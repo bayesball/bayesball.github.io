@@ -9,7 +9,7 @@ library(knitr)
 library(ggplot2)
 
 ## ------------------------------------------------------------------------
-RR <- read_csv("https://bayesball.github.io/VB/runs2015.csv")
+RR <- read_csv("https://bayesball.github.io/VB/data/runs2015.csv")
 
 ## ------------------------------------------------------------------------
 kable(RR)
