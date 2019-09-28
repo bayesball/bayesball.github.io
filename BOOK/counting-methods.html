@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 2 Counting Methods | Bayesian Modeling</title>
+  <meta name="description" content="This is an introduction to Bayesian modeling at the undergraduate level" />
+  <meta name="generator" content="bookdown 0.13 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 2 Counting Methods | Bayesian Modeling" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is an introduction to Bayesian modeling at the undergraduate level" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 2 Counting Methods | Bayesian Modeling" />
+  
+  <meta name="twitter:description" content="This is an introduction to Bayesian modeling at the undergraduate level" />
+  
+
+<meta name="author" content="Jim Albert and Jingchen Hu" />
+
+
+<meta name="date" content="2019-09-28" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="probability-a-measurement-of-uncertainty.html"/>
+<link rel="next" href="conditional-probability.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Probability and Bayesian Modeling</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html"><i class="fa fa-check"></i><b>1</b> Probability: A Measurement of Uncertainty</a><ul>
+<li class="chapter" data-level="1.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#introduction"><i class="fa fa-check"></i><b>1.1</b> Introduction</a></li>
+<li class="chapter" data-level="1.2" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-classical-view-of-a-probability"><i class="fa fa-check"></i><b>1.2</b> The Classical View of a Probability</a></li>
+<li class="chapter" data-level="1.3" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-frequency-view-of-a-probability"><i class="fa fa-check"></i><b>1.3</b> The Frequency View of a Probability</a></li>
+<li class="chapter" data-level="1.4" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-subjective-view-of-a-probability"><i class="fa fa-check"></i><b>1.4</b> The Subjective View of a Probability</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#measuring-probabilities-subjectively"><i class="fa fa-check"></i><b>1.4.1</b> Measuring probabilities subjectively</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-sample-space"><i class="fa fa-check"></i><b>1.5</b> The Sample Space</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#roll-two-fair-indistinguishable-dice"><i class="fa fa-check"></i><b>1.5.1</b> Roll two fair, indistinguishable dice</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#assigning-probabilities"><i class="fa fa-check"></i><b>1.6</b> Assigning Probabilities</a><ul>
+<li class="chapter" data-level="1.6.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#events-and-event-operations"><i class="fa fa-check"></i><b>1.6.1</b> Events and Event Operations</a></li>
+<li class="chapter" data-level="1.6.2" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-three-probability-axioms"><i class="fa fa-check"></i><b>1.6.2</b> The Three Probability Axioms</a></li>
+<li class="chapter" data-level="1.6.3" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-complement-and-addition-properties"><i class="fa fa-check"></i><b>1.6.3</b> The Complement and Addition Properties</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#exercises"><i class="fa fa-check"></i><b>1.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="counting-methods.html"><a href="counting-methods.html"><i class="fa fa-check"></i><b>2</b> Counting Methods</a><ul>
+<li class="chapter" data-level="2.1" data-path="counting-methods.html"><a href="counting-methods.html#introduction-rolling-dice-yahtzee-and-roulette"><i class="fa fa-check"></i><b>2.1</b> Introduction: Rolling Dice, Yahtzee, and Roulette</a></li>
+<li class="chapter" data-level="2.2" data-path="counting-methods.html"><a href="counting-methods.html#equally-likely-outcomes"><i class="fa fa-check"></i><b>2.2</b> Equally Likely Outcomes</a></li>
+<li class="chapter" data-level="2.3" data-path="counting-methods.html"><a href="counting-methods.html#the-multiplication-counting-rule"><i class="fa fa-check"></i><b>2.3</b> The Multiplication Counting Rule</a></li>
+<li class="chapter" data-level="2.4" data-path="counting-methods.html"><a href="counting-methods.html#permutations"><i class="fa fa-check"></i><b>2.4</b> Permutations</a></li>
+<li class="chapter" data-level="2.5" data-path="counting-methods.html"><a href="counting-methods.html#combinations"><i class="fa fa-check"></i><b>2.5</b> Combinations</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="counting-methods.html"><a href="counting-methods.html#number-of-subsets"><i class="fa fa-check"></i><b>2.5.1</b> Number of subsets</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="counting-methods.html"><a href="counting-methods.html#arrangements-of-non-distinct-objects"><i class="fa fa-check"></i><b>2.6</b> Arrangements of Non-Distinct Objects</a></li>
+<li class="chapter" data-level="2.7" data-path="counting-methods.html"><a href="counting-methods.html#playing-yahtzee"><i class="fa fa-check"></i><b>2.7</b> Playing Yahtzee</a></li>
+<li class="chapter" data-level="2.8" data-path="counting-methods.html"><a href="counting-methods.html#exercises-1"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="conditional-probability.html"><a href="conditional-probability.html"><i class="fa fa-check"></i><b>3</b> Conditional Probability</a><ul>
+<li class="chapter" data-level="3.1" data-path="conditional-probability.html"><a href="conditional-probability.html#introduction-the-three-card-problem"><i class="fa fa-check"></i><b>3.1</b> Introduction: The Three Card Problem</a></li>
+<li class="chapter" data-level="3.2" data-path="conditional-probability.html"><a href="conditional-probability.html#independent-events"><i class="fa fa-check"></i><b>3.2</b> Independent Events</a></li>
+<li class="chapter" data-level="3.3" data-path="conditional-probability.html"><a href="conditional-probability.html#in-everyday-life"><i class="fa fa-check"></i><b>3.3</b> In Everyday Life</a></li>
+<li class="chapter" data-level="3.4" data-path="conditional-probability.html"><a href="conditional-probability.html#in-a-two-way-table"><i class="fa fa-check"></i><b>3.4</b> In a Two-Way Table</a></li>
+<li class="chapter" data-level="3.5" data-path="conditional-probability.html"><a href="conditional-probability.html#definition-and-the-multiplication-rule"><i class="fa fa-check"></i><b>3.5</b> Definition and the Multiplication Rule</a></li>
+<li class="chapter" data-level="3.6" data-path="conditional-probability.html"><a href="conditional-probability.html#the-multiplication-rule"><i class="fa fa-check"></i><b>3.6</b> The Multiplication Rule</a></li>
+<li class="chapter" data-level="3.7" data-path="conditional-probability.html"><a href="conditional-probability.html#the-multiplication-rule-under-independence"><i class="fa fa-check"></i><b>3.7</b> The Multiplication Rule Under Independence</a></li>
+<li class="chapter" data-level="3.8" data-path="conditional-probability.html"><a href="conditional-probability.html#learning-using-bayes-rule"><i class="fa fa-check"></i><b>3.8</b> Learning Using Bayes’ Rule</a></li>
+<li class="chapter" data-level="3.9" data-path="conditional-probability.html"><a href="conditional-probability.html#r-example-learning-about-a-spinner"><i class="fa fa-check"></i><b>3.9</b> R Example: Learning About a Spinner</a></li>
+<li class="chapter" data-level="3.10" data-path="conditional-probability.html"><a href="conditional-probability.html#exercises-2"><i class="fa fa-check"></i><b>3.10</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="discrete-distributions.html"><a href="discrete-distributions.html"><i class="fa fa-check"></i><b>4</b> Discrete Distributions</a><ul>
+<li class="chapter" data-level="4.1" data-path="discrete-distributions.html"><a href="discrete-distributions.html#introduction-the-hat-check-problem"><i class="fa fa-check"></i><b>4.1</b> Introduction: The Hat Check Problem</a></li>
+<li class="chapter" data-level="4.2" data-path="discrete-distributions.html"><a href="discrete-distributions.html#random-variable-and-probability-distribution"><i class="fa fa-check"></i><b>4.2</b> Random Variable and Probability Distribution</a></li>
+<li class="chapter" data-level="4.3" data-path="discrete-distributions.html"><a href="discrete-distributions.html#probability-distribution"><i class="fa fa-check"></i><b>4.3</b> Probability distribution</a></li>
+<li class="chapter" data-level="4.4" data-path="discrete-distributions.html"><a href="discrete-distributions.html#summarizing-a-probability-distribution"><i class="fa fa-check"></i><b>4.4</b> Summarizing a Probability Distribution</a></li>
+<li class="chapter" data-level="4.5" data-path="discrete-distributions.html"><a href="discrete-distributions.html#standard-deviation-of-a-probability-distribution"><i class="fa fa-check"></i><b>4.5</b> Standard Deviation of a Probability Distribution</a></li>
+<li class="chapter" data-level="4.6" data-path="discrete-distributions.html"><a href="discrete-distributions.html#coin-tossing-distributions"><i class="fa fa-check"></i><b>4.6</b> Coin-Tossing Distributions</a></li>
+<li class="chapter" data-level="4.7" data-path="discrete-distributions.html"><a href="discrete-distributions.html#binomial-probabilities"><i class="fa fa-check"></i><b>4.7</b> Binomial probabilities</a></li>
+<li class="chapter" data-level="4.8" data-path="discrete-distributions.html"><a href="discrete-distributions.html#binomial-experiments"><i class="fa fa-check"></i><b>4.8</b> Binomial experiments</a></li>
+<li class="chapter" data-level="4.9" data-path="discrete-distributions.html"><a href="discrete-distributions.html#binomial-computations"><i class="fa fa-check"></i><b>4.9</b> Binomial computations</a></li>
+<li class="chapter" data-level="4.10" data-path="discrete-distributions.html"><a href="discrete-distributions.html#mean-and-standard-deviation-of-a-binomial"><i class="fa fa-check"></i><b>4.10</b> Mean and standard deviation of a Binomial</a></li>
+<li class="chapter" data-level="4.11" data-path="discrete-distributions.html"><a href="discrete-distributions.html#negative-binomial-experiments"><i class="fa fa-check"></i><b>4.11</b> Negative Binomial Experiments</a></li>
+<li class="chapter" data-level="4.12" data-path="discrete-distributions.html"><a href="discrete-distributions.html#exercises-3"><i class="fa fa-check"></i><b>4.12</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="continuous-distributions.html"><a href="continuous-distributions.html"><i class="fa fa-check"></i><b>5</b> Continuous Distributions</a><ul>
+<li class="chapter" data-level="5.1" data-path="continuous-distributions.html"><a href="continuous-distributions.html#introduction-a-baseball-spinner-game"><i class="fa fa-check"></i><b>5.1</b> Introduction: A Baseball Spinner Game</a></li>
+<li class="chapter" data-level="5.2" data-path="continuous-distributions.html"><a href="continuous-distributions.html#the-uniform-distribution"><i class="fa fa-check"></i><b>5.2</b> The Uniform Distribution</a></li>
+<li class="chapter" data-level="5.3" data-path="continuous-distributions.html"><a href="continuous-distributions.html#binomial-probabilities-and-the-normal-curve"><i class="fa fa-check"></i><b>5.3</b> Binomial Probabilities and the Normal Curve</a></li>
+<li class="chapter" data-level="5.4" data-path="continuous-distributions.html"><a href="continuous-distributions.html#sampling-distribution-of-the-mean"><i class="fa fa-check"></i><b>5.4</b> Sampling Distribution of the Mean</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html"><i class="fa fa-check"></i><b>6</b> Joint Probability Distributions</a><ul>
+<li class="chapter" data-level="6.1" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#joint-probability-mass-function-sampling-from-a-box"><i class="fa fa-check"></i><b>6.1</b> Joint Probability Mass Function: Sampling From a Box</a></li>
+<li class="chapter" data-level="6.2" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#multinomial-experiments"><i class="fa fa-check"></i><b>6.2</b> Multinomial Experiments</a></li>
+<li class="chapter" data-level="6.3" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#joint-density-functions"><i class="fa fa-check"></i><b>6.3</b> Joint Density Functions</a></li>
+<li class="chapter" data-level="6.4" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#independence-and-measuring-association"><i class="fa fa-check"></i><b>6.4</b> Independence and Measuring Association</a></li>
+<li class="chapter" data-level="6.5" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#flipping-a-random-coin-the-beta-binomial-distribution"><i class="fa fa-check"></i><b>6.5</b> Flipping a Random Coin: The Beta-Binomial Distribution</a></li>
+<li class="chapter" data-level="6.6" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#bivariate-normal-distribution"><i class="fa fa-check"></i><b>6.6</b> Bivariate Normal Distribution</a></li>
+<li class="chapter" data-level="6.7" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#exercises-4"><i class="fa fa-check"></i><b>6.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="proportion.html"><a href="proportion.html"><i class="fa fa-check"></i><b>7</b> Learning About a Binomial Probability</a><ul>
+<li class="chapter" data-level="7.1" data-path="proportion.html"><a href="proportion.html#introduction-thinking-about-a-proportion-subjectively"><i class="fa fa-check"></i><b>7.1</b> Introduction: Thinking About a Proportion Subjectively</a></li>
+<li class="chapter" data-level="7.2" data-path="proportion.html"><a href="proportion.html#bayesian-inference-with-discrete-priors"><i class="fa fa-check"></i><b>7.2</b> Bayesian Inference with Discrete Priors</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="proportion.html"><a href="proportion.html#example-students-dining-preference"><i class="fa fa-check"></i><b>7.2.1</b> Example: students’ dining preference</a></li>
+<li class="chapter" data-level="7.2.2" data-path="proportion.html"><a href="proportion.html#discrete-prior-distributions-for-proportion-p"><i class="fa fa-check"></i><b>7.2.2</b> Discrete prior distributions for proportion <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="7.2.3" data-path="proportion.html"><a href="proportion.html#likelihood"><i class="fa fa-check"></i><b>7.2.3</b> Likelihood</a></li>
+<li class="chapter" data-level="7.2.4" data-path="proportion.html"><a href="proportion.html#posterior-distribution-for-proportion-p"><i class="fa fa-check"></i><b>7.2.4</b> Posterior distribution for proportion <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="7.2.5" data-path="proportion.html"><a href="proportion.html#inference-students-dining-preference"><i class="fa fa-check"></i><b>7.2.5</b> Inference: students’ dining preference</a></li>
+<li class="chapter" data-level="7.2.6" data-path="proportion.html"><a href="proportion.html#discussion-using-a-discrete-prior"><i class="fa fa-check"></i><b>7.2.6</b> Discussion: using a discrete prior</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="proportion.html"><a href="proportion.html#continuous-priors"><i class="fa fa-check"></i><b>7.3</b> Continuous Priors</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="proportion.html"><a href="proportion.html#the-beta-distribution-and-probabilities"><i class="fa fa-check"></i><b>7.3.1</b> The Beta distribution and probabilities</a></li>
+<li class="chapter" data-level="7.3.2" data-path="proportion.html"><a href="proportion.html#choosing-a-beta-density-to-represent-prior-opinion"><i class="fa fa-check"></i><b>7.3.2</b> Choosing a Beta density to represent prior opinion</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="proportion.html"><a href="proportion.html#updating-the-beta-prior"><i class="fa fa-check"></i><b>7.4</b> Updating the Beta Prior</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="proportion.html"><a href="proportion.html#bayes-rule-calculation"><i class="fa fa-check"></i><b>7.4.1</b> Bayes’ rule calculation</a></li>
+<li class="chapter" data-level="7.4.2" data-path="proportion.html"><a href="proportion.html#from-beta-prior-to-beta-posterior"><i class="fa fa-check"></i><b>7.4.2</b> From Beta prior to Beta posterior</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="proportion.html"><a href="proportion.html#bayesian-inferences-with-continuous-priors"><i class="fa fa-check"></i><b>7.5</b> Bayesian Inferences with Continuous Priors</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="proportion.html"><a href="proportion.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>7.5.1</b> Bayesian hypothesis testing</a></li>
+<li class="chapter" data-level="7.5.2" data-path="proportion.html"><a href="proportion.html#bayesian-credible-intervals"><i class="fa fa-check"></i><b>7.5.2</b> Bayesian credible intervals</a></li>
+<li class="chapter" data-level="7.5.3" data-path="proportion.html"><a href="proportion.html#bayesian-prediction"><i class="fa fa-check"></i><b>7.5.3</b> Bayesian prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="proportion.html"><a href="proportion.html#predictive-checking"><i class="fa fa-check"></i><b>7.6</b> Predictive Checking</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="proportion.html"><a href="proportion.html#comparing-bayesian-models"><i class="fa fa-check"></i><b>7.6.1</b> Comparing Bayesian models</a></li>
+<li class="chapter" data-level="7.6.2" data-path="proportion.html"><a href="proportion.html#posterior-predictive-checking"><i class="fa fa-check"></i><b>7.6.2</b> Posterior predictive checking</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="proportion.html"><a href="proportion.html#exercises-5"><i class="fa fa-check"></i><b>7.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="mean.html"><a href="mean.html"><i class="fa fa-check"></i><b>8</b> Modeling Measurement and Count Data</a><ul>
+<li class="chapter" data-level="8.1" data-path="mean.html"><a href="mean.html#introduction-1"><i class="fa fa-check"></i><b>8.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.2" data-path="mean.html"><a href="mean.html#modeling-measurements"><i class="fa fa-check"></i><b>8.2</b> Modeling Measurements</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="mean.html"><a href="mean.html#examples"><i class="fa fa-check"></i><b>8.2.1</b> Examples</a></li>
+<li class="chapter" data-level="8.2.2" data-path="mean.html"><a href="mean.html#the-general-approach"><i class="fa fa-check"></i><b>8.2.2</b> The general approach</a></li>
+<li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
+<li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="mean.html"><a href="mean.html#Normal:Continuous"><i class="fa fa-check"></i><b>8.4</b> Continuous Priors</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="mean.html"><a href="mean.html#Normal:Continuous:prior"><i class="fa fa-check"></i><b>8.4.1</b> The Normal prior for mean <span class="math inline">\(\mu\)</span></a></li>
+<li class="chapter" data-level="8.4.2" data-path="mean.html"><a href="mean.html#Normal:Continuous:choosing"><i class="fa fa-check"></i><b>8.4.2</b> Choosing a Normal prior</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate"><i class="fa fa-check"></i><b>8.5</b> Updating the Normal Prior</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="mean.html"><a href="mean.html#introduction-2"><i class="fa fa-check"></i><b>8.5.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.5.2" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:Overview"><i class="fa fa-check"></i><b>8.5.2</b> A quick peak at the update procedure</a></li>
+<li class="chapter" data-level="8.5.3" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:BayesRule"><i class="fa fa-check"></i><b>8.5.3</b> Bayes’ rule calculation</a></li>
+<li class="chapter" data-level="8.5.4" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:Conjugate"><i class="fa fa-check"></i><b>8.5.4</b> Conjugate Normal prior</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference"><i class="fa fa-check"></i><b>8.6</b> Bayesian Inferences for Continuous Normal Mean</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference:HTandCI"><i class="fa fa-check"></i><b>8.6.1</b> Bayesian hypothesis testing and credible interval</a></li>
+<li class="chapter" data-level="8.6.2" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference:Prediction"><i class="fa fa-check"></i><b>8.6.2</b> Bayesian prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="mean.html"><a href="mean.html#Normal:PPC"><i class="fa fa-check"></i><b>8.7</b> Posterior Predictive Checking</a></li>
+<li class="chapter" data-level="8.8" data-path="mean.html"><a href="mean.html#modeling-count-data"><i class="fa fa-check"></i><b>8.8</b> Modeling Count Data</a><ul>
+<li class="chapter" data-level="8.8.1" data-path="mean.html"><a href="mean.html#examples-1"><i class="fa fa-check"></i><b>8.8.1</b> Examples</a></li>
+<li class="chapter" data-level="8.8.2" data-path="mean.html"><a href="mean.html#the-poisson-distribution"><i class="fa fa-check"></i><b>8.8.2</b> The Poisson distribution</a></li>
+<li class="chapter" data-level="8.8.3" data-path="mean.html"><a href="mean.html#bayesian-inferences"><i class="fa fa-check"></i><b>8.8.3</b> Bayesian inferences</a></li>
+<li class="chapter" data-level="8.8.4" data-path="mean.html"><a href="mean.html#case-study-learning-about-website-counts"><i class="fa fa-check"></i><b>8.8.4</b> Case study: Learning about website counts</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="mean.html"><a href="mean.html#exercises-6"><i class="fa fa-check"></i><b>8.9</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>9</b> Simulation by Markov Chain Monte Carlo</a><ul>
+<li class="chapter" data-level="9.1" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#introduction-3"><i class="fa fa-check"></i><b>9.1</b> Introduction</a></li>
+<li class="chapter" data-level="9.2" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#markov-chains"><i class="fa fa-check"></i><b>9.2</b> Markov Chains</a></li>
+<li class="chapter" data-level="9.3" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#the-metropolis-algorithm"><i class="fa fa-check"></i><b>9.3</b> The Metropolis Algorithm</a></li>
+<li class="chapter" data-level="9.4" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#example-cauchy-normal-problem"><i class="fa fa-check"></i><b>9.4</b> Example: Cauchy-Normal problem</a></li>
+<li class="chapter" data-level="9.5" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#gibbs-sampling"><i class="fa fa-check"></i><b>9.5</b> Gibbs Sampling</a></li>
+<li class="chapter" data-level="9.6" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#mcmc-inputs-and-diagnostics"><i class="fa fa-check"></i><b>9.6</b> MCMC Inputs and Diagnostics</a></li>
+<li class="chapter" data-level="9.7" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#using-jags"><i class="fa fa-check"></i><b>9.7</b> Using JAGS</a></li>
+<li class="chapter" data-level="9.8" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#exercises-7"><i class="fa fa-check"></i><b>9.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html"><i class="fa fa-check"></i><b>10</b> Bayesian Hierarchical Modeling</a><ul>
+<li class="chapter" data-level="10.1" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#introduction-4"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
+<li class="chapter" data-level="10.2" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#hierarchical-normal-modeling"><i class="fa fa-check"></i><b>10.2</b> Hierarchical Normal Modeling</a></li>
+<li class="chapter" data-level="10.3" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#hierarchical-beta-binomial-modeling"><i class="fa fa-check"></i><b>10.3</b> Hierarchical Beta-Binomial Modeling</a></li>
+<li class="chapter" data-level="10.4" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#exercises-8"><i class="fa fa-check"></i><b>10.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>11</b> Simple Linear Regression</a><ul>
+<li class="chapter" data-level="11.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#introduction-5"><i class="fa fa-check"></i><b>11.1</b> Introduction</a></li>
+<li class="chapter" data-level="11.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#example-prices-and-areas-of-house-sales"><i class="fa fa-check"></i><b>11.2</b> Example: Prices and Areas of House Sales</a></li>
+<li class="chapter" data-level="11.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-simple-linear-regression-model"><i class="fa fa-check"></i><b>11.3</b> A Simple Linear Regression Model</a></li>
+<li class="chapter" data-level="11.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-weakly-informative-prior"><i class="fa fa-check"></i><b>11.4</b> A Weakly Informative Prior</a></li>
+<li class="chapter" data-level="11.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-analysis"><i class="fa fa-check"></i><b>11.5</b> Posterior Analysis</a></li>
+<li class="chapter" data-level="11.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#inference-through-mcmc"><i class="fa fa-check"></i><b>11.6</b> Inference through MCMC</a></li>
+<li class="chapter" data-level="11.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#bayesian-inferences-with-simple-linear-regression"><i class="fa fa-check"></i><b>11.7</b> Bayesian Inferences with Simple Linear Regression</a></li>
+<li class="chapter" data-level="11.8" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#informative-prior-1"><i class="fa fa-check"></i><b>11.8</b> Informative Prior</a></li>
+<li class="chapter" data-level="11.9" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-conditional-means-prior"><i class="fa fa-check"></i><b>11.9</b> A Conditional Means Prior</a></li>
+<li class="chapter" data-level="11.10" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-9"><i class="fa fa-check"></i><b>11.10</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html"><i class="fa fa-check"></i><b>12</b> Bayesian Multiple Regression and Logistic Models</a><ul>
+<li class="chapter" data-level="12.1" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#introduction-6"><i class="fa fa-check"></i><b>12.1</b> Introduction</a></li>
+<li class="chapter" data-level="12.2" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#bayesian-multiple-linear-regression"><i class="fa fa-check"></i><b>12.2</b> Bayesian Multiple Linear Regression</a></li>
+<li class="chapter" data-level="12.3" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#bayesian-logistic-regression"><i class="fa fa-check"></i><b>12.3</b> Bayesian Logistic Regression </a></li>
+<li class="chapter" data-level="12.4" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#exercises-10"><i class="fa fa-check"></i><b>12.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="case-studies.html"><a href="case-studies.html"><i class="fa fa-check"></i><b>13</b> Case Studies</a><ul>
+<li class="chapter" data-level="13.1" data-path="case-studies.html"><a href="case-studies.html#introduction-7"><i class="fa fa-check"></i><b>13.1</b> Introduction</a></li>
+<li class="chapter" data-level="13.2" data-path="case-studies.html"><a href="case-studies.html#federalist-papers-study"><i class="fa fa-check"></i><b>13.2</b> Federalist Papers Study</a></li>
+<li class="chapter" data-level="13.3" data-path="case-studies.html"><a href="case-studies.html#negative-binomial-sampling"><i class="fa fa-check"></i><b>13.3</b> Negative Binomial sampling</a></li>
+<li class="chapter" data-level="13.4" data-path="case-studies.html"><a href="case-studies.html#comparison-of-rates-for-two-authors"><i class="fa fa-check"></i><b>13.4</b> Comparison of rates for two authors</a></li>
+<li class="chapter" data-level="13.5" data-path="case-studies.html"><a href="case-studies.html#which-words-distinguish-the-two-authors"><i class="fa fa-check"></i><b>13.5</b> Which words distinguish the two authors?</a></li>
+<li class="chapter" data-level="13.6" data-path="case-studies.html"><a href="case-studies.html#career-trajectories"><i class="fa fa-check"></i><b>13.6</b> Career Trajectories</a></li>
+<li class="chapter" data-level="13.7" data-path="case-studies.html"><a href="case-studies.html#latent-class-modeling"><i class="fa fa-check"></i><b>13.7</b> Latent Class Modeling</a></li>
+<li class="chapter" data-level="13.8" data-path="case-studies.html"><a href="case-studies.html#exercises-11"><i class="fa fa-check"></i><b>13.8</b> Exercises</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Bayesian Modeling</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="counting-methods" class="section level1">
+<h1><span class="header-section-number">Chapter 2</span> Counting Methods</h1>
+<div id="introduction-rolling-dice-yahtzee-and-roulette" class="section level2">
+<h2><span class="header-section-number">2.1</span> Introduction: Rolling Dice, Yahtzee, and Roulette</h2>
+<p>Dice are one of the oldest randomization devices known to man. Egyptian tombs, dated from 2000 BC, were found containing dice and there have some evidence of dice in archaeological excavations dating back to 6000 BC. It is interesting to note that dice appeared to be invented independently by many ancient cultures across the world. In ancient times, the result of a die throw was not just considered luck, but determined by gods. So casting dice was often used as a way of making decisions such as choosing rulers or dividing inheritances. The Roman goddess, Fortuna, daughter of Zeus was believed to determine the outcome of a throw.</p>
+<p><strong>The Game of Yahtzee</strong></p>
+<p>In the 19th and 20th centuries, standard six-sided dice became a basic component of many commercial board games that were developed. One of the most current popular games is Yahtzee that is played with five dice. The Hasbro game company () presents the history of the game. Yahtzee was invented by a wealthy Canadian couple to play aboard their yacht. This “yacht” game was popular among the couple’s friends, who wanted copies of the game for themselves. The couple approached Mr. Edwin Lowe, who made a fortune selling bingo games, about marketing the game. Mr. Lowe’s initial attempts to sell the game of Yahtzee by placing ads were not successful. Lowe thought that the game had to be played to be appreciated and he hosted a number of Yahtzee parties and the game became very successful. The Milton Bradley company acquired the E. S. Lowe Company and Yahtzee in 1973 and currently more than 50 million games are sold annually.</p>
+<p><strong>The Casino Game of Roulette</strong></p>
+<p>Roulette is one of the most popular casino games. The name roulette is derived from the French word meaning small wheel. Although the origin of the game is not clear, it became very popular during the 18th century when Prince Charles introduced gambling to Monaco to alleviate the country’s current financial problems. The game was brought to America in the early part of the 19th century and is currently featured in all casinos. In addition, roulette is a popular game among people who like to game online.</p>
+<p>The American version of the game discussed in this book varies slightly from the European version. The American roulette wheel contains 38 pockets, numbers 1 through 36 plus zero plus double zero. The wheel is spun and a small metal ball comes to rest in one of the 38 pockets.</p>
+<p>Players will place chips on particular locations on a roulette table, predicting where the ball will land when after the wheel is spun and the ball comes to a stop. The dealer places a mark on the winning number. The players who have bet on the winning number are rewarded while the players who bet on losing numbers lose their chips to the casino.</p>
+</div>
+<div id="equally-likely-outcomes" class="section level2">
+<h2><span class="header-section-number">2.2</span> Equally Likely Outcomes</h2>
+<p>Assume one writes the sample space in such a way that the outcomes are equally likely. Then, applying the classical interpretation, the probability of each outcome will be</p>
+<p><span class="math display">\[\begin{equation}
+Prob({\rm Outcome}) = \frac{1}{{\rm Number} \, {\rm of} \, {\rm outcomes}}.
+\end{equation}\]</span>
+If one is interested in the probability of some event, then the probability is given by
+<span class="math display">\[\begin{equation}
+Prob({\rm Event}) = \frac{{\rm Number} \, {\rm of} \, {\rm outcomes} \, {\rm in} \,
+{\rm event}}{{\rm Number} \, {\rm of} \, {\rm outcomes}}.
+\end{equation}\]</span></p>
+<p>This simple formula should be used with caution. To illustrate the use (and misuse) of this formula, suppose one has a box containing five balls of which three are red, one is blue, and one is white. One selects three balls without replacement from the box – what is the probability that all red balls are chosen?</p>
+<p>Let’s consider two representations of the sample space of this experiment.</p>
+
+<p><strong>Sample space 1:</strong> Suppose one does not distinguish between balls of the same color and does not care about the order in which the balls are selected. Then if <span class="math inline">\(R\)</span>, <span class="math inline">\(B\)</span>, <span class="math inline">\(W\)</span> denote choosing a red, blue, and white ball respectively, then there are four possible outcomes:
+<span class="math display">\[
+S_1 = \{(R, R, R), (R, R, B), (R, R, W), (R, B, W)\}.
+\]</span>
+If these outcomes in <span class="math inline">\(S_1\)</span> are assumed equally likely, then the probability of choosing all red balls is
+<span class="math display">\[
+Prob({\rm all} \,  {\rm reds}) = \frac{1}{4}.
+\]</span></p>
+
+<p><strong>Sample space 2:</strong> Suppose instead that one distinguishes the balls of the same color, so the balls in the box are denoted by <span class="math inline">\(R1, R2, R3, B, W\)</span>. Then one writes down ten possible outcomes</p>
+<p><span class="math inline">\(S_2\)</span> = {<span class="math inline">\((R1, R2, R3)\)</span>, <span class="math inline">\((R1, R2, B)\)</span>, <span class="math inline">\((R1, R2, W)\)</span>, <span class="math inline">\((R1, R3, B)\)</span>, <span class="math inline">\((R1, R3, W)\)</span>, <span class="math inline">\((R2, R3, B)\)</span>, <span class="math inline">\((R2, R3, W)\)</span>, <span class="math inline">\((R1, B, W)\)</span>, <span class="math inline">\((R2, B, W)\)</span>, <span class="math inline">\((R3, B, W)\)</span>}.</p>
+<p>If one assumes these outcomes are equally likely, then the probability of choosing all reds is
+<span class="math display">\[
+Prob({\rm all} \,  {\rm reds}) = \frac{1}{10}.
+\]</span>
+If one compares the answers, one sees an obvious problem since one obtains two different answers for the probability of choosing all reds. What is going on? The problem is that the outcomes in the first sample space <span class="math inline">\(S_1\)</span> are not equally likely. In particular, the chance of choosing three reds <span class="math inline">\((R, R, R)\)</span> is smaller than the chance of choosing a red, blue and white <span class="math inline">\((R, B, W)\)</span> – there is only one way of selecting three reds, but there are three ways of selecting exactly one red. On the other hand, the outcomes in sample space <span class="math inline">\(S_2\)</span> are equally likely since one was careful to distinguish the five balls in the box, and it is reasonable that any three of the five balls has the same chance of being selected.</p>
+<p>From this example, a couple of things have been learned. First, when one writes down a sample space, one should think carefully about the assumption that outcomes are equally likely. Second, when one has an experiment with duplicate items (like three red balls), it may be preferable to distinguish the items when one writes down the sample space and computes probabilities.</p>
+
+<p><strong>Sampling From a Box</strong></p>
+<p>One simulates this experiment on R by first creating a vector  with the ball colors, and then using the  function to sample three balls from the vector. The argument  indicates that a sample of 3 is chosen, and the argument  ensures that the sampling is done without replacement. In this particular simulation, one observes a red, blue, and red ball in our sample.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">box &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;white&quot;</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">sample</span>(box, <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<pre><code>## [1] &quot;red&quot;  &quot;red&quot;  &quot;blue&quot;</code></pre>
+</div>
+<div id="the-multiplication-counting-rule" class="section level2">
+<h2><span class="header-section-number">2.3</span> The Multiplication Counting Rule</h2>
+<p>To apply the equally likely recipe for computing probabilities, one needs some methods for counting the number of outcomes in the sample space and the number of outcomes in the event. Here we illustrate a basic counting rule called the multiplication rule.</p>
+<p>Suppose you are dining at your favorite restaurant. Your dinner consists of an appetizer, an entr'ee, and a dessert. You can either choose soup, fruit cup, or quesadillas for your appetizer, you have the choice of chicken, beef, fish, or lamb for your entr'ee, and you can have either pie or ice cream for your dessert.<br />
+We first use a tree diagram to write down all of your possible dinners, in Figure . The first set of branches shows the appetizers, the next set of branches the entr'ees, and the last set of branches the desserts.</p>
+<div class="figure"><span id="fig:unnamed-chunk-2"></span>
+<img src="../LATEX/figures/chapter2/dinners.png" alt="Tree diagram of possible dinners." width="500" />
+<p class="caption">
+Figure 2.1: Tree diagram of possible dinners.
+</p>
+</div>
+
+<p>Note that there are 3 possible appetizers, 4 possible entr'ees, and 2 possible desserts. For each appetizer, there are 4 possible entr'ees, and so there are 3 x 4 = 12 possible choices of appetizer and entr'ee. Using similar reasoning, for each combination of appetizer and entr'ee, there are 2 possible desserts, and so the total number of complete dinners would be</p>
+<p>Number of dinners = <span class="math inline">\(3 \times 4 \times 2\)</span> = 24.</p>
+<p>The above dining example illustrates a general counting rule that we call the multiplication rule.</p>
+
+<p><strong>Multiplication Rule:</strong> Suppose one is performing a task that consists of <span class="math inline">\(k\)</span> steps. One performs the first step in <span class="math inline">\(n_1\)</span> ways, the second step in <span class="math inline">\(n_2\)</span> ways, the third step in <span class="math inline">\(n_3\)</span> ways, and so on. Then the number of ways of completing the task, denoted by <span class="math inline">\(n\)</span>, is the product of the different ways of doing the k steps, or
+<span class="math display">\[\begin{equation}
+n = n_1 \times n_2 \times ... \times n_k.
+\end{equation}\]</span></p>
+</div>
+<div id="permutations" class="section level2">
+<h2><span class="header-section-number">2.4</span> Permutations</h2>
+<p>Suppose one places six songs, Song <span class="math inline">\(A\)</span>, Song <span class="math inline">\(B\)</span>, Song <span class="math inline">\(C\)</span>, Song <span class="math inline">\(D\)</span>, Song <span class="math inline">\(E\)</span>, and Song <span class="math inline">\(F\)</span> in one’s playlist on the streaming service. The songs are played in a random order and one listens to the first three songs. How many different selections of three songs can one hear?
+In this example, one is assuming that the order that the songs are played is important. So hearing the selections</p>
+<p>Song <span class="math inline">\(A\)</span>, Song <span class="math inline">\(B\)</span>, Song <span class="math inline">\(C\)</span></p>
+<p>in that order will be considered different from hearing the selections in the sequence</p>
+<p>Song <span class="math inline">\(C\)</span>, Song <span class="math inline">\(B\)</span>, Song <span class="math inline">\(A\)</span>.</p>
+<p>An outcome such as this is called a permutation or arrangement of 3 out of the 6 songs.
+One represents possible permutations by a set of three blanks, where songs are placed in the blanks.</p>
+
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+</tr>
+<tr class="even">
+<td align="center">1st Song</td>
+<td align="center">2nd Song</td>
+<td align="center">3rd Song</td>
+</tr>
+</tbody>
+</table>
+<p>One computes the number of permutations as follows:</p>
+<ol style="list-style-type: decimal">
+<li>First, it is known that 6 possible songs can be played first. One places this number in the first blank above.</li>
+</ol>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center">6</td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+</tr>
+<tr class="even">
+<td align="center">1st Song</td>
+<td align="center">2nd Song</td>
+<td align="center">3rd Song</td>
+</tr>
+</tbody>
+</table>
+<ol start="2" style="list-style-type: decimal">
+<li>If one places a particular song, say Song A, in the first slot, there are 5 possible songs in the second position. One places this number in the second blank.</li>
+</ol>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center">6</td>
+<td align="center">5</td>
+<td align="center"><span class="underline"></span></td>
+</tr>
+<tr class="even">
+<td align="center">1st Song</td>
+<td align="center">2nd Song</td>
+<td align="center">3rd Song</td>
+</tr>
+</tbody>
+</table>
+<p>By use of the multiplication rule, there are <span class="math inline">\(6 \times 5 = 30\)</span> ways of placing two songs in the first two slots.</p>
+<ol start="3" style="list-style-type: decimal">
+<li>Continuing in the same way, one sees that there are 4 ways of putting a song in the third slot and completing the list of three songs.</li>
+</ol>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center">6</td>
+<td align="center">5</td>
+<td align="center">4</td>
+</tr>
+<tr class="even">
+<td align="center">1st Song</td>
+<td align="center">2nd Song</td>
+<td align="center">3rd Song</td>
+</tr>
+</tbody>
+</table>
+<p>Again using the multiplication rule, we see that the number of possible permutations of six songs in the three positions is
+<span class="math display">\[
+6 \times 5 \times 4 = 120.
+\]</span></p>
+<p>A second basic counting rule has just been illustrated.</p>
+
+<p><strong>Permutations Rule:</strong> If one has <span class="math inline">\(n\)</span> objects (all distinguishable), then the number of ways to arrange <span class="math inline">\(r\)</span> of them, called the number of permutations, is
+<span class="math display">\[\begin{equation}
+ _n P_r =  n \times (n - 1) \times  ... \times (n - r ).
+ \end{equation}\]</span>
+In this example, <span class="math inline">\(n = 6\)</span> and <span class="math inline">\(r = 3\)</span>, and If three songs are played in one’s playlist, each of the 120 possible permutations will be equally likely to occur. So the probability of any single permutation, say</p>
+<p>Song <span class="math inline">\(A\)</span>, Song <span class="math inline">\(D\)</span>, Song <span class="math inline">\(B\)</span></p>
+<p>is equal to 1/120.</p>
+<p>Suppose one listens to all six songs on the playlist. How many possible orders are there? In this case, one is interested in finding the number of ways of arranging the entire set of 6 objects. Here <span class="math inline">\(n = 6\)</span> and <span class="math inline">\(r = 6\)</span> and, applying the permutation rule formula, the number of permutations is
+<span class="math display">\[
+ _6 P_6= n! = 6 \times 5 \times  4 \times... \times 1 = 720.
+ \]</span>
+One uses the special symbol <span class="math inline">\(n!\)</span>, pronounced “n factorial”, to denote the product of the integers from 1 to n. So the number of ways of arranging <span class="math inline">\(n\)</span> distinct objects is
+<span class="math display">\[\begin{equation}
+ _n P_n= n! = n \times (n - 1) \times  (n - 2) \times... \times 1.
+ \end{equation}\]</span></p>
+<p></p>
+<p><strong>Simulating a Permutation</strong></p>
+<p>To illustrate simulating a permutation,
+define a function “<code>permutation()&quot;</code> with arguments”<code>d&quot;</code> and “<code>Size&quot;</code>.
+Inside the function, the”<code>sample()&quot;</code> function takes a sample of size “<code>Size&quot;</code> without replacement from the vector”<code>d&quot;</code> and the “<code>str_flatten()&quot;</code> function creates a single string with the arrangement of the”<code>Size&quot;</code> values.
+To use this function, a vector “<code>songs&quot;</code>is defined containing the names of the six songs. One applies the”<code>permutation()&quot;</code> function with arguments &quot;<code>songs&quot;</code> and 3 and the simulated arrangement of songs is <span class="math inline">\(C\)</span>, <span class="math inline">\(F\)</span>, and <span class="math inline">\(B\)</span>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">permutation &lt;-<span class="st"> </span><span class="cf">function</span>(d, Size){</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="kw">str_flatten</span>(<span class="kw">sample</span>(d, <span class="dt">size=</span>Size),</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">              <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">}</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">songs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Song A&quot;</span>, <span class="st">&quot;Song B&quot;</span>, <span class="st">&quot;Song C&quot;</span>, <span class="st">&quot;Song D&quot;</span>,</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">           <span class="st">&quot;Song E&quot;</span>, <span class="st">&quot;Song F&quot;</span>)</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="kw">permutation</span>(songs, <span class="dt">Size =</span> <span class="dv">3</span>)</a></code></pre></div>
+<pre><code>## [1] &quot;Song C Song F Song B&quot;</code></pre>
+</div>
+<div id="combinations" class="section level2">
+<h2><span class="header-section-number">2.5</span> Combinations</h2>
+<p>Suppose one has a box with five balls – three are white and two are black. One first shakes up the box and then chooses two balls out without replacement, i.e. once one takes a ball out, one does not return it to the box before the second ball is taken out.</p>
+<img src="../LATEX/figures/chapter2/chooseballs.png" width="324" />
+
+<p>To make it easier to talk about outcomes, the five balls have been labelled from 1 to 5. Remember one is choosing two balls from the box and an outcome is the numbers of the two balls that one selects.
+When one lists possible outcomes, one should decide if it matters how one orders the selection of balls. That is, if one chooses ball 1 and then ball 2, is that different than choosing ball 2 and then ball 1?</p>
+<p>One could say that order is important – so choosing ball 1 then ball 2 is a different outcome from ball 2 then ball 1. But in this type of selection problem, it is common practice not to consider the order of the selection. Then all that matters is the collection of two balls that we select. In this case, one calls the resulting outcome a combination.</p>
+<p>When order does not matter, there are 10 possible pairs of balls that one can select. These outcomes or combinations are written below – this list represents a sample space for this random experiment.</p>
+<img src="../LATEX/figures/chapter2/chooseballs2.png" width="459" />
+
+<p>There is a simple formula for counting the number of outcomes in this situation.</p>
+
+<p><strong>Combinations Rule:</strong> Suppose one has <span class="math inline">\(n\)</span> objects and one wishes to take a subset of size <span class="math inline">\(r\)</span> from the group of objects without regards to order. Then the number of subsets or combinations is given by the formula
+<span class="math display">\[\begin{equation}
+{\rm number} \, {\rm of} \, {\rm combinations} = {n \choose r} = \frac{n!}{r! (n-r)!}.
+\end{equation}\]</span>
+where <span class="math inline">\(k!\)</span> stands for <span class="math inline">\(k\)</span> factorial <span class="math inline">\(k! = k \times (k -1) \times (k-2) \times ... \times 1\)</span>. You might have seen another notation<span class="math inline">\({n \choose r}\)</span> when people talk about combinations. This notation is pronounced “n choose r”, and it is the same as <span class="math inline">\({n \choose r}\)</span>.</p>
+<p>Let’s try the formula in our example to see if it agrees with our number. In our setting, one has <span class="math inline">\(n = 5\)</span> balls and one is selecting a subset of size <span class="math inline">\(r = 2\)</span> from the box of balls. Using <span class="math inline">\(n = 5\)</span> and <span class="math inline">\(r = 2\)</span> in the formula, one obtains
+<span class="math display">\[
+{5 \choose 2} = \frac{5!}{2! (5 - 2)!} = \frac{5 \times 4 \times 3 \times 2 \times 1}
+{[2 \times 1]\times [3 \times 2 \times 1]} = \frac{120}{12} = 10.
+\]</span>
+that agrees with our earlier answer of 10 outcomes in the sample space.</p>
+
+<p><strong>Simulating Combinations</strong></p>
+<p>To illustrate combinations, define a vector “<code>Numbers&quot;</code> containing the integers from 1 to 5. The R function”<code>combn()&quot;</code> generates all combinations of a set of a specific size. The matrix “<code>all_combo&quot;</code> is displayed which contains all combinations of size 2 from”<code>Numbers&quot;</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">Numbers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">all_combo &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">combn</span>(Numbers, <span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">all_combo</a></code></pre></div>
+<pre><code>##       [,1] [,2]
+##  [1,]    1    2
+##  [2,]    1    3
+##  [3,]    1    4
+##  [4,]    1    5
+##  [5,]    2    3
+##  [6,]    2    4
+##  [7,]    2    5
+##  [8,]    3    4
+##  [9,]    3    5
+## [10,]    4    5</code></pre>
+<p>Below the function “<code>sample()&quot;</code> is used to simulate random rows of the matrix”<code>all\_combo&quot;</code>
+and a frequency table of the ten possible combinations is displayed. Note that the frequencies for the ten possible combinations are similar since these outcomes are equally likely.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">N &lt;-<span class="st"> </span><span class="kw">nrow</span>(all_combo)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Iter =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">500</span>,</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">                 <span class="dt">Balls =</span> all_combo[<span class="kw">sample</span>(N, <span class="dt">size =</span> <span class="dv">500</span>,</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">                                    <span class="dt">replace =</span> <span class="ot">TRUE</span>), ])</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Balls<span class="fl">.1</span>, Balls<span class="fl">.2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>()</a></code></pre></div>
+<pre><code>## # A tibble: 10 x 3
+## # Groups:   Balls.1, Balls.2 [10]
+##    Balls.1 Balls.2     n
+##      &lt;dbl&gt;   &lt;dbl&gt; &lt;int&gt;
+##  1       1       2    45
+##  2       1       3    42
+##  3       1       4    45
+##  4       1       5    48
+##  5       2       3    44
+##  6       2       4    52
+##  7       2       5    57
+##  8       3       4    52
+##  9       3       5    57
+## 10       4       5    58</code></pre>
+<div id="number-of-subsets" class="section level3">
+<h3><span class="header-section-number">2.5.1</span> Number of subsets</h3>
+<p>Suppose one has a group of <span class="math inline">\(n\)</span> objects and one is interested in the total number of subsets of this group. Then this total number is
+<span class="math display">\[\begin{equation}
+2 ^ n =  {n \choose 0} + {n \choose 1} + ... + {n \choose n}.
+\end{equation}\]</span>
+The formula <span class="math inline">\(2^n\)</span> is found by noticing there are two possibilities for each object – either the object is in the subset or it is not – and then applying the multiplication rule. The right hand side of the equation is derived by first counting the number of subsets of size 0, of size 1, of size 2, and so on, and then adding all of these subset numbers to get the total number.</p>
+<p><strong>Counting the number of pizzas</strong></p>
+<p>To illustrate the combinations rule, consider a situation where ine is interested in ordering a pizza and there are six possible toppings.<br />
+How many toppings can there be in the pizza? Since there are six possible toppings, one can either have 0, 1, 2, 3, 4, 5, or 6 toppings on our pizza. Using combinations rule formula,</p>
+<ul>
+<li>There are <span class="math inline">\({ 6 \choose 0}\)</span> pizzas that have no toppings.</li>
+<li>There are <span class="math inline">\({ 6 \choose 1}\)</span> pizzas that have exactly one topping.</li>
+<li>There are <span class="math inline">\({ 6 \choose 2}\)</span> pizzas that have two toppings.</li>
+</ul>
+<p>To compute the total number of different pizzas, one continues in this fashion and the total number of possible pizzas is
+<span class="math display">\[
+N = { 6 \choose 0} + { 6 \choose 1} + { 6 \choose 2} + { 6 \choose 3} +
+{ 6 \choose 4} + { 6 \choose 5} + { 6 \choose 6}.
+\]</span>
+The reader can confirm that <span class="math inline">\(N = 2 ^ 6 = 64\)</span>.</p>
+</div>
+</div>
+<div id="arrangements-of-non-distinct-objects" class="section level2">
+<h2><span class="header-section-number">2.6</span> Arrangements of Non-Distinct Objects</h2>
+<p>First let’s use a simple example to review the two basic counting rules that we have discussed. Suppose one is making up silly words from the letters “a”, “b”, “c”, “d”, “e”, “f”, like</p>
+<p>bacedf, decabf, eabcfd</p>
+<p>How many silly words can one make up? Here one has <span class="math inline">\(n = 6\)</span> objects. Using the permutation rule, the number of possible permutations is
+<span class="math display">\[
+6! = 6 \times 5 \times 4 \times ...\times 1.
+\]</span></p>
+<p>To illustrate the second counting rule, suppose one has six letters “a”, “b”, “c”, “d”, “e”, “f”, and one is going to choose three of the letters to construct a three-letter word. One cannot choose the same letter twice and the order in which one chooses the letters is not important. In this case, one is interested in the number of combinations – applying our combination rule with <span class="math inline">\(n = 6\)</span> and <span class="math inline">\(k = 3\)</span>, the number of ways of choosing three letters from six is equal to
+<span class="math display">\[
+{6 \choose 3} = \frac{6!}{3! \, 3!}.
+\]</span></p>
+<p>Now, consider a different arrangement problem. Suppose one randomly arranges the four triangles and five squares as shown below.</p>
+<p><img src="../LATEX/figures/chapter2/objects.png" width="360" /></p>
+<p>What is the chance that the first and last locations are occupied by triangles? This is an arrangement problem with one difference – the objects are not all distinct – one cannot distinguish the four triangles or the five squares. So one cannot use the earlier permutations rule that assumes the objects are distinguishable.
+How can one count the number of possible arrangements? It turns out that the combinations rule is useful here. (Surprising, but true.)</p>
+<p>To think about possible arrangements, suppose one writes down a list of nine slots and an arrangement is constructed by placing the triangles and the squares in the nine slots. It is helpful to label the slots with the numbers 1 through 9.</p>
+
+<p><img src="../LATEX/figures/chapter2/objects2.png" width="385" /></p>
+<p>One constructs an arrangement in two steps. First, place the four triangles in four slots, and then place the squares in the remaining slots.
+How many ways can one put the triangles in the slots? First note that one can specify a placement by the numbers of the slots that are used. For example, one could place the triangles in slots 1, 3, 4, and 8.</p>
+<p><img src="../LATEX/figures/chapter2/objects3.png" width="385" /></p>
+
+<p>Or one could place the four triangles in slots 2, 5, 7, and 8.</p>
+<img src="../LATEX/figures/chapter2/objects4.png" width="382" />
+
+<p>One specifies an arrangement by choosing four locations from the slot locations {1, 2, 3, 4, 5, 6, 7, 8, 9}. How many ways can this be done? One knows that the number of ways of selecting four objects (here labels of locations) from a group of nine objects is
+<span class="math display">\[
+{9 \choose 4} = \frac{9!}{4! (9 - 4)!} = 126.
+\]</span>
+So there are 126 ways of choosing the four locations for the triangles. Once the triangles have been placed, one finishes the arrangement by putting in the squares. But there is only one way of doing this. For example, if one places triangles in slots 2, 5, 6, 7, then the squares must go in slots 1, 3, 4, 8, 9. So applying the multiplication rule, the number of ways of arranging four triangles and five squares is <span class="math inline">\(126 \times 1 = 126\)</span>.</p>
+<p>A new counting rule has been derived:</p>
+
+<p><strong>Permutations Rule for Non-Distinct Objects:</strong> The number of permutations of <span class="math inline">\(n\)</span> non-distinct objects where <span class="math inline">\(r\)</span> are of one type and <span class="math inline">\(n - r\)</span> are of a second type is
+<span class="math display">\[\begin{equation}
+{n \choose r} = \frac{n!}{r! (n - r)!}.
+\end{equation}\]</span></p>
+<p>Recall the question that of interest: Suppose four triangles and five squares are randomly arranged. What is the chance that the first and last locations are occupied by triangles?</p>
+<p>It has already been shown that there are 126 ways of mixing up four triangles and five squares. Each possible arrangement is equally likely and has a chance of 1/126 of occurring.</p>
+<p>To find the probability, one needs to count the number of ways of arranging the triangles and squares so that the first and last positions are filled with triangles.</p>
+<img src="../LATEX/figures/chapter2/objects5.png" width="392" />
+
+<p>If one places triangles in slots 1 and 9 (and there is only one way of doing that), then one is free to arrange the remaining two triangles and five squares in slots {2, 3, 4, 5, 6, 7, 8, 9}. By use of the new arrangements formula, the number of ways of doing this is
+<span class="math display">\[
+{7 \choose 2} = \frac{7!}{2! (7 - 2)!} = 21
+\]</span>
+and so the probability the first and last slots are filled with triangles is equal to 21/126.</p>
+
+<p><strong>Simulating Arrangements of Non-Distinct Objects</strong></p>
+<p>The function <code>permutation()</code> is again used to simulate a permutation in this non-distinct object case. A vector <code>objects</code> is defined containing three x’s and two o’s, and a single random permutation is generated by using <code>permutation()</code> with arguments <code>objects</code> and 5. The <code>replicate()</code> function is used to repeat this experiment 1000 times and the frequencies of the different arrangements is displayed. Here the total number of arrangements is <span class="math inline">\({5\choose 2} = 10\)</span> and as expected, each of the 10 possible arrangements occurs with approximately the same frequency.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">permutation &lt;-<span class="st"> </span><span class="cf">function</span>(d, Size){</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="kw">str_flatten</span>(<span class="kw">sample</span>(d, <span class="dt">size=</span>Size),</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">              <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>)</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">}</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">objects &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;x&#39;</span>, <span class="st">&#39;x&#39;</span>, <span class="st">&#39;x&#39;</span>, <span class="st">&#39;o&#39;</span>, <span class="st">&#39;o&#39;</span>)</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Iter =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>,</a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">              <span class="dt">Arrangement =</span> <span class="kw">replicate</span>(<span class="dv">1000</span>,</a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">                  <span class="kw">permutation</span>(objects, <span class="dv">5</span>)))</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Arrangement) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>()</a></code></pre></div>
+<pre><code>## # A tibble: 10 x 2
+## # Groups:   Arrangement [10]
+##    Arrangement     n
+##    &lt;fct&gt;       &lt;int&gt;
+##  1 o o x x x      95
+##  2 o x o x x     111
+##  3 o x x o x     102
+##  4 o x x x o     102
+##  5 x o o x x      97
+##  6 x o x o x      93
+##  7 x o x x o      88
+##  8 x x o o x     104
+##  9 x x o x o      96
+## 10 x x x o o     112</code></pre>
+
+<p><strong>Which Rule to Use?</strong></p>
+<p>Three important counting rules have been described, the permutations rule for distinct objects, the combinations rule, and the permutations rule for non-distinct objects. How can one decide which rule to apply in a given problem? Here are some tips to help one find the right rule.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>Do We Care About Order?</strong>
+If an outcome consists of a collection of objects, does the order that one list the objects matter? If order does matter, then a permutations rule may be appropriate. If the order of the objects does not matter, such as choosing a subset from a larger group, then a combinations rule is probably more suitable.</p></li>
+<li><p><strong>Are the Objects Distinguishable?</strong>
+There are two permutation rules, one that applies when all of the objects are distinguishable, and the second where there are two types of objects and one cannot? distinguish between the objects of each type.</p></li>
+<li><p><strong>When In Doubt?</strong>
+If the first two tips do not seem helpful, it may benefit to start writing down a few outcomes in the sample space. When one looks at different outcomes, one should recognize if order is important and if the objects are distinguishable.</p></li>
+</ol>
+</div>
+<div id="playing-yahtzee" class="section level2">
+<h2><span class="header-section-number">2.7</span> Playing Yahtzee</h2>
+<p>Yahtzee is a popular game played with five dice. The game is similar to the card game poker – in both games, one is trying to achieve desirable patterns in the dice faces or cards, and some types of patterns are similar in the two games. In this section, some of the dice patterns in the first roll in Yahtzee are described and the problem of determining the chances of several of the patterns are considered.</p>
+<p><strong>Outcomes of one roll of five dice</strong></p>
+When a player rolls five dice in the game Yahtzee, the most valuable result is when all of the five dice show the same number such as
+
+<p>This is called a “Yahtzee” and the player scores 50 points with this pattern. A second valuable pattern is a &quot;four-of-a-kind’ where you observe one number appearing four times, such as</p>
+<p>3, 4, 3, 3, 3.</p>
+<p>The following table gives all of the possible patterns when you roll five dice in Yahtzee. When one plays the game, some of these patterns are worth a particular number of points and these points are given in the right column.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Pattern</th>
+<th align="center">Sample of pattern</th>
+<th align="center">Point value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Yahtzee</td>
+<td align="center">4, 4, 4, 4, 4</td>
+<td align="center">50</td>
+</tr>
+<tr class="even">
+<td align="left">Four-of-a-kind</td>
+<td align="center">6, 6, 6, 4, 6</td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="left">Large straight</td>
+<td align="center">2, 6, 4, 5, 3</td>
+<td align="center">40</td>
+</tr>
+<tr class="even">
+<td align="left">Small straight</td>
+<td align="center">4, 2, 1, 3, 2</td>
+<td align="center">30</td>
+</tr>
+<tr class="odd">
+<td align="left">Full house</td>
+<td align="center">5, 1, 1, 5, 1</td>
+<td align="center">25</td>
+</tr>
+<tr class="even">
+<td align="left">Three-of-a-kind</td>
+<td align="center">2, 2, 3, 4, 2</td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="left">Two pair</td>
+<td align="center">6, 3, 3, 6, 2</td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="left">One pair</td>
+<td align="center">4, 3, 4, 1, 5</td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="left">Nothing</td>
+<td align="center">1, 3, 2, 5, 6</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Total number of outcomes</strong></p>
+<p>As in the case of two dice, it is useful to distinguish the five dice when one counts outcomes. One can represent an outcome by placing a value of individual die rolls (1 through 6) in the six slots.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+</tr>
+<tr class="even">
+<td align="center">die 1</td>
+<td align="center">die 2</td>
+<td align="center">die 3</td>
+<td align="center">die 4</td>
+<td align="center">die 5</td>
+</tr>
+</tbody>
+</table>
+<p>So two possible outcomes are</p>
+<p>2, 3, 4, 5, 5 and 3, 2, 4, 5, 5.</p>
+<p>Each die has 6 possibilities and so, applying the multiplication rule, the total number of outcomes in the rolls of five dice is
+<span class="math display">\[
+6 \times  6\times   6\times   6\times   6 = 7776.
+\]</span>
+Since all of the outcomes are equally likely, we assign a probability of 1/7776 to each outcome.</p>
+<p><strong>Probability of a Yahtzee</strong></p>
+<p>One represents the Yahtzee roll as the outcome
+<span class="math display">\[
+x, x, x, x, x
+\]</span>
+where <span class="math inline">\(x\)</span> denotes an arbitrary roll of one die. There are six possible choices for <span class="math inline">\(x\)</span>, and so the number of possible Yahtzees is 6.</p>
+<p>Since each outcome has probability 1/7776, the probability of a Yahtzee is
+<span class="math display">\[
+Prob({\rm Yahtzee}) = \frac{6}{7776}.
+\]</span></p>
+<p><strong>Probability of four-of-a-kind</strong></p>
+<p>In the pattern “four of a kind”, one wants to have one number appear four times and a second number appear once. In other words, one is interested in counting outcomes of the form
+<span class="math display">\[
+x, x, x, x, y
+\]</span>
+where the four <span class="math inline">\(x\)</span>’s and the single <span class="math inline">\(y\)</span> can be in different orders.
+To apply the multiplication rule, think of writing down a possible “four-of-a-kind” in three steps.</p>
+<ul>
+<li>Step 1: Choose the number for <span class="math inline">\(x\)</span> (the number that appears four times).</li>
+<li>Step 2: Next choose the number for the singleton <span class="math inline">\(y\)</span>.</li>
+<li>Step 3: Mix up the orders of the four <span class="math inline">\(x\)</span>’s and the one <span class="math inline">\(y\)</span>.</li>
+</ul>
+<p>For example, one chooses the outcome 5, 5, 5, 3, 5 by (1) choosing 5 to be the number that appears four times, (2) choosing 3 as the number that appears once, and then arranging the digits 5, 5, 5, 5, 3 to get 5, 5, 5, 3, 5.</p>
+<p>Next the number of ways of doing each of the three steps is counted.</p>
+<ul>
+<li>Step 1: There are 6 ways of choosing <span class="math inline">\(x\)</span>.<br />
+</li>
+<li>Step 2: Once <span class="math inline">\(x\)</span> has been chosen, there are 5 ways of choosing the value for <span class="math inline">\(y\)</span>.</li>
+<li>Step 3: Last, once <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> have been selected, there are <span class="math inline">\({5 \choose 4} = 5\)</span> ways of mixing up the <span class="math inline">\(x\)</span>’s and <span class="math inline">\(y\)</span>’s.</li>
+</ul>
+<p>To find the number of four-of-a-kinds, one uses the multiplication rule using the number of ways of doing each of the three steps:</p>
+<p>Number of ways = <span class="math inline">\(6 \times 5 \times 5 = 150\)</span>.</p>
+<p>The corresponding probability of four-of-a-kind is
+<span class="math display">\[
+Prob({\rm four-}{\rm of-}{\rm a-}{\rm kind}) = \frac{150}{7776}.
+\]</span></p>
+<p><strong>Simulating Yahtzee</strong></p>
+<p>Some of the Yahtzee probabilities are conveniently approximated by simulation. In the following, the function
+<code>four_kind()</code> uses the <code>sample()</code> function to simulate the rolls of five dice. By tabulating the roll outcomes (using the
+<code>table()</code> function), one checks if a four-of-a-kind is observed – if so, the string “4 kind” is returned, otherwise a “nothing” is returned.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">four_kind &lt;-<span class="st"> </span><span class="cf">function</span>(){</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">  rolls &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">6</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3">  <span class="kw">ifelse</span>(<span class="kw">max</span>(<span class="kw">table</span>(rolls) <span class="op">==</span><span class="st"> </span><span class="dv">4</span>), </a>
+<a class="sourceLine" id="cb11-4" data-line-number="4">         <span class="st">&quot;4 kind&quot;</span>, <span class="st">&quot;nothing&quot;</span>)</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">}</a></code></pre></div>
+<p>This Yahtzee experiment is simulated 1000 times by use of the  function. One sees below that one observed four-of-a-kind 20 times, so the approximated probability of four-of-a-kind is 16/1000 = 0.016. This agrees closely with the exact probability of 150/7776 = 0.0193.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Iter =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>,</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">           <span class="dt">Result =</span> <span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">four_kind</span>()))</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Result) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>()</a></code></pre></div>
+<pre><code>## # A tibble: 2 x 2
+## # Groups:   Result [2]
+##   Result      n
+##   &lt;fct&gt;   &lt;int&gt;
+## 1 4 kind     25
+## 2 nothing   975</code></pre>
+</div>
+<div id="exercises-1" class="section level2">
+<h2><span class="header-section-number">2.8</span> Exercises</h2>
+<ol style="list-style-type: decimal">
+<li><strong>Constructing a Word</strong></li>
+</ol>
+<p>Suppose you select three letters at random from {a, b, c, d, e, f} to form a word.</p>
+<ol style="list-style-type: lower-alpha">
+<li>How many possible words are there?</li>
+<li>What is the probability the word you choose is “fad”?</li>
+<li>What is the probability the word you choose contains the letter “a”?</li>
+<li>What is the chance that the first letter in the word is “a”?</li>
+<li>What is the probability that the word contains the letters “d”, “e”, and “f”?</li>
+</ol>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Running a Race</strong></li>
+</ol>
+<p>There are seven runners in a race – three runners are from Team <span class="math inline">\(A\)</span> and four runners are from Team <span class="math inline">\(B\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Suppose you record which runners finish first, second, and third. Count the number of possible outcomes of this race.</li>
+<li>If the runners all have the same ability, then each of the outcomes in (a) are equally likely. Find the probability that Team A runners finish first, second, and third.</li>
+<li>Find the probability that the first runner across the finish line is from Team <span class="math inline">\(A\)</span>.</li>
+</ol>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Rolling Dice</strong></li>
+</ol>
+<p>Suppose you roll three fair dice.</p>
+<ol style="list-style-type: lower-alpha">
+<li>How many possible outcomes are there?</li>
+<li>Find the probability you roll three sixes.</li>
+<li>Find the probability that all three dice show the same number.</li>
+<li>Find the probability that the sum of the dice is equal to 10.</li>
+</ol>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Ordering Hash Browns</strong></li>
+</ol>
+<p>When you order Waffle House’s world famous hash browns, you can order them scattered (on the grill), smothered (with onions), chunked (with ham), topped (with chili), diced (with tomatoes), and peppered (with peppers). How many ways can you order 5 hash browns at Waffle House?</p>
+<ol start="5" style="list-style-type: decimal">
+<li><strong>Selecting Balls from a Box</strong></li>
+</ol>
+<p>A box contains 5 balls – 2 are white, 2 are black, and one is green. You choose two balls out of the box at random without replacement.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write down all possible outcomes of this experiment. (Assume that the order in which you select the balls is important.)</li>
+<li>Find the probability that you choose two white balls.</li>
+<li>Find the probability you choose two balls of the same color.</li>
+<li>Find the probability you choose a white ball second.</li>
+</ol>
+<ol start="6" style="list-style-type: decimal">
+<li><strong>Dividing into Teams</strong></li>
+</ol>
+<p>Suppose that ten boys are randomly divided into two teams of equal size. Find the probability that the three tallest boys are on the same team.</p>
+<ol start="7" style="list-style-type: decimal">
+<li><strong>Choosing Numbers</strong></li>
+</ol>
+<p>Suppose you choose three numbers from the set {1, 2, 3, 4, 5, 6, 7, 8} without replacement.</p>
+<ol style="list-style-type: lower-alpha">
+<li>How many possible choices can you make?</li>
+<li>What is the probability you choose exactly two even numbers?</li>
+<li>What is the probability the three numbers add up to 10?</li>
+</ol>
+<ol start="8" style="list-style-type: decimal">
+<li><strong>Choosing People</strong></li>
+</ol>
+<p>Suppose you choose two people from three married couples.</p>
+<ol style="list-style-type: lower-alpha">
+<li>How many selections can you make?</li>
+<li>What is the probability the two people you choose are married to each other?</li>
+<li>What is the probability that the two people are of the same gender?</li>
+</ol>
+<ol start="9" style="list-style-type: decimal">
+<li><strong>Football Plays</strong></li>
+</ol>
+<p>Suppose a football team has five basic plays, and they will randomly choose a play on each down.</p>
+<ol style="list-style-type: lower-alpha">
+<li>On three downs, find the probability that the team runs the same play on each down.</li>
+<li>Find the probability the team runs three different plays on the three downs.</li>
+</ol>
+<ol start="10" style="list-style-type: decimal">
+<li><strong>Playing the Lottery</strong></li>
+</ol>
+<p>In a lottery game, you make a random guess at the winning three-digit number (each digit can be 0, 1, 2, 3, 4, 5, 6, 7, 8, 9). You win $200 if your guess matches the winning number, $20 if your guess matches in exactly two positions and $2 if your guess matches in exactly one position. Find the probabilities of winning $200, winning $20, and winning $2.</p>
+<ol start="11" style="list-style-type: decimal">
+<li><strong>Dining at a Restaurant</strong></li>
+</ol>
+<p>Suppose you are dining at a Chinese restaurant with the menu given on the previous page. You decide to order a combination meal where you get to order one soup or appetizer, one entr'ee (seafood, beef, or poultry), and a side dish (either fried rice or noodles).</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left"><span><strong>SOUP</strong></span></td>
+<td align="left"><span><strong>POULTRY</strong></span></td>
+</tr>
+<tr class="even">
+<td align="left">HOT AND SOUR SOUP</td>
+<td align="left">KUNG PAO CHICKEN</td>
+</tr>
+<tr class="odd">
+<td align="left">WONTON SOUP</td>
+<td align="left">HUNAN CHICKEN</td>
+</tr>
+<tr class="even">
+<td align="left">EGG DROP SOUP</td>
+<td align="left">CHICKEN WITH DOUBLE</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">NUTS</td>
+</tr>
+<tr class="even">
+<td align="left"><span><strong>APPETIZERS</strong></span></td>
+<td align="left">CHICKEN WITH GARLIC</td>
+</tr>
+<tr class="odd">
+<td align="left">EGG ROLL</td>
+<td align="left">SAUCE</td>
+</tr>
+<tr class="even">
+<td align="left">BARBECUED SPARERIBS</td>
+<td align="left">CURRY CHICKEN</td>
+</tr>
+<tr class="odd">
+<td align="left">FRIED CHICKEN STRIPS</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">BUTTERFLY SHRIMP</td>
+<td align="left"><span><strong>FRIED RICE</strong></span></td>
+</tr>
+<tr class="odd">
+<td align="left">CRAB RANGOON</td>
+<td align="left">CHICKEN FRIED RICE</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">BEEF FRIED RICE</td>
+</tr>
+<tr class="odd">
+<td align="left"><span><strong>SEAFOOD</strong></span></td>
+<td align="left">SHRIMP FRIED RICE</td>
+</tr>
+<tr class="even">
+<td align="left">SHRIMP WITH GARLIC SAUCE</td>
+<td align="left">PORK FRIED RICE</td>
+</tr>
+<tr class="odd">
+<td align="left">CURRY SHRIMP</td>
+<td align="left">THREE DELIGHT FRIED</td>
+</tr>
+<tr class="even">
+<td align="left">KUNG PAO SCALLOPS</td>
+<td align="left">RICE</td>
+</tr>
+<tr class="odd">
+<td align="left">FLOWER SHRIMP</td>
+<td align="left">VEGETABLE FRIED RICE</td>
+</tr>
+<tr class="even">
+<td align="left">SHRIMP WITH PEA PODS</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left"><span><strong>NOODLES/RICE</strong></span></td>
+</tr>
+<tr class="even">
+<td align="left"><span><strong>BEEF</strong></span></td>
+<td align="left">PAN FRIED NOODLES</td>
+</tr>
+<tr class="odd">
+<td align="left">KUNG PAO BEEF</td>
+<td align="left">MOO SHU PANCAKE</td>
+</tr>
+<tr class="even">
+<td align="left">HUNAN BEEF</td>
+<td align="left">CHOW MEIN NOODLES</td>
+</tr>
+<tr class="odd">
+<td align="left">SZECHUAN STYLE BEEF</td>
+<td align="left">STEAMED RICE</td>
+</tr>
+<tr class="even">
+<td align="left">ORANGE BEEF (HOT &amp; SPICY)</td>
+<td align="left"></td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>How many possible combination meals can you order?</li>
+<li>If you are able to go to this restaurant every day, approximately how many years could you order different combination meals?</li>
+<li>Suppose that you are allergic to seafood (this includes crab, shrimp, and scallops). How many different combination meals can you order?</li>
+<li>Suppose your friend orders two different entr'ees completely at random. How many possible dinners can she order? What is the probability the two entr'ees chosen contain the same meat?</li>
+</ol>
+<ol start="12" style="list-style-type: decimal">
+<li><strong>Ordering Pizza</strong></li>
+</ol>
+<p>If you buy a pizza from Papa John’s, you can you order the following toppings:
+ham, bacon, pepperoni, Italian sausage, sausage, beef, anchovies, extra cheese, baby portabella mushrooms, onions, black olives, Roma tomatoes, green peppers, jalape~no peppers, banana peppers, pineapple, grilled chicken.</p>
+<ol style="list-style-type: lower-alpha">
+<li>If you have the option of choosing two toppings, how many different two topping pizzas can you order?</li>
+<li>Suppose you want your two toppings to be some meat and some peppers. How many two-topping pizzas are of this type?</li>
+<li>If you order a “random” two-topping pizza, what is the chance that it will have peppers?</li>
+<li>If you are able to order at most four toppings, how many different pizzas can you order?</li>
+</ol>
+<ol start="13" style="list-style-type: decimal">
+<li><strong>Mixed Letters</strong></li>
+</ol>
+<p>You randomly mix up the letters “s”, “t”, “a”, “t”, “s”.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability the arrangement spells the word “stats”.</li>
+<li>Find the probability the arrangement starts and ends with “s”.</li>
+</ol>
+<ol start="14" style="list-style-type: decimal">
+<li><strong>Arranging CDs</strong></li>
+</ol>
+<p>Suppose you have three Taylor Swift cds and three Lady Gaga cds sitting on a shelf as follows. We assume that you can’t distinguish the cds of a given artist.</p>
+<p><span class="math display">\[T, T, T, L, L, L\]</span></p>
+<p>The cds are knocked off of the shelf and you place them back on the shelf completely at random.</p>
+<ol style="list-style-type: lower-alpha">
+<li>What is the probability that the mixed-up cds remain in the same order?</li>
+<li>What is the probability that the first and last cds on the shelf are both Lady Gaga music?</li>
+<li>What is the probability that the Jewel cds stay together on the shelf?</li>
+</ol>
+<ol start="15" style="list-style-type: decimal">
+<li><strong>Playing a Lottery Game</strong></li>
+</ol>
+<p>The Minnesota State Lottery has a game called Daily 3. A three digit number is chosen randomly from the set {000, 001, … , 999} and you win by guessing correctly certain characteristics of this three digit number. The lottery website lists the following possible plays such as First Digit, Front Pair, etc. Find the probability of winning for each play.</p>
+<p><strong>First Digit:</strong> Pick one number. To win, match the first number drawn.</p>
+<p><strong>Front Pair:</strong> Pick 2 numbers. To win, match the first 2 numbers drawn in exact order</p>
+<p><strong>Straight:</strong> Pick 3 numbers. To win, match all 3 numbers drawn in exact order.</p>
+<p><strong>3-Way Box:</strong> Pick 3 numbers, 2 that are the same. To win, match all three numbers
+drawn in any order.</p>
+<p><strong>6-Way Box:</strong> Pick 3 different numbers. To win, match all 3 numbers drawn in any order.</p>
+<ol start="16" style="list-style-type: decimal">
+<li><strong>Booking a Flight</strong></li>
+</ol>
+<p>Suppose you are booking a flight to San Francisco on Orbitz. To save money, you agree to either leave Monday, Tuesday, or Wednesday, and return on either Friday, Saturday, or Sunday. Assume that Orbitz randomly assigns you a day to leave and randomly assigns you a day to return.</p>
+<ol style="list-style-type: lower-alpha">
+<li>What is the probability you leave on Tuesday and return on Saturday?</li>
+<li>What is the chance that your trip will be exactly three days long?</li>
+<li>What is the most likely trip length in days?</li>
+<li>Do you think that the assumptions about Orbitz are reasonable? Explain.</li>
+</ol>
+<ol start="17" style="list-style-type: decimal">
+<li><strong>Assigning Grades</strong></li>
+</ol>
+<p>A math class of ten students takes an exam.</p>
+<ol style="list-style-type: lower-alpha">
+<li>If the instructor decides to give exam grades of <span class="math inline">\(A\)</span> to two randomly selected students, how many ways can this be done?</li>
+<li>Of the remaining eight students, three will receive <span class="math inline">\(B\)</span>’s and the remaining will receive <span class="math inline">\(C\)</span>’s. How many ways can this be done?</li>
+<li>If the instructor assigns at random, two <span class="math inline">\(A\)</span>’s, three <span class="math inline">\(B\)</span>’s and five <span class="math inline">\(C\)</span>’s to the ten students, how many ways can this be done?</li>
+<li>Under this grading method, what is the probability that Jim (the best student in the class) gets an <span class="math inline">\(A\)</span>?</li>
+</ol>
+<ol start="18" style="list-style-type: decimal">
+<li><strong>Choosing Officers</strong></li>
+</ol>
+<p>A club consisting of 8 members has to choose three officers.</p>
+<ol style="list-style-type: lower-alpha">
+<li>How many ways can this be done?</li>
+<li>Suppose that the club needs to choose a president, a vice-president, and a treasurer. How many ways can this be done?</li>
+<li>If the club consists of 4 men and 4 women and the officers are chosen at random, find the probability the three officers are all of the same gender.</li>
+<li>Find the probability the president and the vice-president are different genders.</li>
+</ol>
+<ol start="19" style="list-style-type: decimal">
+<li><strong>Playing Yahtzee</strong></li>
+</ol>
+<p>Find the number of ways and the corresponding probabilities of getting all of the following patterns in Yahtzee. Here are some hints for the different patterns.</p>
+<p><strong>Four of a kind:</strong> The pattern here is {x, x, x, x, y}, where x is the number that appears four times and y is the number that appears once.</p>
+<p><strong>Small straight:</strong> This roll will either include the numbers 1, 2, 3, 4, the numbers 2, 3, 4, 5, or the numbers 3, 4, 5, 6. If the numbers 1, 2, 3, 4 are the small straight, then the remaining number can not be 5 (otherwise it would be a large straight).</p>
+<p><strong>Full house:</strong> The pattern here is {x, x, x, y, y}, where x is the number that appears three times and y is the number that appears twice.</p>
+<p><strong>Three of a kind:</strong> The pattern here is {x, x, x, y, z}, where x is the number that appears three times, and y and z are the numbers that appear only once.</p>
+<p><strong>One pair:</strong> The pattern here is {x, x, w, y z}, where x is the number that appears two times, and w, y and z are the numbers that appear only once.</p>
+<p><strong>Nothing:</strong> This is the most difficult number to count directly. Once the number of each of the remaining patterns is found, then the number of “nothings” can be found by subtracting the total number of other patterns from the total number of rolls (7776).</p>
+<p><strong>R Exercises</strong></p>
+<ol start="20" style="list-style-type: decimal">
+<li><strong>Sampling Letters</strong></li>
+</ol>
+<p>The built-in vector <code>letters</code> contains the 26 lower-case letters of the alphabet.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Using the <code>sample()</code> function, take a sample of 10 letters without replacement from <code>letters</code>.</li>
+<li>Using the `<code>sample()</code> function, take a sample of 10 letters <strong>with replacement</strong> from <code>letters</code>.</li>
+</ol>
+<ol start="21" style="list-style-type: decimal">
+<li><strong>Sampling Letters (continued)</strong></li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>Write a function to take a sample of 10 letters without replacement from <code>letters</code>.</li>
+<li>Add a line in the function so that the function returns the number of vowels in the sample. (If the sample is stored in the vector <code>y</code>, then the line of code</li>
+</ol>
+<pre><code>sum(y %in% c(&quot;a&quot;, &quot;e&quot;, &quot;i&quot;, &quot;o&quot;, &quot;u&quot;))</code></pre>
+<p>will count the number of vowels in the sample.)
+(c) Using the function <code>replicate()</code>, take 50 samples, storing the number of vowels from the samples in the vector <code>n_vowels</code>.
+(d) Approximate the probability that there are two vowels in your sample.</p>
+<ol start="22" style="list-style-type: decimal">
+<li><strong>Simulating Permutations</strong></li>
+</ol>
+<p>Suppose a license plate in a particular state consists of two letters followed by a number (for example, “CD9” and “EE0” are two possible license plates).</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write a function to simulate a random license plate.</li>
+<li>Using the <code>replicate()</code> function to simulate 50 random license plates.</li>
+<li>From the simulated plates, approximate the probability there is at least one vowel in the license plate.</li>
+</ol>
+<ol start="23" style="list-style-type: decimal">
+<li><strong>Simulating Yahtzee</strong></li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>Write a function to roll five dice and record by a 1 or 0 if one observes a large straight.</li>
+<li>Use the <code>replicate()</code> function and the function found in part (a) to approximate the probability of rolling a large straight.</li>
+<li>By changing the function in part (a) and using the <code>replicate()</code> function, approximate the probability of rolling a small straight.</li>
+<li>In a similar fashion, approximate the probability of rolling a full house.</li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="probability-a-measurement-of-uncertainty.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="conditional-probability.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/02-counting.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,2217 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Discrete Distributions | Bayesian Modeling</title>
+  <meta name="description" content="This is an introduction to Bayesian modeling at the undergraduate level" />
+  <meta name="generator" content="bookdown 0.13 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Discrete Distributions | Bayesian Modeling" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is an introduction to Bayesian modeling at the undergraduate level" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Discrete Distributions | Bayesian Modeling" />
+  
+  <meta name="twitter:description" content="This is an introduction to Bayesian modeling at the undergraduate level" />
+  
+
+<meta name="author" content="Jim Albert and Jingchen Hu" />
+
+
+<meta name="date" content="2019-09-28" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="conditional-probability.html"/>
+<link rel="next" href="continuous-distributions.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Probability and Bayesian Modeling</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html"><i class="fa fa-check"></i><b>1</b> Probability: A Measurement of Uncertainty</a><ul>
+<li class="chapter" data-level="1.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#introduction"><i class="fa fa-check"></i><b>1.1</b> Introduction</a></li>
+<li class="chapter" data-level="1.2" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-classical-view-of-a-probability"><i class="fa fa-check"></i><b>1.2</b> The Classical View of a Probability</a></li>
+<li class="chapter" data-level="1.3" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-frequency-view-of-a-probability"><i class="fa fa-check"></i><b>1.3</b> The Frequency View of a Probability</a></li>
+<li class="chapter" data-level="1.4" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-subjective-view-of-a-probability"><i class="fa fa-check"></i><b>1.4</b> The Subjective View of a Probability</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#measuring-probabilities-subjectively"><i class="fa fa-check"></i><b>1.4.1</b> Measuring probabilities subjectively</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-sample-space"><i class="fa fa-check"></i><b>1.5</b> The Sample Space</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#roll-two-fair-indistinguishable-dice"><i class="fa fa-check"></i><b>1.5.1</b> Roll two fair, indistinguishable dice</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#assigning-probabilities"><i class="fa fa-check"></i><b>1.6</b> Assigning Probabilities</a><ul>
+<li class="chapter" data-level="1.6.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#events-and-event-operations"><i class="fa fa-check"></i><b>1.6.1</b> Events and Event Operations</a></li>
+<li class="chapter" data-level="1.6.2" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-three-probability-axioms"><i class="fa fa-check"></i><b>1.6.2</b> The Three Probability Axioms</a></li>
+<li class="chapter" data-level="1.6.3" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-complement-and-addition-properties"><i class="fa fa-check"></i><b>1.6.3</b> The Complement and Addition Properties</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#exercises"><i class="fa fa-check"></i><b>1.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="counting-methods.html"><a href="counting-methods.html"><i class="fa fa-check"></i><b>2</b> Counting Methods</a><ul>
+<li class="chapter" data-level="2.1" data-path="counting-methods.html"><a href="counting-methods.html#introduction-rolling-dice-yahtzee-and-roulette"><i class="fa fa-check"></i><b>2.1</b> Introduction: Rolling Dice, Yahtzee, and Roulette</a></li>
+<li class="chapter" data-level="2.2" data-path="counting-methods.html"><a href="counting-methods.html#equally-likely-outcomes"><i class="fa fa-check"></i><b>2.2</b> Equally Likely Outcomes</a></li>
+<li class="chapter" data-level="2.3" data-path="counting-methods.html"><a href="counting-methods.html#the-multiplication-counting-rule"><i class="fa fa-check"></i><b>2.3</b> The Multiplication Counting Rule</a></li>
+<li class="chapter" data-level="2.4" data-path="counting-methods.html"><a href="counting-methods.html#permutations"><i class="fa fa-check"></i><b>2.4</b> Permutations</a></li>
+<li class="chapter" data-level="2.5" data-path="counting-methods.html"><a href="counting-methods.html#combinations"><i class="fa fa-check"></i><b>2.5</b> Combinations</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="counting-methods.html"><a href="counting-methods.html#number-of-subsets"><i class="fa fa-check"></i><b>2.5.1</b> Number of subsets</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="counting-methods.html"><a href="counting-methods.html#arrangements-of-non-distinct-objects"><i class="fa fa-check"></i><b>2.6</b> Arrangements of Non-Distinct Objects</a></li>
+<li class="chapter" data-level="2.7" data-path="counting-methods.html"><a href="counting-methods.html#playing-yahtzee"><i class="fa fa-check"></i><b>2.7</b> Playing Yahtzee</a></li>
+<li class="chapter" data-level="2.8" data-path="counting-methods.html"><a href="counting-methods.html#exercises-1"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="conditional-probability.html"><a href="conditional-probability.html"><i class="fa fa-check"></i><b>3</b> Conditional Probability</a><ul>
+<li class="chapter" data-level="3.1" data-path="conditional-probability.html"><a href="conditional-probability.html#introduction-the-three-card-problem"><i class="fa fa-check"></i><b>3.1</b> Introduction: The Three Card Problem</a></li>
+<li class="chapter" data-level="3.2" data-path="conditional-probability.html"><a href="conditional-probability.html#independent-events"><i class="fa fa-check"></i><b>3.2</b> Independent Events</a></li>
+<li class="chapter" data-level="3.3" data-path="conditional-probability.html"><a href="conditional-probability.html#in-everyday-life"><i class="fa fa-check"></i><b>3.3</b> In Everyday Life</a></li>
+<li class="chapter" data-level="3.4" data-path="conditional-probability.html"><a href="conditional-probability.html#in-a-two-way-table"><i class="fa fa-check"></i><b>3.4</b> In a Two-Way Table</a></li>
+<li class="chapter" data-level="3.5" data-path="conditional-probability.html"><a href="conditional-probability.html#definition-and-the-multiplication-rule"><i class="fa fa-check"></i><b>3.5</b> Definition and the Multiplication Rule</a></li>
+<li class="chapter" data-level="3.6" data-path="conditional-probability.html"><a href="conditional-probability.html#the-multiplication-rule"><i class="fa fa-check"></i><b>3.6</b> The Multiplication Rule</a></li>
+<li class="chapter" data-level="3.7" data-path="conditional-probability.html"><a href="conditional-probability.html#the-multiplication-rule-under-independence"><i class="fa fa-check"></i><b>3.7</b> The Multiplication Rule Under Independence</a></li>
+<li class="chapter" data-level="3.8" data-path="conditional-probability.html"><a href="conditional-probability.html#learning-using-bayes-rule"><i class="fa fa-check"></i><b>3.8</b> Learning Using Bayes’ Rule</a></li>
+<li class="chapter" data-level="3.9" data-path="conditional-probability.html"><a href="conditional-probability.html#r-example-learning-about-a-spinner"><i class="fa fa-check"></i><b>3.9</b> R Example: Learning About a Spinner</a></li>
+<li class="chapter" data-level="3.10" data-path="conditional-probability.html"><a href="conditional-probability.html#exercises-2"><i class="fa fa-check"></i><b>3.10</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="discrete-distributions.html"><a href="discrete-distributions.html"><i class="fa fa-check"></i><b>4</b> Discrete Distributions</a><ul>
+<li class="chapter" data-level="4.1" data-path="discrete-distributions.html"><a href="discrete-distributions.html#introduction-the-hat-check-problem"><i class="fa fa-check"></i><b>4.1</b> Introduction: The Hat Check Problem</a></li>
+<li class="chapter" data-level="4.2" data-path="discrete-distributions.html"><a href="discrete-distributions.html#random-variable-and-probability-distribution"><i class="fa fa-check"></i><b>4.2</b> Random Variable and Probability Distribution</a></li>
+<li class="chapter" data-level="4.3" data-path="discrete-distributions.html"><a href="discrete-distributions.html#probability-distribution"><i class="fa fa-check"></i><b>4.3</b> Probability distribution</a></li>
+<li class="chapter" data-level="4.4" data-path="discrete-distributions.html"><a href="discrete-distributions.html#summarizing-a-probability-distribution"><i class="fa fa-check"></i><b>4.4</b> Summarizing a Probability Distribution</a></li>
+<li class="chapter" data-level="4.5" data-path="discrete-distributions.html"><a href="discrete-distributions.html#standard-deviation-of-a-probability-distribution"><i class="fa fa-check"></i><b>4.5</b> Standard Deviation of a Probability Distribution</a></li>
+<li class="chapter" data-level="4.6" data-path="discrete-distributions.html"><a href="discrete-distributions.html#coin-tossing-distributions"><i class="fa fa-check"></i><b>4.6</b> Coin-Tossing Distributions</a></li>
+<li class="chapter" data-level="4.7" data-path="discrete-distributions.html"><a href="discrete-distributions.html#binomial-probabilities"><i class="fa fa-check"></i><b>4.7</b> Binomial probabilities</a></li>
+<li class="chapter" data-level="4.8" data-path="discrete-distributions.html"><a href="discrete-distributions.html#binomial-experiments"><i class="fa fa-check"></i><b>4.8</b> Binomial experiments</a></li>
+<li class="chapter" data-level="4.9" data-path="discrete-distributions.html"><a href="discrete-distributions.html#binomial-computations"><i class="fa fa-check"></i><b>4.9</b> Binomial computations</a></li>
+<li class="chapter" data-level="4.10" data-path="discrete-distributions.html"><a href="discrete-distributions.html#mean-and-standard-deviation-of-a-binomial"><i class="fa fa-check"></i><b>4.10</b> Mean and standard deviation of a Binomial</a></li>
+<li class="chapter" data-level="4.11" data-path="discrete-distributions.html"><a href="discrete-distributions.html#negative-binomial-experiments"><i class="fa fa-check"></i><b>4.11</b> Negative Binomial Experiments</a></li>
+<li class="chapter" data-level="4.12" data-path="discrete-distributions.html"><a href="discrete-distributions.html#exercises-3"><i class="fa fa-check"></i><b>4.12</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="continuous-distributions.html"><a href="continuous-distributions.html"><i class="fa fa-check"></i><b>5</b> Continuous Distributions</a><ul>
+<li class="chapter" data-level="5.1" data-path="continuous-distributions.html"><a href="continuous-distributions.html#introduction-a-baseball-spinner-game"><i class="fa fa-check"></i><b>5.1</b> Introduction: A Baseball Spinner Game</a></li>
+<li class="chapter" data-level="5.2" data-path="continuous-distributions.html"><a href="continuous-distributions.html#the-uniform-distribution"><i class="fa fa-check"></i><b>5.2</b> The Uniform Distribution</a></li>
+<li class="chapter" data-level="5.3" data-path="continuous-distributions.html"><a href="continuous-distributions.html#binomial-probabilities-and-the-normal-curve"><i class="fa fa-check"></i><b>5.3</b> Binomial Probabilities and the Normal Curve</a></li>
+<li class="chapter" data-level="5.4" data-path="continuous-distributions.html"><a href="continuous-distributions.html#sampling-distribution-of-the-mean"><i class="fa fa-check"></i><b>5.4</b> Sampling Distribution of the Mean</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html"><i class="fa fa-check"></i><b>6</b> Joint Probability Distributions</a><ul>
+<li class="chapter" data-level="6.1" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#joint-probability-mass-function-sampling-from-a-box"><i class="fa fa-check"></i><b>6.1</b> Joint Probability Mass Function: Sampling From a Box</a></li>
+<li class="chapter" data-level="6.2" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#multinomial-experiments"><i class="fa fa-check"></i><b>6.2</b> Multinomial Experiments</a></li>
+<li class="chapter" data-level="6.3" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#joint-density-functions"><i class="fa fa-check"></i><b>6.3</b> Joint Density Functions</a></li>
+<li class="chapter" data-level="6.4" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#independence-and-measuring-association"><i class="fa fa-check"></i><b>6.4</b> Independence and Measuring Association</a></li>
+<li class="chapter" data-level="6.5" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#flipping-a-random-coin-the-beta-binomial-distribution"><i class="fa fa-check"></i><b>6.5</b> Flipping a Random Coin: The Beta-Binomial Distribution</a></li>
+<li class="chapter" data-level="6.6" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#bivariate-normal-distribution"><i class="fa fa-check"></i><b>6.6</b> Bivariate Normal Distribution</a></li>
+<li class="chapter" data-level="6.7" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#exercises-4"><i class="fa fa-check"></i><b>6.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="proportion.html"><a href="proportion.html"><i class="fa fa-check"></i><b>7</b> Learning About a Binomial Probability</a><ul>
+<li class="chapter" data-level="7.1" data-path="proportion.html"><a href="proportion.html#introduction-thinking-about-a-proportion-subjectively"><i class="fa fa-check"></i><b>7.1</b> Introduction: Thinking About a Proportion Subjectively</a></li>
+<li class="chapter" data-level="7.2" data-path="proportion.html"><a href="proportion.html#bayesian-inference-with-discrete-priors"><i class="fa fa-check"></i><b>7.2</b> Bayesian Inference with Discrete Priors</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="proportion.html"><a href="proportion.html#example-students-dining-preference"><i class="fa fa-check"></i><b>7.2.1</b> Example: students’ dining preference</a></li>
+<li class="chapter" data-level="7.2.2" data-path="proportion.html"><a href="proportion.html#discrete-prior-distributions-for-proportion-p"><i class="fa fa-check"></i><b>7.2.2</b> Discrete prior distributions for proportion <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="7.2.3" data-path="proportion.html"><a href="proportion.html#likelihood"><i class="fa fa-check"></i><b>7.2.3</b> Likelihood</a></li>
+<li class="chapter" data-level="7.2.4" data-path="proportion.html"><a href="proportion.html#posterior-distribution-for-proportion-p"><i class="fa fa-check"></i><b>7.2.4</b> Posterior distribution for proportion <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="7.2.5" data-path="proportion.html"><a href="proportion.html#inference-students-dining-preference"><i class="fa fa-check"></i><b>7.2.5</b> Inference: students’ dining preference</a></li>
+<li class="chapter" data-level="7.2.6" data-path="proportion.html"><a href="proportion.html#discussion-using-a-discrete-prior"><i class="fa fa-check"></i><b>7.2.6</b> Discussion: using a discrete prior</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="proportion.html"><a href="proportion.html#continuous-priors"><i class="fa fa-check"></i><b>7.3</b> Continuous Priors</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="proportion.html"><a href="proportion.html#the-beta-distribution-and-probabilities"><i class="fa fa-check"></i><b>7.3.1</b> The Beta distribution and probabilities</a></li>
+<li class="chapter" data-level="7.3.2" data-path="proportion.html"><a href="proportion.html#choosing-a-beta-density-to-represent-prior-opinion"><i class="fa fa-check"></i><b>7.3.2</b> Choosing a Beta density to represent prior opinion</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="proportion.html"><a href="proportion.html#updating-the-beta-prior"><i class="fa fa-check"></i><b>7.4</b> Updating the Beta Prior</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="proportion.html"><a href="proportion.html#bayes-rule-calculation"><i class="fa fa-check"></i><b>7.4.1</b> Bayes’ rule calculation</a></li>
+<li class="chapter" data-level="7.4.2" data-path="proportion.html"><a href="proportion.html#from-beta-prior-to-beta-posterior"><i class="fa fa-check"></i><b>7.4.2</b> From Beta prior to Beta posterior</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="proportion.html"><a href="proportion.html#bayesian-inferences-with-continuous-priors"><i class="fa fa-check"></i><b>7.5</b> Bayesian Inferences with Continuous Priors</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="proportion.html"><a href="proportion.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>7.5.1</b> Bayesian hypothesis testing</a></li>
+<li class="chapter" data-level="7.5.2" data-path="proportion.html"><a href="proportion.html#bayesian-credible-intervals"><i class="fa fa-check"></i><b>7.5.2</b> Bayesian credible intervals</a></li>
+<li class="chapter" data-level="7.5.3" data-path="proportion.html"><a href="proportion.html#bayesian-prediction"><i class="fa fa-check"></i><b>7.5.3</b> Bayesian prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="proportion.html"><a href="proportion.html#predictive-checking"><i class="fa fa-check"></i><b>7.6</b> Predictive Checking</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="proportion.html"><a href="proportion.html#comparing-bayesian-models"><i class="fa fa-check"></i><b>7.6.1</b> Comparing Bayesian models</a></li>
+<li class="chapter" data-level="7.6.2" data-path="proportion.html"><a href="proportion.html#posterior-predictive-checking"><i class="fa fa-check"></i><b>7.6.2</b> Posterior predictive checking</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="proportion.html"><a href="proportion.html#exercises-5"><i class="fa fa-check"></i><b>7.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="mean.html"><a href="mean.html"><i class="fa fa-check"></i><b>8</b> Modeling Measurement and Count Data</a><ul>
+<li class="chapter" data-level="8.1" data-path="mean.html"><a href="mean.html#introduction-1"><i class="fa fa-check"></i><b>8.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.2" data-path="mean.html"><a href="mean.html#modeling-measurements"><i class="fa fa-check"></i><b>8.2</b> Modeling Measurements</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="mean.html"><a href="mean.html#examples"><i class="fa fa-check"></i><b>8.2.1</b> Examples</a></li>
+<li class="chapter" data-level="8.2.2" data-path="mean.html"><a href="mean.html#the-general-approach"><i class="fa fa-check"></i><b>8.2.2</b> The general approach</a></li>
+<li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
+<li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="mean.html"><a href="mean.html#Normal:Continuous"><i class="fa fa-check"></i><b>8.4</b> Continuous Priors</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="mean.html"><a href="mean.html#Normal:Continuous:prior"><i class="fa fa-check"></i><b>8.4.1</b> The Normal prior for mean <span class="math inline">\(\mu\)</span></a></li>
+<li class="chapter" data-level="8.4.2" data-path="mean.html"><a href="mean.html#Normal:Continuous:choosing"><i class="fa fa-check"></i><b>8.4.2</b> Choosing a Normal prior</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate"><i class="fa fa-check"></i><b>8.5</b> Updating the Normal Prior</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="mean.html"><a href="mean.html#introduction-2"><i class="fa fa-check"></i><b>8.5.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.5.2" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:Overview"><i class="fa fa-check"></i><b>8.5.2</b> A quick peak at the update procedure</a></li>
+<li class="chapter" data-level="8.5.3" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:BayesRule"><i class="fa fa-check"></i><b>8.5.3</b> Bayes’ rule calculation</a></li>
+<li class="chapter" data-level="8.5.4" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:Conjugate"><i class="fa fa-check"></i><b>8.5.4</b> Conjugate Normal prior</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference"><i class="fa fa-check"></i><b>8.6</b> Bayesian Inferences for Continuous Normal Mean</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference:HTandCI"><i class="fa fa-check"></i><b>8.6.1</b> Bayesian hypothesis testing and credible interval</a></li>
+<li class="chapter" data-level="8.6.2" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference:Prediction"><i class="fa fa-check"></i><b>8.6.2</b> Bayesian prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="mean.html"><a href="mean.html#Normal:PPC"><i class="fa fa-check"></i><b>8.7</b> Posterior Predictive Checking</a></li>
+<li class="chapter" data-level="8.8" data-path="mean.html"><a href="mean.html#modeling-count-data"><i class="fa fa-check"></i><b>8.8</b> Modeling Count Data</a><ul>
+<li class="chapter" data-level="8.8.1" data-path="mean.html"><a href="mean.html#examples-1"><i class="fa fa-check"></i><b>8.8.1</b> Examples</a></li>
+<li class="chapter" data-level="8.8.2" data-path="mean.html"><a href="mean.html#the-poisson-distribution"><i class="fa fa-check"></i><b>8.8.2</b> The Poisson distribution</a></li>
+<li class="chapter" data-level="8.8.3" data-path="mean.html"><a href="mean.html#bayesian-inferences"><i class="fa fa-check"></i><b>8.8.3</b> Bayesian inferences</a></li>
+<li class="chapter" data-level="8.8.4" data-path="mean.html"><a href="mean.html#case-study-learning-about-website-counts"><i class="fa fa-check"></i><b>8.8.4</b> Case study: Learning about website counts</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="mean.html"><a href="mean.html#exercises-6"><i class="fa fa-check"></i><b>8.9</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>9</b> Simulation by Markov Chain Monte Carlo</a><ul>
+<li class="chapter" data-level="9.1" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#introduction-3"><i class="fa fa-check"></i><b>9.1</b> Introduction</a></li>
+<li class="chapter" data-level="9.2" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#markov-chains"><i class="fa fa-check"></i><b>9.2</b> Markov Chains</a></li>
+<li class="chapter" data-level="9.3" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#the-metropolis-algorithm"><i class="fa fa-check"></i><b>9.3</b> The Metropolis Algorithm</a></li>
+<li class="chapter" data-level="9.4" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#example-cauchy-normal-problem"><i class="fa fa-check"></i><b>9.4</b> Example: Cauchy-Normal problem</a></li>
+<li class="chapter" data-level="9.5" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#gibbs-sampling"><i class="fa fa-check"></i><b>9.5</b> Gibbs Sampling</a></li>
+<li class="chapter" data-level="9.6" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#mcmc-inputs-and-diagnostics"><i class="fa fa-check"></i><b>9.6</b> MCMC Inputs and Diagnostics</a></li>
+<li class="chapter" data-level="9.7" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#using-jags"><i class="fa fa-check"></i><b>9.7</b> Using JAGS</a></li>
+<li class="chapter" data-level="9.8" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#exercises-7"><i class="fa fa-check"></i><b>9.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html"><i class="fa fa-check"></i><b>10</b> Bayesian Hierarchical Modeling</a><ul>
+<li class="chapter" data-level="10.1" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#introduction-4"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
+<li class="chapter" data-level="10.2" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#hierarchical-normal-modeling"><i class="fa fa-check"></i><b>10.2</b> Hierarchical Normal Modeling</a></li>
+<li class="chapter" data-level="10.3" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#hierarchical-beta-binomial-modeling"><i class="fa fa-check"></i><b>10.3</b> Hierarchical Beta-Binomial Modeling</a></li>
+<li class="chapter" data-level="10.4" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#exercises-8"><i class="fa fa-check"></i><b>10.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>11</b> Simple Linear Regression</a><ul>
+<li class="chapter" data-level="11.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#introduction-5"><i class="fa fa-check"></i><b>11.1</b> Introduction</a></li>
+<li class="chapter" data-level="11.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#example-prices-and-areas-of-house-sales"><i class="fa fa-check"></i><b>11.2</b> Example: Prices and Areas of House Sales</a></li>
+<li class="chapter" data-level="11.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-simple-linear-regression-model"><i class="fa fa-check"></i><b>11.3</b> A Simple Linear Regression Model</a></li>
+<li class="chapter" data-level="11.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-weakly-informative-prior"><i class="fa fa-check"></i><b>11.4</b> A Weakly Informative Prior</a></li>
+<li class="chapter" data-level="11.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-analysis"><i class="fa fa-check"></i><b>11.5</b> Posterior Analysis</a></li>
+<li class="chapter" data-level="11.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#inference-through-mcmc"><i class="fa fa-check"></i><b>11.6</b> Inference through MCMC</a></li>
+<li class="chapter" data-level="11.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#bayesian-inferences-with-simple-linear-regression"><i class="fa fa-check"></i><b>11.7</b> Bayesian Inferences with Simple Linear Regression</a></li>
+<li class="chapter" data-level="11.8" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#informative-prior-1"><i class="fa fa-check"></i><b>11.8</b> Informative Prior</a></li>
+<li class="chapter" data-level="11.9" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-conditional-means-prior"><i class="fa fa-check"></i><b>11.9</b> A Conditional Means Prior</a></li>
+<li class="chapter" data-level="11.10" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-9"><i class="fa fa-check"></i><b>11.10</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html"><i class="fa fa-check"></i><b>12</b> Bayesian Multiple Regression and Logistic Models</a><ul>
+<li class="chapter" data-level="12.1" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#introduction-6"><i class="fa fa-check"></i><b>12.1</b> Introduction</a></li>
+<li class="chapter" data-level="12.2" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#bayesian-multiple-linear-regression"><i class="fa fa-check"></i><b>12.2</b> Bayesian Multiple Linear Regression</a></li>
+<li class="chapter" data-level="12.3" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#bayesian-logistic-regression"><i class="fa fa-check"></i><b>12.3</b> Bayesian Logistic Regression </a></li>
+<li class="chapter" data-level="12.4" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#exercises-10"><i class="fa fa-check"></i><b>12.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="case-studies.html"><a href="case-studies.html"><i class="fa fa-check"></i><b>13</b> Case Studies</a><ul>
+<li class="chapter" data-level="13.1" data-path="case-studies.html"><a href="case-studies.html#introduction-7"><i class="fa fa-check"></i><b>13.1</b> Introduction</a></li>
+<li class="chapter" data-level="13.2" data-path="case-studies.html"><a href="case-studies.html#federalist-papers-study"><i class="fa fa-check"></i><b>13.2</b> Federalist Papers Study</a></li>
+<li class="chapter" data-level="13.3" data-path="case-studies.html"><a href="case-studies.html#negative-binomial-sampling"><i class="fa fa-check"></i><b>13.3</b> Negative Binomial sampling</a></li>
+<li class="chapter" data-level="13.4" data-path="case-studies.html"><a href="case-studies.html#comparison-of-rates-for-two-authors"><i class="fa fa-check"></i><b>13.4</b> Comparison of rates for two authors</a></li>
+<li class="chapter" data-level="13.5" data-path="case-studies.html"><a href="case-studies.html#which-words-distinguish-the-two-authors"><i class="fa fa-check"></i><b>13.5</b> Which words distinguish the two authors?</a></li>
+<li class="chapter" data-level="13.6" data-path="case-studies.html"><a href="case-studies.html#career-trajectories"><i class="fa fa-check"></i><b>13.6</b> Career Trajectories</a></li>
+<li class="chapter" data-level="13.7" data-path="case-studies.html"><a href="case-studies.html#latent-class-modeling"><i class="fa fa-check"></i><b>13.7</b> Latent Class Modeling</a></li>
+<li class="chapter" data-level="13.8" data-path="case-studies.html"><a href="case-studies.html#exercises-11"><i class="fa fa-check"></i><b>13.8</b> Exercises</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Bayesian Modeling</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="discrete-distributions" class="section level1">
+<h1><span class="header-section-number">Chapter 4</span> Discrete Distributions</h1>
+<div id="introduction-the-hat-check-problem" class="section level2">
+<h2><span class="header-section-number">4.1</span> Introduction: The Hat Check Problem</h2>
+<p></p>
+<p>Some time ago, it was common for men to wear hats when they went out for dinner. When one entered a restaurant, each man would give his hat to an attendant who would keep the hat in a room until his departure. Suppose the attendant gets confused and returns hats in some random fashion to the departing men. What is the chance that no man receives his personal hat? How many hats, on average, will be returned to the right owners?</p>
+<p>This is a famous “matching” probability problem. To start thinking about this problem, it is helpful to start with some simple cases. Suppose only one man checks his hat at the restaurant. Then obviously this man will get his hat back. Then the probability of “no one receives the right hat” is 0, and the average number of hats returned will be equal to 1.</p>
+<p>Let <span class="math inline">\(n\)</span> denote the number of men who enter the restaurant. The case <span class="math inline">\(n = 1\)</span> was considered above. What if <span class="math inline">\(n = 2\)</span>? If the two men are Barry and Bobby, then there are two possibilities shown in the following table.
+These two outcomes are equally likely, so the probability of no match is 1/2. Half the time there will be 2 matches and half the time there will be 0 matches, and so the average number of matches will be 1.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"></th>
+<th align="center">Barry receives</th>
+<th align="center">Bobby receives</th>
+<th align="center"># of matching hats</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1.</td>
+<td align="center">Barry’s hat</td>
+<td align="center">Bobby’s hat</td>
+<td align="center">2</td>
+</tr>
+<tr class="even">
+<td align="center">2.</td>
+<td align="center">Bobby’s hat</td>
+<td align="center">Barry’s hat</td>
+<td align="center">0</td>
+</tr>
+</tbody>
+</table>
+<p>What if we have <span class="math inline">\(n = 3\)</span> men that we’ll call Barry, Bobby, and Jack. Then there are 3! = 6 ways of returning hats to men, listed in Table .
+Again these outcomes are equally likely, so the probability of no match is 2/6. One can show that the average number of matches is again 1.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"></th>
+<th align="center">Barry receives</th>
+<th align="center">Bobby receives</th>
+<th align="center">Jack receives</th>
+<th align="center"># of matching hats</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1.</td>
+<td align="center">Barry’s hat</td>
+<td align="center">Bobby’s hat</td>
+<td align="center">Jack’s hat</td>
+<td align="center">3</td>
+</tr>
+<tr class="even">
+<td align="center">2.</td>
+<td align="center">Barry’s hat</td>
+<td align="center">Jack’s hat</td>
+<td align="center">Bobby’s hat</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="center">3.</td>
+<td align="center">Bobby’s hat</td>
+<td align="center">Barry’s hat</td>
+<td align="center">Jack’s hat</td>
+<td align="center">1</td>
+</tr>
+<tr class="even">
+<td align="center">4.</td>
+<td align="center">Bobby’s hat</td>
+<td align="center">Jack’s hat</td>
+<td align="center">Barry’s hat</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td align="center">5.</td>
+<td align="center">Jack’s hat</td>
+<td align="center">Barry’s hat</td>
+<td align="center">Bobby’s hat</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="center">6.</td>
+<td align="center">Jack’s hat</td>
+<td align="center">Bobby’s hat</td>
+<td align="center">Barry’s hat</td>
+<td align="center">1</td>
+</tr>
+</tbody>
+</table>
+<p>What happens if there are a large number of hats checked? It turns out that the probability of no matches is given by
+<span class="math display">\[
+Prob({\rm no} \, {\rm matches}) = \frac{1}{e},
+\]</span>
+where <span class="math inline">\(e\)</span> is the special irrational number 2.718. Also it is interesting that the average number of matches for any value of <span class="math inline">\(n\)</span> is given by</p>
+<p>Average number of matches = 1.</p>
+<p>The reader will get the opportunity of exploring this famous problem by simulation in the end-of-chapter exercises.</p>
+</div>
+<div id="random-variable-and-probability-distribution" class="section level2">
+<h2><span class="header-section-number">4.2</span> Random Variable and Probability Distribution</h2>
+<p>Suppose that Peter and Paul play a simple coin game. A coin is tossed. If the coin lands heads, then Peter receives $2 from Paul; otherwise Peter has to pay $2 to Paul. The game is played for a total of five coin flips.
+After the five flips, what is Peter’s net gain (in dollars)?</p>
+<p>The answer depends on the results of the coin flips. There are two possible outcomes of each coin flip (heads or tails) and, by applying the multiplication rule, there are <span class="math inline">\(2^5 = 32\)</span> possibilities for the five flips. The 32 possible outcomes are written below.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(HHHHH\)</span></td>
+<td align="center"><span class="math inline">\(HTHHH\)</span></td>
+<td align="center"><span class="math inline">\(THHHH\)</span></td>
+<td align="center"><span class="math inline">\(TTHHH\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(HHHHT\)</span></td>
+<td align="center"><span class="math inline">\(HTHHT\)</span></td>
+<td align="center"><span class="math inline">\(THHHT\)</span></td>
+<td align="center"><span class="math inline">\(TTHHT\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(HHHTH\)</span></td>
+<td align="center"><span class="math inline">\(HTHTH\)</span></td>
+<td align="center"><span class="math inline">\(THHTH\)</span></td>
+<td align="center"><span class="math inline">\(TTHTH\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(HHHTT\)</span></td>
+<td align="center"><span class="math inline">\(HTHTT\)</span></td>
+<td align="center"><span class="math inline">\(THHTT\)</span></td>
+<td align="center"><span class="math inline">\(TTHTT\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(HHTHH\)</span></td>
+<td align="center"><span class="math inline">\(HTTHH\)</span></td>
+<td align="center"><span class="math inline">\(THTHH\)</span></td>
+<td align="center"><span class="math inline">\(TTTHH\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(HHTHT\)</span></td>
+<td align="center"><span class="math inline">\(HTTHT\)</span></td>
+<td align="center"><span class="math inline">\(THTHT\)</span></td>
+<td align="center"><span class="math inline">\(TTTHT\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(HHTTH\)</span></td>
+<td align="center"><span class="math inline">\(HTTTH\)</span></td>
+<td align="center"><span class="math inline">\(THTTH\)</span></td>
+<td align="center"><span class="math inline">\(TTTTH\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(HHTTT\)</span></td>
+<td align="center"><span class="math inline">\(HTTTT\)</span></td>
+<td align="center"><span class="math inline">\(THTTT\)</span></td>
+<td align="center"><span class="math inline">\(TTTTT\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>For each possible outcome of the flips, say <span class="math inline">\(HTHHT\)</span>, there will be a corresponding net gain for Peter. For this outcome, Peter won three times and lost twice, so his net gain is <span class="math inline">\(3(2) - 2(2) = 2\)</span> dollars. The net gain is an example of a <strong>random variable</strong> – this is simply a number that is assigned to each outcome of the random experiment.</p>
+<p>Generally, a capital letter will be used to represent a random variable – here
+the capital letter <span class="math inline">\(G\)</span> denotes Peter’s gain in this experiment. For each of the 32 outcomes, one can assign a value of <span class="math inline">\(G\)</span> – this is done in Table .</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(HHHHH, G=10\)</span></td>
+<td align="left"><span class="math inline">\(HTHHH, G=6\)</span></td>
+<td align="left"><span class="math inline">\(THHHH, G=6\)</span></td>
+<td align="left"><span class="math inline">\(TTHHH, G=2\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(HHHHT, G=6\)</span></td>
+<td align="left"><span class="math inline">\(HTHHT, G=2\)</span></td>
+<td align="left"><span class="math inline">\(THHHT, G=2\)</span></td>
+<td align="left"><span class="math inline">\(TTHHT, G=-2\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(HHHTH, G=6\)</span></td>
+<td align="left"><span class="math inline">\(HTHTH, G=2\)</span></td>
+<td align="left"><span class="math inline">\(THHTH, G=2\)</span></td>
+<td align="left"><span class="math inline">\(TTHTH, G=-2\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(HHHTT, G=2\)</span></td>
+<td align="left"><span class="math inline">\(HTHTT, G=-2\)</span></td>
+<td align="left"><span class="math inline">\(THHTT, G=-2\)</span></td>
+<td align="left"><span class="math inline">\(TTHTT, G=-6\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(HHTHH, G=6\)</span></td>
+<td align="left"><span class="math inline">\(HTTHH, G=2\)</span></td>
+<td align="left"><span class="math inline">\(THTHH, G=2\)</span></td>
+<td align="left"><span class="math inline">\(TTTHH, G=-2\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(HHTHT, G=2\)</span></td>
+<td align="left"><span class="math inline">\(HTTHT, G=-2\)</span></td>
+<td align="left"><span class="math inline">\(THTHT, G=-2\)</span></td>
+<td align="left"><span class="math inline">\(TTTHT, G=-6\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(HHTTH, G=2\)</span></td>
+<td align="left"><span class="math inline">\(HTTTH, G=-2\)</span></td>
+<td align="left"><span class="math inline">\(THTTH, G=-2\)</span></td>
+<td align="left"><span class="math inline">\(TTTTH, G=-6\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(HHTTT, G=-2\)</span></td>
+<td align="left"><span class="math inline">\(HTTTT, G=-6\)</span></td>
+<td align="left"><span class="math inline">\(THTTT, G=-6\)</span></td>
+<td align="left"><span class="math inline">\(TTTTT, G=-10\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>It is seen from the table that the possible gains for Peter are -10, -6, -2, 2, 6, and 10 dollars. One is interested in the probability that Peter will get each possible gain. To do this, one puts all of the possible values of the random variable in a table.
+Although a capital letter will be used to denote a random variable, a small letter will denote a specific value of the random variable. So <span class="math inline">\(g\)</span> refers to one specific value of the gain <span class="math inline">\(G\)</span>, and <span class="math inline">\(P(G = g)\)</span> refers to the corresponding probability.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Gain <span class="math inline">\(g\)</span> (dollars)</th>
+<th align="center">Number of outcomes</th>
+<th align="center"><span class="math inline">\(P(G = g)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(-10\)</span></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(-6\)</span></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(-2\)</span></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">6</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">10</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>What is the probability that Peter gains $6 in this game? Looking at the table of outcomes, one sees that Peter won $6 in five of the outcomes. Since there are 32 possible outcomes of the five flips, and each outcome has the same probability, one sees that the probability of Peter winning $6 is 5/32.</p>
+<p>This process is continued for all of the possible values of <span class="math inline">\(G\)</span> – one places the number of outcomes for each value and the corresponding probability in the table.
+This is an example of a probability distribution for <span class="math inline">\(G\)</span> – this is simply a list of all possible values for a random variable together with the associated probabilities.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Gain <span class="math inline">\(g\)</span> (dollars)</th>
+<th align="center">Number of outcomes</th>
+<th align="center"><span class="math inline">\(P(G = g)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(-10\)</span></td>
+<td align="center">1</td>
+<td align="center">1/32</td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(-6\)</span></td>
+<td align="center">5</td>
+<td align="center">5/32</td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(-2\)</span></td>
+<td align="center">10</td>
+<td align="center">10/32</td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center">10</td>
+<td align="center">10/32</td>
+</tr>
+<tr class="odd">
+<td align="center">6</td>
+<td align="center">5</td>
+<td align="center">5/32</td>
+</tr>
+<tr class="even">
+<td align="center">10</td>
+<td align="center">1</td>
+<td align="center">1/32</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="probability-distribution" class="section level2">
+<h2><span class="header-section-number">4.3</span> Probability distribution</h2>
+<p>In general, suppose <span class="math inline">\(X\)</span> is a discrete random variable. This type of random variable only assigns probability to a discrete set of values. In other words, the {} of <span class="math inline">\(X\)</span> is a set of discrete values. The function <span class="math inline">\(f(x)\)</span> is a probability mass function (pmf) for <span class="math inline">\(X\)</span> if the function satisfies two properties.</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(f(x) \ge 0\)</span> for each possible value <span class="math inline">\(x\)</span> of <span class="math inline">\(X\)</span></li>
+<li><span class="math inline">\(\sum_x f(x) = 1\)</span></li>
+</ol>
+<p>The table of values of the gain <span class="math inline">\(G\)</span> and the associated probabilities <span class="math inline">\(f(g) = P(G = g)\)</span> do satisfy these two properties. Each of the assigned probabilities is positive, so property (1) is satisfied. If one sums the assigned probabilities, one finds
+<span class="math display">\[
+\sum_g P(G = g) = \frac{1}{32} +  \frac{5}{32} +  \frac{10}{32}  +  \frac{10}{32} +  \frac{5}{32} +
+ \frac{1}{32} = 1,
+ \]</span>
+and so property (2) is satisfied.</p>
+<p>A probability distribution is a listing of the values of <span class="math inline">\(X\)</span> together with the associated values of the pmf. One graphically displays this probability distribution with a bar graph. One places all of the values of <span class="math inline">\(G\)</span> on the horizontal axis, marks off a probability scale on the vertical scale, and then draws vertical lines on the graph corresponding to the pmf values.</p>
+
+<div class="figure"><span id="fig:unnamed-chunk-1"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-1-1.png" alt="Probability distribution of the net gains for Peter in the Peter-Paul game." width="500" />
+<p class="caption">
+Figure 4.1: Probability distribution of the net gains for Peter in the Peter-Paul game.
+</p>
+</div>
+<p>Figure  visually shows that it is most likely for Peter to finish with a net gain of <span class="math inline">\(+2\)</span> or <span class="math inline">\(-2\)</span> dollars. Also note the symmetry of the graph – the graph looks the same way on either side of 0. This symmetry about 0 indicates that this game is fair. We will shortly discuss a way of summarizing this probability distribution that confirms that this is indeed a fair game.</p>
+
+<p><strong>Simulating the Peter-Paul Game</strong></p>
+<p>It is straightforward to simulate this game in R. A function <code>one_play()</code> is written which will play the game one time. The <code>sample()</code> function is used to flip a coin five times and the function returns the net gain for Paul.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">one_play &lt;-<span class="st"> </span><span class="cf">function</span>(){</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">  flips &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;H&quot;</span>, <span class="st">&quot;T&quot;</span>), </a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">                  <span class="dt">size =</span> <span class="dv">5</span>,</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">                  <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">  <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>(flips <span class="op">==</span><span class="st"> &quot;H&quot;</span>) <span class="op">-</span></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="st">       </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>(flips <span class="op">==</span><span class="st"> &quot;T&quot;</span>)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">}</a></code></pre></div>
+<p>The <code>replicate()</code> function is used to simulate 1000 plays of the game and the net gains for all plays are stored in the vector <code>G</code>. If one constructs a bar graph of the net gains, it will resemble the graph of the probability distribution of <span class="math inline">\(G\)</span> showed in the above figure.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">G &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">one_play</span>())</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">bar_plot</span>(G)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-3"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-3-1.png" alt="Bar graph of net gains from simulation of Peter-Paul game." width="500" />
+<p class="caption">
+Figure 4.2: Bar graph of net gains from simulation of Peter-Paul game.
+</p>
+</div>
+</div>
+<div id="summarizing-a-probability-distribution" class="section level2">
+<h2><span class="header-section-number">4.4</span> Summarizing a Probability Distribution</h2>
+<p>Once we have constructed a probability distribution – like was one above– it is convenient to use this to find probabilities.</p>
+<p>What is the chance that Peter will win at least $5 in this game? Looking at the probability table, ones sees that winning “at least $5” includes the possible values</p>
+<p><span class="math inline">\(G\)</span> = 6 and <span class="math inline">\(G\)</span> = 10</p>
+<p>One finds the probability of interest by adding the probabilities of the individual values.
+<span class="math display">\[\begin{align*}
+P(G \ge 5) &amp;= P(G = 6 \, \, {\rm or} \, \,  G = 10) \\
+&amp;= P(G = 6) + P(G = 10) \\
+&amp;= \frac{5+1}{32} = \frac{6}{32}.
+\end{align*}\]</span></p>
+<p>What is the probability Peter wins money in this game? Peter wins money if the gain <span class="math inline">\(G\)</span> is positive and this corresponds to the values <span class="math inline">\(G = 2, 6, 10\)</span>. By adding up the probabilities of these three values, one sees the probability that Peter wins money is
+<span class="math display">\[\begin{align*}
+P({\rm Peter \, \, wins}) &amp;= P(G &gt; 0) \\
+&amp;= P(G = 2) + P(G = 6) + P(G = 10) \\
+&amp;= \frac{10 + 5+1}{32} = \frac{1}{2}.
+\end{align*}\]</span>
+It is easy to compute the probability Peter loses money – also 1/2. Since the probability Peter wins in the game is the same as the probability he loses, the game is clearly fair.</p>
+<p>When one has a distribution of data, it is helpful to summarize the data with a single number, such as median or mean, to get some understanding about a typical data value. In a similar fashion, it is helpful to compute an “average” of a probability distribution – this will give us some feeling about typical or representative values of the random variable when one observes it repeated times.</p>
+<p>A common measure of “average” is the mean or expected value of <span class="math inline">\(X\)</span>, denoted <span class="math inline">\(\mu\)</span> or <span class="math inline">\(E(X)\)</span>. The mean (or expected value) is found by</p>
+<ol style="list-style-type: decimal">
+<li>Computing the product of a value of <span class="math inline">\(X\)</span> and the corresponding value of the pmf <span class="math inline">\(f(x) = P(X = x)\)</span> for all values of <span class="math inline">\(X\)</span>.</li>
+<li>Summing the products.</li>
+</ol>
+<p>In other words, one finds the mean by the formula
+<span class="math display">\[\begin{equation}
+ \mu = \sum_x x  f(x).
+\end{equation}\]</span></p>
+<p>The computation of the mean for the Peter-Paul game is illustrated in Table . For each value of the gain <span class="math inline">\(G\)</span>, the value is multiplied by the associated probability – the products are given in the rightmost column of the table. Then the products are added – one sees that the mean of <span class="math inline">\(G\)</span> is <span class="math inline">\(\mu = 0\)</span>.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"><span class="math inline">\(g\)</span></th>
+<th align="right"><span class="math inline">\(P(G = g)\)</span></th>
+<th align="right"><span class="math inline">\(g \times P(G = g)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(-10\)</span></td>
+<td align="right">1/32</td>
+<td align="right"><span class="math inline">\(-10/32\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(-6\)</span></td>
+<td align="right">5/32</td>
+<td align="right"><span class="math inline">\(-30/32\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(-2\)</span></td>
+<td align="right">10/32</td>
+<td align="right"><span class="math inline">\(-20/32\)</span></td>
+</tr>
+<tr class="even">
+<td align="left">2</td>
+<td align="right">10/32</td>
+<td align="right">20/32</td>
+</tr>
+<tr class="odd">
+<td align="left">6</td>
+<td align="right">5/32</td>
+<td align="right">30/32</td>
+</tr>
+<tr class="even">
+<td align="left">10</td>
+<td align="right">1/32</td>
+<td align="right">10/32</td>
+</tr>
+<tr class="odd">
+<td align="left">SUM</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>How does one interpret a mean value of 0? Actually it is interesting to note that <span class="math inline">\(G = 0\)</span> is not a possible outcome of the game – that is, Peter cannot break even when this game is played. But if Peter and Paul play this game a large number of times, then the value <span class="math inline">\(\mu\)</span>= 0 represents (approximately) the mean winnings of Peter in all of these games.</p>
+
+<p><strong>Simulating the Peter-Paul Game (continued)</strong></p>
+<p>The functions <code>sample()</code> and <code>replicate()</code> were earlier illustrated to simulate this game 1000 times in R. Peter’s winnings in the different games are stored in the vector <code>G</code>. Here is a display of Peter’s winnings in the first 100 games:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">G[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>]</a></code></pre></div>
+<pre><code>##   [1]  -6   2   2   2  -2  -6  -2  10   6   2  -6  -2   2   6   2  -2   2
+##  [18]  -2   2  -2  -2   2   6  -2   2  10  -6   6  -2   2   2   6   2   6
+##  [35]  -2  -2  -2   6   2  -6 -10   6  -2  -2  -2   6 -10   2   6  -2  -6
+##  [52]  -6   2 -10  -2   2  -2  -6   2  -2  -2  -2  -6  -6   6  -6   2  -2
+##  [69]  -2  -6   6   6  -6  -6  -6   2  -2   6  -2 -10  -6 -10  -2   6  -6
+##  [86]   2  -2   2   6   2   2 -10  -2  -2 -10   6  -2  -2   6  -2</code></pre>
+<p>One approximates the mean winning <span class="math inline">\(\mu\)</span> by finding the sample mean <span class="math inline">\(\bar G\)</span> of the winning values in the 1000 simulated games.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">mean</span>(G)</a></code></pre></div>
+<pre><code>## [1] -0.204</code></pre>
+<p>This value is approximately equal to the mean of <span class="math inline">\(G\)</span>, <span class="math inline">\(\mu\)</span>= 0. If Peter was able to play this game for a much larger number of games, then one would see that his average winning would be very close to <span class="math inline">\(\mu = 0\)</span>.</p>
+</div>
+<div id="standard-deviation-of-a-probability-distribution" class="section level2">
+<h2><span class="header-section-number">4.5</span> Standard Deviation of a Probability Distribution</h2>
+<p></p>
+<p>Consider two dice – one we will call the “fair die” and the other one will be called the “loaded die”. The fair die is the familiar one where each possible number (1 through 6) has the same chance of being rolled. The loaded die is designed in a special way that 3’s or 4’s are relatively likely to occur, and the remaining numbers (1, 2, 5, and 6) are unlikely to occur. Table  gives the probabilities of the possible rolls for both dice.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">Roll</td>
+<td align="center">Probability</td>
+<td align="center">Roll</td>
+<td align="center">Probability</td>
+</tr>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">1/6</td>
+<td align="center">1</td>
+<td align="center">1/12</td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center">1/6</td>
+<td align="center">2</td>
+<td align="center">1/12</td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center">1/6</td>
+<td align="center">3</td>
+<td align="center">1/3</td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center">1/6</td>
+<td align="center">4</td>
+<td align="center">1/3</td>
+</tr>
+<tr class="odd">
+<td align="center">5</td>
+<td align="center">1/6</td>
+<td align="center">5</td>
+<td align="center">1/12</td>
+</tr>
+<tr class="even">
+<td align="center">6</td>
+<td align="center">1/6</td>
+<td align="center">6</td>
+<td align="center">1/12</td>
+</tr>
+</tbody>
+</table>
+<p>How can one distinguish the fair and loaded dice? An obvious way is to roll each a number of times and see if we can distinguish the patterns of rolls that we get. One first rolls the fair die 20 times with the results</p>
+<p>3, 3, 5, 6, 6, 1, 2, 1, 4, 3, 2, 5, 6, 4, 2, 5, 6, 1, 2, 3 (mean 3.5)</p>
+<p>Next one rolls the loaded die 20 times with the results</p>
+<p>3, 2, 1, 4, 4, 1, 4, 3, 3, 3, 1, 3, 3, 5, 3, 3, 3, 6, 3, 4 (mean 3.1)</p>
+<p>Figure  displays dotplots of 50 rolls from each of the two dice.</p>
+<div class="figure"><span id="fig:unnamed-chunk-6"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-6-1.png" alt="Dotplots of 50 rolls of the fair die and the loaded die." width="500" />
+<p class="caption">
+Figure 4.3: Dotplots of 50 rolls of the fair die and the loaded die.
+</p>
+</div>
+<p>What does one see? For the fair die, the rolls appear to be evenly spread out among the six possible numbers. In contrast, the rolls for the loaded die tend to concentrate on the values and 3 and 4, and the remaining numbers were less likely to occur.</p>
+<p>Can one compute a summary value to contrast the probability distributions for the fair and loaded dice?
+One summary number for a random variable has already been discussed, the mean <span class="math inline">\(\mu\)</span>. This number represents the average outcome for the random variable when one performs the experiment many times.</p>
+<p>Suppose the mean is computed for each of the two probability distributions. For the fair die, the mean is given by
+<span class="math display">\[\begin{align*}
+\mu_{Fair Die} &amp;= (1) (\frac{1}{6}) + (2) (\frac{1}{6}) + (3) (\frac{1}{6}) + (4) (\frac{1}{6}) + (5) (\frac{1}{6}) + (6) (\frac{1}{6}) \\
+&amp;= 3.5,
+\end{align*}\]</span>
+and for the loaded die the mean is given by
+<span class="math display">\[\begin{align*}
+\mu_{Loaded Die} &amp;= (1) (\frac{1}{12}) + (2) (\frac{1}{12}) + (3) (\frac{1}{3}) + (4) (\frac{1}{3}) + (5) (\frac{1}{12}) + (6) (\frac{1}{12}) \\
+&amp;= 3.5.
+\end{align*}\]</span></p>
+<p>The means of the two probability distributions are the same – this means that one will tend to get the same average roll when the fair die and the loaded die are rolled many times.</p>
+<p>But one knows from our rolling data that the two probability distributions are different. For the loaded die, it is more likely to roll 3’s or 4’s. In other words, for the loaded die, it is more likely to roll a number close to the mean value <span class="math inline">\(\mu\)</span> = 3.5.</p>
+<p>The standard deviation of a random variable <span class="math inline">\(X\)</span>, denoted by the Greek letter <span class="math inline">\(\sigma\)</span>, measures how close the random variable is to the mean <span class="math inline">\(\mu\)</span>. It is called a standard deviation since it represents an “average” (or standard) distance (or deviation) from the mean <span class="math inline">\(\mu\)</span>. This standard deviation, denoted <span class="math inline">\(\sigma\)</span> is defined as follows:
+<span class="math display">\[\begin{equation}
+\sigma = \sqrt{\Sigma_x (x - \mu)^2 P(X = x)}.
+\end{equation}\]</span></p>
+<p>To find the standard deviation <span class="math inline">\(\sigma\)</span> for a random variable, one first computes (for all values of <span class="math inline">\(X\)</span>) the difference (or deviation) of <span class="math inline">\(x\)</span> from the mean value <span class="math inline">\(\mu\)</span>. Next, one squares each of the differences, and finds the average squared deviation by multiplying each squared deviation by the corresponding value of the pmf and summing the products.
+The standard deviation <span class="math inline">\(\sigma\)</span> is the square root of the average squared deviation.</p>
+<p>Tables  and  illustrate the computation of the standard deviation for the roll of the fair die and for the roll of the loaded die, where <span class="math inline">\(R\)</span> denotes the roll random variable.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="math inline">\(r\)</span></th>
+<th align="center"><span class="math inline">\(r - \mu\)</span></th>
+<th align="center"><span class="math inline">\((r - \mu)^2 \times\)</span> <span class="math inline">\(P(R = r)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center"><span class="math inline">\(1 - 3.5 = -2.5\)</span></td>
+<td align="center"><span class="math inline">\((-2.5)^2 \times (1/6)\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center"><span class="math inline">\(2 - 3.5 = -1.5\)</span></td>
+<td align="center"><span class="math inline">\((-1.5)^2 \times (1/6)\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center"><span class="math inline">\(3 - 3.5 = -0.5\)</span></td>
+<td align="center"><span class="math inline">\((-0.5)^2 \times (1/6)\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center"><span class="math inline">\(4 - 3.5 = 0.5\)</span></td>
+<td align="center"><span class="math inline">\((0.5)^2 \times (1/6)\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">5</td>
+<td align="center"><span class="math inline">\(5 - 3.5 = 1.5\)</span></td>
+<td align="center"><span class="math inline">\((1.5)^2 \times (1/6)\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">6</td>
+<td align="center"><span class="math inline">\(6 - 3.5 = 2.5\)</span></td>
+<td align="center"><span class="math inline">\((2.5)^2 \times (1/6)\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">SUM</td>
+<td align="center"></td>
+<td align="center">2.917</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">\[\sigma_{Fair Die} = \sqrt{2.917} = 1.71\]</span></p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="math inline">\(r\)</span></th>
+<th align="center"><span class="math inline">\(r - \mu\)</span></th>
+<th align="center"><span class="math inline">\((r - \mu)^2 \times\)</span> <span class="math inline">\(P(R = r)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center"><span class="math inline">\(1 - 3.5 = -2.5\)</span></td>
+<td align="center"><span class="math inline">\((-2.5)^2 \times (1/12)\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center"><span class="math inline">\(2 - 3.5 = -1.5\)</span></td>
+<td align="center"><span class="math inline">\((-1.5)^2 \times (1/12)\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center"><span class="math inline">\(3 - 3.5 = -0.5\)</span></td>
+<td align="center"><span class="math inline">\((-0.5)^2 \times (1/3)\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center"><span class="math inline">\(4 - 3.5 = 0.5\)</span></td>
+<td align="center"><span class="math inline">\((0.5)^2 \times (1/3)\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">5</td>
+<td align="center"><span class="math inline">\(5 - 3.5 = 1.5\)</span></td>
+<td align="center"><span class="math inline">\((1.5)^2 \times (1/12)\)</span></td>
+</tr>
+<tr class="even">
+<td align="center">6</td>
+<td align="center"><span class="math inline">\(6 - 3.5 = 2.5\)</span></td>
+<td align="center"><span class="math inline">\((2.5)^2 \times (1/12)\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center">SUM</td>
+<td align="center"></td>
+<td align="center">1.583</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">\[\sigma_{Loaded Die} = \sqrt{1.583} = 1.26\]</span></p>
+<p>It is seen from our calculations that
+<span class="math display">\[\sigma_{Fair Die}= 1.71,  \sigma_{Loaded Die} = 1.26\]</span>
+What does this mean? Since the loaded die roll has a smaller standard deviation, this means that the roll of the loaded die tends to be closer to the mean (3.5) than for the fair die. When one rolls the loaded die many times, one will notice a smaller spread or variation in the rolls than when one rolls the fair die many times.</p>
+
+<p><strong>Simulating Rolls of Fair and Loaded Dice</strong></p>
+<p>One illustrates the difference in distributions of rolls of fair and loaded dice by an R simulation. The probabilities of 100 rolls of each of the two types of dice are stored in the vectors <code>die1</code> and <code>die2</code>. Two applications of the <code>sample()</code> function are used to simulated rolls – the rolls for the fair and loaded dice are stored in the vectors <code>rolls1</code> and <code>rolls2</code>. respectively.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">die1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="op">/</span><span class="st"> </span><span class="dv">6</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">die2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="op">/</span><span class="st"> </span><span class="dv">12</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3">rolls1 &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">prob =</span> die1,</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">                 <span class="dt">size =</span> <span class="dv">100</span>, </a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">                 <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">rolls2 &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">prob =</span> die2,</a>
+<a class="sourceLine" id="cb7-7" data-line-number="7">                 <span class="dt">size =</span> <span class="dv">100</span>, </a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">                 <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>One approximates the means and standard deviations for the probability distributions by computing sample means and sample standard deviations of the simulated rolls.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">c</span>(<span class="kw">mean</span>(rolls1), <span class="kw">sd</span>(rolls1))</a></code></pre></div>
+<pre><code>## [1] 3.630000 1.508595</code></pre>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">c</span>(<span class="kw">mean</span>(rolls2), <span class="kw">sd</span>(rolls2))</a></code></pre></div>
+<pre><code>## [1] 3.360000 1.132798</code></pre>
+<p>Note that both types of dice display similar means, but the loaded die displays a smaller standard deviation than the fair die.</p>
+<p><strong>Interpreting the standard deviation for a bell-shaped distribution</strong></p>
+<p>Once one has computed a standard deviation <span class="math inline">\(\sigma\)</span> for a random variable, how can one use this summary measure? One use of <span class="math inline">\(\sigma\)</span> was illustrated in the dice example above. The probabilities for the roll of the loaded die were more concentrated about the mean than the probabilities for the roll of the fair die, and that resulted in a smaller value of <span class="math inline">\(\sigma\)</span> for the roll of the loaded die.</p>
+<p>The standard deviation has an attractive interpretation when the probability distribution of the random variable is bell-shaped. When the probability distribution has the following shape:</p>
+<div class="figure"><span id="fig:unnamed-chunk-10"></span>
+<img src="../LATEX/figures/chapter4/bellshape.png" alt="Bell-shaped curve." width="500" />
+<p class="caption">
+Figure 4.4: Bell-shaped curve.
+</p>
+</div>
+<p>then approximately</p>
+<ul>
+<li>the probability that <span class="math inline">\(X\)</span> falls within one standard deviation of the mean is 0.68.</li>
+<li>the probability that <span class="math inline">\(X\)</span> falls within two standard deviations of the mean is 0.95.</li>
+</ul>
+Mathematically, one writes,
+
+
+<p><strong>Simulating Rolls of Ten Dice</strong></p>
+<p>To illustrate this interpretation of the standard deviation, suppose ten fair dice are rolled and the sum of the numbers appearing on the dice is recorded. It is easy to simulate this experiment in R using the following script. The function <code>roll10()</code> will roll 10 dice, the function <code>replicate()</code> repeats the experiment for 1000 trials, and the variable <code>sum_rolls</code> contains the sum of the rolls from the experiments.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">roll10 &lt;-<span class="st"> </span><span class="cf">function</span>(){</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">  <span class="kw">sum</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">size =</span> <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3">}</a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">sum_rolls &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">roll10</span>())</a></code></pre></div>
+<p>A histogram of the results from 1000 trials of this experiment is shown in Figure .</p>
+<div class="figure"><span id="fig:unnamed-chunk-12"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-12-1.png" alt="Histogram of 1000 sums of ten dice" width="500" />
+<p class="caption">
+Figure 4.5: Histogram of 1000 sums of ten dice
+</p>
+</div>
+<p>Note that the shape of this histogram is approximately bell shaped about the value 35. Since this histogram is a reflection of the probability distribution of the sum of the rolls of ten dice, this means that the shape of the probability distribution for the sum will also be bell-shaped.</p>
+<p>For this problem, it can be shown (as an end-of-chapter exercise) that the mean and standard deviation for the sum of the rolls of ten fair dice are respectively
+<span class="math display">\[\mu = 35, \, \,  \sigma = 5.4.\]</span>
+Applying our rule, the probability that the sum falls between</p>
+<p><span class="math inline">\(\mu - \sigma\)</span> and <span class="math inline">\(\mu + \sigma\)</span>, or 35 <span class="math inline">\(-\)</span> 5.4 = 29.6 and 35 + 5.4 = 40.4</p>
+<p>is approximately 0.68, and the probability that the sum of the rolls falls between</p>
+<p><span class="math inline">\(\mu - 2 \sigma\)</span> and <span class="math inline">\(\mu + 2\sigma\)</span>, or 35 <span class="math inline">\(-\)</span> 2(5.4) = 24.2 and 35 + 2 (5.4) = 45.8</p>
+<p>is approximately 0.95.</p>
+
+<p><strong>Simulating Rolls of Ten Dice (continued)</strong></p>
+<p>To see if these are accurate probability computations, return to our simulation of this experiment and see how often the sum of the ten rolls fell within the above limits. Recall that the simulation sums were stored in the vector . Below the proportions of sums of ten rolls that fall between 29.6 and 40.4, and between 24.2 and 45.8, are computed.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">sum</span>(sum_rolls <span class="op">&gt;</span><span class="st"> </span><span class="fl">29.6</span> <span class="op">&amp;</span><span class="st"> </span>sum_rolls <span class="op">&lt;</span><span class="st"> </span><span class="fl">40.4</span>) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
+<pre><code>## [1] 0.72</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">sum</span>(sum_rolls <span class="op">&gt;</span><span class="st"> </span><span class="fl">24.2</span> <span class="op">&amp;</span><span class="st"> </span>sum_rolls <span class="op">&lt;</span><span class="st"> </span><span class="fl">45.8</span>) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
+<pre><code>## [1] 0.957</code></pre>
+<p>One sees that the proportions of values that fall within these limits are 0.702 and 0.955, respectively. Since these proportions are close to the numbers 0.68 and 0.95, we see in this example that this rule is pretty accurate.</p>
+</div>
+<div id="coin-tossing-distributions" class="section level2">
+<h2><span class="header-section-number">4.6</span> Coin-Tossing Distributions</h2>
+<p><strong>Introduction: A Galton Board</strong></p>
+<p>A Galton board is a physical device for simulating a special type of random experiment. It was named after the famous scientist Sir Francis Galton who lived from 1822 to 1911. Galton is noted for a wide range of achievements in the areas of meteorology, genetics, psychology, and statistics. The Galton board consists of a set of pegs laid out in the configuration shown in Figure  – one peg is in the top row, two pegs are in the second row, three pegs in the third row, and so on. A ball is placed above the top peg. When the ball is dropped and hits a peg, it is equally likely to fall left or right. We are interested in the location of the ball after striking five pegs – as shown in the figure, the ball can land in locations 0, 1, 2, 3, 4, or 5.</p>
+<div class="figure"><span id="fig:unnamed-chunk-15"></span>
+<img src="../LATEX/figures/chapter4/galton1.png" alt="Illustration of a Galton board." width="500" />
+<p class="caption">
+Figure 4.6: Illustration of a Galton board.
+</p>
+</div>
+
+<p>Figure  shows the path of four balls that fall through a Galton board. The chances of falling in the locations follow a special probability distribution that has a strong connection with a simple coin-tossing experiment.</p>
+<div class="figure"><span id="fig:unnamed-chunk-16"></span>
+<img src="../LATEX/figures/chapter4/galton2.png" alt="Illustration of the path of four balls falling through  a Galton board." width="500" />
+<p class="caption">
+Figure 4.7: Illustration of the path of four balls falling through a Galton board.
+</p>
+</div>
+
+<p>Consider the following random experiment. One takes a quarter and flip it ten times, recording the number of heads one gets. There are four special characteristics of this simple coin-tossing experiment.</p>
+<ol style="list-style-type: decimal">
+<li>One is doing the same thing (flip the coin) ten times. We will call an individual coin flip a trial, and so our experiment consists of ten identical trials.</li>
+<li><pre><code> On each trial, there are two possible outcomes, heads or tails.</code></pre></li>
+<li>In addition, the probability of flipping heads on any trial is 1/2.<br />
+</li>
+<li>The results of different trials are independent. This means that the probability of heads, say, on the fourth flip, does not depend on what happened on the first three flips.</li>
+</ol>
+<p>One is interested in the number of heads one gets – this number will be referred to <span class="math inline">\(X\)</span>. In particular, one is interested in the probability of getting five heads, or <span class="math inline">\(Prob\)</span>(<span class="math inline">\(X\)</span> = 5).</p>
+<p>In this section, one will see that this Binomial probability model applies to many different random phenomena in the real world. Probability computations for the Binomial and the closely related Negative Binomial models will be discussed and the usefulness of these models in representing the variation in real-life experiments will be illustrated.</p>
+</div>
+<div id="binomial-probabilities" class="section level2">
+<h2><span class="header-section-number">4.7</span> Binomial probabilities</h2>
+<p>Let’s return to our experiment where a quarter is flipped ten times, recording <span class="math inline">\(X\)</span>, the number of heads. One is interested in the probability of flipping exactly five heads, that is, <span class="math inline">\(Prob\)</span>(<span class="math inline">\(X = 5\)</span>). To compute this probability, one first has to think of possible outcomes in this experiment. Suppose one records if each flip is heads (<span class="math inline">\(H\)</span>) or tails (<span class="math inline">\(T\)</span>). Then one possible outcome with ten flips is</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">Trial</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">4</td>
+<td align="center">5</td>
+<td align="center">6</td>
+<td align="center">7</td>
+<td align="center">8</td>
+<td align="center">9</td>
+<td align="center">10</td>
+</tr>
+<tr class="even">
+<td align="left">Result</td>
+<td align="center"><span class="math inline">\(H\)</span></td>
+<td align="center"><span class="math inline">\(H\)</span></td>
+<td align="center"><span class="math inline">\(T\)</span></td>
+<td align="center"><span class="math inline">\(T\)</span></td>
+<td align="center"><span class="math inline">\(H\)</span></td>
+<td align="center"><span class="math inline">\(T\)</span></td>
+<td align="center"><span class="math inline">\(T\)</span></td>
+<td align="center"><span class="math inline">\(H\)</span></td>
+<td align="center"><span class="math inline">\(H\)</span></td>
+<td align="center"><span class="math inline">\(T\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Another possible outcome is <span class="math inline">\(TTHHTHTHHH\)</span>. The sample space consists of all possible ordered listings of ten letters, where each letter is either an <span class="math inline">\(H\)</span> or a <span class="math inline">\(T\)</span>.</p>
+<p>Next, consider computing the probability of a single outcome of ten flips such as the <span class="math inline">\(HHTTHHTHHT\)</span> sequence shown above. The probability of this outcome is written as</p>
+<p><span class="math inline">\(P\)</span>(“<span class="math inline">\(H\)</span> on toss 1” AND “<span class="math inline">\(H\)</span> on toss 2” AND … AND “<span class="math inline">\(T\)</span> on toss 10”).</p>
+<p>Using the fact that outcomes on different trials are independent, this probability is written as the product</p>
+<p><span class="math inline">\(P\)</span>(<span class="math inline">\(H\)</span> on toss 1)<span class="math inline">\(\times\)</span> <span class="math inline">\(P\)</span>(<span class="math inline">\(H\)</span> on toss 2) <span class="math inline">\(\times ... \times\)</span> <span class="math inline">\(P\)</span>(<span class="math inline">\(T\)</span> on toss 10).</p>
+<p>Since the probability of heads (or tails) on a given trial is 1/2, one has
+<span class="math display">\[
+P(HHTTHHTTHT) =  \frac{1}{2} \times \frac{1}{2} \times ... \times \frac{1}{2} = \left(\frac{1}{2}\right)^{10}.
+\]</span>
+Actually, the probability of any outcome (sequence of ten letters with <span class="math inline">\(H\)</span>’s or <span class="math inline">\(T\)</span>’s) in this experiment is equal to <span class="math inline">\(\left(\frac{1}{2}\right)^{10}.\)</span></p>
+<p>Let’s return to our original question – what is the probability that one gets exactly five heads? If one thinks of the individual outcomes of the ten trials, then one will see that there are many ways to get five heads. For example, one could observe</p>
+<p><span class="math inline">\(HHHHHTTTTT\)</span> or <span class="math inline">\(HHHHTTTTTH\)</span> or <span class="math inline">\(HHHTTTTTHH\)</span></p>
+<p>In each of the three outcomes, note that the number of heads is five.
+How many outcomes (like the ones shown above) will result in exactly five heads? As before, label the outcomes of the individual flips by the trial number:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">Trial</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">4</td>
+<td align="center">5</td>
+<td align="center">6</td>
+<td align="center">7</td>
+<td align="center">8</td>
+<td align="center">9</td>
+<td align="center">10</td>
+</tr>
+<tr class="even">
+<td align="left">Outcome</td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+<td align="center"><span class="underline"></span></td>
+</tr>
+</tbody>
+</table>
+<p>If five heads are observed, then one wishes to place five <span class="math inline">\(H\)</span>’s in the ten slots above. In the outcome <span class="math inline">\(HHHHHTTTTT\)</span>, the heads occur in trials 1, 2, 3, 4, 5, and in the outcome <span class="math inline">\(HHHTTTTTHH\)</span>, the heads occur in trials 1, 2, 3, 9, and 10. If one observes exactly 5 heads, then one must choose five numbers from the possible trial numbers 1, 2, …, 10 to place the five H’s. There are <span class="math inline">\(10 \choose 5\)</span> ways of choosing these trial numbers. Note that the order in which one chooses the trial numbers is not important. Since there are ways of getting exactly five heads, and each outcome has probability <span class="math inline">\(\left(\frac{1}{2}\right)^{10}\)</span>, one sees that
+<span class="math display">\[
+Prob(X = 5) = {10 \choose 5} \left(\frac{1}{2}\right)^{10}  = 0.246.
+\]</span></p>
+<p>From the complement property, one sees that the <span class="math inline">\(Prob\)</span>(five heads are {} tossed) = <span class="math inline">\(1- 0.246\)</span> = 0.754. It is interesting to note that although one expects to get five heads when we flip a coin ten times, it is actually much more likely {} to flip five heads than to flip five heads.</p>
+</div>
+<div id="binomial-experiments" class="section level2">
+<h2><span class="header-section-number">4.8</span> Binomial experiments</h2>
+<p>Although the coin tossing experiment described above seems pretty artificial, many random experiments share the same basic properties as coin tossing. Consider the following Binomial experiment:</p>
+<ol style="list-style-type: decimal">
+<li>One repeats the same basic task or trial many times – let the number of trials be denoted by <span class="math inline">\(n\)</span>.</li>
+<li>On each trial, there are two possible outcomes, which are called “success” or “failure”. One could call the two outcomes “black” and “white”, or “0” or “1”, but they are usually called success and failure.</li>
+<li>The probability of a success, denoted by <span class="math inline">\(p\)</span>, is the same for each trial.</li>
+<li>The results of outcomes from different trials are independent.</li>
+</ol>
+<p>Here are some examples of Binomial experiments.</p>
+<p><strong>Example: A sample survey.</strong>
+Suppose the Gallup organization is interested in estimating the proportion of adults in the United States who use the popular auction website eBay. They take a random sample of 100 adults and 45 say that they use eBay. In this story, we see that</p>
+<ol style="list-style-type: decimal">
+<li>The results of this survey can be considered to be a sequence of 100 trials where one trial is asking a particular adult if he or she uses eBay.<br />
+</li>
+<li>There are two possible responses to the survey question – either the adult says “yes” (he or she uses eBay) or “no” (he or she doesn’t use eBay).</li>
+<li>Suppose the proportion of all adults that use eBay is <span class="math inline">\(p\)</span>. Then the probability that the adult says “yes” will be p.</li>
+<li>If the sampling is done randomly, then the chance that one person says “yes” will not depend on the answers of the people who were previously asked. This means that the responses of different adults to the question can be regarded as independent events.</li>
+</ol>
+<p><strong>Example: A baseball hitter’s performance during a game</strong>. Suppose you are going to a baseball game and your favorite player comes to bat five times during the game. This particular player is a pretty good hitter and his batting average is about 0.300. You are interested in the number of hits he will get in the game. This can also be considered a Binomial experiment:</p>
+<ol style="list-style-type: decimal">
+<li>The player will come to bat five times – these five at-bats can be considered the five trials of the experiment (<span class="math inline">\(n\)</span> = 5).</li>
+<li>At each at-bat, there are two outcomes of interest – either the player gets a hit or he doesn’t get a hit.</li>
+<li>Since the player’s batting average is 0.300, the probability that he will get a hit in a single at-bat is <span class="math inline">\(p\)</span> = 0.300.</li>
+<li>It is reasonable to assume that the results of the different at-bats are independent. That means that the chance that the player will get a hit in his fifth at-bat will be unrelated to his performance in the first four at-bats. We note that this is a debatable assumption, especially if you believe that a player can have a hot-hand.</li>
+</ol>
+<p><strong>Example: Sampling without replacement.</strong> Suppose a committee of four will be chosen at random from a group of five women and five men. You are interested in the number of women that will be in the committee. Is this a Binomial experiment?</p>
+<ol style="list-style-type: decimal">
+<li>If one thinks of selecting this committee one person at a time, then one can think this experiment as four trials (corresponding to selecting the four people).</li>
+<li>On each trial, there are two possible outcomes – either one selects a woman or a man.
+At this point, things are looking good – this may be a Binomial experiment. But…</li>
+<li>Is the probability of choosing a woman the same for each trial? For the first pick, the chance of picking a woman is 5/10. But once this first person has been chosen, the probability of choosing a woman is not 5/10 – it will be either 4/9 or 5/9 depending on the outcome of the first trial. So the probability of a “success” is not the same for all trials, so this violates the third property of a Binomial experiment.</li>
+<li>Likewise, in this experiment, the outcomes of the trials are not independent. The probability of choosing a woman on the fourth trial is dependent on who was selected in the first three trials, so again the Binomial assumption is violated.</li>
+</ol>
+</div>
+<div id="binomial-computations" class="section level2">
+<h2><span class="header-section-number">4.9</span> Binomial computations</h2>
+<p>A Binomial experiment is defined by two numbers</p>
+<p><span class="math inline">\(n\)</span> = the number of trials, and</p>
+<p><span class="math inline">\(p\)</span> = probability of a “success” on a single trial.</p>
+<p>If one recognizes an experiment as being Binomial, then all one needs to know is <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span> to determine probabilities for the number of successes <span class="math inline">\(X\)</span>.
+Using the same argument as was made in the coin-tossing example, one can show that the probability of <span class="math inline">\(x\)</span> successes in a Binomial experiment is given by
+<span class="math display">\[\begin{equation}
+ P(X = x) = {n \choose x} p^x (1 - p)^{n-x}, \, \, k = x ..., n.
+\end{equation}\]</span></p>
+<p>Let’s illustrate using this formula for a few examples.</p>
+
+<p><strong>Example: A baseball hitter’s performance during a game (revisited).</strong> Remember our baseball player with a true batting average of 0.300 is coming to bat five times during a game. What is the probability that he gets exactly two hits?
+It was shown earlier that this was a Binomial experiment. Since the player has five opportunities, the number of trials is <span class="math inline">\(n = 5\)</span>. If one regards a success as getting a hit, the probability of success on a single trial is <span class="math inline">\(p = 0.3\)</span>. The random variable <span class="math inline">\(X\)</span> is the number of hits of the player during this game.
+Using the formula, the probability of exactly two hits is
+<span class="math display">\[
+P(X = 2) = {5 \choose 2} (0.3)^2 (1 - 0.4)^{5-2} = 0.3087.
+\]</span></p>
+<p>What is the probability that the player gets at least one hit? To do this problem, one first constructs the collection of Binomial probabilities for <span class="math inline">\(n = 5\)</span> trials and probability of success <span class="math inline">\(p = 0.3\)</span>. The following table shows all possible values of <span class="math inline">\(X\)</span> (0, 1, 2, 3, 4, 5) and the associated probabilities found using the Binomial formula.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="math inline">\(x\)</span></th>
+<th align="center"><span class="math inline">\(P(X = x)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0</td>
+<td align="center">0.168</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">0.360</td>
+</tr>
+<tr class="odd">
+<td align="center">2</td>
+<td align="center">0.309</td>
+</tr>
+<tr class="even">
+<td align="center">3</td>
+<td align="center">0.132</td>
+</tr>
+<tr class="odd">
+<td align="center">4</td>
+<td align="center">0.029</td>
+</tr>
+<tr class="even">
+<td align="center">5</td>
+<td align="center">0.002</td>
+</tr>
+</tbody>
+</table>
+<p>One is interested in the probability that the player gets at least one hit or <span class="math inline">\(P(X \ge 1)\)</span>. “At least one hit” means that <span class="math inline">\(X\)</span> can be 1, 2, 3, 4, or 5. To find this one simply sums the probabilities of <span class="math inline">\(X\)</span> between 1 and 5:
+<span class="math display">\[
+P(X \ge 1) = P(X = 1, 2, 3, 4, 5) = 0.360 + 0.309 + 0.132 + 0.029 + 0.002 = 0.832.
+\]</span>
+There is a simpler way of doing this computation using the complement property of probability. We note that if the player does not get at least one hit, then he was hitless in the game (that is, <span class="math inline">\(X\)</span> = 0). Using the complement property
+<span class="math display">\[
+P(X \ge 1) = 1 - P(X = 0) = 1 - 0.168 = 0.832.
+\]</span></p>
+
+<p><strong>Binomial Calculations in R</strong></p>
+<p>By use of the <code>dbinom()</code> and <code>pbinom()</code> functions in R, one can perform probability calculations for any Binomial distribution. In our baseball example the number of hits <span class="math inline">\(X\)</span> is Binomial with sample size 5 and probability of success <span class="math inline">\(p = 0.3\)</span>. In the following R script a data frame is constructed with the possible values of the number of hits <code>x</code>, and the function <code>dbinom()</code> with arguments <code>size</code> and <code>prob</code> is used to compute the Binomial probabilities:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Probability =</span> <span class="kw">dbinom</span>(x, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>))</a></code></pre></div>
+<pre><code>##   x Probability
+## 1 0     0.16807
+## 2 1     0.36015
+## 3 2     0.30870
+## 4 3     0.13230
+## 5 4     0.02835
+## 6 5     0.00243</code></pre>
+<p>The function <code>pbinom()</code> will compute cumulative probabilities of the form <span class="math inline">\(P(X \le x)\)</span>. For example, to find the probability that number of hits <span class="math inline">\(X\)</span> is 2 or less, <span class="math inline">\(P(X \le 2)\)</span>:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">pbinom</span>(<span class="dv">2</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>)</a></code></pre></div>
+<pre><code>## [1] 0.83692</code></pre>
+<p>One computes the probability <span class="math inline">\(P(X \ge 2)\)</span> by finding the cumulative probability <span class="math inline">\(P(X \le 1)\)</span>, and subtracting the result from 1:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pbinom</span>(<span class="dv">1</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>)</a></code></pre></div>
+<pre><code>## [1] 0.47178</code></pre>
+<p><strong>Simulating Binomial Experiments</strong></p>
+<p>One conveniently simulates outcomes from Binomial experiments by use of the <code>rbinom()</code> function. The arguments to this function are the number of simulated draws, the number of Binomial trials <code>size</code> and the probability of success <code>prob</code>. To illustrate, consider the baseball hitter who is coming to bat 5 times in a game where the probability of a hit on each at-bat is 0.3. One simulates the number of hits in 50 games by using arguments 50, <code>size = 5</code> and <code>prob = 0.3</code>.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">(hits &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">50</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.3</span>))</a></code></pre></div>
+<pre><code>##  [1] 1 2 1 1 2 2 2 0 2 2 2 1 2 4 2 1 2 3 2 2 0 1 1 2 1 2 0 3 3 4 4 1 2 0 3
+## [36] 1 1 4 2 2 1 2 1 0 3 2 0 3 1 0</code></pre>
+<p>By use of the  function, we tally the outcomes.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">table</span>(hits)</a></code></pre></div>
+<pre><code>## hits
+##  0  1  2  3  4 
+##  7 14 19  6  4</code></pre>
+<p>Here this player got exactly one hit in a game in 20 games, so the approximately probability that <span class="math inline">\(X = 1\)</span> is equal to 20/50 = 0.4.</p>
+</div>
+<div id="mean-and-standard-deviation-of-a-binomial" class="section level2">
+<h2><span class="header-section-number">4.10</span> Mean and standard deviation of a Binomial</h2>
+<p>There are simple formula for the mean and variance for a Binomial random variable. First let <span class="math inline">\(X_1\)</span> denote the result of the first Binomial trial where</p>
+<p><span class="math display">\[
+  X_1=
+  \begin{cases}
+                                   1 &amp; \text{if we observe a success} \\
+                                   0 &amp; \text{if we observe a failure} \\
+    \end{cases}
+\]</span></p>
+<p>In the end-of-chapter exercises, the reader will be asked to show that the mean and variance of <span class="math inline">\(X_1\)</span> are given by
+<span class="math display">\[
+ E(X_1) = p, \, \, \, Var(X_1) = p (1 - p).
+\]</span>
+If <span class="math inline">\(X_1, ..., X_n\)</span> represent the results of the <span class="math inline">\(n\)</span> Binomial trials, then the Binomial random variable <span class="math inline">\(X\)</span> can be written as
+<span class="math display">\[
+ X = X_1 + ... + X_n.
+ \]</span>
+Using this representation, the mean and variance of X are given by
+<span class="math display">\[
+E(X) = E(X_1) + ... + E(X_n), \, \, \, Var(X) = Var(X_1) + ... + Var(X_n).
+\]</span>
+The result about the variance is a consequence of the fact that the results of different trials of a Binomial experiment are independent. Using this result and the previous result on the mean and variance of an individual trial outcome, we obtain
+<span class="math display">\[\begin{equation}
+E(X) = p + ... + p = n p,
+\end{equation}\]</span>
+and
+<span class="math display">\[\begin{equation}
+Var(X) = p(1-p) + ... + p(1-p) = n p (1-p).
+\end{equation}\]</span></p>
+<p>To illustrate these formulas, recall the first example where <span class="math inline">\(X\)</span> denoted the number of heads when a fair coin is flipped 10 times. Here the number of trials and probability of success are given by <span class="math inline">\(n\)</span> = 10 and <span class="math inline">\(p\)</span> = 0.5. The expected number of heads would be
+<span class="math display">\[
+E(X) = 10 (0.5) = 5
+\]</span>
+and the variance of the number of heads would be
+<span class="math display">\[
+V(X) = 10 (0.5) (1- 0.5) = 2.5.
+\]</span></p>
+
+<p><strong>Simulating Binomial Experiments (continued)</strong></p>
+<p>In our baseball example, the number of successes <span class="math inline">\(X\)</span> were simulated in 50 Binomial experiments where <span class="math inline">\(n = 5\)</span> and <span class="math inline">\(p = 0.3\)</span>. The mean and standard deviation of <span class="math inline">\(X\)</span> are given by <span class="math inline">\(\mu = 5 (0.3) = 1.5\)</span> and <span class="math inline">\(\sigma = \sqrt{5 (.3) (1 - .3)} = 1.02\)</span>. One approximates the mean and standard deviation by finding the sample mean and standard deviation from the simulated values of <span class="math inline">\(X\)</span>. Below one sees that these approximate values agree closely with the exact values of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">hits &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">50</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.3</span>)</a>
+<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">mean</span>(hits)</a></code></pre></div>
+<pre><code>## [1] 1.66</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">sd</span>(hits)</a></code></pre></div>
+<pre><code>## [1] 1.061574</code></pre>
+</div>
+<div id="negative-binomial-experiments" class="section level2">
+<h2><span class="header-section-number">4.11</span> Negative Binomial Experiments</h2>
+<p>The 2004 baseball season was exciting since particular players had the opportunity to break single-season records. Let’s focus on Ichiro Suzuki of the Seattle Mariners who had the opportunity to break the season record for the most hits that was set by George Sisler in 1920. Sisler’s record was 257 hits and Suzuki had 255 hits before the Mariners’ game on September 30. Was it likely that Suzuki would tie Sisler’s record during this particular game?</p>
+<p>One can approximate this process as a coin-tossing experiment. When Suzuki comes to bat, there are two relevant outcomes: either he will get a hit, or he will get an out. Note that other batting plays such as a walk or sacrifice bunt are ignored that don’t result in a hit or an out. Assume the probability that he gets a hit on a single at-bat is <span class="math inline">\(p\)</span> = 0.372 (his 2004 batting average) and one assumes (for simplicity) that the outcomes on different at-bats are independent.</p>
+<p>Suzuki needs two more hits to tie the record. How many at-bats will it take him to get two hits?</p>
+<p>This is not a Binomial experiment since the number of trials is not fixed. Instead the number of successes (hits) is fixed in advance and the number of trials to achieve this is random. Consider</p>
+<p><span class="math inline">\(Y\)</span> = number of at-bats to get two hits.</p>
+<p>One is interested in probabilities about the number of bats <span class="math inline">\(Y\)</span>.</p>
+<p>It should be obvious that <span class="math inline">\(Y\)</span> has be at least 2 (he needs at least 2 at-bats to get 2 hits), but <span class="math inline">\(Y\)</span> could be 3, 4, 5, etc. Let’s find the probability that <span class="math inline">\(Y\)</span> = 5.</p>
+<p>First we know that the second hit must have occurred in the fifth trial (since <span class="math inline">\(Y\)</span>=5). Also it is known that there must have been one hit and three outs in the first four trials – there are <span class="math inline">\({4 \choose 1}\)</span> ways of arranging the H’s and the O’s in these trials.</p>
+
+<p><img src="../LATEX/figures/chapter4/nb1.png" width="500" /></p>
+<p>Also the probability of each possible outcome is <span class="math inline">\(p^2(1-p)^3\)</span>, where p is the probability of a hit. So the probability that it takes 5 trials to observe 2 hits is
+<span class="math display">\[
+P(Y = 5) = {4 \choose 1} p^2(1-p)^3.
+\]</span>
+Since <span class="math inline">\(p\)</span> = 0.372 in this case, we get
+<span class="math display">\[
+P(Y = 5) = {4 \choose 1} 0.372^2(1-0.372)^3 = 0.1371.
+\]</span></p>
+<p>A general Negative Binomial experiment is described as follows:</p>
+<ul>
+<li>One has a sequence of independent trials where each trial can be a success (<span class="math inline">\(S\)</span>) or a failure.</li>
+<li>The probability of a success on a single trial is <span class="math inline">\(p\)</span>.</li>
+<li>The experiment is continued until one observes <span class="math inline">\(r\)</span> successes, and <span class="math inline">\(Y\)</span> = number of trials one observes.</li>
+</ul>
+<p>The probability that it takes <span class="math inline">\(y\)</span> trials to observe <span class="math inline">\(r\)</span> successes is
+<span class="math display">\[\begin{equation}
+P(Y = y) = {y-1 \choose r-1} p^r (1- p)^{y-r}, y = r, r+1, r + 2, ...
+\end{equation}\]</span></p>
+<p>Let’s use this formula in our baseball example where <span class="math inline">\(r = 2\)</span> and <span class="math inline">\(p\)</span> = 0.372. Table  gives the probabilities for the number of at-bats <span class="math inline">\(y\)</span> = 2, 3, …, 9.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="math inline">\(y\)</span></th>
+<th align="center"><span class="math inline">\(P(Y = y)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">2</td>
+<td align="center">.1384</td>
+</tr>
+<tr class="even">
+<td align="center">3</td>
+<td align="center">.1738</td>
+</tr>
+<tr class="odd">
+<td align="center">4</td>
+<td align="center">.1637</td>
+</tr>
+<tr class="even">
+<td align="center">5</td>
+<td align="center">.1371</td>
+</tr>
+<tr class="odd">
+<td align="center">6</td>
+<td align="center">.1076</td>
+</tr>
+<tr class="even">
+<td align="center">7</td>
+<td align="center">.0811</td>
+</tr>
+<tr class="odd">
+<td align="center">8</td>
+<td align="center">.0594</td>
+</tr>
+<tr class="even">
+<td align="center">9</td>
+<td align="center">.0426</td>
+</tr>
+</tbody>
+</table>
+<p>Note that it is most likely that Suzuki will only need three at-bats to get his two additional hits, but the probability of three at-bats is only 17%. Actually each of the values 2, 3, 4, 5, and 6 have probabilities exceeding 10%. There is a significant probability that Suzuki will take a large number of bats – by adding the probabilities in Table , we see that the probability that <span class="math inline">\(Y\)</span> is at most 9 is 0.904, so the probability that Y exceeds 9 is 1 - 0.904 = 0.096.</p>
+<p>For a Negative Binomial experiment where <span class="math inline">\(Y\)</span> is the number of trials needed to observe <span class="math inline">\(r\)</span> successes, one can show that the mean value is
+<span class="math display">\[\begin{equation}
+ E(Y) = \frac{r}{p}.
+\end{equation}\]</span>
+For the baseball example, <span class="math inline">\(r = 2\)</span> and <span class="math inline">\(p = 0.372\)</span>, so the expected number of at-bats to get two hits would be <span class="math inline">\(E(Y) = 2/0.372 = 5.4\)</span>. It is interesting to note that although <span class="math inline">\(Y = 3\)</span> is the most probable value, Suzuki would average over 5 at-bats to get 2 hits in many repetitions of this random experiment.</p>
+
+<p><strong>Negative Binomial Calculations and Simulations</strong></p>
+<p>The R functions <code>dnbinom()</code> and <code>rnbinom()</code> can be used to compute probabilities and simulate from Negative Binomial distributions. One small complication is that these functions define the random variable to be the number of failures (instead of the total number of trials) until the <span class="math inline">\(r\)</span>-th success.</p>
+<p>To illustrate the use of these functions, consider our baseball example where <span class="math inline">\(X\)</span> is the number of at-bats for Suzuki to get <span class="math inline">\(r =2\)</span> hits where the probability of a hit on a single at-bat is <span class="math inline">\(p = 0.372\)</span>. The probability <span class="math inline">\(P(X = 5)\)</span> is the same as the probability <span class="math inline">\(P(Y = 3)\)</span> where <span class="math inline">\(Y\)</span> is the number of failures until the 2nd success. Using the function <code>dnbinom()</code>, one computes <span class="math inline">\(P(Y = 3)\)</span></p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">dnbinom</span>(<span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="fl">.372</span>)</a></code></pre></div>
+<pre><code>## [1] 0.137096</code></pre>
+<p>which is equivalent to the probability that <span class="math inline">\(X = 5\)</span> computed earlier. Also,  can be used to simulate Negative Binomial experiments. For example, one can simulate the number of failures until the second success for 10 experiments as follows.</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">rnbinom</span>(<span class="dv">10</span>, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="fl">.372</span>)</a></code></pre></div>
+<pre><code>##  [1] 0 3 5 3 7 4 9 5 1 6</code></pre>
+<p>It is interesting to note that Suzuki had 15 outs until the second success for one of these experiments.</p>
+</div>
+<div id="exercises-3" class="section level2">
+<h2><span class="header-section-number">4.12</span> Exercises</h2>
+<ol style="list-style-type: decimal">
+<li><strong>Coin-tossing Game</strong></li>
+</ol>
+<p>In the Peter-Paul coin-tossing game described in the text, let the random variable <span class="math inline">\(X\)</span> be the number of times Paul is in the lead. For example, if the coin tosses are <span class="math inline">\(HTHHT\)</span>, Paul’s running winnings are $-2, 0, $2, $4, $2, and the number of times he is in the lead is <span class="math inline">\(X = 4\)</span>.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(HHHHH\)</span></td>
+<td align="center"><span class="math inline">\(HTHHH\)</span></td>
+<td align="center"><span class="math inline">\(THHHH\)</span></td>
+<td align="center"><span class="math inline">\(TTHHH\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(HHHHT\)</span></td>
+<td align="center"><span class="math inline">\(HTHHT\)</span></td>
+<td align="center"><span class="math inline">\(THHHT\)</span></td>
+<td align="center"><span class="math inline">\(TTHHT\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(HHHTH\)</span></td>
+<td align="center"><span class="math inline">\(HTHTH\)</span></td>
+<td align="center"><span class="math inline">\(THHTH\)</span></td>
+<td align="center"><span class="math inline">\(TTHTH\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(HHHTT\)</span></td>
+<td align="center"><span class="math inline">\(HTHTT\)</span></td>
+<td align="center"><span class="math inline">\(THHTT\)</span></td>
+<td align="center"><span class="math inline">\(TTHTT\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(HHTHH\)</span></td>
+<td align="center"><span class="math inline">\(HTTHH\)</span></td>
+<td align="center"><span class="math inline">\(THTHH\)</span></td>
+<td align="center"><span class="math inline">\(TTTHH\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(HHTHT\)</span></td>
+<td align="center"><span class="math inline">\(HTTHT\)</span></td>
+<td align="center"><span class="math inline">\(THTHT\)</span></td>
+<td align="center"><span class="math inline">\(TTTHT\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(HHTTH\)</span></td>
+<td align="center"><span class="math inline">\(HTTTH\)</span></td>
+<td align="center"><span class="math inline">\(THTTH\)</span></td>
+<td align="center"><span class="math inline">\(TTTTH\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(HHTTT\)</span></td>
+<td align="center"><span class="math inline">\(HTTTT\)</span></td>
+<td align="center"><span class="math inline">\(THTTT\)</span></td>
+<td align="center"><span class="math inline">\(TTTTT\)</span></td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability distribution for <span class="math inline">\(X\)</span>.</li>
+<li>Construct a graph of the pmf for <span class="math inline">\(X\)</span>.</li>
+<li>What is the most likely value of <span class="math inline">\(X\)</span>?</li>
+<li>Find the probability that <span class="math inline">\(X &gt; 2\)</span>.</li>
+</ol>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Sampling Without Replacement</strong></li>
+</ol>
+<p>Suppose you choose two coins from a box with two nickels and three quarters. Let <span class="math inline">\(X\)</span> denote the number of nickels you draw.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write out all possible 10 outcomes of this experiment.</li>
+<li>Find the probability distribution for <span class="math inline">\(X\)</span>.</li>
+<li>What is the most likely value of <span class="math inline">\(X\)</span>?</li>
+<li>Find the probability that <span class="math inline">\(X &gt; 1\)</span>.</li>
+</ol>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Shooting Free Throws</strong></li>
+</ol>
+<p>Suppose you watch your favorite basketball player attempt five free throw shots during a game. You know that the chance that he is successful on a single shot is 0.5, so that the possible sequences of successes (<span class="math inline">\(S\)</span>) and misses (<span class="math inline">\(M\)</span>) shown below are equally likely. Suppose you measure the number of runs <span class="math inline">\(X\)</span> where a run is defined to be a streak of <span class="math inline">\(S\)</span>’s or <span class="math inline">\(M\)</span>’s. For example, in the sequence <span class="math inline">\(MMSSM\)</span>, there are three runs (one run of two misses, one run of two successes, and one run of one miss).</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(SSSSS\)</span></td>
+<td align="left"><span class="math inline">\(SMSSS\)</span></td>
+<td align="left"><span class="math inline">\(MSSSS\)</span></td>
+<td align="left"><span class="math inline">\(MMSSS\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(SSSSM\)</span></td>
+<td align="left"><span class="math inline">\(SMSSM\)</span></td>
+<td align="left"><span class="math inline">\(MSSSM\)</span></td>
+<td align="left"><span class="math inline">\(MMSSM\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(SSSMS\)</span></td>
+<td align="left"><span class="math inline">\(SMSMS\)</span></td>
+<td align="left"><span class="math inline">\(MSSMS\)</span></td>
+<td align="left"><span class="math inline">\(MMSMS\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(SSSMM\)</span></td>
+<td align="left"><span class="math inline">\(SMSMM\)</span></td>
+<td align="left"><span class="math inline">\(MSSMM\)</span></td>
+<td align="left"><span class="math inline">\(MMSMM\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(SSMSS\)</span></td>
+<td align="left"><span class="math inline">\(SMMSS\)</span></td>
+<td align="left"><span class="math inline">\(MSMSS\)</span></td>
+<td align="left"><span class="math inline">\(MMMSS\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(SSMSM\)</span></td>
+<td align="left"><span class="math inline">\(SMMSM\)</span></td>
+<td align="left"><span class="math inline">\(MSMSM\)</span></td>
+<td align="left"><span class="math inline">\(MMMSM\)</span></td>
+</tr>
+<tr class="odd">
+<td align="left"><span class="math inline">\(SSMMS\)</span></td>
+<td align="left"><span class="math inline">\(SMMMS\)</span></td>
+<td align="left"><span class="math inline">\(MSMMS\)</span></td>
+<td align="left"><span class="math inline">\(MMMMS\)</span></td>
+</tr>
+<tr class="even">
+<td align="left"><span class="math inline">\(SSMMM\)</span></td>
+<td align="left"><span class="math inline">\(SMMMM\)</span></td>
+<td align="left"><span class="math inline">\(MSMMM\)</span></td>
+<td align="left"><span class="math inline">\(MMMMM\)</span></td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability distribution for <span class="math inline">\(X\)</span>.</li>
+<li>Construct a graph of the pmf for <span class="math inline">\(X\)</span>.</li>
+<li>What is the most likely number of runs in the sequence?</li>
+<li>Find the probability that you have at most 2 runs in the sequence.</li>
+</ol>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Rolling Two Dice</strong></li>
+</ol>
+<p>Suppose you roll two dice and you keep track of the larger of the two rolls which we denote by <span class="math inline">\(X\)</span>. For example, if you roll a 4 and a 5, then <span class="math inline">\(X\)</span> = 5.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability distribution for <span class="math inline">\(X\)</span>.</li>
+<li>Construct a graph of the pmf for <span class="math inline">\(X\)</span>.</li>
+<li>What is the most likely value of <span class="math inline">\(X\)</span>?</li>
+<li>Find the probability that <span class="math inline">\(X\)</span> is either 5 or 6.</li>
+</ol>
+<ol start="5" style="list-style-type: decimal">
+<li><strong>Spinning a Spinner</strong></li>
+</ol>
+<p>Let <span class="math inline">\(X\)</span> denote the number you get when you spin the spinner shown below.</p>
+<img src="../LATEX/figures/chapter4/spinner7.png" width="200" />
+
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability distribution for <span class="math inline">\(X\)</span>.</li>
+<li>Find the probability that <span class="math inline">\(X \ge 2\)</span> .</li>
+<li>Find the mean and standard deviation of <span class="math inline">\(X\)</span>.</li>
+</ol>
+<ol start="6" style="list-style-type: decimal">
+<li><strong>Rolling Four Dice</strong></li>
+</ol>
+<p>Suppose you are asked to roll four dice and record the sum <span class="math inline">\(X\)</span>. A lazy student thinks this is too much work. As a shortcut, he decides to roll only two dice, record the sum of the dice, and then double the result – call this random variable <span class="math inline">\(Y\)</span>.</p>
+<p>The probability distributions of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are shown in Tables  and . The distribution of <span class="math inline">\(X\)</span> was obtained by simulating the rolls of four dice for one million trials.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right"><span class="math inline">\(x\)</span></th>
+<th align="center"><span class="math inline">\(P(X = x)\)</span></th>
+<th align="right"><span class="math inline">\(x\)</span></th>
+<th align="center"><span class="math inline">\(P(X = x)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+<td align="center">0.001</td>
+<td align="right">15</td>
+<td align="center">0.108</td>
+</tr>
+<tr class="even">
+<td align="right">5</td>
+<td align="center">0.003</td>
+<td align="right">16</td>
+<td align="center">0.096</td>
+</tr>
+<tr class="odd">
+<td align="right">6</td>
+<td align="center">0.008</td>
+<td align="right">17</td>
+<td align="center">0.080</td>
+</tr>
+<tr class="even">
+<td align="right">7</td>
+<td align="center">0.016</td>
+<td align="right">18</td>
+<td align="center">0.062</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="center">0.027</td>
+<td align="right">19</td>
+<td align="center">0.043</td>
+</tr>
+<tr class="even">
+<td align="right">9</td>
+<td align="center">0.044</td>
+<td align="right">20</td>
+<td align="center">0.027</td>
+</tr>
+<tr class="odd">
+<td align="right">10</td>
+<td align="center">0.062</td>
+<td align="right">21</td>
+<td align="center">0.015</td>
+</tr>
+<tr class="even">
+<td align="right">11</td>
+<td align="center">0.080</td>
+<td align="right">22</td>
+<td align="center">0.008</td>
+</tr>
+<tr class="odd">
+<td align="right">12</td>
+<td align="center">0.097</td>
+<td align="right">23</td>
+<td align="center">0.003</td>
+</tr>
+<tr class="even">
+<td align="right">13</td>
+<td align="center">0.108</td>
+<td align="right">24</td>
+<td align="center">0.001</td>
+</tr>
+<tr class="odd">
+<td align="right">14</td>
+<td align="center">0.113</td>
+<td align="right"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th align="right"><span class="math inline">\(y\)</span></th>
+<th align="center"><span class="math inline">\(P(Y = y)\)</span></th>
+<th align="right"><span class="math inline">\(y\)</span></th>
+<th align="center"><span class="math inline">\(P(Y = y)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">4</td>
+<td align="center">0.028</td>
+<td align="right">16</td>
+<td align="center">0.139</td>
+</tr>
+<tr class="even">
+<td align="right">6</td>
+<td align="center">0.056</td>
+<td align="right">18</td>
+<td align="center">0.111</td>
+</tr>
+<tr class="odd">
+<td align="right">8</td>
+<td align="center">0.083</td>
+<td align="right">20</td>
+<td align="center">0.083</td>
+</tr>
+<tr class="even">
+<td align="right">10</td>
+<td align="center">0.111</td>
+<td align="right">12</td>
+<td align="center">0.056</td>
+</tr>
+<tr class="odd">
+<td align="right">12</td>
+<td align="center">0.139</td>
+<td align="right">14</td>
+<td align="center">0.028</td>
+</tr>
+<tr class="even">
+<td align="right">14</td>
+<td align="center">0.167</td>
+<td align="right"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Compute the mean and standard deviation of the probability distributions of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</li>
+<li>Plot the probability distributions of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> on the same graph.</li>
+<li>Compare and contrast the two probability distributions. How are the distributions similar? How are they different? How would you respond to the lazy student who thinks that doubling a two-dice result is equivalent to finding the sum of four fair dice?</li>
+</ol>
+<ol start="7" style="list-style-type: decimal">
+<li><strong>Running a Marathon Race</strong></li>
+</ol>
+<p>Suppose three runners from college <span class="math inline">\(A\)</span> and four runners from college <span class="math inline">\(B\)</span> are participating in a marathon race. Suppose that all seven runners have equal abilities and so all possible orders of finish of the seven runners are equally likely. For example, one possible order of finish is <span class="math inline">\(AAABBBB\)</span> where the three <span class="math inline">\(A\)</span> runners finish first, second, and third. Let <span class="math inline">\(X\)</span> denote the finish position of the best runner from college <span class="math inline">\(A\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability distribution of <span class="math inline">\(X\)</span>.</li>
+<li>Find the probability that <span class="math inline">\(X\)</span> is at most 2.</li>
+<li>Find the average finish of the best runner from college <span class="math inline">\(A\)</span>.</li>
+</ol>
+<ol start="8" style="list-style-type: decimal">
+<li><strong>Choosing a Slip from a Random Box</strong></li>
+</ol>
+<p>Suppose you roll a die. If the die roll is 1 or 2, you choose a slip from box 1; otherwise you choose a slip from box 2. Let <span class="math inline">\(Y\)</span> denote the number on the slip.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability distribution for <span class="math inline">\(Y\)</span>.</li>
+<li>Find the probability that <span class="math inline">\(Y\)</span> is between 2 to 4.</li>
+</ol>
+<ol start="9" style="list-style-type: decimal">
+<li><strong>A Random Walk</strong></li>
+</ol>
+<p>Suppose that a person starts at location 0 on the number line and each minute he is equally likely to take a step to the left and to the right. Let <span class="math inline">\(Y\)</span> denote the person’s location after four steps.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability distribution for <span class="math inline">\(Y\)</span>.</li>
+<li>Find the probability that he is at least two steps away from his start after four steps.</li>
+<li>Suppose there is some gravitational pull towards the 0 (home) location. Then if he is currently at a negative location, the probability he will take a positive step is 0.7, and likewise if he is at a positive location, the probability he takes a negative step is 0.7. If he is at point 0, he is equally likely to take a negative or positive step. Find the probability distribution of <span class="math inline">\(Y\)</span>.</li>
+<li>Compare the two probability distributions in parts (a) and (c) using the mean and standard deviation.</li>
+</ol>
+<ol start="10" style="list-style-type: decimal">
+<li><strong>Selecting a Prize from a Bag</strong></li>
+</ol>
+<p>Suppose you select a prize (with replacement) from a bag that contains three prizes – one worth $1, one worth $5, and one worth $10. You have three opportunities to select a prize and you get to keep the largest prize of the three you select. Let <span class="math inline">\(X\)</span> denote the value of the prize you keep.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability distribution of <span class="math inline">\(X\)</span>.</li>
+<li>Find the probability you win more than $1.</li>
+<li>Find your expected winning.</li>
+</ol>
+<ol start="11" style="list-style-type: decimal">
+<li><strong>Playing Roulette</strong></li>
+</ol>
+<p>Suppose you place a single $5 bet on three numbers (the Trio Bet) in roulette that has a payoff odds of 11 to 1. Let <span class="math inline">\(X\)</span> denote your payoff. Recall that if you win you receive 11 times your betting amount plus your $5 bet; if you lose, your payoff is nothing.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability distribution for <span class="math inline">\(X\)</span>.</li>
+<li>Find the mean of <span class="math inline">\(X\)</span>. On average, how much money do you lose in a single $5 bet?</li>
+<li>Consider placing $5 instead on a Five Number Bet that pays at 6 to 1. Find the probability distribution for the payoff <span class="math inline">\(Y\)</span> for this bet. Compute the mean of <span class="math inline">\(Y\)</span>. How does this average payoff compare with the average payoff for the Trio Bet?</li>
+<li>Find the standard deviation of the payoffs for <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. Which bet has the larger standard deviation? Interpret what it means to have a large standard deviation.</li>
+</ol>
+<ol start="12" style="list-style-type: decimal">
+<li><strong>Sum of Independent Random Variables</strong></li>
+</ol>
+<p>Suppose you have <span class="math inline">\(k\)</span> random variables <span class="math inline">\(X_1, ..., X_k\)</span>. Each random variable has a mean <span class="math inline">\(\mu\)</span> and a standard deviation <span class="math inline">\(\sigma\)</span>. Suppose the random variables are independent – this means that the probability that one variable, say takes a value will not be affected by the values of the other random variables. In this case, it can be shown that the mean and standard deviation of the sum <span class="math inline">\(S = X_1 + ... + X_k\)</span> will have mean <span class="math inline">\(E(S)= k \mu\)</span> and standard deviation <span class="math inline">\(SD(S)= \sqrt{k} \sigma\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>It has been shown that if <span class="math inline">\(X\)</span> denotes the roll of a single die, then the mean and standard deviation of X are given by <span class="math inline">\(\mu=3.5\)</span> and <span class="math inline">\(\sigma=1.71\)</span>. Suppose you roll 10 dice and the outcomes of these dice are represented by <span class="math inline">\(X_1, ..., X_{10}\)</span>. Using the above result, find the mean and standard deviation of the sum of these 10 rolls.</p></li>
+<li><p>Suppose you spin the spinner pictured here five times and record the sum of the five spins <span class="math inline">\(S\)</span>. Find the mean and standard deviation of <span class="math inline">\(S\)</span>. [Hint: First you need to find the mean and standard deviation of <span class="math inline">\(X\)</span>, a single spin of the spinner. Then you can apply the above result.]</p></li>
+</ol>
+<img src="../LATEX/figures/chapter4/spinner9.png" width="200" />
+
+<ol start="13" style="list-style-type: decimal">
+<li><strong>Selecting a Coin from a Box</strong></li>
+</ol>
+<p>Suppose you select a coin from a box containing 3 nickels, 2 dimes and one quarter. Let <span class="math inline">\(X\)</span> represent the value of the coin.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability distribution of <span class="math inline">\(X\)</span>.</li>
+<li>Find the mean and standard deviation of <span class="math inline">\(X\)</span>.</li>
+<li>Suppose that your instructor will give you twice the value of the coin that you select, so your profit is <span class="math inline">\(Y = 2 X\)</span>. Make intelligent guesses at the mean and standard deviation of <span class="math inline">\(Y\)</span>.</li>
+<li>Check your guesses by actually computing the mean and standard deviation of <span class="math inline">\(Y\)</span>.</li>
+<li>This is an illustration of a general result. If <span class="math inline">\(X\)</span> has mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>and <span class="math inline">\(Y = c X\)</span> where <span class="math inline">\(c\)</span> is a positive constant, then the mean of <span class="math inline">\(Y\)</span> is equal to  and the standard deviation of <span class="math inline">\(Y\)</span> is equal to .</li>
+</ol>
+<ol start="14" style="list-style-type: decimal">
+<li><strong>How Many Tries to Open the Door?</strong></li>
+</ol>
+<p>You have a ring with four keys, one of which will open your door. Suppose you try the keys in a random order until you open the door. Let <span class="math inline">\(X\)</span> denote the number of wrong keys you try before you find the right one. It can be shown that <span class="math inline">\(X\)</span> has the following distribution.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="math inline">\(x\)</span></th>
+<th align="center"><span class="math inline">\(P(X = x)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0</td>
+<td align="center">1/4</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">1/4</td>
+</tr>
+<tr class="odd">
+<td align="center">2</td>
+<td align="center">1/4</td>
+</tr>
+<tr class="even">
+<td align="center">3</td>
+<td align="center">1/4</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Find the mean and standard deviation of <span class="math inline">\(X\)</span>.</li>
+<li>Suppose you record instead <span class="math inline">\(Y\)</span>, the total number of keys you try. Note that <span class="math inline">\(Y = X + 1\)</span>. Find the probability distribution for <span class="math inline">\(Y\)</span> and the mean and standard deviation.</li>
+<li>This is an illustration of a general result. If <span class="math inline">\(X\)</span> has mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(Y = X + c\)</span> for some constant <span class="math inline">\(c\)</span>, then the mean of <span class="math inline">\(Y\)</span> is equal to  and the standard deviation of <span class="math inline">\(Y\)</span> is equal to .</li>
+</ol>
+<ol start="15" style="list-style-type: decimal">
+<li><strong>The Hat Check Problem</strong></li>
+</ol>
+<p>Consider the hat check problem described in Section . Consider the special case where <span class="math inline">\(n = 4\)</span> men are checking their hats. If the names of the four men are represented by the initials <span class="math inline">\(A, B, C, D\)</span>, then you can represent the hats given to these four men by the arrangements <span class="math inline">\(ABCD, ABDC\)</span>, and so on.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write down the 24 possible arrangements and find the probability distribution for <span class="math inline">\(X\)</span>, the number of matches.</li>
+<li>Find the probability of no matches.</li>
+<li>Find the expected number of matches.</li>
+</ol>
+<ol start="16" style="list-style-type: decimal">
+<li><strong>Binomial Experiments</strong></li>
+</ol>
+<p>Is each random process described below a Binomial experiment? If it is, give values of <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span>. Otherwise, explain why it is not Binomial.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Roll a die 20 times and count the number of sixes you roll.</li>
+<li>There is a room of 10 women and 10 men – you choose five people from the room without replacement and count the number of women you choose.</li>
+<li>Same process as part (b) but you sample with replacement instead of without replacement.</li>
+<li>You flip a coin repeatedly until you observe 3 heads.</li>
+<li>The spinner below is spun 50 times – you count the number of spins in the black region.</li>
+</ol>
+<p>
+<img src="../LATEX/figures/chapter4/spinner99.png" width="200" /></p>
+<ol start="17" style="list-style-type: decimal">
+<li><strong>Binomial and Negative Binomial Experiments</strong></li>
+</ol>
+<p>Each of the random processes below is a Binomial experiment, a Negative Binomial experiment, or neither. If the process is Binomial, give values of <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span>, and if the process is Negative Binomial, give values of <span class="math inline">\(r\)</span> and <span class="math inline">\(p\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Suppose that 30% of students at a college regularly commute to school. You sample 15 students and record the number of commuters.</li>
+<li>Same scenario as part (a). You continue to sample students until you find two commuters and record the number of students sampled.</li>
+<li>Suppose that a restaurant offers apple and orange juice. From past experience, the restaurant knows that 30% of the breakfast customers order apple juice, 50% order orange juice, and 20% order no juice. One morning, the restaurant has 30 customers and the numbers ordering apple juice, orange juice, and no juice are recorded.</li>
+<li>Same scenario as part (c). The restaurant only records the number ordering orange juice out of the first 30 customers.</li>
+<li>Same scenario as part (c). The restaurant counts the number of customers that order breakfast until exactly three order apple juice.</li>
+<li>Same scenario as part (c). Suppose that from past experience, the restaurant knows that 40% of the breakfast bills will exceed $10. Of the first 30 breakfast bills, the number of bills exceeding $10 is observed.</li>
+</ol>
+<ol start="18" style="list-style-type: decimal">
+<li><strong>Shooting Free Throws</strong></li>
+</ol>
+<p>Suppose that Michael Jordan makes 80% of his free throws. Assume he takes 10 free shots during one game.</p>
+<ol style="list-style-type: lower-alpha">
+<li>What is the most likely number of shots he will make?</li>
+<li>Find the probability that he makes at least 8 shots.</li>
+<li>Find the probability he makes more than 5 shots.</li>
+</ol>
+<ol start="19" style="list-style-type: decimal">
+<li><strong>Purchasing Audio CDs</strong></li>
+</ol>
+<p>Suppose you know that 20% of the audio cd’s sold in China are defective. You travel to China and you purchase 20 cd’s on your trip.</p>
+<ol style="list-style-type: lower-alpha">
+<li>What is the probability that at least one cd in your purchase is defective?</li>
+<li>What is the probability that between 4 and 7 cd’s are defective?</li>
+<li>Compute the “average” number of defectives in your purchase.</li>
+</ol>
+<ol start="20" style="list-style-type: decimal">
+<li><strong>Rolling Five Dice</strong></li>
+</ol>
+<p>Suppose you roll five dice and count the number of 1’s you get.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability you roll exactly two 1’s. Perform an exact calculation.</li>
+<li>Find the probability all the dice are 1’s. Perform an exact calculation.</li>
+<li>Find the probability you roll at least two 1’s. Perform an exact calculation.</li>
+</ol>
+<ol start="21" style="list-style-type: decimal">
+<li><strong>Choosing Socks from a Drawer</strong></li>
+</ol>
+<p>Suppose a drawer contains 10 socks, of which 4 are brown. We select 5 socks from the drawer with replacement.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability two of the five selected are brown.</li>
+<li>Find the probability we choose more brown than non-brown.</li>
+<li>How many brown socks do we expect to select?</li>
+<li>Does the answer to part a change if we select socks from the drawer without replacement? Explain.</li>
+</ol>
+<ol start="22" style="list-style-type: decimal">
+<li><strong>Choosing Socks from a Drawer</strong></li>
+</ol>
+<p>Suppose that we select socks from the drawer with replacement until we see two that are brown.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability that it takes us four selections.</li>
+<li>Find the probability it takes more than 2 selections.</li>
+<li>How many selections do we expect to make?</li>
+</ol>
+<ol start="23" style="list-style-type: decimal">
+<li><strong>Sampling Voters</strong></li>
+</ol>
+<p>In your local town, suppose that 60% of the residents are supportive of a school levy that will be on the ballot in the next election. You take a random sample of 15 residents.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability that a majority of the sample support the levy.</li>
+<li>How many residents in the sample do you expect will support the levy?</li>
+<li>If you sample the residents one at a time, find the probability that it will take you five residents to find three that support the levy.</li>
+</ol>
+<ol start="24" style="list-style-type: decimal">
+<li><strong>Taking a True/False Test</strong></li>
+</ol>
+<p>Suppose you take a true/false test with twenty questions and you guess at the answers.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability you pass the test assuming that passing is 60% or higher correct.</li>
+<li>Find the probability you get a <span class="math inline">\(B\)</span> or higher where <span class="math inline">\(B\)</span> is 80% correct.<br />
+</li>
+<li>If you get an 80% on this test, is it reasonable to assume that you were guessing? Explain.</li>
+</ol>
+<ol start="25" style="list-style-type: decimal">
+<li><strong>Bernoulli Experiment</strong></li>
+</ol>
+<p>Let <span class="math inline">\(X_1\)</span> denote the result of one Binomial trial, where <span class="math inline">\(X_1=1\)</span> if you observe a success and $X_1 = 0 $ if you observe a failure. Find the mean and variance of <span class="math inline">\(X_1\)</span>.</p>
+<ol start="26" style="list-style-type: decimal">
+<li><strong>Rolling a Die</strong></li>
+</ol>
+<p>Suppose we roll a die until we observe a 6. This is a special case of a Negative Binomial experiment where <span class="math inline">\(r = 1\)</span> and <span class="math inline">\(p\)</span> = 1/6. When we are interested in the number of trials until the first success, this is a Geometric experiment and <span class="math inline">\(Y\)</span> is a Geometric random variable.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability that it takes you 4 rolls to get a 6.</li>
+<li>Find the probability that it takes you more than 2 rolls to get a 6.</li>
+<li>How many rolls do you need, on average, to get a 6?</li>
+</ol>
+<ol start="27" style="list-style-type: decimal">
+<li><strong>Heights of Male Freshmen</strong></li>
+</ol>
+<p>Suppose that one third of male freshmen entering a college are over 6 feet tall. Four men are randomly assigned to a dorm room. Let <span class="math inline">\(X\)</span> denote the number of men in this room that are under 6 feet tall. You can ignore the fact that the actual sampling of men is done without replacement.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Assuming <span class="math inline">\(X\)</span> has a Binomial Distribution, what is a “success” and give values of <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span>.</li>
+<li>What is the most likely value of <span class="math inline">\(X\)</span>? What is the probability of this value?</li>
+<li>Find the probability that at least three men in this room will be under 6 feet tall.</li>
+</ol>
+<ol start="28" style="list-style-type: decimal">
+<li><strong>Basketball Shooting</strong></li>
+</ol>
+<p>Suppose a basketball player is practicing shots from the free-throw line. She hasn’t been playing for a while and she becomes more skillful in making shots as she is practicing. Let <span class="math inline">\(X\)</span> represent the number of shots she makes in 50 attempts. Explain why the Binomial distribution should not be used in finding probabilities about <span class="math inline">\(X\)</span>.</p>
+<ol start="29" style="list-style-type: decimal">
+<li><strong>Collecting Posters from Cereal Boxes</strong></li>
+</ol>
+<p>Suppose that a cereal box contains one of four posters and you are interested in collecting a complete set. You first purchase one box of cereal and find poster #1.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Let <span class="math inline">\(X_2\)</span> denote the number of boxes you need to purchase to find a different poster than #1. Find the expected value of <span class="math inline">\(X_2\)</span>.</li>
+<li>Once you have found your second poster, say #2, let <span class="math inline">\(X_3\)</span> denote the number of boxes you need to find a different poster than #1 or #2. Find the expected value of <span class="math inline">\(X_3\)</span>.</li>
+<li>Once you have collected posters #1, #2, #3, let <span class="math inline">\(X_4\)</span> denote the number of boxes you need to purchase to get poster #4. Find the expected value of <span class="math inline">\(X_4\)</span>.</li>
+<li>How many posters do you need, on average, to get a complete set of four?</li>
+</ol>
+<ol start="30" style="list-style-type: decimal">
+<li><strong>Baseball Hitting</strong></li>
+</ol>
+<p>In baseball, it is important for a batter to get “on-base” and batters are rated in terms of their on-base percentage. In the 2004 baseball season, Bobby Abreu of the Philadelphia Phillies had 705 “plate appearances” or opportunities to bat. Suppose we divide his plate appearances into groups of five – we record the number of times Abreu was on-base for plate appearances 1 through 5, for 6 through 10, for 11 through 15, and so on. If we let <span class="math inline">\(X\)</span> denote the number of times on-base for five plate appearances, then we observe the following counts for <span class="math inline">\(X\)</span>:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"><span class="math inline">\(x\)</span></th>
+<th align="center">0</th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">5</th>
+<th align="center">Total</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Count</td>
+<td align="center">10</td>
+<td align="center">29</td>
+<td align="center">44</td>
+<td align="center">40</td>
+<td align="center">15</td>
+<td align="center">3</td>
+<td align="center">141</td>
+</tr>
+</tbody>
+</table>
+<p>To help understand this table, note that the count for <span class="math inline">\(X=1\)</span> is 29 – this means there were 29 periods where Abreu was on-base exactly one time. The count for <span class="math inline">\(X=2\)</span> is 44 – this means that for 44 periods Abreu was on-base two times.</p>
+<p>Since each outcome is either a success or failure, where success is getting on-base, one wonders if the variation in these data can be explained by a Binomial distribution.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"><span class="math inline">\(x\)</span></th>
+<th align="center">0</th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">5</th>
+<th align="center">TOTAL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(P(X = x)\)</span></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="left">Expected</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="left">Count</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probabilities for a Binomial distribution with <span class="math inline">\(n = 5\)</span> and <span class="math inline">\(p = 0.443\)</span>. This value of <span class="math inline">\(p\)</span> is Abreu’s on-base rate for the entire 2004 baseball season. Place these probabilities in the <span class="math inline">\(P(X = x)\)</span> row of the table.</li>
+<li>Multiply the probabilities you found in part (a) by 141, the number of periods in the 2004 season. Place these numbers in the Expected Count row of the table. These represent the expected number of times Abreu would have 0, 1, 2, .., 5 times on-base if the probabilities followed a Binomial distribution.</li>
+<li>Compare the expected counts with the actual observed counts in the first table. Does a Binomial distribution provide a good description of these data?</li>
+</ol>
+<ol start="31" style="list-style-type: decimal">
+<li><strong>Graphs of Binomial Distributions</strong></li>
+</ol>
+<p>Figure  shows the Binomial distributions with <span class="math inline">\(n = 20\)</span> and <span class="math inline">\(p = 0.5\)</span> (above) and <span class="math inline">\(n = 20\)</span> and <span class="math inline">\(p = 0.2\)</span> (below).</p>
+<img src="../LATEX/figures/chapter4/twobinomials.png" width="500" />
+
+<p>Recall in Section  that if a probability distribution is approximately bell-shaped, then approximately 68% of the probability falls within one standard deviation of the mean.</p>
+<ol style="list-style-type: lower-alpha">
+<li>For the Binomial distribution with <span class="math inline">\(n = 20\)</span> and <span class="math inline">\(p = 0.5\)</span>, find the mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> and compute the interval (<span class="math inline">\(\mu - \sigma, \mu + \sigma)\)</span>.</li>
+<li>Find the exact probability that X falls in the interval (<span class="math inline">\(\mu - \sigma, \mu + \sigma)\)</span>.</li>
+<li>Repeat parts a and b for the Binomial distribution <span class="math inline">\(n = 20\)</span> and <span class="math inline">\(p = 0.2\)</span>.</li>
+<li>For which distribution was the 68% rule more accurate? Does that make sense based on the shapes of the two distributions?</li>
+</ol>
+<ol start="32" style="list-style-type: decimal">
+<li><strong>Guessing on a Test</strong></li>
+</ol>
+<p>Students in a statistics class were given a five-question baseball trivia quiz. On each question, the students had to choose one of two possible answers. The number correct <span class="math inline">\(X\)</span> was recorded for each student – a count table of the values of <span class="math inline">\(X\)</span> are shown below.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="math inline">\(X = x\)</span></th>
+<th align="center">Count</th>
+<th align="center"><span class="math inline">\(P(X = x)\)</span></th>
+<th align="center">Expected</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">3</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">2</td>
+<td align="center">4</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">3</td>
+<td align="center">7</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">4</td>
+<td align="center">6</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">5</td>
+<td align="center">1</td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Suppose the students know little about baseball and so they are guessing on each question. If this is true, find the probability distribution of the number correct <span class="math inline">\(X\)</span>.</li>
+<li>Using this distribution, find the probability of each value of <span class="math inline">\(X\)</span> and place these probabilities in the above table.</li>
+<li>By multiplying these probabilities by the number of students (21), find the expected number of students for each value of <span class="math inline">\(X\)</span>.</li>
+<li>Compare your expected counts with the actual counts – does a Binomial distribution seem like a reasonable assumption in this example?</li>
+</ol>
+<ol start="33" style="list-style-type: decimal">
+<li><strong>Playing Roulette</strong></li>
+</ol>
+<p>Suppose you play the game roulette 20 times. Each game, you place a Trio Bet on three numbers and you win with probability 3/38.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability you win the game exactly two times.</li>
+<li>Find the probability that you are winless in the 20 games.</li>
+<li>Find the probability you win at least once.</li>
+<li>How many games do you expect to win?</li>
+</ol>
+<ol start="34" style="list-style-type: decimal">
+<li><strong>The Galton Board</strong></li>
+</ol>
+<p>Consider the Galton board described in Section . A ball is placed above the first peg and dropped. When it strikes a peg, it is equally likely to fall left or right. The location at the bottom <span class="math inline">\(X\)</span> is equal to the number of times that the ball falls right.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Explain why <span class="math inline">\(X\)</span> has a Binomial distribution and give the values of <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span>.</li>
+<li>Find <span class="math inline">\(P(X = 2)\)</span>.</li>
+<li>Find the probability the ball falls to the right of the location “1”.</li>
+<li>Suppose that we change the experiment so that the probability of falling right is equal to 1/4. Explain how this changes the Binomial experiment and find <span class="math inline">\(P(X = 2).\)</span></li>
+</ol>
+<ol start="35" style="list-style-type: decimal">
+<li><strong>Drug Testing</strong></li>
+</ol>
+<p>In a New York Times article “Facing Questions, Rodriguez Raises More?” (February 21, 2008), Major League Baseball is said to have a drug-testing policy where 600 tests are randomly given to a group of 1200 professional ballplayers. Alex Rodriguez claimed one season that he received five random tests.</p>
+<ol style="list-style-type: lower-alpha">
+<li>If every player is equally likely to receive a single random blood test, what is the probability that Rodriguez gets tested?</li>
+<li>If <span class="math inline">\(X\)</span> represents the number of tests administered to Rodriguez among the 600 test, then explain why <span class="math inline">\(X\)</span> has a Binomial distribution and give the values of <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span>.</li>
+<li>Compute the probability that Rodriguez receives exactly one test.</li>
+<li>Recall Rodriguez’s claim that he received five random tests. Compute the probability of this event.</li>
+<li>You should find the probability computed in part (d) to be very small. If Rodriguez is indeed telling the truth, what do you think about the randomness of the drug-testing policy?</li>
+</ol>
+<p><strong>R Exercises</strong></p>
+<ol start="36" style="list-style-type: decimal">
+<li><strong>Peter-Paul Game</strong></li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>Implement the Peter-Paul game simulation as described in the text, storing 1000 values of the gain variable in the R variable .</li>
+<li>Use the simulated values to estimate the probability <span class="math inline">\(P(G &gt; 2)\)</span>.</li>
+<li>Estimate the standard deviation of <span class="math inline">\(G\)</span> from the simulated values.</li>
+</ol>
+<ol start="37" style="list-style-type: decimal">
+<li><strong>The Hat Check Problem (continued)</strong></li>
+</ol>
+<p>Suppose that <span class="math inline">\(n = 10\)</span> men are checking their hats. It would be too tedious to write down all <span class="math inline">\(10! = 3,628,800\)</span> possible arrangements of hats, but it is straightforward to design a simulation experiment for this problem.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write a function to mix up the integers 1 through 10 and returning the number of matches.</p></li>
+<li><p>Using the function written in part (a), simulate this experiment 1000 times. Approximate the probability of no matches and the expected number of matches. Compare your answers with the “large sample” answers given in the introduction to this chapter.</p></li>
+</ol>
+<ol start="38" style="list-style-type: decimal">
+<li><strong>A Random Walk (continued)</strong></li>
+</ol>
+<p>Suppose that a person starts at location 0 on the number line and each minute he is equally likely to take a step to the left and to the right. Let <span class="math inline">\(Y\)</span> denote the person’s location after four steps.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write a function to implement one random walk, returning the person’s location after four steps.</li>
+<li>By use of the <code>replicate()</code> function, simulate this random walk for 1000 iterations. Summarize the simulated locations by a mean and standard deviation.
+(c0 Make an adjustment to your function so that if the person is currently at a negative location, the probability he will take a positive step is 0.7, and likewise if he is at a positive location, the probability he takes a negative step is 0.7. (If he is at point 0, he is equally likely to take a negative or positive step.) Simulate this adjusted random walk 1000 iterations. Compute the mean and standard deviation of this new random walk and compare to the values computed in part (b).</li>
+</ol>
+<ol start="39" style="list-style-type: decimal">
+<li><strong>Dice Rolls</strong></li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li><p>Construct a data frame with variables <code>roll1</code>, <code>roll2</code>, …, <code>roll5</code>, each containing 1000 simulated rolls of a fair die.</p></li>
+<li><p>Using the function <code>pmax()</code> as shown below, define a new variable <code>Max</code> that is equal to the maximum among the five rolls for each of the 1000 iterations.</p></li>
+</ol>
+<pre><code>Max &lt;- pmax(roll1, roll2, roll3, roll4, roll5)</code></pre>
+<ol start="3" style="list-style-type: lower-alpha">
+<li><p>Estimate the probability that the maximum roll is equal to 6.</p></li>
+<li><p>Estimate the mean and standard deviation of the maximum roll.</p></li>
+</ol>
+<ol start="40" style="list-style-type: decimal">
+<li><strong>Binomial Experiments</strong></li>
+</ol>
+<ol style="list-style-type: lower-alpha">
+<li>Suppose 25 percent of the students are commuters. You take a survey of 12 students and count <span class="math inline">\(X\)</span> the number of commuters. Simulate 1000 surveys using the function <code>rbinom()</code>, storing the number of commuters in these 1000 samples.</li>
+<li>Approximate the probability that exactly 3 people in your sample are commuters.</li>
+<li>Compute the sample mean and standard deviation of the simulated values and compare with the exact values of the mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>.</li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="conditional-probability.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="continuous-distributions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/04-discrete.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

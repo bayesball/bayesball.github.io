@@ -1,0 +1,1423 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Joint Probability Distributions | Bayesian Modeling</title>
+  <meta name="description" content="This is an introduction to Bayesian modeling at the undergraduate level" />
+  <meta name="generator" content="bookdown 0.13 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Joint Probability Distributions | Bayesian Modeling" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is an introduction to Bayesian modeling at the undergraduate level" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Joint Probability Distributions | Bayesian Modeling" />
+  
+  <meta name="twitter:description" content="This is an introduction to Bayesian modeling at the undergraduate level" />
+  
+
+<meta name="author" content="Jim Albert and Jingchen Hu" />
+
+
+<meta name="date" content="2019-09-28" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="continuous-distributions.html"/>
+<link rel="next" href="proportion.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Probability and Bayesian Modeling</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html"><i class="fa fa-check"></i><b>1</b> Probability: A Measurement of Uncertainty</a><ul>
+<li class="chapter" data-level="1.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#introduction"><i class="fa fa-check"></i><b>1.1</b> Introduction</a></li>
+<li class="chapter" data-level="1.2" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-classical-view-of-a-probability"><i class="fa fa-check"></i><b>1.2</b> The Classical View of a Probability</a></li>
+<li class="chapter" data-level="1.3" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-frequency-view-of-a-probability"><i class="fa fa-check"></i><b>1.3</b> The Frequency View of a Probability</a></li>
+<li class="chapter" data-level="1.4" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-subjective-view-of-a-probability"><i class="fa fa-check"></i><b>1.4</b> The Subjective View of a Probability</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#measuring-probabilities-subjectively"><i class="fa fa-check"></i><b>1.4.1</b> Measuring probabilities subjectively</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-sample-space"><i class="fa fa-check"></i><b>1.5</b> The Sample Space</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#roll-two-fair-indistinguishable-dice"><i class="fa fa-check"></i><b>1.5.1</b> Roll two fair, indistinguishable dice</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#assigning-probabilities"><i class="fa fa-check"></i><b>1.6</b> Assigning Probabilities</a><ul>
+<li class="chapter" data-level="1.6.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#events-and-event-operations"><i class="fa fa-check"></i><b>1.6.1</b> Events and Event Operations</a></li>
+<li class="chapter" data-level="1.6.2" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-three-probability-axioms"><i class="fa fa-check"></i><b>1.6.2</b> The Three Probability Axioms</a></li>
+<li class="chapter" data-level="1.6.3" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-complement-and-addition-properties"><i class="fa fa-check"></i><b>1.6.3</b> The Complement and Addition Properties</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#exercises"><i class="fa fa-check"></i><b>1.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="counting-methods.html"><a href="counting-methods.html"><i class="fa fa-check"></i><b>2</b> Counting Methods</a><ul>
+<li class="chapter" data-level="2.1" data-path="counting-methods.html"><a href="counting-methods.html#introduction-rolling-dice-yahtzee-and-roulette"><i class="fa fa-check"></i><b>2.1</b> Introduction: Rolling Dice, Yahtzee, and Roulette</a></li>
+<li class="chapter" data-level="2.2" data-path="counting-methods.html"><a href="counting-methods.html#equally-likely-outcomes"><i class="fa fa-check"></i><b>2.2</b> Equally Likely Outcomes</a></li>
+<li class="chapter" data-level="2.3" data-path="counting-methods.html"><a href="counting-methods.html#the-multiplication-counting-rule"><i class="fa fa-check"></i><b>2.3</b> The Multiplication Counting Rule</a></li>
+<li class="chapter" data-level="2.4" data-path="counting-methods.html"><a href="counting-methods.html#permutations"><i class="fa fa-check"></i><b>2.4</b> Permutations</a></li>
+<li class="chapter" data-level="2.5" data-path="counting-methods.html"><a href="counting-methods.html#combinations"><i class="fa fa-check"></i><b>2.5</b> Combinations</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="counting-methods.html"><a href="counting-methods.html#number-of-subsets"><i class="fa fa-check"></i><b>2.5.1</b> Number of subsets</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="counting-methods.html"><a href="counting-methods.html#arrangements-of-non-distinct-objects"><i class="fa fa-check"></i><b>2.6</b> Arrangements of Non-Distinct Objects</a></li>
+<li class="chapter" data-level="2.7" data-path="counting-methods.html"><a href="counting-methods.html#playing-yahtzee"><i class="fa fa-check"></i><b>2.7</b> Playing Yahtzee</a></li>
+<li class="chapter" data-level="2.8" data-path="counting-methods.html"><a href="counting-methods.html#exercises-1"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="conditional-probability.html"><a href="conditional-probability.html"><i class="fa fa-check"></i><b>3</b> Conditional Probability</a><ul>
+<li class="chapter" data-level="3.1" data-path="conditional-probability.html"><a href="conditional-probability.html#introduction-the-three-card-problem"><i class="fa fa-check"></i><b>3.1</b> Introduction: The Three Card Problem</a></li>
+<li class="chapter" data-level="3.2" data-path="conditional-probability.html"><a href="conditional-probability.html#independent-events"><i class="fa fa-check"></i><b>3.2</b> Independent Events</a></li>
+<li class="chapter" data-level="3.3" data-path="conditional-probability.html"><a href="conditional-probability.html#in-everyday-life"><i class="fa fa-check"></i><b>3.3</b> In Everyday Life</a></li>
+<li class="chapter" data-level="3.4" data-path="conditional-probability.html"><a href="conditional-probability.html#in-a-two-way-table"><i class="fa fa-check"></i><b>3.4</b> In a Two-Way Table</a></li>
+<li class="chapter" data-level="3.5" data-path="conditional-probability.html"><a href="conditional-probability.html#definition-and-the-multiplication-rule"><i class="fa fa-check"></i><b>3.5</b> Definition and the Multiplication Rule</a></li>
+<li class="chapter" data-level="3.6" data-path="conditional-probability.html"><a href="conditional-probability.html#the-multiplication-rule"><i class="fa fa-check"></i><b>3.6</b> The Multiplication Rule</a></li>
+<li class="chapter" data-level="3.7" data-path="conditional-probability.html"><a href="conditional-probability.html#the-multiplication-rule-under-independence"><i class="fa fa-check"></i><b>3.7</b> The Multiplication Rule Under Independence</a></li>
+<li class="chapter" data-level="3.8" data-path="conditional-probability.html"><a href="conditional-probability.html#learning-using-bayes-rule"><i class="fa fa-check"></i><b>3.8</b> Learning Using Bayes’ Rule</a></li>
+<li class="chapter" data-level="3.9" data-path="conditional-probability.html"><a href="conditional-probability.html#r-example-learning-about-a-spinner"><i class="fa fa-check"></i><b>3.9</b> R Example: Learning About a Spinner</a></li>
+<li class="chapter" data-level="3.10" data-path="conditional-probability.html"><a href="conditional-probability.html#exercises-2"><i class="fa fa-check"></i><b>3.10</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="discrete-distributions.html"><a href="discrete-distributions.html"><i class="fa fa-check"></i><b>4</b> Discrete Distributions</a><ul>
+<li class="chapter" data-level="4.1" data-path="discrete-distributions.html"><a href="discrete-distributions.html#introduction-the-hat-check-problem"><i class="fa fa-check"></i><b>4.1</b> Introduction: The Hat Check Problem</a></li>
+<li class="chapter" data-level="4.2" data-path="discrete-distributions.html"><a href="discrete-distributions.html#random-variable-and-probability-distribution"><i class="fa fa-check"></i><b>4.2</b> Random Variable and Probability Distribution</a></li>
+<li class="chapter" data-level="4.3" data-path="discrete-distributions.html"><a href="discrete-distributions.html#probability-distribution"><i class="fa fa-check"></i><b>4.3</b> Probability distribution</a></li>
+<li class="chapter" data-level="4.4" data-path="discrete-distributions.html"><a href="discrete-distributions.html#summarizing-a-probability-distribution"><i class="fa fa-check"></i><b>4.4</b> Summarizing a Probability Distribution</a></li>
+<li class="chapter" data-level="4.5" data-path="discrete-distributions.html"><a href="discrete-distributions.html#standard-deviation-of-a-probability-distribution"><i class="fa fa-check"></i><b>4.5</b> Standard Deviation of a Probability Distribution</a></li>
+<li class="chapter" data-level="4.6" data-path="discrete-distributions.html"><a href="discrete-distributions.html#coin-tossing-distributions"><i class="fa fa-check"></i><b>4.6</b> Coin-Tossing Distributions</a></li>
+<li class="chapter" data-level="4.7" data-path="discrete-distributions.html"><a href="discrete-distributions.html#binomial-probabilities"><i class="fa fa-check"></i><b>4.7</b> Binomial probabilities</a></li>
+<li class="chapter" data-level="4.8" data-path="discrete-distributions.html"><a href="discrete-distributions.html#binomial-experiments"><i class="fa fa-check"></i><b>4.8</b> Binomial experiments</a></li>
+<li class="chapter" data-level="4.9" data-path="discrete-distributions.html"><a href="discrete-distributions.html#binomial-computations"><i class="fa fa-check"></i><b>4.9</b> Binomial computations</a></li>
+<li class="chapter" data-level="4.10" data-path="discrete-distributions.html"><a href="discrete-distributions.html#mean-and-standard-deviation-of-a-binomial"><i class="fa fa-check"></i><b>4.10</b> Mean and standard deviation of a Binomial</a></li>
+<li class="chapter" data-level="4.11" data-path="discrete-distributions.html"><a href="discrete-distributions.html#negative-binomial-experiments"><i class="fa fa-check"></i><b>4.11</b> Negative Binomial Experiments</a></li>
+<li class="chapter" data-level="4.12" data-path="discrete-distributions.html"><a href="discrete-distributions.html#exercises-3"><i class="fa fa-check"></i><b>4.12</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="continuous-distributions.html"><a href="continuous-distributions.html"><i class="fa fa-check"></i><b>5</b> Continuous Distributions</a><ul>
+<li class="chapter" data-level="5.1" data-path="continuous-distributions.html"><a href="continuous-distributions.html#introduction-a-baseball-spinner-game"><i class="fa fa-check"></i><b>5.1</b> Introduction: A Baseball Spinner Game</a></li>
+<li class="chapter" data-level="5.2" data-path="continuous-distributions.html"><a href="continuous-distributions.html#the-uniform-distribution"><i class="fa fa-check"></i><b>5.2</b> The Uniform Distribution</a></li>
+<li class="chapter" data-level="5.3" data-path="continuous-distributions.html"><a href="continuous-distributions.html#binomial-probabilities-and-the-normal-curve"><i class="fa fa-check"></i><b>5.3</b> Binomial Probabilities and the Normal Curve</a></li>
+<li class="chapter" data-level="5.4" data-path="continuous-distributions.html"><a href="continuous-distributions.html#sampling-distribution-of-the-mean"><i class="fa fa-check"></i><b>5.4</b> Sampling Distribution of the Mean</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html"><i class="fa fa-check"></i><b>6</b> Joint Probability Distributions</a><ul>
+<li class="chapter" data-level="6.1" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#joint-probability-mass-function-sampling-from-a-box"><i class="fa fa-check"></i><b>6.1</b> Joint Probability Mass Function: Sampling From a Box</a></li>
+<li class="chapter" data-level="6.2" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#multinomial-experiments"><i class="fa fa-check"></i><b>6.2</b> Multinomial Experiments</a></li>
+<li class="chapter" data-level="6.3" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#joint-density-functions"><i class="fa fa-check"></i><b>6.3</b> Joint Density Functions</a></li>
+<li class="chapter" data-level="6.4" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#independence-and-measuring-association"><i class="fa fa-check"></i><b>6.4</b> Independence and Measuring Association</a></li>
+<li class="chapter" data-level="6.5" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#flipping-a-random-coin-the-beta-binomial-distribution"><i class="fa fa-check"></i><b>6.5</b> Flipping a Random Coin: The Beta-Binomial Distribution</a></li>
+<li class="chapter" data-level="6.6" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#bivariate-normal-distribution"><i class="fa fa-check"></i><b>6.6</b> Bivariate Normal Distribution</a></li>
+<li class="chapter" data-level="6.7" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#exercises-4"><i class="fa fa-check"></i><b>6.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="proportion.html"><a href="proportion.html"><i class="fa fa-check"></i><b>7</b> Learning About a Binomial Probability</a><ul>
+<li class="chapter" data-level="7.1" data-path="proportion.html"><a href="proportion.html#introduction-thinking-about-a-proportion-subjectively"><i class="fa fa-check"></i><b>7.1</b> Introduction: Thinking About a Proportion Subjectively</a></li>
+<li class="chapter" data-level="7.2" data-path="proportion.html"><a href="proportion.html#bayesian-inference-with-discrete-priors"><i class="fa fa-check"></i><b>7.2</b> Bayesian Inference with Discrete Priors</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="proportion.html"><a href="proportion.html#example-students-dining-preference"><i class="fa fa-check"></i><b>7.2.1</b> Example: students’ dining preference</a></li>
+<li class="chapter" data-level="7.2.2" data-path="proportion.html"><a href="proportion.html#discrete-prior-distributions-for-proportion-p"><i class="fa fa-check"></i><b>7.2.2</b> Discrete prior distributions for proportion <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="7.2.3" data-path="proportion.html"><a href="proportion.html#likelihood"><i class="fa fa-check"></i><b>7.2.3</b> Likelihood</a></li>
+<li class="chapter" data-level="7.2.4" data-path="proportion.html"><a href="proportion.html#posterior-distribution-for-proportion-p"><i class="fa fa-check"></i><b>7.2.4</b> Posterior distribution for proportion <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="7.2.5" data-path="proportion.html"><a href="proportion.html#inference-students-dining-preference"><i class="fa fa-check"></i><b>7.2.5</b> Inference: students’ dining preference</a></li>
+<li class="chapter" data-level="7.2.6" data-path="proportion.html"><a href="proportion.html#discussion-using-a-discrete-prior"><i class="fa fa-check"></i><b>7.2.6</b> Discussion: using a discrete prior</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="proportion.html"><a href="proportion.html#continuous-priors"><i class="fa fa-check"></i><b>7.3</b> Continuous Priors</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="proportion.html"><a href="proportion.html#the-beta-distribution-and-probabilities"><i class="fa fa-check"></i><b>7.3.1</b> The Beta distribution and probabilities</a></li>
+<li class="chapter" data-level="7.3.2" data-path="proportion.html"><a href="proportion.html#choosing-a-beta-density-to-represent-prior-opinion"><i class="fa fa-check"></i><b>7.3.2</b> Choosing a Beta density to represent prior opinion</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="proportion.html"><a href="proportion.html#updating-the-beta-prior"><i class="fa fa-check"></i><b>7.4</b> Updating the Beta Prior</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="proportion.html"><a href="proportion.html#bayes-rule-calculation"><i class="fa fa-check"></i><b>7.4.1</b> Bayes’ rule calculation</a></li>
+<li class="chapter" data-level="7.4.2" data-path="proportion.html"><a href="proportion.html#from-beta-prior-to-beta-posterior"><i class="fa fa-check"></i><b>7.4.2</b> From Beta prior to Beta posterior</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="proportion.html"><a href="proportion.html#bayesian-inferences-with-continuous-priors"><i class="fa fa-check"></i><b>7.5</b> Bayesian Inferences with Continuous Priors</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="proportion.html"><a href="proportion.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>7.5.1</b> Bayesian hypothesis testing</a></li>
+<li class="chapter" data-level="7.5.2" data-path="proportion.html"><a href="proportion.html#bayesian-credible-intervals"><i class="fa fa-check"></i><b>7.5.2</b> Bayesian credible intervals</a></li>
+<li class="chapter" data-level="7.5.3" data-path="proportion.html"><a href="proportion.html#bayesian-prediction"><i class="fa fa-check"></i><b>7.5.3</b> Bayesian prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="proportion.html"><a href="proportion.html#predictive-checking"><i class="fa fa-check"></i><b>7.6</b> Predictive Checking</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="proportion.html"><a href="proportion.html#comparing-bayesian-models"><i class="fa fa-check"></i><b>7.6.1</b> Comparing Bayesian models</a></li>
+<li class="chapter" data-level="7.6.2" data-path="proportion.html"><a href="proportion.html#posterior-predictive-checking"><i class="fa fa-check"></i><b>7.6.2</b> Posterior predictive checking</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="proportion.html"><a href="proportion.html#exercises-5"><i class="fa fa-check"></i><b>7.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="mean.html"><a href="mean.html"><i class="fa fa-check"></i><b>8</b> Modeling Measurement and Count Data</a><ul>
+<li class="chapter" data-level="8.1" data-path="mean.html"><a href="mean.html#introduction-1"><i class="fa fa-check"></i><b>8.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.2" data-path="mean.html"><a href="mean.html#modeling-measurements"><i class="fa fa-check"></i><b>8.2</b> Modeling Measurements</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="mean.html"><a href="mean.html#examples"><i class="fa fa-check"></i><b>8.2.1</b> Examples</a></li>
+<li class="chapter" data-level="8.2.2" data-path="mean.html"><a href="mean.html#the-general-approach"><i class="fa fa-check"></i><b>8.2.2</b> The general approach</a></li>
+<li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
+<li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="mean.html"><a href="mean.html#Normal:Continuous"><i class="fa fa-check"></i><b>8.4</b> Continuous Priors</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="mean.html"><a href="mean.html#Normal:Continuous:prior"><i class="fa fa-check"></i><b>8.4.1</b> The Normal prior for mean <span class="math inline">\(\mu\)</span></a></li>
+<li class="chapter" data-level="8.4.2" data-path="mean.html"><a href="mean.html#Normal:Continuous:choosing"><i class="fa fa-check"></i><b>8.4.2</b> Choosing a Normal prior</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate"><i class="fa fa-check"></i><b>8.5</b> Updating the Normal Prior</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="mean.html"><a href="mean.html#introduction-2"><i class="fa fa-check"></i><b>8.5.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.5.2" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:Overview"><i class="fa fa-check"></i><b>8.5.2</b> A quick peak at the update procedure</a></li>
+<li class="chapter" data-level="8.5.3" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:BayesRule"><i class="fa fa-check"></i><b>8.5.3</b> Bayes’ rule calculation</a></li>
+<li class="chapter" data-level="8.5.4" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:Conjugate"><i class="fa fa-check"></i><b>8.5.4</b> Conjugate Normal prior</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference"><i class="fa fa-check"></i><b>8.6</b> Bayesian Inferences for Continuous Normal Mean</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference:HTandCI"><i class="fa fa-check"></i><b>8.6.1</b> Bayesian hypothesis testing and credible interval</a></li>
+<li class="chapter" data-level="8.6.2" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference:Prediction"><i class="fa fa-check"></i><b>8.6.2</b> Bayesian prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="mean.html"><a href="mean.html#Normal:PPC"><i class="fa fa-check"></i><b>8.7</b> Posterior Predictive Checking</a></li>
+<li class="chapter" data-level="8.8" data-path="mean.html"><a href="mean.html#modeling-count-data"><i class="fa fa-check"></i><b>8.8</b> Modeling Count Data</a><ul>
+<li class="chapter" data-level="8.8.1" data-path="mean.html"><a href="mean.html#examples-1"><i class="fa fa-check"></i><b>8.8.1</b> Examples</a></li>
+<li class="chapter" data-level="8.8.2" data-path="mean.html"><a href="mean.html#the-poisson-distribution"><i class="fa fa-check"></i><b>8.8.2</b> The Poisson distribution</a></li>
+<li class="chapter" data-level="8.8.3" data-path="mean.html"><a href="mean.html#bayesian-inferences"><i class="fa fa-check"></i><b>8.8.3</b> Bayesian inferences</a></li>
+<li class="chapter" data-level="8.8.4" data-path="mean.html"><a href="mean.html#case-study-learning-about-website-counts"><i class="fa fa-check"></i><b>8.8.4</b> Case study: Learning about website counts</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="mean.html"><a href="mean.html#exercises-6"><i class="fa fa-check"></i><b>8.9</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>9</b> Simulation by Markov Chain Monte Carlo</a><ul>
+<li class="chapter" data-level="9.1" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#introduction-3"><i class="fa fa-check"></i><b>9.1</b> Introduction</a></li>
+<li class="chapter" data-level="9.2" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#markov-chains"><i class="fa fa-check"></i><b>9.2</b> Markov Chains</a></li>
+<li class="chapter" data-level="9.3" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#the-metropolis-algorithm"><i class="fa fa-check"></i><b>9.3</b> The Metropolis Algorithm</a></li>
+<li class="chapter" data-level="9.4" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#example-cauchy-normal-problem"><i class="fa fa-check"></i><b>9.4</b> Example: Cauchy-Normal problem</a></li>
+<li class="chapter" data-level="9.5" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#gibbs-sampling"><i class="fa fa-check"></i><b>9.5</b> Gibbs Sampling</a></li>
+<li class="chapter" data-level="9.6" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#mcmc-inputs-and-diagnostics"><i class="fa fa-check"></i><b>9.6</b> MCMC Inputs and Diagnostics</a></li>
+<li class="chapter" data-level="9.7" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#using-jags"><i class="fa fa-check"></i><b>9.7</b> Using JAGS</a></li>
+<li class="chapter" data-level="9.8" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#exercises-7"><i class="fa fa-check"></i><b>9.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html"><i class="fa fa-check"></i><b>10</b> Bayesian Hierarchical Modeling</a><ul>
+<li class="chapter" data-level="10.1" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#introduction-4"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
+<li class="chapter" data-level="10.2" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#hierarchical-normal-modeling"><i class="fa fa-check"></i><b>10.2</b> Hierarchical Normal Modeling</a></li>
+<li class="chapter" data-level="10.3" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#hierarchical-beta-binomial-modeling"><i class="fa fa-check"></i><b>10.3</b> Hierarchical Beta-Binomial Modeling</a></li>
+<li class="chapter" data-level="10.4" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#exercises-8"><i class="fa fa-check"></i><b>10.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>11</b> Simple Linear Regression</a><ul>
+<li class="chapter" data-level="11.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#introduction-5"><i class="fa fa-check"></i><b>11.1</b> Introduction</a></li>
+<li class="chapter" data-level="11.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#example-prices-and-areas-of-house-sales"><i class="fa fa-check"></i><b>11.2</b> Example: Prices and Areas of House Sales</a></li>
+<li class="chapter" data-level="11.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-simple-linear-regression-model"><i class="fa fa-check"></i><b>11.3</b> A Simple Linear Regression Model</a></li>
+<li class="chapter" data-level="11.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-weakly-informative-prior"><i class="fa fa-check"></i><b>11.4</b> A Weakly Informative Prior</a></li>
+<li class="chapter" data-level="11.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-analysis"><i class="fa fa-check"></i><b>11.5</b> Posterior Analysis</a></li>
+<li class="chapter" data-level="11.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#inference-through-mcmc"><i class="fa fa-check"></i><b>11.6</b> Inference through MCMC</a></li>
+<li class="chapter" data-level="11.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#bayesian-inferences-with-simple-linear-regression"><i class="fa fa-check"></i><b>11.7</b> Bayesian Inferences with Simple Linear Regression</a></li>
+<li class="chapter" data-level="11.8" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#informative-prior-1"><i class="fa fa-check"></i><b>11.8</b> Informative Prior</a></li>
+<li class="chapter" data-level="11.9" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-conditional-means-prior"><i class="fa fa-check"></i><b>11.9</b> A Conditional Means Prior</a></li>
+<li class="chapter" data-level="11.10" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-9"><i class="fa fa-check"></i><b>11.10</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html"><i class="fa fa-check"></i><b>12</b> Bayesian Multiple Regression and Logistic Models</a><ul>
+<li class="chapter" data-level="12.1" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#introduction-6"><i class="fa fa-check"></i><b>12.1</b> Introduction</a></li>
+<li class="chapter" data-level="12.2" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#bayesian-multiple-linear-regression"><i class="fa fa-check"></i><b>12.2</b> Bayesian Multiple Linear Regression</a></li>
+<li class="chapter" data-level="12.3" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#bayesian-logistic-regression"><i class="fa fa-check"></i><b>12.3</b> Bayesian Logistic Regression </a></li>
+<li class="chapter" data-level="12.4" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#exercises-10"><i class="fa fa-check"></i><b>12.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="case-studies.html"><a href="case-studies.html"><i class="fa fa-check"></i><b>13</b> Case Studies</a><ul>
+<li class="chapter" data-level="13.1" data-path="case-studies.html"><a href="case-studies.html#introduction-7"><i class="fa fa-check"></i><b>13.1</b> Introduction</a></li>
+<li class="chapter" data-level="13.2" data-path="case-studies.html"><a href="case-studies.html#federalist-papers-study"><i class="fa fa-check"></i><b>13.2</b> Federalist Papers Study</a></li>
+<li class="chapter" data-level="13.3" data-path="case-studies.html"><a href="case-studies.html#negative-binomial-sampling"><i class="fa fa-check"></i><b>13.3</b> Negative Binomial sampling</a></li>
+<li class="chapter" data-level="13.4" data-path="case-studies.html"><a href="case-studies.html#comparison-of-rates-for-two-authors"><i class="fa fa-check"></i><b>13.4</b> Comparison of rates for two authors</a></li>
+<li class="chapter" data-level="13.5" data-path="case-studies.html"><a href="case-studies.html#which-words-distinguish-the-two-authors"><i class="fa fa-check"></i><b>13.5</b> Which words distinguish the two authors?</a></li>
+<li class="chapter" data-level="13.6" data-path="case-studies.html"><a href="case-studies.html#career-trajectories"><i class="fa fa-check"></i><b>13.6</b> Career Trajectories</a></li>
+<li class="chapter" data-level="13.7" data-path="case-studies.html"><a href="case-studies.html#latent-class-modeling"><i class="fa fa-check"></i><b>13.7</b> Latent Class Modeling</a></li>
+<li class="chapter" data-level="13.8" data-path="case-studies.html"><a href="case-studies.html#exercises-11"><i class="fa fa-check"></i><b>13.8</b> Exercises</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Bayesian Modeling</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="joint-probability-distributions" class="section level1">
+<h1><span class="header-section-number">Chapter 6</span> Joint Probability Distributions</h1>
+
+<p>In Chapters 4 and 5, the focus was on probability distributions for a single random variable.
+For example, in Chapter 4, the number of successes in a Binomial experiment was explored and in Chapter 5, several popular distributions for a continuous random variable were considered. In addition, in introducing the Central Limit Theorem, the approximate distribution of a sample mean <span class="math inline">\(\bar X\)</span> was described when a sample of independent observations <span class="math inline">\(X_1, ..., X_n\)</span> is taken from a common distribution.</p>
+<p>In this chapter, examples of the general situation will be described where several random variables, e.g. <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, are observed. The joint probability mass function (discrete case) or the joint density (continuous case) are used to compute probabilities involving <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</p>
+<div id="joint-probability-mass-function-sampling-from-a-box" class="section level2">
+<h2><span class="header-section-number">6.1</span> Joint Probability Mass Function: Sampling From a Box</h2>
+<p>To begin the discussion of two random variables, we start with a familiar example. Suppose one has a box of ten balls – four are white, three are red, and three are black. One selects five balls out of the box without replacement and counts the number of white and red balls in the sample. What is the probability one observes two white and two red balls in the sample?</p>
+<p>This probability can be found using ideas from previous chapters.</p>
+<ol style="list-style-type: decimal">
+<li><p>First, one thinks the total number of ways of selecting five balls with replacement from a box of ten balls. One assumes the balls are distinct and one does not care about the order that one selects the balls, so the total number of outcomes is
+<span class="math display">\[
+ N = {10 \choose 5} = 252.
+ \]</span></p></li>
+<li><p>Next, one thinks about the number of ways of selecting two white and two red balls. One does this in steps – first select the white balls, then select the red balls, and then select the one remaining black ball. Note that five balls are selected, so exactly one of the balls must be black. Since the box has four white balls, the number of ways of choose two white is <span class="math inline">\({4 \choose 2} = 6\)</span>. Of the three red balls, one wants to choose two – the number of ways of doing that is <span class="math inline">\({3 \choose 2} = 3\)</span>. Last, the number of ways of choosing the remaining one black ball is <span class="math inline">\({3 \choose 1} = 3.\)</span> So the total number of ways of choosing two white, two red, and one black ball is the product
+<span class="math display">\[
+ {4 \choose 2} \times {3 \choose 2} \times {3 \choose 1} = 6 \times 3 \times 3 = 54.
+ \]</span></p></li>
+<li><p>Each one of the <span class="math inline">\({10 \choose 5} = 252\)</span> possible outcomes of five balls is equally likely to be chosen. Of these outcomes, 54 resulted in two white and two red balls, so the probability of choosing two white and two red balls is
+<span class="math display">\[
+ P({\rm 2 \, white \, and \, 2 \, red}) = \frac{54}{252}.
+ \]</span></p></li>
+</ol>
+<p>Here the probability of choosing a specific number of white and red balls has been found. To do this calculation for other outcomes, it is convenient to define two random variables</p>
+<p><span class="math inline">\(X\)</span> = number of red balls selected, <span class="math inline">\(Y\)</span> = number of white balls selected.</p>
+<p>Based on what was found,
+<span class="math display">\[
+ P(X = 2, Y = 2) = \frac{54}{252}.
+ \]</span></p>
+<p><strong>Joint probability mass function</strong></p>
+<p>Suppose this calculation is done for every possible pair of values of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. The table of probabilities is given in Table 6.1.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(X\)</span> = # of Red</td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center">4</td>
+</tr>
+<tr class="even">
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">6/252</td>
+<td align="center">12/252</td>
+<td align="center">3/252</td>
+</tr>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center">0</td>
+<td align="center">12/252</td>
+<td align="center">54/252</td>
+<td align="center">36/252</td>
+<td align="center">3/252</td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center">3/252</td>
+<td align="center">36/252</td>
+<td align="center">54/252</td>
+<td align="center">12/252</td>
+<td align="center">0</td>
+</tr>
+<tr class="odd">
+<td align="center">3</td>
+<td align="center">3/252</td>
+<td align="center">12/252</td>
+<td align="center">6/252</td>
+<td align="center">0</td>
+<td align="center">0</td>
+</tr>
+</tbody>
+</table>
+<p>Joint pmf for <span class="math inline">\((X, Y)\)</span> for balls in box example.</p>
+<p>This table is called the joint probability mass function (pmf) <span class="math inline">\(f(x, y)\)</span> of (<span class="math inline">\(X, Y\)</span>).<br />
+As for any probability distribution, one requires that each of the probability values are nonnegative and the sum of the probabilities over all values of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is one. That is, the function <span class="math inline">\(f(x, y)\)</span> satisfies two properties:</p>
+<ol style="list-style-type: decimal">
+<li><span class="math inline">\(f(x, y) \ge 0\)</span>, for all <span class="math inline">\(x\)</span>, <span class="math inline">\(y\)</span></li>
+<li><span class="math inline">\(\Sigma_{x, y} f(x, y) = 1\)</span></li>
+</ol>
+<p>It is clear from Table 6.1 that all of the probabilities are nonnegative and the reader can confirm that the sum of the probabilities is equal to one.</p>
+<p>Using Table 6.1, one sees that some particular pairs <span class="math inline">\((x, y)\)</span> are not possible as <span class="math inline">\(f(x, y) = 0\)</span>. For example, <span class="math inline">\(f(0, 1) = 0\)</span> which means that it is not possible to observe 0 red balls and 1 white ball in the sample. Note that five balls were sampled, and if one only observed one red or white ball, that means that one must have sampled <span class="math inline">\(5 - 1 = 4\)</span> black balls which is not possible.</p>
+<p>One finds probabilities of any event involving <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> by summing probabilities from Table 6.1.</p>
+<p>() {} By the table, one sees that this is possible only when <span class="math inline">\(X = 1, Y = 1\)</span> or <span class="math inline">\(X = 2, Y = 2\)</span>. So the probability
+<span class="math display">\[
+P(X = Y) = f(1, 1) + f(2, 2) = \frac{12}{252} + \frac{54}{252} = \frac{66}{252}.
+\]</span>
+() {} From the table, one identifies the outcomes where <span class="math inline">\(X &gt; Y\)</span>, and then sums the corresponding probabilities.
+<span class="math display">\[\begin{align*}
+P(X &gt; Y) &amp; = f(1, 0) + f(2, 0) + f(2, 1) + f(3, 0) + f(3, 1) + f(3, 2) \\
+&amp; = \frac{12}{252} + \frac{3}{252} + \frac{36}{252} + \frac{3}{252} + \frac{12}{252} + \frac{6}{252} \\
+&amp; =  \frac{72}{252}
+\end{align*}\]</span></p>
+
+<p><strong>Simulating sampling from a box</strong></p>
+<p>The variable  is a vector containing the colors of the ten balls in the box. The function  simulates drawing five balls from the box and computing the number of red balls and number of white balls.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">box &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;white&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;white&quot;</span>,</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">         <span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, </a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">         <span class="st">&quot;black&quot;</span>, <span class="st">&quot;black&quot;</span>, <span class="st">&quot;black&quot;</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">one_rep &lt;-<span class="st"> </span><span class="cf">function</span>(){</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">  balls &lt;-<span class="st"> </span><span class="kw">sample</span>(box, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">  X &lt;-<span class="st"> </span><span class="kw">sum</span>(balls <span class="op">==</span><span class="st"> &quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">  Y &lt;-<span class="st"> </span><span class="kw">sum</span>(balls <span class="op">==</span><span class="st"> &quot;white&quot;</span>)</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">  <span class="kw">c</span>(X, Y)</a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">}</a></code></pre></div>
+<p>Using the <code>replicate()</code> function, one simulates this sampling process 1000 times, storing the outcomes in the data frame <code>results</code> with variable names <code>X</code> and <code>Y</code>. Using the <code>table()</code> function, one classifies all outcomes with respect to the two variables. By dividing the observed counts by the number of simulations, one obtains approximate probabilities similar to the exact probabilities shown in Table 6.1.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">one_rep</span>())))</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">names</span>(results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">table</span>(results<span class="op">$</span>X, results<span class="op">$</span>Y) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
+<pre><code>##    
+##         0     1     2     3     4
+##   0 0.000 0.000 0.027 0.042 0.008
+##   1 0.000 0.059 0.192 0.155 0.014
+##   2 0.010 0.152 0.222 0.044 0.000
+##   3 0.008 0.042 0.025 0.000 0.000</code></pre>
+<p><strong>Marginal probability functions</strong></p>
+<p>Once a joint probability mass function for <span class="math inline">\((X, Y)\)</span> has been constructed, one finds probabilities for one of the two variables. In our balls example, suppose one wants to find the probability that exactly three red balls are chosen, that is <span class="math inline">\(P(X = 3)\)</span>. This probability is found by summing values of the pmf <span class="math inline">\(f(x, y)\)</span> where <span class="math inline">\(x = 3\)</span> and <span class="math inline">\(y\)</span> can be any possible value of the random variable <span class="math inline">\(Y\)</span>, that is,
+<span class="math display">\[\begin{align*}
+ P(X = 3) &amp; = \sum_y f(3, y) \\
+ &amp; = f(3, 0) + f(3, 1) + f(3, 2) \\
+ &amp; = \frac{3}{252} + \frac{12}{252} + \frac{6}{252} \\
+ &amp; = \frac{21}{252}.
+ \end{align*}\]</span></p>
+<p>This operation is done for each of the possible values of <span class="math inline">\(X\)</span> – the {} probability mass function of <span class="math inline">\(X\)</span>, <span class="math inline">\(f_X()\)</span> is defined as follows:
+<span class="math display">\[\begin{equation}
+ f_X(x) = \sum_y f(x, y).
+ \end{equation}\]</span>
+One finds this marginal pmf of <span class="math inline">\(X\)</span> from Table 6.1 by summing the joint probabilities for each row of the table. The marginal pmf is displayed in Table 6.2.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="math inline">\(x\)</span></th>
+<th align="center"><span class="math inline">\(f_X(x)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0</td>
+<td align="center">21/252</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">105/252</td>
+</tr>
+<tr class="odd">
+<td align="center">2</td>
+<td align="center">105/252</td>
+</tr>
+<tr class="even">
+<td align="center">3</td>
+<td align="center">21/252</td>
+</tr>
+</tbody>
+</table>
+<p>Marginal pmf for <span class="math inline">\(X\)</span> in balls in the balls example.</p>
+<p>Note that a marginal pmf is a legitimate probability function in that the values are nonnegative and the probabilities sum to one.</p>
+<p>One can also find the marginal pmf of <span class="math inline">\(Y\)</span>, denoted by <span class="math inline">\(f_Y()\)</span>, by a similar operation – for a fixed value of <span class="math inline">\(Y = y\)</span> one sums over all of the possible values of <span class="math inline">\(X\)</span>.
+<span class="math display">\[\begin{equation}
+ f_Y(y) = \sum_x f(x, y).
+\end{equation}\]</span></p>
+<p>For example, if one wants to find <span class="math inline">\(f_Y(2) = P(Y = 2)\)</span> in our example, one sums the joint probabilities in Table 6.1 over the rows in the column where <span class="math inline">\(Y = 2\)</span>. One obtains the probability:
+<span class="math display">\[\begin{align*}
+ f_Y(2) &amp; = \sum_x f(x, 2) \\
+ &amp; = f(0, 2) + f(1, 2) + f(2, 2) + f(3, 2)\\
+ &amp; = \frac{6}{252} + \frac{54}{252} + \frac{54}{252} + \frac{6}{252}\\
+ &amp; = \frac{120}{252}.
+ \end{align*}\]</span>
+By repeating this exercise for each value of <span class="math inline">\(Y\)</span>, one obtains the marginal pmf displayed in Table 6.3.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="math inline">\(y\)</span></th>
+<th align="center"><span class="math inline">\(f_Y(y)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0</td>
+<td align="center">6/252</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">60/252</td>
+</tr>
+<tr class="odd">
+<td align="center">2</td>
+<td align="center">120/252</td>
+</tr>
+<tr class="even">
+<td align="center">3</td>
+<td align="center">60/252</td>
+</tr>
+<tr class="odd">
+<td align="center">4</td>
+<td align="center">6/252</td>
+</tr>
+</tbody>
+</table>
+<p>Marginal pmf for <span class="math inline">\(Y\)</span> in balls in the balls example.</p>
+<p><strong>Conditional probability mass functions</strong></p>
+<p>In Chapter 3, the conditional probability of an event <span class="math inline">\(A\)</span> was defined given knowledge of another event <span class="math inline">\(B\)</span>. Moving back to the sampling balls from a box example, suppose one is told that exactly two red balls are sampled, that is <span class="math inline">\(X\)</span> = 2 – how does that information change the probabilities about the number of white balls <span class="math inline">\(Y\)</span>?</p>
+<p>In this example, one is interested in finding <span class="math inline">\(P(Y = y \mid X = 2)\)</span>. Using the definition of conditional probability, one has
+<span class="math display">\[\begin{align*}
+ P(Y = y \mid X = 2) &amp; = \frac{P(Y = y, X = 2)}{P(X = 2)}. \\
+ &amp; = \frac{f(2, y)}{f_X(2)}
+ \end{align*}\]</span>
+For example, the probability of observing two white balls given that we have two red balls is equal to
+<span class="math display">\[\begin{align*}
+ P(Y = 2 \mid X = 2) &amp; = \frac{P(Y = 2, X = 2)}{P(X = 2)} \\
+ &amp; = \frac{f(2, 2)}{f_X(2)} \\
+ &amp; = \frac{54 / 252}{105/252} = \frac{54}{105}. \\
+ \end{align*}\]</span></p>
+<p>Suppose this calculation is repeated for all possible values of <span class="math inline">\(Y\)</span> – one obtains the values displayed in Table 6.4.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center"><span class="math inline">\(y\)</span></th>
+<th align="center"><span class="math inline">\(f_{Y \mid X}(y \mid X = 2)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">0</td>
+<td align="center">3/105</td>
+</tr>
+<tr class="even">
+<td align="center">1</td>
+<td align="center">36/105</td>
+</tr>
+<tr class="odd">
+<td align="center">2</td>
+<td align="center">54/105</td>
+</tr>
+<tr class="even">
+<td align="center">3</td>
+<td align="center">12/105</td>
+</tr>
+</tbody>
+</table>
+<p>Conditional pmf for <span class="math inline">\(Y\)</span> given <span class="math inline">\(X = 2\)</span> in balls in the balls example.</p>
+<p>These probabilities represent the conditional pmf for <span class="math inline">\(Y\)</span> conditional on <span class="math inline">\(X = 2\)</span>. This conditional pmf is just like any other probability distribution in that the values are nonnegative and they sum to one. To illustrate using this distribution, suppose one ais told that two red balls are selected (that is, <span class="math inline">\(X = 2\)</span>) and one wants to find the probability that more than one white ball is chosen. This probability is given by
+<span class="math display">\[\begin{align*}
+ P(Y &gt; 1 \mid X = 2) &amp; = \Sigma_{y &gt;1} \, \, f_{Y \mid X}(y \mid X = 2) \\
+ &amp; = f_{Y \mid X}(2 \mid X = 2) + f_{Y \mid X}(3 \mid X = 2) \\
+ &amp; = \frac{54}{105} + \frac{12}{105} = \frac{66}{105}.
+ \end{align*}\]</span></p>
+<p>In general, the conditional probability mass function of <span class="math inline">\(Y\)</span> conditional on <span class="math inline">\(X = x\)</span>, denoted by <span class="math inline">\(f_{Y\ mid X}(y \mid x)\)</span>, is defined to be
+<span class="math display">\[\begin{equation}
+ f_{Y \mid X}(y \mid x)  = \frac{f(x, y)}{f_X(x)}, \, \, {\rm if} \, \, f_X(x) &gt; 0.
+ \end{equation}\]</span></p>
+<p></p>
+<p><strong>Simulating sampling from a box</strong></p>
+<p>Recall that the data frame <code>results</code> contains the simulated outcomes for 1000 selections of balls from the box. By filtering on the value <code>X = 2</code> and tabulating the values of <code>Y</code>, one is simulating from the conditional pmf of <span class="math inline">\(Y\)</span> conditional on <span class="math inline">\(X = 2\)</span>. Note that the relative frequencies displayed below are approximately equal to the exact probabilities shown in Table 6.2.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">results <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(X <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">group_by</span>(Y) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">N =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">P =</span> N <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(N))</a></code></pre></div>
+<pre><code>## # A tibble: 4 x 3
+##       Y     N      P
+##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
+## 1     0    10 0.0234
+## 2     1   152 0.355 
+## 3     2   222 0.519 
+## 4     3    44 0.103</code></pre>
+</div>
+<div id="multinomial-experiments" class="section level2">
+<h2><span class="header-section-number">6.2</span> Multinomial Experiments</h2>
+<p></p>
+<p>Suppose one rolls the usual six-sided die where one side shows 1, two sides show 2, and three sides show 3. One rolls this die ten times – what is the chance that one will observe three 1’s and five 2’s?</p>
+<p>This situation resembles the coin-tossing experiment described in Chapter 4. One is repeating the same process, that is rolling the die, repeated times, and one regards the individual die results as independent outcomes. The difference is that the coin-tossing experiment had only two possible outcomes on a single trial, and here there are three outcomes on a single die roll, 1, 2, and 3.</p>
+<p>Suppose a random experiment consists of a sequence of <span class="math inline">\(n\)</span> independent trials where there are <span class="math inline">\(k\)</span> possible outcomes on a single trial where <span class="math inline">\(k \ge 2\)</span>. Denote the possible outcomes as 1, 2, …, <span class="math inline">\(k\)</span>, and let <span class="math inline">\(p_1, p_2, ..., p_k\)</span> denote the associated probabilities.
+If <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span>, …, <span class="math inline">\(X_k\)</span> denote the number of 1s, 2s, …, <span class="math inline">\(k\)</span>s observed in the <span class="math inline">\(n\)</span> trials, the vector of outcomes <span class="math inline">\(X\)</span> = <span class="math inline">\((X_1, X_2, ..., X_n)\)</span> has a Multinomial distribution with sample size <span class="math inline">\(n\)</span> and vector of probabilities <span class="math inline">\(p = (p_1, p_2, ..., p_k)\)</span>.</p>
+<p>In our example, each die roll has <span class="math inline">\(k = 3\)</span> possible outcomes and the associated vector of probabilities is <span class="math inline">\(p = (1/6, 2/6, 3/6)\)</span>. The number of observed 1s, 2s, 3s in <span class="math inline">\(n = 10\)</span> trials, <span class="math inline">\(X = (X_1, X_2, X_3)\)</span> has a Multinomial distribution with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span>.</p>
+<p>By generalizing the arguments made in Chapter 4, one can show that the probability that <span class="math inline">\(X_1 = x_1, ..., X_k = x_k\)</span> has the general form
+<span class="math display">\[\begin{equation}
+f(x_1, ..., x_k) = \left(\frac{n!}{n_1! ... n_k!}\right) \prod_{j=1}^k p_j^{x_j},
+\end{equation}\]</span>
+where <span class="math inline">\(x_j = 0, 1, 2, ..., j = 1, ... k\)</span> and <span class="math inline">\(\sum_{j=1}^n x_j = n\)</span>.</p>
+<p>This formula can be used to compute a probability for our example. One has <span class="math inline">\(n = 10\)</span> trials and the outcome ``three 1’s and five 2’s&quot; is equivalent to the outcome <span class="math inline">\(X_1 = 3, X_2 = 5\)</span>. Note that the number of 3s <span class="math inline">\(X_3\)</span> is not random since we know that <span class="math inline">\(X_1 + X_2 + X_3 = 10\)</span>. The probability vector is <span class="math inline">\(p = (1/6, 2/6, 3/6)\)</span>. By substituting in the formula, we have
+<span class="math display">\[
+ P(X_1 = 3, X_2 = 5, X_3 = 2) = \left(\frac{10!}{3! \, 5! \, 2!}\right) \left(\frac{1}{6}\right)^3
+ \left(\frac{2}{6}\right)^5 \left(\frac{3}{6}\right)^2.
+ \]</span></p>
+<p></p>
+<p>By use of the <code>factorial()</code> function in R, we compute this probability to be 0.012.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">factorial</span>(<span class="dv">10</span>) <span class="op">/</span><span class="st"> </span>(<span class="kw">factorial</span>(<span class="dv">3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">factorial</span>(<span class="dv">5</span>) <span class="op">*</span><span class="st"> </span><span class="kw">factorial</span>(<span class="dv">2</span>)) <span class="op">*</span></a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">   </span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>) <span class="op">^</span><span class="st"> </span><span class="dv">3</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>) <span class="op">^</span><span class="st"> </span><span class="dv">5</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>) <span class="op">^</span><span class="st"> </span><span class="dv">2</span></a></code></pre></div>
+<pre><code>## [1] 0.01200274</code></pre>
+<p>Other probabilities can be found by summing the joint Multinomial pmf over sets of interest. For example, suppose one is interested in computing the probability that the number of 1s exceeds the number of 2’s in our ten dice rolls. One is interested in the probability <span class="math inline">\(P(X_1 &gt; X_2)\)</span> which is given by
+<span class="math display">\[
+ P(X_1 &gt; X_2) = \sum_{x_1 &gt; x_2}  \left(\frac{10!}{3! \, 5! \, 2!}\right) \left(\frac{1}{6}\right)^{x_1}
+ \left(\frac{2}{6}\right)^{x_2} \left(\frac{3}{6}\right)^{10 - x_1 - x_2},
+\]</span>
+where one is summing over all of the outcomes <span class="math inline">\((x_1, x_2)\)</span> where <span class="math inline">\(x_1 &gt; x_2\)</span>.</p>
+<p><strong>Marginal distributions</strong></p>
+<p>One attractive feature of the Multinomial distribution is that the marginal distributions have familiar functional forms. In the dice roll example, suppose one is interested only in <span class="math inline">\(X_1\)</span>, the number of 1s in ten rolls of our die. One obtains the marginal probability distribution of <span class="math inline">\(X_1\)</span> directly by summing out the other variables from the joint pmf of <span class="math inline">\(X_1\)</span> and <span class="math inline">\(X_2\)</span>. For example, one finds, say <span class="math inline">\(P(X_1 = 2)\)</span>, by summing the joint probability values over all (<span class="math inline">\(x_1, x_2\)</span>) pairs where <span class="math inline">\(x_1 = 2\)</span>:
+<span class="math display">\[
+P(X_1 = 2) = \sum_{x_2, x_1 + x_2 \le 10} f(x_1, x_2).
+\]</span>
+In this computation, it is important to recognize that the sum of rolls of 1 and 2, <span class="math inline">\(x_1 + x_2\)</span> cannot exceed the number of trials <span class="math inline">\(n = 10\)</span>.</p>
+<p>A more intuitive way to obtain a marginal distribution relies on the previous knowledge of Binomial distributions. In each die roll, suppose one records if one gets a one or not. Then <span class="math inline">\(X_1\)</span>, the number of ones in <span class="math inline">\(n\)</span> trials, will be Binomial distributed with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p = 1/6\)</span>. Using a similar argument, <span class="math inline">\(X_2\)</span>, the number of twos in <span class="math inline">\(n\)</span> trials, will be Binomial with <span class="math inline">\(n\)</span> trials and <span class="math inline">\(p = 2/6\)</span>.</p>
+<p><strong>Conditional distributions</strong></p>
+<p>One applies the knowledge about marginal distributions to compute conditional distributions in the Multinomial situation. Suppose that one is given that <span class="math inline">\(X_2 = 3\)</span> in <span class="math inline">\(n = 10\)</span> trials. What can one say about the probabilities of <span class="math inline">\(X_1\)</span>?</p>
+<p>One uses the conditional pmf definition to compute the conditional probability <span class="math inline">\(P(X_1 = x \mid X_2 = 3)\)</span>. First, it is helpful to think about possible values for <span class="math inline">\(X_1\)</span>. Since one has <span class="math inline">\(n = 10\)</span> rolls of the die and we know that we observe <span class="math inline">\(X_2 = 3\)</span> (three twos), the possible values of <span class="math inline">\(X_1\)</span> can be 0, 1, …, 7. For these values, we have
+<span class="math display">\[
+P(X_1 = x \mid X_2 = 3) = \frac{P(X_1 = x, X_2 = 3)}{P(X_2 = 3)}.
+\]</span>
+The numerator is the Multinomial probability and since <span class="math inline">\(X_2\)</span> has a marginal Binomial distribution, the denominator is a Binomial probability. Making the substitutions, one has
+<span class="math display">\[
+P(X_1 = x \mid X_2 = 3) = \frac{\left(\frac{10!}{x! \, 3! \, (10 - x - 3)!}\right) \left(\frac{1}{6}\right)^x
+ \left(\frac{2}{6}\right)^3 \left(\frac{3}{6}\right)^{10 - x - 3}}
+ {{10 \choose 3} \left(\frac{2}{6}\right) ^3 \left(1 - \frac{2}{6}\right) ^{10 - 3}}. 
+ \]</span>
+After some simplification, one obtains
+<span class="math display">\[
+ P(X_1 = x \mid X_2 = 3) = {7 \choose x} \left(\frac{1}{4}\right)^x \left(1 - \frac{1}{4}\right)^{7 - x}, 
+ \, \, x = 0, ..., 7.
+ \]</span>
+which is a Binomial distribution with 7 trials and probability of success 1/4.</p>
+<p>An alternative way to figure out the conditional distribution is based on an intuitive argument. One is told there are three 2’s in 10 rolls of the die.
+The results of the remaining <span class="math inline">\(10 - 3 = 7\)</span> trials are unknown where the possible outcomes are one and three with probabilities proportional to 1/6 and 3/6. So <span class="math inline">\(X_1\)</span> will be Binomial with 7 trials and success probability equal to <span class="math inline">\((1/6) / (1/6 + 3/6) = 1/4\)</span>.</p>
+<p></p>
+<p><strong>Simulating Multinomial experiments</strong></p>
+<p>The function <code>sim_die_rolls()</code> will simulate 10 rolls of the special weighted die. The <code>sample()</code> function draws values of 1, 2, 3 with replacement where the respective probabilities are 1/6, 2/6, and 3/6. The output are values of <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span> and <span class="math inline">\(X_3\)</span>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">sim_die_rolls &lt;-<span class="st"> </span><span class="cf">function</span>(){</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">        rolls &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">10</span>,</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3">                        <span class="dt">replace =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">                        <span class="dt">prob =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="op">/</span><span class="st"> </span><span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb8-5" data-line-number="5">        <span class="kw">c</span>(<span class="kw">sum</span>(rolls <span class="op">==</span><span class="st"> </span><span class="dv">1</span>),</a>
+<a class="sourceLine" id="cb8-6" data-line-number="6">          <span class="kw">sum</span>(rolls <span class="op">==</span><span class="st"> </span><span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb8-7" data-line-number="7">          <span class="kw">sum</span>(rolls <span class="op">==</span><span class="st"> </span><span class="dv">3</span>))</a>
+<a class="sourceLine" id="cb8-8" data-line-number="8">}</a></code></pre></div>
+<p>Using the <code>replicate()</code> function, one simulates the Multinomial experiment for 5000 iterations. The outcomes are placed in a data frame with variable names <code>X1</code>, <code>X2</code> and <code>X3</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">replicate</span>(<span class="dv">5000</span>,</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">                                <span class="kw">sim_die_rolls</span>())))</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">names</span>(results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;X3&quot;</span>)</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">head</span>(results)</a></code></pre></div>
+<pre><code>##   X1 X2 X3
+## 1  0  2  8
+## 2  0  3  7
+## 3  2  2  6
+## 4  1  2  7
+## 5  3  3  4
+## 6  1  3  6</code></pre>
+<p>Given this simulated output, one can compute many different probabilities of interest. For example, suppose one is interested in <span class="math inline">\(P(X_1 + X_2 &lt; 5)\)</span>. One approximates this probability by simulation by finding the proportion of simulated pairs (<code>X1, X2</code>) where <code>X1 + X2 &lt; 5</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">results <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">P =</span> <span class="kw">sum</span>(X1 <span class="op">+</span><span class="st"> </span>X2 <span class="op">&lt;</span><span class="st"> </span><span class="dv">5</span>) <span class="op">/</span><span class="st"> </span><span class="dv">5000</span>)</a></code></pre></div>
+<pre><code>##       P
+## 1 0.373</code></pre>
+<p>Suppose one is interested in finding the mean of the distribution of <span class="math inline">\(X_1\)</span> conditional on <span class="math inline">\(X_2 = 3\)</span>. The <code>filter()</code> function is used to choose only the Multinomial results where <code>X2 = 3</code> and the <code>summarize()</code> function finds the mean of <code>X1</code> among these results. One estimates <span class="math inline">\(E(X_1 \mid X_2 = 3) \approx 1.79193.\)</span> Note that it was found earlier that the conditional distribution of <span class="math inline">\(X_1\)</span> conditional on <span class="math inline">\(X_2 = 3\)</span> is Binomial(<span class="math inline">\(7, 1/4\)</span>) with mean <span class="math inline">\(7 (1 /4)\)</span> which is consistent with the simulation-based calculation.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">results <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(X2 <span class="op">==</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">X1_M =</span> <span class="kw">mean</span>(X1))</a></code></pre></div>
+<pre><code>##       X1_M
+## 1 1.747754</code></pre>
+</div>
+<div id="joint-density-functions" class="section level2">
+<h2><span class="header-section-number">6.3</span> Joint Density Functions</h2>
+<p>One can also describe probabilities when the two variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are continuous. As a simple example, suppose that one randomly chooses two points <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> on the interval (0, 2) where <span class="math inline">\(X &lt; Y\)</span>. One defines the joint probability density function or joint pdf of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> to be the function
+<span class="math display">\[
+ f(x, y) =
+ \begin{cases}
+\frac{1}{2},  \, \, 0  &lt; x &lt; y &lt;2;\\
+0, \, \,{\rm elsewhere}.
+\end{cases}
+\]</span></p>
+<div class="figure"><span id="fig:unnamed-chunk-9"></span>
+<img src="../LATEX/figures/chapter6/Cont2_b.png" alt="Region where the joint pdf $f(x, y)$ is positive in the choose two points example." width="500" />
+<p class="caption">
+Figure 6.1: Region where the joint pdf <span class="math inline">\(f(x, y)\)</span> is positive in the choose two points example.
+</p>
+</div>
+
+<p>This joint pdf is viewed as a plane of constant height over the set of points <span class="math inline">\((x, y)\)</span> where <span class="math inline">\(0 &lt; x &lt; y &lt;2\)</span>. This region of points in the plane is shown in Figure 6.1.</p>
+<p>In the one variable situation in Chapter 5, a function <span class="math inline">\(f\)</span> is a legitimate density function or pdf if it is nonnegative over the real line and the total area under the curve is equal t to one.
+Similarly for two variables, any function <span class="math inline">\(f(x, y)\)</span> is considered a pdf if it satisfies two properties:
+</p>
+<ol style="list-style-type: decimal">
+<li>Density is nonnegative over the whole plane:
+<span class="math display">\[\begin{equation}
+f(x, y) \ge 0, \, \, {\rm for} \, {\rm all} \, \, x, y.
+\end{equation}\]</span></li>
+<li>The total volume under the density is equal to one:
+<span class="math display">\[\begin{equation}
+\int \int f(x, y) dx dy = 1.
+\end{equation}\]</span></li>
+</ol>
+<p>One can check that the pdf in our example is indeed a legitimate pdf. It is pretty obvious that the density that was defined is nonnegative, but it is less clear that the integral of the density is equal to one. Since the density is a plane of constant height, one computes this double integral geometrically. Using the familiar ``one half base times height&quot; argument, the area of the triangle in the plane is <span class="math inline">\((1/2) (2) (2) = 2\)</span> and since the pdf has constant height of <span class="math inline">\(1/2\)</span>, the volume under the surface is equal to <span class="math inline">\(2 (1/2) =1\)</span>.</p>
+<p>Probabilities about <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are found by finding volumes under the pdf surface. For example, suppose one wants to find the probability that the sum of locations
+<span class="math inline">\(X + Y &gt; 3\)</span>, that is <span class="math inline">\(P(X + Y &gt; 3)\)</span>. The region in the <span class="math inline">\((x, y)\)</span> plane of interest is first identified, and then one finds the volume under the joint pdf over this region.</p>
+<div class="figure"><span id="fig:unnamed-chunk-10"></span>
+<img src="../LATEX/figures/chapter6/Cont2_a.png" alt="Shaded region where x + y &gt; 3 in the choose two points example." width="500" />
+<p class="caption">
+Figure 6.2: Shaded region where x + y &gt; 3 in the choose two points example.
+</p>
+</div>
+<p>In Figure 6.2, the region where <span class="math inline">\(x + y &gt; 3\)</span> has been shaded. The probability <span class="math inline">\(P(X + Y &gt; 3)\)</span> is the volume under the pdf over this region. Applying a geometric argument, one notes that the area of the shaded region is <span class="math inline">\(1/4\)</span>, and so the probability of interest is <span class="math inline">\((1/4)(1/2) = 1/8\)</span>. One also finds this probability by integrating the joint pdf over the region as follows:
+<span class="math display">\[\begin{align*}
+ P(X + Y &lt; 3) &amp; = \int_{1.5}^2 \int^y_{3-y} f(x, y) dx dy \\
+ &amp; = \int_{1.5}^2 \int^y_{3-y} \frac{1}{2} dx dy \\
+ &amp; = \int_{1.5}^2 \frac{2 y - 3}{2}dy \\
+ &amp; = \frac{y^2 - 3 y}{ 2} \Big|_{1.5}^2 \\
+ &amp; = \frac{1}{8}.
+ \end{align*}\]</span></p>
+<p><strong>Marginal probability density functions</strong></p>
+<p>Given a joint pdf <span class="math inline">\(f(x, y)\)</span> that describes probabilities of two continuous variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, one summarizes probabilities about each variable individually by the computation of marginal pdfs. The marginal pdf of <span class="math inline">\(X\)</span>, <span class="math inline">\(f_X(x)\)</span>, is obtained by integrating out <span class="math inline">\(y\)</span> from the joint pdf.
+<span class="math display">\[\begin{equation}
+f_X(x) = \int f(x, y) dy.
+\end{equation}\]</span>
+In a similar fashion, one defines the marginal pdf of <span class="math inline">\(Y\)</span> by integrating out <span class="math inline">\(x\)</span> from the joint pdf.
+<span class="math display">\[\begin{equation}
+f_Y(x) = \int f(x, y) dx.
+\end{equation}\]</span></p>
+<p>Let’s illustrate the computation of marginal pdfs for our example. One has to be careful about the limits of the integration due to the dependence between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> in the support of the joint density. Looking back at Figure 6.1, one sees that if the value of <span class="math inline">\(x\)</span> is fixed, then the limits for <span class="math inline">\(y\)</span> go from <span class="math inline">\(x\)</span> to 2. So the marginal density of <span class="math inline">\(X\)</span> is given by
+<span class="math display">\[\begin{align*}
+ f_X(x) &amp; = \int f(x, y) dy \\
+ &amp; = \int_x^2  \frac{1}{2}  dy \\
+ &amp; = \frac{2 - x}{2}, \, \, 0 &lt; x &lt; 2.
+ \end{align*}\]</span>
+By a similar calculation, one can verify that the marginal density of <span class="math inline">\(Y\)</span> is equal to
+<span class="math display">\[
+ f_Y(y) = \frac{y}{2}, \, \, 0 &lt; y &lt; 2.
+ \]</span></p>
+<p><strong>Conditional probability density functions</strong></p>
+<p>Once a joint pdf <span class="math inline">\(f(x, y)\)</span> has been defined, one can also define conditional pdfs. In our example, suppose one is told that the first random location is equal to <span class="math inline">\(X = 1.5\)</span>. What has one learned about the value of the second random variable <span class="math inline">\(Y\)</span>?</p>
+<p>To answer this question, one defines the notion of a conditional pdf. The conditional pdf of the random variable <span class="math inline">\(Y\)</span> given the value <span class="math inline">\(X = x\)</span> is defined as the quotient
+<span class="math display">\[\begin{equation}
+f_{Y \mid X}(y \mid X = x) = \frac{f(x, y)}{f_X(x)}, \, \, {\rm if} \, \, f_X(x) &gt; 0.
+\end{equation}\]</span>
+In our example one is given that <span class="math inline">\(X = 1.5\)</span>. Looking at Figure 6.1, one sees that when <span class="math inline">\(X = 1.5\)</span>, the only possible values of <span class="math inline">\(Y\)</span> are between 1.5 and 2. By substituting the values of <span class="math inline">\(f(x, y)\)</span> and <span class="math inline">\(f_X(x)\)</span>, one obtains
+<span class="math display">\[\begin{align*}
+ f_{Y \mid X}(y \mid X = 1.5) &amp; = \frac{f(1.5, y)}{f_X(1.5)} \\
+ &amp; =  \frac{1/2}{(2 - 1.5) / 2} \\
+ &amp; =  2, \, \, 1.5 &lt; y &lt; 2. \\
+ \end{align*}\]</span>
+In other words, the conditional density for <span class="math inline">\(Y\)</span> when <span class="math inline">\(X = 1.5\)</span> is uniform from 1.5 to 2.</p>
+<p>A conditional pdf is a legitimate density function, so the integral of the pdf over all values <span class="math inline">\(y\)</span> is equal to one. We use this density to compute conditional probabilities. For example, if <span class="math inline">\(X\)</span> = 1.5, what is the probability that <span class="math inline">\(Y\)</span> is greater than 1.7? This probability is the conditional probability <span class="math inline">\(P(Y &gt; 1.7 \mid X = 1.5)\)</span> that is equal to an integral over the conditional density <span class="math inline">\(f_{Y \mid X}(y \mid 1.5)\)</span>:
+<span class="math display">\[\begin{align*}
+ P(Y &gt; 1.7 \mid X = 1.5) &amp; = \int_{1.7}^2 f_{Y \mid X}(y \mid 1.5) dy \\
+ &amp; =  \int_{1.7}^2 2 dy \\
+ &amp; =  0.6. \\
+ \end{align*}\]</span></p>
+<p><strong>Turn the random variables around</strong></p>
+<p>Above, we looked at the pdf of <span class="math inline">\(Y\)</span> conditional on a value of <span class="math inline">\(X\)</span>. One can also consider a pdf of <span class="math inline">\(X\)</span> conditional on a value of <span class="math inline">\(Y\)</span>. Returning to our example, suppose that one learns that <span class="math inline">\(Y\)</span>, the larger random variable on the interval is equal to 0.8. In this case, what would one expect for the random variable <span class="math inline">\(X\)</span>?</p>
+<p>This question is answered in two steps – one first finds the conditional pdf of <span class="math inline">\(X\)</span> conditional on <span class="math inline">\(Y = 0.8\)</span>. Then once this conditional pdf is found, one finds the mean of this distribution.</p>
+<p>The conditional pdf of <span class="math inline">\(X\)</span> given the value <span class="math inline">\(Y = y\)</span> is defined as the quotient
+<span class="math display">\[\begin{equation}
+f_{X \mid Y}(x \mid Y = y) = \frac{f(x, y)}{f_Y(y)}, \, \, {\rm if} \, \, f_Y(y) &gt; 0.
+\end{equation}\]</span>
+Looking back at Figure 6.1, one sees that if <span class="math inline">\(Y = 0.8\)</span>, the possible values of <span class="math inline">\(X\)</span> are from 0 to 0.8. Over these values the conditional pdf of <span class="math inline">\(X\)</span> is given by
+<span class="math display">\[\begin{align*}
+ f_{X \mid Y}(x \mid 0.8) &amp; = \frac{f(x, 0.8)}{f_Y(0.8)} \\
+ &amp; =  \frac{1/2}{0.8 / 2} \\
+ &amp; =  1.25, \, \, 0 &lt; x &lt; 0.8. \\
+ \end{align*}\]</span>
+So if one knows that <span class="math inline">\(Y = 0.8\)</span>, then the conditional pdf for <span class="math inline">\(X\)</span> is Uniform on (0, 0.8).</p>
+<p>To find the ``expected&quot; value of <span class="math inline">\(X\)</span> knowing that <span class="math inline">\(Y = 0.8\)</span>, one finds the mean of this distribution.
+<span class="math display">\[\begin{align*}
+ E(X \mid Y = 0.8) &amp; = \int_0^{0.8} x f_{X \mid Y}(x \mid 0.8) dx \\
+ &amp; = \int_0^{0.8} x \,1.25 \, dx \\ \\
+ &amp; =  (0.8)^2 / 2 \times 1.25 = 0.4. \\
+ \end{align*}\]</span></p>
+</div>
+<div id="independence-and-measuring-association" class="section level2">
+<h2><span class="header-section-number">6.4</span> Independence and Measuring Association</h2>
+<p>As a second example, suppose one has two random variables (<span class="math inline">\(X, Y\)</span>) that have the joint density
+<span class="math display">\[
+ f(x, y) =
+ \begin{cases}
+x + y,  \, \, 0  &lt; x &lt; 1, 0 &lt; y &lt; 1;\\
+0, \, \,{\rm elsewhere}.
+\end{cases}
+\]</span>
+This density is positive over the unit square, but the value of the density increases in <span class="math inline">\(X\)</span> (for fixed <span class="math inline">\(y\)</span>) and also in <span class="math inline">\(Y\)</span> (for fixed <span class="math inline">\(x\)</span>). Figure 6.3 displays a graph of this joint pdf – the density is a section of a plane that reaches its maximum value at the point (1, 1).</p>
+<div class="figure"><span id="fig:unnamed-chunk-11"></span>
+<img src="../LATEX/figures/chapter6/bivariate1.png" alt="Three dimensional display of the pdf of f(x; y) = x + y defined over the unit square." width="500" />
+<p class="caption">
+Figure 6.3: Three dimensional display of the pdf of f(x; y) = x + y defined over the unit square.
+</p>
+</div>
+
+<p>From this density, one computes the marginal pdfs of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. For example, the marginal density of <span class="math inline">\(X\)</span> is given by
+<span class="math display">\[\begin{align*}
+ f_X(x) &amp; = \int_0^1 x + y dy \\
+ &amp; = x + \frac{1}{2}, \, \, \, 0 &lt; x &lt; 1. \\ \\
+ \end{align*}\]</span>
+Similarly, one can show that the marginal density of <span class="math inline">\(Y\)</span> is given by <span class="math inline">\(f_Y(y) = y + \frac{1}{2}\)</span> for <span class="math inline">\(0 &lt; y &lt; 1\)</span>.</p>
+<p><strong>Independence</strong></p>
+<p>Two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are said to be {} if the joint pdf factors into a product of their marginal densities, that is
+<span class="math display">\[\begin{equation}
+f(x, y) = f_X(x) f_Y(y).
+\end{equation}\]</span>
+for all values of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. Are <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> independent in our example? Since we have computed the marginal densities, we look at the product
+<span class="math display">\[
+f_X(x) f_Y(y) = (x + \frac{1}{2}) (y + \frac{1}{2})
+\]</span>
+which is clearly not equal to the joint pdf <span class="math inline">\(f(x, y) = x + y\)</span> for values of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> in the unit square. So <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are not independent in this example.</p>
+<p><strong>Measuring association by covariance</strong></p>
+<p>In the situation like this one where two random variables are not independent, it is desirable to measure the association pattern. A standard measure of association is the covariance defined as the expectation
+<span class="math display">\[\begin{align}
+ Cov(X, Y) &amp; = E\left((X - \mu_X) (Y - \mu_Y)\right) \nonumber \\
+ &amp; =\int \int (x - \mu_X)(y - \mu_Y) f(x, y) dx dy. 
+ \end{align}\]</span>
+For computational purposes, one writes the covariance as
+<span class="math display">\[\begin{align}
+ Cov(X, Y) &amp;  = E(X Y) - \mu_X \mu_Y \nonumber \\ 
+ &amp; = \int \int (x y) f(x, y) dx dy - \mu_X \mu_Y.
+ \end{align}\]</span></p>
+<p>For our example, one computes the expectation <span class="math inline">\(E(XY)\)</span> from the joint density:
+<span class="math display">\[\begin{align*}
+ E(XY) &amp; = \int_0^1 \int_0^1 (xy) (x + y) dx dy \\
+ &amp; = \int \frac{y}{3} + \frac{y^2}{2} dy \\ 
+ &amp; = \frac{1}{3}.
+ \end{align*}\]</span>
+One can compute that the means of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are given by <span class="math inline">\(\mu_X = 7/12\)</span> and <span class="math inline">\(\mu_Y = 7/12\)</span>, respectively. So then the covariance of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is given by
+<span class="math display">\[\begin{align*}
+ Cov(X, Y) &amp;  = E(X Y) - \mu_X \mu_Y \\ 
+ &amp; =\frac{1}{3} - \left(\frac{7}{12}\right) \left(\frac{7}{12}\right) \\ 
+ &amp; = -\frac{1}{144}.
+ \end{align*}\]</span></p>
+<p>It can be difficult to interpret a covariance value since it depends on the scale of the support of the <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> variables. One standardizes this measure of association by dividing by the standard deviations of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> resulting in the correlation measure <span class="math inline">\(\rho\)</span>:
+<span class="math display">\[\begin{equation}
+ \rho = \frac{Cov(X, Y)}{\sigma_X \sigma_Y}.
+ \end{equation}\]</span>
+In a separate calculation one can find the variances of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> to be <span class="math inline">\(\sigma_X^2 = 11/144\)</span> and <span class="math inline">\(\sigma_Y^2 = 11/144\)</span>. Then the correlation is given by
+<span class="math display">\[\begin{align*}
+ \rho &amp;  = \frac{-1 / 144}{\sqrt{11/144}\sqrt{11/144}} \\ 
+ &amp; = -\frac{1}{11}.
+ \end{align*}\]</span>
+It can be shown that the value of the correlation <span class="math inline">\(\rho\)</span> falls in the interval <span class="math inline">\((-1, 1)\)</span> where a value of <span class="math inline">\(\rho = -1\)</span> or <span class="math inline">\(\rho = 1\)</span> indicates that <span class="math inline">\(Y\)</span> is a linear function of <span class="math inline">\(X\)</span> with probability 1. Here the correlation value is a small negative value indicates weak negative association between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</p>
+</div>
+<div id="flipping-a-random-coin-the-beta-binomial-distribution" class="section level2">
+<h2><span class="header-section-number">6.5</span> Flipping a Random Coin: The Beta-Binomial Distribution</h2>
+<p></p>
+<p>Suppose one has a box of coins where the coin probabilities vary. If one selects a coin from the box, <span class="math inline">\(p\)</span>, the probability the coin lands heads follows the distribution
+<span class="math display">\[
+ g(p) =  \frac{1}{B(6, 6)} p^5 (1 - p)^5, \, \, 0 &lt; p &lt; 1,
+ \]</span>
+where <span class="math inline">\(B(6,6)\)</span> is the Beta function, which will be more thoroughly discussed in Chapter 7. This density is plotted in Figure 6.4. A couple of things to notice about this density. First, the density has a significant height over much of the plausible values of the probability – this reflects the idea that one are really unsure about the chance of observing a heads when flipped. Second, the density is symmetric about <span class="math inline">\(p = 0.5\)</span>, which means that the coin is equally likely to be biased towards heads or biased towards tails.</p>
+<div class="figure"><span id="fig:unnamed-chunk-12"></span>
+<img src="../LATEX/figures/chapter6/beta66.png" alt="Beta(6, 6) density representing the distribution of probabilities of heads for a large collection of random coins." width="500" />
+<p class="caption">
+Figure 6.4: Beta(6, 6) density representing the distribution of probabilities of heads for a large collection of random coins.
+</p>
+</div>
+
+<p>One next flips this ``random&quot; coin 20 times.<br />
+Denote the outcome of this experiment by the random variable <span class="math inline">\(Y\)</span> which is equal to the count of heads. If we are given a value of the probability <span class="math inline">\(p\)</span>, then <span class="math inline">\(Y\)</span> has a Binomial distribution with <span class="math inline">\(n = 20\)</span> trials and success probability <span class="math inline">\(p\)</span>. This probability function is actually the conditional probability of observing <span class="math inline">\(y\)</span> heads given a value of the probability <span class="math inline">\(p\)</span>:
+<span class="math display">\[
+ f(y \mid p) = {20 \choose y} p ^ y (1 - p) ^ {20 - y}, \, \, y = 0, 1, ..., 20.
+ \]</span></p>
+<p>Given the density of <span class="math inline">\(p\)</span> and the conditional density of <span class="math inline">\(Y\)</span> conditional on <span class="math inline">\(p\)</span>, one computes the joint density by the product
+<span class="math display">\[\begin{align*}
+ f(y, p) =  &amp; \, g(p) f(y \mid p) = \left[ \frac{1}{B(6, 6)} p^5 (1 - p)^5\right] \left[{20 \choose y} p ^ y (1 - p) ^ {20 - y}\right] \\
+ = &amp; \frac{1}{B(6, 6)} {20 \choose y} p^{y + 5} (1 - p)^{25 - y}, \, \, 0 &lt; p &lt; 1, y = 0, 1, ..., 20. \\
+ \end{align*}\]</span>
+This is a mixed density in the sense that one variable (<span class="math inline">\(p\)</span>) is continuous and one (<span class="math inline">\(Y\)</span>) is discrete. This will not create any problems in the computation of marginal or conditional distributions, but one should be careful to understand the support of each random variable.</p>
+<p></p>
+<p><strong>Simulating from the Beta-Binomial Distribution</strong></p>
+<p>Using R it is straightforward to simulate a sample of <span class="math inline">\((p, y)\)</span> values from the Beta-Binomial distribution. Using the <code>rbeta()</code> function, one takes a random sample of 500 draws from the Beta(6, 6) distribution. Then for each probability value <span class="math inline">\(p\)</span>, one uses the <code>rbinom()</code> function to simulate the number of heads in 20 flips of this ``<span class="math inline">\(p\)</span> coin.&quot;</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">data.frame</span>(<span class="dt">p =</span> <span class="kw">rbeta</span>(<span class="dv">500</span>, <span class="dv">6</span>, <span class="dv">6</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Y =</span> <span class="kw">rbinom</span>(<span class="dv">500</span>, <span class="dt">size =</span> <span class="dv">20</span>, <span class="dt">prob =</span> p)) -&gt;<span class="st"> </span>df</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(p, Y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_jitter</span>()</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-14"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-14-1.png" alt="Scatterplot of 500 simulated draws from the joint density of the probability of heads $p$ and the number of heads $Y$ in 20 flips." width="672" />
+<p class="caption">
+Figure 6.5: Scatterplot of 500 simulated draws from the joint density of the probability of heads <span class="math inline">\(p\)</span> and the number of heads <span class="math inline">\(Y\)</span> in 20 flips.
+</p>
+</div>
+<p>A scatterplot of the simulated values of <span class="math inline">\(p\)</span> and <span class="math inline">\(Y\)</span> is displayed in Figure 6.5. Note that the variables are positively correlated, which indicates that one tends to observe a large number of heads with coins with a large probability of heads.</p>
+
+<p>What is the probability that one observes exactly 10 heads in the 20 flips, that is <span class="math inline">\(P(Y = 10)\)</span>? One performs this calculation by computing the marginal probability function for <span class="math inline">\(Y\)</span>. This is obtained by integrating out the probability <span class="math inline">\(p\)</span> from the joint density. This density is a special case of the Beta-Binomial distribution.
+<span class="math display">\[\begin{align*}
+ f(y) =  &amp; \, \int_0^1 g(p) f(y \mid p) dp  \\
+ = &amp; \int_0^1 \frac{1}{B(6, 6)} {20 \choose y} p^{y + 5} (1 - p)^{25 - y} dp\\
+ = &amp; {20 \choose y} \frac{B(y + 6, 26 - y)}{B(6, 6)}, \, \, y = 0, 1, 2, ..., 20.
+ \end{align*}\]</span></p>
+<p>Using this formula with the substitution <span class="math inline">\(y = 10\)</span>, we use R to find the probability <span class="math inline">\(P(Y = 10)\)</span>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">choose</span>(<span class="dv">20</span>, <span class="dv">10</span>) <span class="op">*</span><span class="st"> </span><span class="kw">beta</span>(<span class="dv">10</span> <span class="op">+</span><span class="st"> </span><span class="dv">6</span>, <span class="dv">26</span> <span class="op">-</span><span class="st"> </span><span class="dv">10</span>) <span class="op">/</span><span class="st">   </span><span class="kw">beta</span>(<span class="dv">6</span>, <span class="dv">6</span>)</a></code></pre></div>
+<pre><code>## [1] 0.1065048</code></pre>
+</div>
+<div id="bivariate-normal-distribution" class="section level2">
+<h2><span class="header-section-number">6.6</span> Bivariate Normal Distribution</h2>
+<p>Suppose one collects multiple body measurements from a group of 30 students. For example, for each of 30 students, one might collect the diameter of the wrist and the diameter of the ankle. If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> denote the two body measurements (measured in cm) for a student, then one might think that the density of <span class="math inline">\(X\)</span> and the density of <span class="math inline">\(Y\)</span> is each Normally distributed. Moreover, the two random variables would be positively correlated – if a student has a large wrist diameter, one would predict her to also have a large forearm length.</p>
+<p>A convenient joint density function for two continuous measurements <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, each variable measured on the whole real line, is the Bivariate Normal density with density given by
+<span class="math display">\[\begin{equation}
+f(x, y) = \frac{1}{2 \pi \sigma_X \sigma_Y \sqrt{1 - \rho}} \exp\left[-\frac{1}{2 (1 - \rho^2)}(z_X^2 - 2 \rho z_X z_Y + z_Y^2)\right],
+\end{equation}\]</span>
+where <span class="math inline">\(z_X\)</span> and <span class="math inline">\(z_Y\)</span> are the standardized scores
+<span class="math display">\[\begin{equation}
+z_X = \frac{x - \mu_X}{\sigma_X}, \, \, \, z_Y = \frac{y - \mu_Y}{\sigma_Y},
+\end{equation}\]</span>
+and <span class="math inline">\(\mu_X, \mu_Y\)</span> and <span class="math inline">\(\sigma_X, \sigma_Y\)</span> are respectively the means and standard deviations of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. The parameter <span class="math inline">\(\rho\)</span> is the correlation of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> and measures the association between the two variables.</p>
+<p>Figure 6.6 shows contour plots of four Bivariate Normal distributions. The bottom right graph corresponds to the values <span class="math inline">\(\mu_X = 17, \mu_Y = 23, \sigma_X = 2, \sigma_Y = 3\)</span> and <span class="math inline">\(\rho = 0.4\)</span> where <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> represent the wrist diameter and ankle diameter measurements of the student. The correlation value of <span class="math inline">\(\rho = 0.4\)</span> reflects the moderate positive correlation of the two body measurements. The other three graphs use the same means and standard deviations but different values of the <span class="math inline">\(\rho\)</span> parameter. This figure shows that the Bivariate Normal distribution is able to model a variety of association structures between two continuous measurements.</p>
+<div class="figure"><span id="fig:unnamed-chunk-16"></span>
+<img src="../LATEX/figures/chapter6/binormals.png" alt="Contour graphs of four Bivariate Normal distributions with different correlations." width="500" />
+<p class="caption">
+Figure 6.6: Contour graphs of four Bivariate Normal distributions with different correlations.
+</p>
+</div>
+
+<p>There are a number of attractive properties of the Bivariate Normal distribution.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>The marginal densities of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are Normal.</strong> So <span class="math inline">\(X\)</span> has a Normal density with parameters <span class="math inline">\(\mu_X\)</span> and <span class="math inline">\(\sigma_X\)</span> and likewise <span class="math inline">\(Y\)</span> is <span class="math inline">\(\textrm{Norma}(\mu_Y, \sigma_Y)\)</span>.</p></li>
+<li><p><strong>The conditional densities will also be Normal.</strong> For example, if one is given that <span class="math inline">\(Y = y\)</span>, then the conditional density of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y = y\)</span> is Normal where</p></li>
+</ol>
+<p><span class="math display">\[\begin{equation}
+E(X \mid Y = y) = \mu_X + \rho \frac{\sigma_X}{\sigma_Y}(y - \mu_Y), \, \, Var(X \mid Y = y) = \sigma_X^2(1 - \rho^2).
+\end{equation}\]</span>
+Similarly, if one knows that <span class="math inline">\(X = x\)</span>, then the conditional density of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X = x\)</span> is Normal with mean $ _Y + (x - _X)$ and variance $ _Y^2(1 - ^2)$.</p>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>For a Bivariate Normal distribution, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent if and only if the correlation <span class="math inline">\(\rho = 0\)</span>.</strong> In contrast, as the correlation parameter <span class="math inline">\(\rho\)</span> approaches <span class="math inline">\(+1\)</span> and <span class="math inline">\(-1\)</span>, then all of the probability mass will be concentrated on a line where <span class="math inline">\(Y = a X + b\)</span>.</li>
+</ol>
+<p><strong>Bivariate Normal calculations</strong></p>
+<p>Returning to the body measurements application, different uses of the Bivariate Normal model can be illustrated. Recall that <span class="math inline">\(X\)</span> denotes the wrist diameter, <span class="math inline">\(Y\)</span> represents the ankle diameter and we are assuming <span class="math inline">\((X, Y)\)</span> has a Bivariate Normal distribution with parameters <span class="math inline">\(\mu_X = 17, \mu_Y = 23, \sigma_X = 2, \sigma_Y = 3\)</span> and <span class="math inline">\(\rho = 0.4\)</span></p>
+<ol style="list-style-type: decimal">
+<li><strong>Find the probability a student’s wrist diameter exceeds 20 cm.</strong></li>
+</ol>
+<p>Here one is interested in the probability <span class="math inline">\(P(X &gt; 20)\)</span>. From the facts above, the marginal density for <span class="math inline">\(X\)</span> will be Normal with mean <span class="math inline">\(\mu_X = 17\)</span> and standard deviation <span class="math inline">\(\sigma_X = 2\)</span>. So this probability is computed using the function <code>pnorm()</code>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">20</span>, <span class="dv">17</span>, <span class="dv">2</span>)</a></code></pre></div>
+<pre><code>## [1] 0.0668072</code></pre>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Suppose one is told that the student’s ankle diameter is 20 cm – find the conditional probability <span class="math inline">\(P(X &gt; 20 \mid Y = 20)\)</span>.</strong></li>
+</ol>
+<p>By above the distribution of <span class="math inline">\(X\)</span> conditional on the value <span class="math inline">\(Y = y\)</span> is Normal with mean <span class="math inline">\(\mu_X + \rho \frac{\sigma_X}{\sigma_Y}(y - \mu_Y)\)</span> and variance <span class="math inline">\(\sigma_X^2(1 - \rho^2)\)</span>. Here one is conditioning on the value <span class="math inline">\(Y = 20\)</span> and one computes the mean and standard deviation and apply the <code>pnorm()</code> function:
+<span class="math display">\[\begin{align*}
+ E(X \mid Y = 20) &amp; = \mu_X + \rho \frac{\sigma_X}{\sigma_Y}(y - \mu_Y) \\
+ &amp; =  17 + 0.4 \left(\frac{2}{3}\right)(20 - 23) \\ 
+ &amp; = 16.2.
+ \end{align*}\]</span>
+<span class="math display">\[\begin{align*}
+ SD(X \mid Y = 20) &amp; = \sqrt{\sigma_X^2(1 - \rho^2)} \\
+ &amp; =  \sqrt{2^2 (1 - 0.4^2)} \\ 
+ &amp; = 1.83.
+ \end{align*}\]</span></p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">20</span>, <span class="fl">16.2</span>, <span class="fl">1.83</span>)</a></code></pre></div>
+<pre><code>## [1] 0.01892374</code></pre>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Are <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> independent variables?</strong></li>
+</ol>
+<p>By the properties above, for a Bivariate Normal distribution, a necessary and sufficient condition for independence is that the correlation <span class="math inline">\(\rho = 0\)</span>. Since the correlation between the two variables is not zero, the random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> can not be independent.</p>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Find the probability a student’s ankle diameter measurement is at 50 percent greater than her wrist diameter measurement, that is <span class="math inline">\(P(Y &gt; 1.5 X)\)</span>.</strong></li>
+</ol>
+<p><strong>Simulating Bivariate Normal measurements</strong></p>
+<p>The computation of the probability <span class="math inline">\(P(Y &gt; 1.5 X)\)</span> is not obvious from the information provided. But simulation provides an attractive method of computing this probability. One simulates a large number, say 1000, draws from the Bivariate Normal distribution and then finds the fraction of simulated <span class="math inline">\((x, y)\)</span> pairs where <span class="math inline">\(y &gt; 1.5 x\)</span>. Figure 6.7 displays a scatterplot of these simulated draws and the line <span class="math inline">\(y = 1.5 x\)</span>. The probability is estimated by the fraction of points that fall to the left of this line. In the R script below we use a function <code>sim_binorm()</code> to simulate 1000 draws from a Bivariate Normal distribution with inputted parameters <span class="math inline">\(\mu_X, \mu_Y, \sigma_X, \sigma_Y, \phi\)</span>. The bivariate normal parameters are set to the values in this example and using the function <code>sim_binorm()</code> the probability of interest is approximated by 0.242.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">sim_binorm &lt;-<span class="st"> </span><span class="cf">function</span>(mx, my, sx, sy, r){</a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">  <span class="kw">require</span>(ProbBayes)</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3">  v &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(sx <span class="op">^</span><span class="st"> </span><span class="dv">2</span>, r <span class="op">*</span><span class="st"> </span>sx <span class="op">*</span><span class="st"> </span>sy, </a>
+<a class="sourceLine" id="cb23-4" data-line-number="4">                r <span class="op">*</span><span class="st"> </span>sx <span class="op">*</span><span class="st"> </span>sy, sy <span class="op">^</span><span class="st"> </span><span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb23-5" data-line-number="5">                <span class="dv">2</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb23-6" data-line-number="6">  <span class="kw">as.data.frame</span>(<span class="kw">rmnorm</span>(<span class="dv">1000</span>, <span class="dt">mean =</span> <span class="kw">c</span>(mx, my), </a>
+<a class="sourceLine" id="cb23-7" data-line-number="7">                       <span class="dt">varcov =</span> v))}</a>
+<a class="sourceLine" id="cb23-8" data-line-number="8">mx &lt;-<span class="st"> </span><span class="dv">17</span>; my &lt;-<span class="st"> </span><span class="dv">23</span>; sx &lt;-<span class="st"> </span><span class="dv">2</span>; sy &lt;-<span class="st"> </span><span class="dv">3</span>; r &lt;-<span class="st"> </span><span class="fl">0.4</span></a>
+<a class="sourceLine" id="cb23-9" data-line-number="9">sdata &lt;-<span class="st"> </span><span class="kw">sim_binorm</span>(mx, my, sx, sy, r)</a>
+<a class="sourceLine" id="cb23-10" data-line-number="10"><span class="kw">names</span>(sdata) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)</a>
+<a class="sourceLine" id="cb23-11" data-line-number="11">sdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="kw">mean</span>(Y <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.5</span> <span class="op">*</span><span class="st"> </span>X))</a></code></pre></div>
+<pre><code>##   mean(Y &gt; 1.5 * X)
+## 1             0.243</code></pre>
+<div class="figure"><span id="fig:unnamed-chunk-20"></span>
+<img src="../LATEX/figures/chapter6/Binorm_scatter.png" alt="Scatterplot of simulated draws from the Bivariate Normal in body measurement example.  The probability that $Y &gt; 1.5 X$ is approximated by the proportion of simulated points that fall to the left of the line $y = 1.5 x$." width="500" />
+<p class="caption">
+Figure 6.7: Scatterplot of simulated draws from the Bivariate Normal in body measurement example. The probability that <span class="math inline">\(Y &gt; 1.5 X\)</span> is approximated by the proportion of simulated points that fall to the left of the line <span class="math inline">\(y = 1.5 x\)</span>.
+</p>
+</div>
+
+</div>
+<div id="exercises-4" class="section level2">
+<h2><span class="header-section-number">6.7</span> Exercises</h2>
+<ol style="list-style-type: decimal">
+<li><strong>Coin Flips</strong></li>
+</ol>
+<p>Suppose you flip a coin three times with eight equally likely outcomes <span class="math inline">\(HHH, HHT, ..., TTT\)</span>. Let <span class="math inline">\(X\)</span> denote the number of heads in the first two flips and <span class="math inline">\(Y\)</span> the number of heads in the last two flips.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the joint probability mass function (pmf) of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> and put your answers in the following table.</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th align="center"></th>
+<th align="center"></th>
+<th align="center">y</th>
+<th align="center"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(x\)</span></td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+</tr>
+<tr class="even">
+<td align="center">0</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">1</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">2</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Find <span class="math inline">\(P(X &gt; Y)\)</span>.</li>
+<li>Find the marginal pmf’s of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</li>
+<li>Find the conditional pmf of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y = 1\)</span>.</li>
+</ol>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Selecting Numbers</strong></li>
+</ol>
+<p>Suppose you select two numbers without replacement from the set {1, 2, 3, 4, 5}. Let <span class="math inline">\(X\)</span> denote the smaller of the two numbers and <span class="math inline">\(Y\)</span> denote the larger of the two numbers.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the joint probability mass function of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</li>
+<li>Find the marginal pmf’s of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</li>
+<li>Are <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> independent? If not, explain why.</li>
+<li>Find <span class="math inline">\(P(Y = 3 \mid X = 2)\)</span>.</li>
+</ol>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Die Rolls</strong></li>
+</ol>
+<p>You roll a die 4 times and record <span class="math inline">\(O\)</span>, the number of ones, and <span class="math inline">\(T\)</span> the number of twos rolled.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Construct the joint pmf of <span class="math inline">\(O\)</span> and <span class="math inline">\(T\)</span>.</li>
+<li>Find the probability <span class="math inline">\(P(O = T)\)</span>.</li>
+<li>Find the conditional pmf of <span class="math inline">\(T\)</span> given <span class="math inline">\(O = 1\)</span>.</li>
+<li>Compute <span class="math inline">\(P(T &gt; 0 \mid O = 1)\)</span>.</li>
+</ol>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Choosing Balls</strong></li>
+</ol>
+<p>Suppose you have a box with 3 red and 2 black balls. You first roll a die – if the roll is 1, 2, you sample 3 balls without replacement from the box. If you roll is 3 or higher, you sample 2 balls with replacement from the box. Let <span class="math inline">\(X\)</span> denote the number of balls you sample and <span class="math inline">\(Y\)</span> the number of red balls selected.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the joint pmf of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</li>
+<li>Find the probability <span class="math inline">\(P(X = Y)\)</span>.</li>
+<li>Find the marginal pmf of <span class="math inline">\(Y\)</span>.</li>
+<li>Find the conditional pmf of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y = 2\)</span>.</li>
+</ol>
+<ol start="5" style="list-style-type: decimal">
+<li><strong>Baseball Hitting</strong></li>
+</ol>
+<p>Suppose a player is equally likely to have 4, 5, or 6 at-bats (opportunities) in a baseball game. If <span class="math inline">\(N\)</span> is the number of opportunities, then assume that <span class="math inline">\(X\)</span>, the number of hits, is Binomial with probability <span class="math inline">\(p = 0.3\)</span> and sample size <span class="math inline">\(N\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the joint pmf of <span class="math inline">\(N\)</span> and <span class="math inline">\(X\)</span>.</li>
+<li>Find the marginal pmf of <span class="math inline">\(X\)</span>.</li>
+<li>Find the conditional pmf of <span class="math inline">\(N\)</span> given <span class="math inline">\(X = 2\)</span>.</li>
+<li>If the player gets 3 hits, what is the probability he had exactly 5 at-bats?</li>
+</ol>
+<ol start="6" style="list-style-type: decimal">
+<li><strong>Multinomial Density</strong>
+</li>
+</ol>
+<p>Suppose a box contains 4 red, 3 black, and 3 green balls. You sample eight balls with replacement from the box and let <span class="math inline">\(R\)</span> denote the number of red and <span class="math inline">\(B\)</span> the number of black balls selected.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Explain why this is a Multinomial experiment and given values of the parameters of the Multinomial distribution for <span class="math inline">\((R, B)\)</span>.</li>
+<li>Compute <span class="math inline">\(P(R = 3, B = 2)\)</span>.</li>
+<li>Compute the probability that you sample more red balls than black balls.</li>
+<li>Find the marginal distribution of <span class="math inline">\(B\)</span>.</li>
+<li>If you are given that you sampled <span class="math inline">\(B = 4\)</span> balls, find the probability that you sampled at most 2 red balls.</li>
+</ol>
+<ol start="7" style="list-style-type: decimal">
+<li><strong>Joint Density</strong></li>
+</ol>
+<p>Let <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> have the joint density
+<span class="math display">\[
+f(x, y) = k y, \, \, 0 &lt; x &lt; 2, 0 &lt; y &lt; 2.
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the value of <span class="math inline">\(k\)</span> so that <span class="math inline">\(f()\)</span> is a pdf.</li>
+<li>Find the marginal density of <span class="math inline">\(X\)</span>.</li>
+<li>FInd <span class="math inline">\(P(Y &gt; X)\)</span>.</li>
+<li>Find the conditional density of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X = x\)</span> for any value <span class="math inline">\(0 &lt; x &lt; 2\)</span>.</li>
+</ol>
+<ol start="8" style="list-style-type: decimal">
+<li><strong>Joint Density</strong></li>
+</ol>
+<p>Let <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> have the joint density
+<span class="math display">\[
+f(x, y) = x + y, \, \, 0 &lt; x &lt; 1, 0 &lt; y &lt; 1.
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li>Check that <span class="math inline">\(f\)</span> is indeed a valid pdf. If it is not, correct the definition of <span class="math inline">\(f\)</span> so it is valid.</li>
+<li>Find the probability <span class="math inline">\(P(X &gt; 0.5, Y &lt; 0.5)\)</span>.</li>
+<li>Find the marginal density of <span class="math inline">\(X\)</span>.</li>
+<li>Are <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> independent? Answer by a suitable calculation.</li>
+</ol>
+<ol start="9" style="list-style-type: decimal">
+<li><strong>Random Division</strong></li>
+</ol>
+<p>Suppose one randomly chooses a values <span class="math inline">\(X\)</span> on the interval (0, 2), and then random choosing a second point <span class="math inline">\(Y\)</span> from 0 to <span class="math inline">\(X\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the joint density of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</li>
+<li>Are <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> independent? Explain.</li>
+<li>Find the probability <span class="math inline">\(P(Y &gt; 0.5)\)</span>.</li>
+<li>Find the probability <span class="math inline">\(P(X + Y &gt; 2)\)</span>.</li>
+</ol>
+<ol start="10" style="list-style-type: decimal">
+<li><strong>Choosing a Random Point in a Circle</strong></li>
+</ol>
+<p>Suppose (<span class="math inline">\(X, Y\)</span>) denotes a random point selected over the unit circle. The joint pdf of (<span class="math inline">\(X, Y\)</span>) is given by
+<span class="math display">\[
+ f(x, y) =
+ \begin{cases}
+C,  \, \, x^2 + y^2 \le 1;\\
+0, \, \,{\rm elsewhere}.
+\end{cases}
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the value of the constant <span class="math inline">\(C\)</span> so <span class="math inline">\(f()\)</span> is indeed a joint pdf.</li>
+<li>Find the marginal pdf of <span class="math inline">\(Y\)</span>.</li>
+<li>Find the probability <span class="math inline">\(P(Y &gt; 0.5)\)</span></li>
+<li>Find the conditional pdf of <span class="math inline">\(X\)</span> conditional on <span class="math inline">\(Y = 0.5\)</span>.</li>
+</ol>
+<ol start="11" style="list-style-type: decimal">
+<li><strong>A Random Meeting</strong></li>
+</ol>
+<p>Suppose John and Jill independently arrive at an airport at a random between 3 and 4 pm one afternoon. Let <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> denote respectively the number of minutes past 3 pm that John and Jill arrive.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the joint pdf of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</li>
+<li>Find the probability that John arrives later than Jill.</li>
+<li>Find the probability that John and Jill meet within 10 minutes of each other.</li>
+</ol>
+<ol start="12" style="list-style-type: decimal">
+<li><strong>Defects in Fabric</strong></li>
+</ol>
+<p>Suppose the number of defects per yard in a fabric <span class="math inline">\(X\)</span> is assumed to have a Poisson distribution with mean <span class="math inline">\(\lambda\)</span>. That is, the conditional density of <span class="math inline">\(X\)</span> given <span class="math inline">\(\lambda\)</span> has the form
+<span class="math display">\[
+f(x \mid \lambda) = \frac{e^{-\lambda} \lambda^x}{x!}, x = 0, 1, 2, ...
+\]</span>
+The parameter <span class="math inline">\(\lambda\)</span> is assumed to be uniformly distributed over the values 0.5, 1, 1.5, and 2.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write down the joint pmf of <span class="math inline">\(X\)</span> and <span class="math inline">\(\lambda\)</span>.</li>
+<li>Find the probability that the number of defects <span class="math inline">\(X\)</span> is equal to 0.</li>
+<li>Find the conditional pmf of <span class="math inline">\(\lambda\)</span> if you know that <span class="math inline">\(X = 0\)</span>.</li>
+</ol>
+<ol start="13" style="list-style-type: decimal">
+<li><strong>Defects in Fabric (continued)</strong></li>
+</ol>
+<p>Again we assume the number of defects per yard in a fabric <span class="math inline">\(X\)</span> given <span class="math inline">\(\lambda\)</span> has a Poisson distribution with mean <span class="math inline">\(\lambda\)</span>. But now we assume <span class="math inline">\(\lambda\)</span> is continuous-valued with the exponential density
+<span class="math display">\[
+g(\lambda) = \exp(-\lambda), \, \, \lambda &gt; 0.
+\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li>Write down the joint density of <span class="math inline">\(X\)</span> and <span class="math inline">\(\lambda\)</span>.</li>
+<li><p>Find the marginal density of <span class="math inline">\(X\)</span>. [Hint: it may be helpful to use the integral identity
+<span class="math display">\[
+\int_0^\infty \exp(-a) \lambda^b d\lambda = \frac{b!}{a ^ b},
+\]</span>
+where <span class="math inline">\(b\)</span> is a nonnegative integer.]</p></li>
+<li>Find the probability that the number of defects <span class="math inline">\(X\)</span> is equal to 0.</li>
+<li><p>Find the conditional density of <span class="math inline">\(\lambda\)</span> if you know that <span class="math inline">\(X = 0\)</span>.</p></li>
+</ol>
+<ol start="14" style="list-style-type: decimal">
+<li><strong>Flipping a Random Coin</strong></li>
+</ol>
+<p>Suppose you plan flipping a coin twice where the probability <span class="math inline">\(p\)</span> of heads has the density function
+<span class="math display">\[
+f(p) = 6 p (1 - p), \, \, 0 &lt; p &lt; 1.
+\]</span>
+Let <span class="math inline">\(Y\)</span> denote the number of heads of this “random” coin. <span class="math inline">\(Y\)</span> given a value of <span class="math inline">\(p\)</span> is Binomial with <span class="math inline">\(n = 2\)</span> and probability of success <span class="math inline">\(p\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write down the joint density of <span class="math inline">\(Y\)</span> and <span class="math inline">\(p\)</span>.</li>
+<li>Find <span class="math inline">\(P(Y = 2)\)</span>.</li>
+<li>If <span class="math inline">\(Y = 2\)</span>, then find the probability that <span class="math inline">\(p\)</span> is greater than 0.5.</li>
+</ol>
+<ol start="15" style="list-style-type: decimal">
+<li><strong>Passengers on An Airport Limousine</strong></li>
+</ol>
+<p>An airport limousine can accommodate up to four passengers on any one trip. The company will accept a maximum of six reservations for a trip, and a passenger must have a reservation. From previous records, <span class="math inline">\(30\%\)</span> of all those making reservations do not appear for the trip. Answer the following questions, assuming independence whenever appropriate.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>If six reservations are made, what is the probability that at least one individual with a reservation cannot be accommodated on the trip?</p></li>
+<li><p>If six reservations are made, what is the expected number of available places when the limousine departs?</p></li>
+<li><p>Suppose the probability distribution of the number of reservations made is given in the following table.</p></li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Number of observations</th>
+<th align="center">3</th>
+<th align="center">4</th>
+<th align="center">5</th>
+<th align="center">6</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center">0.13</td>
+<td align="center">0.18</td>
+<td align="center">0.35</td>
+<td align="center">0.34</td>
+</tr>
+</tbody>
+</table>
+<p>Let <span class="math inline">\(X\)</span> denote the number of passengers on a randomly selected trip. Obtain the probability mass function of <span class="math inline">\(X\)</span>.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"><span class="math inline">\(x\)</span></th>
+<th align="center">0</th>
+<th align="center">1</th>
+<th align="center">2</th>
+<th align="center">3</th>
+<th align="center">4</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left"><span class="math inline">\(p(x)\)</span></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<ol start="16" style="list-style-type: decimal">
+<li><strong>Heights of Fathers and Sons</strong></li>
+</ol>
+<p>It is well-know that heights of fathers and sons are positively association. In fact, if <span class="math inline">\(X\)</span> represents the father’s height in inches and <span class="math inline">\(Y\)</span> represents the son’s height, then the joint distribution of <span class="math inline">\((X, Y)\)</span> can be approximated by a Bivariate Normal with means <span class="math inline">\(\mu_X = \mu_Y = 69\)</span>, <span class="math inline">\(\sigma_X = \sigma_Y = 3\)</span> and correlation <span class="math inline">\(\rho = 0.4\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Are <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> independent? Why or why not?</li>
+<li>Find the conditional density of the sons height if you know the father’s height is 70 inches.</li>
+<li>Using the result in part (b) to find <span class="math inline">\(P(Y &gt; 72 \mid X = 70)\)</span>.</li>
+<li>By simulating from the Bivariate Normal distribution, approximate the probability that the son will be more than one inch taller than his father.</li>
+</ol>
+<ol start="17" style="list-style-type: decimal">
+<li><strong>Instruction and Students’ Scores</strong></li>
+</ol>
+<p>Twenty-two children are given a reading comprehension test before and after receiving a particular instruction method. Assume students’ pre-instructional and post-instructional scores follow a Bivariate Normal distribution with: <span class="math inline">\(\mu_{pre} = 47, \mu_{post} = 53, \sigma_{pre} = 13, \sigma_{post} = 15\)</span> and <span class="math inline">\(\rho = 0.7\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Find the probability that a student’s post-instructional score exceeds 60.</p></li>
+<li><p>Suppose one student’s pre-instructional score is 45, find the probability that this student’s post-instructional score exceeds 70.</p></li>
+<li><p>Find the probability that a student has increased the test score by at least 10 points. [Hint: Use R to simulate a large number of draws from the Bivariate Normal distribution. Refer to the example  function in Section  for simulating Bivariate Normal draws.]</p></li>
+</ol>
+<ol start="18" style="list-style-type: decimal">
+<li><strong>Shooting Free Throws</strong>
+</li>
+</ol>
+<p>Suppose a basketball player will take <span class="math inline">\(N\)</span> free throw shots during a game where <span class="math inline">\(N\)</span> has the following discrete distribution.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"><span class="math inline">\(N\)</span></th>
+<th align="center">5</th>
+<th align="center">6</th>
+<th align="center">7</th>
+<th align="center">8</th>
+<th align="center">9</th>
+<th align="center">10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center">0.2</td>
+<td align="center">0.2</td>
+<td align="center">0.2</td>
+<td align="center">0.2</td>
+<td align="center">0.1</td>
+<td align="center">0.1</td>
+</tr>
+</tbody>
+</table>
+<p>If the player takes <span class="math inline">\(N = n\)</span> shots, then the number of makes <span class="math inline">\(Y\)</span> is Binomial with sample size <span class="math inline">\(n\)</span> and probability of success <span class="math inline">\(p = 0.7\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Find the probability the player takes 6 shots and makes 4 of them.</p></li>
+<li><p>From the joint distribution of <span class="math inline">\((N, Y)\)</span>, find the most likely <span class="math inline">\((n, y)\)</span> pair.</p></li>
+<li><p>Find the conditional distribution of the number of shots <span class="math inline">\(N\)</span> if he makes 4 shots.</p></li>
+<li><p>Find the expectation <span class="math inline">\(E(N \mid Y = 4)\)</span>.</p></li>
+</ol>
+<ol start="19" style="list-style-type: decimal">
+<li><strong>Flipping a Random Coin</strong></li>
+</ol>
+<p>Suppose one selects a probability <span class="math inline">\(p\)</span> Uniformly from the interval (0, 1), and then flips a coin 10 times, where the probability of heads is the probability <span class="math inline">\(p\)</span>. Let <span class="math inline">\(X\)</span> denote the observed number of heads.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Find the joint distribution of <span class="math inline">\(p\)</span> and <span class="math inline">\(X\)</span>.</p></li>
+<li><p>Use R to simulate a sample of size 1000 from the joint distribution of <span class="math inline">\((p, X)\)</span>.</p></li>
+<li><p>From inspecting a histogram of the simulated values of <span class="math inline">\(X\)</span>, guess at the marginal distribution of <span class="math inline">\(X\)</span>.</p></li>
+</ol>
+<p><strong>R Exercises</strong></p>
+<ol start="20" style="list-style-type: decimal">
+<li><strong>Simulating Multinomial Probabilities</strong></li>
+</ol>
+<p>Revisit Exercise .</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write an R function to simulate 10 balls of the special weighted box (4 red, 3 black, and 3 green balls). [Hint: Section  introduces the  function for the example of a special weighted die.]</p></li>
+<li><p>Use the  function to simulate the Multinomial experiment in Exercise  for 5000 iterations, and approximate <span class="math inline">\(P(R = 3, B = 2)\)</span>.</p></li>
+<li><p>Use the 5000 simulated Multinomial experiments to approximate the probability that you sample more red balls than black balls, i.e. <span class="math inline">\(P(R &gt; B)\)</span>.</p></li>
+<li><p>Conditional on <span class="math inline">\(B = 4\)</span>, approximate the mean number of red balls will get sampled. Compare the approximated mean value to the exact mean. [Hint: Conditional on <span class="math inline">\(B = 4\)</span>, the distribution of <span class="math inline">\(R\)</span> is a Binomial distribution.]</p></li>
+</ol>
+<ol start="21" style="list-style-type: decimal">
+<li><strong>Simulating from a Beta-Binomial Distribution</strong></li>
+</ol>
+<p>Consider a box of coins where the coin probabilities vary, and the probability of a selected coin lands heads, <span class="math inline">\(p\)</span>, follows a <span class="math inline">\(\textrm{Beta}(2, 8)\)</span> distribution. Jason then continues to flip this ``random&quot; coin 10 times, and is interested in the count of heads of the 10 flips, denoted by <span class="math inline">\(Y\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write an R function to simulate 5000 samples of <span class="math inline">\((p, y)\)</span>. [Hint: Use <code>rbeta()</code> and <code>rbinom()</code> functions accordingly.]</p></li>
+<li><p>Approximate the probability that Jason observes 3 heads out of 10 flips, using the simulated 5000 samples. Compare the approximated probability to the exact probability. [Hint: Write out <span class="math inline">\(f(y)\)</span> following the work in Section , and use R to calculate the exact probability.]</p></li>
+</ol>
+<ol start="22" style="list-style-type: decimal">
+<li><strong>Shooting Free Throws (continued)</strong></li>
+</ol>
+<p>Consider the free throws shooting in Exercise .</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write an R function to simulate 5000 samples of <span class="math inline">\((n, y)\)</span>.</p></li>
+<li><p>From the 5000 samples, find the most likely <span class="math inline">\((n ,y)\)</span> pair. Compare your result to Exercise  part (b).</p></li>
+<li><p>Approximate the expectation <span class="math inline">\(E(N \mid Y = 4)\)</span>, and compare your result to Exercise  part (d).</p></li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="continuous-distributions.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="proportion.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/06-joint.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

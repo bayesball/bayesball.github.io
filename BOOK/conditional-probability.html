@@ -1,0 +1,2617 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Conditional Probability | Bayesian Modeling</title>
+  <meta name="description" content="This is an introduction to Bayesian modeling at the undergraduate level" />
+  <meta name="generator" content="bookdown 0.13 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Conditional Probability | Bayesian Modeling" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This is an introduction to Bayesian modeling at the undergraduate level" />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Conditional Probability | Bayesian Modeling" />
+  
+  <meta name="twitter:description" content="This is an introduction to Bayesian modeling at the undergraduate level" />
+  
+
+<meta name="author" content="Jim Albert and Jingchen Hu" />
+
+
+<meta name="date" content="2019-09-28" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="counting-methods.html"/>
+<link rel="next" href="discrete-distributions.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Probability and Bayesian Modeling</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html"><i class="fa fa-check"></i><b>1</b> Probability: A Measurement of Uncertainty</a><ul>
+<li class="chapter" data-level="1.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#introduction"><i class="fa fa-check"></i><b>1.1</b> Introduction</a></li>
+<li class="chapter" data-level="1.2" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-classical-view-of-a-probability"><i class="fa fa-check"></i><b>1.2</b> The Classical View of a Probability</a></li>
+<li class="chapter" data-level="1.3" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-frequency-view-of-a-probability"><i class="fa fa-check"></i><b>1.3</b> The Frequency View of a Probability</a></li>
+<li class="chapter" data-level="1.4" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-subjective-view-of-a-probability"><i class="fa fa-check"></i><b>1.4</b> The Subjective View of a Probability</a><ul>
+<li class="chapter" data-level="1.4.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#measuring-probabilities-subjectively"><i class="fa fa-check"></i><b>1.4.1</b> Measuring probabilities subjectively</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-sample-space"><i class="fa fa-check"></i><b>1.5</b> The Sample Space</a><ul>
+<li class="chapter" data-level="1.5.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#roll-two-fair-indistinguishable-dice"><i class="fa fa-check"></i><b>1.5.1</b> Roll two fair, indistinguishable dice</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#assigning-probabilities"><i class="fa fa-check"></i><b>1.6</b> Assigning Probabilities</a><ul>
+<li class="chapter" data-level="1.6.1" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#events-and-event-operations"><i class="fa fa-check"></i><b>1.6.1</b> Events and Event Operations</a></li>
+<li class="chapter" data-level="1.6.2" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-three-probability-axioms"><i class="fa fa-check"></i><b>1.6.2</b> The Three Probability Axioms</a></li>
+<li class="chapter" data-level="1.6.3" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#the-complement-and-addition-properties"><i class="fa fa-check"></i><b>1.6.3</b> The Complement and Addition Properties</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="probability-a-measurement-of-uncertainty.html"><a href="probability-a-measurement-of-uncertainty.html#exercises"><i class="fa fa-check"></i><b>1.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="counting-methods.html"><a href="counting-methods.html"><i class="fa fa-check"></i><b>2</b> Counting Methods</a><ul>
+<li class="chapter" data-level="2.1" data-path="counting-methods.html"><a href="counting-methods.html#introduction-rolling-dice-yahtzee-and-roulette"><i class="fa fa-check"></i><b>2.1</b> Introduction: Rolling Dice, Yahtzee, and Roulette</a></li>
+<li class="chapter" data-level="2.2" data-path="counting-methods.html"><a href="counting-methods.html#equally-likely-outcomes"><i class="fa fa-check"></i><b>2.2</b> Equally Likely Outcomes</a></li>
+<li class="chapter" data-level="2.3" data-path="counting-methods.html"><a href="counting-methods.html#the-multiplication-counting-rule"><i class="fa fa-check"></i><b>2.3</b> The Multiplication Counting Rule</a></li>
+<li class="chapter" data-level="2.4" data-path="counting-methods.html"><a href="counting-methods.html#permutations"><i class="fa fa-check"></i><b>2.4</b> Permutations</a></li>
+<li class="chapter" data-level="2.5" data-path="counting-methods.html"><a href="counting-methods.html#combinations"><i class="fa fa-check"></i><b>2.5</b> Combinations</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="counting-methods.html"><a href="counting-methods.html#number-of-subsets"><i class="fa fa-check"></i><b>2.5.1</b> Number of subsets</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="counting-methods.html"><a href="counting-methods.html#arrangements-of-non-distinct-objects"><i class="fa fa-check"></i><b>2.6</b> Arrangements of Non-Distinct Objects</a></li>
+<li class="chapter" data-level="2.7" data-path="counting-methods.html"><a href="counting-methods.html#playing-yahtzee"><i class="fa fa-check"></i><b>2.7</b> Playing Yahtzee</a></li>
+<li class="chapter" data-level="2.8" data-path="counting-methods.html"><a href="counting-methods.html#exercises-1"><i class="fa fa-check"></i><b>2.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="conditional-probability.html"><a href="conditional-probability.html"><i class="fa fa-check"></i><b>3</b> Conditional Probability</a><ul>
+<li class="chapter" data-level="3.1" data-path="conditional-probability.html"><a href="conditional-probability.html#introduction-the-three-card-problem"><i class="fa fa-check"></i><b>3.1</b> Introduction: The Three Card Problem</a></li>
+<li class="chapter" data-level="3.2" data-path="conditional-probability.html"><a href="conditional-probability.html#independent-events"><i class="fa fa-check"></i><b>3.2</b> Independent Events</a></li>
+<li class="chapter" data-level="3.3" data-path="conditional-probability.html"><a href="conditional-probability.html#in-everyday-life"><i class="fa fa-check"></i><b>3.3</b> In Everyday Life</a></li>
+<li class="chapter" data-level="3.4" data-path="conditional-probability.html"><a href="conditional-probability.html#in-a-two-way-table"><i class="fa fa-check"></i><b>3.4</b> In a Two-Way Table</a></li>
+<li class="chapter" data-level="3.5" data-path="conditional-probability.html"><a href="conditional-probability.html#definition-and-the-multiplication-rule"><i class="fa fa-check"></i><b>3.5</b> Definition and the Multiplication Rule</a></li>
+<li class="chapter" data-level="3.6" data-path="conditional-probability.html"><a href="conditional-probability.html#the-multiplication-rule"><i class="fa fa-check"></i><b>3.6</b> The Multiplication Rule</a></li>
+<li class="chapter" data-level="3.7" data-path="conditional-probability.html"><a href="conditional-probability.html#the-multiplication-rule-under-independence"><i class="fa fa-check"></i><b>3.7</b> The Multiplication Rule Under Independence</a></li>
+<li class="chapter" data-level="3.8" data-path="conditional-probability.html"><a href="conditional-probability.html#learning-using-bayes-rule"><i class="fa fa-check"></i><b>3.8</b> Learning Using Bayes’ Rule</a></li>
+<li class="chapter" data-level="3.9" data-path="conditional-probability.html"><a href="conditional-probability.html#r-example-learning-about-a-spinner"><i class="fa fa-check"></i><b>3.9</b> R Example: Learning About a Spinner</a></li>
+<li class="chapter" data-level="3.10" data-path="conditional-probability.html"><a href="conditional-probability.html#exercises-2"><i class="fa fa-check"></i><b>3.10</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="discrete-distributions.html"><a href="discrete-distributions.html"><i class="fa fa-check"></i><b>4</b> Discrete Distributions</a><ul>
+<li class="chapter" data-level="4.1" data-path="discrete-distributions.html"><a href="discrete-distributions.html#introduction-the-hat-check-problem"><i class="fa fa-check"></i><b>4.1</b> Introduction: The Hat Check Problem</a></li>
+<li class="chapter" data-level="4.2" data-path="discrete-distributions.html"><a href="discrete-distributions.html#random-variable-and-probability-distribution"><i class="fa fa-check"></i><b>4.2</b> Random Variable and Probability Distribution</a></li>
+<li class="chapter" data-level="4.3" data-path="discrete-distributions.html"><a href="discrete-distributions.html#probability-distribution"><i class="fa fa-check"></i><b>4.3</b> Probability distribution</a></li>
+<li class="chapter" data-level="4.4" data-path="discrete-distributions.html"><a href="discrete-distributions.html#summarizing-a-probability-distribution"><i class="fa fa-check"></i><b>4.4</b> Summarizing a Probability Distribution</a></li>
+<li class="chapter" data-level="4.5" data-path="discrete-distributions.html"><a href="discrete-distributions.html#standard-deviation-of-a-probability-distribution"><i class="fa fa-check"></i><b>4.5</b> Standard Deviation of a Probability Distribution</a></li>
+<li class="chapter" data-level="4.6" data-path="discrete-distributions.html"><a href="discrete-distributions.html#coin-tossing-distributions"><i class="fa fa-check"></i><b>4.6</b> Coin-Tossing Distributions</a></li>
+<li class="chapter" data-level="4.7" data-path="discrete-distributions.html"><a href="discrete-distributions.html#binomial-probabilities"><i class="fa fa-check"></i><b>4.7</b> Binomial probabilities</a></li>
+<li class="chapter" data-level="4.8" data-path="discrete-distributions.html"><a href="discrete-distributions.html#binomial-experiments"><i class="fa fa-check"></i><b>4.8</b> Binomial experiments</a></li>
+<li class="chapter" data-level="4.9" data-path="discrete-distributions.html"><a href="discrete-distributions.html#binomial-computations"><i class="fa fa-check"></i><b>4.9</b> Binomial computations</a></li>
+<li class="chapter" data-level="4.10" data-path="discrete-distributions.html"><a href="discrete-distributions.html#mean-and-standard-deviation-of-a-binomial"><i class="fa fa-check"></i><b>4.10</b> Mean and standard deviation of a Binomial</a></li>
+<li class="chapter" data-level="4.11" data-path="discrete-distributions.html"><a href="discrete-distributions.html#negative-binomial-experiments"><i class="fa fa-check"></i><b>4.11</b> Negative Binomial Experiments</a></li>
+<li class="chapter" data-level="4.12" data-path="discrete-distributions.html"><a href="discrete-distributions.html#exercises-3"><i class="fa fa-check"></i><b>4.12</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="continuous-distributions.html"><a href="continuous-distributions.html"><i class="fa fa-check"></i><b>5</b> Continuous Distributions</a><ul>
+<li class="chapter" data-level="5.1" data-path="continuous-distributions.html"><a href="continuous-distributions.html#introduction-a-baseball-spinner-game"><i class="fa fa-check"></i><b>5.1</b> Introduction: A Baseball Spinner Game</a></li>
+<li class="chapter" data-level="5.2" data-path="continuous-distributions.html"><a href="continuous-distributions.html#the-uniform-distribution"><i class="fa fa-check"></i><b>5.2</b> The Uniform Distribution</a></li>
+<li class="chapter" data-level="5.3" data-path="continuous-distributions.html"><a href="continuous-distributions.html#binomial-probabilities-and-the-normal-curve"><i class="fa fa-check"></i><b>5.3</b> Binomial Probabilities and the Normal Curve</a></li>
+<li class="chapter" data-level="5.4" data-path="continuous-distributions.html"><a href="continuous-distributions.html#sampling-distribution-of-the-mean"><i class="fa fa-check"></i><b>5.4</b> Sampling Distribution of the Mean</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html"><i class="fa fa-check"></i><b>6</b> Joint Probability Distributions</a><ul>
+<li class="chapter" data-level="6.1" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#joint-probability-mass-function-sampling-from-a-box"><i class="fa fa-check"></i><b>6.1</b> Joint Probability Mass Function: Sampling From a Box</a></li>
+<li class="chapter" data-level="6.2" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#multinomial-experiments"><i class="fa fa-check"></i><b>6.2</b> Multinomial Experiments</a></li>
+<li class="chapter" data-level="6.3" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#joint-density-functions"><i class="fa fa-check"></i><b>6.3</b> Joint Density Functions</a></li>
+<li class="chapter" data-level="6.4" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#independence-and-measuring-association"><i class="fa fa-check"></i><b>6.4</b> Independence and Measuring Association</a></li>
+<li class="chapter" data-level="6.5" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#flipping-a-random-coin-the-beta-binomial-distribution"><i class="fa fa-check"></i><b>6.5</b> Flipping a Random Coin: The Beta-Binomial Distribution</a></li>
+<li class="chapter" data-level="6.6" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#bivariate-normal-distribution"><i class="fa fa-check"></i><b>6.6</b> Bivariate Normal Distribution</a></li>
+<li class="chapter" data-level="6.7" data-path="joint-probability-distributions.html"><a href="joint-probability-distributions.html#exercises-4"><i class="fa fa-check"></i><b>6.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="proportion.html"><a href="proportion.html"><i class="fa fa-check"></i><b>7</b> Learning About a Binomial Probability</a><ul>
+<li class="chapter" data-level="7.1" data-path="proportion.html"><a href="proportion.html#introduction-thinking-about-a-proportion-subjectively"><i class="fa fa-check"></i><b>7.1</b> Introduction: Thinking About a Proportion Subjectively</a></li>
+<li class="chapter" data-level="7.2" data-path="proportion.html"><a href="proportion.html#bayesian-inference-with-discrete-priors"><i class="fa fa-check"></i><b>7.2</b> Bayesian Inference with Discrete Priors</a><ul>
+<li class="chapter" data-level="7.2.1" data-path="proportion.html"><a href="proportion.html#example-students-dining-preference"><i class="fa fa-check"></i><b>7.2.1</b> Example: students’ dining preference</a></li>
+<li class="chapter" data-level="7.2.2" data-path="proportion.html"><a href="proportion.html#discrete-prior-distributions-for-proportion-p"><i class="fa fa-check"></i><b>7.2.2</b> Discrete prior distributions for proportion <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="7.2.3" data-path="proportion.html"><a href="proportion.html#likelihood"><i class="fa fa-check"></i><b>7.2.3</b> Likelihood</a></li>
+<li class="chapter" data-level="7.2.4" data-path="proportion.html"><a href="proportion.html#posterior-distribution-for-proportion-p"><i class="fa fa-check"></i><b>7.2.4</b> Posterior distribution for proportion <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="7.2.5" data-path="proportion.html"><a href="proportion.html#inference-students-dining-preference"><i class="fa fa-check"></i><b>7.2.5</b> Inference: students’ dining preference</a></li>
+<li class="chapter" data-level="7.2.6" data-path="proportion.html"><a href="proportion.html#discussion-using-a-discrete-prior"><i class="fa fa-check"></i><b>7.2.6</b> Discussion: using a discrete prior</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="proportion.html"><a href="proportion.html#continuous-priors"><i class="fa fa-check"></i><b>7.3</b> Continuous Priors</a><ul>
+<li class="chapter" data-level="7.3.1" data-path="proportion.html"><a href="proportion.html#the-beta-distribution-and-probabilities"><i class="fa fa-check"></i><b>7.3.1</b> The Beta distribution and probabilities</a></li>
+<li class="chapter" data-level="7.3.2" data-path="proportion.html"><a href="proportion.html#choosing-a-beta-density-to-represent-prior-opinion"><i class="fa fa-check"></i><b>7.3.2</b> Choosing a Beta density to represent prior opinion</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="proportion.html"><a href="proportion.html#updating-the-beta-prior"><i class="fa fa-check"></i><b>7.4</b> Updating the Beta Prior</a><ul>
+<li class="chapter" data-level="7.4.1" data-path="proportion.html"><a href="proportion.html#bayes-rule-calculation"><i class="fa fa-check"></i><b>7.4.1</b> Bayes’ rule calculation</a></li>
+<li class="chapter" data-level="7.4.2" data-path="proportion.html"><a href="proportion.html#from-beta-prior-to-beta-posterior"><i class="fa fa-check"></i><b>7.4.2</b> From Beta prior to Beta posterior</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="proportion.html"><a href="proportion.html#bayesian-inferences-with-continuous-priors"><i class="fa fa-check"></i><b>7.5</b> Bayesian Inferences with Continuous Priors</a><ul>
+<li class="chapter" data-level="7.5.1" data-path="proportion.html"><a href="proportion.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>7.5.1</b> Bayesian hypothesis testing</a></li>
+<li class="chapter" data-level="7.5.2" data-path="proportion.html"><a href="proportion.html#bayesian-credible-intervals"><i class="fa fa-check"></i><b>7.5.2</b> Bayesian credible intervals</a></li>
+<li class="chapter" data-level="7.5.3" data-path="proportion.html"><a href="proportion.html#bayesian-prediction"><i class="fa fa-check"></i><b>7.5.3</b> Bayesian prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="7.6" data-path="proportion.html"><a href="proportion.html#predictive-checking"><i class="fa fa-check"></i><b>7.6</b> Predictive Checking</a><ul>
+<li class="chapter" data-level="7.6.1" data-path="proportion.html"><a href="proportion.html#comparing-bayesian-models"><i class="fa fa-check"></i><b>7.6.1</b> Comparing Bayesian models</a></li>
+<li class="chapter" data-level="7.6.2" data-path="proportion.html"><a href="proportion.html#posterior-predictive-checking"><i class="fa fa-check"></i><b>7.6.2</b> Posterior predictive checking</a></li>
+</ul></li>
+<li class="chapter" data-level="7.7" data-path="proportion.html"><a href="proportion.html#exercises-5"><i class="fa fa-check"></i><b>7.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="mean.html"><a href="mean.html"><i class="fa fa-check"></i><b>8</b> Modeling Measurement and Count Data</a><ul>
+<li class="chapter" data-level="8.1" data-path="mean.html"><a href="mean.html#introduction-1"><i class="fa fa-check"></i><b>8.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.2" data-path="mean.html"><a href="mean.html#modeling-measurements"><i class="fa fa-check"></i><b>8.2</b> Modeling Measurements</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="mean.html"><a href="mean.html#examples"><i class="fa fa-check"></i><b>8.2.1</b> Examples</a></li>
+<li class="chapter" data-level="8.2.2" data-path="mean.html"><a href="mean.html#the-general-approach"><i class="fa fa-check"></i><b>8.2.2</b> The general approach</a></li>
+<li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
+</ul></li>
+<li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
+<li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
+</ul></li>
+<li class="chapter" data-level="8.4" data-path="mean.html"><a href="mean.html#Normal:Continuous"><i class="fa fa-check"></i><b>8.4</b> Continuous Priors</a><ul>
+<li class="chapter" data-level="8.4.1" data-path="mean.html"><a href="mean.html#Normal:Continuous:prior"><i class="fa fa-check"></i><b>8.4.1</b> The Normal prior for mean <span class="math inline">\(\mu\)</span></a></li>
+<li class="chapter" data-level="8.4.2" data-path="mean.html"><a href="mean.html#Normal:Continuous:choosing"><i class="fa fa-check"></i><b>8.4.2</b> Choosing a Normal prior</a></li>
+</ul></li>
+<li class="chapter" data-level="8.5" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate"><i class="fa fa-check"></i><b>8.5</b> Updating the Normal Prior</a><ul>
+<li class="chapter" data-level="8.5.1" data-path="mean.html"><a href="mean.html#introduction-2"><i class="fa fa-check"></i><b>8.5.1</b> Introduction</a></li>
+<li class="chapter" data-level="8.5.2" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:Overview"><i class="fa fa-check"></i><b>8.5.2</b> A quick peak at the update procedure</a></li>
+<li class="chapter" data-level="8.5.3" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:BayesRule"><i class="fa fa-check"></i><b>8.5.3</b> Bayes’ rule calculation</a></li>
+<li class="chapter" data-level="8.5.4" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:Conjugate"><i class="fa fa-check"></i><b>8.5.4</b> Conjugate Normal prior</a></li>
+</ul></li>
+<li class="chapter" data-level="8.6" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference"><i class="fa fa-check"></i><b>8.6</b> Bayesian Inferences for Continuous Normal Mean</a><ul>
+<li class="chapter" data-level="8.6.1" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference:HTandCI"><i class="fa fa-check"></i><b>8.6.1</b> Bayesian hypothesis testing and credible interval</a></li>
+<li class="chapter" data-level="8.6.2" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference:Prediction"><i class="fa fa-check"></i><b>8.6.2</b> Bayesian prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="8.7" data-path="mean.html"><a href="mean.html#Normal:PPC"><i class="fa fa-check"></i><b>8.7</b> Posterior Predictive Checking</a></li>
+<li class="chapter" data-level="8.8" data-path="mean.html"><a href="mean.html#modeling-count-data"><i class="fa fa-check"></i><b>8.8</b> Modeling Count Data</a><ul>
+<li class="chapter" data-level="8.8.1" data-path="mean.html"><a href="mean.html#examples-1"><i class="fa fa-check"></i><b>8.8.1</b> Examples</a></li>
+<li class="chapter" data-level="8.8.2" data-path="mean.html"><a href="mean.html#the-poisson-distribution"><i class="fa fa-check"></i><b>8.8.2</b> The Poisson distribution</a></li>
+<li class="chapter" data-level="8.8.3" data-path="mean.html"><a href="mean.html#bayesian-inferences"><i class="fa fa-check"></i><b>8.8.3</b> Bayesian inferences</a></li>
+<li class="chapter" data-level="8.8.4" data-path="mean.html"><a href="mean.html#case-study-learning-about-website-counts"><i class="fa fa-check"></i><b>8.8.4</b> Case study: Learning about website counts</a></li>
+</ul></li>
+<li class="chapter" data-level="8.9" data-path="mean.html"><a href="mean.html#exercises-6"><i class="fa fa-check"></i><b>8.9</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>9</b> Simulation by Markov Chain Monte Carlo</a><ul>
+<li class="chapter" data-level="9.1" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#introduction-3"><i class="fa fa-check"></i><b>9.1</b> Introduction</a></li>
+<li class="chapter" data-level="9.2" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#markov-chains"><i class="fa fa-check"></i><b>9.2</b> Markov Chains</a></li>
+<li class="chapter" data-level="9.3" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#the-metropolis-algorithm"><i class="fa fa-check"></i><b>9.3</b> The Metropolis Algorithm</a></li>
+<li class="chapter" data-level="9.4" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#example-cauchy-normal-problem"><i class="fa fa-check"></i><b>9.4</b> Example: Cauchy-Normal problem</a></li>
+<li class="chapter" data-level="9.5" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#gibbs-sampling"><i class="fa fa-check"></i><b>9.5</b> Gibbs Sampling</a></li>
+<li class="chapter" data-level="9.6" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#mcmc-inputs-and-diagnostics"><i class="fa fa-check"></i><b>9.6</b> MCMC Inputs and Diagnostics</a></li>
+<li class="chapter" data-level="9.7" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#using-jags"><i class="fa fa-check"></i><b>9.7</b> Using JAGS</a></li>
+<li class="chapter" data-level="9.8" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#exercises-7"><i class="fa fa-check"></i><b>9.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html"><i class="fa fa-check"></i><b>10</b> Bayesian Hierarchical Modeling</a><ul>
+<li class="chapter" data-level="10.1" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#introduction-4"><i class="fa fa-check"></i><b>10.1</b> Introduction</a></li>
+<li class="chapter" data-level="10.2" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#hierarchical-normal-modeling"><i class="fa fa-check"></i><b>10.2</b> Hierarchical Normal Modeling</a></li>
+<li class="chapter" data-level="10.3" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#hierarchical-beta-binomial-modeling"><i class="fa fa-check"></i><b>10.3</b> Hierarchical Beta-Binomial Modeling</a></li>
+<li class="chapter" data-level="10.4" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#exercises-8"><i class="fa fa-check"></i><b>10.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>11</b> Simple Linear Regression</a><ul>
+<li class="chapter" data-level="11.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#introduction-5"><i class="fa fa-check"></i><b>11.1</b> Introduction</a></li>
+<li class="chapter" data-level="11.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#example-prices-and-areas-of-house-sales"><i class="fa fa-check"></i><b>11.2</b> Example: Prices and Areas of House Sales</a></li>
+<li class="chapter" data-level="11.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-simple-linear-regression-model"><i class="fa fa-check"></i><b>11.3</b> A Simple Linear Regression Model</a></li>
+<li class="chapter" data-level="11.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-weakly-informative-prior"><i class="fa fa-check"></i><b>11.4</b> A Weakly Informative Prior</a></li>
+<li class="chapter" data-level="11.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-analysis"><i class="fa fa-check"></i><b>11.5</b> Posterior Analysis</a></li>
+<li class="chapter" data-level="11.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#inference-through-mcmc"><i class="fa fa-check"></i><b>11.6</b> Inference through MCMC</a></li>
+<li class="chapter" data-level="11.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#bayesian-inferences-with-simple-linear-regression"><i class="fa fa-check"></i><b>11.7</b> Bayesian Inferences with Simple Linear Regression</a></li>
+<li class="chapter" data-level="11.8" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#informative-prior-1"><i class="fa fa-check"></i><b>11.8</b> Informative Prior</a></li>
+<li class="chapter" data-level="11.9" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-conditional-means-prior"><i class="fa fa-check"></i><b>11.9</b> A Conditional Means Prior</a></li>
+<li class="chapter" data-level="11.10" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-9"><i class="fa fa-check"></i><b>11.10</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html"><i class="fa fa-check"></i><b>12</b> Bayesian Multiple Regression and Logistic Models</a><ul>
+<li class="chapter" data-level="12.1" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#introduction-6"><i class="fa fa-check"></i><b>12.1</b> Introduction</a></li>
+<li class="chapter" data-level="12.2" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#bayesian-multiple-linear-regression"><i class="fa fa-check"></i><b>12.2</b> Bayesian Multiple Linear Regression</a></li>
+<li class="chapter" data-level="12.3" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#bayesian-logistic-regression"><i class="fa fa-check"></i><b>12.3</b> Bayesian Logistic Regression </a></li>
+<li class="chapter" data-level="12.4" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#exercises-10"><i class="fa fa-check"></i><b>12.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="case-studies.html"><a href="case-studies.html"><i class="fa fa-check"></i><b>13</b> Case Studies</a><ul>
+<li class="chapter" data-level="13.1" data-path="case-studies.html"><a href="case-studies.html#introduction-7"><i class="fa fa-check"></i><b>13.1</b> Introduction</a></li>
+<li class="chapter" data-level="13.2" data-path="case-studies.html"><a href="case-studies.html#federalist-papers-study"><i class="fa fa-check"></i><b>13.2</b> Federalist Papers Study</a></li>
+<li class="chapter" data-level="13.3" data-path="case-studies.html"><a href="case-studies.html#negative-binomial-sampling"><i class="fa fa-check"></i><b>13.3</b> Negative Binomial sampling</a></li>
+<li class="chapter" data-level="13.4" data-path="case-studies.html"><a href="case-studies.html#comparison-of-rates-for-two-authors"><i class="fa fa-check"></i><b>13.4</b> Comparison of rates for two authors</a></li>
+<li class="chapter" data-level="13.5" data-path="case-studies.html"><a href="case-studies.html#which-words-distinguish-the-two-authors"><i class="fa fa-check"></i><b>13.5</b> Which words distinguish the two authors?</a></li>
+<li class="chapter" data-level="13.6" data-path="case-studies.html"><a href="case-studies.html#career-trajectories"><i class="fa fa-check"></i><b>13.6</b> Career Trajectories</a></li>
+<li class="chapter" data-level="13.7" data-path="case-studies.html"><a href="case-studies.html#latent-class-modeling"><i class="fa fa-check"></i><b>13.7</b> Latent Class Modeling</a></li>
+<li class="chapter" data-level="13.8" data-path="case-studies.html"><a href="case-studies.html#exercises-11"><i class="fa fa-check"></i><b>13.8</b> Exercises</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Bayesian Modeling</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="conditional-probability" class="section level1">
+<h1><span class="header-section-number">Chapter 3</span> Conditional Probability</h1>
+<div id="introduction-the-three-card-problem" class="section level2">
+<h2><span class="header-section-number">3.1</span> Introduction: The Three Card Problem</h2>
+<p>Suppose one has three cards – one card is blue on both sides, one card is pink on both sides, and one card is blue on one side and pink on the other side. Suppose one chooses a card and place it down showing “blue”. What is the chance that the other side is also blue?</p>
+<p>This is an illustration of a famous conditional probability problem. One is given certain information – here the information is that one side of the card is blue – and one wishes to determine the probability that the other side is blue.</p>
+<p>Most people think that this probability is 1/2, but actually this is wrong. The correct answer is demonstrated by simulating this experiment many times. One can do this simulation by hand, but we will illustrate this using an R script.</p>
+<p>Suppose one thinks of this experiments are first choosing a card, and then choosing a side from the card. There are three possible cards, which we call “Blue”, “Pink” and “mixed”. For the blue card, there are two blue sides; for the pink card, there are two pink sides, and the “mixed” card has a blue side and a pink side.</p>
+
+<p><strong>Conditional Probabilities by Simulation</strong></p>
+<p>We illustrate using R to perform this simulation. A data frame <code>df</code> with two variables <code>Card</code> and <code>Side</code> is defined.
+The <code>sample()</code> function randomly chooses a card and a side by choosing a random row from the data frame. This experiment was repeated 1000 times and the <code>table()</code> function is used to classify the outcomes by card and side.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Card =</span> <span class="kw">c</span>(<span class="st">&quot;Blue&quot;</span>, <span class="st">&quot;Blue&quot;</span>,</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2">                          <span class="st">&quot;Pink&quot;</span>, <span class="st">&quot;Pink&quot;</span>,</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">                          <span class="st">&quot;Mixed&quot;</span>, <span class="st">&quot;Mixed&quot;</span>),</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">                 <span class="dt">Side =</span> <span class="kw">c</span>(<span class="st">&quot;Blue&quot;</span>, <span class="st">&quot;Blue&quot;</span>,</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">                          <span class="st">&quot;Pink&quot;</span>, <span class="st">&quot;Pink&quot;</span>,</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">                          <span class="st">&quot;Blue&quot;</span>, <span class="st">&quot;Pink&quot;</span>))</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">cards &lt;-<span class="st"> </span>df[<span class="kw">sample</span>(<span class="dv">6</span>, <span class="dt">size =</span> <span class="dv">1000</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>), ]</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="kw">table</span>(cards<span class="op">$</span>Card, cards<span class="op">$</span>Side)</a></code></pre></div>
+<pre><code>##        
+##         Blue Pink
+##   Blue   346    0
+##   Mixed  162  164
+##   Pink     0  328</code></pre>
+<p>One observed “side is blue” and one are interested in the probability of the event “card is blue”. In this experiment, the blue side was observed 326 + 173 = 499 times – of these, the card was blue 326 times. So the probability the other side is blue is approximated by 326 / 499 which is close to 2/3. This example illustrates that one’s intuition can be faulty in figuring out probabilities of the conditional type.</p>
+<p><strong>Selecting Slips of Paper</strong></p>
+<p>To illustrate the conditional nature of probabilities, suppose one has a box that has 6 slips of paper – the slips are labeled with the numbers 2, 4, 6, 8, 10, and 12. One selects two slips at random from the box.
+It is assumed that one is sampling without replacement and the order that one selects the slips is not important. Then one lists all of the possible outcomes. Note that since two numbers are chosen from six, the total number of outcomes will be <span class="math inline">\(_6 C_2 = 15\)</span>.</p>
+<p><span class="math inline">\(S\)</span> = {(2, 4), (2, 6), (2, 8), (2, 10), (2, 12), (4, 6), (4, 8), (4, 10), (4, 12)
+(6, 8), (6, 10), (6, 12), (8, 10), (8, 12), (10, 12)}.</p>
+<p>Suppose one are interested in the probability the sum of the numbers on the two slips is 14 or higher. Assuming that the 15 outcomes listed above are equally likely, one sees there are 9 outcomes where the sum is 14 or higher and so
+<span class="math display">\[
+Prob({\rm sum} \, 14 \, {\rm or} \, {\rm higher}) = \frac{9}{15}.
+\]</span></p>
+<p>Next, suppose one is given some new information about this experiment – both of the numbers on the slips are single digits. Given this information, one now has only six possible outcomes. This new sample space is called the reduced sample space based on the new information.</p>
+<p><span class="math inline">\(S\)</span> = {(2, 4), (2, 6), (2, 8), (4, 6), (4, 8), (6, 8)}</p>
+<p>One evaluates the probability <span class="math inline">\(Prob\)</span>(sum is 14 or higher) given that both of the slip numbers are single digits. Since there is only one way of obtaining a sum of 14 or higher in our new sample space, one sees
+<span class="math display">\[
+Prob({\rm sum} \, 14 \, {\rm or} \, {\rm higher}) = \frac{1}{6}.
+\]</span></p>
+<p><strong>Notation:</strong> Suppose that <span class="math inline">\(E\)</span> is our event of interest and <span class="math inline">\(H\)</span> is our new information. Then one writes the probability of <span class="math inline">\(E\)</span> given the new information H as <span class="math inline">\(Prob(E \mid H)\)</span>, where the vertical line “<span class="math inline">\(|\)</span>” means “conditional on” or given the new information. Here it was found</p>
+<p><span class="math inline">\(Prob\)</span>(sum is 14 or higher $ | $ both slip numbers are single digits).</p>
+<p>How does the probability of “14 or higher” change given the new information? Initially, the probability of 14 and higher was pretty high (9/15), but given the new information, the probability dropped to 1/6. Does this make sense? Yes. If one is told that both numbers are single digits, then one has drawn small numbers and that would tend to make the sum of the digits small.</p>
+</div>
+<div id="independent-events" class="section level2">
+<h2><span class="header-section-number">3.2</span> Independent Events</h2>
+<p>One says that events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are independent if the knowledge of event <span class="math inline">\(A\)</span> does not change the probability of the event <span class="math inline">\(B\)</span>. Using symbols
+<span class="math display">\[\begin{equation}
+P(B \mid A) = P(B).
+\end{equation}\]</span></p>
+<p><strong>Rolls of Two Dice</strong></p>
+<p>To illustrate the concept of independence, consider an example where one rolls a red die and a white die – the 36 possible outcomes of rolling the two dice are shown in the following table.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">One</td>
+<td align="center">Two</td>
+<td align="center">Three</td>
+<td align="center">Four</td>
+<td align="center">Five</td>
+<td align="center">Six</td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center">One</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center">Two</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+</tr>
+<tr class="even">
+<td align="center">White Die</td>
+<td align="center">Three</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center">Four</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center">Five</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center">Six</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+<td align="center">x</td>
+</tr>
+</tbody>
+</table>
+<p>Consider the following three events:</p>
+<ul>
+<li><span class="math inline">\(S\)</span> = the sum of the two rolls is 7</li>
+<li><span class="math inline">\(E\)</span> = the red die is an even number</li>
+<li><span class="math inline">\(D\)</span> = the rolls of the two dice are different</li>
+</ul>
+<p><strong>Are events <span class="math inline">\(S\)</span> and <span class="math inline">\(E\)</span> independent?</strong></p>
+<ol style="list-style-type: decimal">
+<li><p>First one finds the probability one rolls a sum equal to 7, that is, <span class="math inline">\(P(S)\)</span>. There are 36 outcomes and 6 outcomes results in a sum of 7, so <span class="math inline">\(P(S) = 6 / 36\)</span>.</p></li>
+<li><p>Next, one finds <span class="math inline">\(P(S \mid E)\)</span>. Given that the red die is an even number (event <span class="math inline">\(E\)</span>), note that there are 18 outcomes where <span class="math inline">\(E\)</span> occurs. Of these 18 outcomes, there are 3 outcomes where the sum is equal to 7. So <span class="math inline">\(P(S \mid E) = 3 / 18\)</span>.</p></li>
+<li><p>Note <span class="math inline">\(P(S \mid E) = P(S)\)</span>, so events <span class="math inline">\(S\)</span> and <span class="math inline">\(E\)</span> are independent. Knowing the red die is even does not change one’s probability of rolling a 7.
+\end{enumerate}</p></li>
+</ol>
+<p><strong>Are events <span class="math inline">\(S\)</span> and <span class="math inline">\(D\)</span> independent?</strong></p>
+<p>To see if these two events are independent, one computes <span class="math inline">\(P(S \mid D)\)</span> and checks if <span class="math inline">\(P(S \mid D) = P(S)\)</span>. One can show that <span class="math inline">\(P(S \mid D) = 6 / 30\)</span>. This probability is not equal to <span class="math inline">\(P(S)\)</span> so <span class="math inline">\(S\)</span> and <span class="math inline">\(D\)</span> are not independent events.</p>
+<p><strong>Conditional Probabilities by Simulation</strong></p>
+<p>One can demonstrate conditional probability by the use of the <code>filter()</code> function in the <code>dplyr</code> package. To illustrate, a data frame <code>df</code> is constructed with simulated rolls of two dice – the associated variables are <code>Roll_1</code> and <code>Roll_2</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Roll_1 =</span> <span class="kw">sample</span>(<span class="dv">6</span>, <span class="dt">size =</span> <span class="dv">1000</span>, </a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">                                 <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">                 <span class="dt">Roll_2 =</span> <span class="kw">sample</span>(<span class="dv">6</span>, <span class="dt">size =</span> <span class="dv">1000</span>,</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">                                 <span class="dt">replace =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<p>The <code>mutate()</code> function is used to define a new variable <code>Sum</code> that is the sum of the two rolls. Suppose one is told that the roll of the first die is greater than 3 – how does that information change the probabilities for <code>Sum</code>? In the following script, the <code>filter()</code> function is used to restrict die rolls to only the ones where <code>Roll_1 &gt; 3</code>. Then the frequencies and corresponding approximate probabilities of different sums are found on these “restricted” die rolls. For example, one sees that the probability <span class="math inline">\(Prob({\rm Sum} = 10 | {\rm Roll\_1} &gt; 3) \approx 0.164\)</span>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">df <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Sum =</span> Roll_<span class="dv">1</span> <span class="op">+</span><span class="st"> </span>Roll_<span class="dv">2</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">filter</span>(Roll_<span class="dv">1</span> <span class="op">&gt;</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="kw">group_by</span>(Sum) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">Count =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Probability =</span> Count <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(Count))</a></code></pre></div>
+<pre><code>## # A tibble: 8 x 3
+##     Sum Count Probability
+##   &lt;int&gt; &lt;int&gt;       &lt;dbl&gt;
+## 1     5    18      0.0367
+## 2     6    53      0.108 
+## 3     7    75      0.153 
+## 4     8    95      0.193 
+## 5     9    94      0.191 
+## 6    10    80      0.163 
+## 7    11    52      0.106 
+## 8    12    24      0.0489</code></pre>
+</div>
+<div id="in-everyday-life" class="section level2">
+<h2><span class="header-section-number">3.3</span> In Everyday Life</h2>
+<p>Generally one’s beliefs about uncertain events can change when new information is obtained. Conditional probability provides a way to precisely say how one’s beliefs change. Let’s illustrate this with a simple example.</p>
+<p>Suppose one is interested in estimating the population of Philadelphia, Pennsylvania in the current year. Consider three possible events:</p>
+<ul>
+<li><span class="math inline">\(A\)</span> = Philadelphia’s population is under one million</li>
+<li><span class="math inline">\(B\)</span> = Philadelphia’s population is between one and two million</li>
+<li><span class="math inline">\(C\)</span> = Philadelphia’s population is over two million</li>
+</ul>
+<p>If one knows little about Philadelphia, then one probably are not very knowledgeable about its population. So initially the probabilities are assigned shown in Table .</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="center"><span class="math inline">\(P(Event \mid I)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">under one million</td>
+<td align="center">0.3</td>
+</tr>
+<tr class="even">
+<td align="left">between one and two million</td>
+<td align="center">0.3</td>
+</tr>
+<tr class="odd">
+<td align="left">over two million</td>
+<td align="center">0.4</td>
+</tr>
+<tr class="even">
+<td align="left">TOTAL</td>
+<td align="center">1.0</td>
+</tr>
+</tbody>
+</table>
+<p>One is assigning approximately the same probability to each of the three events, indicating that they are all equally likely in his or her mind. These can be viewed as conditional probabilities since they are conditional on one’s initial information – these probabilities are denoted by <span class="math inline">\(P(Event \mid I)\)</span>, where <span class="math inline">\(I\)</span> denotes one’s Initial information.</p>
+<p>Now suppose some new information is provided about Philadelphia’s population. One is not told the current population, but the person is told that in 1990, Philadelphia was the fifth largest city in the country, and the population of the sixth largest city, San Diego, was 1.1 million in 1990. So this tells one that in 1990, the population of Philadelphia had to exceed 1.1 million. Now one might not be sure about how the population of Philadelphia has changed between 1990 and 2020, but it probably has not changed a significant amount. So one thinks that</p>
+<ul>
+<li>The population of Philadelphia is most likely to be between 1 and 2 million.</li>
+<li>It is very unlikely that Philadelphia’s population is over 2 million.</li>
+<li>There is a small chance that Philadelphia’s population is under 1 million.</li>
+</ul>
+<p>One then revise his or her probabilities that reflect these beliefs as shown in the table below. These probabilities are denoted as <span class="math inline">\(P(Event \mid N)\)</span>, which are probabilities of these population events conditional on the newer information <span class="math inline">\(N\)</span>, in Table .</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="center"><span class="math inline">\(P(Event \mid N)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">under one million</td>
+<td align="center">0.2</td>
+</tr>
+<tr class="even">
+<td align="left">between one and two million</td>
+<td align="center">0.78</td>
+</tr>
+<tr class="odd">
+<td align="left">over two million</td>
+<td align="center">0.02</td>
+</tr>
+<tr class="even">
+<td align="left">TOTAL</td>
+<td align="center">1.0</td>
+</tr>
+</tbody>
+</table>
+<p>Now, additional information is provided. To find the current population of Philadelphia, one looks up the Census estimated figures and the population of Philly was reported to be 1,567,872 in 2016. Even though the Census number is a few years old, one doesn’t think that the population has changed much – definitely not enough to put in a new category of the table. So one’s probabilities will change again as shown in Table . We call these probabilities of events conditional on additional information <span class="math inline">\(A\)</span>.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="center"><span class="math inline">\(P(Event \mid A)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">under one million</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="left">between one and two million</td>
+<td align="center">1</td>
+</tr>
+<tr class="odd">
+<td align="left">over two million</td>
+<td align="center">0</td>
+</tr>
+<tr class="even">
+<td align="left">TOTAL</td>
+<td align="center">1.0</td>
+</tr>
+</tbody>
+</table>
+<p>All of us actually make many judgments every day based on uncertainty. For example, we make decisions about the weather based on information such as the weather report, how it looks outside, and advice from friends. We make decisions about who we think will win a sports event based on what we read in the paper, our knowledge of the teams’ strengths, and discussion with friends. Conditional probability is simply a way of quantifying our beliefs about uncertain events given information.</p>
+</div>
+<div id="in-a-two-way-table" class="section level2">
+<h2><span class="header-section-number">3.4</span> In a Two-Way Table</h2>
+<p>It can be easier to think about, and compute conditional probabilities when they are found from observed counts in a two-way table.</p>
+<p>In Table , high school athletes in 14 sports are classified with respect to their sport and their gender. These numbers are recorded in thousands, so the 454 entry in the Baseball/Softball – Male cell means that 454,000 males played baseball or softball this year.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="center">Male</th>
+<th align="center">Female</th>
+<th align="center">TOTAL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Baseball/Softball</td>
+<td align="center">454</td>
+<td align="center">373</td>
+<td align="center">827</td>
+</tr>
+<tr class="even">
+<td align="left">Basketball</td>
+<td align="center">541</td>
+<td align="center">456</td>
+<td align="center">997</td>
+</tr>
+<tr class="odd">
+<td align="left">Cross Country</td>
+<td align="center">192</td>
+<td align="center">163</td>
+<td align="center">355</td>
+</tr>
+<tr class="even">
+<td align="left">Football</td>
+<td align="center">1048</td>
+<td align="center">1</td>
+<td align="center">1049</td>
+</tr>
+<tr class="odd">
+<td align="left">Gymnastics</td>
+<td align="center">2</td>
+<td align="center">21</td>
+<td align="center">23</td>
+</tr>
+<tr class="even">
+<td align="left">Golf</td>
+<td align="center">163</td>
+<td align="center">62</td>
+<td align="center">225</td>
+</tr>
+<tr class="odd">
+<td align="left">Ice Hockey</td>
+<td align="center">35</td>
+<td align="center">7</td>
+<td align="center">42</td>
+</tr>
+<tr class="even">
+<td align="left">Lacrosse</td>
+<td align="center">50</td>
+<td align="center">39</td>
+<td align="center">89</td>
+</tr>
+<tr class="odd">
+<td align="left">Soccer</td>
+<td align="center">345</td>
+<td align="center">301</td>
+<td align="center">646</td>
+</tr>
+<tr class="even">
+<td align="left">Swimming</td>
+<td align="center">95</td>
+<td align="center">141</td>
+<td align="center">236</td>
+</tr>
+<tr class="odd">
+<td align="left">Tennis</td>
+<td align="center">145</td>
+<td align="center">163</td>
+<td align="center">308</td>
+</tr>
+<tr class="even">
+<td align="left">Track and Field</td>
+<td align="center">550</td>
+<td align="center">462</td>
+<td align="center">1012</td>
+</tr>
+<tr class="odd">
+<td align="left">Volleyball</td>
+<td align="center">39</td>
+<td align="center">397</td>
+<td align="center">436</td>
+</tr>
+<tr class="even">
+<td align="left">Wrestling</td>
+<td align="center">240</td>
+<td align="center">4</td>
+<td align="center">244</td>
+</tr>
+<tr class="odd">
+<td align="left">TOTAL</td>
+<td align="center">3899</td>
+<td align="center">2590</td>
+<td align="center">6489</td>
+</tr>
+</tbody>
+</table>
+<p>Suppose one chooses a high school athlete at random who is involved in one of these 14 sports. Consider several events</p>
+<ul>
+<li><span class="math inline">\(F\)</span> = athlete chosen is female</li>
+<li><span class="math inline">\(S\)</span> = athlete is a swimmer</li>
+<li><span class="math inline">\(V\)</span> = athlete plays volleyball</li>
+</ul>
+What is the probability that the athlete is female? Of the 6489 (thousand) athletes, 2590 were female, so the probability is
+
+Likewise, the probability that the randomly chosen athlete is a swimmer is
+
+and the probability he or she plays volleyball is
+
+<p>Next, consider the computation of some conditional probabilities. What is the probability a volleyball player is female? In other words, conditional on the fact that the athlete plays volleyball, what is the chance that the athlete is female:</p>
+<p><span class="math display">\[P(F \mid V).\]</span></p>
+<p>To find this probability, restrict attention only to the volleyball players in the table.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="center">Male</th>
+<th align="center">Female</th>
+<th align="center">TOTAL</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Volleyball</td>
+<td align="center">39</td>
+<td align="center">397</td>
+<td align="center">436</td>
+</tr>
+</tbody>
+</table>
+<p>Of the 436 (thousand) volleyball players, 397 are female, so</p>
+<p><span class="math display">\[P(F \mid V) = 397/436 = 0.9106.\]</span></p>
+<p>What is the probability a woman athlete is a swimmer? In other words, if one knows that the athlete is female, what is the (conditional) probability she is a swimmer, or <span class="math inline">\(P(S \mid F)\)</span>?</p>
+<p>Here since one is given the information that the athlete is female, one restricts attention to the “Female” column of counts. There are a total of 2590 (thousand) women who play one of these sports; of these, 141 are swimmers. So</p>
+<p><span class="math display">\[
+P(S \mid F) = 141/2590 = 0.0544.
+\]</span></p>
+<p>Are events <span class="math inline">\(F\)</span> and <span class="math inline">\(V\)</span> independent? One can check this several ways. Above it was found that the probability a randomly chosen athlete is a volleyball player is <span class="math inline">\(P(V)\)</span> = 0.0672. Suppose one is told that the athlete is a female (<span class="math inline">\(F\)</span>). Will that change the probability that she is a volleyball player? Of the 2590 women, 397 are volleyball players, and so <span class="math inline">\(P(V \mid F)\)</span> = 397/2590 = 0.1533, Note that <span class="math inline">\(P(V)\)</span> is different from <span class="math inline">\(P(V \mid F)\)</span>, that means that the knowledge the athlete is female has increased one’s probability that the athlete is a volleyball player. So the two events are not independent.</p>
+
+<p><strong>Conditional Probabilities in a Two-Way Table</strong></p>
+<p>Suppose one has two spinners, each that will record a 1, 2, 3, or 4 with equal probabilities. Suppose the smaller of the two spins is 2 – what is the probability that the larger spin is equal to 4? One can answer this question by use of a simulation experiment. First one constructs a data frame – by two uses of the <code>sample()</code> function, 1000 random spins of the first spinner are stored in <code>Spin_1</code> and 1000 spins of the second spinner in <code>Spin_2</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Spin_1 =</span> <span class="kw">sample</span>(<span class="dv">4</span>, <span class="dt">size =</span> <span class="dv">1000</span>, </a>
+<a class="sourceLine" id="cb6-2" data-line-number="2">                                 <span class="dt">replace =</span> <span class="ot">TRUE</span>),</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">                 <span class="dt">Spin_2 =</span> <span class="kw">sample</span>(<span class="dv">4</span>, <span class="dt">size =</span> <span class="dv">1000</span>,</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">                                 <span class="dt">replace =</span> <span class="ot">TRUE</span>))</a></code></pre></div>
+<p>By use of the <code>mutate()</code> function, one computes the smaller and larger of the two spins and stores the result in the respective variables <code>Min</code> and <code>Max</code>. Then one finds a frequency table of the simulated values of <code>Min</code> and <code>Max</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">library</span>(tidyr)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">df <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Min =</span> <span class="kw">pmin</span>(Spin_<span class="dv">1</span>, Spin_<span class="dv">2</span>),</a>
+<a class="sourceLine" id="cb7-4" data-line-number="4">         <span class="dt">Max =</span> <span class="kw">pmax</span>(Spin_<span class="dv">1</span>, Spin_<span class="dv">2</span>)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="st">  </span><span class="kw">group_by</span>(Min, Max) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">n =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="st">  </span><span class="kw">pivot_wider</span>(<span class="dt">names_from =</span> Max, </a>
+<a class="sourceLine" id="cb7-8" data-line-number="8">              <span class="dt">values_from =</span> n) </a></code></pre></div>
+<pre><code>## # A tibble: 4 x 5
+## # Groups:   Min [4]
+##     Min   `1`   `2`   `3`   `4`
+##   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;
+## 1     1    55   128   112   129
+## 2     2    NA    78   128   133
+## 3     3    NA    NA    64   103
+## 4     4    NA    NA    NA    70</code></pre>
+<p>Since one is told that the smaller of the two spins is equal to 2, one restricts attention to the row where . One observes that  is equal to 2, 3, 4 with frequencies 67, 127, and 123. So
+<span class="math display">\[
+  P({\rm Max \, spin = 4} \mid {\rm Min \, spin = 2}) = \frac{123}{67 + 127 + 123} = 0.388.
+  \]</span></p>
+</div>
+<div id="definition-and-the-multiplication-rule" class="section level2">
+<h2><span class="header-section-number">3.5</span> Definition and the Multiplication Rule</h2>
+<p>In this chapter, conditional probabilities have been computed by considering a reduced sample space. There is a formal definition of conditional probability that is useful in computing probabilities of complicated events.</p>
+<p>Suppose one has two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> where the probability of event <span class="math inline">\(B\)</span> is positive, that is <span class="math inline">\(P(B) &gt; 0.\)</span> Then the probability of <span class="math inline">\(A\)</span> given <span class="math inline">\(B\)</span> is defined as the quotient
+<span class="math display">\[\begin{equation}
+P(A \mid B) = \frac{P(A \cap B)}{P(B)}.
+\end{equation}\]</span></p>
+<p><strong>How many boys?</strong><br />
+To illustrate this conditional probability definition, suppose a couple has four children. One is told that this couple has at least one boy. What is the chance that they have exactly two boys?</p>
+<p>If one lets <span class="math inline">\(L\)</span> be the event “at least one boy” and <span class="math inline">\(B\)</span> be the event “have two boys”, one wishes to find <span class="math inline">\(P(B \mid L).\)</span></p>
+<p>Suppose one represents the genders of the four children (from youngest to oldest) as a sequence of four letters. For example, the sequence <span class="math inline">\(BBGG\)</span> means that the first two children were boys and the last two were girls. If we represent outcomes this way, there are 16 possible outcomes of four births:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(BBBB\)</span></td>
+<td align="center"><span class="math inline">\(BGBB\)</span></td>
+<td align="center"><span class="math inline">\(GBBB\)</span></td>
+<td align="center"><span class="math inline">\(GGBB\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(BBBG\)</span></td>
+<td align="center"><span class="math inline">\(BGBG\)</span></td>
+<td align="center"><span class="math inline">\(GBBG\)</span></td>
+<td align="center"><span class="math inline">\(GGBG\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(BBGB\)</span></td>
+<td align="center"><span class="math inline">\(BGGB\)</span></td>
+<td align="center"><span class="math inline">\(GBGB\)</span></td>
+<td align="center"><span class="math inline">\(GGGB\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(BBGG\)</span></td>
+<td align="center"><span class="math inline">\(BGGG\)</span></td>
+<td align="center"><span class="math inline">\(GBGG\)</span></td>
+<td align="center"><span class="math inline">\(GGGG\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>If one assumes that boys and girls are equally likely (is this really true?), then each of the outcomes are equally likely and each outcome is assigned a probability of 1/16. Applying the definition of conditional probability, one has
+<span class="math display">\[
+P(B \mid L) = \frac{P(B \cap L)}{P(L)}.
+\]</span>
+There are 15 outcomes in the set <span class="math inline">\(L\)</span>, and 6 outcomes where both events <span class="math inline">\(B\)</span> and <span class="math inline">\(L\)</span> occur. So using the definition
+<span class="math display">\[
+P(B \mid L) = \frac{6/16}{15/16} = \frac{6}{15}.
+\]</span></p>
+</div>
+<div id="the-multiplication-rule" class="section level2">
+<h2><span class="header-section-number">3.6</span> The Multiplication Rule</h2>
+<p>If one takes the conditional probability definition and multiplies both sides of the equation by <span class="math inline">\(P(B)\)</span>, one obtains the multiplication rule
+<span class="math display">\[\begin{equation}
+P(A \cap B) = P(B) P(A \mid B).
+\end{equation}\]</span></p>
+<p><strong>Choosing balls from a random bowl</strong></p>
+<p>The multiplication rule is especially useful for experiments that can be divided into stages. Suppose one has two bowls – Bowl 1 is filled with one white and 5 black balls, and Bowl 2 has 4 white and 2 black balls. One first spins the spinner below that determines which bowl to select, and then selects one ball from the bowl. What the chance that the ball one selects is white?</p>
+<p><img src="../LATEX/figures/chapter3/bowlspinner.png" width="640" /></p>
+
+<p>One can demonstrate the multiplication rule by the tree diagram in Figure . The first set of branches corresponds to the spinner result (choose Bowl 1 or choose Bowl 2) and the second set of branches corresponds to the ball selection.</p>
+<div class="figure"><span id="fig:unnamed-chunk-8"></span>
+<img src="../LATEX/figures/chapter3/tree5.png" alt="Tree diagram of choosing  balls  from a random bowl, part 1." width="350" />
+<p class="caption">
+Figure 3.1: Tree diagram of choosing balls from a random bowl, part 1.
+</p>
+</div>
+
+<p>One places numbers on the diagram corresponding to the probabilities that are given in the problem, shown in Figure . Since one quarter of the spinner region is “Bowl 1”, the chance of choosing Bowl 1 is 1/4 and so the chance of choosing Bowl 2 is 3/4 – these probabilities are placed at the first set of branches. Also one knows that if Bowl 1 is selected, the chances of choosing a white ball and a black ball are respectively 1/6 and 5/6. These conditional probabilities, <span class="math inline">\(P\)</span>(white <span class="math inline">\(\mid\)</span> Bowl 1) and <span class="math inline">\(P\)</span>(black <span class="math inline">\(\mid\)</span> Bowl 2), are placed at the top set of branches at the second level. Also, if one selects Bowl 2, the conditional probabilities of selecting a white ball and a black ball are given by <span class="math inline">\(P\)</span>(white <span class="math inline">\(\mid\)</span> Bowl 2) = 4/6 and <span class="math inline">\(P\)</span>(black <span class="math inline">\(\mid\)</span> Bowl 2) = 2/6 – these probabilities are placed at the bottom set of branches.</p>
+<div class="figure"><span id="fig:unnamed-chunk-9"></span>
+<img src="../LATEX/figures/chapter3/tree6.png" alt="Tree diagram of choosing  balls  from a random bowl, part 12." width="350" />
+<p class="caption">
+Figure 3.2: Tree diagram of choosing balls from a random bowl, part 12.
+</p>
+</div>
+
+<p>Now that the probabilities are assigned on the tree, one uses the multiplication rule to compute the probabilities of interest:</p>
+<ul>
+<li>What is the probability of selecting Bowl 1 and selecting a white ball? By the multiplication rule
+<span class="math display">\[\begin{align*} 
+P({\rm Bowl \, 1} \cap {\rm white \, ball}) &amp;=  P({\rm Bowl \, 1}) P({\rm white \, ball} \mid {\rm Bowl \, 1})
+ \\ 
+ &amp;=  \frac{1}{4} \times \frac{1}{6} = \frac{1}{24}.
+\end{align*}\]</span></li>
+</ul>
+<p>One is just multiplying probabilities along the top branch of the tree.</p>
+<ul>
+<li>What is the probability of selecting a white ball? One sees from the tree that there are two ways of selecting a white depending on which bowl is selected. One can either (1) select Bowl 1 and choose a white ball or (2) select Bowl 2 and choose a white ball. One finds the probability of each of the two outcomes and add the probabilities to get the answer.
+<span class="math display">\[\begin{align*}
+P({\rm white \, ball}) &amp; =  P({\rm Bowl \, 1} \cap {\rm white \, ball}) + P({\rm Bowl \, 2} \cap {\rm white \, ball}) \\ 
+&amp; =  \frac{1}{4} \times \frac{1}{6} + \frac{3}{4} \times \frac{4}{6} = \frac{13}{24}.
+\end{align*}\]</span></li>
+</ul>
+
+<p><strong>Simulating choosing balls from a random bowl</strong></p>
+<p>One simulate this balls and bowl experiment on R. Using the <code>sample()</code> function, one simulates 1000 choices of the bowl where the probabilities of choosing Bowl 1 and Bowl 2 are 1/4 and 3/4 and places the bowl choices in variable <code>Bowl</code>. In a similar fashion, one simulates 1000 ball selections from Bowl 1 (variable <code>Color_1</code>) and 1000 selections from Bowl 2 (variable <code>Color_2</code>). Last, by use of a single <code>ifelse()</code> function, one lets the ball color be equal to <code>Color_1</code> if Bowl 1 is selection, or <code>Color_2</code> if Bowl 2 is selected.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">Bowl &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="dt">size =</span> <span class="dv">1000</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">               <span class="dt">prob =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>) <span class="op">/</span><span class="st"> </span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">Color_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;white&quot;</span>, <span class="st">&quot;black&quot;</span>), <span class="dt">size =</span> <span class="dv">1000</span>,</a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">                  <span class="dt">replace =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">                  <span class="dt">prob =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">5</span>) <span class="op">/</span><span class="st"> </span><span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">Color_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;white&quot;</span>, <span class="st">&quot;black&quot;</span>), <span class="dt">size =</span> <span class="dv">1000</span>,</a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">                  <span class="dt">replace =</span> <span class="ot">TRUE</span>,</a>
+<a class="sourceLine" id="cb9-8" data-line-number="8">                  <span class="dt">prob =</span> <span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">2</span>) <span class="op">/</span><span class="st"> </span><span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb9-9" data-line-number="9">Color &lt;-<span class="st"> </span><span class="kw">ifelse</span>(Bowl <span class="op">==</span><span class="st"> </span><span class="dv">1</span>, Color_<span class="dv">1</span>, Color_<span class="dv">2</span>)</a></code></pre></div>
+<p>By use of the <code>table()</code> function, one categorizes all simulations by the values of <code>Bowl</code> and <code>Color</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">table</span>(Bowl, Color)</a></code></pre></div>
+<pre><code>##     Color
+## Bowl black white
+##    1   195    40
+##    2   240   525</code></pre>
+<p>The probability that Bowl 1 was selected and a white ball was chosen is approximately equal to 41/1000 = 0.41. The chance of choosing a white ball is approximated by (41+497)/1000 = 0.538.</p>
+</div>
+<div id="the-multiplication-rule-under-independence" class="section level2">
+<h2><span class="header-section-number">3.7</span> The Multiplication Rule Under Independence</h2>
+<p>When two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are independent, then the multiplication rule takes the simple form
+<span class="math display">\[\begin{equation}
+ P(A \cap B) = P(A) \times P(B).
+ \end{equation}\]</span>
+Moreover, if one has a sequence of independent events, say <span class="math inline">\(A_1, A_2, \cdots, A_k\)</span>, then the probability that all events happen simultaneously is the product of the probabilities of the individual events
+<span class="math display">\[\begin{equation}
+  P(A_1 \cap A_2 \cap \cdots \cap A_k) = P(A_1) \times P(A_2) \times \cdots \times P(A_k).
+\end{equation}\]</span></p>
+<p>By use of the assumption of independent events and multiplying, one finds probabilities of sophisticated events. We illustrate this in several examples.</p>
+<p><strong>Blood Types of Couples</strong></p>
+<p>White Americans have the blood types <span class="math inline">\(O, A, B\)</span>, and <span class="math inline">\(AB\)</span> with respectively proportions 0.45, 0.40, 0.11, and 0.04. Suppose two people in this group are married.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>What is the probability that the man has blood type O and the woman has blood type A?</strong>
+Let <span class="math inline">\(O_M\)</span> denote the event that the man has <span class="math inline">\(O\)</span> blood type and <span class="math inline">\(A_W\)</span> the event that the woman has <span class="math inline">\(A\)</span> blood type. Since these two people are not related, it is reasonable to assume that <span class="math inline">\(O_M\)</span> and <span class="math inline">\(A_W\)</span> are independent events. Applying the multiplication rule, the probability the couple have these two specific blood types is
+<span class="math display">\[\begin{align*}
+P(O_M \cap A_W) &amp; = P(O_M) \times P(A_W) \\
+&amp; = (0.45) \times (0.40) = 0.18.
+ \end{align*}\]</span></p></li>
+<li><p><strong>What is the probability the couple have O and A blood types?</strong>
+This is a different question from the first one since it is not been specified who has the two blood types. Either the man has blood type <span class="math inline">\(O\)</span> and the woman has blood type <span class="math inline">\(A\)</span>, or the other way around. So the probability of interest is
+<span class="math display">\[\begin{align*}
+P({\rm two \, have \, A, O \, types}) &amp; = P((O_M \cap A_W) \cup (O_W \cap A_M)) \\
+&amp; = P(O_M \cap A_W)+ P(O_W \cap A_M).
+ \end{align*}\]</span>
+One adds the probabilities since <span class="math inline">\(O_M \cap A_W\)</span> and <span class="math inline">\(O_W \cap A_M\)</span> are different outcomes. One uses the multiplication rule with the independence assumption to find the probability:
+<span class="math display">\[\begin{align*}
+P({\rm two \, have \, A, O \, types}) &amp; = P((O_M \cap A_W) \cup (O_W \cap A_M)) \\
+&amp; = P(O_M \cap A_W)+ P(O_W \cap A_M) \\
+&amp; = P(O_M) \times P(A_W) + P(O_W) \times P(A_M) \\
+&amp; = (0.45) \times (0.40) + (0.45) \times (0.40) \\
+&amp; = 0.36.
+ \end{align*}\]</span></p></li>
+<li><p><strong>What is the probability the man and the woman have the same blood type?</strong>
+This is a more general question than the earlier parts since one hasn’t specified the blood types – one is just interested in the event that the two people have the same type. There are four possible ways for this to happen: they can both have type <span class="math inline">\(O\)</span>, they both have type <span class="math inline">\(A\)</span>, they have type <span class="math inline">\(B\)</span>, or they have type <span class="math inline">\(AB\)</span>. One first finds the probability of each possible outcome and then sum the outcome probabilities to obtain the probability of interest. One obtains</p></li>
+</ol>
+<p><span class="math display">\[\begin{align*}
+P({\rm same \, type}) &amp; = P((O_M \cap O_W) \cup (A_M \cap A_W) \cup\\
+&amp;  (B_M \cap B_W) \cup (AB_W \cap AB_M)) \\
+&amp; = (0.45)^2 + (0.40)^2 + (0.11)^2 + (0.04)^2 \\
+&amp; = 0.3762.
+ \end{align*}\]</span></p>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>What is the probability the couple have different blood types?</strong>
+One way of doing this problem is to consider all of the ways to have different blood types – the two people could have blood types <span class="math inline">\(O\)</span> and <span class="math inline">\(A\)</span>, types <span class="math inline">\(O\)</span> and <span class="math inline">\(B\)</span>, and so on, and add the probabilities of the different outcomes. But it is simpler to note that the event “having different blood types” is the complement of the event “have the same blood type”. Then using the complement property of probability,</li>
+</ol>
+<p><span class="math display">\[\begin{align*}
+P({\rm different \, type}) &amp; = 1 - P({\rm same \, type}) \\
+&amp; = 1 - 0.3762 \\
+&amp; = 0.6238.
+ \end{align*}\]</span></p>
+<p><strong>A Five-Game Playoff</strong></p>
+<p>Suppose two baseball teams play in a “best of five” playoff series, where the first team to win three games wins the series. Suppose the Yankees play the Angels and one believes that the probability the Yankees will win a single game is 0.6. If the results of the games are assumed independent, what is the probability the Yankees win the series?</p>
+<p>This is a more sophisticated problem than the first example, since there are numerous outcomes of this series of games. The first thing to note is that the playoff can last three games, four games, or five games. In listing outcomes, one lets <span class="math inline">\(Y\)</span> and <span class="math inline">\(A\)</span> denote respectively the single-game outcomes “Yankees win” and “Angels win”. Then a series result is represented by a sequence of letters. For example, <span class="math inline">\(YYAY\)</span> means that the Yankees won the first two games, the Angels won the third game, and the Yankees won the fourth game and the series. Using this notation, all of the possible outcomes of the five-game series are written below.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Three games</th>
+<th align="center">Four games</th>
+<th align="center">Five games</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="underline"><span class="math inline">\(YYY\)</span></span></td>
+<td align="center"><span class="underline"><span class="math inline">\(YYAY\)</span></span>, <span class="math inline">\(AAYA\)</span></td>
+<td align="center"><span class="underline"><span class="math inline">\(YYAAY\)</span></span>, <span class="math inline">\(AAYYA\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(AAA\)</span></td>
+<td align="center"><span class="underline"><span class="math inline">\(YAYY\)</span></span>, <span class="math inline">\(AYAA\)</span></td>
+<td align="center"><span class="underline"><span class="math inline">\(YAYAY\)</span></span>, <span class="math inline">\(AYAYA\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"><span class="underline"><span class="math inline">\(AYYY\)</span></span>, <span class="math inline">\(YAAA\)</span></td>
+<td align="center"><span class="underline"><span class="math inline">\(YAAYY\)</span></span>, <span class="math inline">\(AYYAA\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"><span class="underline"><span class="math inline">\(AYYAY\)</span></span>, <span class="math inline">\(YAAYA\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"><span class="underline"><span class="math inline">\(AYAYY\)</span></span>, <span class="math inline">\(YAYAA\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"><span class="underline"><span class="math inline">\(AAYYY\)</span></span>, <span class="math inline">\(YYAAA\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>One is interested in the probability the Yankees win the series. All of the outcomes above where the Yankees win are underlined. By the assumption of independence, one finds the probability of a specific outcome – for example, the probability of the outcome <span class="math inline">\(YYAY\)</span> as
+<span class="math display">\[\begin{align*}
+P(YYAY) &amp;= (0.6) \times (0.6) \times (0.4) \times (0.6) \\
+&amp;= 0.0864.
+ \end{align*}\]</span>
+One finds the probability that the Yankees win the series by finding the probabilities of each type of Yankees win and adding the outcome probabilities. The probability of each outcome is written down in Table .</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">Three games</th>
+<th align="center">Four games</th>
+<th align="center">Five games</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(P(YYY) = 0.216\)</span></td>
+<td align="center"><span class="math inline">\(P(YYAY) = 0.0864\)</span></td>
+<td align="center"><span class="math inline">\(P(YYAAY) = 0.0346\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center"><span class="math inline">\(P(YAYY) = 0.0864\)</span></td>
+<td align="center"><span class="math inline">\(P(YAYAY) = 0.0346\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"><span class="math inline">\(P(AYYY) = .0864\)</span></td>
+<td align="center"><span class="math inline">\(P(YAAYY) = 0.0346\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"><span class="math inline">\(P(AYYAY) = 0.0346\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"><span class="math inline">\(P(AYAYY) = 0.0346\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"><span class="math inline">\(P(AAYYY) = 0.0346\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>So the probability of interest is given by
+<span class="math display">\[\begin{align*}
+P({\rm Yankees \, win \, series}) &amp;= P(YYY, YYAY, YAYY, ...) \\
+&amp;= 0.216 + 3 \times 0.864 + 6 \times 0.0346 \\
+&amp;= 0.683.
+ \end{align*}\]</span></p>
+<p><strong>Playing Craps</strong></p>
+<p>One of the most popular casino games is craps. Here we describe a basic version of the game, and we will use the multiplication rule together with the use of conditional probabilities to find the probability of winnings.</p>
+<p>This game is based on the roll of two dice. One begins by rolling the dice: if the sum of the dice is 7 or 11, the player wins, and if the sum is 2, 3, or 12, the player loses. If any other sum of dice is rolled (that is, 4, 5, 6, 8, 9, 10), this sum is called the “point”. The player continues rolling two dice until either his point or a 7 are observed – he wins if he sees his point and loses if he observes a 7.
+What is the probability of winning at this game?</p>
+<ol style="list-style-type: decimal">
+<li>On the first roll, the player can win by rolling the sum of 7 or 11, or lose by rolling the sum of 2, 3, or 12. The probabilities of these five outcomes are placed in Table .</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th align="center">First roll</th>
+<th align="center">Probability</th>
+<th align="center">Outcome</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">7</td>
+<td align="center">6/36</td>
+<td align="center">Win</td>
+</tr>
+<tr class="even">
+<td align="center">11</td>
+<td align="center">2/36</td>
+<td align="center">Win</td>
+</tr>
+<tr class="odd">
+<td align="center">2</td>
+<td align="center">1/36</td>
+<td align="center">Lose</td>
+</tr>
+<tr class="even">
+<td align="center">3</td>
+<td align="center">2/36</td>
+<td align="center">Lose</td>
+</tr>
+<tr class="odd">
+<td align="center">12</td>
+<td align="center">1/36</td>
+<td align="center">Lose</td>
+</tr>
+</tbody>
+</table>
+<ol start="2" style="list-style-type: decimal">
+<li>If the player rolls initially a sum 4, 5, 6, 8, 9 or 10, he keeps rolling. The probabilities of rolling these sums (of two dice) are placed in the <span class="math inline">\(P\)</span>(Roll) column of Table .</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th align="center">First Roll</th>
+<th align="center"><span class="math inline">\(P\)</span>(Roll)</th>
+<th align="center">Second Roll</th>
+<th align="center">Outcome</th>
+<th align="center"><span class="math inline">\(P\)</span>(Win <span class="math inline">\(\mid\)</span> Roll)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">4</td>
+<td align="center">3/36</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center">3/36</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">5</td>
+<td align="center">4/36</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">5</td>
+<td align="center">4/36</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">6</td>
+<td align="center">5/36</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">6</td>
+<td align="center">5/36</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">8</td>
+<td align="center">5/36</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">8</td>
+<td align="center">5/36</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">9</td>
+<td align="center">4/36</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">9</td>
+<td align="center">4/36</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">10</td>
+<td align="center">3/36</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">10</td>
+<td align="center">3/36</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<ol start="3" style="list-style-type: decimal">
+<li>Suppose the player initially rolls 4 and this becomes his or her point. Now the player keep rolling until the point of 4 (player wins) or a 7 (player loses) are observed. All of the other sums of two dice are not important. In this case, there are only the following nine possible outcomes.</li>
+</ol>
+<p>(1, 3), (1, 6), (2, 2), (2, 5), (3, 1), (3, 4), (4, 3), (5, 2), (6, 1)</p>
+<p>Of these nine outcomes, the player wins (point of 4) in three of them – so the conditional probability <span class="math inline">\(P\)</span>(Win <span class="math inline">\(\mid\)</span> First Roll is 4) = 3/9. This value is placed in the <span class="math inline">\(P\)</span>(Win <span class="math inline">\(\mid\)</span> Roll) column.
+Using a similar method, one computes <span class="math inline">\(P\)</span>(Win <span class="math inline">\(\mid\)</span> First Roll) if the first roll is 5, if the first roll is 6, …, the first roll is 10. The secondary roll, the outcome (Win or Lose), and conditional win probabilities are placed in the <span class="math inline">\(P\)</span>(Win <span class="math inline">\(\mid\)</span> Roll ) column in Table .</p>
+<table>
+<thead>
+<tr class="header">
+<th align="center">First Roll</th>
+<th align="center"><span class="math inline">\(P\)</span>(Roll)</th>
+<th align="center">Second Roll</th>
+<th align="center">Outcome</th>
+<th align="center"><span class="math inline">\(P\)</span>(Win <span class="math inline">\(\mid\)</span> Roll)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center">4</td>
+<td align="center">3/36</td>
+<td align="center">4</td>
+<td align="center">Win</td>
+<td align="center">3/9</td>
+</tr>
+<tr class="even">
+<td align="center">4</td>
+<td align="center">3/36</td>
+<td align="center">7</td>
+<td align="center">Lose</td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">5</td>
+<td align="center">4/36</td>
+<td align="center">5</td>
+<td align="center">Win</td>
+<td align="center">4/10</td>
+</tr>
+<tr class="even">
+<td align="center">5</td>
+<td align="center">4/36</td>
+<td align="center">7</td>
+<td align="center">Lose</td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">6</td>
+<td align="center">5/36</td>
+<td align="center">6</td>
+<td align="center">Win</td>
+<td align="center">5/11</td>
+</tr>
+<tr class="even">
+<td align="center">6</td>
+<td align="center">5/36</td>
+<td align="center">7</td>
+<td align="center">Lose</td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">8</td>
+<td align="center">5/36</td>
+<td align="center">8</td>
+<td align="center">Win</td>
+<td align="center">5/11</td>
+</tr>
+<tr class="even">
+<td align="center">8</td>
+<td align="center">5/36</td>
+<td align="center">7</td>
+<td align="center">Lose</td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">9</td>
+<td align="center">4/36</td>
+<td align="center">9</td>
+<td align="center">Win</td>
+<td align="center">4/10</td>
+</tr>
+<tr class="even">
+<td align="center">9</td>
+<td align="center">4/36</td>
+<td align="center">7</td>
+<td align="center">Lose</td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">10</td>
+<td align="center">3/36</td>
+<td align="center">10</td>
+<td align="center">Win</td>
+<td align="center">3/9</td>
+</tr>
+<tr class="even">
+<td align="center">10</td>
+<td align="center">3/36</td>
+<td align="center">7</td>
+<td align="center">Lose</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<ol start="4" style="list-style-type: decimal">
+<li>Using the multiplication rule, the probability of rolling a 4 first and then winning is given by</li>
+</ol>
+<p><span class="math inline">\(P\)</span>(Roll = 4 <span class="math inline">\(\cap\)</span> Win) = <span class="math inline">\(P\)</span>(Roll = 4) <span class="math inline">\(P\)</span>(Win <span class="math inline">\(\mid\)</span> Roll = 4).</p>
+<p>Using a similar calculation, the probabilities
+<span class="math inline">\(P\)</span>(Roll = 5 <span class="math inline">\(\cap\)</span> Win), <span class="math inline">\(P\)</span>(Roll = 6 <span class="math inline">\(\cap\)</span> Win), <span class="math inline">\(P\)</span>(Roll = 8 <span class="math inline">\(\cap\)</span> Win), <span class="math inline">\(P\)</span>(Roll = 9 <span class="math inline">\(\cap\)</span> Win), <span class="math inline">\(P\)</span>(Roll = 10 <span class="math inline">\(\cap\)</span> Win)
+are found by multiplying entries in the <span class="math inline">\(P\)</span>(Roll) and <span class="math inline">\(P\)</span> (Win <span class="math inline">\(\mid\)</span> Roll) columns of Table .</p>
+<ol start="5" style="list-style-type: decimal">
+<li>The probability the player wins at craps is the following sum</li>
+</ol>
+<p><span class="math display">\[\begin{align*}
+P({\rm Win}) &amp;= P({\rm Roll} = 7) + P({\rm Roll} = 11) + P({\rm Roll} = 4 \cap {\rm Win})  \\
+&amp;+ P({\rm Roll} = 5 \cap {\rm Win}) + P({\rm Roll} = 6\cap {\rm Win})  \\
+&amp; +P({\rm Roll} = 8 \cap {\rm Win})  + P({\rm Roll} = 9\cap {\rm Win}) \\
+&amp; + P({\rm Roll} = 10 \cap {\rm Win}) \\
+&amp; = \frac{6}{36} + \frac{2}{36} + \left(\frac{3}{36}\right) \left(\frac{3}{9}\right) +
+ \left(\frac{4}{36}\right) \left(\frac{4}{10}\right) + \\
+&amp; \left(\frac{5}{36}\right) \left(\frac{5}{11}\right) + \left(\frac{5}{36}\right) \left(\frac{5}{11}\right) + \left(\frac{4}{36}\right) \left(\frac{4}{10}\right) + \\
+ &amp;\left(\frac{3}{36}\right) \left(\frac{3}{9}\right) \\
+ &amp; = 0.493. \\
+ \end{align*}\]</span></p>
+<p>Is craps a fair game? In other words, who has the advantage in this game: the player or the casino? Since the probability of the player winning at craps is 0.493, it is not a fair game. But the advantage to the casino is relatively small.</p>
+</div>
+<div id="learning-using-bayes-rule" class="section level2">
+<h2><span class="header-section-number">3.8</span> Learning Using Bayes’ Rule</h2>
+<p>We have seen that probabilities are conditional in that one’s opinion about an event is dependent on our current state of knowledge. As we gain new information, our probabilities can change. Bayes’ rule provides a mechanism for changing our probabilities when we obtain new data.</p>
+<p>Suppose that you are given a blood test for a rare disease. The proportion of people who currently have this disease is 0.1. The blood test comes back with two results: positive, which is some indication that you may have the disease, or negative. It is possible that the test will give the wrong result. If you have the disease, it will give a negative reading with probability 0.2. Likewise, it will give a false positive result with probability 0.2. Suppose that you have a blood test and the result is positive. Should you be concerned that you have the disease?</p>
+<p>In this example, you are uncertain if you have the rare disease. There are two possible alternatives: you have the disease, or you don’t have the disease. Before you have a blood test, you assign probabilities to “have disease” and “don’t have disease” that reflect the plausibility of these two models. You think that your chance of having the disease is similar to the chance of a randomly selected person from the population. Thus you assign the event “have disease” a probability of 0.1 By the complement property, this implies that the event “don’t have disease” has a probability of 1- 0.1 = 0.9.</p>
+<p>The new information that one obtains to learn about the different models is called data. In this example, the data is the result of the blood test. Here the two possible data results are a positive result (<span class="math inline">\(+\)</span>) or a negative result (<span class="math inline">\(-\)</span>). One is given the probabilities of the observations for each model. If one “has the disease,” the probability of a <span class="math inline">\(+\)</span> observation is 0.8 and the probability of a <span class="math inline">\(-\)</span> observation is 0.2. Since these are conditional probabilities, one writes
+<span class="math display">\[
+ P(+ \mid {\rm disease}) = 0.8, \, \, P(- \mid {\rm disease}) = 0.2.
+ \]</span>
+Likewise, if one “does’t have the disease,” the probabilities of the outcomes <span class="math inline">\(+\)</span> and <span class="math inline">\(-\)</span> are .2 and .8, respectively. Using symbols, one has
+<span class="math display">\[
+ P(+ \mid {\rm no \, disease}) = 0.2, \, \, P(- \mid {\rm no \, disease}) = 0.8.
+ \]</span>
+Suppose you take the blood test and the result is positive (<span class="math inline">\(+\)</span>) – what is the chance you really have the disease? We are interested in computing the conditional probability
+<span class="math display">\[
+ P({\rm disease} \mid +).
+ \]</span>
+This should not be confused with the earlier probability <span class="math inline">\(P(+ \mid {\rm disease})\)</span> that is the probability of getting a positive result if you have the disease. Here the focus is on the so-called inverse probability – the probability of having the disease given a positive blood test result.</p>
+<p>We describe the computation of this inverse probability using two methods. They are essentially two ways of viewing the same calculation.</p>
+
+<p><strong>Method 1: Using a tree diagram</strong></p>
+<p>A person either has or does not have the disease, and given the person’s disease state, he or she either gets a positive or negative test result. One represents the outcomes by a tree diagram where the first set of branches corresponds to the disease states and the second set of branches corresponds to the blood test results. The branches of the tree are labelled by the given probabilities, shown in Figure .</p>
+<div class="figure"><span id="fig:unnamed-chunk-12"></span>
+<img src="../LATEX/figures/chapter3/newtree.png" alt="Tree diagram of the disease problem." width="500" />
+<p class="caption">
+Figure 3.3: Tree diagram of the disease problem.
+</p>
+</div>
+
+<p>By the definition of conditional probability,
+<span class="math display">\[
+ P({\rm disease} \mid +) = \frac{P({\rm disease} \cap +)}{P(+)}.
+ \]</span>
+One finds the numerator <span class="math inline">\(P({\rm disease} \cap +)\)</span> by use of the multiplication rule:
+<span class="math display">\[\begin{align*}
+P({\rm disease} \cap +) &amp;= P({\rm disease}) P(+ \mid {\rm disease})  \\
+&amp; = 0.1 \times 0.8 = 0.08.
+ \end{align*}\]</span>
+In the tree diagram, one is multiplying probabilities along the disease/<span class="math inline">\(+\)</span> branch to find this probability.</p>
+<p>To find the denominator <span class="math inline">\(P(+)\)</span>, note that there are two ways of getting a positive blood test result – either the person has the disease and gets a positive blood test result, or the person doesn’t have the disease and gets a positive result. These two outcomes are the disease/<span class="math inline">\(+\)</span> and no disease/<span class="math inline">\(+\)</span> branches of the tree. One finds the probability by using the multiplication rule to find the probability of each outcome, and then summing the outcome probabilities:
+<span class="math display">\[\begin{align*}
+P(+) &amp;= P({\rm disease} \cap +) + P({\rm no} \, {\rm disease} \cap +)  \\
+&amp; = P({\rm disease}) P(+ \mid {\rm disease}) + P({\rm no \, disease})P(+ \mid {\rm no \, disease}) \\
+&amp; = 0.1 \times 0.8 + 0.9 \times 0.2 \\
+&amp; = 0.26.
+ \end{align*}\]</span></p>
+<p>So the probability of having the disease, given a positive blood test result is
+<span class="math display">\[
+P({\rm disease} \mid +) = \frac{P({\rm disease} \cap +)}{P(+)} = \frac{0.08}{0.26} = 0.31.
+\]</span>
+As one would expect, the new probability of having the disease (0.31) is larger than the initial probability of having the disease (0.1) since a positive blood test was observed.</p>
+<p><strong>Method 2: Using a Bayes’ box</strong></p>
+<p>There is an alternative way of computing the inverse probably based on a two-way table that classifies people by the disease status and the blood test result. This is an attractive method since it based on expected counts rather than probabilities.</p>
+<p>Suppose there are 1000 people in the community – one places &quot;1000’ in the lower right corner of Table .</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">+</td>
+<td align="center"><span class="math inline">\(-\)</span></td>
+<td align="center">TOTAL</td>
+</tr>
+<tr class="even">
+<td align="center">Disease</td>
+<td align="center">Have disease</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">status</td>
+<td align="center">Don’t have disease</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">TOTAL</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">1000</td>
+</tr>
+</tbody>
+</table>
+<p>One knows that the chance of getting the disease is 10% – so one expects 10% of the 1000 = 100 people to have the disease and the remaining 900 people to be disease-free. One places these numbers in the right column corresponding to “Disease status”, in Table .</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">+</td>
+<td align="center"><span class="math inline">\(-\)</span></td>
+<td align="center">TOTAL</td>
+</tr>
+<tr class="even">
+<td align="center">Disease</td>
+<td align="center">Have disease</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">100</td>
+</tr>
+<tr class="odd">
+<td align="center">status</td>
+<td align="center">Don’t have disease</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">900</td>
+</tr>
+<tr class="even">
+<td align="center">TOTAL</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">1000</td>
+</tr>
+</tbody>
+</table>
+<p>One knows the test will err with probability 0.2. So if 100 people have the disease, one expects 20% of 100 = 20 to have a negative test result and 80 will have a positive result – one places these counts in the first row of the table. Likewise, if 900 people are disease-free, then 20% of 900 = 180 will have an incorrect positive result and the remaining 720 will have a negative result – one places these in the second row of Table .</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">+</td>
+<td align="center"><span class="math inline">\(-\)</span></td>
+<td align="center">TOTAL</td>
+</tr>
+<tr class="even">
+<td align="center">Disease</td>
+<td align="center">Have disease</td>
+<td align="center">80</td>
+<td align="center">20</td>
+<td align="center">100</td>
+</tr>
+<tr class="odd">
+<td align="center">status</td>
+<td align="center">Don’t have disease</td>
+<td align="center">180</td>
+<td align="center">720</td>
+<td align="center">900</td>
+</tr>
+<tr class="even">
+<td align="center">TOTAL</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">1000</td>
+</tr>
+</tbody>
+</table>
+<p>Now one is ready to compute the probability of interest <span class="math inline">\(P({\rm disease} \mid +)\)</span> from the table of counts. Since one is conditioning on the event <span class="math inline">\(+\)</span>, one restricts attention to the <span class="math inline">\(+\)</span> column of the table – there are 260 people had a positive test result. Of these 260, 80 actually had the disease, so
+<span class="math display">\[
+P({\rm disease} \mid +) = \frac{80}{260} = 0.31.
+\]</span>
+Note that, as expected, one obtains the same answer for the inverse probability.</p>
+</div>
+<div id="r-example-learning-about-a-spinner" class="section level2">
+<h2><span class="header-section-number">3.9</span> R Example: Learning About a Spinner</h2>
+<p>The <code>ProbBayes</code> package is designed to illustrate Bayesian thinking. This package is used here to learn about the identity of an unknown spinner.
+It is supposed that each spinner is divided in several regions and the outcomes of the spins are the integers 1, 2, … and so on.</p>
+<p>A spinner is constructed by specifying a vector of areas of the spinner regions. For example one spinner is defined with five outcomes with corresponding areas 2, 1, 2, 1, 2. The <code>spinner_plot()</code> function will produce the spinner as displayed in Figure .</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">library</span>(ProbBayes)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2">areas &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw">spinner_plot</span>(areas)</a></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>One figures out the probability distribution for the spins from knowing the areas of the five outcomes. Each region area is divided by the sum of the areas, obtaining the probabilities as displayed using the function <code>spinner_probs()</code>. This data frame of probabilities is stored in the R object <code>p_dist</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">(p_dist &lt;-<span class="st"> </span><span class="kw">spinner_probs</span>(areas))</a></code></pre></div>
+<pre><code>##   Region  Prob
+## 1      1 0.250
+## 2      2 0.125
+## 3      3 0.250
+## 4      4 0.125
+## 5      5 0.250</code></pre>
+<p>To illustrate Bayes’ rule, suppose there are four spinners, <span class="math inline">\(A, B, C, D\)</span> defined by the vectors <code>s_reg_A</code>, <code>s_reg_B</code>, <code>s_reg_C</code>, and <code>s_reg_D</code> pictured in Figure</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">s_reg_A &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">s_reg_B &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">s_reg_C &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">2</span>)</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">s_reg_D &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">3</span>, <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5"><span class="kw">many_spinner_plots</span>(<span class="kw">list</span>(s_reg_A, s_reg_B,</a>
+<a class="sourceLine" id="cb15-6" data-line-number="6">                  s_reg_C, s_reg_D))</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-15"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-15-1.png" alt="Four possible spinners." width="500" />
+<p class="caption">
+Figure 3.4: Four possible spinners.
+</p>
+</div>
+<p>A box contains four spinners, one of each type. A friend selects one and holds it behind a curtain. Which spinner is she holding?</p>
+<p>The identity of her spinner is called a <strong>model</strong>. There are four possible models, the friend could be holding Spinner A, or Spinner B, or Spinner C, or Spinner D. In R, a data frame is created with a single variable <code>Model</code> and the names of these spinners are placed in that column.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">(bayes_table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Model=</span><span class="kw">c</span>(<span class="st">&quot;Spinner A&quot;</span>,</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="st">&quot;Spinner B&quot;</span>, <span class="st">&quot;Spinner C&quot;</span>, <span class="st">&quot;Spinner D&quot;</span>)))</a></code></pre></div>
+<pre><code>##       Model
+## 1 Spinner A
+## 2 Spinner B
+## 3 Spinner C
+## 4 Spinner D</code></pre>
+<p>One does not know what spinner this person is holding. But one can assign probabilities to each model that reflect her opinion about the likelihood of these four spinners. There is no reason to think that any of the spinners are more or less likely to be chosen so the same probability of 1/4 is assigned to each model. These probabilities are called the person’s <strong>prior</strong> since they reflect her beliefs before or prior to observing any data. It is called a Uniform prior since the probabilities are spread Uniformly over the four models. In the data frame, a new column <code>Prior</code> is added with the values 1/4, 1/4, 1/4, 1/4.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">bayes_table<span class="op">$</span>Prior &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">4</span>, <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">bayes_table</a></code></pre></div>
+<pre><code>##       Model Prior
+## 1 Spinner A  0.25
+## 2 Spinner B  0.25
+## 3 Spinner C  0.25
+## 4 Spinner D  0.25</code></pre>
+<p>The <code>prob_plot()</code> function graphs the prior distribution (see Figure ).</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">prob_plot</span>(bayes_table)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-18"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-18-1.png" alt="Prior on the four spinners" width="500" />
+<p class="caption">
+Figure 3.5: Prior on the four spinners
+</p>
+</div>
+
+<p>Next, our friend will spin the unknown spinner once – it turns out to land in Region 1.<br />
+The next step is to compute the {} – these are the probabilities of observing a spin in Region 1 for each of the four spinners. In other words, the likelihood is the conditional probability
+<span class="math display">\[
+Prob({\rm Region 1} \mid {\rm Model}),
+\]</span>
+where model is one of the four spinners.</p>
+<p>One figures out these likelihoods by looking at the spinners. For example, look at Spinner <span class="math inline">\(A\)</span>. Region 1 is one quarter of the total area for Spinner <span class="math inline">\(A\)</span>, so the likelihood for Spinner <span class="math inline">\(A\)</span> is one fourth, or
+<span class="math display">\[
+Prob({\rm Region 1} \mid {\rm Spinner} \, \, A) = 1 / 4.
+\]</span>
+Looking at Spinner <span class="math inline">\(B\)</span>, Region 1 is one half of the total area so its likelihood is one half. In a similar fashion, one determines the likelihood for Spinner <span class="math inline">\(C\)</span> is one fourth and the likelihood for Spinner <span class="math inline">\(D\)</span> is one eighth. These likelihoods are added to our <code>bayes_table</code>.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">bayes_table<span class="op">$</span>Likelihood &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">4</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">2</span>,  <span class="dv">1</span><span class="op">/</span><span class="dv">4</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">8</span>)</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">bayes_table</a></code></pre></div>
+<pre><code>##       Model Prior Likelihood
+## 1 Spinner A  0.25      0.250
+## 2 Spinner B  0.25      0.500
+## 3 Spinner C  0.25      0.250
+## 4 Spinner D  0.25      0.125</code></pre>
+<p>Once the prior probabilities and the likelihoods are found, it is straightforward to compute the posterior probabilities. Basically, Bayes’ rule says that the posterior probability of a model is proportional to the product of the prior probability and the likelihood. That is,
+<span class="math display">\[
+Prob({\rm model} \mid {\rm data}) \propto Prob({\rm model}) \times Prob({\rm data} \mid {\rm model})
+\]</span>
+Bayesian use the phrase “turn the Bayesian crank” to reflect the straightforward way of computing posterior probabilities using Bayes’ rule.</p>
+<p>An R function <code>bayesian\_crank()</code> takes as input a data frame with variables <code>Prior</code> and <code>Likelihood</code> and outputs a data frame with new columns <code>Product</code> and <code>Posterior</code>. This function is applied for our example where we observe “Region 1” outcome.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">(<span class="kw">bayesian_crank</span>(bayes_table) -&gt;<span class="st"> </span>bayes_table)</a></code></pre></div>
+<pre><code>##       Model Prior Likelihood Product Posterior
+## 1 Spinner A  0.25      0.250 0.06250 0.2222222
+## 2 Spinner B  0.25      0.500 0.12500 0.4444444
+## 3 Spinner C  0.25      0.250 0.06250 0.2222222
+## 4 Spinner D  0.25      0.125 0.03125 0.1111111</code></pre>
+<p>For each possible model, the prior probability is multiplied by its likelihood. After finding the four products, these are changed to probabilities by dividing each product by the sum of the products. These are called <strong>posterior</strong> probabilities since they reflect our new opinion about the identity of the spinner posterior or after observing the spin in Region 1.</p>
+<p>By using the <code>prior_post_plot()</code> function, the prior and posterior distributions are graphically compared for our spinners, in Figure .</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">prior_post_plot</span>(bayes_table)</a></code></pre></div>
+<div class="figure"><span id="fig:unnamed-chunk-21"></span>
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-21-1.png" alt="Prior and posterior distributions on the four spinners." width="500" />
+<p class="caption">
+Figure 3.6: Prior and posterior distributions on the four spinners.
+</p>
+</div>
+
+<p>These calculations can be viewed from a learning perspective. Initially, one had no reason to favor any spinner and each of the four spinners was given the same prior probability of 0.25.
+Now after observing one spin in Region 1, the person’s opinions have changed. Now the most likely spinner behind the curtain is Spinner B since it has a posterior probability of 0.44. In contrast, it is unlikely that Spinner D has been spun since its new probability is only 0.11.</p>
+</div>
+<div id="exercises-2" class="section level2">
+<h2><span class="header-section-number">3.10</span> Exercises</h2>
+<ol style="list-style-type: decimal">
+<li><strong>Flipping Coins</strong></li>
+</ol>
+<p>Suppose you flip a fair coin four times. The 16 possible outcomes of this experiment are shown below.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"><span class="math inline">\(HHHH\)</span></td>
+<td align="center"><span class="math inline">\(HHHT\)</span></td>
+<td align="center"><span class="math inline">\(HHTT\)</span></td>
+<td align="center"><span class="math inline">\(HHTH\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(HTHH\)</span></td>
+<td align="center"><span class="math inline">\(HTHT\)</span></td>
+<td align="center"><span class="math inline">\(HTTT\)</span></td>
+<td align="center"><span class="math inline">\(HTTH\)</span></td>
+</tr>
+<tr class="odd">
+<td align="center"><span class="math inline">\(THHH\)</span></td>
+<td align="center"><span class="math inline">\(THHT\)</span></td>
+<td align="center"><span class="math inline">\(THTT\)</span></td>
+<td align="center"><span class="math inline">\(THTH\)</span></td>
+</tr>
+<tr class="even">
+<td align="center"><span class="math inline">\(TTHH\)</span></td>
+<td align="center"><span class="math inline">\(TTHT\)</span></td>
+<td align="center"><span class="math inline">\(TTTT\)</span></td>
+<td align="center"><span class="math inline">\(TTTH\)</span></td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Let <span class="math inline">\(A\)</span> denote the event that you flip exactly three heads. Find the probability of <span class="math inline">\(A\)</span>.</li>
+<li>Suppose you are given the information <span class="math inline">\(N\)</span> that at least two heads are flipped. Circle the possible outcomes in the reduced sample space based on knowing that event <span class="math inline">\(N\)</span> is true.</li>
+<li>Using the reduced sample space, find the conditional probability <span class="math inline">\(P(A \mid N)\)</span>.</li>
+<li>Compare <span class="math inline">\(P(A)\)</span> computed in part a with <span class="math inline">\(P(A \mid N)\)</span> computed in part (c). Based on this comparison, are events <span class="math inline">\(A\)</span> and <span class="math inline">\(N\)</span> independent? Why?</li>
+</ol>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Choosing a Committee</strong></li>
+</ol>
+<p>Suppose you randomly choose three people from the group
+{Sue, Ellen, Jill, Bob, Joe, John}
+to be on a committee. Below we have listed all possible committees of size three:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center">{Sue, Ellen, Jill}</td>
+<td align="center">{Sue, Ellen, Bob}</td>
+<td align="center">{Sue, Ellen, Joe}</td>
+</tr>
+<tr class="even">
+<td align="center">{Sue, Jill, Bob}</td>
+<td align="center">{Sue, Jill, Joe}</td>
+<td align="center">{Sue, Jill, John}</td>
+</tr>
+<tr class="odd">
+<td align="center">{Sue, Bob, John}</td>
+<td align="center">{Sue, Joe, John}</td>
+<td align="center">{Ellen, Jill, Bob}</td>
+</tr>
+<tr class="even">
+<td align="center">{Ellen, Jill, John}</td>
+<td align="center">{Ellen, Bob, Joe}</td>
+<td align="center">{Ellen, Bob, John}</td>
+</tr>
+<tr class="odd">
+<td align="center">{Jill, Bob, Joe}</td>
+<td align="center">{Jill, Bob, John}</td>
+<td align="center">{Jill, Joe, John}</td>
+</tr>
+<tr class="even">
+<td align="center">{Sue, Ellen, John}</td>
+<td align="center">{Sue, Bob, Joe}</td>
+<td align="center">{Ellen, Jill, Joe}</td>
+</tr>
+<tr class="odd">
+<td align="center">{Ellen, Joe, John}</td>
+<td align="center">{Bob, Joe, John}</td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability of the event <span class="math inline">\(A\)</span> that exactly two women are in the committee (Sue, Ellen, and Jill are women; Bob, Joe, and John are men).</li>
+<li>Suppose you are told that Jill is on the committee– call this event <span class="math inline">\(J\)</span>. Circle the possible outcomes in the reduced sample space if we know that <span class="math inline">\(J\)</span> is true.</li>
+<li>Compute the conditional probability <span class="math inline">\(P(A \mid J)\)</span>.</li>
+<li>Based on your computations in parts (a) and (c), are events <span class="math inline">\(A\)</span> and <span class="math inline">\(J\)</span> independent?</li>
+<li>Let <span class="math inline">\(F\)</span> denote the event that more women are on the committee than men. Find <span class="math inline">\(P(F)\)</span>.</li>
+<li>Suppose you are given the information <span class="math inline">\(S\)</span> that all three people on the committee are of the same gender. Find <span class="math inline">\(P(F \mid S)\)</span>.</li>
+<li>Based on your computations in parts (e) and (f), are events <span class="math inline">\(F\)</span> and <span class="math inline">\(S\)</span> independent?</li>
+</ol>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Arranging Letters</strong></li>
+</ol>
+<p>Suppose you randomly arrange the letters a, s, s, t, t. You used a computer to do this arranging 200 times and below lists all of the possible “words” that came up. There were 30 distinct arrangements.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center">asstt</td>
+<td align="center">astst</td>
+<td align="center">astts</td>
+<td align="center">atsst</td>
+<td align="center">atsts</td>
+<td align="center">attss</td>
+</tr>
+<tr class="even">
+<td align="center">sastt</td>
+<td align="center">satst</td>
+<td align="center">satts</td>
+<td align="center">ssatt</td>
+<td align="center">sstat</td>
+<td align="center">sstta</td>
+</tr>
+<tr class="odd">
+<td align="center">stast</td>
+<td align="center">stats</td>
+<td align="center">stsat</td>
+<td align="center">ststa</td>
+<td align="center">sttas</td>
+<td align="center">sttsa</td>
+</tr>
+<tr class="even">
+<td align="center">tasst</td>
+<td align="center">tasts</td>
+<td align="center">tatss</td>
+<td align="center">tsast</td>
+<td align="center">tsats</td>
+<td align="center">tssat</td>
+</tr>
+<tr class="odd">
+<td align="center">tssta</td>
+<td align="center">tstas</td>
+<td align="center">tstsa</td>
+<td align="center">ttass</td>
+<td align="center">ttsas</td>
+<td align="center">ttssa</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Assuming each possible arrangement is equally likely, what is the probability that the word formed is “stats”?</li>
+<li>What is the probability that the word formed begins and ends with an “s”?</li>
+<li>Suppose you are told that the word formed starts with “s” – write down all of the possible words in the reduced sample space.</li>
+<li>Given that the word begins with “s”, what is the probability the word is “stats”?</li>
+</ol>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Rolling Two Dice</strong></li>
+</ol>
+<p>Suppose two dice are rolled.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Suppose you are told that the sum of the dice is equal to 7. Write down the six possible outcomes.</li>
+<li>Given the sum of the dice is equal to 7, find the probability the largest die roll is 6.</li>
+<li>Suppose you are told that the two dice have different numbers. Write down the possible outcomes.</li>
+<li>If the two dice have different numbers, what is the probability the largest die roll is 6?</li>
+</ol>
+<ol start="5" style="list-style-type: decimal">
+<li><strong>Choosing Sport Balls</strong></li>
+</ol>
+<p>Suppose you have a bin in your garage with three sports balls – four are footballs, three are basketballs, and two are tennis balls. Suppose you take three balls from the bin – you count the number of footballs and the number of basketballs. The first time this is done, the following balls were selected:</p>
+<p>basketball, basketball, football,</p>
+<p>so the number of footballs selected was 1 and the number of basketballs selected was 2.
+We repeat this sampling experiment 1000 times, each time recording the number of footballs and basketballs we select. Table  summarizes the results of the 1000 experiments.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Total</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">0</td>
+<td align="center">1</td>
+<td align="center">2</td>
+<td align="center">3</td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center">0</td>
+<td align="center">13</td>
+<td align="center">66</td>
+<td align="center">64</td>
+<td align="center">34</td>
+<td align="center">177</td>
+</tr>
+<tr class="even">
+<td align="center">Numbers of</td>
+<td align="center">1</td>
+<td align="center">49</td>
+<td align="center">198</td>
+<td align="center">169</td>
+<td align="center">0</td>
+<td align="center">416</td>
+</tr>
+<tr class="odd">
+<td align="center">Footballs</td>
+<td align="center">2</td>
+<td align="center">118</td>
+<td align="center">180</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">298</td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center">3</td>
+<td align="center">109</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">0</td>
+<td align="center">109</td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center">Total</td>
+<td align="center">289</td>
+<td align="center">444</td>
+<td align="center">233</td>
+<td align="center">34</td>
+<td align="center">1000</td>
+</tr>
+</tbody>
+</table>
+<p>Let <span class="math inline">\(F_1\)</span> denote that event that you have chosen exactly one football and <span class="math inline">\(B_1\)</span> the event that you chose exactly one basketball from the bin.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find <span class="math inline">\(P(F_1)\)</span> and <span class="math inline">\(P(B_1)\)</span>.</li>
+<li>Find <span class="math inline">\(P(F_1 \mid B_1)\)</span>.</li>
+<li>Find <span class="math inline">\(P(B_1 \mid F_1)\)</span>.</li>
+<li>From your calculations above, explain why <span class="math inline">\(F_1\)</span> and <span class="math inline">\(B_1\)</span> are not independent events.</li>
+</ol>
+<ol start="6" style="list-style-type: decimal">
+<li><strong>Rating Movies</strong></li>
+</ol>
+<p>On the Internet Movie Database www.imdb.com, people are given the opportunity to rate movies on a scale from 1 to 10. Table  shows the ratings of the movie “Sleepless in Seattle” for men and women who visited the website.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"></td>
+<td align="center">8,9,10</td>
+<td align="center">5,6,7</td>
+<td align="center">1,2,3,4</td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">Rating</td>
+<td align="center">(High)</td>
+<td align="center">(Medium)</td>
+<td align="center">(Low)</td>
+<td align="center">TOTAL</td>
+</tr>
+<tr class="odd">
+<td align="center">Males</td>
+<td align="center">2217</td>
+<td align="center">3649</td>
+<td align="center">754</td>
+<td align="center">6620</td>
+</tr>
+<tr class="even">
+<td align="center">Females</td>
+<td align="center">1059</td>
+<td align="center">835</td>
+<td align="center">178</td>
+<td align="center">2072</td>
+</tr>
+<tr class="odd">
+<td align="center">TOTAL</td>
+<td align="center">3276</td>
+<td align="center">4484</td>
+<td align="center">932</td>
+<td align="center">8692</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li><p>Suppose you choose at random a person who is interested in rating this movie on the website. Find the probability that the person gives this movie a high rating between 8 and 10 – that is, <span class="math inline">\(P(H)\)</span>.</p></li>
+<li>Find the conditional probabilities <span class="math inline">\(P(H \mid M)\)</span> and <span class="math inline">\(P(H \mid F)\)</span>, where <span class="math inline">\(M\)</span> and <span class="math inline">\(F\)</span> are the events that a man and a woman rated the movie, respectively.</li>
+<li>Interpret the conditional probabilities in part (b) – does this particular movie appeal to one gender?</li>
+<li><p>Table  below shows the ratings of the movie &quot;Die Hard’’ for men and women who visited the website. Answer questions (a), (b), and (c) for this movie.</p></li>
+</ol>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"></td>
+<td align="center">8,9,10</td>
+<td align="center">5,6,7</td>
+<td align="center">1,2,3,4</td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">Rating</td>
+<td align="center">(High)</td>
+<td align="center">(Medium)</td>
+<td align="center">(Low)</td>
+<td align="center">TOTAL</td>
+</tr>
+<tr class="odd">
+<td align="center">Males</td>
+<td align="center">16197</td>
+<td align="center">6737</td>
+<td align="center">882</td>
+<td align="center">24016</td>
+</tr>
+<tr class="even">
+<td align="center">Females</td>
+<td align="center">1720</td>
+<td align="center">1243</td>
+<td align="center">258</td>
+<td align="center">3221</td>
+</tr>
+<tr class="odd">
+<td align="center">TOTAL</td>
+<td align="center">17917</td>
+<td align="center">8180</td>
+<td align="center">1140</td>
+<td align="center">27237</td>
+</tr>
+</tbody>
+</table>
+<ol start="7" style="list-style-type: decimal">
+<li><strong>Rating Movies (continued)</strong></li>
+</ol>
+<p>The Internet Movie Database also breaks down the movie ratings by the age of the reviewer. For the movie “Sleepless in Seattle”, Table  classifies the reviewers by age and their rating.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"></td>
+<td align="center">8,9,10</td>
+<td align="center">5,6,7</td>
+<td align="center">1,2,3,4</td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">Rating</td>
+<td align="center">(High)</td>
+<td align="center">(Medium)</td>
+<td align="center">(Low)</td>
+<td align="center">TOTAL</td>
+</tr>
+<tr class="odd">
+<td align="center">under 18</td>
+<td align="center">74</td>
+<td align="center">76</td>
+<td align="center">16</td>
+<td align="center">166</td>
+</tr>
+<tr class="even">
+<td align="center">18-29</td>
+<td align="center">1793</td>
+<td align="center">2623</td>
+<td align="center">555</td>
+<td align="center">4971</td>
+</tr>
+<tr class="odd">
+<td align="center">30-44</td>
+<td align="center">886</td>
+<td align="center">1280</td>
+<td align="center">272</td>
+<td align="center">2438</td>
+</tr>
+<tr class="even">
+<td align="center">45+</td>
+<td align="center">438</td>
+<td align="center">300</td>
+<td align="center">60</td>
+<td align="center">798</td>
+</tr>
+<tr class="odd">
+<td align="center">TOTAL</td>
+<td align="center">3191</td>
+<td align="center">4279</td>
+<td align="center">903</td>
+<td align="center">8373</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability that a reviewer gives this movie a high rating – that is, find <span class="math inline">\(P(H)\)</span>.</li>
+<li>Define a “young adult” (<span class="math inline">\(YA\)</span>) as a person between the ages of 18 and 29, and a “senior” (<span class="math inline">\(S\)</span>) as a person 45 or older. Compute <span class="math inline">\(P(H \mid YA)\)</span> and <span class="math inline">\(P(H \mid S)\)</span>.</li>
+<li>Based on your computations in parts (a) and (b), is “giving a high rating” and age independent events? If not, explain how the probability of giving a high rating depends on age.</li>
+</ol>
+<ol start="8" style="list-style-type: decimal">
+<li><strong>Family Planning</strong></li>
+</ol>
+<p>Suppose a family plans to have children until they have two boys. Suppose there are two events of interest, <span class="math inline">\(A\)</span> = event that they have at least five children and <span class="math inline">\(B\)</span> = event that the first child born is male. Assuming that each child is equally likely to be a boy or girl, and genders of different children born are independent, then this process of building a family was simulated 1000 times. The results of the simulation are displayed in Table .</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Female</td>
+<td align="center">Male</td>
+<td align="center">TOTAL</td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center">2</td>
+<td align="center">0</td>
+<td align="center">247</td>
+<td align="center">247</td>
+</tr>
+<tr class="even">
+<td align="center">Number of</td>
+<td align="center">3</td>
+<td align="center">125</td>
+<td align="center">138</td>
+<td align="center">263</td>
+</tr>
+<tr class="odd">
+<td align="center">Children</td>
+<td align="center">4</td>
+<td align="center">126</td>
+<td align="center">58</td>
+<td align="center">184</td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center">5 or more</td>
+<td align="center">250</td>
+<td align="center">56</td>
+<td align="center">306</td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center">TOTAL</td>
+<td align="center">501</td>
+<td align="center">499</td>
+<td align="center">1000</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Use the table to find <span class="math inline">\(P(A)\)</span>.</li>
+<li>Find <span class="math inline">\(P(A \mid B)\)</span> and decide if events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are independent.</li>
+<li>Suppose another family plans to continue to have children until they have at least one of each gender. Table  shows simulated results of 1000 families of this type . Again find <span class="math inline">\(P(A)\)</span>, <span class="math inline">\(P(A \mid B)\)</span> and decide if events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are independent.</li>
+</ol>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">Female</td>
+<td align="center">Male</td>
+<td align="center">TOTAL</td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center">2</td>
+<td align="center">235</td>
+<td align="center">261</td>
+<td align="center">496</td>
+</tr>
+<tr class="even">
+<td align="center">Number of</td>
+<td align="center">3</td>
+<td align="center">106</td>
+<td align="center">152</td>
+<td align="center">258</td>
+</tr>
+<tr class="odd">
+<td align="center">Children</td>
+<td align="center">4</td>
+<td align="center">71</td>
+<td align="center">63</td>
+<td align="center">134</td>
+</tr>
+<tr class="even">
+<td align="center"></td>
+<td align="center">5 or more</td>
+<td align="center">50</td>
+<td align="center">62</td>
+<td align="center">112</td>
+</tr>
+<tr class="odd">
+<td align="center"></td>
+<td align="center">TOTAL</td>
+<td align="center">462</td>
+<td align="center">538</td>
+<td align="center">1000</td>
+</tr>
+</tbody>
+</table>
+<ol start="9" style="list-style-type: decimal">
+<li><strong>Conditional Nature of Probability</strong>
+For each of the following problems</li>
+</ol>
+<ul>
+<li>Make a guess at the probabilities of the three events based on your current knowledge.</li>
+<li>Ask a friend about this problem. Based on his or her opinion about the event, make new probability assignments.</li>
+<li>Do some research on the Internet to learn about the right answer to the question. Make new probability assignments based on your new information.</li>
+</ul>
+<ol style="list-style-type: lower-alpha">
+<li>What is the area of Pennsylvania?</li>
+</ol>
+<p>Initial probabilities:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">Event</td>
+<td align="center">under 30,000</td>
+<td align="center">between 30,000 and</td>
+<td align="center">over 50,000</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="center">sq miles</td>
+<td align="center">50,000 sq miles</td>
+<td align="center">sq miles</td>
+</tr>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>Probabilities after talking with a friend:</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">Event</td>
+<td align="center">under 30,000</td>
+<td align="center">between 30,000 and</td>
+<td align="center">over 50,000</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="center">sq miles</td>
+<td align="center">50,000 sq miles</td>
+<td align="center">sq miles</td>
+</tr>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>Probabilities after doing research on the Internet.</p>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">Event</td>
+<td align="center">under 30,000</td>
+<td align="center">between 30,000 and</td>
+<td align="center">over 50,000</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="center">sq miles</td>
+<td align="center">50,000 sq miles</td>
+<td align="center">sq miles</td>
+</tr>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Robin Williams has appeared in how many movies?</li>
+</ol>
+<p>Probabilities after talking with a friend:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="center">Under 15</th>
+<th align="center">Between 16 and 30</th>
+<th align="center">Over 30</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>Probabilities after doing research on the Internet.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="center">Under 15</th>
+<th align="center">Between 16 and 30</th>
+<th align="center">Over 30</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>Probabilities after doing research on the Internet.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="center">Under 15</th>
+<th align="center">Between 16 and 30</th>
+<th align="center">Over 30</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<ol start="10" style="list-style-type: decimal">
+<li><strong>Conditional Nature of Probability</strong></li>
+</ol>
+<p>For each of the following problems</p>
+<ul>
+<li>Make a guess at the probabilities of the three events based on your current knowledge.</li>
+<li>Ask a friend about this problem. Based on his or her opinion about the event, make new probability assignments.</li>
+<li>Do some research on the Internet to learn about the right answer to the question. Make new probability assignments based on your new information.</li>
+</ul>
+<ol style="list-style-type: lower-alpha">
+<li>How many plays did Shakespeare write?</li>
+</ol>
+<p>Initial probabilities:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="center">Under 30</th>
+<th align="center">Between 31 and 50</th>
+<th align="center">Over 50</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>Probabilities after talking with a friend:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="center">Under 30</th>
+<th align="center">Between 31 and 50</th>
+<th align="center">Over 50</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>Probabilities after doing research on the Internet.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="center">Under 30</th>
+<th align="center">Between 31 and 50</th>
+<th align="center">Over 50</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>What is the average temperature in Melbourne, Australia in June?</li>
+</ol>
+<p>Initial probabilities:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="center">Under 40<span class="math inline">\(^{\circ}\)</span></th>
+<th align="center">Between 40<span class="math inline">\(^{\circ}\)</span> and 60<span class="math inline">\(^{\circ}\)</span></th>
+<th align="center">Over 60<span class="math inline">\(^{\circ}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>Probabilities after talking with a friend:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="center">Under 40<span class="math inline">\(^{\circ}\)</span></th>
+<th align="center">Between 40<span class="math inline">\(^{\circ}\)</span> and 60<span class="math inline">\(^{\circ}\)</span></th>
+<th align="center">Over 60<span class="math inline">\(^{\circ}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<p>Probabilities after doing research on the Internet.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Event</th>
+<th align="center">Under 40<span class="math inline">\(^{\circ}\)</span></th>
+<th align="center">Between 40<span class="math inline">\(^{\circ}\)</span> and 60<span class="math inline">\(^{\circ}\)</span></th>
+<th align="center">Over 60<span class="math inline">\(^{\circ}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Probability</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+</tbody>
+</table>
+<ol start="11" style="list-style-type: decimal">
+<li><strong>Picnic Misery</strong></li>
+</ol>
+<p>Twenty boys went on a picnic. 5 got sunburned, 8 got bitten by mosquitoes, and 10 got home without mishap. What is the probability that the mosquitoes ignored a sunburned boy? What is the probability that a bitten boy was also burned?</p>
+<ol start="12" style="list-style-type: decimal">
+<li><strong>A Mall Survey</strong></li>
+</ol>
+<p>Suppose 30 people are surveyed at a local mall. Half of the 10 men surveyed approve the upcoming school levy and a total of 17 people do not approve of the levy. Based on the survey data,</p>
+<ol style="list-style-type: lower-alpha">
+<li>What is the probability a woman is in favor of the levy?</li>
+<li>If the person is in favor of the levy, what is the probability the person is a woman?</li>
+</ol>
+<ol start="13" style="list-style-type: decimal">
+<li><strong>Drawing Tickets</strong></li>
+</ol>
+<p>Have 12 tickets numbered from 1 to 12. Two tickets are drawn, one after the other, without replacement.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability that both numbers are even.</li>
+<li>Find the probability both numbers are odd.</li>
+<li>Find the probability one number is even and one is odd.</li>
+</ol>
+<ol start="14" style="list-style-type: decimal">
+<li><strong>Testing for Steroids</strong></li>
+</ol>
+<p>Suppose that 20% of all baseball players are currently on steroids. You plan on giving a random player a test, but the test is not perfectly reliable. If the player is truly on steroids, he will test negative (for steroids) with probability 0.1. Likewise, if the player is not on steroids, he will get a positive test result with probability 0.1.</p>
+<ol style="list-style-type: lower-alpha">
+<li>What is the probability the player is on steroids and will test negative?</li>
+<li>If you give a player a test, what is the probability he will test positive?</li>
+<li>If the test result is positive, what is the probability the player is on steroids?</li>
+</ol>
+<ol start="15" style="list-style-type: decimal">
+<li><strong>Preparing for the SAT</strong></li>
+</ol>
+<p>Suppose a student has a choice of enrolling (or not) in an expensive program to prepare for taking the SAT exam. The chance that she enrolls in this class is 0.3. If she takes the program, the chance that she will do well on the SAT exam is 0.8. On the other hand, if she does not take the prep program, the chance that she will do well on the SAT is only 0.4. Let <span class="math inline">\(E\)</span> denote the event “enrolls in the class” and <span class="math inline">\(W\)</span> denote the event “does well on the SAT exam”.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find <span class="math inline">\(P(W \mid E)\)</span></li>
+<li>Find <span class="math inline">\(P(E \cap W)\)</span></li>
+<li>Find <span class="math inline">\(P(E \mid W)\)</span>, that is, the probability that she took the class given that she did well on the test.</li>
+</ol>
+<ol start="16" style="list-style-type: decimal">
+<li><strong>Working Off-Campus</strong></li>
+</ol>
+<p>At a college campus, 33% of the students are freshman and 25% are seniors. 13% of the freshman works over 10 hours off-campus, and 37% of the seniors work over 10 hours off-campus.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Suppose you sample a student who is either a freshman and senior. Find the probability she works over 10 hours off-campus.</li>
+<li>If this person does work over 10 hours off campus, find the probability she is a senior.</li>
+</ol>
+<ol start="17" style="list-style-type: decimal">
+<li><strong>Flipping Coins</strong></li>
+</ol>
+<p>You flip a coin three times. Let <span class="math inline">\(A\)</span> be the event that a head occurs on the first flip and <span class="math inline">\(B\)</span> is the event that (exactly) one head occurs. Are <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> independent?</p>
+<ol start="18" style="list-style-type: decimal">
+<li><strong>A Two-headed Coin?</strong></li>
+</ol>
+<p>One coin in a collection of 65 has two heads. Suppose you choose a coin at random from the collection – you toss it 6 times and observe all heads. What is the probability it was the two-headed coin?</p>
+<ol start="19" style="list-style-type: decimal">
+<li><strong>Smoking and Gender</strong></li>
+</ol>
+<p>Suppose the proportion of female students at your school is 60%. Also you know that 26% of the male students smoke and only 16% of the female students smoke. Suppose you randomly select a student.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability the student is a male smoker.</li>
+<li>Find the probability the student smokes.</li>
+<li>If the student smokes, what is the probability the student is female?</li>
+</ol>
+<ol start="20" style="list-style-type: decimal">
+<li><strong>Choosing Until One Selects a Red</strong></li>
+</ol>
+<p>Suppose you have a box with 4 green and 2 red balls. You select balls from the box one at a time until you get a red, or until you select three balls. If you do not select a red on the first draw, find the probability that you will select three balls.</p>
+<ol start="21" style="list-style-type: decimal">
+<li><strong>Mutually Exclusive and Independence</strong></li>
+</ol>
+<p>Suppose that two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> are mutually exclusive. Are they independent events?</p>
+<ol start="22" style="list-style-type: decimal">
+<li><strong>Blood Type of Couples</strong></li>
+</ol>
+<p>Consider the example where white Americans have the blood types <span class="math inline">\(O, A, B, AB\)</span> with proportions .45, .40, .11, 04. If two people are married</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability both people have blood type <span class="math inline">\(A\)</span>.</li>
+<li>Find the probability the couple have <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> blood types.</li>
+<li>Find the probability neither person has an <span class="math inline">\(A\)</span> type.</li>
+</ol>
+<ol start="23" style="list-style-type: decimal">
+<li><strong>Five-Game Playoffs</strong></li>
+</ol>
+<p>Consider the “best of five” playoff series between the Yankees and the Indians. We assume the probability the Yankees win a single game is 0.6.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability the Yankees win in three games.</li>
+<li>Find the probability the series lasts exactly three games.</li>
+<li>Find the probability the series lasts five games and no team wins more than one game in a row.</li>
+</ol>
+<ol start="24" style="list-style-type: decimal">
+<li><strong>Computer and Video Games</strong></li>
+</ol>
+<p>The Entertainment Software Association reports that of all computer and video games sold, 53% are rated <span class="math inline">\(E\)</span> (Everyone), 30% are rated <span class="math inline">\(T\)</span> (Teen), and 16% are rated <span class="math inline">\(M\)</span> (Mature). Suppose three customers each purchase a game at a local store. Assume that the software choices for the customers can be regarded as independent events.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability that all three customers buy games that are rated <span class="math inline">\(E\)</span>.</li>
+<li>Find the probability that exactly one customer purchases an <span class="math inline">\(M\)</span> rated game.</li>
+<li>Find the probability that the customers purchase games with the same rating.</li>
+</ol>
+<ol start="25" style="list-style-type: decimal">
+<li><strong>Washer and Dryer Repair</strong></li>
+</ol>
+<p>Suppose you purchase a washer and dryer from a particular manufacturer. From reading a consumer magazine, you know that 20% of the washers and 10% of the dryers will need some repair during the warranty period.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability that both the dryer and washer will need repair during the warranty period.</li>
+<li>Find the probability that exactly one of the machines will need repair.</li>
+<li>Find the probability the neither machine will need repair.</li>
+</ol>
+<ol start="26" style="list-style-type: decimal">
+<li><strong>Basketball Shooting</strong></li>
+</ol>
+<p>In a basketball game, a player has a “one and one” opportunity at the free-throw line. If she misses the first shot, she is done. If instead she makes the first shot, she will have an opportunity to make a second shot. From past data, you know that the probability this player will make a single free-throw shot is 0.7.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability the player only takes a single free-throw.</li>
+<li>Find the probability the player makes two shots.</li>
+<li>Find the probability the player makes the first shot and misses the second.</li>
+</ol>
+<ol start="27" style="list-style-type: decimal">
+<li><strong>Playing Roulette</strong></li>
+</ol>
+<p>You play the game of roulette in Reno. Each game you always bet on “red” and the chance that you win is 18/38. Suppose you play the game four times.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability you win in all games.</li>
+<li>Find the probability you win in the first and third games, and lose in the second and fourth games.</li>
+<li>Find the probability you win in exactly two of the four games.</li>
+</ol>
+<ol start="28" style="list-style-type: decimal">
+<li><strong>Is a Die Fair?</strong></li>
+</ol>
+<p>Suppose a friend is about to roll a die. The die either is the usual “fair” type or it is a “special” type that has two sides showing 1, two sides showing 2, and two sides showing 3. You believe that the die is the fair type with probability 0.9. Your friend rolls the die and you observe a 1.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Find the probability that a 1 is rolled.</li>
+<li>If you observe a 1, what is the probability your friend was rolling the fair die?</li>
+</ol>
+<ol start="29" style="list-style-type: decimal">
+<li><strong>How Many Fish?</strong></li>
+</ol>
+<p>You are interested in learning about the number of fish in the pond in your back yard. It is a small pond, so you do not expect many fish to live in it. In fact, you believe that the number of fish in the pond is equally likely to be 1, 2, 3, or 4. To learn about the number of fish, you will perform a capture-recapture experiment. You first catch one of the fish, tag it, and return it to the pond. After a period of time, you catch another fish and observe that it is tagged and this fish is also tossed back into the pond.</p>
+<ol style="list-style-type: lower-alpha">
+<li>There are two stages of this experiment. At the first stage you have 1, 2, 3, or 4 fish in the pond, and at the second stage, you observe either a tagged or not-tagged fish. Draw a tree diagram to represent this experiment, and label the branches of the tree with the given probabilities.</li>
+<li>Find the probability of getting a tagged fish.</li>
+<li>If you find a tagged fish, find the probability there was exactly 1 fish in the pond. Also find the probabilities of exactly 2 fish, 3 fish, and 4 fish in the pond.</li>
+</ol>
+<ol start="30" style="list-style-type: decimal">
+<li><strong>Shopping at the Mall</strong></li>
+</ol>
+<p>Suppose that you are shopping in a large mall in a metropolitan area. The people who shop at this mall either live downtown or in the suburbs. Recently a market research firm surveyed mall shoppers — from this survey, they believe that 70% of the shoppers live in the suburbs and 30% live downtown. You know that there is a relationship between one’s political affiliation and where the person lives. You know that 40% of the adults who live in the suburbs are registered Democrats and 80% of the downtown residents are Democrats.</p>
+<ol style="list-style-type: lower-alpha">
+<li>If you let <span class="math inline">\(T\)</span> = event that shopper lives downtown, <span class="math inline">\(S\)</span> = event that shopper lives in the suburbs and <span class="math inline">\(D\)</span> = event that shopper is a Democrat, write down the probabilities given in the above paragraph.</li>
+<li>Suppose you interview a random shopper. Find the probability that the shopper is a Democrat.</li>
+<li>If your shopper is a Democrat, find the probability he/she lives in the suburbs.</li>
+</ol>
+<ol start="31" style="list-style-type: decimal">
+<li><strong>What Bag?</strong></li>
+</ol>
+<p>Suppose that you have two bags in your closet. The “white bag” contains four white balls and the “mixed bag” contains two white and two black balls. The closet is dark and you just grab one bag out at random and select a ball. The ball you choose can either be white or black.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Suppose there are 1000 hypothetical bags in your closet. By use the Bayes’ box shown below, classify the 1000 bags by the type “white” and `mixed&quot; and the ball color observed.</li>
+</ol>
+<table>
+<tbody>
+<tr class="odd">
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">White</td>
+<td align="center">Black</td>
+<td align="center">TOTAL</td>
+</tr>
+<tr class="even">
+<td align="center">Bag</td>
+<td align="center">White</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="odd">
+<td align="center">type</td>
+<td align="center">Mixed</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+</tr>
+<tr class="even">
+<td align="center">TOTAL</td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center"></td>
+<td align="center">1000</td>
+</tr>
+</tbody>
+</table>
+<ol start="2" style="list-style-type: lower-alpha">
+<li>Using the Bayes’ box, find the probability that you observe a white ball.</li>
+<li>If you observe a white ball, find the probability that you were selecting from the white bag.</li>
+</ol>
+<p><strong>R Exercises</strong></p>
+<ol start="32" style="list-style-type: decimal">
+<li><strong>Conditional Probability</strong></li>
+</ol>
+<p>Suppose you have two spinners – one spinner is equally likely to land on the numbers 1, 2, 3, and the second spinner is equally likely to land on 1, 2, 3, 4, 5.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Using two applications of the <code>sample()</code> function, create a data frame containing 1000 random spins from the first spinner and 1000 random spins from the second spinner.</li>
+<li>Use the <code>filter()</code> function to take a subset of the data frame created in part (a), keeping only the rows where the sum of spins is less than 5.</li>
+<li>Using the output from part (b), approximate the probability the first spin is equal to 1 given that the sum of spins is less than 5.</li>
+<li>By use of the <code>filter()</code> function, approximate the probability the sum of spins is less than 5 given that the first spin is equal to 1.</li>
+</ol>
+<ol start="33" style="list-style-type: decimal">
+<li><strong>Rolling a Random Die</strong></li>
+</ol>
+<p>Suppose you spin a spinner that is equally likely to land on the values 1, 2, 3, 4. If the spinner lands on 1, then you roll a fair die; otherwise (if the spinner lands on 2, 3, 4), you roll a weighted die where an even roll is twice as likely as an odd roll.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Create a data frame where <code>Spin</code> contains 1000 spins from the random spinner, <code>Die1</code> contains 1000 rolls from the fair die and <code>Die2</code> contains 1000 rolls from the biased die.</li>
+<li>By use of the <code>ifelse()</code> function, define a new variable <code>Die</code> representing the roll of the “random” die, where the outcome depends on the value of the spinner.</li>
+<li>Find the probability the random die roll is equal to 3.</li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="counting-methods.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="discrete-distributions.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"google": false,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/03-conditional.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
