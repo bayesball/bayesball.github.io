@@ -358,6 +358,7 @@ For example, in Chapter 4, the number of successes in a Binomial experiment was 
  \]</span></p>
 <p><strong>Joint probability mass function</strong></p>
 <p>Suppose this calculation is done for every possible pair of values of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. The table of probabilities is given in Table 6.1.</p>
+<p>Table 6.1. Joint pdf for (<span class="math inline">\(X, Y\)</span>) for balls in box example.</p>
 <table>
 <tbody>
 <tr class="odd">
@@ -402,7 +403,6 @@ For example, in Chapter 4, the number of successes in a Binomial experiment was 
 </tr>
 </tbody>
 </table>
-<p>Joint pmf for <span class="math inline">\((X, Y)\)</span> for balls in box example.</p>
 <p>This table is called the joint probability mass function (pmf) <span class="math inline">\(f(x, y)\)</span> of (<span class="math inline">\(X, Y\)</span>).<br />
 As for any probability distribution, one requires that each of the probability values are nonnegative and the sum of the probabilities over all values of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is one. That is, the function <span class="math inline">\(f(x, y)\)</span> satisfies two properties:</p>
 <ol style="list-style-type: decimal">
@@ -412,16 +412,18 @@ As for any probability distribution, one requires that each of the probability v
 <p>It is clear from Table 6.1 that all of the probabilities are nonnegative and the reader can confirm that the sum of the probabilities is equal to one.</p>
 <p>Using Table 6.1, one sees that some particular pairs <span class="math inline">\((x, y)\)</span> are not possible as <span class="math inline">\(f(x, y) = 0\)</span>. For example, <span class="math inline">\(f(0, 1) = 0\)</span> which means that it is not possible to observe 0 red balls and 1 white ball in the sample. Note that five balls were sampled, and if one only observed one red or white ball, that means that one must have sampled <span class="math inline">\(5 - 1 = 4\)</span> black balls which is not possible.</p>
 <p>One finds probabilities of any event involving <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> by summing probabilities from Table 6.1.</p>
-<p>() {} By the table, one sees that this is possible only when <span class="math inline">\(X = 1, Y = 1\)</span> or <span class="math inline">\(X = 2, Y = 2\)</span>. So the probability
+<ul>
+<li>{} By the table, one sees that this is possible only when <span class="math inline">\(X = 1, Y = 1\)</span> or <span class="math inline">\(X = 2, Y = 2\)</span>. So the probability
 <span class="math display">\[
 P(X = Y) = f(1, 1) + f(2, 2) = \frac{12}{252} + \frac{54}{252} = \frac{66}{252}.
-\]</span>
-() {} From the table, one identifies the outcomes where <span class="math inline">\(X &gt; Y\)</span>, and then sums the corresponding probabilities.
+\]</span></li>
+<li>{} From the table, one identifies the outcomes where <span class="math inline">\(X &gt; Y\)</span>, and then sums the corresponding probabilities.
 <span class="math display">\[\begin{align*}
 P(X &gt; Y) &amp; = f(1, 0) + f(2, 0) + f(2, 1) + f(3, 0) + f(3, 1) + f(3, 2) \\
 &amp; = \frac{12}{252} + \frac{3}{252} + \frac{36}{252} + \frac{3}{252} + \frac{12}{252} + \frac{6}{252} \\
 &amp; =  \frac{72}{252}
-\end{align*}\]</span></p>
+\end{align*}\]</span></li>
+</ul>
 
 <p><strong>Simulating sampling from a box</strong></p>
 <p>The variable  is a vector containing the colors of the ten balls in the box. The function  simulates drawing five balls from the box and computing the number of red balls and number of white balls.</p>
@@ -440,10 +442,10 @@ P(X &gt; Y) &amp; = f(1, 0) + f(2, 0) + f(2, 1) + f(3, 0) + f(3, 1) + f(3, 2) \\
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">table</span>(results<span class="op">$</span>X, results<span class="op">$</span>Y) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
 <pre><code>##    
 ##         0     1     2     3     4
-##   0 0.000 0.000 0.027 0.042 0.008
-##   1 0.000 0.059 0.192 0.155 0.014
-##   2 0.010 0.152 0.222 0.044 0.000
-##   3 0.008 0.042 0.025 0.000 0.000</code></pre>
+##   0 0.000 0.000 0.023 0.044 0.014
+##   1 0.000 0.047 0.236 0.146 0.014
+##   2 0.008 0.133 0.214 0.054 0.000
+##   3 0.008 0.037 0.022 0.000 0.000</code></pre>
 <p><strong>Marginal probability functions</strong></p>
 <p>Once a joint probability mass function for <span class="math inline">\((X, Y)\)</span> has been constructed, one finds probabilities for one of the two variables. In our balls example, suppose one wants to find the probability that exactly three red balls are chosen, that is <span class="math inline">\(P(X = 3)\)</span>. This probability is found by summing values of the pmf <span class="math inline">\(f(x, y)\)</span> where <span class="math inline">\(x = 3\)</span> and <span class="math inline">\(y\)</span> can be any possible value of the random variable <span class="math inline">\(Y\)</span>, that is,
 <span class="math display">\[\begin{align*}
@@ -453,10 +455,12 @@ P(X &gt; Y) &amp; = f(1, 0) + f(2, 0) + f(2, 1) + f(3, 0) + f(3, 1) + f(3, 2) \\
  &amp; = \frac{21}{252}.
  \end{align*}\]</span></p>
 <p>This operation is done for each of the possible values of <span class="math inline">\(X\)</span> – the {} probability mass function of <span class="math inline">\(X\)</span>, <span class="math inline">\(f_X()\)</span> is defined as follows:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:dmarginal">\[\begin{equation}
  f_X(x) = \sum_y f(x, y).
+ \tag{6.1}
  \end{equation}\]</span>
 One finds this marginal pmf of <span class="math inline">\(X\)</span> from Table 6.1 by summing the joint probabilities for each row of the table. The marginal pmf is displayed in Table 6.2.</p>
+<p>Table 6.2. Marginal pmf for <span class="math inline">\(X\)</span> in balls in box example.</p>
 <table>
 <thead>
 <tr class="header">
@@ -483,11 +487,11 @@ One finds this marginal pmf of <span class="math inline">\(X\)</span> from Table
 </tr>
 </tbody>
 </table>
-<p>Marginal pmf for <span class="math inline">\(X\)</span> in balls in the balls example.</p>
 <p>Note that a marginal pmf is a legitimate probability function in that the values are nonnegative and the probabilities sum to one.</p>
 <p>One can also find the marginal pmf of <span class="math inline">\(Y\)</span>, denoted by <span class="math inline">\(f_Y()\)</span>, by a similar operation – for a fixed value of <span class="math inline">\(Y = y\)</span> one sums over all of the possible values of <span class="math inline">\(X\)</span>.
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:dmarginal2">\[\begin{equation}
  f_Y(y) = \sum_x f(x, y).
+ \tag{6.2}
 \end{equation}\]</span></p>
 <p>For example, if one wants to find <span class="math inline">\(f_Y(2) = P(Y = 2)\)</span> in our example, one sums the joint probabilities in Table 6.1 over the rows in the column where <span class="math inline">\(Y = 2\)</span>. One obtains the probability:
 <span class="math display">\[\begin{align*}
@@ -497,6 +501,7 @@ One finds this marginal pmf of <span class="math inline">\(X\)</span> from Table
  &amp; = \frac{120}{252}.
  \end{align*}\]</span>
 By repeating this exercise for each value of <span class="math inline">\(Y\)</span>, one obtains the marginal pmf displayed in Table 6.3.</p>
+<p>Table 6.3. Marginal pmf for <span class="math inline">\(Y\)</span> in balls in box example.</p>
 <table>
 <thead>
 <tr class="header">
@@ -527,7 +532,6 @@ By repeating this exercise for each value of <span class="math inline">\(Y\)</sp
 </tr>
 </tbody>
 </table>
-<p>Marginal pmf for <span class="math inline">\(Y\)</span> in balls in the balls example.</p>
 <p><strong>Conditional probability mass functions</strong></p>
 <p>In Chapter 3, the conditional probability of an event <span class="math inline">\(A\)</span> was defined given knowledge of another event <span class="math inline">\(B\)</span>. Moving back to the sampling balls from a box example, suppose one is told that exactly two red balls are sampled, that is <span class="math inline">\(X\)</span> = 2 – how does that information change the probabilities about the number of white balls <span class="math inline">\(Y\)</span>?</p>
 <p>In this example, one is interested in finding <span class="math inline">\(P(Y = y \mid X = 2)\)</span>. Using the definition of conditional probability, one has
@@ -542,6 +546,7 @@ For example, the probability of observing two white balls given that we have two
  &amp; = \frac{54 / 252}{105/252} = \frac{54}{105}. \\
  \end{align*}\]</span></p>
 <p>Suppose this calculation is repeated for all possible values of <span class="math inline">\(Y\)</span> – one obtains the values displayed in Table 6.4.</p>
+<p>Table 6.4. Conditional pmf for <span class="math inline">\(Y\)</span> given <span class="math inline">\(X = 2\)</span> in balls in box example.</p>
 <table>
 <thead>
 <tr class="header">
@@ -568,7 +573,6 @@ For example, the probability of observing two white balls given that we have two
 </tr>
 </tbody>
 </table>
-<p>Conditional pmf for <span class="math inline">\(Y\)</span> given <span class="math inline">\(X = 2\)</span> in balls in the balls example.</p>
 <p>These probabilities represent the conditional pmf for <span class="math inline">\(Y\)</span> conditional on <span class="math inline">\(X = 2\)</span>. This conditional pmf is just like any other probability distribution in that the values are nonnegative and they sum to one. To illustrate using this distribution, suppose one ais told that two red balls are selected (that is, <span class="math inline">\(X = 2\)</span>) and one wants to find the probability that more than one white ball is chosen. This probability is given by
 <span class="math display">\[\begin{align*}
  P(Y &gt; 1 \mid X = 2) &amp; = \Sigma_{y &gt;1} \, \, f_{Y \mid X}(y \mid X = 2) \\
@@ -576,8 +580,9 @@ For example, the probability of observing two white balls given that we have two
  &amp; = \frac{54}{105} + \frac{12}{105} = \frac{66}{105}.
  \end{align*}\]</span></p>
 <p>In general, the conditional probability mass function of <span class="math inline">\(Y\)</span> conditional on <span class="math inline">\(X = x\)</span>, denoted by <span class="math inline">\(f_{Y\ mid X}(y \mid x)\)</span>, is defined to be
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:dconditional">\[\begin{equation}
  f_{Y \mid X}(y \mid x)  = \frac{f(x, y)}{f_X(x)}, \, \, {\rm if} \, \, f_X(x) &gt; 0.
+ \tag{6.3}
  \end{equation}\]</span></p>
 <p></p>
 <p><strong>Simulating sampling from a box</strong></p>
@@ -591,10 +596,10 @@ For example, the probability of observing two white balls given that we have two
 <pre><code>## # A tibble: 4 x 3
 ##       Y     N      P
 ##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
-## 1     0    10 0.0234
-## 2     1   152 0.355 
-## 3     2   222 0.519 
-## 4     3    44 0.103</code></pre>
+## 1     0     8 0.0196
+## 2     1   133 0.325 
+## 3     2   214 0.523 
+## 4     3    54 0.132</code></pre>
 </div>
 <div id="multinomial-experiments" class="section level2">
 <h2><span class="header-section-number">6.2</span> Multinomial Experiments</h2>
@@ -605,8 +610,9 @@ For example, the probability of observing two white balls given that we have two
 If <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span>, …, <span class="math inline">\(X_k\)</span> denote the number of 1s, 2s, …, <span class="math inline">\(k\)</span>s observed in the <span class="math inline">\(n\)</span> trials, the vector of outcomes <span class="math inline">\(X\)</span> = <span class="math inline">\((X_1, X_2, ..., X_n)\)</span> has a Multinomial distribution with sample size <span class="math inline">\(n\)</span> and vector of probabilities <span class="math inline">\(p = (p_1, p_2, ..., p_k)\)</span>.</p>
 <p>In our example, each die roll has <span class="math inline">\(k = 3\)</span> possible outcomes and the associated vector of probabilities is <span class="math inline">\(p = (1/6, 2/6, 3/6)\)</span>. The number of observed 1s, 2s, 3s in <span class="math inline">\(n = 10\)</span> trials, <span class="math inline">\(X = (X_1, X_2, X_3)\)</span> has a Multinomial distribution with parameters <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span>.</p>
 <p>By generalizing the arguments made in Chapter 4, one can show that the probability that <span class="math inline">\(X_1 = x_1, ..., X_k = x_k\)</span> has the general form
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:multinomial">\[\begin{equation}
 f(x_1, ..., x_k) = \left(\frac{n!}{n_1! ... n_k!}\right) \prod_{j=1}^k p_j^{x_j},
+\tag{6.4}
 \end{equation}\]</span>
 where <span class="math inline">\(x_j = 0, 1, 2, ..., j = 1, ... k\)</span> and <span class="math inline">\(\sum_{j=1}^n x_j = n\)</span>.</p>
 <p>This formula can be used to compute a probability for our example. One has <span class="math inline">\(n = 10\)</span> trials and the outcome ``three 1’s and five 2’s&quot; is equivalent to the outcome <span class="math inline">\(X_1 = 3, X_2 = 5\)</span>. Note that the number of 3s <span class="math inline">\(X_3\)</span> is not random since we know that <span class="math inline">\(X_1 + X_2 + X_3 = 10\)</span>. The probability vector is <span class="math inline">\(p = (1/6, 2/6, 3/6)\)</span>. By substituting in the formula, we have
@@ -669,23 +675,23 @@ The results of the remaining <span class="math inline">\(10 - 3 = 7\)</span> tri
 <a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">names</span>(results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;X3&quot;</span>)</a>
 <a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">head</span>(results)</a></code></pre></div>
 <pre><code>##   X1 X2 X3
-## 1  0  2  8
-## 2  0  3  7
-## 3  2  2  6
-## 4  1  2  7
-## 5  3  3  4
-## 6  1  3  6</code></pre>
+## 1  2  2  6
+## 2  3  0  7
+## 3  3  2  5
+## 4  2  3  5
+## 5  2  4  4
+## 6  2  4  4</code></pre>
 <p>Given this simulated output, one can compute many different probabilities of interest. For example, suppose one is interested in <span class="math inline">\(P(X_1 + X_2 &lt; 5)\)</span>. One approximates this probability by simulation by finding the proportion of simulated pairs (<code>X1, X2</code>) where <code>X1 + X2 &lt; 5</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">results <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">P =</span> <span class="kw">sum</span>(X1 <span class="op">+</span><span class="st"> </span>X2 <span class="op">&lt;</span><span class="st"> </span><span class="dv">5</span>) <span class="op">/</span><span class="st"> </span><span class="dv">5000</span>)</a></code></pre></div>
-<pre><code>##       P
-## 1 0.373</code></pre>
+<pre><code>##        P
+## 1 0.3676</code></pre>
 <p>Suppose one is interested in finding the mean of the distribution of <span class="math inline">\(X_1\)</span> conditional on <span class="math inline">\(X_2 = 3\)</span>. The <code>filter()</code> function is used to choose only the Multinomial results where <code>X2 = 3</code> and the <code>summarize()</code> function finds the mean of <code>X1</code> among these results. One estimates <span class="math inline">\(E(X_1 \mid X_2 = 3) \approx 1.79193.\)</span> Note that it was found earlier that the conditional distribution of <span class="math inline">\(X_1\)</span> conditional on <span class="math inline">\(X_2 = 3\)</span> is Binomial(<span class="math inline">\(7, 1/4\)</span>) with mean <span class="math inline">\(7 (1 /4)\)</span> which is consistent with the simulation-based calculation.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">results <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(X2 <span class="op">==</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb13-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">X1_M =</span> <span class="kw">mean</span>(X1))</a></code></pre></div>
-<pre><code>##       X1_M
-## 1 1.747754</code></pre>
+<pre><code>##      X1_M
+## 1 1.75188</code></pre>
 </div>
 <div id="joint-density-functions" class="section level2">
 <h2><span class="header-section-number">6.3</span> Joint Density Functions</h2>
@@ -710,12 +716,14 @@ Similarly for two variables, any function <span class="math inline">\(f(x, y)\)<
 </p>
 <ol style="list-style-type: decimal">
 <li>Density is nonnegative over the whole plane:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:jointcont1">\[\begin{equation}
 f(x, y) \ge 0, \, \, {\rm for} \, {\rm all} \, \, x, y.
+\tag{6.5}
 \end{equation}\]</span></li>
 <li>The total volume under the density is equal to one:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:jointcont2">\[\begin{equation}
 \int \int f(x, y) dx dy = 1.
+\tag{6.6}
 \end{equation}\]</span></li>
 </ol>
 <p>One can check that the pdf in our example is indeed a legitimate pdf. It is pretty obvious that the density that was defined is nonnegative, but it is less clear that the integral of the density is equal to one. Since the density is a plane of constant height, one computes this double integral geometrically. Using the familiar ``one half base times height&quot; argument, the area of the triangle in the plane is <span class="math inline">\((1/2) (2) (2) = 2\)</span> and since the pdf has constant height of <span class="math inline">\(1/2\)</span>, the volume under the surface is equal to <span class="math inline">\(2 (1/2) =1\)</span>.</p>
@@ -737,12 +745,14 @@ Figure 6.2: Shaded region where x + y &gt; 3 in the choose two points example.
  \end{align*}\]</span></p>
 <p><strong>Marginal probability density functions</strong></p>
 <p>Given a joint pdf <span class="math inline">\(f(x, y)\)</span> that describes probabilities of two continuous variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, one summarizes probabilities about each variable individually by the computation of marginal pdfs. The marginal pdf of <span class="math inline">\(X\)</span>, <span class="math inline">\(f_X(x)\)</span>, is obtained by integrating out <span class="math inline">\(y\)</span> from the joint pdf.
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:margcont1">\[\begin{equation}
 f_X(x) = \int f(x, y) dy.
+\tag{6.7}
 \end{equation}\]</span>
 In a similar fashion, one defines the marginal pdf of <span class="math inline">\(Y\)</span> by integrating out <span class="math inline">\(x\)</span> from the joint pdf.
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:margcont2">\[\begin{equation}
 f_Y(x) = \int f(x, y) dx.
+\tag{6.8}
 \end{equation}\]</span></p>
 <p>Let’s illustrate the computation of marginal pdfs for our example. One has to be careful about the limits of the integration due to the dependence between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> in the support of the joint density. Looking back at Figure 6.1, one sees that if the value of <span class="math inline">\(x\)</span> is fixed, then the limits for <span class="math inline">\(y\)</span> go from <span class="math inline">\(x\)</span> to 2. So the marginal density of <span class="math inline">\(X\)</span> is given by
 <span class="math display">\[\begin{align*}
@@ -757,8 +767,9 @@ By a similar calculation, one can verify that the marginal density of <span clas
 <p><strong>Conditional probability density functions</strong></p>
 <p>Once a joint pdf <span class="math inline">\(f(x, y)\)</span> has been defined, one can also define conditional pdfs. In our example, suppose one is told that the first random location is equal to <span class="math inline">\(X = 1.5\)</span>. What has one learned about the value of the second random variable <span class="math inline">\(Y\)</span>?</p>
 <p>To answer this question, one defines the notion of a conditional pdf. The conditional pdf of the random variable <span class="math inline">\(Y\)</span> given the value <span class="math inline">\(X = x\)</span> is defined as the quotient
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:condcont1">\[\begin{equation}
 f_{Y \mid X}(y \mid X = x) = \frac{f(x, y)}{f_X(x)}, \, \, {\rm if} \, \, f_X(x) &gt; 0.
+\tag{6.9}
 \end{equation}\]</span>
 In our example one is given that <span class="math inline">\(X = 1.5\)</span>. Looking at Figure 6.1, one sees that when <span class="math inline">\(X = 1.5\)</span>, the only possible values of <span class="math inline">\(Y\)</span> are between 1.5 and 2. By substituting the values of <span class="math inline">\(f(x, y)\)</span> and <span class="math inline">\(f_X(x)\)</span>, one obtains
 <span class="math display">\[\begin{align*}
@@ -777,8 +788,9 @@ In other words, the conditional density for <span class="math inline">\(Y\)</spa
 <p>Above, we looked at the pdf of <span class="math inline">\(Y\)</span> conditional on a value of <span class="math inline">\(X\)</span>. One can also consider a pdf of <span class="math inline">\(X\)</span> conditional on a value of <span class="math inline">\(Y\)</span>. Returning to our example, suppose that one learns that <span class="math inline">\(Y\)</span>, the larger random variable on the interval is equal to 0.8. In this case, what would one expect for the random variable <span class="math inline">\(X\)</span>?</p>
 <p>This question is answered in two steps – one first finds the conditional pdf of <span class="math inline">\(X\)</span> conditional on <span class="math inline">\(Y = 0.8\)</span>. Then once this conditional pdf is found, one finds the mean of this distribution.</p>
 <p>The conditional pdf of <span class="math inline">\(X\)</span> given the value <span class="math inline">\(Y = y\)</span> is defined as the quotient
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:condcont2">\[\begin{equation}
 f_{X \mid Y}(x \mid Y = y) = \frac{f(x, y)}{f_Y(y)}, \, \, {\rm if} \, \, f_Y(y) &gt; 0.
+\tag{6.10}
 \end{equation}\]</span>
 Looking back at Figure 6.1, one sees that if <span class="math inline">\(Y = 0.8\)</span>, the possible values of <span class="math inline">\(X\)</span> are from 0 to 0.8. Over these values the conditional pdf of <span class="math inline">\(X\)</span> is given by
 <span class="math display">\[\begin{align*}
@@ -820,8 +832,9 @@ Figure 6.3: Three dimensional display of the pdf of f(x; y) = x + y defined over
 Similarly, one can show that the marginal density of <span class="math inline">\(Y\)</span> is given by <span class="math inline">\(f_Y(y) = y + \frac{1}{2}\)</span> for <span class="math inline">\(0 &lt; y &lt; 1\)</span>.</p>
 <p><strong>Independence</strong></p>
 <p>Two random variables <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are said to be {} if the joint pdf factors into a product of their marginal densities, that is
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:independence">\[\begin{equation}
 f(x, y) = f_X(x) f_Y(y).
+\tag{6.11}
 \end{equation}\]</span>
 for all values of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. Are <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> independent in our example? Since we have computed the marginal densities, we look at the product
 <span class="math display">\[
@@ -830,14 +843,16 @@ f_X(x) f_Y(y) = (x + \frac{1}{2}) (y + \frac{1}{2})
 which is clearly not equal to the joint pdf <span class="math inline">\(f(x, y) = x + y\)</span> for values of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> in the unit square. So <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are not independent in this example.</p>
 <p><strong>Measuring association by covariance</strong></p>
 <p>In the situation like this one where two random variables are not independent, it is desirable to measure the association pattern. A standard measure of association is the covariance defined as the expectation
-<span class="math display">\[\begin{align}
+<span class="math display" id="eq:cov1">\[\begin{align}
  Cov(X, Y) &amp; = E\left((X - \mu_X) (Y - \mu_Y)\right) \nonumber \\
  &amp; =\int \int (x - \mu_X)(y - \mu_Y) f(x, y) dx dy. 
+ \tag{6.12}
  \end{align}\]</span>
 For computational purposes, one writes the covariance as
-<span class="math display">\[\begin{align}
+<span class="math display" id="eq:cov2">\[\begin{align}
  Cov(X, Y) &amp;  = E(X Y) - \mu_X \mu_Y \nonumber \\ 
  &amp; = \int \int (x y) f(x, y) dx dy - \mu_X \mu_Y.
+ \tag{6.13}
  \end{align}\]</span></p>
 <p>For our example, one computes the expectation <span class="math inline">\(E(XY)\)</span> from the joint density:
 <span class="math display">\[\begin{align*}
@@ -852,8 +867,9 @@ One can compute that the means of <span class="math inline">\(X\)</span> and <sp
  &amp; = -\frac{1}{144}.
  \end{align*}\]</span></p>
 <p>It can be difficult to interpret a covariance value since it depends on the scale of the support of the <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> variables. One standardizes this measure of association by dividing by the standard deviations of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> resulting in the correlation measure <span class="math inline">\(\rho\)</span>:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:rho1">\[\begin{equation}
  \rho = \frac{Cov(X, Y)}{\sigma_X \sigma_Y}.
+ \tag{6.14}
  \end{equation}\]</span>
 In a separate calculation one can find the variances of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> to be <span class="math inline">\(\sigma_X^2 = 11/144\)</span> and <span class="math inline">\(\sigma_Y^2 = 11/144\)</span>. Then the correlation is given by
 <span class="math display">\[\begin{align*}
@@ -917,12 +933,14 @@ Figure 6.5: Scatterplot of 500 simulated draws from the joint density of the pro
 <h2><span class="header-section-number">6.6</span> Bivariate Normal Distribution</h2>
 <p>Suppose one collects multiple body measurements from a group of 30 students. For example, for each of 30 students, one might collect the diameter of the wrist and the diameter of the ankle. If <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> denote the two body measurements (measured in cm) for a student, then one might think that the density of <span class="math inline">\(X\)</span> and the density of <span class="math inline">\(Y\)</span> is each Normally distributed. Moreover, the two random variables would be positively correlated – if a student has a large wrist diameter, one would predict her to also have a large forearm length.</p>
 <p>A convenient joint density function for two continuous measurements <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, each variable measured on the whole real line, is the Bivariate Normal density with density given by
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:binormal">\[\begin{equation}
 f(x, y) = \frac{1}{2 \pi \sigma_X \sigma_Y \sqrt{1 - \rho}} \exp\left[-\frac{1}{2 (1 - \rho^2)}(z_X^2 - 2 \rho z_X z_Y + z_Y^2)\right],
+\tag{6.15}
 \end{equation}\]</span>
 where <span class="math inline">\(z_X\)</span> and <span class="math inline">\(z_Y\)</span> are the standardized scores
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:zscores">\[\begin{equation}
 z_X = \frac{x - \mu_X}{\sigma_X}, \, \, \, z_Y = \frac{y - \mu_Y}{\sigma_Y},
+\tag{6.16}
 \end{equation}\]</span>
 and <span class="math inline">\(\mu_X, \mu_Y\)</span> and <span class="math inline">\(\sigma_X, \sigma_Y\)</span> are respectively the means and standard deviations of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>. The parameter <span class="math inline">\(\rho\)</span> is the correlation of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> and measures the association between the two variables.</p>
 <p>Figure 6.6 shows contour plots of four Bivariate Normal distributions. The bottom right graph corresponds to the values <span class="math inline">\(\mu_X = 17, \mu_Y = 23, \sigma_X = 2, \sigma_Y = 3\)</span> and <span class="math inline">\(\rho = 0.4\)</span> where <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> represent the wrist diameter and ankle diameter measurements of the student. The correlation value of <span class="math inline">\(\rho = 0.4\)</span> reflects the moderate positive correlation of the two body measurements. The other three graphs use the same means and standard deviations but different values of the <span class="math inline">\(\rho\)</span> parameter. This figure shows that the Bivariate Normal distribution is able to model a variety of association structures between two continuous measurements.</p>
@@ -941,7 +959,9 @@ Figure 6.6: Contour graphs of four Bivariate Normal distributions with different
 <p><span class="math display">\[\begin{equation}
 E(X \mid Y = y) = \mu_X + \rho \frac{\sigma_X}{\sigma_Y}(y - \mu_Y), \, \, Var(X \mid Y = y) = \sigma_X^2(1 - \rho^2).
 \end{equation}\]</span>
-Similarly, if one knows that <span class="math inline">\(X = x\)</span>, then the conditional density of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X = x\)</span> is Normal with mean $ _Y + (x - _X)$ and variance $ _Y^2(1 - ^2)$.</p>
+Similarly, if one knows that <span class="math inline">\(X = x\)</span>, then the conditional density of <span class="math inline">\(Y\)</span> given <span class="math inline">\(X = x\)</span> is Normal with mean
+<span class="math inline">\(\mu_Y + \rho \frac{\sigma_Y}{\sigma_X}(x - \mu_X)\)</span> and variance
+<span class="math inline">\(\sigma_Y^2(1 - \rho^2)\)</span>.</p>
 <ol start="3" style="list-style-type: decimal">
 <li><strong>For a Bivariate Normal distribution, <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are independent if and only if the correlation <span class="math inline">\(\rho = 0\)</span>.</strong> In contrast, as the correlation parameter <span class="math inline">\(\rho\)</span> approaches <span class="math inline">\(+1\)</span> and <span class="math inline">\(-1\)</span>, then all of the probability mass will be concentrated on a line where <span class="math inline">\(Y = a X + b\)</span>.</li>
 </ol>
@@ -990,7 +1010,7 @@ Similarly, if one knows that <span class="math inline">\(X = x\)</span>, then th
 <a class="sourceLine" id="cb23-10" data-line-number="10"><span class="kw">names</span>(sdata) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)</a>
 <a class="sourceLine" id="cb23-11" data-line-number="11">sdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="kw">mean</span>(Y <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.5</span> <span class="op">*</span><span class="st"> </span>X))</a></code></pre></div>
 <pre><code>##   mean(Y &gt; 1.5 * X)
-## 1             0.243</code></pre>
+## 1              0.21</code></pre>
 <div class="figure"><span id="fig:unnamed-chunk-20"></span>
 <img src="../LATEX/figures/chapter6/Binorm_scatter.png" alt="Scatterplot of simulated draws from the Bivariate Normal in body measurement example.  The probability that $Y &gt; 1.5 X$ is approximated by the proportion of simulated points that fall to the left of the line $y = 1.5 x$." width="500" />
 <p class="caption">

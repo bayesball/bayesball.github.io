@@ -210,7 +210,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7.3" data-path="proportion.html"><a href="proportion.html#continuous-priors"><i class="fa fa-check"></i><b>7.3</b> Continuous Priors</a><ul>
 <li class="chapter" data-level="7.3.1" data-path="proportion.html"><a href="proportion.html#the-beta-distribution-and-probabilities"><i class="fa fa-check"></i><b>7.3.1</b> The Beta distribution and probabilities</a></li>
-<li class="chapter" data-level="7.3.2" data-path="proportion.html"><a href="proportion.html#choosing-a-beta-density-to-represent-prior-opinion"><i class="fa fa-check"></i><b>7.3.2</b> Choosing a Beta density to represent prior opinion</a></li>
 </ul></li>
 <li class="chapter" data-level="7.4" data-path="proportion.html"><a href="proportion.html#updating-the-beta-prior"><i class="fa fa-check"></i><b>7.4</b> Updating the Beta Prior</a><ul>
 <li class="chapter" data-level="7.4.1" data-path="proportion.html"><a href="proportion.html#bayes-rule-calculation"><i class="fa fa-check"></i><b>7.4.1</b> Bayes’ rule calculation</a></li>
@@ -336,14 +335,16 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>The Bayesian models in Chapters 7 and 8 describe the application of conjugate priors where the prior and posterior belong to the same family of distributions. In these cases, the posterior distribution has a convenient functional form such as a Beta density or Normal density, and the posterior distributions are easy to summarize. For example, if the posterior density has a Normal form, one uses the R functions <code>pnorm()</code> and <code>qnorm()</code> to compute posterior probabilities and quantiles.</p>
 <p>In a general Bayesian problem, the data <span class="math inline">\(Y\)</span> comes from a sampling density <span class="math inline">\(f(y \mid \theta)\)</span> and the parameter <span class="math inline">\(\theta\)</span> is assigned a prior density <span class="math inline">\(\pi(\theta)\)</span>.
 After <span class="math inline">\(Y = y\)</span> has been observed, the likelihood function is equal to <span class="math inline">\(L(\theta) = f(y \mid \theta)\)</span> and the posterior density is written as
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:posterior">\[\begin{equation}
 \pi(\theta \mid y) = \frac{\pi(\theta) L(\theta)}
 {\int \pi(\theta) L(\theta) d\theta}.
+\tag{9.1}
 \end{equation}\]</span>
 If the prior and likelihood function do not combine in a helpful way, the normalizing constant <span class="math inline">\(\int \pi(\theta) L(\theta) d\theta\)</span> can not be evaluated analytically. In addition, summaries of the posterior distribution are expressed as ratios of integrals. For example, the posterior mean of <span class="math inline">\(\theta\)</span> is given by
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:postmean">\[\begin{equation}
 E(\theta \mid y) = \frac{\int \theta \pi(\theta) L(\theta) d\theta}
 {\int \pi(\theta) L(\theta) d\theta}.
+\tag{9.2}
 \end{equation}\]</span>
 Computation of the posterior mean requires the evaluation of two integrals, each not expressible in closed-form.</p>
 <p>The following sections illustrate this general problem where integrals of the product of the likelihood and prior can not be evaluated analytically and so there are challenges in summarizing the posterior distribution.</p>
@@ -380,9 +381,10 @@ Figure 9.2: Two priors for representing prior opinion about a Normal mean.
 </p>
 </div>
 <p>With the use of a <span class="math inline">\(\textrm{Cauchy}(10, 2)\)</span> prior and the same Normal likelihood, the posterior density of <span class="math inline">\(\mu\)</span> is</p>
-<p><span class="math display">\[\begin{equation}
+<p><span class="math display" id="eq:cauchynormal">\[\begin{equation}
 \pi(\mu \mid y) \propto  \pi(\mu)L(\mu) \propto  
 \frac{1}{1 + \left(\frac{\mu - 10}{2}\right)^2} \times \exp\left\{-\frac{n}{2 \sigma^2}(\bar y - \mu)^2\right\}.
+\tag{9.3}
 \end{equation}\]</span></p>
 <p>In contrast with a Normal prior, one can not algebraically simplify this likelihood times prior product to obtain a “nice” functional expression for the posterior density in terms of the mean <span class="math inline">\(\mu\)</span>. That raises the question – how does one implement a Bayesian analysis when one can not easily express the posterior density in a convenient functional form?</p>
 <p><strong>The two-parameter Normal problem</strong>
@@ -473,8 +475,9 @@ If one multiplies <code>p</code> by the matrix <code>P</code> four times, one ob
 ## [1,] 0.10938 0.25 0.27734 0.21875 0.11328 0.03125</code></pre>
 <p>Starting from state 3, this particular person is most likely will be in states 2, 3, and 4 after four moves.</p>
 <p>For an irreducible, aperiodic Markov chain, there is a limiting behavior of the matrix power <span class="math inline">\(P^m\)</span> as <span class="math inline">\(m\)</span> approaches infinity. Specifically, this limit is equal to
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:mcchain">\[\begin{equation}
 W = \lim_{m \rightarrow \infty} P^m,
+\tag{9.4}
 \end{equation}\]</span>
 where <span class="math inline">\(W\)</span> has common rows equal to <span class="math inline">\(w\)</span>. The implication of this result is that, as one takes an infinite number of moves, the probability of landing at a particular state does not depend on the initial starting state.</p>
 <p>One can demonstrate this result empirically for our example. Using a loop, we take the transition matrix <span class="math inline">\(P\)</span> to the 100th power by repeatedly multiplying the transition matrix by itself. From this calculation below, note that the rows of the matrix ```Pm} appear to be approaching a constant vector. Specifically, it appears the constant vector <span class="math inline">\(w\)</span> is equal to (0.1, 0.2, 0.2, 0.2, 0.2, 0.1).</p>
@@ -558,10 +561,11 @@ Figure 9.4: A discrete probability distribution on the values 1, …, 8.
 <p>To simulate from this probability distribution, we will take a simple random walk described as follows.</p>
 <ol style="list-style-type: decimal">
 <li><p>We start at any possible location of our random variable from 1 to <span class="math inline">\(K = 8\)</span>.</p></li>
-<li><p>To decide where to visit next, a fair coin is flipped. If the coin lands heads, we think about visiting the location one value to the left, and if coin lands tails, we consider visiting the location one value to right. We call this location the ``candidate&quot; location.</p></li>
+<li><p>To decide where to visit next, a fair coin is flipped. If the coin lands heads, we think about visiting the location one value to the left, and if coin lands tails, we consider visiting the location one value to right. We call this location the “candidate” location.</p></li>
 <li><p>We compute
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:mhratio">\[\begin{equation}
 R = \frac{pd(candidate)}{pd(current)},
+\tag{9.5}
 \end{equation}\]</span>
 the ratio of the probabilities at the candidate and current locations.</p></li>
 <li><p>We spin a continuous spinner that lands anywhere from 0 to 1 – call the random spin <span class="math inline">\(X\)</span>. If <span class="math inline">\(X\)</span> is smaller than <span class="math inline">\(R\)</span>, we move to the candidate location, and otherwise we remain at the current location.</p></li>
@@ -609,20 +613,23 @@ where <span class="math inline">\(\pi(\theta)\)</span> is the prior and <span cl
 <li><p>(START) As in the random walk algorithm, we begin by selecting any <span class="math inline">\(\theta\)</span> value where the posterior density is positive – the value we select <span class="math inline">\(\theta^{(0)}\)</span> is the starting value.</p></li>
 <li><p>(PROPOSE) Given the current simulated value <span class="math inline">\(\theta^{(j)}\)</span> we propose a new value <span class="math inline">\(\theta^P\)</span> which is selected at random in the interval (<span class="math inline">\(\theta^{(j)} - C, \theta^{(j)} + C)\)</span> where <span class="math inline">\(C\)</span> is a preselected constant.</p></li>
 <li>(ACCEPTANCE PROBABILITY) One computes the ratio <span class="math inline">\(R\)</span> of the posterior density at the proposed value and the current value:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:mhratio2">\[\begin{equation}
 R = \frac{\pi_n(\theta^{P})}{\pi_n(\theta^{(j)})}.
+\tag{9.6}
 \end{equation}\]</span>
 The acceptance probability is the minimum of <span class="math inline">\(R\)</span> and 1:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:mhprob">\[\begin{equation}
 PROB = \min\{R, 1\}.
+\tag{9.7}
 \end{equation}\]</span></li>
 <li><p>(MOVE OR STAY?) One simulates a Uniform random variable <span class="math inline">\(U\)</span>. If <span class="math inline">\(U\)</span> is smaller than the acceptance probability <span class="math inline">\(PROB\)</span>, one moves to the proposed value <span class="math inline">\(\theta^P\)</span>; otherwise one stays at the current value <span class="math inline">\(\theta^{(j)}\)</span>. In other words, the next simulated draw <span class="math inline">\(\theta^{(j+1)}\)</span>
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:mhmove">\[\begin{equation}
 \theta^{(j+1)} = 
 \begin{cases}
   \theta^{p} &amp; \mbox{if} \, \, U &lt; PROB, \\
   \theta^{(j)} &amp; \mbox{elsewhere}.
 \end{cases}
+\tag{9.8}
 \end{equation}\]</span></p></li>
 <li><p>(CONTINUE) One continues by returning to Step 2 – propose a new simulated value, compute an acceptance probability, decide to move to the proposed value or stay, and so on.</p></li>
 </ol>
@@ -660,15 +667,17 @@ Figure 9.6: Illustration of the Metropolis algorithm. The left graphs show the p
 <h2><span class="header-section-number">9.4</span> Example: Cauchy-Normal problem</h2>
 <p></p>
 <p>To illustrate using the <code>metropolis()</code> function, suppose we wish to simulate 1000 values from the posterior distribution in our Buffalo snowfall problem where one uses a Cauchy prior to model one’s prior opinion about the mean snowfall amount. Recall that the posterior density of <span class="math inline">\(\mu\)</span> is proportional to
-<span class="math display">\[\begin{equation}
-\pi(\mu \mid y) \propto \frac{1}{1 + \left(\frac{\mu - 10}{2}\right)^2} \times \exp\left\{-\frac{n}{2 \sigma^2}(\bar y - \mu)^2\right\} .
+<span class="math display" id="eq:normalcauchy2">\[\begin{equation}
+\pi(\mu \mid y) \propto \frac{1}{1 + \left(\frac{\mu - 10}{2}\right)^2} \times \exp\left\{-\frac{n}{2 \sigma^2}(\bar y - \mu)^2\right\}.
+\tag{9.9}
 \end{equation}\]</span>
 There are four inputs to this posterior – the mean <span class="math inline">\(\bar y\)</span> and corresponding standard error <span class="math inline">\(\sigma / \sqrt{n}\)</span>, and the location parameter 10 and the scale parameter 2 for the Cauchy prior. Recall that for the Buffalo snowfall, we observed <span class="math inline">\(\bar y = 26.785\)</span> and <span class="math inline">\(\sigma / \sqrt{n} = 3.236\)</span>.</p>
 
 <p>First we need to define a short function defining the logarithm of the posterior density function. Ignoring constants, the logarithm of this density is given by
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:lognormcauchy">\[\begin{equation}
  \log \pi(\mu \mid y) =  - 
  \log\left\{1 + \left(\frac{\mu - 10}{2}\right)^2\right\} -\frac{n}{2 \sigma^2}(\bar y - \mu)^2.
+ \tag{9.10}
  \end{equation}\]</span></p>
 <p>The function <code>lpost()</code> returns the value of the logarithm of the posterior where <code>s</code> is a list containing the four inputs <code>ybar</code>, <code>se</code>, <code>loc</code>, and <code>scale</code>.</p>
 <pre><code>lpost &lt;- function(theta, s){
@@ -844,20 +853,23 @@ X       1     2     3     4
 <p><strong>Beta-Binomial sampling</strong>}
 </p>
 <p>The previous example demonstrated Gibbs sampling for a two-parameter discrete distribution. In fact, the Gibbs sampling algorithm works for any two-parameter distribution. To illustrate, consider a familiar Bayesian model discussed in Chapter 7. Suppose we flip a coin <span class="math inline">\(n\)</span> times and observe <span class="math inline">\(y\)</span> heads where the probability of heads is <span class="math inline">\(p\)</span>, and our prior for the heads probability is described by a Beta curve with shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. It is convenient to write <span class="math inline">\(X \mid Y = y\)</span> as the conditional distribution of <span class="math inline">\(X\)</span> given <span class="math inline">\(Y=y\)</span>. Using this notation we have</p>
-<p><span class="math display">\[\begin{eqnarray}
+<p><span class="math display" id="eq:betabinomial">\[\begin{eqnarray}
 Y \mid p &amp;\sim&amp;  \textrm{Binomial}(n, p),\\
  p &amp;\sim&amp; \textrm{Beta}(a, b).
+ \tag{9.11}
 \end{eqnarray}\]</span></p>
 <p>To implement Gibbs sampling for this situation, one needs to identify the two conditional distributions <span class="math inline">\(Y \mid p\)</span> and <span class="math inline">\(p \mid Y\)</span>. First write down the joint density of <span class="math inline">\((Y, p)\)</span> which is found by multiplying the marginal density <span class="math inline">\(\pi(p)\)</span> with the conditional density <span class="math inline">\(f(y \mid p)\)</span>.</p>
-<p><span class="math display">\[\begin{eqnarray}
+<p><span class="math display" id="eq:bbdist">\[\begin{eqnarray}
 f(Y = y, p) &amp;=&amp; \pi(p)f(Y = y \mid p) \nonumber \\ 
 &amp;=&amp;  \left[\frac{1}{B(a, b)} p^{a - 1} (1-p)^{b-1}\right] \left[{n \choose y} p^y (1 - p)^{n-y}\right]. \nonumber \\
+\tag{9.12}
 \end{eqnarray}\]</span></p>
 <ol style="list-style-type: decimal">
 <li><p>The conditional density <span class="math inline">\(f(Y = y \mid p)\)</span> is found by fixing a value of the proportion <span class="math inline">\(p\)</span> and then the only random variable is <span class="math inline">\(Y\)</span>. This distribution is <span class="math inline">\(\textrm{Binomial}(n, p)\)</span> which actually was given in the statement of the problem.</p></li>
 <li><p>Turning things around, the conditional density <span class="math inline">\(\pi(p \mid y)\)</span> takes the number of successes <span class="math inline">\(y\)</span> and views the joint density as a function only of the random variable <span class="math inline">\(p\)</span>. Ignoring constants, we see this conditional density is proportional to
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:bbcond1">\[\begin{equation}
 p^{y + a - 1} (1 - p)^{n - y + b - 1},
+\tag{9.13}
 \end{equation}\]</span>
 which we recognize as a Beta distribution with shape parameters <span class="math inline">\(y + a\)</span> and <span class="math inline">\(n - y + b\)</span>. Using our notation, we have <span class="math inline">\(p \mid y \sim \textrm{Beta}(y + a, n - y + b)\)</span>.</p></li>
 </ol>
@@ -894,58 +906,70 @@ Figure 9.9: Histogram of simulated draws of <span class="math inline">\(Y\)</spa
 </p>
 <p>In Chapter 8, we considered the situation of sampling from a Normal distribution with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>. To simplify this to a one-parameter model, we assumed that the value of <span class="math inline">\(\sigma\)</span> was known and focused on the problem of learning about the mean <span class="math inline">\(\mu\)</span>. Since Gibbs sampling provides us to simulate from posterior distributions of more than one parameter, we can generalize to the more realistic situation where both the mean and the standard deviation are unknown.</p>
 <p>Suppose we take a sample of <span class="math inline">\(n\)</span> observations <span class="math inline">\(Y_1, .., Y_n\)</span> from a Normal distribution with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. Recall the sampling density of <span class="math inline">\(Y_i\)</span> has the form
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:normsampling">\[\begin{equation}
 f(y_i \mid \mu, \sigma) = \frac{1}{\sqrt{2 \pi} \sigma} \exp\left\{- \frac{1}{2 \sigma^2}(y_i - \mu)^2\right\}.
+\tag{9.14}
 \end{equation}\]</span>
 It will be convenient to reexpress the variance <span class="math inline">\(\sigma\)</span> by the {} <span class="math inline">\(\phi\)</span> where
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:precision">\[\begin{equation}
 \phi = \frac{1}{\sigma^2}.
+\tag{9.15}
 \end{equation}\]</span>
 The precision <span class="math inline">\(\phi\)</span> reflects the strength in knowledge about the location of the observation <span class="math inline">\(Y_i\)</span>. If <span class="math inline">\(Y_i\)</span> is likely to be close to the mean <span class="math inline">\(\mu\)</span>, then the variance <span class="math inline">\(\sigma^2\)</span> would be small and so the precision <span class="math inline">\(\phi\)</span> would be large.
 So we restate the sampling model as follows. The observations <span class="math inline">\(Y_1, .., Y_n\)</span> are a random sample from a Normal density with mean <span class="math inline">\(\mu\)</span> and precision <span class="math inline">\(\phi\)</span>, where the sampling density of <span class="math inline">\(Y_i\)</span> is given by
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:normsampling2">\[\begin{equation}
 f(y_i \mid \mu, \phi) = \frac{\sqrt{\phi}}{\sqrt{2 \pi}} \exp\left\{- \frac{\phi}{2}(y_i - \mu)^2\right\}.
+\tag{9.16}
 \end{equation}\]</span></p>
 <p>The next step is to construct a prior density on the parameter vector <span class="math inline">\((\mu, \phi)\)</span>. A convenient choice for this prior is to assume that one’s opinion about the location of the mean <span class="math inline">\(\mu\)</span> is independent of one’s belief about the location of the precision <span class="math inline">\(\phi\)</span>. So we assume that <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\phi\)</span> are independent, so one writes the joint prior density as
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:muphiprior">\[\begin{equation}
 \pi(\mu, \phi) = \pi_{\mu}(\mu) \pi_{\phi}(\phi),
+\tag{9.17}
 \end{equation}\]</span>
 where <span class="math inline">\(\pi_{\mu}()\)</span> and <span class="math inline">\(\pi_{\phi}()\)</span> are marginal densities. For convenience, each of these marginal priors are assigned conjugate forms: we assume that <span class="math inline">\(\mu\)</span> is Normal with mean <span class="math inline">\(\mu_0\)</span> and precision <span class="math inline">\(\phi_0\)</span>:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:muprior">\[\begin{equation}
 \pi_{\mu}(\mu) = \frac{\sqrt{\phi_0}}{\sqrt{2 \pi}} \exp\left\{-\frac{\phi_0}{2}(\mu - \mu_0)^2\right\}.
+\tag{9.18}
 \end{equation}\]</span>
 The prior for the precision parameter <span class="math inline">\(\phi\)</span> is assumed Gamma with parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:phiprior">\[\begin{equation}
 \pi_{\phi}(\phi) = \frac{b^a}{\Gamma(a)} \phi^{a-1} \exp(-b \phi), \, \, \phi  &gt; 0.
+\tag{9.19}
 \end{equation}\]</span></p>
 <p>Once values of <span class="math inline">\(y_1, ..., y_n\)</span> are observed, the likelihood is the density of these Normal observations viewed as a function of the mean <span class="math inline">\(\mu\)</span> and the precision parameter <span class="math inline">\(\phi\)</span>. Simplifying the expression and removing constants, one obtains:
-<span class="math display">\[\begin{align}
+<span class="math display" id="eq:normlike">\[\begin{align}
         L(\mu, \phi) &amp;=\prod_{i=1}^n \frac{\sqrt{\phi}}{\sqrt{2 \pi}} \exp\left\{-\frac{\phi}{2}(y_i - \mu)^2\right\} \nonumber \\
         &amp; \propto \phi^{n/2} \exp\left\{-\frac{\phi}{2}\sum_{i=1}^n (y_i - \mu)^2\right\}.
+\tag{9.20}
 \end{align}\]</span></p>
 <p>To implement Gibbs sampling, one first writes down the expression for the posterior density as the product of the likelihood and prior where any constants not involving the parameters are removed.</p>
-<p><span class="math display">\[\begin{eqnarray}
+<p><span class="math display" id="eq:postmuphi">\[\begin{eqnarray}
 \pi(\mu, \phi \mid y_1, \cdots, y_n ) &amp;\propto &amp; \phi^{n/2} \exp\left\{-\frac{\phi}{2}\sum_{i=1}^n (y_i - \mu)^2\right\} \nonumber \\
  &amp; \times &amp; \exp\left\{-\frac{\phi_0}{2}(\mu - \mu_0)^2\right\}  \phi^{a-1} \exp(-b \phi).
+ \tag{9.21}
 \end{eqnarray}\]</span></p>
 <p>Next, the two conditional posterior distributions <span class="math inline">\(\pi(\mu \mid \phi, y_1, \cdots, y_n)\)</span> and <span class="math inline">\(\pi(\phi \mid \mu, y_1, \cdots, y_n)\)</span> are identified.</p>
 <ol style="list-style-type: decimal">
 <li>The first conditional density <span class="math inline">\(\pi(\mu \mid \phi, y_1, \cdots, y_n)\)</span> follows from the work in Chapter 8 on Bayesian inference about a mean with a conjugate prior when the sampling standard deviation was assumed known. One obtains that this conditional distribution <span class="math inline">\(\pi(\mu \mid \phi, y_1, \cdots, y_n)\)</span> is Normal with mean
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:mumean">\[\begin{equation}
 \mu_n = \frac{\phi_0 \mu_0  + n \phi \bar y }{\phi_0  + n \phi}.
+\tag{9.22}
 \end{equation}\]</span>
 and standard deviation
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:musd">\[\begin{equation}
 \sigma_n = \sqrt{\frac{1}{\phi_0  + n \phi}}.
+\tag{9.23}
 \end{equation}\]</span></li>
 <li>Collecting terms, the second conditional density <span class="math inline">\(\pi(\phi \mid \mu, y_1, \cdots, y_n)\)</span> is proportional to
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:phipost">\[\begin{equation}
 \pi(\phi \mid \mu, y_1, \cdots y_n) \propto \phi^{n/2 + a - 1} \exp\left\{-\phi\left[\frac{1}{2}\sum_{i=1}^n (y_i- \mu)^2 + b\right]\right\}. \\
+\tag{9.24}
 \end{equation}\]</span>
 The second conditional distribution <span class="math inline">\(\pi(\phi \mid \mu, y_1, \cdots, y_n)\)</span> is seen to be a Gamma density with parameters
-<span class="math display">\[\begin{eqnarray}
+<span class="math display" id="eq:gamparameters">\[\begin{eqnarray}
 a_n &amp;=&amp; \frac{n}{2} + a, \\
 b_n &amp;=&amp; \frac{1}{2}\sum_{i=1}^n (y_i - \mu)^2 + b.
+\tag{9.25}
 \end{eqnarray}\]</span></li>
 </ol>
 
@@ -1019,12 +1043,14 @@ Figure 9.13: Histogram of simulated draws of the normal mean using the Metropoli
 </p>
 </div>
 <p>One estimates different summaries of the posterior distribution by computing different summaries of the simulated sample. In our Cauchy-Normal model, one estimates, for example, the posterior mean of <span class="math inline">\(\mu\)</span> by computing the mean of the simulated posterior draws:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:simmean">\[\begin{equation}
 E(\mu \mid y) \approx \frac{\sum_{j = 1}^S \mu^{(j)}}{S}.
+\tag{9.26}
 \end{equation}\]</span>
 One typically wants to estimate the simulation standard error of this MCMC estimate. If the draws from the posterior were independent, then the Monte Carlo standard error of this posterior mean estimate would be given by the standard deviation of the draws divided by the square root of the simulation sample size:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:simse">\[\begin{equation}
 se = \frac{sd(\{\mu^{(j)}\})}{\sqrt{S}}.
+\tag{9.27}
 \end{equation}\]</span>
 However, this estimate of the standard error is not correct since the MCMC sample is not independent (the simulated value <span class="math inline">\(\mu^{(j)}\)</span> depends on the value of the previous simulated value <span class="math inline">\(\mu^{(j-1)}\)</span>). One obtains a more accurate estimate of Monte Carlo standard error by using time-series methods. As we will see in the examples of Section , this standard error estimate will be larger than the “naive” standard error estimate that assumes the MCMC sample values are independent.</p>
 </div>
@@ -1037,13 +1063,15 @@ However, this estimate of the standard error is not correct since the MCMC sampl
 <p>To illustrate the use of JAGS, consider the problem of estimating the mean Buffalo snowfall assuming a Normal sampling model with both the mean and standard deviation unknown, and independent priors placed on both parameters. As in Section  one expresses the parameters of the Normal distribution as <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\phi\)</span>, where the precision <span class="math inline">\(\phi\)</span> is the reciprocal of the variance <span class="math inline">\(\phi = 1 / \sigma^2\)</span>. One then writes this Bayesian model as</p>
 <ul>
 <li><p>Sampling, for <span class="math inline">\(i = 1, \cdots, n\)</span>:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:sampnormal2">\[\begin{equation}
 Y_i \overset{i.i.d.}{\sim} \textrm{Normal}(\mu, \sqrt{1/\phi}).
+\tag{9.28}
 \end{equation}\]</span></p></li>
 <li><p>Independent priors for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\phi\)</span>:
-<span class="math display">\[\begin{eqnarray}
+<span class="math display" id="eq:muphiprior2">\[\begin{eqnarray}
 \mu &amp;\sim&amp; \textrm{Normal}(\mu_0, \sqrt{1/\phi_0}), \\
 \phi &amp;\sim&amp; \textrm{Gamma}(a, b).
+\tag{9.29}
 \end{eqnarray}\]</span></p></li>
 </ul>
 <p>The JAGS program parametrizes a Normal density in terms of the precision, so the prior precision is equal to <span class="math inline">\(\phi_0 = 1 / \sigma_0^2\)</span>. As in Section , the parameters of the Normal and Gamma priors are set at <span class="math inline">\(\mu_0 = 10, \phi_0 = 1 / 3 ^ 2, a = 1, b = 1.\)</span></p>
@@ -1191,6 +1219,7 @@ Figure 9.17: Histogram of the posterior predictive distribution of T(y) where T(
 </p>
 <p>To illustrate the usefulness of the JAGS software, we consider a problem comparing two proportions from independent samples. The model is defined in a JAGS script, the data and values of prior parameters are entered through a list, and the <code>run.jags()</code> function is used to simulate from the posterior of the parameters by an MCMC algorithm.</p>
 <p>To better understand the behavior of Facebook users, a survey was administered in 2011 to 244 students. Each student was asked their gender and the average number of times they visited Facebook in a day. We say that the number of daily visits is “high” if the number of visits is 5 or more; otherwise it is “low”. If we classify the sample by gender and daily visits, one obtains the two by two table of counts as shown in Table .</p>
+<p>Table 9.1. Two-way table of counts of students by gender and Facebook visits.</p>
 <table>
 <tbody>
 <tr class="odd">
@@ -1210,8 +1239,8 @@ Figure 9.17: Histogram of the posterior predictive distribution of T(y) where T(
 </tr>
 </tbody>
 </table>
-<p>Two-way table of counts of students by gender and Facebook visits.</p>
 <p>In Table , the random variable <span class="math inline">\(Y_M\)</span> represents the number of males who have a high number of Facebook visits in a sample of <span class="math inline">\(n_M\)</span>, and <span class="math inline">\(Y_F\)</span> and <span class="math inline">\(n_M\)</span> are the analogous count and sample size for women. Assuming that the sample survey represents a random sample from all students using Facebook, then it is reasonable to assume that <span class="math inline">\(Y_M\)</span> and <span class="math inline">\(Y_F\)</span> are independent with <span class="math inline">\(Y_M\)</span> distributed Binomial with parameters <span class="math inline">\(n_M\)</span> and <span class="math inline">\(p_M\)</span>, and <span class="math inline">\(Y_F\)</span> is Binomial with parameters <span class="math inline">\(n_F\)</span> and <span class="math inline">\(p_F\)</span>.</p>
+<p>Table 9.2. Probability structure in two-way table.</p>
 <table>
 <tbody>
 <tr class="odd">
@@ -1231,28 +1260,32 @@ Figure 9.17: Histogram of the posterior predictive distribution of T(y) where T(
 </tr>
 </tbody>
 </table>
-<p>Probability structure in two-way table.</p>
 <p>The probabilities <span class="math inline">\(p_M\)</span> and <span class="math inline">\(p_F\)</span> are displayed in Table . In this type of data structure, one is interested in the association between gender and Facebook visits. Define the odds as the ratio of the probability of “high” to the probability of “low”. The odds of “high” for the men and odds of ’high&quot; for the women are defined by
-<span class="math display">\[\begin{equation}
-\frac{p_M}{1 - p_M}, 
+<span class="math display" id="eq:oddsM">\[\begin{equation}
+\frac{p_M}{1 - p_M},
+\tag{9.30}
 \end{equation}\]</span>
 and
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:oddsF">\[\begin{equation}
 \frac{p_F}{1-p_F},
+\tag{9.31}
 \end{equation}\]</span>
 respectively. The odds ratio
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:oddsratio">\[\begin{equation}
 \alpha = \frac{p_M / (1 - p_M)}{p_F / (1 - p_F)},
+\tag{9.32}
 \end{equation}\]</span>
 is a measure of association in this two-way table. If <span class="math inline">\(\alpha = 1\)</span>, this means that <span class="math inline">\(p_M = p_L\)</span> – this says that tendency to have high visits to Facebook does not depend on gender. If <span class="math inline">\(\alpha &gt; 1\)</span>, this indicates that men are more likely to have high visits to Facebook, and a value <span class="math inline">\(\alpha &lt; 1\)</span> indicates that women are more likely to have high visits. Sometimes association is expressed on a log scale – the log odds ratio <span class="math inline">\(\lambda\)</span> is written as
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:logoddsratio">\[\begin{equation}
 \lambda = \log \alpha = \log\left(\frac{p_M} {1 - p_M}\right) - \log\left(\frac{p_F} {1 - p_F}\right).
+\tag{9.33}
 \end{equation}\]</span>
 That is, the log odds ratio is expressed as the difference in the logits of the men and women probabilities, where the logit of a probability <span class="math inline">\(p\)</span> is equal to <span class="math inline">\({\rm logit}(p) = \log(p) - \log(1 - p)\)</span>. If gender is independent of Facebook visits, then <span class="math inline">\(\lambda = 0\)</span>.</p>
 <p>One’s prior beliefs about association in the two-way table is expressed in terms of logits and the log odds ratio. If one believes that gender and Facebook visits are independent, then the log odds ratio is assigned a Normal prior with mean 0 and standard deviation <span class="math inline">\(\sigma\)</span>. The mean of 0 reflects the prior guess of independence and <span class="math inline">\(\sigma\)</span> indicates the strength of the belief in independence. If one believed strongly in independence, then one would assign <span class="math inline">\(\sigma\)</span> a small value.</p>
 <p>In addition, let
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:meanlogits">\[\begin{equation}
 \theta = \frac{{\rm logit}(p_M) + \rm{logit}(p_F)}{2}
+\tag{9.34}
 \end{equation}\]</span>
 be the mean of the logits, and assume that <span class="math inline">\(\theta\)</span> has a Normal prior with mean <span class="math inline">\(\theta_0\)</span> and standard deviation <span class="math inline">\(\sigma_0\)</span> (precision <span class="math inline">\(\phi_0\)</span>). The prior on <span class="math inline">\(\theta\)</span> reflects beliefs about the general size of the proportions on the logit scale.</p>
 
@@ -1418,12 +1451,14 @@ P = \begin{bmatrix}
 <li><strong>Metropolis Sampling from a Bimodal Distribution</strong></li>
 </ol>
 Suppose we observe a random sample <span class="math inline">\(y_1, ..., y_n\)</span> from a Cauchy distribution with location <span class="math inline">\(\theta\)</span> and scale parameter 1 with density
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:cauchy">\[\begin{equation}
 f(y_i \mid \theta) = \frac{1}{\pi  \left[1 + (y_i - \theta)^2\right]}.
+\tag{9.35}
 \end{equation}\]</span>
 If a Uniform prior is placed on <span class="math inline">\(\theta\)</span>, then the posterior density of <span class="math inline">\(\theta\)</span> is proportional to
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:cauchypost">\[\begin{equation}
 \pi(\theta \mid y_1, \cdots, y_n) \propto \prod_{i = 1}^n \frac{1}{\pi  \left[1 + (y_i - \theta)^2\right]}
+\tag{9.36}
 \end{equation}\]</span>
 If we observe the values 3, 6, 7, 8, 15, 14, 16, 17, Figure  displays the bimodal shape of the posterior density.<br />
 
@@ -1600,8 +1635,9 @@ Write a JAGS script for this Bayesian model. Use the <code>run.jags()</code> fun
 <li><strong>A Normal Mixture Model</strong></li>
 </ol>
 <p>Consider a three-component mixture distribution, where the density for <span class="math inline">\(x\)</span> has the form
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:normalmix">\[\begin{equation}
     f(x) =  0.45 \times \phi(x, -3, 1/3) + 0.1 \times \phi(x, 0, 1/3) + 0.45 \times \phi(x, 3, 1/3),  \\
+\tag{9.37}
 \end{equation}\]</span>
 where <span class="math inline">\(\phi(x, \mu, \sigma)\)</span> is the Normal density with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>. Consider the following two ways of simulating from this mixture density.</p>
 <p><strong>Approach 1: Monte Carlo</strong>:

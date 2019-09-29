@@ -210,7 +210,6 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </ul></li>
 <li class="chapter" data-level="7.3" data-path="proportion.html"><a href="proportion.html#continuous-priors"><i class="fa fa-check"></i><b>7.3</b> Continuous Priors</a><ul>
 <li class="chapter" data-level="7.3.1" data-path="proportion.html"><a href="proportion.html#the-beta-distribution-and-probabilities"><i class="fa fa-check"></i><b>7.3.1</b> The Beta distribution and probabilities</a></li>
-<li class="chapter" data-level="7.3.2" data-path="proportion.html"><a href="proportion.html#choosing-a-beta-density-to-represent-prior-opinion"><i class="fa fa-check"></i><b>7.3.2</b> Choosing a Beta density to represent prior opinion</a></li>
 </ul></li>
 <li class="chapter" data-level="7.4" data-path="proportion.html"><a href="proportion.html#updating-the-beta-prior"><i class="fa fa-check"></i><b>7.4</b> Updating the Beta Prior</a><ul>
 <li class="chapter" data-level="7.4.1" data-path="proportion.html"><a href="proportion.html#bayes-rule-calculation"><i class="fa fa-check"></i><b>7.4.1</b> Bayes’ rule calculation</a></li>
@@ -334,39 +333,44 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p><strong>Adding a predictor variable</strong></p>
 <p>When continuous responses are observed, it is common that other variables are recorded that may be associated with the primary response measure. In the Buffalo snowfall example, one may also observe the average temperature in winter season and one believes that the average season temperature is associated with the corresponding amount of snowfall. For the tennis example, one may believe that the time-to-serve measurement is related to the rally length of the previous point. Specifically, a long rally in the previous point may be associated with a long time-to-serve in the current point.</p>
 <p>In Chapter 9, a Normal curve was used to model the snowfalls <span class="math inline">\(Y_1, ..., Y_n\)</span> for <span class="math inline">\(n\)</span> winters,
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:normsampling">\[\begin{equation}
 Y_i \mid \mu, \sigma \overset{i.i.d.}{\sim} \textrm{Normal}(\mu, \sigma), \, \, i = 1, \cdots, n.
 \label{eq:introLik1}
+\tag{11.1}
 \end{equation}\]</span>
 The model in Equation () assumes that each winter snowfall follows the same Normal density with mean <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>. From a Bayesian viewpoint, one assigns prior distributions for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> and bases inferences about these parameters from the posterior distribution.</p>
 <p>However when the average temperature in winter <span class="math inline">\(i\)</span>, <span class="math inline">\(x_i\)</span>, is also available, one might wonder if the snowfall amount <span class="math inline">\(Y_i\)</span> can be explained by the average temperature <span class="math inline">\(x_i\)</span> in the same winter. One typically calls <span class="math inline">\(x_i\)</span> a predictor variable as one is interested in predicting the snowfall amount <span class="math inline">\(Y_i\)</span> from the value of <span class="math inline">\(x_i\)</span>. How does one extend the basic Normal sampling model in Equation () to study the possible relationship between the average temperature and the snowfall amount?</p>
 <p><strong>An observation-specific mean</strong></p>
 <p>The model in Equation () assumes a common mean <span class="math inline">\(\mu\)</span> for each <span class="math inline">\(Y_i\)</span>. Since one wishes to introduce a new variable <span class="math inline">\(x_i\)</span> specific to winter <span class="math inline">\(i\)</span>, the model in Equation () is adjusted to Equation () where the common mean <span class="math inline">\(\mu\)</span> is replaced by a winter specific mean <span class="math inline">\(\mu_i\)</span> .
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:obsmean">\[\begin{equation}
 Y_i \mid \mu_i, \sigma \overset{ind}{\sim} \textrm{Normal}(\mu_i, \sigma), \, \, i = 1, \cdots, n.
 \label{eq:introLik2}
+\tag{11.2}
 \end{equation}\]</span>
 Note that the observations <span class="math inline">\(Y_1, ..., Y_n\)</span> are no longer identically distributed since they have different means, but the observations are still independent which is indicated by <span class="math inline">\(ind\)</span> written over the distributed <span class="math inline">\(\sim\)</span> symbol in the formula.</p>
 <p><strong>Linear relationship between the mean and the predictor</strong></p>
 <p>One basic approach for relating a predictor <span class="math inline">\(x_i\)</span> and the response <span class="math inline">\(Y_i\)</span> is to assume that the mean of <span class="math inline">\(Y_i\)</span>, <span class="math inline">\(\mu_i\)</span>, is a linear function of <span class="math inline">\(x_i\)</span>. This linear relationship is written as
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:linear">\[\begin{equation}
 \mu_i = \beta_0 + \beta_1 x_i,
 \label{eq:introLink}
+\tag{11.3}
 \end{equation}\]</span>
 for <span class="math inline">\(i = 1, \dots, n\)</span>. In Equation (), each <span class="math inline">\(x_i\)</span> is a known constant (that is why a small letter is used for <span class="math inline">\(x\)</span>) and
 <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are unknown parameters. As one might guess, these intercept and slope parameters are random. One assigns a prior distribution to <span class="math inline">\((\beta_0, \beta_1)\)</span> and perform inference by summarizing the posterior distribution of these parameters.</p>
-<p>In this model, the linear function <span class="math inline">\(\beta_0 + \beta_1 x_i\)</span> is interpreted as the {} snowfall amount when the average temperature is equal to <span class="math inline">\(x_i\)</span>. The intercept <span class="math inline">\(\beta_0\)</span> represents the expected snowfall when the winter temperature is <span class="math inline">\(x_i = 0\)</span>. The slope parameter <span class="math inline">\(\beta_1\)</span> gives the increase in the expected snowfall when the temperature <span class="math inline">\(x_i\)</span> increases by one degree. It is important to note that the linear relationship in Equation () with parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> describes the association between the mean <span class="math inline">\(\mu_i\)</span> and the predictor <span class="math inline">\(x_i\)</span>. This linear relationship is a statement about the expected or average snowfall amount <span class="math inline">\(\mu_i\)</span>, not the {} snowfall amount <span class="math inline">\(Y_i\)</span>.</p>
+<p>In this model, the linear function <span class="math inline">\(\beta_0 + \beta_1 x_i\)</span> is interpreted as the <strong>expected</strong> snowfall amount when the average temperature is equal to <span class="math inline">\(x_i\)</span>. The intercept <span class="math inline">\(\beta_0\)</span> represents the expected snowfall when the winter temperature is <span class="math inline">\(x_i = 0\)</span>. The slope parameter <span class="math inline">\(\beta_1\)</span> gives the increase in the expected snowfall when the temperature <span class="math inline">\(x_i\)</span> increases by one degree. It is important to note that the linear relationship in Equation () with parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> describes the association between the mean <span class="math inline">\(\mu_i\)</span> and the predictor <span class="math inline">\(x_i\)</span>. This linear relationship is a statement about the expected or average snowfall amount <span class="math inline">\(\mu_i\)</span>, not the <strong>actual</strong> snowfall amount <span class="math inline">\(Y_i\)</span>.</p>
 <p><strong>Linear regression model</strong></p>
 <p>Substituting Equation () into the model in Equation (), one obtains the linear regression model.
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:linearregression">\[\begin{equation}
 Y_i \mid \beta_0, \beta_1, \sigma \overset{ind}{\sim} \textrm{Normal}(\beta_0 + \beta_1 x_i, \sigma), \, \, i = 1, \cdots, n.
 \label{eq:introLik3}
+\tag{11.4}
 \end{equation}\]</span>
 This is a special case of a Normal sampling model, where the <span class="math inline">\(Y_i\)</span> independently follow a Normal density with observation specific mean <span class="math inline">\(\beta_0 + \beta_1 x_i\)</span> and common standard deviation <span class="math inline">\(\sigma\)</span>. Since there is only a single predictor <span class="math inline">\(x_i\)</span>, this model is commonly called the simple linear regression model.</p>
 <p>One restates this regression model as
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:linearreg2">\[\begin{equation}
 Y_i  = \mu_i + \epsilon_i, i = 1, \cdots, n,
 \label{eq:introLik3a}
+\tag{11.5}
 \end{equation}\]</span>
 where the mean response <span class="math inline">\(\mu_i = \beta_0 + \beta_1 x_i\)</span> and the residuals <span class="math inline">\(\epsilon_1, ..., \epsilon_n\)</span> are <span class="math inline">\(i.i.d.\)</span> from a Normal distribution with mean 0 and standard deviation <span class="math inline">\(\sigma\)</span>.
 In the context of our example, this model says that the snowfall for a particular season <span class="math inline">\(Y_i\)</span> is a linear function of the average season temperature <span class="math inline">\(x_i\)</span> plus a random error <span class="math inline">\(\epsilon_i\)</span> that is Normal with mean 0 and standard deviation <span class="math inline">\(\sigma\)</span>.</p>
@@ -386,6 +390,7 @@ The practice of standardizing variables will be introduced which is helpful in t
 <div id="example-prices-and-areas-of-house-sales" class="section level2">
 <h2><span class="header-section-number">11.2</span> Example: Prices and Areas of House Sales</h2>
 <p>Zillow is an online real estate database company that collects information on 110 million homes across the United States. Data is collected from a random sample of 24 houses for sale in the Findlay, Ohio area during October 2018. For each house, the dataset contains the selling price (in $1000) and size (in 1000 square feet). Table  displays the first five observations of the dataset.</p>
+<p>Table 11.1. The house index, price (in $1000), and size (in 1000 sq feet) of 5 house sales in Findlay, Ohio area during October 2018. The random sample contains 24 house sales.</p>
 <table>
 <thead>
 <tr class="header">
@@ -422,7 +427,6 @@ The practice of standardizing variables will be introduced which is helpful in t
 </tr>
 </tbody>
 </table>
-<p>The house index, price (in $1000), and size (in 1000 sq feet) of 5 house sales in Findlay, Ohio area during October 2018. The random sample contains 24 house sales.</p>
 <p>Suppose one is interested in predicting a house’s selling price from its house size. In this example, one is treating price as the response variable and size as the single predictor. Figure  constructs a scatterplot of price (y-axis) against the size (x-axis) for the houses in the sample. This figure shows a positive relationship between the size and the price of a house sale, suggesting that the house sale price increases as the house size increases. Can one quantify this relationship through a Bayesian linear regression model? In particular, is there sufficient evidence that there is a positive association among the population of all homes? Can one predict the sale price of a home given its size?</p>
 
 <div class="figure"><span id="fig:unnamed-chunk-2"></span>
@@ -436,16 +440,18 @@ Figure 11.2: Scatterplot of price against size of house sales.
 <h2><span class="header-section-number">11.3</span> A Simple Linear Regression Model</h2>
 <p>The house sale example can be fit into the linear regression model framework.
 It is assumed the response variable, the price of a house sale, is a continuous variable is distributed as a Normal random variable. Specifically, the price <span class="math inline">\(Y_i\)</span> for house <span class="math inline">\(i\)</span>, is Normally distributed with mean <span class="math inline">\(\mu_i\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>.
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:simplereg1">\[\begin{equation}
 Y_i \mid \mu_i, \sigma \overset{ind}{\sim} \textrm{Normal}(\mu_i, \sigma),
 \label{eq:modelLik1}
+\tag{11.6}
 \end{equation}\]</span>
 where <span class="math inline">\(i = 1, \cdots, n\)</span>, where <span class="math inline">\(n = 24\)</span> is the number of homes in the dataset. The <span class="math inline">\(ind\)</span> over <span class="math inline">\(\sim\)</span> in Equation () indicates that each response <span class="math inline">\(Y_i\)</span> independently follows its own Normal density. Moreover, unlike the house-specific mean <span class="math inline">\(\mu_i\)</span>, a common standard deviation <span class="math inline">\(\sigma\)</span> is shared among all responses <span class="math inline">\(Y_i\)</span>’s.</p>
 <p>Since one believes the size of the house is helpful in understanding a house’s price,<br />
 one represents the mean price <span class="math inline">\(\mu_i\)</span> as a linear function of the house size <span class="math inline">\(x_i\)</span> depending on two parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p>
-<p><span class="math display">\[\begin{equation}
+<p><span class="math display" id="eq:simplereg2">\[\begin{equation}
 \mu_i = \beta_0 + \beta_1 x_i
 \label{eq:modelLink}
+\tag{11.7}
 \end{equation}\]</span></p>
 <p>How does one interpret the intercept and slope parameters? The intercept <span class="math inline">\(\beta_0\)</span> gives the expected price <span class="math inline">\(\mu_i\)</span> for a house <span class="math inline">\(i\)</span> that has zero square feet (<span class="math inline">\(x_i = 0\)</span>). This is not a meaningful parameter since no house (not even a tiny house) has zero square feet.
 The slope parameter <span class="math inline">\(\beta_1\)</span> gives the change in the expected price <span class="math inline">\(\mu_i\)</span>, when the size <span class="math inline">\(x_i\)</span> of house <span class="math inline">\(i\)</span> increases by 1 unit, i.e., increases by 1000 square feet.</p>
@@ -473,18 +479,20 @@ A Gamma prior for the precision parameter <span class="math inline">\(\phi = 1/\
 <div id="posterior-analysis" class="section level2">
 <h2><span class="header-section-number">11.5</span> Posterior Analysis</h2>
 <p>In the sampling model one has that <span class="math inline">\(Y_1, ..., Y_n\)</span> are independent with <span class="math inline">\(Y_i \sim \textrm{Normal}(\beta_0 + \beta_1 x_i, \sigma)\)</span>. Suppose the pairs <span class="math inline">\((x_1, y_1), ..., (x_n, y_n)\)</span> are observed. The likelihood is the joint density of these observations viewed as a function of <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span>. For convenience, the standard deviation <span class="math inline">\(\sigma\)</span> is reexpressed as the precision <span class="math inline">\(\phi = 1 / \sigma^2\)</span>.</p>
-<p><span class="math display">\[\begin{eqnarray}
+<p><span class="math display" id="eq:linreglike">\[\begin{eqnarray}
 L(\beta_0, \beta_1, \phi) &amp;= &amp; \prod_{i=1}^n \left[\frac{\sqrt{\phi}}{\sqrt{2 \pi}}
 \exp\left\{-\frac{\phi}{2}(y_i - \beta_0 - \beta_1 x_i)^2\right\}\right]
  \nonumber \\
 &amp; \propto &amp; \phi^{\frac{n}{2}} \exp\left\{-\frac{\phi}{2}\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2\right\} 
+\tag{11.8}
 \end{eqnarray}\]</span></p>
 <p>By multiplying the likelihood by the prior for <span class="math inline">\((\beta_0, \beta_1, \phi)\)</span>, one obtains an expression for the posterior density.
-<span class="math display">\[\begin{eqnarray}
+<span class="math display" id="eq:linregpost">\[\begin{eqnarray}
 \pi(\beta_0, \beta_1, \phi \mid y_1, \cdots, y_n) &amp;\propto &amp; \phi^{\frac{n}{2}} \exp\left\{-\frac{\phi}{2}\sum_{i=1}^n (y_i - \beta_0 - \beta_1 x_i)^2\right\} \nonumber \\
  &amp; \times &amp; \exp\left\{-\frac{1}{2 s_0^2}(\beta_0 - \mu_0)^2\right\} 
  \exp\left\{-\frac{1}{2 s_1^2}(\beta_1 - \mu_1)^2\right\} \nonumber \\ 
 &amp; \times &amp; \phi^{a-1} \exp(-b \phi) 
+\tag{11.9}
 \end{eqnarray}\]</span>
 Since this is not a familiar probability distribution, one needs to use an MCMC algorithm to obtain simulated draws from the posterior.</p>
 </div>
@@ -572,8 +580,9 @@ The posterior median of the standard deviation <span class="math inline">\(\sigm
 <h2><span class="header-section-number">11.7</span> Bayesian Inferences with Simple Linear Regression</h2>
 <p><strong>Simulate fits from the regression model</strong></p>
 <p>The intercept <span class="math inline">\(\beta_0\)</span> and slope <span class="math inline">\(\beta_1\)</span> determine the linear relationship between the mean of the response <span class="math inline">\(Y\)</span> and the predictor <span class="math inline">\(x\)</span>.
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:meanresponse">\[\begin{equation}
 E(Y) = \beta_0 + \beta_1 x.
+\tag{11.10}
 \label{eq:ExpLink}
 \end{equation}\]</span>
 Each pair of values (<span class="math inline">\(\beta_0, \beta_1\)</span>) corresponds to a line <span class="math inline">\(\beta_0 + \beta_1 x\)</span> in the space of values of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. If one finds the posterior mean of these coefficients, say <span class="math inline">\(\tilde {\beta_0}\)</span> and <span class="math inline">\(\tilde {\beta_1}\)</span>, then the line
@@ -609,7 +618,7 @@ Figure 11.5: Scatterplot of the (size, price) data with the best line of fit (so
 </div>
 <p>From Figure , since there is inferential uncertainty about the intercept <span class="math inline">\(\beta_0\)</span> and slope <span class="math inline">\(\beta_1\)</span>, one sees variation among the ten fits from the posterior of the linear regression line <span class="math inline">\(\beta_0 + \beta_1 x\)</span>. This variation about the best-fitting line is understandable since the size of our sample of data is the relatively small value of 24. A larger sample size would help to reduce the posterior variation for the intercept and slope parameters and result in
 posterior samples of fits that are more tightly clustered about the best fitting line in Figure .</p>
-<p>**Learning about the expected response8*</p>
+<p><strong>Learning about the expected response</strong></p>
 <p>In regression modeling, one may be interested in learning about the expected response <span class="math inline">\(E(Y)\)</span> for a specific value of the predictor <span class="math inline">\(x\)</span>. In the house sale example, one may wish to learn about the expected house price for a specific value of the house size. Since the expected response <span class="math inline">\(E(Y) = \beta_0 + \beta_1 x\)</span> is a linear function of the intercept and slope parameters, one obtains a simulated sample from the posterior of <span class="math inline">\(\beta_0 + \beta_1 x\)</span> by computing this function on each of the simulated pairs from the posterior of <span class="math inline">\((\beta_0, \beta_1)\)</span>.</p>
 
 <p>For example, suppose one is interested in the expected price <span class="math inline">\(E(Y)\)</span> for a house with a size of 1, i.e. <span class="math inline">\(x = 1\)</span> (1000 sq feet). In the R script below, one simulates 5000 draws from the posterior of the expected house prices, <span class="math inline">\(E[Y]\)</span> from the 5000 posterior samples of the pair <span class="math inline">\((\beta_0, \beta_1)\)</span>.</p>
@@ -630,12 +639,13 @@ Figure 11.6: Density plots of the simulated draws of the posterior expected hous
 2 Size = 1.6 125  142   159
 3 Size = 2   172  189   205
 4 Size = 2.4 211  236   260</code></pre>
-<p>**Prediction of future response8*</p>
+<p><strong>Prediction of future response</strong></p>
 <p>Learning about the regression model and values of the expected response values focus on the deterministic linear relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(E[Y]\)</span> through the intercept <span class="math inline">\(\beta_0\)</span> and the slope <span class="math inline">\(\beta_1\)</span>, as shown in Equation (). The variability among the fitted lines in Figure  and the variability among the simulated house price for fixed size in Figure  reflects the variability in the posterior draws of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p>
 <p>However, if one wants to predict future values for a house sale price <span class="math inline">\(Y\)</span> given its size <span class="math inline">\(x\)</span>, one needs to go one step further to incorporate the sampling model in the simulation process.
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:futureresponse">\[\begin{equation}
 Y_i \mid \beta_0, \beta_1, \sigma \overset{ind}{\sim} \textrm{Normal}(\beta_0 + \beta_1 x_i, \sigma)
 \label{eq:modelLik5}
+\tag{11.11}
 \end{equation}\]</span>
 As shown in Equation (), the sampling model of <span class="math inline">\(Y\)</span> is a Normal with a mean expressed as a linear combination of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> and a standard deviation <span class="math inline">\(\sigma\)</span>. To obtain a predicted value of <span class="math inline">\(Y\)</span> given <span class="math inline">\(x = x_i\)</span>, one first simulates the expected response from <span class="math inline">\(\beta_0 + \beta_1 x_i\)</span>, and then simulates the predicted value of <span class="math inline">\(Y_i\)</span> from the sampling model: <span class="math inline">\(Y_i \sim \textrm{Normal}(E[Y_i], \sigma)\)</span>. Below is a diagram for the prediction process for an observation where its house size is given as <span class="math inline">\(x\)</span>, and predicted value denoted as <span class="math inline">\(\tilde{y}^{(s)}\)</span> for iteration <span class="math inline">\(s\)</span>. Here the simulation size <span class="math inline">\(S\)</span> is 5000 as there are 5000 posterior samples of each of the three parameters.</p>
 <p><span class="math display">\[\begin{eqnarray*}
@@ -677,7 +687,7 @@ The basic idea is that the observed response values should be consistent with pr
 <li>Values of the parameters <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span> are simulated from the posterior distribution – call these simulated values <span class="math inline">\((\beta^*_0, \beta^*_1, \sigma^*)\)</span>.</li>
 <li>A sample <span class="math inline">\(\{y_1^R, ..., y_n^R\}\)</span> is simulated where the sample size is <span class="math inline">\(n = 24\)</span> and <span class="math inline">\(y_i^R\)</span> is Normal(<span class="math inline">\(\mu^*_i, \sigma^*)\)</span>, where <span class="math inline">\(\mu^*_i = \beta^*_0 + \beta^*_1 x_i\)</span>.</li>
 </ol>
-<p>This is called a {} sample from the posterior predictive distribution since one is using the same sample size and covariate values as the original dataset.</p>
+<p>This is called a <strong>replicated</strong> sample from the posterior predictive distribution since one is using the same sample size and covariate values as the original dataset.</p>
 <p>For our example, this simulation process was repeated eight times, where each iteration produces a sample <span class="math inline">\((x_i, y_i^R), i = 1, ..., 24\)</span>. Scatterplots of these eight replicated samples are displayed in Figure . The observed sample is also displayed in this figure.</p>
 <p>The question one wants to ask is: Do the scatterplots of the simulated replicated samples resemble the scatterplot of the observed data? Since the <span class="math inline">\(x\)</span> values are the same for the observed and replicated datasets, one focuses on possible differences in the observed and replicated response values. Possibly, the sample prices display more variation than the replicated prices, or perhaps the sample prices have a particular outlier or other feature that is not present in the replicated prices.</p>
 <p>In the examination of these scatterplots, the distribution of the observed responses does not seem markably different from the distribution of the response in the simulated replicated datasets. Therefore in this brief examination, one does not see any indication of model misfit – the observed <span class="math inline">\((x, y)\)</span> data seems consistent with replicated data generated from the posterior predictive distribution.</p>
@@ -720,8 +730,9 @@ The standardization process works as follows: for each variable, calculate the s
 <p>For example, let <span class="math inline">\(y_i\)</span> be the observed sale price and <span class="math inline">\(x_i\)</span> be the size of a house. Let
 <span class="math inline">\(\bar{y}\)</span> and <span class="math inline">\(\bar{x}\)</span> denote the sample means and <span class="math inline">\(s_y\)</span> and <span class="math inline">\(s_x\)</span> denote the sample standard deviations for the <span class="math inline">\(y_i\)</span>’s and <span class="math inline">\(x_i\)</span>’s, respectively.
 Then the standardized variables <span class="math inline">\(y_i^*\)</span> and <span class="math inline">\(x_i^*\)</span> are defined by the following formula.
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:standardvars">\[\begin{equation}
 y_i^* = \frac{y_i - \bar{y}}{s_y},  \, \, x_i^* = \frac{x_i - \bar{x}}{s_x}.
+\tag{11.12}
 \end{equation}\]</span></p>
 <p>In R, the function <code>scale()</code> performs standardization.</p>
 <pre class="{r"><code>PriceAreaData$price_standardized &lt;- scale(PriceAreaData$price)
@@ -736,9 +747,10 @@ Figure 11.10: Two scatterplots of price against size of house sales: both variab
 <p>A standardized value represents the number of standard deviations that the value falls above or below the mean. For example, if <span class="math inline">\(x_i^* = -2\)</span>, then this house size is two standard deviations below the mean of all house sizes, and a value <span class="math inline">\(y_i = 1\)</span> indicates a sale price that is one standard deviation larger than the mean. Figure  constructs a scatterplot of the original <span class="math inline">\((x, y)\)</span> data (top) and the standardized <span class="math inline">\((x^*, y^*)\)</span> data (bottom). Note that the ranges of the standardized scores for the <span class="math inline">\(x^*\)</span> and <span class="math inline">\(y^*\)</span> are similar – both sets of standardized scores fall between <span class="math inline">\(-2\)</span> and 2. Also note that the association pattern of the two graphs agree which indicates that the standardization procedure has no impact on the relationship of house size with the sale price.</p>
 <p>One advantage of standardization of the variables is that it provides more meaningful interpretations of the regression parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.
 The linear regression model with the standardized variables is written as follows:</p>
-<p><span class="math display">\[\begin{eqnarray}
+<p><span class="math display" id="eq:regstand">\[\begin{eqnarray}
 Y_i^* \mid \mu_i^*, \sigma &amp;\overset{ind}{\sim}&amp; \textrm{Normal}(\mu_i^*, \sigma), \\
 \mu_i^* &amp;=&amp; \beta_0 + \beta_1 x_i^*.
+\tag{11.13}
 \end{eqnarray}\]</span></p>
 <p>The intercept parameter <span class="math inline">\(\beta_0\)</span> now is the expected standardized sale price for a house where <span class="math inline">\(x_i^* = 0\)</span> corresponding to a house of average size.
 The slope <span class="math inline">\(\beta_1\)</span> gives the change in the expected standardized sale price <span class="math inline">\(\mu_i^*\)</span> when the standardized size <span class="math inline">\(x_i^*\)</span> increases by 1 unit, or when the size variable increases by one standard deviation. In addition, when the variables are standardized, the slope <span class="math inline">\(\beta_1\)</span> can be shown equal to the correlation between <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span>. So this slope provides a meaningful measure of the the linear relationship between the standardized predictor <span class="math inline">\(x_i^*\)</span> and the expected standardized response <span class="math inline">\(\mu_i^*\)</span>.
@@ -842,8 +854,9 @@ The first method reflects weakly informative prior beliefs about the parameters,
 <p><strong>Learning about a gas bill from the outside temperature</strong></p>
 <p>A homeowner will typically have monthly payments on basic utilities such as water, natural gas, and electricity. One particular homeowner observes that her monthly natural gas bill seems to vary across the year. The bill is larger for colder months and smaller for warmer months. That raises the question: can one accurately predict one’s monthly natural gas bill from the outside temperature?</p>
 <p>To address this question, the homeowner collects the monthly gas bill in dollars and the average monthly outside temperature for all twelve months in a particular year. Figure  displays a scatterplot of the temperatures and bill amounts. Note that the month bill appears to decrease as a function of the temperature. This motivates consideration of the linear regression model
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:simplereg7">\[\begin{equation}
 Y_i \mid \beta_0, \beta_1, \sigma \sim {\rm Normal}(\beta_0 + \beta_1 x_i, \sigma),
+\tag{11.14}
 \end{equation}\]</span>
 where <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span> are respectively the average temperature (degrees in Fahrenheit) and the bill amount (in dollars) in month <span class="math inline">\(i\)</span>, and <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span> are the unknown regression parameters.</p>
 
@@ -859,8 +872,9 @@ Figure 11.12: Scatterplot of average temperature and gas bill for twelve payment
 \pi(\beta_0, \beta_1, \sigma) = \pi(\beta_0, \beta_1) \pi(\sigma).
 \end{equation*}\]</span>
 With the unstandardized data, it is difficult to think directly about plausible values of the intercept <span class="math inline">\(\beta_0\)</span> and slope <span class="math inline">\(\beta_1\)</span> and also how these regression parameters are related. But it may be easier to formulate prior opinion about the mean values
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:meanvalues">\[\begin{equation}
 \mu_i^* = \beta_0 + \beta_1 x_i^*,
+\tag{11.15}
 \end{equation}\]</span>
 for two specified values of the predictor <span class="math inline">\(x_1^*\)</span> and <span class="math inline">\(x_2^*\)</span>. The conditional means approach proceeds in two steps.</p>
 <ol style="list-style-type: decimal">
@@ -872,13 +886,15 @@ for two specified values of the predictor <span class="math inline">\(x_1^*\)</s
 \pi(\mu_1^*, \mu_2^*) = \pi(\mu_1^*) \pi(\mu_2^*).
 \end{equation*}\]</span></p>
 <p>This prior on the two conditional means implies a Bivariate Normal prior on the regression parameters. The two conditional means <span class="math inline">\(\mu_1^*\)</span> and <span class="math inline">\(\mu_2^*\)</span> were written above as a function of the regression parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>. By solving these two equations for the regression parameters, one expresses each parameter as a function of the conditional means:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:b0expression">\[\begin{equation}
 \beta_1 = \frac{\mu_2^* - \mu_1^*}{x_2 - x_1},
 \label{eq:cmp:beta1}
+\tag{11.16}
 \end{equation}\]</span>
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:b1expression">\[\begin{equation}
 \beta_0 = \mu_1^* - x_1 \left(\frac{\mu_2^* - \mu_1^*}{x_2 - x_1}\right).
 \label{eq:cmp:beta0}
+\tag{11.17}
 \end{equation}\]</span>
 Note that both the slope <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are linear functions of the two conditional means <span class="math inline">\(\mu_1^*\)</span> and <span class="math inline">\(\mu_2^*\)</span> and this implies that <span class="math inline">\(\beta_0, \beta_1\)</span> will have a Bivariate Normal distribution.</p>
 <p><strong>Regression analysis of the gas bill example</strong></p>
@@ -888,8 +904,9 @@ Note that both the slope <span class="math inline">\(\beta_0\)</span> and <span 
 <li><p>If <span class="math inline">\(x = 60\)</span>, the mean bill <span class="math inline">\(\mu_2^* = \beta_0 + \beta_1 (100)\)</span> is Normal with mean $50 and standard deviation $15. Here the month’s average temperature is warmer and one believes the gas cost will average $50 lower than in the first scenario.</p></li>
 </ul>
 <p>By assuming independence of our prior beliefs about the two means, we have
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:m1m2prior">\[\begin{equation}
 \pi(\mu_1^*, \mu_2^*) = \phi(\mu_1^*, 100, 20) \phi(\mu_2^*, 50, 15),
+\tag{11.18}
 \end{equation}\]</span>
 where <span class="math inline">\(\phi(y, \mu, \sigma)\)</span> denotes the Normal density with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>.</p>
 <p>The prior on the two means is an indirect way of assessing a prior on the regression parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>. One simulate pairs <span class="math inline">\((\beta_0, \beta_1)\)</span> from the prior distribution by simulating values of the means <span class="math inline">\(\mu_1^*\)</span> and <span class="math inline">\(\mu_2^*\)</span> from independent Normal distributions and applying Equation () and Equation ().</p>
@@ -952,6 +969,7 @@ and <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i
 <li><p>Using JAGS, write a script defining the Bayesian model and use MCMC to simulate a sample of 1000 draws from the posterior distribution.</p></li>
 <li><p>From the simulated output, construct 90% interval estimates for the slope <span class="math inline">\(\beta\)</span> and for the standard deviation <span class="math inline">\(\sigma\)</span>.</p></li>
 </ol>
+<p>Table 11.2. Average runs scored, average runs scored against, wins, and losses for 15 National League baseball teams in the 2018 season.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1066,8 +1084,6 @@ and <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i
 </tr>
 </tbody>
 </table>
-<p>Average runs scored, average runs scored against, wins, and losses for
-15 National League baseball teams in the 2018</p>
 <ol start="4" style="list-style-type: decimal">
 <li><strong>Pythagorean Result in Baseball (continued)</strong></li>
 </ol>
@@ -1107,6 +1123,8 @@ summary(fit)</code></pre>
 </ol>
 <p>McDonald’s restaurant publishes nutritional information on the sandwiches they serve.
 Table  displays the serving size (in grams) and the calories for some sandwiches. (This data is available from the file ```mcdonalds.csv}.). One is interested in the model <span class="math inline">\(Y_i \sim \textrm{Normal}(\mu_i, \sigma)\)</span>, where <span class="math inline">\(\mu_i = \beta_0 + \beta_1 x_i\)</span> and <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x_i\)</span> are respectively the calories and serving size for the <span class="math inline">\(i\)</span>-th sandwich.</p>
+<p>Table 11.3. Serving size (grams) and calories for some McDonalds
+sandwiches.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1173,8 +1191,6 @@ Table  displays the serving size (in grams) and the calories for some sandwiches
 </tr>
 </tbody>
 </table>
-<p>Serving size (grams) and calories for some McDonalds
-sandwiches.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Using a suitable weakly informative prior for the regression parameters and the standard deviation, use JAGS to obtain a simulated sample from the joint posterior distribution.</p></li>
 <li><p>Construct a graph and 95% interval estimate for the regression slope <span class="math inline">\(\beta_1\)</span>. Is there sufficient evidence to say that sandwiches with larger serving sizes have more calories?</p></li>
@@ -1196,6 +1212,7 @@ sandwiches.</p>
 Y_i \mid \beta_0, \beta_1, \sigma \sim \textrm{Normal}(\beta_0 + \beta_i x_i, \sigma),
 \end{equation*}\]</span>
 where <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x_i\)</span> are respectively the gross sales and weekend sales for the <span class="math inline">\(i\)</span>-th movie.</p>
+<p>Table 11.4. Weekend and gross sales (in millions of dollars) for ten popular movies released in 2017.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1257,7 +1274,6 @@ where <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x
 </tr>
 </tbody>
 </table>
-<p>Weekend and gross sales (in millions of dollars) for ten popular movies released in 2017.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Assuming weekly informative priors on the regression parameters and the standard deviation, use JAGS to simulate from the joint posterior distribution of <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span>.</p></li>
 <li>Construct a scatterplot of the simulated draws of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</li>
@@ -1269,6 +1285,7 @@ where <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x
 <li><strong>Fog Index and Complex Words of Books</strong></li>
 </ol>
 <p>The <code>amazon.com</code> website used to provide “text statistics” for many of the books it sold. For a particular book, the website displayed the “fog index”, the number of years of formal education required to read and understand a passage of text, and the “complex words”, the percentage of words in the book with three or more syllables. Table  displays the complex words and fog index for a selection of 21 popular books. (This data is contained in the file <code>book_stats.csv</code>.) Suppose one is interested in predicting the fog index of a book given its complex words measurement. Using suitable weakly informative priors on the parameters, fit a simple regression model by simulating 5000 draws from the joint posterior distribution. Use this output to construct a 90% prediction interval for a book whose complex word measurement is 10.</p>
+<p>Table 11.5. Measures of complex words and fog index for a selection of 20 books.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1385,7 +1402,6 @@ where <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x
 </tr>
 </tbody>
 </table>
-<p>Measures of complex words and fog index for a selection of 20 books.</p>
 <ol start="12" style="list-style-type: decimal">
 <li><strong>Distances of Batted Balls</strong>
 </li>

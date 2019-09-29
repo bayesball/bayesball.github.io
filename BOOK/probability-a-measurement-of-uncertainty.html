@@ -372,8 +372,9 @@ One thinks of a probability scale from 0 to 1.</p>
 <div id="the-classical-view-of-a-probability" class="section level2">
 <h2><span class="header-section-number">1.2</span> The Classical View of a Probability</h2>
 <p>Suppose that one observes some phenomena (say, the rolls of two dice) where the outcome is random. Suppose one writes down the list of all possible outcomes, and one believes that each outcome in the list has the same probability. Then the probability of each outcome will be</p>
-<p><span class="math display">\[\begin{equation}
+<p><span class="math display" id="eq:cprob">\[\begin{equation}
 Prob({\rm Outcome}) = \frac{1}{{\rm Number} \, {\rm of} \, {\rm outcomes}}.
+\tag{1.1}
 \end{equation}\]</span></p>
 <p>Let’s illustrate this classical view of probability by a simple example. Suppose one has a bowl with 4 white and 2 black balls</p>
 <p><img src="../LATEX/figures/chapter1/ballsinbowl1.png" width="490" /></p>
@@ -412,6 +413,7 @@ Prob({\rm doubles}) \approx \frac{{\rm Number} \, {\rm of} \, {\rm doubles}}{{\r
 <a class="sourceLine" id="cb1-3" data-line-number="3">}</a>
 <a class="sourceLine" id="cb1-4" data-line-number="4">many_rolls &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">two_rolls</span>())</a></code></pre></div>
 <p>The results of the first 20 experiments are shown in the table below. For each experiment, one records if there is a match (YES) or no match (NO) in the two numbers that are rolled.</p>
+<p>Table 1.1: The results of the first 20 experiments of rolling two dice.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">two_rolls &lt;-<span class="st"> </span><span class="cf">function</span>(){</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2">  <span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb2-3" data-line-number="3">}</a>
@@ -422,25 +424,25 @@ Prob({\rm doubles}) \approx \frac{{\rm Number} \, {\rm of} \, {\rm doubles}}{{\r
 <a class="sourceLine" id="cb2-8" data-line-number="8"><span class="kw">head</span>(df, <span class="dv">20</span>)</a></code></pre></div>
 <pre><code>##    Die_1 Die_2 Match
 ## 1      1     6    No
-## 2      6     6   Yes
-## 3      2     1    No
-## 4      3     3   Yes
-## 5      6     3    No
-## 6      2     5    No
-## 7      3     5    No
-## 8      1     4    No
+## 2      5     2    No
+## 3      1     3    No
+## 4      2     5    No
+## 5      1     5    No
+## 6      3     6    No
+## 7      2     5    No
+## 8      4     3    No
 ## 9      4     1    No
 ## 10     4     4   Yes
-## 11     4     3    No
-## 12     1     6    No
-## 13     1     4    No
-## 14     2     6    No
+## 11     5     2    No
+## 12     6     6   Yes
+## 13     6     6   Yes
+## 14     5     5   Yes
 ## 15     3     3   Yes
-## 16     6     4    No
-## 17     2     6    No
-## 18     3     1    No
-## 19     5     4    No
-## 20     2     5    No</code></pre>
+## 16     1     4    No
+## 17     5     3    No
+## 18     5     2    No
+## 19     5     6    No
+## 20     4     1    No</code></pre>
 <p>In the first 20 rolls we observed a match 11 times, so</p>
 <p><span class="math inline">\(Prob(match) \approx 11/50 = 0.22.\)</span></p>
 <p>Let’s now roll the two dice 10,000 times with R – this time, 1662 matches are observed, so</p>
@@ -526,6 +528,7 @@ Let’s illustrate the variety of sample spaces by the simple experiment “roll
 <p>Suppose instead that one wishes to record the rolls on each of the two dice. One possible outcome would be</p>
 <p>(4 on one die, 3 on the other die)</p>
 <p>or more simply (4, 3). What are the possible outcomes? Here are the twenty-one possibilities:</p>
+<p>Table 1.2: The possible outcomes of rolling two fair, instinguishable dice.</p>
 <table>
 <tbody>
 <tr class="odd">
@@ -570,10 +573,16 @@ Let’s illustrate the variety of sample spaces by the simple experiment “roll
 
 <p>Next suppose one distinguishes the two dice – perhaps one die is red and one die is white – and one are considering all of the possible rolls of both dice. We illustrate two ways of showing the sample space in this case.</p>
 <p>One way of representing possible rolls of two distinct dice is by a tree diagram shown in Figure . On the left side of the diagram, the six possible rolls of the red die are represented by six branches of a tree. Then,on the right side, the six possible rolls of the white die are represented by by six smaller branches coming out of each roll of the red die. A single branch on the left and a single branch on the right represent one possible outcome of this experiment.</p>
-<p><img src="../LATEX/figures/chapter1/twodice.png" width="265" /></p>
+<div class="figure"><span id="fig:unnamed-chunk-7"></span>
+<img src="../LATEX/figures/chapter1/twodice.png" alt="Tree diagram representation of the rolls of two dice." width="265" />
+<p class="caption">
+Figure 1.1: Tree diagram representation of the rolls of two dice.
+</p>
+</div>
 <p>There are alternative ways for representing the outcomes of this experiment of rolling two distinct dice. Suppose one writes down an outcome by the ordered pair</p>
 <p>(roll on white die, roll on red die).</p>
 <p>Then the possible outcomes are listed below.</p>
+<p>Table 1.3. The possible outcomes of rolling two fair, distinguishable dice.</p>
 <table>
 <tbody>
 <tr class="odd">
@@ -637,6 +646,7 @@ Let’s illustrate the variety of sample spaces by the simple experiment “roll
 <p>When one has a random experiment, the first step is to list all of the possible outcomes in the sample space. The next step is to assign numbers, called probabilities, to the different outcomes that reflect the likelihoods that these outcomes can occur.</p>
 <p>To illustrate different assignments of probabilities, suppose a school girl goes to an ice cream parlor and plans to order a single-dip ice cream cone. This particular parlor has four different ice cream flavors. Which flavor will the school girl order?</p>
 <p>First, one writes down the sample space – the possible flavors that the school girl can order. Probabilities will be assigned to these four possible outcomes that reflect a person’s beliefs about her likes and dislikes.</p>
+<p>Table 1.4. Writing down the space space: step 1.</p>
 <table>
 <thead>
 <tr class="header">
@@ -670,6 +680,7 @@ Let’s illustrate the variety of sample spaces by the simple experiment “roll
 <div id="scenario-1" class="section level4">
 <h4><span class="header-section-number">1.6.0.1</span> Scenario 1</h4>
 <p>Suppose that the school girl likes to be surprised. She has brought a hat in which she has placed many slips of paper – 10 slips are labeled “vanilla”, 10 slips are labeled “chocolate”, and 10 slips are “butter pecan”, and 10 are “maple walnut”. She makes her ice cream choice by choosing a slip at random. In this case, each flavor would have a probability of 10/40 = 1/4 .</p>
+<p>Table 1.5. Assignment of probabilities in scenario 1.</p>
 <table>
 <thead>
 <tr class="header">
@@ -695,6 +706,7 @@ Let’s illustrate the variety of sample spaces by the simple experiment “roll
 <h4><span class="header-section-number">1.6.0.2</span> Scenario 2</h4>
 <p>Let’s consider a different set of probabilities based on different assumptions about the school girl’s taste preferences. A person knows that she really doesn’t like “plain” flavors like vanilla or chocolate, and she really likes ice creams with nut flavors. In this case, he would assign “Vanilla” and “Chocolate” each a probability of 0, and assign the two other flavors probabilities that sum to one.</p>
 <p>Here is one possible assignment.</p>
+<p>Table 1.6. Assignment of probabilities in scenario 2.</p>
 <table>
 <thead>
 <tr class="header">
@@ -715,7 +727,8 @@ Let’s illustrate the variety of sample spaces by the simple experiment “roll
 </tr>
 </tbody>
 </table>
-<p>Another possible assignment of probabilities that is consistent with these assumptions is</p>
+<p>Another possible assignment of probabilities that is consistent with these assumptions is the following:</p>
+<p>Table 1.7. Another possible assignment of probabilities in scenario 2.</p>
 <table>
 <thead>
 <tr class="header">
@@ -740,6 +753,7 @@ Let’s illustrate the variety of sample spaces by the simple experiment “roll
 <div id="scenario-3" class="section level4">
 <h4><span class="header-section-number">1.6.0.3</span> Scenario 3</h4>
 <p>Let’s consider an alternative probability assignment from a different person’s viewpoint. The worker at the ice cream shop has no idea what flavor the school girl will order. But the worker has been working at the shop all day and she has kept a record of how many cones of each type have been ordered – of 50 cones ordered, 10 are vanilla, 14 are chocolate, 20 are butter pecan, and 6 are maple walnut. If she believes that the school girl has similar tastes to the previous customers, then it would be reasonable to apply the frequency viewpoint to assign the probabilities.</p>
+<p>Table 1.8. Assignment of probabilities in scenario 3.</p>
 <table>
 <thead>
 <tr class="header">
@@ -791,8 +805,9 @@ Let’s illustrate the variety of sample spaces by the simple experiment “roll
 <li><strong>Axiom 2</strong>: <span class="math inline">\(P(S) = 1\)</span>. That is, the probability that you observe something in the sample space is one.</li>
 <li><strong>Axiom 3:</strong> Suppose one has a sequence of events <span class="math inline">\(A_1, A_2, A_3, ...\)</span> that are mutually exclusive, which means that for any two events in the sequence, say <span class="math inline">\(A_2\)</span> and <span class="math inline">\(A_3\)</span> , the intersection of the two events is the empty set (i.e. <span class="math inline">\(A_2 \cap A_3 = \emptyset\)</span>). Then one finds the probability of the union of the events by adding the individual event probabilities:</li>
 </ul>
-<p><span class="math display">\[\begin{equation}
+<p><span class="math display" id="eq:probunion">\[\begin{equation}
 P(A_1 \cup A_2 \cup A_3 \cup ...) = P(A_1) + P(A_2) + P(A_3) + ...
+\tag{1.2}
 \end{equation}\]</span></p>
 <p>Given the three basic axioms, some additional facts about probabilities can be proven. These additional facts are called properties – these are not axioms, but rather additional facts that are derived knowing the axioms. Below several familiar properties about probabilities are stated and we prove how each property follows logically from the axioms.</p>
 
@@ -803,21 +818,23 @@ P(A_1 \cup A_2 \cup A_3 \cup ...) = P(A_1) + P(A_2) + P(A_3) + ...
 <div class="figure"><span id="fig:unnamed-chunk-8"></span>
 <img src="../LATEX/figures/chapter1/venn1.png" alt="Two sets where set $A$ is  a subset of set $B$." width="238" />
 <p class="caption">
-Figure 1.1: Two sets where set <span class="math inline">\(A\)</span> is a subset of set <span class="math inline">\(B\)</span>.
+Figure 1.2: Two sets where set <span class="math inline">\(A\)</span> is a subset of set <span class="math inline">\(B\)</span>.
 </p>
 </div>
-
 <p>Note that the larger set <span class="math inline">\(B\)</span> can be written as the union of <span class="math inline">\(A\)</span> and <span class="math inline">\(\bar A \cap B\)</span>, that is,
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:unionaac">\[\begin{equation}
 B = A \cup (\bar A \cap B)
+\tag{1.3}
 \end{equation}\]</span>
 Note that <span class="math inline">\(A\)</span> and <span class="math inline">\(\bar A \cap B\)</span> are mutually exclusive (i.e. they have no overlap). So one can apply Axiom 3 and write
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:axiom3">\[\begin{equation}
 P(B) = P(A) + P(\bar A \cap B)
+\tag{1.4}
 \end{equation}\]</span>
 Also, by Axiom 1, the probability of any event is nonnegative. So the probability of <span class="math inline">\(B\)</span> is equal to the probability of <span class="math inline">\(A\)</span> plus a nonnegative number. So this implies
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:probsubset">\[\begin{equation}
 P(B) \ge P(A)
+\tag{1.5}
 \end{equation}\]</span>
 which is what we wish to prove.</p>
 
@@ -826,12 +843,14 @@ which is what we wish to prove.</p>
 
 <p><strong>Proof</strong>:
 Actually this property is a consequence of Property 1. Consider the two events <span class="math inline">\(A\)</span> and the sample space <span class="math inline">\(S\)</span>. Obviously <span class="math inline">\(A\)</span> is a subset of the sample space – that is,
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:subsetS">\[\begin{equation}
 A \subset S
+\tag{1.6}
 \end{equation}\]</span>
 So applying Property 1,
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:probAS">\[\begin{equation}
 P(A) \le P(S) = 1.
+\tag{1.7}
 \end{equation}\]</span>
 It is known that <span class="math inline">\(P(S) = 1\)</span> from the second Axiom 2. So we have proved our result.</p>
 </div>
@@ -841,13 +860,16 @@ It is known that <span class="math inline">\(P(S) = 1\)</span> from the second A
 The first property, called the complement property, states that the probability of the complement of an event is simply one minus the probability of the event.</p>
 
 <p><strong>Complement property:</strong> For an event <span class="math inline">\(A\)</span>,</p>
-<p><span class="math display">\[\begin{equation}P(\bar A) = 1 - P(A).\end{equation}\]</span></p>
+<p><span class="math display" id="eq:compp">\[\begin{equation}P(\bar A) = 1 - P(A).
+\tag{1.8}\end{equation}\]</span></p>
 <p>The second property, called the addition property, gives a formula for the probability of the union of two events.</p>
 
 <p><strong>Addition property</strong>: For two events <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>,</p>
-<p><span class="math display">\[\begin{equation}P(A \cup B) = P(A) + P(B) - P(A \cap B).\end{equation}\]</span></p>
+<p><span class="math display" id="eq:addprop">\[\begin{equation}P(A \cup B) = P(A) + P(B) - P(A \cap B).
+\tag{1.9}\end{equation}\]</span></p>
 <p>Both of these properties are best illustrated by an example. Let’s revisit the example where one was interested in the birth month of a student selected from a class. As before, let <span class="math inline">\(L\)</span> represent the event that the student is born during the last half of the year and <span class="math inline">\(F\)</span> denote the event that the student is born during a month that is four letters long.</p>
 <p>There are 12 possible outcomes for the birth month. One can assume that each month is equally likely to occur, but actually in the U.S. population, the numbers of births during the different months do vary. Using data from the births in the U.S. in 1978, we obtain the following probabilities for the months. We see that August is the most likely birth month with a probability of 0.091 and February (the shortest month) has the smallest probability of 0.075.</p>
+<p>Table 1.9. Probability table of birth months in the U.S. in 1978.</p>
 <table>
 <thead>
 <tr class="header">
@@ -919,7 +941,7 @@ P(F \cup L)  &amp;= P(A) + P(L) - P(F \cap L) \\
 <div class="figure"><span id="fig:unnamed-chunk-9"></span>
 <img src="../LATEX/figures/chapter1/venn2.png" alt="Representation of two sets $F$ and $L$ in birthday example." width="377" />
 <p class="caption">
-Figure 1.2: Representation of two sets <span class="math inline">\(F\)</span> and <span class="math inline">\(L\)</span> in birthday example.
+Figure 1.3: Representation of two sets <span class="math inline">\(F\)</span> and <span class="math inline">\(L\)</span> in birthday example.
 </p>
 </div>
 

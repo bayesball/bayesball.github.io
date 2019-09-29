@@ -335,6 +335,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>This is a famous “matching” probability problem. To start thinking about this problem, it is helpful to start with some simple cases. Suppose only one man checks his hat at the restaurant. Then obviously this man will get his hat back. Then the probability of “no one receives the right hat” is 0, and the average number of hats returned will be equal to 1.</p>
 <p>Let <span class="math inline">\(n\)</span> denote the number of men who enter the restaurant. The case <span class="math inline">\(n = 1\)</span> was considered above. What if <span class="math inline">\(n = 2\)</span>? If the two men are Barry and Bobby, then there are two possibilities shown in the following table.
 These two outcomes are equally likely, so the probability of no match is 1/2. Half the time there will be 2 matches and half the time there will be 0 matches, and so the average number of matches will be 1.</p>
+<p>Table 4.1. Possibilities of the hat check problem when n = 2.</p>
 <table>
 <thead>
 <tr class="header">
@@ -361,6 +362,7 @@ These two outcomes are equally likely, so the probability of no match is 1/2. Ha
 </table>
 <p>What if we have <span class="math inline">\(n = 3\)</span> men that we’ll call Barry, Bobby, and Jack. Then there are 3! = 6 ways of returning hats to men, listed in Table .
 Again these outcomes are equally likely, so the probability of no match is 2/6. One can show that the average number of matches is again 1.</p>
+<p>Table 4.2. Possibilities of the hat check problem when n = 2.</p>
 <table>
 <thead>
 <tr class="header">
@@ -484,6 +486,7 @@ After the five flips, what is Peter’s net gain (in dollars)?</p>
 <p>For each possible outcome of the flips, say <span class="math inline">\(HTHHT\)</span>, there will be a corresponding net gain for Peter. For this outcome, Peter won three times and lost twice, so his net gain is <span class="math inline">\(3(2) - 2(2) = 2\)</span> dollars. The net gain is an example of a <strong>random variable</strong> – this is simply a number that is assigned to each outcome of the random experiment.</p>
 <p>Generally, a capital letter will be used to represent a random variable – here
 the capital letter <span class="math inline">\(G\)</span> denotes Peter’s gain in this experiment. For each of the 32 outcomes, one can assign a value of <span class="math inline">\(G\)</span> – this is done in Table .</p>
+<p>Table 4.3. The 32 outcomes and value of G in the 5 coin flips problem.</p>
 <table>
 <tbody>
 <tr class="odd">
@@ -538,6 +541,7 @@ the capital letter <span class="math inline">\(G\)</span> denotes Peter’s gain
 </table>
 <p>It is seen from the table that the possible gains for Peter are -10, -6, -2, 2, 6, and 10 dollars. One is interested in the probability that Peter will get each possible gain. To do this, one puts all of the possible values of the random variable in a table.
 Although a capital letter will be used to denote a random variable, a small letter will denote a specific value of the random variable. So <span class="math inline">\(g\)</span> refers to one specific value of the gain <span class="math inline">\(G\)</span>, and <span class="math inline">\(P(G = g)\)</span> refers to the corresponding probability.</p>
+<p>Table 4.4. Table of gain, number of outcomes, and corrresponding probability, step 1.</p>
 <table>
 <thead>
 <tr class="header">
@@ -582,6 +586,7 @@ Although a capital letter will be used to denote a random variable, a small lett
 <p>What is the probability that Peter gains $6 in this game? Looking at the table of outcomes, one sees that Peter won $6 in five of the outcomes. Since there are 32 possible outcomes of the five flips, and each outcome has the same probability, one sees that the probability of Peter winning $6 is 5/32.</p>
 <p>This process is continued for all of the possible values of <span class="math inline">\(G\)</span> – one places the number of outcomes for each value and the corresponding probability in the table.
 This is an example of a probability distribution for <span class="math inline">\(G\)</span> – this is simply a list of all possible values for a random variable together with the associated probabilities.</p>
+<p>Table 4.5. Table of gain, number of outcomes, and corrresponding probability, step 2.</p>
 <table>
 <thead>
 <tr class="header">
@@ -691,10 +696,12 @@ It is easy to compute the probability Peter loses money – also 1/2. Since the 
 <li>Summing the products.</li>
 </ol>
 <p>In other words, one finds the mean by the formula
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:meanprobdist">\[\begin{equation}
  \mu = \sum_x x  f(x).
+ \tag{4.1}
 \end{equation}\]</span></p>
 <p>The computation of the mean for the Peter-Paul game is illustrated in Table . For each value of the gain <span class="math inline">\(G\)</span>, the value is multiplied by the associated probability – the products are given in the rightmost column of the table. Then the products are added – one sees that the mean of <span class="math inline">\(G\)</span> is <span class="math inline">\(\mu = 0\)</span>.</p>
+<p>Table 4.6. Calculation of the mean for Peter-Paul game.</p>
 <table>
 <thead>
 <tr class="header">
@@ -746,21 +753,22 @@ It is easy to compute the probability Peter loses money – also 1/2. Since the 
 <p><strong>Simulating the Peter-Paul Game (continued)</strong></p>
 <p>The functions <code>sample()</code> and <code>replicate()</code> were earlier illustrated to simulate this game 1000 times in R. Peter’s winnings in the different games are stored in the vector <code>G</code>. Here is a display of Peter’s winnings in the first 100 games:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">G[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>]</a></code></pre></div>
-<pre><code>##   [1]  -6   2   2   2  -2  -6  -2  10   6   2  -6  -2   2   6   2  -2   2
-##  [18]  -2   2  -2  -2   2   6  -2   2  10  -6   6  -2   2   2   6   2   6
-##  [35]  -2  -2  -2   6   2  -6 -10   6  -2  -2  -2   6 -10   2   6  -2  -6
-##  [52]  -6   2 -10  -2   2  -2  -6   2  -2  -2  -2  -6  -6   6  -6   2  -2
-##  [69]  -2  -6   6   6  -6  -6  -6   2  -2   6  -2 -10  -6 -10  -2   6  -6
-##  [86]   2  -2   2   6   2   2 -10  -2  -2 -10   6  -2  -2   6  -2</code></pre>
+<pre><code>##   [1]  -6  -6  -2   2   2   2  -2   2   6   2   2   6   6  -6  -2  -2  -2
+##  [18]  -2   2 -10   6   2   2   6   2   6   2  -6   2   2   2   2  -6  10
+##  [35]  -2  -2   6   2  -2  -2  -2  -6  -2   6   6   6  -6  -2   2   6   2
+##  [52]  -2  -6   2  -6  -2   2   2   6 -10  -2  -6   6   2  -2  -2   2  -6
+##  [69]   2   2   2  -6   2   2   2  -6  -6   2   2   2  -6  10  -2   2  -2
+##  [86]   2   2   2   6  -2  -2  -2 -10   2   6  -2  -6   6  -2  -6</code></pre>
 <p>One approximates the mean winning <span class="math inline">\(\mu\)</span> by finding the sample mean <span class="math inline">\(\bar G\)</span> of the winning values in the 1000 simulated games.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">mean</span>(G)</a></code></pre></div>
-<pre><code>## [1] -0.204</code></pre>
+<pre><code>## [1] -0.136</code></pre>
 <p>This value is approximately equal to the mean of <span class="math inline">\(G\)</span>, <span class="math inline">\(\mu\)</span>= 0. If Peter was able to play this game for a much larger number of games, then one would see that his average winning would be very close to <span class="math inline">\(\mu = 0\)</span>.</p>
 </div>
 <div id="standard-deviation-of-a-probability-distribution" class="section level2">
 <h2><span class="header-section-number">4.5</span> Standard Deviation of a Probability Distribution</h2>
 <p></p>
 <p>Consider two dice – one we will call the “fair die” and the other one will be called the “loaded die”. The fair die is the familiar one where each possible number (1 through 6) has the same chance of being rolled. The loaded die is designed in a special way that 3’s or 4’s are relatively likely to occur, and the remaining numbers (1, 2, 5, and 6) are unlikely to occur. Table  gives the probabilities of the possible rolls for both dice.</p>
+<p>Table 4.7. Probabilities of the possible rolls for a fair die and a loaded die.</p>
 <table>
 <tbody>
 <tr class="odd">
@@ -840,12 +848,14 @@ and for the loaded die the mean is given by
 <p>The means of the two probability distributions are the same – this means that one will tend to get the same average roll when the fair die and the loaded die are rolled many times.</p>
 <p>But one knows from our rolling data that the two probability distributions are different. For the loaded die, it is more likely to roll 3’s or 4’s. In other words, for the loaded die, it is more likely to roll a number close to the mean value <span class="math inline">\(\mu\)</span> = 3.5.</p>
 <p>The standard deviation of a random variable <span class="math inline">\(X\)</span>, denoted by the Greek letter <span class="math inline">\(\sigma\)</span>, measures how close the random variable is to the mean <span class="math inline">\(\mu\)</span>. It is called a standard deviation since it represents an “average” (or standard) distance (or deviation) from the mean <span class="math inline">\(\mu\)</span>. This standard deviation, denoted <span class="math inline">\(\sigma\)</span> is defined as follows:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:sdprobdist">\[\begin{equation}
 \sigma = \sqrt{\Sigma_x (x - \mu)^2 P(X = x)}.
+\tag{4.2}
 \end{equation}\]</span></p>
 <p>To find the standard deviation <span class="math inline">\(\sigma\)</span> for a random variable, one first computes (for all values of <span class="math inline">\(X\)</span>) the difference (or deviation) of <span class="math inline">\(x\)</span> from the mean value <span class="math inline">\(\mu\)</span>. Next, one squares each of the differences, and finds the average squared deviation by multiplying each squared deviation by the corresponding value of the pmf and summing the products.
 The standard deviation <span class="math inline">\(\sigma\)</span> is the square root of the average squared deviation.</p>
 <p>Tables  and  illustrate the computation of the standard deviation for the roll of the fair die and for the roll of the loaded die, where <span class="math inline">\(R\)</span> denotes the roll random variable.</p>
+<p>Table 4.8. Computation of the standard deviation <span class="math inline">\(\sigma_{Fair \, Die}\)</span> for the fair die.</p>
 <table>
 <thead>
 <tr class="header">
@@ -893,6 +903,7 @@ The standard deviation <span class="math inline">\(\sigma\)</span> is the square
 </tbody>
 </table>
 <p><span class="math display">\[\sigma_{Fair Die} = \sqrt{2.917} = 1.71\]</span></p>
+<p>Table 4.9. Computation of the standard deviation <span class="math inline">\(\sigma_{Loaded \, Die}\)</span> for the loaded die.</p>
 <table>
 <thead>
 <tr class="header">
@@ -956,9 +967,9 @@ What does this mean? Since the loaded die roll has a smaller standard deviation,
 <a class="sourceLine" id="cb7-8" data-line-number="8">                 <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <p>One approximates the means and standard deviations for the probability distributions by computing sample means and sample standard deviations of the simulated rolls.</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">c</span>(<span class="kw">mean</span>(rolls1), <span class="kw">sd</span>(rolls1))</a></code></pre></div>
-<pre><code>## [1] 3.630000 1.508595</code></pre>
+<pre><code>## [1] 3.51000 1.68472</code></pre>
 <div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">c</span>(<span class="kw">mean</span>(rolls2), <span class="kw">sd</span>(rolls2))</a></code></pre></div>
-<pre><code>## [1] 3.360000 1.132798</code></pre>
+<pre><code>## [1] 3.670000 1.035287</code></pre>
 <p>Note that both types of dice display similar means, but the loaded die displays a smaller standard deviation than the fair die.</p>
 <p><strong>Interpreting the standard deviation for a bell-shaped distribution</strong></p>
 <p>Once one has computed a standard deviation <span class="math inline">\(\sigma\)</span> for a random variable, how can one use this summary measure? One use of <span class="math inline">\(\sigma\)</span> was illustrated in the dice example above. The probabilities for the roll of the loaded die were more concentrated about the mean than the probabilities for the roll of the fair die, and that resulted in a smaller value of <span class="math inline">\(\sigma\)</span> for the roll of the loaded die.</p>
@@ -985,9 +996,9 @@ Mathematically, one writes,
 <a class="sourceLine" id="cb12-4" data-line-number="4">sum_rolls &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">roll10</span>())</a></code></pre></div>
 <p>A histogram of the results from 1000 trials of this experiment is shown in Figure .</p>
 <div class="figure"><span id="fig:unnamed-chunk-12"></span>
-<img src="bookdown-demo_files/figure-html/unnamed-chunk-12-1.png" alt="Histogram of 1000 sums of ten dice" width="500" />
+<img src="bookdown-demo_files/figure-html/unnamed-chunk-12-1.png" alt="Histogram of sum of ten dice in 1000 simulated rolls." width="500" />
 <p class="caption">
-Figure 4.5: Histogram of 1000 sums of ten dice
+Figure 4.5: Histogram of sum of ten dice in 1000 simulated rolls.
 </p>
 </div>
 <p>Note that the shape of this histogram is approximately bell shaped about the value 35. Since this histogram is a reflection of the probability distribution of the sum of the rolls of ten dice, this means that the shape of the probability distribution for the sum will also be bell-shaped.</p>
@@ -1002,9 +1013,9 @@ Applying our rule, the probability that the sum falls between</p>
 <p><strong>Simulating Rolls of Ten Dice (continued)</strong></p>
 <p>To see if these are accurate probability computations, return to our simulation of this experiment and see how often the sum of the ten rolls fell within the above limits. Recall that the simulation sums were stored in the vector . Below the proportions of sums of ten rolls that fall between 29.6 and 40.4, and between 24.2 and 45.8, are computed.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">sum</span>(sum_rolls <span class="op">&gt;</span><span class="st"> </span><span class="fl">29.6</span> <span class="op">&amp;</span><span class="st"> </span>sum_rolls <span class="op">&lt;</span><span class="st"> </span><span class="fl">40.4</span>) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
-<pre><code>## [1] 0.72</code></pre>
+<pre><code>## [1] 0.711</code></pre>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">sum</span>(sum_rolls <span class="op">&gt;</span><span class="st"> </span><span class="fl">24.2</span> <span class="op">&amp;</span><span class="st"> </span>sum_rolls <span class="op">&lt;</span><span class="st"> </span><span class="fl">45.8</span>) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
-<pre><code>## [1] 0.957</code></pre>
+<pre><code>## [1] 0.947</code></pre>
 <p>One sees that the proportions of values that fall within these limits are 0.702 and 0.955, respectively. Since these proportions are close to the numbers 0.68 and 0.95, we see in this example that this rule is pretty accurate.</p>
 </div>
 <div id="coin-tossing-distributions" class="section level2">
@@ -1029,7 +1040,7 @@ Figure 4.7: Illustration of the path of four balls falling through a Galton boar
 <p>Consider the following random experiment. One takes a quarter and flip it ten times, recording the number of heads one gets. There are four special characteristics of this simple coin-tossing experiment.</p>
 <ol style="list-style-type: decimal">
 <li>One is doing the same thing (flip the coin) ten times. We will call an individual coin flip a trial, and so our experiment consists of ten identical trials.</li>
-<li><pre><code> On each trial, there are two possible outcomes, heads or tails.</code></pre></li>
+<li>On each trial, there are two possible outcomes, heads or tails.</li>
 <li>In addition, the probability of flipping heads on any trial is 1/2.<br />
 </li>
 <li>The results of different trials are independent. This means that the probability of heads, say, on the fourth flip, does not depend on what happened on the first three flips.</li>
@@ -1162,8 +1173,9 @@ At this point, things are looking good – this may be a Binomial experiment. Bu
 <p><span class="math inline">\(p\)</span> = probability of a “success” on a single trial.</p>
 <p>If one recognizes an experiment as being Binomial, then all one needs to know is <span class="math inline">\(n\)</span> and <span class="math inline">\(p\)</span> to determine probabilities for the number of successes <span class="math inline">\(X\)</span>.
 Using the same argument as was made in the coin-tossing example, one can show that the probability of <span class="math inline">\(x\)</span> successes in a Binomial experiment is given by
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:binomialformula">\[\begin{equation}
  P(X = x) = {n \choose x} p^x (1 - p)^{n-x}, \, \, k = x ..., n.
+ \tag{4.3}
 \end{equation}\]</span></p>
 <p>Let’s illustrate using this formula for a few examples.</p>
 
@@ -1174,6 +1186,7 @@ Using the formula, the probability of exactly two hits is
 P(X = 2) = {5 \choose 2} (0.3)^2 (1 - 0.4)^{5-2} = 0.3087.
 \]</span></p>
 <p>What is the probability that the player gets at least one hit? To do this problem, one first constructs the collection of Binomial probabilities for <span class="math inline">\(n = 5\)</span> trials and probability of success <span class="math inline">\(p = 0.3\)</span>. The following table shows all possible values of <span class="math inline">\(X\)</span> (0, 1, 2, 3, 4, 5) and the associated probabilities found using the Binomial formula.</p>
+<p>Table 4.10. Possible values and associated probabilities for the baseball hitter.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1219,8 +1232,8 @@ P(X \ge 1) = 1 - P(X = 0) = 1 - 0.168 = 0.832.
 
 <p><strong>Binomial Calculations in R</strong></p>
 <p>By use of the <code>dbinom()</code> and <code>pbinom()</code> functions in R, one can perform probability calculations for any Binomial distribution. In our baseball example the number of hits <span class="math inline">\(X\)</span> is Binomial with sample size 5 and probability of success <span class="math inline">\(p = 0.3\)</span>. In the following R script a data frame is constructed with the possible values of the number of hits <code>x</code>, and the function <code>dbinom()</code> with arguments <code>size</code> and <code>prob</code> is used to compute the Binomial probabilities:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Probability =</span> <span class="kw">dbinom</span>(x, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Probability =</span> <span class="kw">dbinom</span>(x, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>))</a></code></pre></div>
 <pre><code>##   x Probability
 ## 1 0     0.16807
 ## 2 1     0.36015
@@ -1229,21 +1242,21 @@ P(X \ge 1) = 1 - P(X = 0) = 1 - 0.168 = 0.832.
 ## 5 4     0.02835
 ## 6 5     0.00243</code></pre>
 <p>The function <code>pbinom()</code> will compute cumulative probabilities of the form <span class="math inline">\(P(X \le x)\)</span>. For example, to find the probability that number of hits <span class="math inline">\(X\)</span> is 2 or less, <span class="math inline">\(P(X \le 2)\)</span>:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">pbinom</span>(<span class="dv">2</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">pbinom</span>(<span class="dv">2</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>## [1] 0.83692</code></pre>
 <p>One computes the probability <span class="math inline">\(P(X \ge 2)\)</span> by finding the cumulative probability <span class="math inline">\(P(X \le 1)\)</span>, and subtracting the result from 1:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pbinom</span>(<span class="dv">1</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pbinom</span>(<span class="dv">1</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>)</a></code></pre></div>
 <pre><code>## [1] 0.47178</code></pre>
 <p><strong>Simulating Binomial Experiments</strong></p>
 <p>One conveniently simulates outcomes from Binomial experiments by use of the <code>rbinom()</code> function. The arguments to this function are the number of simulated draws, the number of Binomial trials <code>size</code> and the probability of success <code>prob</code>. To illustrate, consider the baseball hitter who is coming to bat 5 times in a game where the probability of a hit on each at-bat is 0.3. One simulates the number of hits in 50 games by using arguments 50, <code>size = 5</code> and <code>prob = 0.3</code>.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">(hits &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">50</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.3</span>))</a></code></pre></div>
-<pre><code>##  [1] 1 2 1 1 2 2 2 0 2 2 2 1 2 4 2 1 2 3 2 2 0 1 1 2 1 2 0 3 3 4 4 1 2 0 3
-## [36] 1 1 4 2 2 1 2 1 0 3 2 0 3 1 0</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">(hits &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">50</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.3</span>))</a></code></pre></div>
+<pre><code>##  [1] 1 3 2 3 0 1 1 1 0 0 2 2 3 2 0 1 1 1 0 0 4 2 2 4 2 1 1 3 3 1 0 1 2 2 1
+## [36] 2 2 1 2 0 3 2 0 1 1 4 1 2 1 2</code></pre>
 <p>By use of the  function, we tally the outcomes.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">table</span>(hits)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">table</span>(hits)</a></code></pre></div>
 <pre><code>## hits
 ##  0  1  2  3  4 
-##  7 14 19  6  4</code></pre>
+##  9 17 15  6  3</code></pre>
 <p>Here this player got exactly one hit in a game in 20 games, so the approximately probability that <span class="math inline">\(X = 1\)</span> is equal to 20/50 = 0.4.</p>
 </div>
 <div id="mean-and-standard-deviation-of-a-binomial" class="section level2">
@@ -1269,12 +1282,14 @@ Using this representation, the mean and variance of X are given by
 E(X) = E(X_1) + ... + E(X_n), \, \, \, Var(X) = Var(X_1) + ... + Var(X_n).
 \]</span>
 The result about the variance is a consequence of the fact that the results of different trials of a Binomial experiment are independent. Using this result and the previous result on the mean and variance of an individual trial outcome, we obtain
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:binomialmean">\[\begin{equation}
 E(X) = p + ... + p = n p,
+\tag{4.4}
 \end{equation}\]</span>
 and
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:binomialvar">\[\begin{equation}
 Var(X) = p(1-p) + ... + p(1-p) = n p (1-p).
+\tag{4.5}
 \end{equation}\]</span></p>
 <p>To illustrate these formulas, recall the first example where <span class="math inline">\(X\)</span> denoted the number of heads when a fair coin is flipped 10 times. Here the number of trials and probability of success are given by <span class="math inline">\(n\)</span> = 10 and <span class="math inline">\(p\)</span> = 0.5. The expected number of heads would be
 <span class="math display">\[
@@ -1287,11 +1302,11 @@ V(X) = 10 (0.5) (1- 0.5) = 2.5.
 
 <p><strong>Simulating Binomial Experiments (continued)</strong></p>
 <p>In our baseball example, the number of successes <span class="math inline">\(X\)</span> were simulated in 50 Binomial experiments where <span class="math inline">\(n = 5\)</span> and <span class="math inline">\(p = 0.3\)</span>. The mean and standard deviation of <span class="math inline">\(X\)</span> are given by <span class="math inline">\(\mu = 5 (0.3) = 1.5\)</span> and <span class="math inline">\(\sigma = \sqrt{5 (.3) (1 - .3)} = 1.02\)</span>. One approximates the mean and standard deviation by finding the sample mean and standard deviation from the simulated values of <span class="math inline">\(X\)</span>. Below one sees that these approximate values agree closely with the exact values of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">hits &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">50</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.3</span>)</a>
-<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">mean</span>(hits)</a></code></pre></div>
-<pre><code>## [1] 1.66</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">sd</span>(hits)</a></code></pre></div>
-<pre><code>## [1] 1.061574</code></pre>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1">hits &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">50</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.3</span>)</a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="kw">mean</span>(hits)</a></code></pre></div>
+<pre><code>## [1] 1.7</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="kw">sd</span>(hits)</a></code></pre></div>
+<pre><code>## [1] 0.9091373</code></pre>
 </div>
 <div id="negative-binomial-experiments" class="section level2">
 <h2><span class="header-section-number">4.11</span> Negative Binomial Experiments</h2>
@@ -1320,10 +1335,12 @@ P(Y = 5) = {4 \choose 1} 0.372^2(1-0.372)^3 = 0.1371.
 <li>The experiment is continued until one observes <span class="math inline">\(r\)</span> successes, and <span class="math inline">\(Y\)</span> = number of trials one observes.</li>
 </ul>
 <p>The probability that it takes <span class="math inline">\(y\)</span> trials to observe <span class="math inline">\(r\)</span> successes is
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:negbinomial">\[\begin{equation}
 P(Y = y) = {y-1 \choose r-1} p^r (1- p)^{y-r}, y = r, r+1, r + 2, ...
+\tag{4.6}
 \end{equation}\]</span></p>
 <p>Let’s use this formula in our baseball example where <span class="math inline">\(r = 2\)</span> and <span class="math inline">\(p\)</span> = 0.372. Table  gives the probabilities for the number of at-bats <span class="math inline">\(y\)</span> = 2, 3, …, 9.</p>
+<p>Table 4.11. Probability distribution for the number of at-bats for Suzuki to get two additional hits.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1368,19 +1385,20 @@ P(Y = y) = {y-1 \choose r-1} p^r (1- p)^{y-r}, y = r, r+1, r + 2, ...
 </table>
 <p>Note that it is most likely that Suzuki will only need three at-bats to get his two additional hits, but the probability of three at-bats is only 17%. Actually each of the values 2, 3, 4, 5, and 6 have probabilities exceeding 10%. There is a significant probability that Suzuki will take a large number of bats – by adding the probabilities in Table , we see that the probability that <span class="math inline">\(Y\)</span> is at most 9 is 0.904, so the probability that Y exceeds 9 is 1 - 0.904 = 0.096.</p>
 <p>For a Negative Binomial experiment where <span class="math inline">\(Y\)</span> is the number of trials needed to observe <span class="math inline">\(r\)</span> successes, one can show that the mean value is
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:negbinomialmean">\[\begin{equation}
  E(Y) = \frac{r}{p}.
+ \tag{4.7}
 \end{equation}\]</span>
 For the baseball example, <span class="math inline">\(r = 2\)</span> and <span class="math inline">\(p = 0.372\)</span>, so the expected number of at-bats to get two hits would be <span class="math inline">\(E(Y) = 2/0.372 = 5.4\)</span>. It is interesting to note that although <span class="math inline">\(Y = 3\)</span> is the most probable value, Suzuki would average over 5 at-bats to get 2 hits in many repetitions of this random experiment.</p>
 
 <p><strong>Negative Binomial Calculations and Simulations</strong></p>
 <p>The R functions <code>dnbinom()</code> and <code>rnbinom()</code> can be used to compute probabilities and simulate from Negative Binomial distributions. One small complication is that these functions define the random variable to be the number of failures (instead of the total number of trials) until the <span class="math inline">\(r\)</span>-th success.</p>
 <p>To illustrate the use of these functions, consider our baseball example where <span class="math inline">\(X\)</span> is the number of at-bats for Suzuki to get <span class="math inline">\(r =2\)</span> hits where the probability of a hit on a single at-bat is <span class="math inline">\(p = 0.372\)</span>. The probability <span class="math inline">\(P(X = 5)\)</span> is the same as the probability <span class="math inline">\(P(Y = 3)\)</span> where <span class="math inline">\(Y\)</span> is the number of failures until the 2nd success. Using the function <code>dnbinom()</code>, one computes <span class="math inline">\(P(Y = 3)\)</span></p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">dnbinom</span>(<span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="fl">.372</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">dnbinom</span>(<span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="fl">.372</span>)</a></code></pre></div>
 <pre><code>## [1] 0.137096</code></pre>
 <p>which is equivalent to the probability that <span class="math inline">\(X = 5\)</span> computed earlier. Also,  can be used to simulate Negative Binomial experiments. For example, one can simulate the number of failures until the second success for 10 experiments as follows.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">rnbinom</span>(<span class="dv">10</span>, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="fl">.372</span>)</a></code></pre></div>
-<pre><code>##  [1] 0 3 5 3 7 4 9 5 1 6</code></pre>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="kw">rnbinom</span>(<span class="dv">10</span>, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="fl">.372</span>)</a></code></pre></div>
+<pre><code>##  [1] 3 5 9 2 4 2 1 6 3 2</code></pre>
 <p>It is interesting to note that Suzuki had 15 outs until the second success for one of these experiments.</p>
 </div>
 <div id="exercises-3" class="section level2">
@@ -1545,6 +1563,7 @@ For the baseball example, <span class="math inline">\(r = 2\)</span> and <span c
 </ol>
 <p>Suppose you are asked to roll four dice and record the sum <span class="math inline">\(X\)</span>. A lazy student thinks this is too much work. As a shortcut, he decides to roll only two dice, record the sum of the dice, and then double the result – call this random variable <span class="math inline">\(Y\)</span>.</p>
 <p>The probability distributions of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are shown in Tables  and . The distribution of <span class="math inline">\(X\)</span> was obtained by simulating the rolls of four dice for one million trials.</p>
+<p>Table 4.12. Probability distribution for <span class="math inline">\(X\)</span>.</p>
 <table>
 <thead>
 <tr class="header">
@@ -1623,6 +1642,7 @@ For the baseball example, <span class="math inline">\(r = 2\)</span> and <span c
 </tr>
 </tbody>
 </table>
+<p>Table 4.13. Probability distribution for <span class="math inline">\(Y\)</span>.</p>
 <table>
 <thead>
 <tr class="header">

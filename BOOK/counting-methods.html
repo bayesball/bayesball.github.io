@@ -341,13 +341,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="equally-likely-outcomes" class="section level2">
 <h2><span class="header-section-number">2.2</span> Equally Likely Outcomes</h2>
 <p>Assume one writes the sample space in such a way that the outcomes are equally likely. Then, applying the classical interpretation, the probability of each outcome will be</p>
-<p><span class="math display">\[\begin{equation}
+<p><span class="math display" id="eq:eqlikely1">\[\begin{equation}
 Prob({\rm Outcome}) = \frac{1}{{\rm Number} \, {\rm of} \, {\rm outcomes}}.
+\tag{2.1}
 \end{equation}\]</span>
 If one is interested in the probability of some event, then the probability is given by
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:eqlikely2">\[\begin{equation}
 Prob({\rm Event}) = \frac{{\rm Number} \, {\rm of} \, {\rm outcomes} \, {\rm in} \,
 {\rm event}}{{\rm Number} \, {\rm of} \, {\rm outcomes}}.
+\tag{2.2}
 \end{equation}\]</span></p>
 <p>This simple formula should be used with caution. To illustrate the use (and misuse) of this formula, suppose one has a box containing five balls of which three are red, one is blue, and one is white. One selects three balls without replacement from the box – what is the probability that all red balls are chosen?</p>
 <p>Let’s consider two representations of the sample space of this experiment.</p>
@@ -374,7 +376,7 @@ If one compares the answers, one sees an obvious problem since one obtains two d
 <p>One simulates this experiment on R by first creating a vector  with the ball colors, and then using the  function to sample three balls from the vector. The argument  indicates that a sample of 3 is chosen, and the argument  ensures that the sampling is done without replacement. In this particular simulation, one observes a red, blue, and red ball in our sample.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">box &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;white&quot;</span>)</a>
 <a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">sample</span>(box, <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
-<pre><code>## [1] &quot;red&quot;  &quot;red&quot;  &quot;blue&quot;</code></pre>
+<pre><code>## [1] &quot;red&quot;  &quot;blue&quot; &quot;red&quot;</code></pre>
 </div>
 <div id="the-multiplication-counting-rule" class="section level2">
 <h2><span class="header-section-number">2.3</span> The Multiplication Counting Rule</h2>
@@ -393,8 +395,9 @@ Figure 2.1: Tree diagram of possible dinners.
 <p>The above dining example illustrates a general counting rule that we call the multiplication rule.</p>
 
 <p><strong>Multiplication Rule:</strong> Suppose one is performing a task that consists of <span class="math inline">\(k\)</span> steps. One performs the first step in <span class="math inline">\(n_1\)</span> ways, the second step in <span class="math inline">\(n_2\)</span> ways, the third step in <span class="math inline">\(n_3\)</span> ways, and so on. Then the number of ways of completing the task, denoted by <span class="math inline">\(n\)</span>, is the product of the different ways of doing the k steps, or
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:multrule">\[\begin{equation}
 n = n_1 \times n_2 \times ... \times n_k.
+\tag{2.3}
 \end{equation}\]</span></p>
 </div>
 <div id="permutations" class="section level2">
@@ -481,8 +484,9 @@ One represents possible permutations by a set of three blanks, where songs are p
 <p>A second basic counting rule has just been illustrated.</p>
 
 <p><strong>Permutations Rule:</strong> If one has <span class="math inline">\(n\)</span> objects (all distinguishable), then the number of ways to arrange <span class="math inline">\(r\)</span> of them, called the number of permutations, is
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:permrule">\[\begin{equation}
  _n P_r =  n \times (n - 1) \times  ... \times (n - r ).
+ \tag{2.4}
  \end{equation}\]</span>
 In this example, <span class="math inline">\(n = 6\)</span> and <span class="math inline">\(r = 3\)</span>, and If three songs are played in one’s playlist, each of the 120 possible permutations will be equally likely to occur. So the probability of any single permutation, say</p>
 <p>Song <span class="math inline">\(A\)</span>, Song <span class="math inline">\(D\)</span>, Song <span class="math inline">\(B\)</span></p>
@@ -492,8 +496,9 @@ In this example, <span class="math inline">\(n = 6\)</span> and <span class="mat
  _6 P_6= n! = 6 \times 5 \times  4 \times... \times 1 = 720.
  \]</span>
 One uses the special symbol <span class="math inline">\(n!\)</span>, pronounced “n factorial”, to denote the product of the integers from 1 to n. So the number of ways of arranging <span class="math inline">\(n\)</span> distinct objects is
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:permrule2">\[\begin{equation}
  _n P_n= n! = n \times (n - 1) \times  (n - 2) \times... \times 1.
+ \tag{2.5}
  \end{equation}\]</span></p>
 <p></p>
 <p><strong>Simulating a Permutation</strong></p>
@@ -524,8 +529,9 @@ When one lists possible outcomes, one should decide if it matters how one orders
 <p>There is a simple formula for counting the number of outcomes in this situation.</p>
 
 <p><strong>Combinations Rule:</strong> Suppose one has <span class="math inline">\(n\)</span> objects and one wishes to take a subset of size <span class="math inline">\(r\)</span> from the group of objects without regards to order. Then the number of subsets or combinations is given by the formula
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:comborule">\[\begin{equation}
 {\rm number} \, {\rm of} \, {\rm combinations} = {n \choose r} = \frac{n!}{r! (n-r)!}.
+\tag{2.6}
 \end{equation}\]</span>
 where <span class="math inline">\(k!\)</span> stands for <span class="math inline">\(k\)</span> factorial <span class="math inline">\(k! = k \times (k -1) \times (k-2) \times ... \times 1\)</span>. You might have seen another notation<span class="math inline">\({n \choose r}\)</span> when people talk about combinations. This notation is pronounced “n choose r”, and it is the same as <span class="math inline">\({n \choose r}\)</span>.</p>
 <p>Let’s try the formula in our example to see if it agrees with our number. In our setting, one has <span class="math inline">\(n = 5\)</span> balls and one is selecting a subset of size <span class="math inline">\(r = 2\)</span> from the box of balls. Using <span class="math inline">\(n = 5\)</span> and <span class="math inline">\(r = 2\)</span> in the formula, one obtains
@@ -576,8 +582,9 @@ and a frequency table of the ten possible combinations is displayed. Note that t
 <div id="number-of-subsets" class="section level3">
 <h3><span class="header-section-number">2.5.1</span> Number of subsets</h3>
 <p>Suppose one has a group of <span class="math inline">\(n\)</span> objects and one is interested in the total number of subsets of this group. Then this total number is
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:subsets">\[\begin{equation}
 2 ^ n =  {n \choose 0} + {n \choose 1} + ... + {n \choose n}.
+\tag{2.7}
 \end{equation}\]</span>
 The formula <span class="math inline">\(2^n\)</span> is found by noticing there are two possibilities for each object – either the object is in the subset or it is not – and then applying the multiplication rule. The right hand side of the equation is derived by first counting the number of subsets of size 0, of size 1, of size 2, and so on, and then adding all of these subset numbers to get the total number.</p>
 <p><strong>Counting the number of pizzas</strong></p>
@@ -630,8 +637,9 @@ So there are 126 ways of choosing the four locations for the triangles. Once the
 <p>A new counting rule has been derived:</p>
 
 <p><strong>Permutations Rule for Non-Distinct Objects:</strong> The number of permutations of <span class="math inline">\(n\)</span> non-distinct objects where <span class="math inline">\(r\)</span> are of one type and <span class="math inline">\(n - r\)</span> are of a second type is
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:permnondist">\[\begin{equation}
 {n \choose r} = \frac{n!}{r! (n - r)!}.
+\tag{2.8}
 \end{equation}\]</span></p>
 <p>Recall the question that of interest: Suppose four triangles and five squares are randomly arranged. What is the chance that the first and last locations are occupied by triangles?</p>
 <p>It has already been shown that there are 126 ways of mixing up four triangles and five squares. Each possible arrangement is equally likely and has a chance of 1/126 of occurring.</p>

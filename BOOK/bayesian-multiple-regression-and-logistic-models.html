@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2019-09-28" />
+<meta name="date" content="2019-09-29" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -148,7 +148,6 @@
 </ul></li>
 <li class="chapter" data-level="7.3" data-path="proportion.html"><a href="proportion.html#continuous-priors"><i class="fa fa-check"></i><b>7.3</b> Continuous Priors</a><ul>
 <li class="chapter" data-level="7.3.1" data-path="proportion.html"><a href="proportion.html#the-beta-distribution-and-probabilities"><i class="fa fa-check"></i><b>7.3.1</b> The Beta distribution and probabilities</a></li>
-<li class="chapter" data-level="7.3.2" data-path="proportion.html"><a href="proportion.html#choosing-a-beta-density-to-represent-prior-opinion"><i class="fa fa-check"></i><b>7.3.2</b> Choosing a Beta density to represent prior opinion</a></li>
 </ul></li>
 <li class="chapter" data-level="7.4" data-path="proportion.html"><a href="proportion.html#updating-the-beta-prior"><i class="fa fa-check"></i><b>7.4</b> Updating the Beta Prior</a><ul>
 <li class="chapter" data-level="7.4.1" data-path="proportion.html"><a href="proportion.html#bayes-rule-calculation"><i class="fa fa-check"></i><b>7.4.1</b> Bayes’ rule calculation</a></li>
@@ -277,6 +276,7 @@ In this chapter, this regression scenario is generalized in several ways. In Sec
 <p>The U.S. Bureau of Labor Statistics (BLS) conducts the Consumer Expenditure Surveys (CE) through which the BLS collects data on expenditures, income, and tax statistics about households across the United States. Specifically, this survey provides information on the buying habits of U.S. consumers. The summary, domain-level statistics published by the CE are used for both policy-making and research, including the most widely used measure of inflation, the Consumer Price Index (CPI). In addition, the CE has measurements of poverty that determine thresholds for the U.S. Government’s Supplemental Poverty Measure.</p>
 <p>The CE consists of two surveys. The Quarterly Interview Survey, taken each quarter, aims to capture large purchases (such as rent, utilities, and vehicles), containing approximately 7000 interviews. The Diary Survey, administrated on an annual basis, focuses on capturing small purchases (such as food, beverages, tobacco), containing approximately 14,000 interviews of households.</p>
 <p>The CE publishes public-use microdata (PUMD), and a sample of the Quarterly Interview Survey in 2017 1st quarter is collected from the PUMD. This sample contains 1000 consumer units (CU), and provides information of the CU’s total expenditures in last quarter, the amount of CU income before taxes in past 12 months, and the CU’s urban/rural status. Table  provides the description of each variable in the CE sample.</p>
+<p>Table 12.1. The variable description for the CE sample.</p>
 <table>
 <thead>
 <tr class="header">
@@ -316,24 +316,27 @@ To proceed, one needs to develop a model to express the relationship between exp
 <p>In particular, the slope parameter <span class="math inline">\(\beta_1\)</span> is interpreted as the change in the expected response <span class="math inline">\(\mu_i\)</span>, when the predictor <span class="math inline">\(x_i\)</span> of record <span class="math inline">\(i\)</span> increases by a single unit. In the household expenditures example, not only there are multiple predictors, but the predictors are of different types including one continuous predictor (income), and one binary categorical (rural/urban status) predictor. As Chapter 11 focused on continuous-valued predictors, the interpretation of a regression coefficient for a binary categorical predictor is an important topic for discussion in this section.</p>
 <p><strong>A multiple linear regression model</strong></p>
 <p>Similar to a simple linear regression model, a multiple linear regression model assumes a observation specific mean <span class="math inline">\(\mu_i\)</span> for the <span class="math inline">\(i\)</span>-th response variable <span class="math inline">\(Y_i\)</span>.
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:normalsampling">\[\begin{equation}
 Y_i \mid \mu_i, \sigma \overset{ind}{\sim} \textrm{Normal}(\mu_i, \sigma), \, \, i = 1, \cdots, n.
+\tag{12.1}
 \end{equation}\]</span>
 In addition, it assumes that the mean of <span class="math inline">\(Y_i\)</span>, <span class="math inline">\(\mu_i\)</span>, is a linear function of all predictors. In general, one writes
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:lincomp">\[\begin{equation}
 \mu_i = \beta_0 + \beta_1 x_{i,1} + \beta_2 x_{i,2} + \cdots + \beta_r x_{i,r},
+\tag{12.2}
 \end{equation}\]</span>
 where <span class="math inline">\(\mathbf{x}_i = (x_{i,1}, x_{i,2}, \cdots, x_{i,r})\)</span> is a vector of <span class="math inline">\(r\)</span> known predictors for observation <span class="math inline">\(i\)</span>, and <span class="math inline">\(\mathbf{\beta} = (\beta_0, \beta_1, \cdots, \beta_r)\)</span> is a vector of unknown regression parameters (coefficients), shared among all observations.</p>
 <p>For studies where all <span class="math inline">\(r\)</span> predictors are continuous, one interprets the intercept parameter <span class="math inline">\(\beta_0\)</span> as the expected response <span class="math inline">\(\mu_i\)</span> for observation <span class="math inline">\(i\)</span>, where all of its predictors take values of 0 (i.e. <span class="math inline">\(x_{i,1} = x_{i,2} = \cdots = x_{i,r} = 0\)</span>). One can also interpret the slope parameter <span class="math inline">\(\beta_i\)</span> (<span class="math inline">\(j = 1, 2, \cdots, r\)</span>) as the change in the expected response <span class="math inline">\(\mu_i\)</span>, when the <span class="math inline">\(j\)</span>-th predictor, <span class="math inline">\(x_{i,j}\)</span>, of observation <span class="math inline">\(i\)</span> increases by a single unit while all remaining <span class="math inline">\((r-1)\)</span> predictors stay constant.</p>
 <p>However in the household expenditures example from the CE data sample, not all predictors are continuous. The urban/rural status variable is a binary categorical variable, taking a value of 1 if the CU is in an urban area, and taking value of 2 if the CU is in a rural area.
 It is possible to consider the variable as continuous and interpret the associated regression coefficient as the change in the expected response <span class="math inline">\(\mu_i\)</span> when the CU’s urban/rural status changes by one unit from urban to rural (corresponding to change from one to two). But it is much more common to consider this variable as a binary categorical variable that classifies the observations into two distinct groups: the urban group and the rural group. It will be seen that this classification puts an emphasis on the difference of the expected responses between the two distinct groups.</p>
 <p>Consequently, consider the construction of a new indicator variable in place of the binary variable. This new indicator variable takes a value of 0 if the CU is in an urban area, and a value of 1 if the CU is in a rural area. To understand the implication of this indictor variable, it is helpful to consider a simplified regression model with a single predictor, the binary indicator for rural area <span class="math inline">\(x_i\)</span>. This simple linear regression model expresses the linear relationship as
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:singlepredictor">\[\begin{equation}
 \mu_i = \beta_0 + \beta_1 x_i  = 
  \begin{cases}
   \beta_0, &amp; \text{ the urban group}; \\
   \beta_0 + \beta_1, &amp; \text{ the rural group}.  \\
   \end{cases}
+  \tag{12.3}
 \end{equation}\]</span>
 The expected response <span class="math inline">\(\mu_i\)</span> for CUs in the urban group is given by <span class="math inline">\(\beta_0\)</span>, and the expected response <span class="math inline">\(\mu_i\)</span> for CUs in the rural group is <span class="math inline">\(\beta_0 + \beta_1\)</span>. In this case <span class="math inline">\(\beta_1\)</span> represents the change in the expected response <span class="math inline">\(\mu_i\)</span> from the urban group to the rural group. That is, <span class="math inline">\(\beta_1\)</span> represents the effect of being a member of the rural group.</p>
 <p>Before continuing, there is a need for some data transformation. Both the expenditure and income variables are highly skewed, and both variables have more even distributions if we apply logarithm transformations. So the response variable will be the logarithm of the CU’s total expenditure and the continuous predictor will be the logarithm of the CU 12-month income.
@@ -346,12 +349,14 @@ Figure 12.1: Scatterplot of log total income and log total expenditure for the u
 </p>
 </div>
 <p>Now the the data transformations are completed, one is ready to set up a multiple linear regression model for the log expenditure response including one continuous predictor and one binary categorical predictor. The expected response <span class="math inline">\(\mu_i\)</span> is expressed as a linear combination of the log income variable and the rural indicator variable.
-<span class="math display">\[\begin{eqnarray}
+<span class="math display" id="eq:normalsampling">\[\begin{eqnarray}
 \mu_i = \beta_0 &amp;+&amp; \beta_1 x_{i, income} + \beta_2 x_{i, rural}.
+\tag{12.1}
 \end{eqnarray}\]</span>
 The multiple linear regression model is written as
-<span class="math display">\[\begin{eqnarray}
+<span class="math display" id="eq:linearreg">\[\begin{eqnarray}
 Y_i \mid \beta_0, \beta_1, \beta_2, \sigma \overset{ind}{\sim} \textrm{Normal}(\beta_0 &amp;+&amp; \beta_1 x_{i, income} + \beta_2 x_{i, rural}, \sigma), \nonumber \\
+\tag{12.4}
 \end{eqnarray}\]</span>
 where <span class="math inline">\(\mathbf{x}_i = (x_{i, income}, x_{i, rural})\)</span> is a vector of predictors and <span class="math inline">\(\sigma\)</span> is the standard deviation in the Normal model shared among all responses <span class="math inline">\(Y_i\)</span>’s.</p>
 <p>The regression parameters have clear interpretations.
@@ -432,12 +437,14 @@ sigma   0.735  0.769   0.802  0.769 0.0172   -- 0.000172
 </code></pre>
 <p>One way to determine if the two variables are useful predictors is to inspect the location of the 90% probability intervals. The interval estimate for <span class="math inline">\(\beta_1\)</span> (corresponding to log income) is (0.328, 0.400) and the corresponding estimate for <span class="math inline">\(\beta_2\)</span> (corresponding to the rural variable ) is (<span class="math inline">\(-0.482, -0.048\)</span>). Since both intervals do not cover zero, this indicates that both log income and the rural variables are helpful in predicting log expenditure.</p>
 <p>Several types of summaries of the posterior distribution are illustrated. Suppose one is interested in learning about the expected log expenditure. From the regression model, the mean log expenditure is equal to
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:meanexpend1">\[\begin{equation}
  \beta_0 + \beta_1 x_{income}
+ \tag{12.5}
 \end{equation}\]</span>
 for urban CUs, and equal to
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:meanexpend2">\[\begin{equation}
  \beta_0 + \beta_1 x_{income} + \beta_2
+ \tag{12.6}
  \end{equation}\]</span>
 for rural CUs. Figure  displays simulated draws from the posterior of the expected log expenditure superposed over the scatterplots of log income and log expenditure for the urban and rural cases. Note that there is more variation in the posterior draws for the rural units – this is reasonable since only a small portion of the data came from rural units.</p>
 <div class="figure"><span id="fig:unnamed-chunk-3"></span>
@@ -457,8 +464,9 @@ Figure 12.4: Posterior distributions of the expected log expenditure for units w
 </div>
 <p><strong>Prediction</strong></p>
 <p>A related problem is to predict a CU’s log expenditure for a particular set of predictor values. Let <span class="math inline">\(\tilde{Y}\)</span> denote the future response value for the expenditure for given values of income <span class="math inline">\(x^*_{income}\)</span> and rural value <span class="math inline">\(x^*_{rural}\)</span>. One represents the posterior predictive density of <span class="math inline">\(\tilde{Y}\)</span> as
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:prediction1">\[\begin{equation}
 f(\tilde{Y} = \tilde{y} \mid y) = \int f(\tilde{y} \mid y, \beta, \sigma) \pi(\beta, \sigma   \mid  y) d\beta,
+\tag{12.7}
 \end{equation}\]</span>
 where <span class="math inline">\(\pi(\beta, \sigma | y)\)</span> is the posterior density and <span class="math inline">\(f(\tilde{Y} = \tilde{y} \mid y, \beta, \sigma)\)</span> is the Normal sampling density which depends on the predictor values.</p>
 
@@ -502,8 +510,9 @@ Figure 12.6: Scatterplot of age and home run rate for Mike Schmidt. Fits from li
 <p>How does one choose a suitable regression model that avoids the underfitting and overfitting problems described above? A general method of comparing models is called cross-validation. In this method, one partitions the dataset into two parts – the “training” and “testing” components. One initially fits each regression model to the training dataset. Then one uses each fitted model to predict the response variable in the testing dataset. The model that is better in predicting observations in the future testing dataset is the preferred model.</p>
 <p>Let’s describe how one implements cross-validation for our career trajectory example. In the example, Mike Schmidt had a total of 8170 at-bats for 13 seasons. One randomly divides these 8170 at-bats into two datasets – 4085 of the at-bats (and the associated home run and age variables) are placed in a training dataset and the remaining at-bats become the testing dataset. Let <span class="math inline">\(\{(x_i^{(1)}, y_i^{(1)})\}\)</span> denote the age and home run rate variables from the training dataset and <span class="math inline">\(\{(x_i^{(2)}, y_i^{(2)})\}\)</span> denote the corresponding variables from the testing dataset.</p>
 <p>Suppose one considers the use of Model 1 where the home run rate <span class="math inline">\(Y_i^{(1)} \sim \textrm{Normal}(\mu_i, \sigma)\)</span> where the mean rate is <span class="math inline">\(\mu_i = \beta_0 + (\beta_1 - 30) x_i^{(1)}\)</span>. One places a weakly informative prior on the vector of parameters <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span> and define the likelihood using the training data. One uses JAGS to simulate from the posterior distribution and obtain the fitted regression
-<span class="math display">\[\begin{equation*}
+<span class="math display" id="eq:SSPE">\[\begin{equation*}
 \mu = \tilde{\beta}_0 + (\tilde{\beta}_1 - 30) x,
+\tag{12.8}
 \end{equation*}\]</span>
 where <span class="math inline">\(\tilde{\beta}_0\)</span> and <span class="math inline">\(\tilde{\beta}_1\)</span> are the posterior means of the regression intercept and slope respectively.</p>
 <p>One now uses this fitted regression to predict values of the home run rate from the testing dataset. One could simulate predictions from the posterior predictive distribution, but for simplicity, suppose one is interested in making a single prediction. For the <span class="math inline">\(i\)</span>-th value of age <span class="math inline">\(x_i^{(2)}\)</span> in the testing dataset, our “best” prediction of the <span class="math inline">\(i\)</span>-th home run rate from Model 1 would be <span class="math inline">\(\tilde{y}_i^{(2)}\)</span> where
@@ -552,6 +561,7 @@ penalty 4.817
 Penalized deviance: -84.17</code></pre>
 <p>The value of DIC = <span class="math inline">\(-84.17\)</span> for this single quadratic regression model is not meaningful, but one compares values of DIC for
 competing models. Suppose one wishes to compare models <span class="math inline">\(M_1, M_2, M_3\)</span> and a quartic regression where one represents the home run rate as a polynomial of fourth degree of the age. For each model, a JAGS script is written where the regression coefficients and the precision parameter are assigned weakly informative priors. The <code>run.jags()</code> function is applied to produce a posterior sample and the <code>extract.runjags()</code> with the <code>dic</code> argument to extract the value of DIC. Table  displays the values of DIC for the four regression models. The ``best&quot; model is the model with the smallest value of DIC. Looking at the values in Table , one sees that the quadratic model has the smallest value of <span class="math inline">\(-84.2\)</span>. The interpretation is that the quartic model is best in the sense that it will provide the best out-of-sample predictions.</p>
+<p>Table 12.2. DIC values for four regression models fit to Mike Schmidt’s home run rates.</p>
 <table>
 <thead>
 <tr class="header">
@@ -584,6 +594,7 @@ competing models. Suppose one wishes to compare models <span class="math inline"
 <p><strong>Example: U.S. women labor participation</strong></p>
 <p>The University of Michigan Panel Study of Income Dynamics (PSID) is the longest running longitudinal household survey in the world. The study began in 1968 with a nationally representative sample of over 18,000 individuals living in 5000 families in the United States. Information on these individuals and their descendants has been collected continuously, including data covering employment, income, wealth, expenditures, health, marriage, childbearing, child development, philanthropy, education, and numerous other topics.</p>
 <p>The PSID 1976 survey has attracted particular attention since it interviewed wives in the households directly in the previous year. The survey provides helpful self-reporting data sources for studies of married women’s labor supply. A sample includes information on family income exclusive of wife’s income (in $1000) and the wife’s labor participation (yes or no). This PSID sample contains 753 observations and two variables. Table  provides the description of each variable in the PSID sample.</p>
+<p>Table 12.3. The variable description for hte PSID sample.</p>
 <table>
 <thead>
 <tr class="header">
@@ -622,7 +633,6 @@ Figure 12.7: Scatterplot of the family income against the wife’s labor partici
 <p>Recall in Chapter 11, when one had a continuous-valued response variable and a single continuous predictor, the mean response <span class="math inline">\(\mu_i\)</span> was be expressed as a linear function of the predictor through an intercept parameter <span class="math inline">\(\beta_0\)</span> and a slope parameter <span class="math inline">\(\beta_1\)</span>:
 <span class="math display">\[\begin{equation}
 \mu_i = \beta_0 + \beta_1 x_i.
-\label{eq:LR:mean1}
 \end{equation}\]</span>
 Moreover it is reasonable to use a Normal regression model where the response <span class="math inline">\(Y_i\)</span> is Normally distributed where the mean <span class="math inline">\(\mu_i\)</span> with a linear function as in Equation ().
 <span class="math display">\[\begin{equation*}
@@ -634,13 +644,14 @@ Y_i \mid \mu_i, \sigma \overset{ind}{\sim} \textrm{Normal}(\mu_i, \sigma), \,\,\
 <p>Recall in Chapter 1 and Chapter 7, the definition of odds was introduced – an odds is the ratio of the probability of some event will take place over the probability of the event will not take place. The notion of odds will be used in how one represents the probability of the response in the regression model.</p>
 <p>In the PSID example, let <span class="math inline">\(p_i\)</span> be the probability of labor participation of married woman <span class="math inline">\(i\)</span>, and the corresponding odds of participation is <span class="math inline">\(\frac{p_i}{1 - p_i}\)</span>. The probability <span class="math inline">\(p_i\)</span> falls in the interval [0, 1] and the odds is a positive real number. If one applies the logarithm transformation on the odds, one obtains a quantity, called a log odds or logit, that can take both negative and positive values on the real line. One obtains a linear regression model for a binary response by writing the logit in terms of the linear predictor.</p>
 <p>The binary response <span class="math inline">\(Y_i\)</span> is assumed to have a Bernoulli distribution with probability of success <span class="math inline">\(p_i\)</span>.<br />
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:binaryobs">\[\begin{equation}
 Y_i \mid p_i \overset{ind}{\sim} \textrm{Bernoulli}(p_i), \,\,\, i = 1, \cdots, n.
+\tag{12.9}
 \end{equation}\]</span>
 The logistic regression model writes that the logit of the probability <span class="math inline">\(p_i\)</span> is a linear function of the predictor variable <span class="math inline">\(x_i\)</span>:
-<span class="math display">\[\begin{equation}
+<span class="math display" id="eq:logitmodel">\[\begin{equation}
 \textrm{logit}(p_i) = \textrm{log}\left(\frac{p_i}{1 - p_i}\right) = \beta_0 + \beta_1 x_i.
-\label{eq:LR:mean2}
+\tag{12.10}
 \end{equation}\]</span></p>
 <p>It is more challenging to interpret the regression coefficients in a logistic model.
 In simple linear regression with one predictor, the interpretation of the intercept and the slope is relatively straightforward, as the linear function is directly assigned to the mean <span class="math inline">\(\mu_i\)</span>. With the logit function as in Equation (), one sees the the regression coefficients <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are directly related to the log odds <span class="math inline">\(\textrm{log}\left(\frac{p_i}{1 - p_i}\right)\)</span> instead of <span class="math inline">\(p_i\)</span>.</p>
@@ -651,7 +662,8 @@ In simple linear regression with one predictor, the interpretation of the interc
 \textrm{log}\left(\frac{p_i}{1 - p_i}\right) &amp;=&amp;  \beta_0 + \beta_1 x_i \nonumber \\ 
 \frac{p_i}{1 - p_i} &amp;=&amp; \exp(\beta_0 + \beta_1 x_i)  \nonumber \\
 p_i &amp;=&amp; \frac{\exp(\beta_0 + \beta_1 x_i)}{1 + \exp(\beta_0 + \beta_1 x_i)}.
-\label{eq:LR:p}
+\label{eq:LR p}
+(\#eq:LR p)
 \end{eqnarray}\]</span>
 Equation () shows that the logit function guarantees that the probability <span class="math inline">\(p_i\)</span> lies in the interval [0, 1].</p>
 <p>With these building blocks, one proceeds to prior specification and MCMC posterior inference of this logistic regression model. Note that a prior distribution is needed for the set of regression coefficient parameters: <span class="math inline">\((\beta_0, \beta_1)\)</span>. In the next subsections, a conditional means prior approach is explored in this prior construction and the subsequent MCMC inference.</p>
@@ -675,8 +687,10 @@ By assuming independence of one’s beliefs about <span class="math inline">\(p_
 First write the two conditional probabilities <span class="math inline">\(p^*_1\)</span> and <span class="math inline">\(p^*_2\)</span> as function of the regression coefficient parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>, as in Equation (). By solving these two equations for the regression coefficient parameters, one expresses each regression parameter as a function of the conditional probabilities.</p>
 <p><span class="math display">\[\begin{eqnarray}
 \beta_1 
-&amp;=&amp; \frac{\textrm{logit}(p_1^*) - \textrm{logit}(p_2^*)}{x_1^* - x_2^*}, \label{eq:LR:beta0} \\
-\beta_0 &amp;=&amp; \textrm{log}\left(\frac{p^*_1}{1-p^*_1}\right) - \beta_1 x_1^*. \label{eq:LR:beta1}
+&amp;=&amp; \frac{\textrm{logit}(p_1^*) - \textrm{logit}(p_2^*)}{x_1^* - x_2^*}, \label{eq:LR beta0} \\
+(\#eq:LR beta0)
+\beta_0 &amp;=&amp; \textrm{log}\left(\frac{p^*_1}{1-p^*_1}\right) - \beta_1 x_1^*. \label{eq:LR beta1}
+(\#eq:LR beta1)
 \end{eqnarray}\]</span></p>
 <p>Let’s illustrate constructing a conditional means prior for our example. Consider two different family income (exclusive of the wife’s income), say $20,000 and $80,000 (predictor is in $1000 units). For each family income, a Beta prior is constructed for the probability of the wife’s labor participation. As in Chapter 7, a Beta prior is assessed by specifying two quantiles of the prior distribution and finding the values of the shape parameters that match those specific quantile values.</p>
 <ul>
@@ -694,7 +708,8 @@ Figure 12.8: Illustration of the conditional means prior. Each line represents t
 <p>Assuming independence of the prior beliefs about the two probabilities, one represents the joint prior density function for (<span class="math inline">\(p_1^*, p_2^*\)</span>) as the product of densities
 <span class="math display">\[\begin{equation}
 \pi(p_1^*, p_2^*) = \pi_B(p_1^*, 2.52, 20.08)\pi_B(p_2^*, 20.59, 9.01),
-\label{eq:LR:prior}
+\label{eq:LR prior}
+(\#eq:LR prior)
 \end{equation}\]</span>
 where <span class="math inline">\(\pi_B(y, a, b)\)</span> denotes the Beta density with shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>.</p>
 <p>As said earlier, this prior distribution on the two probabilities implies a prior distribution on the regression coefficients.
@@ -771,6 +786,7 @@ beta1 -0.0143 -0.00524 0.00285 -0.00532 0.00438   -- 7.69e-05</code></pre>
 <p>One difficulty in interpreting a logistic regression model is that the linear component <span class="math inline">\(\beta_0 + \beta_1 x\)</span> is on the logit scale. It is easier to understand the fitted model when one expresses the model in terms of the probability of participation <span class="math inline">\(p_i\)</span>:
 <span class="math display">\[\begin{equation}
 p_i = \frac{\exp(\beta_0 + \beta_1 x_i)}{1 + \exp(\beta_0 + \beta_1 x_i)}.
+(\#eq:LR p5)
 \end{equation}\]</span>
 For a specific value of the predictor <span class="math inline">\(x_i\)</span>, it is straightforward to simulate the posterior distribution of the probability <span class="math inline">\(p_i\)</span>. If <span class="math inline">\((\beta_0^{(s)}, \beta_1^{(s)})\)</span> represents a simulated draw from the posterior of <span class="math inline">\(\beta\)</span>, and one computes <span class="math inline">\(p_i^{(s)}\)</span> using Equation () from the simulated draw, then <span class="math inline">\(p_i^{(s)}\)</span> is a simulated draw from the posterior of <span class="math inline">\(p_i\)</span>.</p>
 <p>This process was used to obtain simulated samples from the posterior distribution of the probability <span class="math inline">\(p_i\)</span> for the income variable values 10, 20, …, 70. In Figure  the posterior medians of the probabilities <span class="math inline">\(p_i\)</span> are displayed as a line graph and 90% posterior interval estimates are shown as vertical bars. The takeaway message from this figure is that the probability of labor participation is close to one-half and this probability slightly decreases as the family income increases. Also note that the length of the posterior interval estimate increases for larger family incomes – this is expected since much of the data is for small income values.</p>
@@ -786,6 +802,7 @@ Figure 12.12: Posterior interval estimates for the probability of labor particip
 <p>One represents this predictive density of <span class="math inline">\(\tilde{y}_i\)</span> as
 <span class="math display">\[\begin{equation}
 f(\tilde{Y}_i = \tilde{y}_i \mid y) = \int \pi(\beta \mid y) f(\tilde{y}_i, \beta) d\beta,
+(\#eq:LR prediction)
 \end{equation}\]</span>
 where <span class="math inline">\(\pi(\beta \mid y)\)</span> is the posterior density of <span class="math inline">\(\beta = (\beta_0, \beta_1)\)</span> and <span class="math inline">\(f(\tilde{y}_i, \beta)\)</span> is the Binomial sampling density of <span class="math inline">\(\tilde{y}_i\)</span> conditional on the regression vector <span class="math inline">\(\beta\)</span>.</p>
 <p>A strategy for simulating the predictive density is implemented similar to what was done in the linear regression setting. Suppose that one focuses on the predictor value <span class="math inline">\(x^*_i\)</span> and one wishes to consider a future sample of <span class="math inline">\(n = 50\)</span> of women with that income level. The simulated draws from the posterior distribution of <span class="math inline">\(\beta\)</span> are stored in a matrix ```post}. For each of the simulated parameter draws, one computes the probability of labor participation <span class="math inline">\(p^{(s)}\)</span> for that income level – these values represent posterior draws of the probability <span class="math inline">\(\{p^{(s)}\}\)</span>. Given those probability values, one simulates Binomial samples of size <span class="math inline">\(n = 50\)</span> where the probability of successes are given by the simulated <span class="math inline">\(\{p^{(s)}\}\)</span> – the variable <span class="math inline">\(\tilde{y}\)</span> represents the simulated Binomial variable. By dividing <span class="math inline">\(\tilde{y}\)</span> by <span class="math inline">\(n\)</span>, one obtains simulated proportions of labor participation for that income level. Each group of simulated draws from the predictive distribution of the labor proportion is summarized by the median, 5th, and 95th percentiles.</p>
@@ -1044,6 +1061,7 @@ where <span class="math inline">\(x_i = 0\)</span> for year 2005 and <span class
 \log \left( \frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1 x_i,
 \]</span>
 where <span class="math inline">\(x_i\)</span> is the number of absences.</p>
+<p>Table 12.4. Number of absences and grades for ten students.</p>
 <table>
 <thead>
 <tr class="header">
