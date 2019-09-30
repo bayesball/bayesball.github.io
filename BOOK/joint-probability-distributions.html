@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2019-09-29" />
+<meta name="date" content="2019-09-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -441,10 +441,10 @@ P(X &gt; Y) &amp; = f(1, 0) + f(2, 0) + f(2, 1) + f(3, 0) + f(3, 1) + f(3, 2) \\
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">table</span>(results<span class="op">$</span>X, results<span class="op">$</span>Y) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
 <pre><code>##    
 ##         0     1     2     3     4
-##   0 0.000 0.000 0.031 0.043 0.009
-##   1 0.000 0.039 0.226 0.129 0.008
-##   2 0.011 0.140 0.224 0.049 0.000
-##   3 0.016 0.049 0.026 0.000 0.000</code></pre>
+##   0 0.000 0.000 0.028 0.042 0.018
+##   1 0.000 0.045 0.228 0.135 0.017
+##   2 0.010 0.140 0.194 0.050 0.000
+##   3 0.017 0.049 0.027 0.000 0.000</code></pre>
 <p><strong>Marginal probability functions</strong></p>
 <p>Once a joint probability mass function for <span class="math inline">\((X, Y)\)</span> has been constructed, one finds probabilities for one of the two variables. In our balls example, suppose one wants to find the probability that exactly three red balls are chosen, that is <span class="math inline">\(P(X = 3)\)</span>. This probability is found by summing values of the pmf <span class="math inline">\(f(x, y)\)</span> where <span class="math inline">\(x = 3\)</span> and <span class="math inline">\(y\)</span> can be any possible value of the random variable <span class="math inline">\(Y\)</span>, that is,
 <span class="math display">\[\begin{align*}
@@ -595,10 +595,10 @@ For example, the probability of observing two white balls given that we have two
 <pre><code>## # A tibble: 4 x 3
 ##       Y     N      P
 ##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
-## 1     0    11 0.0259
-## 2     1   140 0.330 
-## 3     2   224 0.528 
-## 4     3    49 0.116</code></pre>
+## 1     0    10 0.0254
+## 2     1   140 0.355 
+## 3     2   194 0.492 
+## 4     3    50 0.127</code></pre>
 </div>
 <div id="multinomial-experiments" class="section level2">
 <h2><span class="header-section-number">6.2</span> Multinomial Experiments</h2>
@@ -674,23 +674,23 @@ The results of the remaining <span class="math inline">\(10 - 3 = 7\)</span> tri
 <a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">names</span>(results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;X3&quot;</span>)</a>
 <a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">head</span>(results)</a></code></pre></div>
 <pre><code>##   X1 X2 X3
-## 1  1  4  5
-## 2  2  5  3
-## 3  2  2  6
-## 4  0  5  5
-## 5  4  2  4
-## 6  1  3  6</code></pre>
+## 1  3  1  6
+## 2  2  4  4
+## 3  1  4  5
+## 4  0  3  7
+## 5  0  6  4
+## 6  0  6  4</code></pre>
 <p>Given this simulated output, one can compute many different probabilities of interest. For example, suppose one is interested in <span class="math inline">\(P(X_1 + X_2 &lt; 5)\)</span>. One approximates this probability by simulation by finding the proportion of simulated pairs (<code>X1, X2</code>) where <code>X1 + X2 &lt; 5</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">results <span class="op">%&gt;%</span><span class="st"> </span></a>
 <a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">P =</span> <span class="kw">sum</span>(X1 <span class="op">+</span><span class="st"> </span>X2 <span class="op">&lt;</span><span class="st"> </span><span class="dv">5</span>) <span class="op">/</span><span class="st"> </span><span class="dv">5000</span>)</a></code></pre></div>
-<pre><code>##       P
-## 1 0.379</code></pre>
+<pre><code>##        P
+## 1 0.3832</code></pre>
 <p>Suppose one is interested in finding the mean of the distribution of <span class="math inline">\(X_1\)</span> conditional on <span class="math inline">\(X_2 = 3\)</span>. The <code>filter()</code> function is used to choose only the Multinomial results where <code>X2 = 3</code> and the <code>summarize()</code> function finds the mean of <code>X1</code> among these results. One estimates <span class="math inline">\(E(X_1 \mid X_2 = 3) \approx 1.79193.\)</span> Note that it was found earlier that the conditional distribution of <span class="math inline">\(X_1\)</span> conditional on <span class="math inline">\(X_2 = 3\)</span> is Binomial(<span class="math inline">\(7, 1/4\)</span>) with mean <span class="math inline">\(7 (1 /4)\)</span> which is consistent with the simulation-based calculation.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">results <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(X2 <span class="op">==</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb13-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">X1_M =</span> <span class="kw">mean</span>(X1))</a></code></pre></div>
 <pre><code>##       X1_M
-## 1 1.725984</code></pre>
+## 1 1.751914</code></pre>
 </div>
 <div id="joint-density-functions" class="section level2">
 <h2><span class="header-section-number">6.3</span> Joint Density Functions</h2>
@@ -1009,7 +1009,7 @@ Similarly, if one knows that <span class="math inline">\(X = x\)</span>, then th
 <a class="sourceLine" id="cb23-10" data-line-number="10"><span class="kw">names</span>(sdata) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)</a>
 <a class="sourceLine" id="cb23-11" data-line-number="11">sdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="kw">mean</span>(Y <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.5</span> <span class="op">*</span><span class="st"> </span>X))</a></code></pre></div>
 <pre><code>##   mean(Y &gt; 1.5 * X)
-## 1             0.207</code></pre>
+## 1             0.221</code></pre>
 <div class="figure"><span id="fig:unnamed-chunk-20"></span>
 <img src="../LATEX/figures/chapter6/Binorm_scatter.png" alt="Scatterplot of simulated draws from the Bivariate Normal in body measurement example.  The probability that $Y &gt; 1.5 X$ is approximated by the proportion of simulated points that fall to the left of the line $y = 1.5 x$." width="500" />
 <p class="caption">
