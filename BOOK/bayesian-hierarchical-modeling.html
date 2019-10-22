@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 10 Bayesian Hierarchical Modeling | Probability and Bayesian Modeling</title>
   <meta name="description" content="This is an introduction to probability and Bayesian modeling at the undergraduate level. It assumes the student has some background with calculus." />
-  <meta name="generator" content="bookdown 0.13 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.14 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 10 Bayesian Hierarchical Modeling | Probability and Bayesian Modeling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2019-09-30" />
+<meta name="date" content="2019-10-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -40,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -841,8 +844,80 @@ From these facts, a more natural parameterization of the hyperprior distribution
 \tag{10.22}
 \end{equation}\]</span>
 where <span class="math inline">\(a = \mu\eta\)</span> and <span class="math inline">\(b = (1-\mu)\eta\)</span>. These expressions are useful in writing the JAGS script for the hierarchical Beta-Binomial Bayesian model.</p>
-<p>A hyperprior is constructed from the <span class="math inline">\((\mu, \eta)\)</span> representation. Assume <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\eta\)</span> are independent which means that one’s beliefs about the prior mean to <code>N</code> is needed for the priors as each <code>p[i]</code> follows the same <code>dbeta(a, b)</code> distribution.
-The hyperpriors section uses the new parameterization of the <span class="math inline">\(\textrm{Beta}(a, b)\)</span> distribution in terms of <code>mu</code> and <code>eta</code>. Here one expresses the hyperparameters <code>a</code> and <code>b</code> in terms of the new hyperparameters <code>mu</code> and <code>eta</code>, and then assigns to the parameters <code>mu</code> and <code>logeta</code> the independent distributions <code>dbeta(mua, mub)</code> and <code>dlogist(logn, 1)</code>, respectively. One also needs to transform <code>logeta</code> to <code>eta</code>. The values of <code>mua</code>, <code>mub</code>, and <code>logn</code> are assigned together with the data in the setup of JAGS, following Equation () and Equation ().</p>
+<p>A hyperprior is constructed from the <span class="math inline">\((\mu, \eta)\)</span> representation. Assume <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\eta\)</span> are independent which means that one’s beliefs about the prior mean are independent of the beliefs about the prior sample size. The hyperprior expectation <span class="math inline">\(\mu\)</span> is the mean measure for <span class="math inline">\(p_i\)</span>, the average death rate across 13 hospitals. If one has little prior knowledge about the expectation <span class="math inline">\(\mu\)</span>, one assigns this parameter a Uniform prior which is equivalent to a <span class="math inline">\(\textrm{Beta}(1, 1)\)</span> prior.</p>
+<p>To motivate the prior choice for the hyperparameter sample size <span class="math inline">\(\eta\)</span>, consider the case where the hyperparameter values are known. If <span class="math inline">\(y^*\)</span> and <span class="math inline">\(n^*\)</span> are respectively the number of deaths and number of cases for one hospital, then the posterior mean of death rate parameter <span class="math inline">\(p^*\)</span> is given by
+<span class="math display" id="eq:postmean1">\[\begin{equation}
+E(p^* \mid y^*) = \frac{y^* + \mu \eta }{n^* + \eta}.
+\tag{10.23}
+\end{equation}\]</span>
+With a little algebra, the posterior mean is rewritten as
+<span class="math display" id="eq:postmean2">\[\begin{equation}
+E(p^* \mid y^*) = (1 - \lambda) \frac{y^*}{n^*} + \lambda \mu,
+\tag{10.24}
+\end{equation}\]</span>
+where <span class="math inline">\(\lambda\)</span> is the shrinkage fraction
+<span class="math display" id="eq:shrinkage">\[\begin{equation}
+\lambda = \frac{\eta}{n^* + \eta}.
+\tag{10.25}
+\end{equation}\]</span>
+The parameter <span class="math inline">\(\lambda\)</span> falls in the interval (0, 1) and represents the degree of shrinkage of the posterior mean away from the sample proportion <span class="math inline">\(y^* / n^*\)</span> towards the prior mean <span class="math inline">\(\mu\)</span>.</p>
+<p>Suppose one believes {} that, for a representative sample size <span class="math inline">\(n^*\)</span>, the shrinkage <span class="math inline">\(\lambda\)</span> is Uniformly distributed on (0, 1). By performing a transformation, this implies that the prior density for the prior sample size <span class="math inline">\(\eta\)</span> has the form
+<span class="math display" id="eq:etaprior">\[\begin{equation}
+\pi(\eta) = \frac{n^*}{(n^* + \eta)^2}, \, \, \eta &gt; 0.
+\tag{10.26}
+\end{equation}\]</span>
+Equivalently, the logarithm of <span class="math inline">\(\eta\)</span>, <span class="math inline">\(\theta = \log \eta\)</span>, has a Logistic distribution with location <span class="math inline">\(\log n^*\)</span> and scale 1. We represent this distribution as <span class="math inline">\(\textrm{Logistic}(\log n^*, 1)\)</span>, with pdf:
+<span class="math display" id="eq:logetaprior">\[\begin{equation}
+\pi(\theta) = \frac{e^{-(\theta - \log n^*)}}
+{(1 + e^{-(\theta - \log n^*)})^2}.
+\tag{10.27}
+\end{equation}\]</span></p>
+<p>With this specification of the hyperparameter distribution, one writes down the complete hierarchical model as follows:</p>
+<ul>
+<li><p>Sampling, for <span class="math inline">\(i, \cdots, 13\)</span>:
+<span class="math display" id="eq:bino7">\[\begin{equation}
+Y_i \sim \textrm{Binomial}(n_i, p_i)
+\label{eq:BetaBinomialLik_v3}
+\tag{10.28}
+\end{equation}\]</span></p></li>
+<li><p>Prior for <span class="math inline">\(p_i\)</span>, Stage 1: for <span class="math inline">\(i = 1, \cdots, 13\)</span>:
+<span class="math display" id="eq:beta7">\[\begin{equation}
+p_i \sim \textrm{Beta}(a, b)
+\label{eq:BetaBinomialPrior_v3}
+\tag{10.29}
+\end{equation}\]</span></p></li>
+<li><p>Prior for <span class="math inline">\(p_i\)</span>, Stage 2:
+<span class="math display" id="eq:muetaprior7">\[\begin{eqnarray}
+\mu &amp;\sim&amp; \textrm{Beta}(1, 1), \label{eq:BetaBinomialHyperprior_v21}\\
+\log \eta &amp;\sim&amp; \textrm{Logistic}(\log n^*, 1)
+\label{eq:BetaBinomialHyperprior_v22}
+\tag{10.30}
+\end{eqnarray}\]</span>
+where <span class="math inline">\(a = \mu\eta\)</span> and <span class="math inline">\(b = (1-\mu)\eta\)</span>.</p></li>
+</ul>
+<p><strong>Writing the JAGS script</strong></p>
+
+<p>Following this model structure above, one writes out the model section of the JAGS script for the hierarchical Beta-Binomial model.
+The model script is saved in <code>modelString</code>.</p>
+<pre><code>modelString &lt;-&quot;
+model {
+## likelihood
+for (i in 1:N){
+   y[i] ~ dbin(p[i], n[i])
+}
+## priors
+for (i in 1:N){
+   p[i] ~ dbeta(a, b)
+}
+## hyperpriors
+a &lt;- mu*eta
+b &lt;- (1-mu)*eta
+mu ~ dbeta(mua, mub)
+eta &lt;- exp(logeta)
+logeta ~ dlogis(logn, 1)
+}
+&quot;</code></pre>
+<p>In the sampling part of the script, the loop goes from <code>1</code> to <code>N</code>, where <code>N</code> is the total number of observations, with index <code>i</code>. Another loop going from <code>1} to</code>N<code>is needed for the priors as each</code>p[i]<code>follows the same</code>dbeta(a, b)<code>distribution.  The hyperpriors section uses the new parameterization of the $\textrm{Beta}(a, b)$ distribution in terms of</code>mu<code>and</code>eta<code>. Here one expresses the hyperparameters</code>a<code>and</code>b<code>in terms of the new hyperparameters</code>mu<code>and</code>eta<code>, and then assigns to the parameters</code>mu<code>and</code>logeta<code>the independent distributions</code>dbeta(mua, mub)<code>and</code>dlogist(logn, 1)<code>, respectively. One also needs to transform</code>logeta<code>to</code>eta<code>. The values of</code>mua<code>,</code>mub<code>, and</code>logn``` are assigned together with the data in the setup of JAGS, following Equation () and Equation ().</p>
 <p><strong>Define the data and prior parameters</strong></p>
 
 <p>Following the usual implementation of JAGS, the next step is to define the data and provide values for the parameters of the prior. In the script below, a list <code>the_data</code> contains the vector of death counts in <code>y</code>, the vector of hearth attack cases in <code>n</code>, the number of observations <code>N</code>, the values of <code>mua</code>, <code>mub</code>, and <code>logn</code>. Note that we are setting <span class="math inline">\(\log n^* = \log(100)\)</span> which indicates that {} we believe the shrinkage <span class="math inline">\(\lambda = \eta / (\eta + 100)\)</span> is Uniformly distributed on (0, 1).</p>
@@ -918,7 +993,7 @@ sum(diff &gt; 0)/5000
 <p>Generally, when one presents a table such as Table 10.2, one is interested in ranking the 13 hospitals from best (smallest death rate) to worst (largest death rate). A particular hospital, say Bellevue Hospital Center, is interested in its rank among the 13 hospitals. The probability Bellevue has rank 1 is the posterior probability
 <span class="math display" id="eq:rankoneprob">\[\begin{equation}
 P(p_1 &lt; p_2, ..., p_1 &lt; p_{13} | y),
-\tag{10.23}
+\tag{10.31}
 \end{equation}\]</span>
 and this probability is approximated by collecting the posterior draws where the simulated value of <span class="math inline">\(p_1\)</span> is the smallest among the 13 simulated proportions. Likewise, one computes from the MCMC output the probability that Bellevue has rank 2 through 13. These rank probabilities are displayed in Figure  for two hospitals. The probability that Bellevue is the best hospital with respect to death rate is 0.25 and by summing several probabilities, the probability that Bellevue is ranked among the top three hospitals is 0.54. In contrast, from Figure 10.8, the rank of Harlem Hospital is less certain since the probability distribution is relatively flat across the 13 possible rank values. This is not surprising since this particular hospital had only 35 cases, compared to 129 cases at Bellevue.</p>
 
@@ -1722,11 +1797,13 @@ distributions.</p></li>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
