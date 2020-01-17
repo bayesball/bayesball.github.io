@@ -1,0 +1,277 @@
+---
+title: "Introduction to the ProbBayes Package"
+author: "Jim Albert"
+date: "1/15/2020"
+output:
+  html_document:
+    theme: lumen
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    code_folding: show
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      warning = FALSE,
+                      message = FALSE)
+```
+
+### Introduction
+
+The ```ProbBayes``` package was written to accompany the text _Probability and Bayesian Modeling_ by Jim Albert and Jingchen Hu.  The package includes a number of functions to illustrate Bayesian computations described in the text.  In addition, ```ProbBayes``` contains all datasets used in the examples and exercises.  The purpose of this document to provide an overview of the functions contained in the package.
+
+### Installing ProbBayes
+
+The ProbBayes package is available via the authors' Github site.  Assuming the devtools package has been installed, the package is installed by use of the ```install_github()``` function.
+
+```
+library(devtools)
+install_github("bayesball/ProbBayes")
+```
+
+To load the package, use the ```library()``` function.
+
+```{r}
+library(ProbBayes)
+```
+
+### Datasets
+
+All datsets mentioned in _Probability and Bayesian Modeling_ are contained in the ```ProbBayes``` package.  For example, the dataset ```pt99price.csv``` contains the point prices of 0.99 carat diamonds in Exercise 16 of Chapter 8.  This data is contained in the data framew ```pt99price`` in ```ProbBayes```.
+
+```{r}
+head(pt99price)
+```
+
+### Functions in Chapter 3 - Bayes' Rule
+
+#### Learning About a Spinner
+
+This chapter introduces Bayes' rule by use of a spinner example.  Suppose there are four possible spinners defined by four vectors.  The length of a vector corresponds to the number of areas and the values are proportional to the areas.
+
+```{r}
+s1 <- c(2, 2, 2, 2)
+s2 <- c(4, 1, 1, 2)
+s3 <- c(2, 4, 2)
+s4 <- c(1, 3, 3, 1)
+```
+
+We can see these spinners by use of the ```many_spinner_plots()``` function.
+
+```{r}
+many_spinner_plots(list(s1, s2, s3, s4))
+```
+
+Initially, suppose you have little knowledge about the actual spinner and so you place a uniform prior on these spinners.  We construct a data frame with the four models and the associated prior probabilities.
+
+```{r}
+(bayes_table <- data.frame(Model = 
+                paste("Spinner", c("A", "B", "C", "D")),
+                Prior = c(1, 1, 1, 1) / 4))
+```
+
+Suppose a spinner is chosen at random and the outcome is "1".  The likelihood is the chance of observing "1" for each spinner.
+
+```{r}
+(bayes_table %>% 
+  mutate(Likelihood = c(1/4, 1/2, 1/4, 1/8)) ->
+bayes_table)
+```
+
+The ```bayesian_crank()``` function will update the probabilities given that the spinner landed "1".
+
+```{r}
+(bayes_table <- bayesian_crank(bayes_table))
+```
+
+The ```prior_post_plot()``` plots the prior and posterior probabilities of the spinners.  We see that it is most likely that the unknown spinner is Spinner B.
+
+```{r}
+prior_post_plot(bayes_table)
+```
+
+### Functions for Chapter 7:  Learning about a Binomial Probability
+
+#### Using a Discrete Prior
+
+We introduce Bayesian thinking about a proportion using a discrete prior.  Suppose you are interested in estimating the proportion $p$ of coffee drinkers on campus and your prior on $p$ is uniform on the values $p$ = 0.1, 0.2, ..., 0.9.  You take a sample of 20 students and you find 12 coffee drinkers.  What have you learned about $p$?
+
+Construct a data frame with your prior.
+
+```{r}
+(df <- data.frame(p = seq(0.1, 0.9, by = 0.1),
+                 Prior = rep(1/9, 9)))
+```
+
+The likelihood is the binomial probability of 12 successes out of 20 when the probability of success is $p$.
+
+```{r}
+(df %>% 
+  mutate(Likelihood = dbinom(12, size = 20, prob = p)) -> df)
+```
+
+Update the probabilities using the ```bayesian_crank()``` function.
+
+```{r}
+(df <- bayesian_crank(df))
+```
+
+Show the prior and posterior for $p$.  We see that it is very likely that $p$ is 0.5, 0.6, or 0.7.
+
+```{r}
+prior_post_plot(df)
+```
+
+#### Using a Beta Prior
+
+Using the same example, suppose you want to use a beta prior to model your beliefs about $p$, the proportion of coffee drinkers on campus.  Your median for $p$ is 0.40 and you are 90% sure that $p$ is smaller than 0.55.  The ```beta.select()``` function will find the shape parameters of the  beta prior that matches these statements.
+
+```{r}
+(ab <- beta.select(list(p = 0.5, x = 0.4),
+                   list(p = 0.9, x = 0.55)))
+```
+
+(You can graphically find the beta parameters to match statements of the 50th and 90th percentiles by use of a Shiny app accessed by the ```ChooseBeta()``` function.)
+
+We observed 12 coffee drinkers and 8 non-coffee drinkers.  We update the beta parameters of the beta posterior.
+
+```{r}
+(ab_new <- ab + c(12, 8))
+```
+
+The ```beta_prior_post()``` function shows the prior and posterior beta functions.
+
+```{r}
+beta_prior_post(ab, ab_new)
+```
+
+There are several functions ```beta_area()```, ```beta_interval()```, ```beta_quantile()``` to summarize the beta posterior.
+
+To illustrate, we use the ```beta_interval()``` to construct a 90% interval  \estimate for $p$.
+
+```{r}
+beta_interval(0.90, ab_new)
+```
+
+### Functions for Chapter 8:  Learning about a Normal Mean
+
+#### Using a normal prior
+
+Suppose a dietician wishes to learn about the mean weight gain $\mu$ of freshmen college students in the first month of college.  His best guess apriori at $\mu$ is 3 lbs and he is 90% sure that $\mu$ is smaller than 5 lbs.
+
+We find a matching normal prior by use of the ```normal.select()``` function.  
+
+```{r}
+(normal_prior <- normal.select(list(p = .5, x = 3),
+                              list(p = .9, x = 5)))
+```
+We see that a N(3, 1.56) prior matches his beliefs.
+
+Suppose a sample of students gives $\bar y = 2$ with a standard error of $se = 0.5$.  One can find the parameters of the normal posterior by the ```normal_update()``` function.
+
+```{r}
+prior <- c(3, 1.56)
+data <- c(2, 0.5)
+normal_update(prior, data, teach = TRUE)
+```
+We see the posterior for $\mu$ is N(2.09, 0.48).
+
+The functions ```normal_area()```, ```normal_interval()``` and ```normal_quantile()``` are helpful for computing various summaries of the normal posterior.
+
+What is the posterior probability that $\mu$ is between 1 and 3 lbs?
+
+```{r}
+normal_area(1, 3, c(2.09, 0.48))
+```
+
+### Functions for Chapter 9:  Introduction to MCMC
+
+There are several functions ```random_walk()```, ```metropolis()```, ```gibbs_discrete()```, ```gibbs_normal()```, and ```gibbs_betabin()``` that are discussed in the text.
+
+#### Using the Metropolis algorithm
+
+We illustrate the use of ```metropolis()``` to simulate from a real-valued posterior of a single parameter.
+
+In the Cauchy-Normal problem discussed in Section 9.4, suppose $\mu$ is the mean monthly snowfall and we assign $\mu$ a Cauchy prior with location 10 and scale 2.  We observe some data -- the sample mean is $\bar y = 26.78$ inches with corresponding standard error of 3.24 inches.
+
+I program the log posterior:
+
+```{r}
+cn_logpost <- function(mu, loc, scale, ybar, se){
+  dcauchy(mu, loc, scale, log = TRUE) +
+    dnorm(ybar, mu, se, log = TRUE)
+}
+```
+
+I use metropolis sampling where (1) the starting value is 10, (2) the width of the proposal density is 20, and I take 5000 interations.
+
+```{r}
+post <- metropolis(cn_logpost, 10, 20, 5000,
+                10, 2, 26.78, 3.24)
+```
+
+We check the acceptance rate of the algorithm.
+
+```{r}
+post$accept_rate
+```
+
+By using the ```coda``` package, we display a trace plot and density plot of the simulated draws.
+
+```{r}
+library(coda)
+plot(mcmc(post$S))
+```
+
+We use the ```coda``` package to get posterior summaries.
+
+```{r}
+summary(mcmc(post$S))
+```
+
+### Functions for Chapter 10 Hierarchical Modeling
+
+#### Beta-binomial modeling
+
+Section 10.3 illustrates the use of hierarchical model where 
+
+- $y_j \sim$ binomial($n_j, p_j$) and $p_j \sim$ beta($a, b$), $i = 1, ..., N$, where $a = \eta \mu$, $b = \eta (1 - \mu)$.  
+- The hyperparameters are given the priors $\mu \sim Beta(a, b)$ and $\log \eta \sim$ Logistic($\log n^*, 1$).
+
+We illustrate fitting this model on the famous Efron and Morris' baseball dataset stored in the ```pscl``` package.
+
+```{r}
+library(pscl)
+(select(EfronMorris, name, r) %>%
+      mutate(n = 45) -> d)
+```
+
+We store the data and parameters of the hyperparameter distribution in the list ```the_data```.
+
+```{r}
+the_data <- list(y = d$r, n = d$n, N = 18,
+                 "mua" = 1, "mub" = 1,
+                 "logn" = log(45))
+```
+
+The JAGS script for this model is stored in the function ```JAGS_beta_binomial()```.  We fit this model by MCMC using the ```runs.jags()``` function in the ```runjags``` package.
+
+```{r}
+library(runjags)
+posterior <- run.jags(JAGS_beta_binomial(),
+                          n.chains = 1,
+                          data = the_data,
+                monitor = c("p", "mu", "eta"),
+                          adapt = 1000,
+                          burnin = 10000,
+                          sample = 20000)
+
+```
+
+Posterior summaries of the parameters $p_1, ..., p_N, \mu, \eta$ are obtained by the ```print()``` method.
+
+```{r}
+print(posterior, digits = 3)
+```
+
