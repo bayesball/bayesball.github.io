@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 7 Learning About a Binomial Probability | Probability and Bayesian Modeling</title>
   <meta name="description" content="This is an introduction to probability and Bayesian modeling at the undergraduate level. It assumes the student has some background with calculus." />
-  <meta name="generator" content="bookdown 0.13 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 Learning About a Binomial Probability | Probability and Bayesian Modeling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2019-10-01" />
+<meta name="date" content="2020-01-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -40,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -632,7 +635,7 @@ that value, F(x).</li>
 </ul>
 <p>For example, suppose one is interested in simulating a sample of size five from <span class="math inline">\(\textrm{Beta}(1, 1)\)</span>.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">rbeta</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>)</a></code></pre></div>
-<pre><code>## [1] 0.4758836 0.1841583 0.6491941 0.8899553 0.3682313</code></pre>
+<pre><code>## [1] 0.8864329 0.7239145 0.7099146 0.7988592 0.3904362</code></pre>
 <p>There are additional functions in the <code>ProbBayes</code> R package that aid in visualizing Beta distribution calculations.
 For example, suppose one has a <span class="math inline">\(\textrm{Beta}(7, 10)\)</span> curve and we want to find the chance that <span class="math inline">\(p\)</span> is between 0.4 and 0.8. Looking at Figure 7.5, this probability corresponds to the area of the shaded region. The special function <code>beta_area()</code> will compute and illustrate this probability. Note the use of the vector <code>c(7, 10)</code> to input the two shape parameters.</p>
 <pre><code>beta_area(0.4, 0.8, c(7, 10))</code></pre>
@@ -686,7 +689,7 @@ Figure 7.7: Histograms of 1000 samples of two Beta density curves Beta(4, 4) and
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">Beta44samples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1000</span>, <span class="dv">4</span>, <span class="dv">4</span>)</a>
 <a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">quantile</span>(Beta44samples, <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>))</a></code></pre></div>
 <pre><code>##       25%       75% 
-## 0.3849036 0.6276510</code></pre>
+## 0.3670169 0.6318393</code></pre>
 <p>This tells us that the probability that <span class="math inline">\(p \leq 0.366\)</span> is 0.25 and the probability that <span class="math inline">\(p \geq 0.616\)</span> is also 0.25. These probability statements should be checked against one’s prior belief about <span class="math inline">\(p\)</span>. If these quantiles do not seem reasonable, one should make adjustments to the values of the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> .</p>
 <p>On the surface the two priors <span class="math inline">\(\textrm{Beta}(4, 4)\)</span> and <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> seem similar in that they both have a mean of <span class="math inline">\(0.5\)</span> and represent similar breakdowns of the success and failure counts. However, the aforementioned concept of prior sample size tells us that <span class="math inline">\(\textrm{Beta}(4, 4)\)</span> has a prior sample size of 8 while that of <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> is 80. As we will see in Section , the prior sample size determines the strength of the prior (i.e. the confidence level in the prior) and so the <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> prior represents a much stronger belief that <span class="math inline">\(p\)</span> is close to the value 0.5.</p>
 <p>A second indirect method of determining a Beta prior is by specification of quantiles of the distribution. Specifically, one determines the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> by first specifying two quantiles of the Beta density curve, and then finding the Beta density curve that matches these quantiles. Suppose the restaurant owner uses his knowledge to specify the 0.5 and 0.9 quantiles of the proportion <span class="math inline">\(p\)</span> as follows.</p>
@@ -874,7 +877,7 @@ Figure 7.10: Probability of the hypothesis from the Beta posterior density.
 <a class="sourceLine" id="cb37-2" data-line-number="2">BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</a></code></pre></div>
 <p>The proportion of the 1000 simulated values of <span class="math inline">\(p\)</span> that are at least 0.75 gives an approximation of the probability that <span class="math inline">\(p \geq 0.75\)</span>.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">sum</span>(BetaSamples <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.75</span>) <span class="op">/</span><span class="st"> </span>S</a></code></pre></div>
-<pre><code>## [1] 0.039</code></pre>
+<pre><code>## [1] 0.038</code></pre>
 <p>The simulation-based probability estimate is 0.037 which is an accurate approximation to the exact probability 0.04 obtained before.</p>
 <p>It would be reasonable to question the choice of the number of simulations <span class="math inline">\(S = 1000\)</span>. One can change the simulation sample size to larger or smaller values as one sees fit. In general, the larger the value of <span class="math inline">\(S\)</span>, the more accurate the approximation. Figure  shows that the shape of a histogram of the simulated values of <span class="math inline">\(p\)</span> approaches the exact posterior density as the value of <span class="math inline">\(S\)</span> changes from 100 to 10,000. The corresponding simulation-based probabilities of <span class="math inline">\(p \geq 0.75\)</span> are <span class="math inline">\(\{0.02, 0.05, 0.033, 0.0422\}\)</span> indicating that the accuracy of the approximation improves for larger simulation sample sizes.</p>
 <div class="figure"><span id="fig:unnamed-chunk-31"></span>
@@ -909,7 +912,7 @@ Figure 7.12: Display of 90% probability interval for the proportion <span class=
 <a class="sourceLine" id="cb45-2" data-line-number="2">BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</a>
 <a class="sourceLine" id="cb45-3" data-line-number="3"><span class="kw">quantile</span>(BetaSamples, <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</a></code></pre></div>
 <pre><code>##        5%       95% 
-## 0.4249255 0.7499943</code></pre>
+## 0.4198643 0.7435297</code></pre>
 <p>The approximate middle 90% credible interval is [0.427, 0.733], which is close in value to the exact 90% credible interval [0.427, 0.741] computed using the <code>qbeta()</code> and <code>beta_interval()</code> functions. In an end-of-chapter exercise the reader is encouraged to practice and experiment with different values of the size of the simulated sample <span class="math inline">\(S\)</span>.</p>
 </div>
 <div id="bayesian-prediction" class="section level3">
@@ -1063,7 +1066,7 @@ Prob(7 \le \tilde Y \le 16) = 0.919.
 <a class="sourceLine" id="cb51-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">20</span>; y &lt;-<span class="st"> </span><span class="dv">12</span></a>
 <a class="sourceLine" id="cb51-3" data-line-number="3">pred_p_sim &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1</span>, a <span class="op">+</span><span class="st"> </span>y, b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>y)</a>
 <a class="sourceLine" id="cb51-4" data-line-number="4">(pred_y_sim &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">1</span>, n, pred_p_sim))</a></code></pre></div>
-<pre><code>## [1] 13</code></pre>
+<pre><code>## [1] 7</code></pre>
 <p>Due to the ability of R to work easily with vectors, ]the same code is essentially used for simulating <span class="math inline">\(S = 1000\)</span> draws from the predictive distribution.<br />
 In the following R script, <code>pred_p_sim</code> contains 1000 simulated draws from the posterior, and for each element of this posterior sample, the <code>rbinom()</code> function is used to simulate a corresponding value of <span class="math inline">\(\tilde Y\)</span> from the Binomial sampling density.</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">a &lt;-<span class="st"> </span><span class="fl">3.06</span>; b &lt;-<span class="st"> </span><span class="fl">2.56</span></a>
@@ -1302,7 +1305,7 @@ p &amp;=&amp; \{0.3, 0.4, 0.5, 0.6, 0.7, 0.8\} \nonumber \\
 <ol start="11" style="list-style-type: decimal">
 <li><strong>Sequential Updating</strong></li>
 </ol>
-<p>The restaurant owner’s belief about the proportion of students’ favorite dining day being Friday is represented by a <span class="math inline">\({\rm{Beta}}(15.06, 10.56)\)</span> distribution. Recall that he obtained this posterior distribution from a <span class="math inline">\({\rm{Beta}}(3.06, 2.56)\)</span> prior and a survey of <span class="math inline">\(12\)</span> yes’s out of <span class="math inline">\(20\)</span> responses. The owner is interested in conducting another dining survey a few months later with the same question and the owner is still interested in <span class="math inline">\(p\)</span>, the proportion of all students who say Friday or Saturday.</p>
+<p>The restaurant owner’s belief about the proportion of students’ favorite dining day being Friday is represented by a <span class="math inline">\({\rm{Beta}}(15.06, 10.56)\)</span> distribution. Recall that he obtained this posterior distribution from a <span class="math inline">\({\rm{Beta}}(3.06, 2.56)\)</span> prior and a survey of <span class="math inline">\(12\)</span> yes’s out of <span class="math inline">\(20\)</span> responses. The owner is interested in conducting another dining survey a few months later with the same question and the owner is still interested in <span class="math inline">\(p\)</span>, the proportion of all students who say Friday.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>The second survey gives a result of <span class="math inline">\(8\)</span> yes’s out of <span class="math inline">\(20\)</span> responses. Use the owner’s current beliefs and this information to update the restaurant owner’s belief about the proportion <span class="math inline">\(p\)</span>.</p></li>
 <li><p>Suppose the two surveys are conducted at the same time and the results are <span class="math inline">\(20\)</span> yes’s (<span class="math inline">\(12 + 8\)</span>) out of <span class="math inline">\(40\)</span> responses (<span class="math inline">\(20 + 20\)</span>). Starting with the <span class="math inline">\({\rm{Beta}}(3.06, 2.56)\)</span> prior, update the owner’s belief about the proportion of interest.</p></li>
@@ -1417,7 +1420,7 @@ To illustrate the advantage of simulation, suppose one is interested in finding 
 <ol style="list-style-type: lower-alpha">
 <li>Find and graph the prior predictive density of the number <span class="math inline">\(y\)</span> who prefer pizza in a sample of 20 customers.</li>
 <li>If 14 out of 20 customers prefer pepperoni, is this result consistent with the predictive distribution?</li>
-<li>Compare the two Bayesian models where (1) <span class="math inline">\(p\)</span> is distributed (12, 62) distribution and (2) <span class="math inline">\(p\)</span> is distributed (6, 12) distribution by a Bayes factor. Interpret the value that you compute.</li>
+<li>Compare the two Bayesian models where (1) <span class="math inline">\(p\)</span> is distributed (12, 6) and (2) <span class="math inline">\(p\)</span> is distributed (6, 12) by a Bayes factor. Interpret the value that you compute.</li>
 </ol>
 <ol start="23" style="list-style-type: decimal">
 <li><strong>Posterior Predictive Checking - Pizza Popularity</strong></li>
@@ -1466,11 +1469,13 @@ Find the posterior distribution of <span class="math inline">\((\theta_A, \theta
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -1478,12 +1483,11 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -1495,6 +1499,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },
