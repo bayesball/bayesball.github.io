@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-01-21" />
+<meta name="date" content="2020-01-22" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -635,7 +635,7 @@ that value, F(x).</li>
 </ul>
 <p>For example, suppose one is interested in simulating a sample of size five from <span class="math inline">\(\textrm{Beta}(1, 1)\)</span>.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">rbeta</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>)</a></code></pre></div>
-<pre><code>## [1] 0.96216847 0.70233217 0.09858539 0.95147414 0.30066128</code></pre>
+<pre><code>## [1] 0.7989508 0.4172875 0.1882907 0.7143727 0.8719608</code></pre>
 <p>There are additional functions in the <code>ProbBayes</code> R package that aid in visualizing Beta distribution calculations.
 For example, suppose one has a <span class="math inline">\(\textrm{Beta}(7, 10)\)</span> curve and we want to find the chance that <span class="math inline">\(p\)</span> is between 0.4 and 0.8. Looking at Figure 7.5, this probability corresponds to the area of the shaded region. The special function <code>beta_area()</code> will compute and illustrate this probability. Note the use of the vector <code>c(7, 10)</code> to input the two shape parameters.</p>
 <pre><code>beta_area(0.4, 0.8, c(7, 10))</code></pre>
@@ -689,7 +689,7 @@ Figure 7.7: Histograms of 1000 samples of two Beta density curves Beta(4, 4) and
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">Beta44samples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1000</span>, <span class="dv">4</span>, <span class="dv">4</span>)</a>
 <a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">quantile</span>(Beta44samples, <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>))</a></code></pre></div>
 <pre><code>##       25%       75% 
-## 0.3759401 0.6266218</code></pre>
+## 0.3665396 0.6179591</code></pre>
 <p>This tells us that the probability that <span class="math inline">\(p \leq 0.366\)</span> is 0.25 and the probability that <span class="math inline">\(p \geq 0.616\)</span> is also 0.25. These probability statements should be checked against one’s prior belief about <span class="math inline">\(p\)</span>. If these quantiles do not seem reasonable, one should make adjustments to the values of the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> .</p>
 <p>On the surface the two priors <span class="math inline">\(\textrm{Beta}(4, 4)\)</span> and <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> seem similar in that they both have a mean of <span class="math inline">\(0.5\)</span> and represent similar breakdowns of the success and failure counts. However, the aforementioned concept of prior sample size tells us that <span class="math inline">\(\textrm{Beta}(4, 4)\)</span> has a prior sample size of 8 while that of <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> is 80. As we will see in Section 7.4, the prior sample size determines the strength of the prior (i.e. the confidence level in the prior) and so the <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> prior represents a much stronger belief that <span class="math inline">\(p\)</span> is close to the value 0.5.</p>
 <p>A second indirect method of determining a Beta prior is by specification of quantiles of the distribution. Specifically, one determines the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> by first specifying two quantiles of the Beta density curve, and then finding the Beta density curve that matches these quantiles. Suppose the restaurant owner uses his knowledge to specify the 0.5 and 0.9 quantiles of the proportion <span class="math inline">\(p\)</span> as follows.</p>
@@ -877,7 +877,7 @@ Figure 7.10: Probability of the hypothesis from the Beta posterior density.
 <a class="sourceLine" id="cb37-2" data-line-number="2">BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</a></code></pre></div>
 <p>The proportion of the 1000 simulated values of <span class="math inline">\(p\)</span> that are at least 0.75 gives an approximation of the probability that <span class="math inline">\(p \geq 0.75\)</span>.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">sum</span>(BetaSamples <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.75</span>) <span class="op">/</span><span class="st"> </span>S</a></code></pre></div>
-<pre><code>## [1] 0.05</code></pre>
+<pre><code>## [1] 0.033</code></pre>
 <p>The simulation-based probability estimate is 0.037 which is an accurate approximation to the exact probability 0.04 obtained before.</p>
 <p>It would be reasonable to question the choice of the number of simulations <span class="math inline">\(S = 1000\)</span>. One can change the simulation sample size to larger or smaller values as one sees fit. In general, the larger the value of <span class="math inline">\(S\)</span>, the more accurate the approximation. Figure  shows that the shape of a histogram of the simulated values of <span class="math inline">\(p\)</span> approaches the exact posterior density as the value of <span class="math inline">\(S\)</span> changes from 100 to 10,000. The corresponding simulation-based probabilities of <span class="math inline">\(p \geq 0.75\)</span> are <span class="math inline">\(\{0.02, 0.05, 0.033, 0.0422\}\)</span> indicating that the accuracy of the approximation improves for larger simulation sample sizes.</p>
 <div class="figure"><span id="fig:unnamed-chunk-31"></span>
@@ -912,7 +912,7 @@ Figure 7.12: Display of 90% probability interval for the proportion <span class=
 <a class="sourceLine" id="cb45-2" data-line-number="2">BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</a>
 <a class="sourceLine" id="cb45-3" data-line-number="3"><span class="kw">quantile</span>(BetaSamples, <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</a></code></pre></div>
 <pre><code>##        5%       95% 
-## 0.4393393 0.7391232</code></pre>
+## 0.4202616 0.7446862</code></pre>
 <p>The approximate middle 90% credible interval is [0.427, 0.733], which is close in value to the exact 90% credible interval [0.427, 0.741] computed using the <code>qbeta()</code> and <code>beta_interval()</code> functions. In an end-of-chapter exercise the reader is encouraged to practice and experiment with different values of the size of the simulated sample <span class="math inline">\(S\)</span>.</p>
 </div>
 <div id="bayesian-prediction" class="section level3">
@@ -1066,7 +1066,7 @@ Prob(7 \le \tilde Y \le 16) = 0.919.
 <a class="sourceLine" id="cb51-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">20</span>; y &lt;-<span class="st"> </span><span class="dv">12</span></a>
 <a class="sourceLine" id="cb51-3" data-line-number="3">pred_p_sim &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1</span>, a <span class="op">+</span><span class="st"> </span>y, b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>y)</a>
 <a class="sourceLine" id="cb51-4" data-line-number="4">(pred_y_sim &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">1</span>, n, pred_p_sim))</a></code></pre></div>
-<pre><code>## [1] 9</code></pre>
+<pre><code>## [1] 15</code></pre>
 <p>Due to the ability of R to work easily with vectors, ]the same code is essentially used for simulating <span class="math inline">\(S = 1000\)</span> draws from the predictive distribution.<br />
 In the following R script, <code>pred_p_sim</code> contains 1000 simulated draws from the posterior, and for each element of this posterior sample, the <code>rbinom()</code> function is used to simulate a corresponding value of <span class="math inline">\(\tilde Y\)</span> from the Binomial sampling density.</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">a &lt;-<span class="st"> </span><span class="fl">3.06</span>; b &lt;-<span class="st"> </span><span class="fl">2.56</span></a>
@@ -1345,7 +1345,7 @@ To illustrate the advantage of simulation, suppose one is interested in finding 
 <ol start="16" style="list-style-type: decimal">
 <li><strong>Simulating the Odds</strong></li>
 </ol>
-<p>Revisit Exercise . Instead of the logit or log odds of the proportion <span class="math inline">\(p\)</span>, suppose we are interested in the odds <span class="math inline">\(\frac{p}{1-p}\)</span>. If the posterior distribution for <span class="math inline">\(p\)</span> is Beta(12, 20), use R to simulate 1000 values from the posterior distribution of the odds. Construct a histogram of the simulated odds and construct a <span class="math inline">\(90%\)</span> interval estimate. Experiment with different values of the simulation sample size <span class="math inline">\(S\)</span> and comment on the effect of the value of <span class="math inline">\(S\)</span> on the width of the <span class="math inline">\(90%\)</span> interval estimates.</p>
+<p>Revisit Exercise 15. Instead of the logit or log odds of the proportion <span class="math inline">\(p\)</span>, suppose we are interested in the odds <span class="math inline">\(\frac{p}{1-p}\)</span>. If the posterior distribution for <span class="math inline">\(p\)</span> is Beta(12, 20), use R to simulate 1000 values from the posterior distribution of the odds. Construct a histogram of the simulated odds and construct a <span class="math inline">\(90%\)</span> interval estimate. Experiment with different values of the simulation sample size <span class="math inline">\(S\)</span> and comment on the effect of the value of <span class="math inline">\(S\)</span> on the width of the <span class="math inline">\(90%\)</span> interval estimates.</p>
 <ol start="17" style="list-style-type: decimal">
 <li><strong>Teenagers and Televisions</strong>
 </li>
@@ -1360,7 +1360,7 @@ To illustrate the advantage of simulation, suppose one is interested in finding 
 <ol start="18" style="list-style-type: decimal">
 <li><strong>Teenagers and Televisions (continued)</strong></li>
 </ol>
-<p>Revisit Exercise . Consider the odds of having a television in the room. Recall that if <span class="math inline">\(p\)</span> is the probability of having a television in room, then the odds is <span class="math inline">\(\frac{p}{1-p}\)</span>.</p>
+<p>Revisit Exercise 17. Consider the odds of having a television in the room. Recall that if <span class="math inline">\(p\)</span> is the probability of having a television in room, then the odds is <span class="math inline">\(\frac{p}{1-p}\)</span>.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Find the mean, median and 95% posterior interval of Alex’s analysis of the odds of teenagers having a television in their room.</p></li>
 <li><p>Find the mean, median and 95% posterior interval of Benedict’s analysis of the odds of teenagers having a television in their room.</p></li>
@@ -1416,7 +1416,7 @@ To illustrate the advantage of simulation, suppose one is interested in finding 
 <li><strong>Bayes Factor - Pizza Popularity</strong>
 </li>
 </ol>
-<p>In the restaurant example of Exercise , suppose one of the waiters has a different opinion about the popularity of pepperoni pizza. His prior belief about the proportion <span class="math inline">\(p\)</span> preferring pizza is described by a (12, 6) distribution.</p>
+<p>In the restaurant example of Exercise 21, suppose one of the waiters has a different opinion about the popularity of pepperoni pizza. His prior belief about the proportion <span class="math inline">\(p\)</span> preferring pizza is described by a (12, 6) distribution.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Find and graph the prior predictive density of the number <span class="math inline">\(y\)</span> who prefer pizza in a sample of 20 customers.</li>
 <li>If 14 out of 20 customers prefer pepperoni, is this result consistent with the predictive distribution?</li>
@@ -1425,7 +1425,7 @@ To illustrate the advantage of simulation, suppose one is interested in finding 
 <ol start="23" style="list-style-type: decimal">
 <li><strong>Posterior Predictive Checking - Pizza Popularity</strong></li>
 </ol>
-<p>Consider the same problem as in Exercise  where <span class="math inline">\(p\)</span> is the proportion of customers who prefer pepperoni and the manager’s prior beliefs are given by a (6, 12) distribution.</p>
+<p>Consider the same problem as in Exercise 22 where <span class="math inline">\(p\)</span> is the proportion of customers who prefer pepperoni and the manager’s prior beliefs are given by a (6, 12) distribution.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Suppose 14 out of 20 customers prefer pepperoni. Using the algorithm described in Section 7.6, simulate 1000 values of <span class="math inline">\(\tilde y\)</span> (out of 20 customers) from the posterior predictive distribution. Construct a histogram of these values.</p></li>
 <li><p>Is the observation (14 preferring pepperoni) consistent with this predictive distribution? Explain.</p></li>
