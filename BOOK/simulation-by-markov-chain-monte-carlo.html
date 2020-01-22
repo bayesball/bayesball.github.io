@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-01-20" />
+<meta name="date" content="2020-01-21" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -396,7 +396,7 @@ Figure 9.2: Two priors for representing prior opinion about a Normal mean.
 From a Bayesian perspective, since we have two unknown parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>, this situation presents new challenges. One needs to construct a joint prior <span class="math inline">\(\pi(\mu, \sigma)\)</span> for the two parameters – up to this point, we have only discussed constructing a prior distribution for a single parameter. Also, although one can compute the posterior density by the usual ``prior times likelihood&quot; recipe, it may be difficult to get nice analytic answers with this posterior to obtain particular inferences of interest.</p>
 <p><strong>Overview of the chapter</strong>
 </p>
-<p>In Chapters 7 and 8, we illustrated the use of simulation to summarize posterior distributions of a specific functional form such as the Beta and Normal. In this chapter, we introduce a general class of algorithms, collectively called Markov chain Monte Carlo (MCMC), that can be used to simulate the posterior from general Bayesian models. These algorithms are based on a general probability model called a Markov chain and Section  describes this probability model for situations where the possible models are finite. Section  introduces the Metropolis sampler, a general algorithm for simulating from an arbitrary posterior distribution. Section  describes the implementation of this simulation algorithm for the Normal sampling problem with a Cauchy prior. Section  introduces another MCMC simulation algorithm, Gibbs sampling, that is well-suited for simulation from posterior distributions of many parameters. One issue in the implementation of these MCMC algorithms is that the simulation draws represent an approximate sample from the posterior distribution. Section  describes some common diagnostic methods for seeing if the simulated sample is a suitable exploration of the posterior distribution. Finally in Section , we describe the use of a general-purpose software program Just Another Gibbs Sampler (JAGS) and R interface for implementing these MCMC algorithms.</p>
+<p>In Chapters 7 and 8, we illustrated the use of simulation to summarize posterior distributions of a specific functional form such as the Beta and Normal. In this chapter, we introduce a general class of algorithms, collectively called Markov chain Monte Carlo (MCMC), that can be used to simulate the posterior from general Bayesian models. These algorithms are based on a general probability model called a Markov chain and Section 9.2 describes this probability model for situations where the possible models are finite. Section 9.3 introduces the Metropolis sampler, a general algorithm for simulating from an arbitrary posterior distribution. Section 9.4 describes the implementation of this simulation algorithm for the Normal sampling problem with a Cauchy prior. Section 9.5 introduces another MCMC simulation algorithm, Gibbs sampling, that is well-suited for simulation from posterior distributions of many parameters. One issue in the implementation of these MCMC algorithms is that the simulation draws represent an approximate sample from the posterior distribution. Section 9.6 describes some common diagnostic methods for seeing if the simulated sample is a suitable exploration of the posterior distribution. Finally in Section 9.7, we describe the use of a general-purpose software program Just Another Gibbs Sampler (JAGS) and R interface for implementing these MCMC algorithms.</p>
 </div>
 <div id="markov-chains" class="section level2">
 <h2><span class="header-section-number">9.2</span> Markov Chains</h2>
@@ -710,7 +710,7 @@ Figure 9.7: Trace plots of simulated draws using different choices of the consta
 <p>When one chooses a small value <span class="math inline">\(C = 0.3\)</span> (top-left panel in Figure 9.7), note that the graph of simulated draws has a snake-like appearance. Due to the strong autocorrelation of the simulated draws, the sampler does a relatively poor job of exploring the posterior distribution. One measure that this sampler is not working well is the large acceptance rate of 0.9702. On the other hand, if one uses a large value <span class="math inline">\(C = 200\)</span> (bottom-right panel in Figure 9.7), the flat-portions in the graph indicates there are many occurrences where the chain will not move from the current value. The low acceptance rate of 0.0272 indicates this problem. The more moderate values of <span class="math inline">\(C = 3\)</span> and <span class="math inline">\(C = 30\)</span> (top-right and bottom-left panels in Figure 9.7) produce more acceptable streams of simulated values, although the respectively acceptance rates (0.8158 and 0.179) are very different.</p>
 <p>In practice, it is recommended that the Metropolis algorithm has an acceptance rate between 20% and 40%. For this example, this would suggest trying an alternative choice of <span class="math inline">\(C\)</span> between 2 and 20.</p>
 <p><strong>Collecting the simulated draws</strong></p>
-<p>Using MCMC diagnostic methods that will be described in Section , one sees that the simulated draws are a reasonable approximation to the posterior density of <span class="math inline">\(\mu\)</span>. One displays the posterior density by computing a density estimate of the simulated sample.
+<p>Using MCMC diagnostic methods that will be described in Section 9.6, one sees that the simulated draws are a reasonable approximation to the posterior density of <span class="math inline">\(\mu\)</span>. One displays the posterior density by computing a density estimate of the simulated sample.
 In Figure 9.8, we plot the prior, likelihood, and posterior density for the mean amount of Buffalo snowfall <span class="math inline">\(\mu\)</span> using the Cauchy prior. Recall that we have prior-data conflict, the prior says that the mean snowfall is about 10 inches and the likelihood indicates that the mean snowfall was around 27 inches. When a Normal prior was applied, we found that the posterior mean was 17.75 inches – actually the posterior density has little overlap with the prior or the likelihood in Figure 9.1. In contrast, it is seen from Figure 9.8 that the posterior density using the Cauchy density resembles the likelihood. Essentially this posterior analysis says that our prior information was off the mark and the posterior is most influenced by the data.</p>
 
 <div class="figure"><span id="fig:unnamed-chunk-15"></span>
@@ -1014,12 +1014,12 @@ Figure 9.10: Scatterplot of simulated draws of the posterior distribution of mea
 <p></p>
 <p><strong>Burn-in, starting values, and multiple chains</strong>
 </p>
-<p>In theory, the Metropolis and Gibbs sampling algorithms will produce simulated draws that converge to the posterior distribution of interest. But in typical practice, it may take a number of iterations before the simulation values are close to the posterior distribution. So in general it is recommended that one run the algorithm for a number of “burn-in” iterations before one collects iterations for inference. The JAGS software that is introduced in Section  will allow the user to specify the number of burn-in iterations.</p>
+<p>In theory, the Metropolis and Gibbs sampling algorithms will produce simulated draws that converge to the posterior distribution of interest. But in typical practice, it may take a number of iterations before the simulation values are close to the posterior distribution. So in general it is recommended that one run the algorithm for a number of “burn-in” iterations before one collects iterations for inference. The JAGS software that is introduced in Section 9.7 will allow the user to specify the number of burn-in iterations.</p>
 <p>In the examples, we have illustrated running a single “chain” where one has a single starting value and one collects simulated draws from many iterations. It is possible that the MCMC sample will depend on the choice of starting value. So a general recommendation is to run the MCMC algorithm several times using different starting values. In this case, one will have multiple MCMC chains. By comparing the inferential summaries from the different chains one explores the sensitivity of the inference to the choice of starting value. Although we will focus on the use of a single chain, we will explore the use of different starting values and multiple chains in an example in this chapter. The JAGS software and other programs to implement MCMC will allow for different starting values and several chains.</p>
 <p><strong>Diagnostics</strong></p>
 <p>The output of a single chain from the Metropolis and Gibbs algorithms is a vector or matrix of simulated draws. Before one believes that a collection of simulated draws is a close approximation to the posterior distribution, some special diagnostic methods should be initially performed.</p>
 <p><strong>Trace plot</strong></p>
-<p>It is helpful to construct a trace plot which is a line plot of the simulated draws of the parameter of interest graphed against the iteration number. Figure 9.11 displays a trace plot of the simulated draws of <span class="math inline">\(\mu\)</span> from the Metropolis algorithm for our Buffalo snowfall example for Normal sampling (known standard deviation) with a Cauchy prior. Section  shows some sample trace plots for Metropolis sampler. As discussed in that section, it is undesirable to have a snack-like appearance in the trace plot indicating a high acceptance rate. Also, Section  displays a trace plot with many flat portions that indicates a sampler with a low acceptance rate. From the authors’ experience, the trace plot in Figure 9.11 indicates that the sampler is using a good value of the constant <span class="math inline">\(C\)</span> and efficiently sampling from the posterior distribution.</p>
+<p>It is helpful to construct a trace plot which is a line plot of the simulated draws of the parameter of interest graphed against the iteration number. Figure 9.11 displays a trace plot of the simulated draws of <span class="math inline">\(\mu\)</span> from the Metropolis algorithm for our Buffalo snowfall example for Normal sampling (known standard deviation) with a Cauchy prior. Section 9.4.1 shows some sample trace plots for Metropolis sampler. As discussed in that section, it is undesirable to have a snack-like appearance in the trace plot indicating a high acceptance rate. Also, Section 9.4.1 displays a trace plot with many flat portions that indicates a sampler with a low acceptance rate. From the authors’ experience, the trace plot in Figure 9.11 indicates that the sampler is using a good value of the constant <span class="math inline">\(C\)</span> and efficiently sampling from the posterior distribution.</p>
 
 <div class="figure"><span id="fig:unnamed-chunk-18"></span>
 <img src="../LATEX/figures/chapter9/mcmc6.png" alt="Trace plot of simulated draws of normal mean using the Metropolis algorithm with $C = 20$." width="500" />
@@ -1055,15 +1055,15 @@ One typically wants to estimate the simulation standard error of this MCMC estim
 se = \frac{sd(\{\mu^{(j)}\})}{\sqrt{S}}.
 \tag{9.27}
 \end{equation}\]</span>
-However, this estimate of the standard error is not correct since the MCMC sample is not independent (the simulated value <span class="math inline">\(\mu^{(j)}\)</span> depends on the value of the previous simulated value <span class="math inline">\(\mu^{(j-1)}\)</span>). One obtains a more accurate estimate of Monte Carlo standard error by using time-series methods. As we will see in the examples of Section , this standard error estimate will be larger than the “naive” standard error estimate that assumes the MCMC sample values are independent.</p>
+However, this estimate of the standard error is not correct since the MCMC sample is not independent (the simulated value <span class="math inline">\(\mu^{(j)}\)</span> depends on the value of the previous simulated value <span class="math inline">\(\mu^{(j-1)}\)</span>). One obtains a more accurate estimate of Monte Carlo standard error by using time-series methods. As we will see in the examples of Section 9.7, this standard error estimate will be larger than the “naive” standard error estimate that assumes the MCMC sample values are independent.</p>
 </div>
 <div id="using-jags" class="section level2">
 <h2><span class="header-section-number">9.7</span> Using JAGS</h2>
 <p></p>
-<p>Sections  and  have illustrated general strategies for simulating from a posterior distribution of one or more parameters. Over the years, there has been an effort to develop general-purpose Bayesian computing software that would take a Bayesian model (i.e. the specification of a prior and sampling density as input), and use an MCMC algorithm to output a matrix of simulated draws from the posterior. One of the earliest Bayesian simulation-based computing software was BUGS (for Bayesian inference Using Gibbs Sampling) and we illustrate in this text applications of a similar package JAGS (for Just Another Gibbs Sampler).</p>
+<p>Sections 9.3 and 9.5 have illustrated general strategies for simulating from a posterior distribution of one or more parameters. Over the years, there has been an effort to develop general-purpose Bayesian computing software that would take a Bayesian model (i.e. the specification of a prior and sampling density as input), and use an MCMC algorithm to output a matrix of simulated draws from the posterior. One of the earliest Bayesian simulation-based computing software was BUGS (for Bayesian inference Using Gibbs Sampling) and we illustrate in this text applications of a similar package JAGS (for Just Another Gibbs Sampler).</p>
 <p>The use of JAGS has several attractive features. One defines a Bayesian model for a particular problem by writing a short script. One then inputs this script together with data and prior parameter values in a single R function from the <code>runjags</code> package that decides on the appropriate MCMC sampling algorithm for the particular Bayesian model. In addition, this function simulates from the MCMC algorithm for a specified number of samples and collects simulated draws of the parameters of interest.</p>
 <p><strong>Normal sampling model</strong></p>
-<p>To illustrate the use of JAGS, consider the problem of estimating the mean Buffalo snowfall assuming a Normal sampling model with both the mean and standard deviation unknown, and independent priors placed on both parameters. As in Section  one expresses the parameters of the Normal distribution as <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\phi\)</span>, where the precision <span class="math inline">\(\phi\)</span> is the reciprocal of the variance <span class="math inline">\(\phi = 1 / \sigma^2\)</span>. One then writes this Bayesian model as</p>
+<p>To illustrate the use of JAGS, consider the problem of estimating the mean Buffalo snowfall assuming a Normal sampling model with both the mean and standard deviation unknown, and independent priors placed on both parameters. As in Section 9.5.3 one expresses the parameters of the Normal distribution as <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\phi\)</span>, where the precision <span class="math inline">\(\phi\)</span> is the reciprocal of the variance <span class="math inline">\(\phi = 1 / \sigma^2\)</span>. One then writes this Bayesian model as</p>
 <ul>
 <li><p>Sampling, for <span class="math inline">\(i = 1, \cdots, n\)</span>:
 <span class="math display" id="eq:sampnormal2">\[\begin{equation}
@@ -1077,7 +1077,7 @@ Y_i \overset{i.i.d.}{\sim} \textrm{Normal}(\mu, \sqrt{1/\phi}).
 \tag{9.29}
 \end{eqnarray}\]</span></p></li>
 </ul>
-<p>The JAGS program parametrizes a Normal density in terms of the precision, so the prior precision is equal to <span class="math inline">\(\phi_0 = 1 / \sigma_0^2\)</span>. As in Section , the parameters of the Normal and Gamma priors are set at <span class="math inline">\(\mu_0 = 10, \phi_0 = 1 / 3 ^ 2, a = 1, b = 1.\)</span></p>
+<p>The JAGS program parametrizes a Normal density in terms of the precision, so the prior precision is equal to <span class="math inline">\(\phi_0 = 1 / \sigma_0^2\)</span>. As in Section 9.5.3, the parameters of the Normal and Gamma priors are set at <span class="math inline">\(\mu_0 = 10, \phi_0 = 1 / 3 ^ 2, a = 1, b = 1.\)</span></p>
 <p><strong>Describe the model by a script</strong></p>
 
 <p>To begin, one writes the following script defining this model. The model is saved in the character string ```modelString}.</p>
@@ -1147,7 +1147,7 @@ In Figures 9.14 and 9.15, the trace plots show little autocorrelation in the str
 mu       10.8   16.5    21.4 16.5 2.68   -- 0.0486     
 sigma    11.8   17.1      24 17.4 3.18   -- 0.0576    </code></pre>
 <p><strong>Multiple chains</strong></p>
-<p>In Section , we explained the benefit of trying different starting values and running several MCMC chains. This is facilitated by arguments in the <code>run.jags()</code> function. Suppose one considers the very different pairs of starting values, <span class="math inline">\((\mu, \phi) = (2, 1 / 4)\)</span> and <span class="math inline">\((\mu, \phi) = (30, 1/ 900)\)</span>. Note that both pair of parameter values are far outside of the region where the posterior density is concentrated. One defines a value <code>InitialValues</code> that is a list containing two lists, each list containing a starting value.</p>
+<p>In Section 9.6.1, we explained the benefit of trying different starting values and running several MCMC chains. This is facilitated by arguments in the <code>run.jags()</code> function. Suppose one considers the very different pairs of starting values, <span class="math inline">\((\mu, \phi) = (2, 1 / 4)\)</span> and <span class="math inline">\((\mu, \phi) = (30, 1/ 900)\)</span>. Note that both pair of parameter values are far outside of the region where the posterior density is concentrated. One defines a value <code>InitialValues</code> that is a list containing two lists, each list containing a starting value.</p>
 <pre><code>InitialValues &lt;- list(
   list(mu = 2, phi = 1 / 4),
   list(mu = 30, phi = 1 / 900)
@@ -1338,7 +1338,7 @@ Figure 9.18: Posterior density estimate of simulated draws of log odds ratio for
 <ol style="list-style-type: decimal">
 <li><strong>Normal and Cauchy Priors</strong></li>
 </ol>
-<p>In the example in Section , it was assumed that the prior for the average snowfall <span class="math inline">\(\mu\)</span> was Normal with mean 10 inches and standard deviation 3 inches.</p>
+<p>In the example in Section 9.1.2, it was assumed that the prior for the average snowfall <span class="math inline">\(\mu\)</span> was Normal with mean 10 inches and standard deviation 3 inches.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Confirm that the 25th and 75th percentiles of this prior are equal to 8 and 12 inches, respectively.</li>
 <li>Show that under this Normal prior, it is unlikely that the mean <span class="math inline">\(\mu\)</span> is at least as large as 26.75 inches.</li>
@@ -1369,7 +1369,7 @@ P = \begin{bmatrix}
 </ol>
 <p>Consider the random walk Markov chain described in Exercise .</p>
 <ol style="list-style-type: lower-alpha">
-<li>Suppose one starts at the location 1. Using an R script with the ```sample()} function (see example script Section ),
+<li>Suppose one starts at the location 1. Using an R script with the ```sample()} function (see example script Section 9.2.3),
 simulate 1000 steps of the Markov chain using the probabilities given
 in the transition matrix. Store the locations of the walk in a vector.</li>
 <li>Compute the relative frequencies of the walker in the five states from
@@ -1422,14 +1422,14 @@ P = \begin{bmatrix}
 
 <ol style="list-style-type: lower-alpha">
 <li>Write an R function that computes this probability distribution for any value of <span class="math inline">\(X\)</span>.</li>
-<li>Using the Metropolis algorithm described in Section  as programmed in the function <code>random_walk()</code>, simulate 10,000 draws from this probability distribution starting at the value <span class="math inline">\(X = 2\)</span>.</li>
+<li>Using the Metropolis algorithm described in Section 9.3.1 as programmed in the function <code>random_walk()</code>, simulate 10,000 draws from this probability distribution starting at the value <span class="math inline">\(X = 2\)</span>.</li>
 <li>Collect the simulated draws and find the relative frequencies of the values 1 through 9. Compare these approximate probabilities with the exact probabilities.</li>
 </ol>
 <ol start="7" style="list-style-type: decimal">
 <li><strong>Metropolis Sampling of a Binomial Distribution</strong></li>
 </ol>
 <ol style="list-style-type: lower-alpha">
-<li>Using the Metropolis algorithm described in Section  as programmed in the function <code>random_walk()</code>, simulate 1000 draws from a Binomial distribution with parameters <span class="math inline">\(n = 20\)</span> and <span class="math inline">\(p = 0.3\)</span>.</li>
+<li>Using the Metropolis algorithm described in Section 9.3 as programmed in the function <code>random_walk()</code>, simulate 1000 draws from a Binomial distribution with parameters <span class="math inline">\(n = 20\)</span> and <span class="math inline">\(p = 0.3\)</span>.</li>
 <li>Collect the simulated draws and find the relative frequencies of the values 0 through 20. Compare these approximate probabilities with the exact probabilities.</li>
 <li>Using the simulated values, estimate the mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> of the distribution and compare these estimates with the known values of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> of a binomial distribution.</li>
 </ol>
@@ -1443,7 +1443,7 @@ P = \begin{bmatrix}
 \end{equation*}\]</span></p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Write a function to compute the logarithm of the posterior density. Assume that one observes the sample 2, 5, 10, 5, 6, and the prior parameters are <span class="math inline">\(a = b = 1\)</span>.</p></li>
-<li><p>Use the <code>metropolis()</code> function in Section  to collect 1000 draws from the posterior distribution. Use a starting value of <span class="math inline">\(\lambda = 5\)</span> and a neighborhood scale value of <span class="math inline">\(C = 2\)</span>.</p></li>
+<li><p>Use the <code>metropolis()</code> function in Section 9.3.3 to collect 1000 draws from the posterior distribution. Use a starting value of <span class="math inline">\(\lambda = 5\)</span> and a neighborhood scale value of <span class="math inline">\(C = 2\)</span>.</p></li>
 <li><p>Inspect MCMC diagnostic graphs to assess if the simulated sample approximates the posterior density of <span class="math inline">\(\lambda\)</span>.</p></li>
 </ol>
 <ol start="9" style="list-style-type: decimal">
@@ -1464,7 +1464,7 @@ If we observe the values 3, 6, 7, 8, 15, 14, 16, 17, Figure  displays the bimoda
 
 <ol style="list-style-type: lower-alpha">
 <li>Write a function to compute the logarithm of the posterior density.</li>
-<li>Using the <code>metropolis()</code> function in Section , collect a simulated sample of 1000 from the posterior distribution. Run the sampler twice, once using a starting value of <span class="math inline">\(\theta = 10\)</span> and a neighborhood scale value of <span class="math inline">\(C = 3\)</span>, and a second time with the same starting value and a scale value of <span class="math inline">\(C = 0.2\)</span>.</li>
+<li>Using the <code>metropolis()</code> function in Section 9.3.3, collect a simulated sample of 1000 from the posterior distribution. Run the sampler twice, once using a starting value of <span class="math inline">\(\theta = 10\)</span> and a neighborhood scale value of <span class="math inline">\(C = 3\)</span>, and a second time with the same starting value and a scale value of <span class="math inline">\(C = 0.2\)</span>.</li>
 <li>By inspecting MCMC diagnostic graphs, which value of <span class="math inline">\(C\)</span> appears to result in a simulated sample that is a better approximation to the posterior distribution? Explain.</li>
 </ol>
 <ol start="10" style="list-style-type: decimal">
@@ -1545,7 +1545,7 @@ flips <span class="math inline">\(Y\)</span> in four tosses of a fair coin.</p>
 <li>Find the conditional distribution <span class="math inline">\(f(x \mid Y = 1)\)</span>.</li>
 <li>Find the conditional distribution <span class="math inline">\(f(y \mid X = 2)\)</span>.</li>
 <li>Describe how Gibbs sampling can be used to simulate from the joint distribution of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</li>
-<li>Using the <code>gibbs_discrete()</code> function in Section , simulate 1000 iterations of Gibbs sampling using this probability distribution. By tabulating the <span class="math inline">\((X, Y)\)</span> output and computing relative frequencies, confirm that the relative frequencies are good approximations to the actual probabilities.</li>
+<li>Using the <code>gibbs_discrete()</code> function in Section 9.5.1, simulate 1000 iterations of Gibbs sampling using this probability distribution. By tabulating the <span class="math inline">\((X, Y)\)</span> output and computing relative frequencies, confirm that the relative frequencies are good approximations to the actual probabilities.</li>
 </ol>
 <ol start="12" style="list-style-type: decimal">
 <li><strong>Normal Sampling with Both Parameters Unknown</strong>
@@ -1582,27 +1582,27 @@ flips <span class="math inline">\(Y\)</span> in four tosses of a fair coin.</p>
 </table>
 <p>Suppose one assumes that the Normal mean and precision parameters are independent with <span class="math inline">\(\mu\)</span> distributed <span class="math inline">\(\textrm{Normal}(62, 1)\)</span> and <span class="math inline">\(\phi\)</span> distributed Gamma with parameters <span class="math inline">\(a = 1\)</span> and <span class="math inline">\(b = 1\)</span>.</p>
 <ol style="list-style-type: lower-alpha">
-<li>Using the <code>gibbs_normal()</code> function in Section , collect a sample of 5000 from the joint posterior distribution of <span class="math inline">\((\mu, \phi)\)</span>.</li>
+<li>Using the <code>gibbs_normal()</code> function in Section 9.5.3, collect a sample of 5000 from the joint posterior distribution of <span class="math inline">\((\mu, \phi)\)</span>.</li>
 <li>Find a 90% interval estimate for the standard deviation <span class="math inline">\(\sigma = 1 / \sqrt{\phi}\)</span>.</li>
 <li>Suppose one is interested in estimating the 90th percentile of the height distribution <span class="math inline">\(P_{90} = \mu + 1.645 \sigma\)</span>. Collect simulated draws from the posterior of <span class="math inline">\(P_{90}\)</span> and construct a density estimate.</li>
 </ol>
 <ol start="13" style="list-style-type: decimal">
 <li><strong>Normal Sampling with Both Parameters Unknown (continued)</strong></li>
 </ol>
-<p>In Exercise , one learned about the mean and precision of the heights by use of a Gibbs sampling algorithm. Use JAGS and the <code>runjags</code> package to collect MCMC draws from this model. Write a JAGS script for this Normal sampling problem and use the <code>run.jags()</code> function. Answer questions from parts (c) and (d) from Exercise . (Note that the sample JAGS script in Section  returns samples of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>.)</p>
+<p>In Exercise , one learned about the mean and precision of the heights by use of a Gibbs sampling algorithm. Use JAGS and the <code>runjags</code> package to collect MCMC draws from this model. Write a JAGS script for this Normal sampling problem and use the <code>run.jags()</code> function. Answer questions from parts (c) and (d) from Exercise . (Note that the sample JAGS script in Section 9.7.1 returns samples of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>.)</p>
 <ol start="14" style="list-style-type: decimal">
 <li><strong>Normal Sampling with Both Parameters Unknown (continued)</strong></li>
 </ol>
 <p>If one graphs the height data from Exercise , one notes that there is one unusually small height value, 47. One wonders if this minimum height is consistent with the fitted model.</p>
 <ol style="list-style-type: lower-alpha">
-<li>Write a function to simulate a sample of size 20 from the posterior predictive distribution. You can use either the <code>gibbs_normal()</code> function in Section  or the JAGS sample script in Section  to generate a sample from the posterior distribution of (<span class="math inline">\(\mu, \phi\)</span>) or (<span class="math inline">\(\mu, \sigma\)</span>). For each sample, compute the minimum value <span class="math inline">\(T(\tilde y)\)</span>.</li>
+<li>Write a function to simulate a sample of size 20 from the posterior predictive distribution. You can use either the <code>gibbs_normal()</code> function in Section 9.5.3 or the JAGS sample script in Section 9.7.1 to generate a sample from the posterior distribution of (<span class="math inline">\(\mu, \phi\)</span>) or (<span class="math inline">\(\mu, \sigma\)</span>). For each sample, compute the minimum value <span class="math inline">\(T(\tilde y)\)</span>.</li>
 <li>Repeat the procedure 1000 times, collecting a sample of the predictive distribution of the minimum observation.</li>
 <li>Graph the predictive distribution. From comparing the observed minimum height with this distribution, what can you conclude about the suitability of the model?</li>
 </ol>
 <ol start="15" style="list-style-type: decimal">
 <li><strong>Comparing Proportions</strong></li>
 </ol>
-<p>In Section , the problem of comparing proportions of high visits to Facebook from male and female students was considered.</p>
+<p>In Section 9.7.4, the problem of comparing proportions of high visits to Facebook from male and female students was considered.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Using the same prior, use JAGS to take a simulated sample of size 5000 from the posterior of <span class="math inline">\(p_F\)</span> and <span class="math inline">\(p_M\)</span>. Construct a 90% probability interval estimate for the difference is proportions <span class="math inline">\(\delta = p_W - p_M\)</span>.</li>
 <li>Use the same simulated sample to perform inferences about the ratio of proportions <span class="math inline">\(R = p_W / p_M\)</span>. Construct a density estimate of <span class="math inline">\(R\)</span> and construct a 90% probability interval estimate.</li>
@@ -1615,7 +1615,7 @@ flips <span class="math inline">\(Y\)</span> in four tosses of a fair coin.</p>
 <li><strong>Normal Sampling with a Cauchy Prior</strong>
 </li>
 </ol>
-<p>In Section , we considered the problem of estimating the mean snowfall amount in Buffalo with a Cauchy prior. The sample mean <span class="math inline">\(\bar y\)</span> is Normal with mean <span class="math inline">\(\mu\)</span> and standard error <span class="math inline">\(se\)</span> and <span class="math inline">\(\mu\)</span> is Cauchy with location 10 and scale 2. In our problem, <span class="math inline">\(\bar y= 26.785\)</span> and <span class="math inline">\(se = 3.236\)</span>.
+<p>In Section 9.4, we considered the problem of estimating the mean snowfall amount in Buffalo with a Cauchy prior. The sample mean <span class="math inline">\(\bar y\)</span> is Normal with mean <span class="math inline">\(\mu\)</span> and standard error <span class="math inline">\(se\)</span> and <span class="math inline">\(\mu\)</span> is Cauchy with location 10 and scale 2. In our problem, <span class="math inline">\(\bar y= 26.785\)</span> and <span class="math inline">\(se = 3.236\)</span>.
 Write a JAGS script for this Bayesian model. Use the <code>run.jags()</code> function to simulate 1000 draws of the posterior distribution for <span class="math inline">\(\mu\)</span>. Compute the posterior mean and posterior standard deviation for <span class="math inline">\(\mu\)</span>.</p>
 <ol start="18" style="list-style-type: decimal">
 <li><strong>Normal Sampling with a Cauchy Prior (continued)</strong></li>
