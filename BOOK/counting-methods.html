@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<html lang="" xml:lang="">
 <head>
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Counting Methods | Probability and Bayesian Modeling</title>
   <meta name="description" content="This is an introduction to probability and Bayesian modeling at the undergraduate level. It assumes the student has some background with calculus." />
-  <meta name="generator" content="bookdown 0.13 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Counting Methods | Probability and Bayesian Modeling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2019-09-30" />
+<meta name="date" content="2020-02-14" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -40,6 +40,9 @@
 <link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
 
 
 
@@ -50,9 +53,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -61,14 +64,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -77,9 +82,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -234,7 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#Normal:Discrete:Roger"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
 <li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
 </ul></li>
@@ -373,9 +378,9 @@ If one compares the answers, one sees an obvious problem since one obtains two d
 
 <p><strong>Sampling From a Box</strong></p>
 <p>One simulates this experiment on R by first creating a vector  with the ball colors, and then using the  function to sample three balls from the vector. The argument  indicates that a sample of 3 is chosen, and the argument  ensures that the sampling is done without replacement. In this particular simulation, one observes a red, blue, and red ball in our sample.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">box &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;white&quot;</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">sample</span>(box, <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
-<pre><code>## [1] &quot;white&quot; &quot;red&quot;   &quot;red&quot;</code></pre>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="counting-methods.html#cb1-1"></a>box &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;blue&quot;</span>, <span class="st">&quot;white&quot;</span>)</span>
+<span id="cb1-2"><a href="counting-methods.html#cb1-2"></a><span class="kw">sample</span>(box, <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<pre><code>## [1] &quot;red&quot;   &quot;blue&quot;  &quot;white&quot;</code></pre>
 </div>
 <div id="the-multiplication-counting-rule" class="section level2">
 <h2><span class="header-section-number">2.3</span> The Multiplication Counting Rule</h2>
@@ -388,7 +393,6 @@ We first use a tree diagram to write down all of your possible dinners, in Figur
 Figure 2.1: Tree diagram of possible dinners.
 </p>
 </div>
-
 <p>Note that there are 3 possible appetizers, 4 possible entr'ees, and 2 possible desserts. For each appetizer, there are 4 possible entr'ees, and so there are 3 x 4 = 12 possible choices of appetizer and entr'ee. Using similar reasoning, for each combination of appetizer and entr'ee, there are 2 possible desserts, and so the total number of complete dinners would be</p>
 <p>Number of dinners = <span class="math inline">\(3 \times 4 \times 2\)</span> = 24.</p>
 <p>The above dining example illustrates a general counting rule that we call the multiplication rule.</p>
@@ -484,7 +488,7 @@ One represents possible permutations by a set of three blanks, where songs are p
 
 <p><strong>Permutations Rule:</strong> If one has <span class="math inline">\(n\)</span> objects (all distinguishable), then the number of ways to arrange <span class="math inline">\(r\)</span> of them, called the number of permutations, is
 <span class="math display" id="eq:permrule">\[\begin{equation}
- _n P_r =  n \times (n - 1) \times  ... \times (n - r ).
+ _n P_r =  n \times (n - 1) \times  ... \times (n - r + 1).
  \tag{2.4}
  \end{equation}\]</span>
 In this example, <span class="math inline">\(n = 6\)</span> and <span class="math inline">\(r = 3\)</span>, and If three songs are played in one’s playlist, each of the 120 possible permutations will be equally likely to occur. So the probability of any single permutation, say</p>
@@ -494,7 +498,7 @@ In this example, <span class="math inline">\(n = 6\)</span> and <span class="mat
 <span class="math display">\[
  _6 P_6= n! = 6 \times 5 \times  4 \times... \times 1 = 720.
  \]</span>
-One uses the special symbol <span class="math inline">\(n!\)</span>, pronounced “n factorial”, to denote the product of the integers from 1 to n. So the number of ways of arranging <span class="math inline">\(n\)</span> distinct objects is
+One uses the special symbol <span class="math inline">\(n!\)</span>, pronounced “n factorial”, to denote the product of the integers from 1 to n. So the number of ways of arranging <span class="math inline">\(n\)</span> distinct objects is
 <span class="math display" id="eq:permrule2">\[\begin{equation}
  _n P_n= n! = n \times (n - 1) \times  (n - 2) \times... \times 1.
  \tag{2.5}
@@ -502,16 +506,16 @@ One uses the special symbol <span class="math inline">\(n!\)</span>, pronounced 
 <p></p>
 <p><strong>Simulating a Permutation</strong></p>
 <p>To illustrate simulating a permutation,
-define a function “<code>permutation()&quot;</code> with arguments”<code>d&quot;</code> and “<code>Size&quot;</code>.
-Inside the function, the”<code>sample()&quot;</code> function takes a sample of size “<code>Size&quot;</code> without replacement from the vector”<code>d&quot;</code> and the “<code>str_flatten()&quot;</code> function creates a single string with the arrangement of the”<code>Size&quot;</code> values.
-To use this function, a vector “<code>songs&quot;</code>is defined containing the names of the six songs. One applies the”<code>permutation()&quot;</code> function with arguments &quot;<code>songs&quot;</code> and 3 and the simulated arrangement of songs is <span class="math inline">\(C\)</span>, <span class="math inline">\(F\)</span>, and <span class="math inline">\(B\)</span>.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">permutation &lt;-<span class="st"> </span><span class="cf">function</span>(d, Size){</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">  <span class="kw">str_flatten</span>(<span class="kw">sample</span>(d, <span class="dt">size=</span>Size),</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">              <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>)</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">}</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">songs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Song A&quot;</span>, <span class="st">&quot;Song B&quot;</span>, <span class="st">&quot;Song C&quot;</span>, <span class="st">&quot;Song D&quot;</span>,</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">           <span class="st">&quot;Song E&quot;</span>, <span class="st">&quot;Song F&quot;</span>)</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="kw">permutation</span>(songs, <span class="dt">Size =</span> <span class="dv">3</span>)</a></code></pre></div>
+define a function “<code>permutation()"</code> with arguments”<code>d"</code> and “<code>Size"</code>.
+Inside the function, the”<code>sample()"</code> function takes a sample of size “<code>Size"</code> without replacement from the vector”<code>d"</code> and the “<code>str_flatten()"</code> function creates a single string with the arrangement of the”<code>Size"</code> values.
+To use this function, a vector “<code>songs"</code>is defined containing the names of the six songs. One applies the”<code>permutation()"</code> function with arguments "<code>songs"</code> and 3 and the simulated arrangement of songs is <span class="math inline">\(C\)</span>, <span class="math inline">\(F\)</span>, and <span class="math inline">\(B\)</span>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="counting-methods.html#cb3-1"></a>permutation &lt;-<span class="st"> </span><span class="cf">function</span>(d, Size){</span>
+<span id="cb3-2"><a href="counting-methods.html#cb3-2"></a>  <span class="kw">str_flatten</span>(<span class="kw">sample</span>(d, <span class="dt">size=</span>Size),</span>
+<span id="cb3-3"><a href="counting-methods.html#cb3-3"></a>              <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>)</span>
+<span id="cb3-4"><a href="counting-methods.html#cb3-4"></a>}</span>
+<span id="cb3-5"><a href="counting-methods.html#cb3-5"></a>songs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Song A&quot;</span>, <span class="st">&quot;Song B&quot;</span>, <span class="st">&quot;Song C&quot;</span>, <span class="st">&quot;Song D&quot;</span>,</span>
+<span id="cb3-6"><a href="counting-methods.html#cb3-6"></a>           <span class="st">&quot;Song E&quot;</span>, <span class="st">&quot;Song F&quot;</span>)</span>
+<span id="cb3-7"><a href="counting-methods.html#cb3-7"></a><span class="kw">permutation</span>(songs, <span class="dt">Size =</span> <span class="dv">3</span>)</span></code></pre></div>
 <pre><code>## [1] &quot;Song C Song F Song B&quot;</code></pre>
 </div>
 <div id="combinations" class="section level2">
@@ -541,10 +545,10 @@ where <span class="math inline">\(k!\)</span> stands for <span class="math inlin
 that agrees with our earlier answer of 10 outcomes in the sample space.</p>
 
 <p><strong>Simulating Combinations</strong></p>
-<p>To illustrate combinations, define a vector &quot;<code>Numbers&quot;</code> containing the integers from 1 to 5. The R function <code>combn()</code> generates all combinations of a set of a specific size. The matrix <code>all_combo</code> is displayed which contains all combinations of size 2 from <code>Numbers</code>.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">Numbers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">all_combo &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">combn</span>(Numbers, <span class="dv">2</span>))</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">all_combo</a></code></pre></div>
+<p>To illustrate combinations, define a vector "<code>Numbers"</code> containing the integers from 1 to 5. The R function <code>combn()</code> generates all combinations of a set of a specific size. The matrix <code>all_combo</code> is displayed which contains all combinations of size 2 from <code>Numbers</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="counting-methods.html#cb5-1"></a>Numbers &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>)</span>
+<span id="cb5-2"><a href="counting-methods.html#cb5-2"></a>all_combo &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">combn</span>(Numbers, <span class="dv">2</span>))</span>
+<span id="cb5-3"><a href="counting-methods.html#cb5-3"></a>all_combo</span></code></pre></div>
 <pre><code>##       [,1] [,2]
 ##  [1,]    1    2
 ##  [2,]    1    3
@@ -558,12 +562,12 @@ that agrees with our earlier answer of 10 outcomes in the sample space.</p>
 ## [10,]    4    5</code></pre>
 <p>Below the function <code>sample()</code> is used to simulate random rows of the matrix <code>all_combo</code>
 and a frequency table of the ten possible combinations is displayed. Note that the frequencies for the ten possible combinations are similar since these outcomes are equally likely.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">N &lt;-<span class="st"> </span><span class="kw">nrow</span>(all_combo)</a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Iter =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">500</span>,</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">                 <span class="dt">Balls =</span> all_combo[<span class="kw">sample</span>(N, <span class="dt">size =</span> <span class="dv">500</span>,</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">                                    <span class="dt">replace =</span> <span class="ot">TRUE</span>), ])</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6">df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Balls<span class="fl">.1</span>, Balls<span class="fl">.2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="counting-methods.html#cb7-1"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb7-2"><a href="counting-methods.html#cb7-2"></a>N &lt;-<span class="st"> </span><span class="kw">nrow</span>(all_combo)</span>
+<span id="cb7-3"><a href="counting-methods.html#cb7-3"></a>df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Iter =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">500</span>,</span>
+<span id="cb7-4"><a href="counting-methods.html#cb7-4"></a>                 <span class="dt">Balls =</span> all_combo[<span class="kw">sample</span>(N, <span class="dt">size =</span> <span class="dv">500</span>,</span>
+<span id="cb7-5"><a href="counting-methods.html#cb7-5"></a>                                    <span class="dt">replace =</span> <span class="ot">TRUE</span>), ])</span>
+<span id="cb7-6"><a href="counting-methods.html#cb7-6"></a>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Balls<span class="fl">.1</span>, Balls<span class="fl">.2</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>()</span></code></pre></div>
 <pre><code>## # A tibble: 10 x 3
 ## # Groups:   Balls.1, Balls.2 [10]
 ##    Balls.1 Balls.2     n
@@ -653,15 +657,15 @@ and so the probability the first and last slots are filled with triangles is equ
 
 <p><strong>Simulating Arrangements of Non-Distinct Objects</strong></p>
 <p>The function <code>permutation()</code> is again used to simulate a permutation in this non-distinct object case. A vector <code>objects</code> is defined containing three x’s and two o’s, and a single random permutation is generated by using <code>permutation()</code> with arguments <code>objects</code> and 5. The <code>replicate()</code> function is used to repeat this experiment 1000 times and the frequencies of the different arrangements is displayed. Here the total number of arrangements is <span class="math inline">\({5\choose 2} = 10\)</span> and as expected, each of the 10 possible arrangements occurs with approximately the same frequency.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">permutation &lt;-<span class="st"> </span><span class="cf">function</span>(d, Size){</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="kw">str_flatten</span>(<span class="kw">sample</span>(d, <span class="dt">size=</span>Size),</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3">              <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>)</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4">}</a>
-<a class="sourceLine" id="cb9-5" data-line-number="5">objects &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;x&#39;</span>, <span class="st">&#39;x&#39;</span>, <span class="st">&#39;x&#39;</span>, <span class="st">&#39;o&#39;</span>, <span class="st">&#39;o&#39;</span>)</a>
-<a class="sourceLine" id="cb9-6" data-line-number="6">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Iter =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>,</a>
-<a class="sourceLine" id="cb9-7" data-line-number="7">              <span class="dt">Arrangement =</span> <span class="kw">replicate</span>(<span class="dv">1000</span>,</a>
-<a class="sourceLine" id="cb9-8" data-line-number="8">                  <span class="kw">permutation</span>(objects, <span class="dv">5</span>)))</a>
-<a class="sourceLine" id="cb9-9" data-line-number="9">df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Arrangement) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="counting-methods.html#cb9-1"></a>permutation &lt;-<span class="st"> </span><span class="cf">function</span>(d, Size){</span>
+<span id="cb9-2"><a href="counting-methods.html#cb9-2"></a>  <span class="kw">str_flatten</span>(<span class="kw">sample</span>(d, <span class="dt">size=</span>Size),</span>
+<span id="cb9-3"><a href="counting-methods.html#cb9-3"></a>              <span class="dt">collapse =</span> <span class="st">&quot; &quot;</span>)</span>
+<span id="cb9-4"><a href="counting-methods.html#cb9-4"></a>}</span>
+<span id="cb9-5"><a href="counting-methods.html#cb9-5"></a>objects &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;x&#39;</span>, <span class="st">&#39;x&#39;</span>, <span class="st">&#39;x&#39;</span>, <span class="st">&#39;o&#39;</span>, <span class="st">&#39;o&#39;</span>)</span>
+<span id="cb9-6"><a href="counting-methods.html#cb9-6"></a>df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Iter =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>,</span>
+<span id="cb9-7"><a href="counting-methods.html#cb9-7"></a>              <span class="dt">Arrangement =</span> <span class="kw">replicate</span>(<span class="dv">1000</span>,</span>
+<span id="cb9-8"><a href="counting-methods.html#cb9-8"></a>                  <span class="kw">permutation</span>(objects, <span class="dv">5</span>)))</span>
+<span id="cb9-9"><a href="counting-methods.html#cb9-9"></a>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Arrangement) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>()</span></code></pre></div>
 <pre><code>## # A tibble: 10 x 2
 ## # Groups:   Arrangement [10]
 ##    Arrangement     n
@@ -694,7 +698,7 @@ If the first two tips do not seem helpful, it may benefit to start writing down 
 <p><strong>Outcomes of one roll of five dice</strong></p>
 When a player rolls five dice in the game Yahtzee, the most valuable result is when all of the five dice show the same number such as
 
-<p>This is called a “Yahtzee” and the player scores 50 points with this pattern. A second valuable pattern is a &quot;four-of-a-kind’ where you observe one number appearing four times, such as</p>
+<p>This is called a “Yahtzee” and the player scores 50 points with this pattern. A second valuable pattern is a "four-of-a-kind’ where you observe one number appearing four times, such as</p>
 <p>3, 4, 3, 3, 3.</p>
 <p>The following table gives all of the possible patterns when you roll five dice in Yahtzee. When one plays the game, some of these patterns are worth a particular number of points and these points are given in the right column.</p>
 <table>
@@ -820,15 +824,15 @@ Prob({\rm four-}{\rm of-}{\rm a-}{\rm kind}) = \frac{150}{7776}.
 <p>Some of the Yahtzee probabilities are conveniently approximated by simulation. In the following, the function
 <code>four_kind()</code> uses the <code>sample()</code> function to simulate the rolls of five dice. By tabulating the roll outcomes (using the
 <code>table()</code> function), one checks if a four-of-a-kind is observed – if so, the string “4 kind” is returned, otherwise a “nothing” is returned.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">four_kind &lt;-<span class="st"> </span><span class="cf">function</span>(){</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2">  rolls &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">6</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb11-3" data-line-number="3">  <span class="kw">ifelse</span>(<span class="kw">max</span>(<span class="kw">table</span>(rolls) <span class="op">==</span><span class="st"> </span><span class="dv">4</span>), </a>
-<a class="sourceLine" id="cb11-4" data-line-number="4">         <span class="st">&quot;4 kind&quot;</span>, <span class="st">&quot;nothing&quot;</span>)</a>
-<a class="sourceLine" id="cb11-5" data-line-number="5">}</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="counting-methods.html#cb11-1"></a>four_kind &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb11-2"><a href="counting-methods.html#cb11-2"></a>  rolls &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">6</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb11-3"><a href="counting-methods.html#cb11-3"></a>  <span class="kw">ifelse</span>(<span class="kw">max</span>(<span class="kw">table</span>(rolls) <span class="op">==</span><span class="st"> </span><span class="dv">4</span>), </span>
+<span id="cb11-4"><a href="counting-methods.html#cb11-4"></a>         <span class="st">&quot;4 kind&quot;</span>, <span class="st">&quot;nothing&quot;</span>)</span>
+<span id="cb11-5"><a href="counting-methods.html#cb11-5"></a>}</span></code></pre></div>
 <p>This Yahtzee experiment is simulated 1000 times by use of the  function. One sees below that one observed four-of-a-kind 20 times, so the approximated probability of four-of-a-kind is 16/1000 = 0.016. This agrees closely with the exact probability of 150/7776 = 0.0193.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Iter =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>,</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">           <span class="dt">Result =</span> <span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">four_kind</span>()))</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3">df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Result) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>()</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="counting-methods.html#cb12-1"></a>df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Iter =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">1000</span>,</span>
+<span id="cb12-2"><a href="counting-methods.html#cb12-2"></a>           <span class="dt">Result =</span> <span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">four_kind</span>()))</span>
+<span id="cb12-3"><a href="counting-methods.html#cb12-3"></a>df <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">group_by</span>(Result) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">count</span>()</span></code></pre></div>
 <pre><code>## # A tibble: 2 x 2
 ## # Groups:   Result [2]
 ##   Result      n
@@ -1158,11 +1162,13 @@ drawn in any order.</p>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
 <script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
 <script>
 gitbook.require(["gitbook"], function(gitbook) {
 gitbook.start({
@@ -1170,12 +1176,11 @@ gitbook.start({
 "github": false,
 "facebook": true,
 "twitter": true,
-"google": false,
 "linkedin": false,
 "weibo": false,
 "instapaper": false,
 "vk": false,
-"all": ["facebook", "google", "twitter", "linkedin", "weibo", "instapaper"]
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
 "theme": "white",
@@ -1187,6 +1192,10 @@ gitbook.start({
 "text": "Edit"
 },
 "history": {
+"link": null,
+"text": null
+},
+"view": {
 "link": null,
 "text": null
 },
