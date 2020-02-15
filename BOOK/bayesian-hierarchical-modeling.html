@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-01-24" />
+<meta name="date" content="2020-02-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,9 +53,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +64,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +82,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -237,7 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#Normal:Discrete:Roger"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
 <li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
 </ul></li>
@@ -380,11 +382,11 @@ The prior distribution for the <span class="math inline">\(j\)</span>-th mean, <
 <p>Several comments can be made about this two-stage prior.</p>
 <ul>
 <li><p>Specifying the same prior distribution for all <span class="math inline">\(\mu_j\)</span>’s at Stage 1 does not say that the <span class="math inline">\(\mu_j\)</span>’s are the same value. Instead, Stage1 indicates that the <span class="math inline">\(\mu_j\)</span>’s {} are related and come from the same distribution. If the prior distribution <span class="math inline">\(\textrm{Normal}(\mu, \tau)\)</span> has a large standard deviation (that is, if <span class="math inline">\(\tau\)</span> is large), the <span class="math inline">\(\mu_j\)</span>’s can be very different from each other {}. On the other hand, if the standard deviation <span class="math inline">\(\tau\)</span> is small, the <span class="math inline">\(\mu_j\)</span>’s will be very similar in size.</p></li>
-<li><p>To follow up the previous comment, if one considers the limit of the Stage 1 prior as the standard deviation <span class="math inline">\(\tau\)</span> approaches zero, the group means <span class="math inline">\(\mu_j\)</span> will be identical. Then one is in the ``combined groups&quot; situation where one is pooling the SAT data to learn about a single population. At the other extreme, if one allows the standard deviation <span class="math inline">\(\tau\)</span> of the Stage 1 prior to approach infinity, then one is saying that the group means <span class="math inline">\(\mu_1, ..., \mu_5\)</span> are unrelated and that leads to the separate estimates situation.</p></li>
+<li><p>To follow up the previous comment, if one considers the limit of the Stage 1 prior as the standard deviation <span class="math inline">\(\tau\)</span> approaches zero, the group means <span class="math inline">\(\mu_j\)</span> will be identical. Then one is in the ``combined groups" situation where one is pooling the SAT data to learn about a single population. At the other extreme, if one allows the standard deviation <span class="math inline">\(\tau\)</span> of the Stage 1 prior to approach infinity, then one is saying that the group means <span class="math inline">\(\mu_1, ..., \mu_5\)</span> are unrelated and that leads to the separate estimates situation.</p></li>
 <li><p>In the school testing example, this prior <span class="math inline">\(\textrm{Normal}(\mu, \tau)\)</span> distribution is a model about all <span class="math inline">\(\mu_j\)</span>’s in the U.S., i.e. the population of SAT score means corresponding to all schools in the United States. The five schools in the dataset represent a sample from all schools in the U.S.</p></li>
 <li><p>Since <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> are parameters in the prior distribution, they are called hyperparameters. Learning about <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> provides information about the population of <span class="math inline">\(\mu_j\)</span>’s. Naturally in Bayesian inference, one learns about <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> by specifying a hyperprior distribution and performing inference based on the posterior distribution. In this example, inferences about <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> tell us about the location and spread of the population of mean SAT scores of schools in the U.S.</p></li>
 </ul>
-<p>To recap, one models continuous outcomes in groups through the school-specific sampling density in Equation (10.1) and the common Normal prior distribution in Equation (10.2) for the mean parameters. An important and appealing feature of this approach is learning simultaneously about each school (group) and learning about the population of schools (groups). Specifically in the current setup, the model simultaneously estimates the means for the schools (the <span class="math inline">\(\mu_j\)</span>’s) and the variation among the means (<span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span>). It will be seen that the hierarchical model posterior estimates for one school borrows information from other schools. This process is often called ``partial pooling&quot; information among groups.</p>
+<p>To recap, one models continuous outcomes in groups through the school-specific sampling density in Equation (10.1) and the common Normal prior distribution in Equation (10.2) for the mean parameters. An important and appealing feature of this approach is learning simultaneously about each school (group) and learning about the population of schools (groups). Specifically in the current setup, the model simultaneously estimates the means for the schools (the <span class="math inline">\(\mu_j\)</span>’s) and the variation among the means (<span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span>). It will be seen that the hierarchical model posterior estimates for one school borrows information from other schools. This process is often called ``partial pooling" information among groups.</p>
 <p>From the structural point of view, due to the two stages of the model, this approach is called hierarchical or multilevel modeling. In essence, hierarchical modeling takes into account information from multiple levels, acknowledging differences and similarities among groups. In the posterior analysis, one learns simultaneously about each group and learns about the population of groups by pooling information across groups.</p>
 <p>In this chapter, hierarchical modeling is described in two situations that extend the Bayesian models for one proportion and one Normal mean described in Chapters 7 and 8, respectively.
 Section 10.2 introduces hierarchical Normal modeling using a sample of ratings of animation movies released in 2010; and Section 10.3 describes hierarchical Beta-Binomial modeling with an example of deaths after heart attack. In each section, we motivate the consideration of hierarchical models, outline the model structure, and implement model inference through Markov chain Monte Carlo simulation.</p>
@@ -402,7 +404,7 @@ The ratings are likely affected by the quality of the movie itself, as some movi
 Figure 10.1: Jittered dotplot of the ratings for the eight animation movies.
 </p>
 </div>
-<p>Figure 10.1 displays a jittered dotplot of the ratings grouped by movie title and Table 10.1 lists the sample mean, sample standard deviation, and the number of ratings for each title. Note the variability in the sample sizes – “Toy Story 3’ received 16 ratings and”Legend of the Guardians&quot; and “Batman: Under the Red Hood” only received a single rating. For a movie with only one observed rating, such as “Legend of the Guardians” and ``Batman: Under the Red Hood&quot;, it would be difficult to learn much about its mean rating. Here it is desirable to improve the estimate of its mean rating by using rating information from similar movies.</p>
+<p>Figure 10.1 displays a jittered dotplot of the ratings grouped by movie title and Table 10.1 lists the sample mean, sample standard deviation, and the number of ratings for each title. Note the variability in the sample sizes – “Toy Story 3’ received 16 ratings and”Legend of the Guardians" and “Batman: Under the Red Hood” only received a single rating. For a movie with only one observed rating, such as “Legend of the Guardians” and ``Batman: Under the Red Hood", it would be difficult to learn much about its mean rating. Here it is desirable to improve the estimate of its mean rating by using rating information from similar movies.</p>
 <p>Table 10.1. The movie title, the mean rating, the standard deviation of the ratings, and the number of ratings.</p>
 <table>
 <thead>
@@ -485,7 +487,7 @@ Y_{ij} \mid \mu_j, \sigma \overset{i.i.d.}{\sim} \textrm{Normal}(\mu_j, \sigma).
 \end{equation}\]</span></p>
 <p>As discussed in Section 10.1, this prior allows for a flexible method for pooling information across movies.
 If the prior distribution has a large standard deviation (e.g. a large value of <span class="math inline">\(\tau\)</span>), the <span class="math inline">\(\mu_j\)</span>’s are very different from each other {}, and one would have modest pooling of the eight sets of ratings. If instead this prior has a small standard deviation (e.g. a small value of <span class="math inline">\(\tau\)</span>), the <span class="math inline">\(\mu_j\)</span>’s are very similar {} and one would essentially be pooling the ratings to get an estimate at each of the <span class="math inline">\(\mu_j\)</span>. This shared prior <span class="math inline">\(\textrm{Normal}(\mu, \tau)\)</span> distribution among the <span class="math inline">\(\mu_j\)</span>’s simultaneously estimates both a mean for each movie (the <span class="math inline">\(\mu_j\)</span>’s) and also lets us learn about variation among the movies by the parameter <span class="math inline">\(\tau\)</span>.</p>
-<p>The hyperparameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> are treated as random since we are unsure about the degree of pooling of the eight sets of ratings. In typical practice, one specifies weakly informative hyperprior distributions for these “second-stage” parameters, indicating that one has little prior knowledge about the locations of these parameters. After observing data, inference is performed about <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> based on their posterior distributions. The posterior on the mean parameter <span class="math inline">\(\mu\)</span> is informative about an ``average&quot; mean rating and the posterior on <span class="math inline">\(\tau\)</span> lets one know about the variation among the <span class="math inline">\(\mu_j\)</span>’s in the posterior.</p>
+<p>The hyperparameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> are treated as random since we are unsure about the degree of pooling of the eight sets of ratings. In typical practice, one specifies weakly informative hyperprior distributions for these “second-stage” parameters, indicating that one has little prior knowledge about the locations of these parameters. After observing data, inference is performed about <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> based on their posterior distributions. The posterior on the mean parameter <span class="math inline">\(\mu\)</span> is informative about an ``average" mean rating and the posterior on <span class="math inline">\(\tau\)</span> lets one know about the variation among the <span class="math inline">\(\mu_j\)</span>’s in the posterior.</p>
 <p>Treating <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> as random, one arrives at the following hierarchical model.</p>
 <ul>
 <li><p>Sampling: for <span class="math inline">\(j = 1, \cdots, 8\)</span> and <span class="math inline">\(i = 1, \cdots, n_j\)</span>:
@@ -573,24 +575,24 @@ Y_{ij} \mid \mu_j, \sigma_j \overset{i.i.d.}{\sim} \textrm{Normal}(\mu_j, \sigma
 <p><strong>Describe the model by a script</strong></p>
 
 <p>The first step in using the JAGS software is to write the following script defining the hierarchical model. The model is saved in the character string <code>modelString</code>.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">modelString &lt;-<span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="st">model {</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">## sampling</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="st">for (i in 1:N){</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="st">   y[i] ~ dnorm(mu_j[MovieIndex[i]], invsigma2)</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="st">}</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="st">## priors</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">for (j in 1:J){</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">   mu_j[j] ~ dnorm(mu, invtau2)</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="st">}</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="st">invsigma2 ~ dgamma(a_s, b_s)</span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="st">sigma &lt;- sqrt(pow(invsigma2, -1))</span></a>
-<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="st">## hyperpriors</span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="st">mu ~ dnorm(mu0, g0)</span></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="st">invtau2 ~ dgamma(a_t, b_t)</span></a>
-<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="st">tau &lt;- sqrt(pow(invtau2, -1))</span></a>
-<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="st">}</span></a>
-<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="st">&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="bayesian-hierarchical-modeling.html#cb1-1"></a>modelString &lt;-<span class="st">&quot;</span></span>
+<span id="cb1-2"><a href="bayesian-hierarchical-modeling.html#cb1-2"></a><span class="st">model {</span></span>
+<span id="cb1-3"><a href="bayesian-hierarchical-modeling.html#cb1-3"></a><span class="st">## sampling</span></span>
+<span id="cb1-4"><a href="bayesian-hierarchical-modeling.html#cb1-4"></a><span class="st">for (i in 1:N){</span></span>
+<span id="cb1-5"><a href="bayesian-hierarchical-modeling.html#cb1-5"></a><span class="st">   y[i] ~ dnorm(mu_j[MovieIndex[i]], invsigma2)</span></span>
+<span id="cb1-6"><a href="bayesian-hierarchical-modeling.html#cb1-6"></a><span class="st">}</span></span>
+<span id="cb1-7"><a href="bayesian-hierarchical-modeling.html#cb1-7"></a><span class="st">## priors</span></span>
+<span id="cb1-8"><a href="bayesian-hierarchical-modeling.html#cb1-8"></a><span class="st">for (j in 1:J){</span></span>
+<span id="cb1-9"><a href="bayesian-hierarchical-modeling.html#cb1-9"></a><span class="st">   mu_j[j] ~ dnorm(mu, invtau2)</span></span>
+<span id="cb1-10"><a href="bayesian-hierarchical-modeling.html#cb1-10"></a><span class="st">}</span></span>
+<span id="cb1-11"><a href="bayesian-hierarchical-modeling.html#cb1-11"></a><span class="st">invsigma2 ~ dgamma(a_s, b_s)</span></span>
+<span id="cb1-12"><a href="bayesian-hierarchical-modeling.html#cb1-12"></a><span class="st">sigma &lt;- sqrt(pow(invsigma2, -1))</span></span>
+<span id="cb1-13"><a href="bayesian-hierarchical-modeling.html#cb1-13"></a><span class="st">## hyperpriors</span></span>
+<span id="cb1-14"><a href="bayesian-hierarchical-modeling.html#cb1-14"></a><span class="st">mu ~ dnorm(mu0, g0)</span></span>
+<span id="cb1-15"><a href="bayesian-hierarchical-modeling.html#cb1-15"></a><span class="st">invtau2 ~ dgamma(a_t, b_t)</span></span>
+<span id="cb1-16"><a href="bayesian-hierarchical-modeling.html#cb1-16"></a><span class="st">tau &lt;- sqrt(pow(invtau2, -1))</span></span>
+<span id="cb1-17"><a href="bayesian-hierarchical-modeling.html#cb1-17"></a><span class="st">}</span></span>
+<span id="cb1-18"><a href="bayesian-hierarchical-modeling.html#cb1-18"></a><span class="st">&quot;</span></span></code></pre></div>
 <p>In the sampling part of the script, note that the loop goes from <code>1</code> to <code>N</code>, where <code>N</code> is the number of observations with index <code>i</code>. However, because now <code>N</code> observations are grouped according to movies, indicated by <code>j</code>, one needs to create one vector, <code>mu_j</code> of length eight, and use <code>MovieIndex[i]</code> to grab the corresponding <code>mu_j</code> based on the movie index.</p>
 <p>In the priors part of the script, the loop goes from <code>1</code> to <code>J</code>, and <code>J</code> = 8 in the current example. Inside the loop, the first line corresponds to the prior distribution for <code>mu_j</code>. Due to a commonly shared <code>sigma</code>, <code>invsigma2</code> follows <code>dgamma(a_g, b_g)} outside of the loop. In addition,</code>sigma &lt;- sqrt(pow(invsigma2, -1))<code>is added to help track</code>sigma``` directly.</p>
 <p>Finally in the hyperpriors section of the script, one specifies the Normal hyperprior for <code>mu</code>, a Gamma hyperprior for <code>invtau2</code>. Keep in mind that the arguments in the <code>dnorm</code> in JAGS are the mean and the precision. If one is interested instead in the standard deviation parameter <code>tau</code>, one could return it in the script by using <code>tau &lt;- sqrt(pow(invtau2, -1))</code>, enabling the tracking of its MCMC chain in the posterior inferences.</p>
@@ -606,7 +608,7 @@ the_data &lt;- list(&quot;y&quot; = y, &quot;MovieIndex&quot; = MovieIndex,
                  &quot;mu0&quot; = 3, &quot;g0&quot; = 1,
                  &quot;a_t&quot; = 1, &quot;b_t&quot; = 1,
                  &quot;a_s&quot; = 1, &quot;b_s&quot; = 1)</code></pre>
-<p>One uses the <code>run.jags()</code> function in the <code>runjags</code> R package to generate posterior samples by using the MCMC algorithms in JAGS. The script below runs one MCMC chain with 1000 iterations in the adapt period (preparing for MCMC), 5000 iterations of burn-in and an additional set of 5000 iterations to be run and collected for inference. By using <code>monitor = c(&quot;mu&quot;, &quot;tau&quot;, &quot;mu_j&quot;, &quot;sigma&quot;)</code>, one collects the values of all parameters in the model. In the end, the output variable <code>posterior</code> contains a matrix of simulated draws.</p>
+<p>One uses the <code>run.jags()</code> function in the <code>runjags</code> R package to generate posterior samples by using the MCMC algorithms in JAGS. The script below runs one MCMC chain with 1000 iterations in the adapt period (preparing for MCMC), 5000 iterations of burn-in and an additional set of 5000 iterations to be run and collected for inference. By using <code>monitor = c("mu", "tau", "mu_j", "sigma")</code>, one collects the values of all parameters in the model. In the end, the output variable <code>posterior</code> contains a matrix of simulated draws.</p>
 <pre><code>posterior &lt;- run.jags(modelString,
                       n.chains = 1,
                       data = the_data,
@@ -638,11 +640,11 @@ mu_j[6]     2.7   3.84    4.99  3.85  0.576   -- 0.00915
 mu_j[7]    2.74   3.53    4.27  3.51  0.388   -- 0.00595  
 mu_j[8]    3.58   4.12    4.66  4.12  0.276   -- 0.00423  
 sigma     0.763   0.92    1.12  0.93 0.0923   -- 0.00142 </code></pre>
-<p>One performs various inferential summaries and inferences based on the output. For example, the movies “How to Train Your Dragon” (corresponding to <span class="math inline">\(\mu_1\)</span>) and “Megamind” (corresponding to <span class="math inline">\(\mu_7\)</span>) have the lowest average ratings with short 90% credible intervals, (2.96, 3.99) and (2.74, 4.27) respectively, whereas “Legend of the Guardians: The Owls of Ga’Hoole” (corresponding to <span class="math inline">\(\mu_6\)</span>) also has a low average rating but with a wider 90% credible interval (2.70, 4.99). The differences in the width of the credible intervals stem from the sample sizes: there are eleven ratings for “How to Train Your Dragon”, four ratings for “Megamind”, and only a single rating for ``Legend of the Guardians: The Owls of Ga’Hoole&quot;. The smaller the sample size, the larger the variability in the inference, even if one pools information across groups.</p>
+<p>One performs various inferential summaries and inferences based on the output. For example, the movies “How to Train Your Dragon” (corresponding to <span class="math inline">\(\mu_1\)</span>) and “Megamind” (corresponding to <span class="math inline">\(\mu_7\)</span>) have the lowest average ratings with short 90% credible intervals, (2.96, 3.99) and (2.74, 4.27) respectively, whereas “Legend of the Guardians: The Owls of Ga’Hoole” (corresponding to <span class="math inline">\(\mu_6\)</span>) also has a low average rating but with a wider 90% credible interval (2.70, 4.99). The differences in the width of the credible intervals stem from the sample sizes: there are eleven ratings for “How to Train Your Dragon”, four ratings for “Megamind”, and only a single rating for ``Legend of the Guardians: The Owls of Ga’Hoole". The smaller the sample size, the larger the variability in the inference, even if one pools information across groups.</p>
 <p>Among the movies with high average ratings, “Batman: Under the Red Hood” (corresponding to <span class="math inline">\(\mu_5\)</span>) is worth noting. This movie’s average rating <span class="math inline">\(\mu_5\)</span> has the largest median value among all <span class="math inline">\(\mu_j\)</span>’s, at 4.15, and also a wide 90% credible interval, (3.09, 5.43). “Batman: Under the Red Hood” also received one rating in the sample resulting in a wide credible interval.</p>
 <p><strong>Shrinkage</strong></p>
 <p>Recall that the two-stage prior in Equations (10.7) to (10.8) specifies a shared prior <span class="math inline">\(\textrm{Normal}(\mu, \tau)\)</span> for all <span class="math inline">\(\mu_j\)</span>’s which facilitates simultaneous estimation of the movie mean ratings (the <span class="math inline">\(\mu_j\)</span>’s), and estimation of the variation among the movie mean ratings through the parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span>. The posterior mean of the rating for a particular movie <span class="math inline">\(\mu_j\)</span> shrinks the observed mean rating towards an average rating.<br />
-Figure 10.3 displays a ``shrinkage plot&quot; which illustrates the movement of the observed sample mean ratings towards an average rating.</p>
+Figure 10.3 displays a ``shrinkage plot" which illustrates the movement of the observed sample mean ratings towards an average rating.</p>
 
 <div class="figure"><span id="fig:unnamed-chunk-5"></span>
 <img src="../LATEX/figures/chapter10/MovieLensPoolingb.png" alt="Shrinkage plot of sample means and posterior means of movie ratings for eight movies." width="500" />
@@ -650,7 +652,7 @@ Figure 10.3 displays a ``shrinkage plot&quot; which illustrates the movement of 
 Figure 10.3: Shrinkage plot of sample means and posterior means of movie ratings for eight movies.
 </p>
 </div>
-<p>The left side of Figure 10.3 plots the sample movie rating means and lines connect the sample means to the corresponding posterior means (i.e. means of the posterior draws of <span class="math inline">\(\mu_j\)</span>). The shrinkage effect is obvious for the movie “Batman: Under the Red Hood” which corresponds to the dot at the value 5.0 on the left. This movie only received one rating of 5.0 and its mean rating <span class="math inline">\(\mu_5\)</span> shrinks to the value 4.178 on the right, which is still the highest posterior mean among the nine movie posterior means. A large shrinkage is desirable for a movie with a small number of ratings such as “Batman: Under the Red Hood”. For a movie with a small sample size, information about other ratings of similar movies helps to produce a more reasonable estimate at the ``true&quot; average movie rating. The amount of shrinkage is more modest for movies with larger sample sizes. Furthermore, by pooling ratings across movies, one is able to estimate the standard deviation <span class="math inline">\(\sigma\)</span> of the ratings. Without this pooling, one would be unable to estimate the standard deviation for a movie with only one rating.</p>
+<p>The left side of Figure 10.3 plots the sample movie rating means and lines connect the sample means to the corresponding posterior means (i.e. means of the posterior draws of <span class="math inline">\(\mu_j\)</span>). The shrinkage effect is obvious for the movie “Batman: Under the Red Hood” which corresponds to the dot at the value 5.0 on the left. This movie only received one rating of 5.0 and its mean rating <span class="math inline">\(\mu_5\)</span> shrinks to the value 4.178 on the right, which is still the highest posterior mean among the nine movie posterior means. A large shrinkage is desirable for a movie with a small number of ratings such as “Batman: Under the Red Hood”. For a movie with a small sample size, information about other ratings of similar movies helps to produce a more reasonable estimate at the ``true" average movie rating. The amount of shrinkage is more modest for movies with larger sample sizes. Furthermore, by pooling ratings across movies, one is able to estimate the standard deviation <span class="math inline">\(\sigma\)</span> of the ratings. Without this pooling, one would be unable to estimate the standard deviation for a movie with only one rating.</p>
 <p><strong>Sources of variability</strong></p>
 <p>As discussed in Section 10.1, the prior distribution <span class="math inline">\(\textrm{Normal}(\mu, \tau)\)</span> is shared among the means <span class="math inline">\(\mu_j\)</span>’s of all groups in a hierarchical Normal model, and the hyperparameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> provide information about the population of <span class="math inline">\(\mu_j\)</span>’s. Specifically, the standard deviation <span class="math inline">\(\tau\)</span> measures the variability among the <span class="math inline">\(\mu_j\)</span>’s. When the hierarchical model is estimated through MCMC, summaries from the simulation draws from the posterior of <span class="math inline">\(\tau\)</span> provide information about this source of variation after analyzing the data.</p>
 <p>There are actually two sources for the variability among the observed <span class="math inline">\(Y_{ij}\)</span>’s. At the sampling level of the model, the standard deviation <span class="math inline">\(\sigma\)</span> measures variability of the <span class="math inline">\(Y_{ij}\)</span> within the groups. In contrast, the parameter <span class="math inline">\(\tau\)</span> measures the variability in the measurements between the groups. When the hierarchical model is fit through MCMC, summaries from the marginal posterior distributions of <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(\tau\)</span> provide information about the two sources of variability.</p>
@@ -930,7 +932,7 @@ the_data &lt;- list(&quot;y&quot; = y, &quot;n&quot; = n, &quot;N&quot; = N,
                  &quot;logn&quot; = log(100))</code></pre>
 <p><strong>Generate samples from the posterior distribution</strong></p>
 
-<p>The <code>run.jags()</code> function is used to generate samples by MCMC in JAGS following the sample script below. It runs one MCMC chain with 1000 iterations in the adapt period, 5000 iterations of burn-in and an additional set of 5000 iterations to be run and collected for inference. One keeps tracks of all parameters in the model by using the argument <code>monitor = c(&quot;p&quot;, &quot;mu&quot;, &quot;logeta&quot;)</code>. The output of the MCMC runs is the variable <code>posterior</code> containing a matrix of simulated draws.</p>
+<p>The <code>run.jags()</code> function is used to generate samples by MCMC in JAGS following the sample script below. It runs one MCMC chain with 1000 iterations in the adapt period, 5000 iterations of burn-in and an additional set of 5000 iterations to be run and collected for inference. One keeps tracks of all parameters in the model by using the argument <code>monitor = c("p", "mu", "logeta")</code>. The output of the MCMC runs is the variable <code>posterior</code> containing a matrix of simulated draws.</p>
 <pre><code>posterior &lt;- run.jags(modelString,
                       n.chains = 1,
                       data = the_data,
@@ -1019,7 +1021,7 @@ Figure 10.9: Posterior probabilities of the hospital that was ranked first.
 <li><strong>Time-to-Serve for Six Tennis Players</strong>
 </li>
 </ol>
-<p>Table 10.3 displays the sample size <span class="math inline">\(n_j\)</span> and the mean time-to-serve <span class="math inline">\(\bar y_j\)</span> (in seconds) for six professional tennis players. Assume that the sample mean for the <span class="math inline">\(i\)</span>-th player <span class="math inline">\(\bar y_i\)</span> is Normally distributed with mean <span class="math inline">\(\mu_i\)</span> and standard deviation <span class="math inline">\(\sigma / \sqrt{n_i}\)</span> where we assume <span class="math inline">\(\sigma = 5.5\)</span> seconds.</p>
+<p>Table 10.3 displays the sample size <span class="math inline">\(n_i\)</span> and the mean time-to-serve <span class="math inline">\(\bar y_i\)</span> (in seconds) for six professional tennis players. Assume that the sample mean for the <span class="math inline">\(i\)</span>-th player <span class="math inline">\(\bar y_i\)</span> is Normally distributed with mean <span class="math inline">\(\mu_i\)</span> and standard deviation <span class="math inline">\(\sigma / \sqrt{n_i}\)</span> where we assume <span class="math inline">\(\sigma = 5.5\)</span> seconds.</p>
 <p>Table 10.3. Number of serves and mean time-to-serve for six professional tennis players.</p>
 <table>
 <thead>
@@ -1072,7 +1074,7 @@ Figure 10.9: Posterior probabilities of the hospital that was ranked first.
 </ol>
 <p>Suppose one wishes to estimate the mean time-to-serve values for the six players by the following hierarchical model. Remember that we are assuming <span class="math inline">\(\sigma = 5.5\)</span> seconds.</p>
 <p><span class="math display">\[\begin{eqnarray*}
-\bar{y}_i &amp;\sim&amp; \textrm{Normal}(\mu_j, \sigma / \sqrt{n_i}), \,\,\, i = 1, ..., 6. \\
+\bar{y}_i &amp;\sim&amp; \textrm{Normal}(\mu_i, \sigma / \sqrt{n_i}), \,\,\, i = 1, ..., 6. \\
 \mu_i &amp;\sim&amp; \textrm{Normal}(\mu, \tau), \,\,\, i = 1, ..., 6. \\
 \mu &amp;\sim&amp; \textrm{Normal}(20, 1 / 0.001), \\
 1 / \tau^2 &amp;\sim&amp; \textrm{Gamma}(0.1, 0.1).
@@ -1295,7 +1297,7 @@ Figure 10.9: Posterior probabilities of the hospital that was ranked first.
 </ol>
 
 <div class="figure"><span id="fig:unnamed-chunk-15"></span>
-<img src="../LATEX/figures/chapter10/marriage_ages.png" alt="Dotplot of marriage rates in Italy from 1936 to 1951." width="500" />
+<img src="LATEX/figures/chapter10/marriage_ages.png" alt="Dotplot of marriage rates in Italy from 1936 to 1951." width="500" />
 <p class="caption">
 Figure 10.10: Dotplot of marriage rates in Italy from 1936 to 1951.
 </p>
@@ -1309,7 +1311,7 @@ Figure 10.10: Dotplot of marriage rates in Italy from 1936 to 1951.
 <ol start="11" style="list-style-type: decimal">
 <li><strong>Hierarchical Gamma-Poisson Modeling - Fire Calls in Pennsylvania</strong></li>
 </ol>
-<p>Table 10.7 displays the number of fire calls and the number of building fires for ten counties in Montgomery County, Pennsylvania from 2015 through 2019. This data is currently described as ``Emergency - 911 Calls&quot; from ```kaggle.com}. Suppose that the number of building fires for the <span class="math inline">\(j\)</span>-th zip code is Poisson with mean <span class="math inline">\(n_j \lambda_j\)</span>, where <span class="math inline">\(n_j\)</span> and <span class="math inline">\(\lambda_j\)</span> are respectively the number of fire calls and rate of building fires for the <span class="math inline">\(j\)</span>-th zip code.</p>
+<p>Table 10.7 displays the number of fire calls and the number of building fires for ten counties in Montgomery County, Pennsylvania from 2015 through 2019. This data is currently described as ``Emergency - 911 Calls" from ```kaggle.com}. Suppose that the number of building fires for the <span class="math inline">\(j\)</span>-th zip code is Poisson with mean <span class="math inline">\(n_j \lambda_j\)</span>, where <span class="math inline">\(n_j\)</span> and <span class="math inline">\(\lambda_j\)</span> are respectively the number of fire calls and rate of building fires for the <span class="math inline">\(j\)</span>-th zip code.</p>
 <p>Table 10.7. The number of fire calls and building fires for ten zip codes in Montgomery County, Pennsylvania.</p>
 <table>
 <thead>
@@ -1635,7 +1637,7 @@ deaths &lt;- rpois(10, lambda = pop_size * true_rates)</code></pre>
 <ol start="2" style="list-style-type: lower-alpha">
 <li><p>Compute the observed death rates {<span class="math inline">\(y_j / n_j\)</span>}. Identify the counties with the lowest and highest death rates.</p></li>
 <li><p>Using JAGS, fit a hierarchical model to the data assuming weakly informative Gamma priors on the parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. Simulate a sample of 10,000 draws from the posterior distribution and compute the posterior means of the {<span class="math inline">\(\theta_j\)</span>}.</p></li>
-<li><p>Identify the counties with the lowest and highest posterior means of the true rates. Compare these <code>best&quot; and</code>worst&quot; counties with the best and worst counties identified in part (b).</p></li>
+<li><p>Identify the counties with the lowest and highest posterior means of the true rates. Compare these <code>best" and</code>worst" counties with the best and worst counties identified in part (b).</p></li>
 </ol>
 <p>Exercises 16 to 20 are additional Bayesian hierarchical models with more complicated structures. These exercises are here to help the reader gain familiarity of working with joint posterior distribution and deriving full conditional posterior distributions. These skills are essential to creating Metropolis and Gibbs sampling algorithms by oneself (as opposed to using JAGS).}</p>
 <ol start="16" style="list-style-type: decimal">

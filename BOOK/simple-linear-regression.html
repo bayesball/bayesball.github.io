@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-01-24" />
+<meta name="date" content="2020-02-15" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,9 +53,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +64,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +82,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -237,7 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#Normal:Discrete:Roger"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
 <li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
 </ul></li>
@@ -505,18 +507,18 @@ Since this is not a familiar probability distribution, one needs to use an MCMC 
 One attractive feature of JAGS is that it is straightforward to transpose the statement of the Bayesian model (sampling density and prior) directly to the JAGS model script.</p>
 <p><strong>Describe the model by a script</strong></p>
 <p>The first step in using JAGS is writing the following script defining the linear regression model, saving the script in the character string ```modelString}.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">modelString &lt;-<span class="st">&quot;</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="st">model {</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="st">## sampling</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="st">for (i in 1:N){</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="st">   y[i] ~ dnorm(beta0 + beta1*x[i], invsigma2)</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="st">}</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="st">## priors</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="st">beta0 ~ dnorm(mu0, g0)</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="st">beta1 ~ dnorm(mu1, g1)</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="st">invsigma2 ~ dgamma(a, b)</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="st">sigma &lt;- sqrt(pow(invsigma2, -1))</span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="st">}&quot;</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="simple-linear-regression.html#cb1-1"></a>modelString &lt;-<span class="st">&quot;</span></span>
+<span id="cb1-2"><a href="simple-linear-regression.html#cb1-2"></a><span class="st">model {</span></span>
+<span id="cb1-3"><a href="simple-linear-regression.html#cb1-3"></a><span class="st">## sampling</span></span>
+<span id="cb1-4"><a href="simple-linear-regression.html#cb1-4"></a><span class="st">for (i in 1:N){</span></span>
+<span id="cb1-5"><a href="simple-linear-regression.html#cb1-5"></a><span class="st">   y[i] ~ dnorm(beta0 + beta1*x[i], invsigma2)</span></span>
+<span id="cb1-6"><a href="simple-linear-regression.html#cb1-6"></a><span class="st">}</span></span>
+<span id="cb1-7"><a href="simple-linear-regression.html#cb1-7"></a><span class="st">## priors</span></span>
+<span id="cb1-8"><a href="simple-linear-regression.html#cb1-8"></a><span class="st">beta0 ~ dnorm(mu0, g0)</span></span>
+<span id="cb1-9"><a href="simple-linear-regression.html#cb1-9"></a><span class="st">beta1 ~ dnorm(mu1, g1)</span></span>
+<span id="cb1-10"><a href="simple-linear-regression.html#cb1-10"></a><span class="st">invsigma2 ~ dgamma(a, b)</span></span>
+<span id="cb1-11"><a href="simple-linear-regression.html#cb1-11"></a><span class="st">sigma &lt;- sqrt(pow(invsigma2, -1))</span></span>
+<span id="cb1-12"><a href="simple-linear-regression.html#cb1-12"></a><span class="st">}&quot;</span></span></code></pre></div>
 <p>In the sampling section of the script, the loop goes from <code>1</code> to <code>N</code>, where <code>N</code> is the number of observations with index <code>i</code>. Recall that the Normal distribution <code>dnorm</code> in JAGS is stated in terms of the mean and precision, and so the variable <code>invsigma2</code> corresponds to the Normal sampling precision. The variable <code>sigma</code> is defined in the prior section of the script so one can track the simulated values of the standard deviation <span class="math inline">\(\sigma\)</span>.
 Also the variables <code>g0</code> and <code>g1</code> correspond to the precisions of the Normal prior densities for <code>beta0</code> and <code>beta1</code>.</p>
 <p><strong>Define the data and prior parameters</strong></p>
@@ -529,7 +531,7 @@ the_data &lt;- list(&quot;y&quot; = y, &quot;x&quot; = x, &quot;N&quot; = N,
                  &quot;mu1&quot; = 0, &quot;g1&quot; = 0.0001,
                  &quot;a&quot; = 1, &quot;b&quot; = 1)</code></pre>
 <p><strong>Generate samples from the posterior distribution</strong></p>
-<p>The <code>run.jags()</code> function in the <code>runjags</code> package generates posterior samples by the MCMC algorithm using the JAGS software. The script below runs one MCMC chain with an adaption period of 1000 iterations, a burn-in period of 5000 iterations, and an additional set of 5000 iterations to be run and collected for inference. By using the argument <code>monitor = c(&quot;beta0&quot;, &quot;beta1&quot;, &quot;sigma&quot;)</code>, one keeps tracks of all three model parameters. The output variable <code>posterior</code> contains a matrix of simulated draws.</p>
+<p>The <code>run.jags()</code> function in the <code>runjags</code> package generates posterior samples by the MCMC algorithm using the JAGS software. The script below runs one MCMC chain with an adaption period of 1000 iterations, a burn-in period of 5000 iterations, and an additional set of 5000 iterations to be run and collected for inference. By using the argument <code>monitor = c("beta0", "beta1", "sigma")</code>, one keeps tracks of all three model parameters. The output variable <code>posterior</code> contains a matrix of simulated draws.</p>
 <pre><code>posterior &lt;- run.jags(modelString,
                       n.chains = 1,
                       data = the_data,
@@ -592,7 +594,7 @@ Each pair of values (<span class="math inline">\(\beta_0, \beta_1\)</span>) corr
 <span class="math display">\[\begin{equation*}
 y = \tilde{\beta_0} + \tilde{\beta_1} x
 \end{equation*}\]</span>
-corresponds to a ``best&quot; line of fit through the data.</p>
+corresponds to a ``best" line of fit through the data.</p>
 <p>This best line represents a most likely value of the line <span class="math inline">\(\beta_0 + \beta_1 x\)</span> from the posterior distribution. One learns about the uncertainty of this line estimate by drawing a sample of <span class="math inline">\(J\)</span> rows from the matrix of posterior draws of <span class="math inline">\((\beta_0, \beta_1)\)</span> and collecting the line estimates
 <span class="math display">\[\begin{equation*}
 \tilde{\beta_0}^{(j)} + \tilde{\beta_1}^{(j)} x, j = 1, ..., J.
@@ -624,7 +626,7 @@ posterior samples of fits that are more tightly clustered about the best fitting
 <p><strong>Learning about the expected response</strong></p>
 <p>In regression modeling, one may be interested in learning about the expected response <span class="math inline">\(E(Y)\)</span> for a specific value of the predictor <span class="math inline">\(x\)</span>. In the house sale example, one may wish to learn about the expected house price for a specific value of the house size. Since the expected response <span class="math inline">\(E(Y) = \beta_0 + \beta_1 x\)</span> is a linear function of the intercept and slope parameters, one obtains a simulated sample from the posterior of <span class="math inline">\(\beta_0 + \beta_1 x\)</span> by computing this function on each of the simulated pairs from the posterior of <span class="math inline">\((\beta_0, \beta_1)\)</span>.</p>
 
-<p>For example, suppose one is interested in the expected price <span class="math inline">\(E(Y)\)</span> for a house with a size of 1, i.e. <span class="math inline">\(x = 1\)</span> (1000 sq feet). In the R script below, one simulates 5000 draws from the posterior of the expected house prices, <span class="math inline">\(E[Y]\)</span> from the 5000 posterior samples of the pair <span class="math inline">\((\beta_0, \beta_1)\)</span>.</p>
+<p>For example, suppose one is interested in the expected price <span class="math inline">\(E(Y)\)</span> for a house with a size of 1, i.e. <span class="math inline">\(x = 1\)</span> (1000 sq feet). In the R script below, one simulates 5000 draws from the posterior of the expected house prices, <span class="math inline">\(E[Y]\)</span> from the 5000 posterior samples of the pair <span class="math inline">\((\beta_0, \beta_1)\)</span>.</p>
 <pre><code>size &lt;- 1
 mean_response &lt;- post[, &quot;beta0&quot;] + size * post[, &quot;beta1&quot;]</code></pre>
 <p>This process is repeated for the four sizes <span class="math inline">\(x = 1.2, 1.6, 2.0, 2.4\)</span> (1200 sq feet, 1600 sq feet, 2000 sq feet, and 2400 sq feet). Let <span class="math inline">\(E(Y \mid x)\)</span> denotes the expected price for a house with size <span class="math inline">\(x\)</span>. Figure 11.6 displays density plots of the simulated posterior samples for the expected prices <span class="math inline">\(E(Y \mid 1.2)\)</span>, <span class="math inline">\(E(Y \mid 1.6)\)</span>, <span class="math inline">\(E(Y \mid 2.0)\)</span>, <span class="math inline">\(E(Y \mid 2.4)\)</span> for these four house sizes.</p>
@@ -658,7 +660,7 @@ As shown in Equation (11.11), the sampling model of <span class="math inline">\(
 \text{simulate}\,\, E[y]^{(S)} = \beta_0^{(S)} + \beta_1^{(S)} x &amp;\rightarrow&amp; \text{sample}\,\, \tilde{y}^{(S)} \sim {\rm{Normal}}(E[y]^{(S)}, \sigma^{(S)})\\
 \end{eqnarray*}\]</span></p>
 
-<p>The R function <code>one_predicted()</code> obtains a simulated sample of the predictive distribution of the house price given a value of the house size. First one uses the posterior sample of <span class="math inline">\((\beta_0, \beta_1)\)</span> to obtain a posterior sample of the ``linear response&quot; <span class="math inline">\(\beta_0 + \beta_1 x\)</span>. Then it simulates draws of the future observation by simulating from a Normal distribution with mean <span class="math inline">\(\beta_0 + \beta_1 x\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, where draws of <span class="math inline">\(\sigma\)</span> are taken from its posterior distribution.</p>
+<p>The R function <code>one_predicted()</code> obtains a simulated sample of the predictive distribution of the house price given a value of the house size. First one uses the posterior sample of <span class="math inline">\((\beta_0, \beta_1)\)</span> to obtain a posterior sample of the ``linear response" <span class="math inline">\(\beta_0 + \beta_1 x\)</span>. Then it simulates draws of the future observation by simulating from a Normal distribution with mean <span class="math inline">\(\beta_0 + \beta_1 x\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, where draws of <span class="math inline">\(\sigma\)</span> are taken from its posterior distribution.</p>
 <pre><code>one_predicted &lt;- function(x){
   lp &lt;- post[ , &quot;beta0&quot;] +  x * post[ , &quot;beta1&quot;]
   y &lt;- rnorm(5000, lp, post[, &quot;sigma&quot;])
@@ -765,7 +767,7 @@ A positive value <span class="math inline">\(\beta_1\)</span> indicates a positi
 \end{equation*}\]</span>
 Then the task of assigning a joint prior simplifies to the task of assigning priors separately to each of the three parameters. The process of assigning an informative prior is described for each parameter.</p>
 <p><strong>Prior on the intercept <span class="math inline">\(\beta_0\)</span></strong></p>
-<p>After the data is standardized, recall that the intercept <span class="math inline">\(\beta_0\)</span> represents the expected standardized sale price given a house of average size (i.e. <span class="math inline">\(x_i^* = 0\)</span>). If one believes a house of average size will also have an average price, then a reasonable guess of <span class="math inline">\(\beta_0\)</span> is zero. One can give a Normal prior for <span class="math inline">\(\beta_0\)</span> with mean <span class="math inline">\(\mu_0 = 0\)</span> and standard deviation <span class="math inline">\(s_0\)</span>:
+<p>After the data is standardized, recall that the intercept <span class="math inline">\(\beta_0\)</span> represents the expected standardized sale price given a house of average size (i.e. <span class="math inline">\(x_i^* = 0\)</span>). If one believes a house of average size will also have an average price, then a reasonable guess of <span class="math inline">\(\beta_0\)</span> is zero. One can give a Normal prior for <span class="math inline">\(\beta_0\)</span> with mean <span class="math inline">\(\mu_0 = 0\)</span> and standard deviation <span class="math inline">\(s_0\)</span>:
 <span class="math display">\[\begin{equation*}
 \beta_0 \sim \textrm{Normal}(0, s_0).
 \end{equation*}\]</span></p>
@@ -776,7 +778,7 @@ If one instead is very sure of the guess that <span class="math inline">\(\beta_
 <span class="math display">\[\begin{equation*}
 \beta_1 \sim \textrm{Normal}(\mu_1, s_1),
 \end{equation*}\]</span>
-For this prior, <span class="math inline">\(\mu_1\)</span> represents one’s best guess of the correlation and <span class="math inline">\(s_1\)</span> represents the sureness of this guess. For example, if one lets <span class="math inline">\(\beta_1\)</span> be <span class="math inline">\(\textrm{Normal}(0.7, 0.15)\)</span>, this means that one’s ``best guess&quot; of the correlation is 0.7 and one is pretty certain that the correlation falls between <span class="math inline">\(0.7 - 0.15\)</span> and <span class="math inline">\(0.7 + 0.15\)</span>. If one is not very sure of the guess of 0.7, one could choose a larger value of <span class="math inline">\(s_1\)</span>.</p>
+For this prior, <span class="math inline">\(\mu_1\)</span> represents one’s best guess of the correlation and <span class="math inline">\(s_1\)</span> represents the sureness of this guess. For example, if one lets <span class="math inline">\(\beta_1\)</span> be <span class="math inline">\(\textrm{Normal}(0.7, 0.15)\)</span>, this means that one’s ``best guess" of the correlation is 0.7 and one is pretty certain that the correlation falls between <span class="math inline">\(0.7 - 0.15\)</span> and <span class="math inline">\(0.7 + 0.15\)</span>. If one is not very sure of the guess of 0.7, one could choose a larger value of <span class="math inline">\(s_1\)</span>.</p>
 <p><strong>Prior on <span class="math inline">\(\sigma\)</span></strong></p>
 <p>It is typically harder to specify informative beliefs about a standard deviation than a mean parameter such as <span class="math inline">\(\beta_0 + \beta_1 x\)</span>.
 So it seems reasonable to assign a weakly informative prior for the sampling error standard deviation <span class="math inline">\(\sigma\)</span>.
@@ -1093,7 +1095,7 @@ and <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i
 <ol style="list-style-type: lower-alpha">
 <li>Suppose a team scores on average 4.5 runs and allows, on average, 4.0 runs, so <span class="math inline">\(x = \log(R / RA) = \log(4.5 / 4) = 0.118\)</span>. Simulate 1000 draws from the posterior distribution of <span class="math inline">\(\mu = \beta x\)</span>.</li>
 <li>If <span class="math inline">\(x = 0.118\)</span>, use the work from part (a) to simulate repeated draws of the posterior predictive distribution of <span class="math inline">\(y = \log(W /L)\)</span> and use the output to construct a 90% prediction interval for <span class="math inline">\(y\)</span>.</li>
-<li>From the interval found in part (a), find a 90% prediction interval for the number of wins in a 162 game season.</li>
+<li>From the interval found in part (b), find a 90% prediction interval for the number of wins in a 162 game season.</li>
 </ol>
 <ol start="5" style="list-style-type: decimal">
 <li><strong>Pythagorean Result in Baseball (continued)</strong></li>
@@ -1279,9 +1281,9 @@ where <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x
 </table>
 <ol style="list-style-type: lower-alpha">
 <li><p>Assuming weekly informative priors on the regression parameters and the standard deviation, use JAGS to simulate from the joint posterior distribution of <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span>.</p></li>
-<li>Construct a scatterplot of the simulated draws of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</li>
-<li>From your output, is there significant evidence that weekend sales is a useful predictor of gross sales? Explain.</li>
-<li>From the simulated draws, construct a 80% interval estimate for the average gross sales for all movies that have a $100 million weekend sales.</li>
+<li><p>Construct a scatterplot of the simulated draws of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p></li>
+<li><p>From your output, is there significant evidence that weekend sales is a useful predictor of gross sales? Explain.</p></li>
+<li><p>From the simulated draws, construct a 80% interval estimate for the average gross sales for all movies that have a $100 million weekend sales.</p></li>
 <li><p>Suppose you are interested in predicting the gross sales for a single move that has $100 million weekend sales. Construct a 80% prediction interval for the gross sales.</p></li>
 </ol>
 <ol start="11" style="list-style-type: decimal">
@@ -1457,7 +1459,7 @@ where <span class="math inline">\(y^*_i\)</span> and <span class="math inline">\
 <p>A traditional “maximum likelihood” fit of the model <span class="math inline">\(Y_i \mid \beta_0, \beta_1, \sigma \sim \textrm{Normal}(\beta_0 + \beta_1 x, \sigma)\)</span> can be found by use of the <code>lm()</code> function.</p>
 <pre><code>fit &lt;- lm(Bill ~ Temp, data = gas2017)
 summary(fit)</code></pre>
-<p>The output provides estimates of the regression coefficients <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> and the ’Residual standard error&quot; provides an estimate at the standard deviation <span class="math inline">\(\sigma\)</span>. Compare these estimates with the posterior means of <span class="math inline">\(\beta_0, \beta_1, \sigma\)</span> found in Exercise 14.</p>
+<p>The output provides estimates of the regression coefficients <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> and the ’Residual standard error" provides an estimate at the standard deviation <span class="math inline">\(\sigma\)</span>. Compare these estimates with the posterior means of <span class="math inline">\(\beta_0, \beta_1, \sigma\)</span> found in Exercise 14.</p>
 <ol start="16" style="list-style-type: decimal">
 <li><strong>Conditional Means Prior</strong></li>
 </ol>
