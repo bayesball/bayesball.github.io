@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-01-22" />
+<meta name="date" content="2020-02-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,9 +53,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +64,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +82,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -237,7 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#Normal:Discrete:Roger"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
 <li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
 </ul></li>
@@ -656,17 +658,17 @@ Figure 4.1: Probability distribution of the net gains for Peter in the Peter-Pau
 
 <p><strong>Simulating the Peter-Paul Game</strong></p>
 <p>It is straightforward to simulate this game in R. A function <code>one_play()</code> is written which will play the game one time. The <code>sample()</code> function is used to flip a coin five times and the function returns the net gain for Paul.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">one_play &lt;-<span class="st"> </span><span class="cf">function</span>(){</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">  flips &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;H&quot;</span>, <span class="st">&quot;T&quot;</span>), </a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">                  <span class="dt">size =</span> <span class="dv">5</span>,</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">                  <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">  <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>(flips <span class="op">==</span><span class="st"> &quot;H&quot;</span>) <span class="op">-</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="st">       </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>(flips <span class="op">==</span><span class="st"> &quot;T&quot;</span>)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">}</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="discrete-distributions.html#cb1-1"></a>one_play &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb1-2"><a href="discrete-distributions.html#cb1-2"></a>  flips &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="kw">c</span>(<span class="st">&quot;H&quot;</span>, <span class="st">&quot;T&quot;</span>), </span>
+<span id="cb1-3"><a href="discrete-distributions.html#cb1-3"></a>                  <span class="dt">size =</span> <span class="dv">5</span>,</span>
+<span id="cb1-4"><a href="discrete-distributions.html#cb1-4"></a>                  <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb1-5"><a href="discrete-distributions.html#cb1-5"></a>  <span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>(flips <span class="op">==</span><span class="st"> &quot;H&quot;</span>) <span class="op">-</span></span>
+<span id="cb1-6"><a href="discrete-distributions.html#cb1-6"></a><span class="st">       </span><span class="dv">2</span> <span class="op">*</span><span class="st"> </span><span class="kw">sum</span>(flips <span class="op">==</span><span class="st"> &quot;T&quot;</span>)</span>
+<span id="cb1-7"><a href="discrete-distributions.html#cb1-7"></a>}</span></code></pre></div>
 <p>The <code>replicate()</code> function is used to simulate 1000 plays of the game and the net gains for all plays are stored in the vector <code>G</code>. If one constructs a bar graph of the net gains (see Figure 4.2), it will resemble the graph of the probability distribution of <span class="math inline">\(G\)</span> showed in Figure 4.1.</p>
 <pre><code>G &lt;- replicate(1000, one_play())
 bar_plot(G)</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;../LATEX/figures/chapter4/discrete1.png&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="discrete-distributions.html#cb3-1"></a>knitr<span class="op">::</span><span class="kw">include_graphics</span>(<span class="st">&quot;../LATEX/figures/chapter4/discrete1.png&quot;</span>)</span></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-3"></span>
 <img src="../LATEX/figures/chapter4/discrete1.png" alt="Bar graph of net gains from simulation of Peter-Paul game." width="500" />
 <p class="caption">
@@ -755,16 +757,16 @@ It is easy to compute the probability Peter loses money – also 1/2. Since the 
 
 <p><strong>Simulating the Peter-Paul Game (continued)</strong></p>
 <p>The functions <code>sample()</code> and <code>replicate()</code> were earlier illustrated to simulate this game 1000 times in R. Peter’s winnings in the different games are stored in the vector <code>G</code>. Here is a display of Peter’s winnings in the first 100 games:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">G[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>]</a></code></pre></div>
-<pre><code>##   [1]   6   2  -6   6   2  -2   2   2   6   2   2  -2   6   2  -2  -2  10   6
-##  [19]   2   6  -6   2   2  -2   6  -6  -2   2   2  -2   2  -2   2   2   6  -2
-##  [37]  -2  -6   2   2  -6   2  -2   2  -2  10  -2   2   2   2   2   6 -10   2
-##  [55]   2   2  -2   2  -2   2  -2  -6   6  -6  -2   6  -2   6  -2   2   6  -2
-##  [73]   2  -6  -6  -2   2  -2   6   2   6  -2   2  -2  -2  -2   2  -6  -6  -6
-##  [91]  -2   2   2  -2  -2  -2   2  -6  -6  -6</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="discrete-distributions.html#cb4-1"></a>G[<span class="dv">1</span><span class="op">:</span><span class="dv">100</span>]</span></code></pre></div>
+<pre><code>##   [1]  -2  -2   2   2  -2  -2   6   2  -2   2 -10  -2   2   6   2   2  -2   2
+##  [19]  -2   2   2  -6   2  -6   2  -6   2 -10   6   2   6  10   2  -2  -2  -2
+##  [37]  -6  -2   2  -2  -6  -6  -2   2  -2   6  -2   6  -6  10   6  10   2   2
+##  [55]   6   2   6   2  -2   6  -2  -6  -2   2   2 -10  -6  -2   6   6  -2   6
+##  [73]  -2  -6  -2  -2  -2   6   6  -6   2   6  -6   2  -2   6   2   2  -2   2
+##  [91]  -2  -2  -2  -6  -2   2  -2  -2   2  10</code></pre>
 <p>One approximates the mean winning <span class="math inline">\(\mu\)</span> by finding the sample mean <span class="math inline">\(\bar G\)</span> of the winning values in the 1000 simulated games.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">mean</span>(G)</a></code></pre></div>
-<pre><code>## [1] -0.044</code></pre>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="discrete-distributions.html#cb6-1"></a><span class="kw">mean</span>(G)</span></code></pre></div>
+<pre><code>## [1] 0.256</code></pre>
 <p>This value is approximately equal to the mean of <span class="math inline">\(G\)</span>, <span class="math inline">\(\mu\)</span>= 0. If Peter was able to play this game for a much larger number of games, then one would see that his average winning would be very close to <span class="math inline">\(\mu = 0\)</span>.</p>
 </div>
 <div id="standard-deviation-of-a-probability-distribution" class="section level2">
@@ -960,19 +962,19 @@ What does this mean? Since the loaded die roll has a smaller standard deviation,
 
 <p><strong>Simulating Rolls of Fair and Loaded Dice</strong></p>
 <p>One illustrates the difference in distributions of rolls of fair and loaded dice by an R simulation. The probabilities of 100 rolls of each of the two types of dice are stored in the vectors <code>die1</code> and <code>die2</code>. Two applications of the <code>sample()</code> function are used to simulated rolls – the rolls for the fair and loaded dice are stored in the vectors <code>rolls1</code> and <code>rolls2</code>. respectively.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">die1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="op">/</span><span class="st"> </span><span class="dv">6</span></a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">die2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="op">/</span><span class="st"> </span><span class="dv">12</span></a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">rolls1 &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">prob =</span> die1,</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">                 <span class="dt">size =</span> <span class="dv">100</span>, </a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">                 <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">rolls2 &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">prob =</span> die2,</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">                 <span class="dt">size =</span> <span class="dv">100</span>, </a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">                 <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="discrete-distributions.html#cb8-1"></a>die1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="op">/</span><span class="st"> </span><span class="dv">6</span></span>
+<span id="cb8-2"><a href="discrete-distributions.html#cb8-2"></a>die2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="op">/</span><span class="st"> </span><span class="dv">12</span></span>
+<span id="cb8-3"><a href="discrete-distributions.html#cb8-3"></a>rolls1 &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">prob =</span> die1,</span>
+<span id="cb8-4"><a href="discrete-distributions.html#cb8-4"></a>                 <span class="dt">size =</span> <span class="dv">100</span>, </span>
+<span id="cb8-5"><a href="discrete-distributions.html#cb8-5"></a>                 <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb8-6"><a href="discrete-distributions.html#cb8-6"></a>rolls2 &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">prob =</span> die2,</span>
+<span id="cb8-7"><a href="discrete-distributions.html#cb8-7"></a>                 <span class="dt">size =</span> <span class="dv">100</span>, </span>
+<span id="cb8-8"><a href="discrete-distributions.html#cb8-8"></a>                 <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
 <p>One approximates the means and standard deviations for the probability distributions by computing sample means and sample standard deviations of the simulated rolls.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">c</span>(<span class="kw">mean</span>(rolls1), <span class="kw">sd</span>(rolls1))</a></code></pre></div>
-<pre><code>## [1] 3.72000 1.68223</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">c</span>(<span class="kw">mean</span>(rolls2), <span class="kw">sd</span>(rolls2))</a></code></pre></div>
-<pre><code>## [1] 3.480000 1.290838</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="discrete-distributions.html#cb9-1"></a><span class="kw">c</span>(<span class="kw">mean</span>(rolls1), <span class="kw">sd</span>(rolls1))</span></code></pre></div>
+<pre><code>## [1] 3.380000 1.686428</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="discrete-distributions.html#cb11-1"></a><span class="kw">c</span>(<span class="kw">mean</span>(rolls2), <span class="kw">sd</span>(rolls2))</span></code></pre></div>
+<pre><code>## [1] 3.430000 1.249283</code></pre>
 <p>Note that both types of dice display similar means, but the loaded die displays a smaller standard deviation than the fair die.</p>
 <p><strong>Interpreting the standard deviation for a bell-shaped distribution</strong></p>
 <p>Once one has computed a standard deviation <span class="math inline">\(\sigma\)</span> for a random variable, how can one use this summary measure? One use of <span class="math inline">\(\sigma\)</span> was illustrated in the dice example above. The probabilities for the roll of the loaded die were more concentrated about the mean than the probabilities for the roll of the fair die, and that resulted in a smaller value of <span class="math inline">\(\sigma\)</span> for the roll of the loaded die.</p>
@@ -993,10 +995,10 @@ Mathematically, one writes,
 
 <p><strong>Simulating Rolls of Ten Dice</strong></p>
 <p>To illustrate this interpretation of the standard deviation, suppose ten fair dice are rolled and the sum of the numbers appearing on the dice is recorded. It is easy to simulate this experiment in R using the following script. The function <code>roll10()</code> will roll 10 dice, the function <code>replicate()</code> repeats the experiment for 1000 trials, and the variable <code>sum_rolls</code> contains the sum of the rolls from the experiments.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">roll10 &lt;-<span class="st"> </span><span class="cf">function</span>(){</a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">  <span class="kw">sum</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">size =</span> <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">}</a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">sum_rolls &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">roll10</span>())</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="discrete-distributions.html#cb13-1"></a>roll10 &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb13-2"><a href="discrete-distributions.html#cb13-2"></a>  <span class="kw">sum</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">size =</span> <span class="dv">10</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb13-3"><a href="discrete-distributions.html#cb13-3"></a>}</span>
+<span id="cb13-4"><a href="discrete-distributions.html#cb13-4"></a>sum_rolls &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">roll10</span>())</span></code></pre></div>
 <p>A histogram of the results from 1000 trials of this experiment is shown in Figure 4.5.</p>
 <div class="figure"><span id="fig:unnamed-chunk-13"></span>
 <img src="bookdown-demo_files/figure-html/unnamed-chunk-13-1.png" alt="Histogram of sum of ten dice in 1000 simulated rolls." width="500" />
@@ -1015,10 +1017,10 @@ Applying our rule, the probability that the sum falls between</p>
 
 <p><strong>Simulating Rolls of Ten Dice (continued)</strong></p>
 <p>To see if these are accurate probability computations, return to our simulation of this experiment and see how often the sum of the ten rolls fell within the above limits. Recall that the simulation sums were stored in the vector . Below the proportions of sums of ten rolls that fall between 29.6 and 40.4, and between 24.2 and 45.8, are computed.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">sum</span>(sum_rolls <span class="op">&gt;</span><span class="st"> </span><span class="fl">29.6</span> <span class="op">&amp;</span><span class="st"> </span>sum_rolls <span class="op">&lt;</span><span class="st"> </span><span class="fl">40.4</span>) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
-<pre><code>## [1] 0.688</code></pre>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">sum</span>(sum_rolls <span class="op">&gt;</span><span class="st"> </span><span class="fl">24.2</span> <span class="op">&amp;</span><span class="st"> </span>sum_rolls <span class="op">&lt;</span><span class="st"> </span><span class="fl">45.8</span>) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
-<pre><code>## [1] 0.945</code></pre>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="discrete-distributions.html#cb14-1"></a><span class="kw">sum</span>(sum_rolls <span class="op">&gt;</span><span class="st"> </span><span class="fl">29.6</span> <span class="op">&amp;</span><span class="st"> </span>sum_rolls <span class="op">&lt;</span><span class="st"> </span><span class="fl">40.4</span>) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></span></code></pre></div>
+<pre><code>## [1] 0.696</code></pre>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="discrete-distributions.html#cb16-1"></a><span class="kw">sum</span>(sum_rolls <span class="op">&gt;</span><span class="st"> </span><span class="fl">24.2</span> <span class="op">&amp;</span><span class="st"> </span>sum_rolls <span class="op">&lt;</span><span class="st"> </span><span class="fl">45.8</span>) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></span></code></pre></div>
+<pre><code>## [1] 0.958</code></pre>
 <p>One sees that the proportions of values that fall within these limits are 0.702 and 0.955, respectively. Since these proportions are close to the numbers 0.68 and 0.95, we see in this example that this rule is pretty accurate.</p>
 </div>
 <div id="coin-tossing-distributions" class="section level2">
@@ -1235,8 +1237,21 @@ P(X \ge 1) = 1 - P(X = 0) = 1 - 0.168 = 0.832.
 
 <p><strong>Binomial Calculations in R</strong></p>
 <p>By use of the <code>dbinom()</code> and <code>pbinom()</code> functions in R, one can perform probability calculations for any Binomial distribution. In our baseball example the number of hits <span class="math inline">\(X\)</span> is Binomial with sample size 5 and probability of success <span class="math inline">\(p = 0.3\)</span>. In the following R script a data frame is constructed with the possible values of the number of hits <code>x</code>, and the function <code>dbinom()</code> with arguments <code>size</code> and <code>prob</code> is used to compute the Binomial probabilities:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1"><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Probability =</span> <span class="kw">dbinom</span>(x, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="discrete-distributions.html#cb18-1"></a><span class="kw">require</span>(dplyr)</span></code></pre></div>
+<pre><code>## Loading required package: dplyr</code></pre>
+<pre><code>## 
+## Attaching package: &#39;dplyr&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:gridExtra&#39;:
+## 
+##     combine</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     filter, lag</code></pre>
+<pre><code>## The following objects are masked from &#39;package:base&#39;:
+## 
+##     intersect, setdiff, setequal, union</code></pre>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="discrete-distributions.html#cb24-1"></a><span class="kw">data.frame</span>(<span class="dt">x =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">5</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb24-2"><a href="discrete-distributions.html#cb24-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Probability =</span> <span class="kw">dbinom</span>(x, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>))</span></code></pre></div>
 <pre><code>##   x Probability
 ## 1 0     0.16807
 ## 2 1     0.36015
@@ -1245,21 +1260,21 @@ P(X \ge 1) = 1 - P(X = 0) = 1 - 0.168 = 0.832.
 ## 5 4     0.02835
 ## 6 5     0.00243</code></pre>
 <p>The function <code>pbinom()</code> will compute cumulative probabilities of the form <span class="math inline">\(P(X \le x)\)</span>. For example, to find the probability that number of hits <span class="math inline">\(X\)</span> is 2 or less, <span class="math inline">\(P(X \le 2)\)</span>:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">pbinom</span>(<span class="dv">2</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="discrete-distributions.html#cb26-1"></a><span class="kw">pbinom</span>(<span class="dv">2</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>)</span></code></pre></div>
 <pre><code>## [1] 0.83692</code></pre>
 <p>One computes the probability <span class="math inline">\(P(X \ge 2)\)</span> by finding the cumulative probability <span class="math inline">\(P(X \le 1)\)</span>, and subtracting the result from 1:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pbinom</span>(<span class="dv">1</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="discrete-distributions.html#cb28-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pbinom</span>(<span class="dv">1</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">.3</span>)</span></code></pre></div>
 <pre><code>## [1] 0.47178</code></pre>
 <p><strong>Simulating Binomial Experiments</strong></p>
 <p>One conveniently simulates outcomes from Binomial experiments by use of the <code>rbinom()</code> function. The arguments to this function are the number of simulated draws, the number of Binomial trials <code>size</code> and the probability of success <code>prob</code>. To illustrate, consider the baseball hitter who is coming to bat 5 times in a game where the probability of a hit on each at-bat is 0.3. One simulates the number of hits in 50 games by using arguments 50, <code>size = 5</code> and <code>prob = 0.3</code>.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">(hits &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">50</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.3</span>))</a></code></pre></div>
-<pre><code>##  [1] 0 0 2 1 1 1 0 2 1 0 1 0 2 1 1 0 4 3 0 3 1 0 1 3 1 3 2 2 1 0 1 0 1 2 0 2 1 1
-## [39] 2 0 2 2 1 0 2 1 1 1 2 3</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="discrete-distributions.html#cb30-1"></a>(hits &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">50</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.3</span>))</span></code></pre></div>
+<pre><code>##  [1] 3 4 2 3 1 2 1 3 1 0 2 2 1 2 2 3 2 3 3 2 1 1 2 0 2 0 1 1 1 2 1 1 2 1 0 1 0 0
+## [39] 1 0 1 1 1 4 3 1 2 4 1 2</code></pre>
 <p>By use of the  function, we tally the outcomes.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="kw">table</span>(hits)</a></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="discrete-distributions.html#cb32-1"></a><span class="kw">table</span>(hits)</span></code></pre></div>
 <pre><code>## hits
 ##  0  1  2  3  4 
-## 13 19 12  5  1</code></pre>
+##  7 19 14  7  3</code></pre>
 <p>Here this player got exactly one hit in a game in 20 games, so the approximately probability that <span class="math inline">\(X = 1\)</span> is equal to 20/50 = 0.4.</p>
 </div>
 <div id="mean-and-standard-deviation-of-a-binomial" class="section level2">
@@ -1305,10 +1320,10 @@ V(X) = 10 (0.5) (1- 0.5) = 2.5.
 
 <p><strong>Simulating Binomial Experiments (continued)</strong></p>
 <p>In our baseball example, the number of successes <span class="math inline">\(X\)</span> were simulated in 50 Binomial experiments where <span class="math inline">\(n = 5\)</span> and <span class="math inline">\(p = 0.3\)</span>. The mean and standard deviation of <span class="math inline">\(X\)</span> are given by <span class="math inline">\(\mu = 5 (0.3) = 1.5\)</span> and <span class="math inline">\(\sigma = \sqrt{5 (.3) (1 - .3)} = 1.02\)</span>. One approximates the mean and standard deviation by finding the sample mean and standard deviation from the simulated values of <span class="math inline">\(X\)</span>. Below one sees that these approximate values agree closely with the exact values of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">hits &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">50</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.3</span>)</a>
-<a class="sourceLine" id="cb28-2" data-line-number="2"><span class="kw">mean</span>(hits)</a></code></pre></div>
-<pre><code>## [1] 1.6</code></pre>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1"><span class="kw">sd</span>(hits)</a></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="discrete-distributions.html#cb34-1"></a>hits &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">50</span>, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">prob =</span> <span class="fl">0.3</span>)</span>
+<span id="cb34-2"><a href="discrete-distributions.html#cb34-2"></a><span class="kw">mean</span>(hits)</span></code></pre></div>
+<pre><code>## [1] 1.4</code></pre>
+<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="discrete-distributions.html#cb36-1"></a><span class="kw">sd</span>(hits)</span></code></pre></div>
 <pre><code>## [1] 1.030158</code></pre>
 </div>
 <div id="negative-binomial-experiments" class="section level2">
@@ -1397,11 +1412,11 @@ For the baseball example, <span class="math inline">\(r = 2\)</span> and <span c
 <p><strong>Negative Binomial Calculations and Simulations</strong></p>
 <p>The R functions <code>dnbinom()</code> and <code>rnbinom()</code> can be used to compute probabilities and simulate from Negative Binomial distributions. One small complication is that these functions define the random variable to be the number of failures (instead of the total number of trials) until the <span class="math inline">\(r\)</span>-th success.</p>
 <p>To illustrate the use of these functions, consider our baseball example where <span class="math inline">\(X\)</span> is the number of at-bats for Suzuki to get <span class="math inline">\(r =2\)</span> hits where the probability of a hit on a single at-bat is <span class="math inline">\(p = 0.372\)</span>. The probability <span class="math inline">\(P(X = 5)\)</span> is the same as the probability <span class="math inline">\(P(Y = 3)\)</span> where <span class="math inline">\(Y\)</span> is the number of failures until the 2nd success. Using the function <code>dnbinom()</code>, one computes <span class="math inline">\(P(Y = 3)\)</span></p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1"><span class="kw">dnbinom</span>(<span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="fl">.372</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="discrete-distributions.html#cb38-1"></a><span class="kw">dnbinom</span>(<span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="fl">.372</span>)</span></code></pre></div>
 <pre><code>## [1] 0.137096</code></pre>
 <p>which is equivalent to the probability that <span class="math inline">\(X = 5\)</span> computed earlier. Also,  can be used to simulate Negative Binomial experiments. For example, one can simulate the number of failures until the second success for 10 experiments as follows.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">rnbinom</span>(<span class="dv">10</span>, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="fl">.372</span>)</a></code></pre></div>
-<pre><code>##  [1]  4  1 14  0  5  7  5  3  3  1</code></pre>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="discrete-distributions.html#cb40-1"></a><span class="kw">rnbinom</span>(<span class="dv">10</span>, <span class="dt">size =</span> <span class="dv">2</span>, <span class="dt">prob =</span> <span class="fl">.372</span>)</span></code></pre></div>
+<pre><code>##  [1] 1 2 1 0 5 0 5 2 3 5</code></pre>
 <p>It is interesting to note that Suzuki had 15 outs until the second success for one of these experiments.</p>
 </div>
 <div id="exercises-3" class="section level2">
@@ -1799,7 +1814,7 @@ For the baseball example, <span class="math inline">\(r = 2\)</span> and <span c
 <ol style="list-style-type: lower-alpha">
 <li>Find the mean and standard deviation of <span class="math inline">\(X\)</span>.</li>
 <li>Suppose you record instead <span class="math inline">\(Y\)</span>, the total number of keys you try. Note that <span class="math inline">\(Y = X + 1\)</span>. Find the probability distribution for <span class="math inline">\(Y\)</span> and the mean and standard deviation.</li>
-<li>This is an illustration of a general result. If <span class="math inline">\(X\)</span> has mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(Y = X + c\)</span> for some constant <span class="math inline">\(c\)</span>, then the mean of <span class="math inline">\(Y\)</span> is equal to  and the standard deviation of <span class="math inline">\(Y\)</span> is equal to .</li>
+<li>This is an illustration of a general result. If <span class="math inline">\(X\)</span> has mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(Y = X + c\)</span> for some constant <span class="math inline">\(c\)</span>, then the mean of <span class="math inline">\(Y\)</span> is equal to <span class="math inline">\(\underline{\hspace{2cm}}\)</span> and the standard deviation of <span class="math inline">\(Y\)</span> is equal to <span class="math inline">\(\underline{\hspace{2cm}}\)</span>.</li>
 </ol>
 <ol start="15" style="list-style-type: decimal">
 <li><strong>The Hat Check Problem</strong></li>
