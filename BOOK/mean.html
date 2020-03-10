@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 8 Modeling Measurement and Count Data | Probability and Bayesian Modeling</title>
   <meta name="description" content="This is an introduction to probability and Bayesian modeling at the undergraduate level. It assumes the student has some background with calculus." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 8 Modeling Measurement and Count Data | Probability and Bayesian Modeling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-01-22" />
+<meta name="date" content="2020-03-10" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,9 +53,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +64,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +82,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -237,7 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#Normal:Discrete:Roger"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
 <li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
 </ul></li>
@@ -405,7 +407,7 @@ In our first situation, one collects the number of applications from a sample of
 </div>
 <div id="Normal:Discrete" class="section level2">
 <h2><span class="header-section-number">8.3</span> Bayesian Inference with Discrete Priors</h2>
-<div id="example-roger-federers-time-to-serve" class="section level3">
+<div id="Normal:Discrete:Roger" class="section level3">
 <h3><span class="header-section-number">8.3.1</span> Example: Roger Federer’s time-to-serve</h3>
 <p>Roger Federer is recognized as one of the greatest players in tennis history. One aspect of his play that people enjoy is his businesslike way of serving to start a point in tennis. Federer appears to be efficient in his preparation to serve and some of his service games are completed very quickly. One measures one’s service efficiency by the time-to-serve which is the measured time in seconds between the end of the previous point and the beginning of the current point.</p>
 <p>Since Federer is viewed as an efficient server, this raises the question: how long, on average, is Federer’s time-to-serve? We know two things about his time-to-serve measurements. First, since they are time measurements, they are continuous variables. Second, due to a number of other variables, the measurements will vary from serve to serve. Suppose one collects a single time-to-serve measurement in seconds. denoted as <span class="math inline">\(Y\)</span>. It seems reasonable to assume <span class="math inline">\(Y\)</span> is Normally distributed with unknown mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>. From previous data, we assume that the standard deviation is known and given by <span class="math inline">\(\sigma = 4\)</span> seconds.</p>
@@ -519,8 +521,8 @@ f(y_i) = \frac{1}{\sqrt{2 \pi} \sigma} \exp\left\{\frac{-(y_i - \mu)^2}{2 \sigma
 Again since <span class="math inline">\(\sigma = 4\)</span> is known, the only parameter in Equation (8.6) is <span class="math inline">\(\mu\)</span> and we are interested in learning about this mean parameter <span class="math inline">\(\mu\)</span>.
 Suppose the same discrete Uniform prior is used as in Equation (8.4) and graphed in Figure 8.2. The mean <span class="math inline">\(\mu\)</span> takes on the values <span class="math inline">\(\{15, 16, \cdots, 22\}\)</span> with each value assigned the same probability of <span class="math inline">\(\frac{1}{8}\)</span>.</p>
 <p>Suppose one collects a sample of 20 times-to-serve for Federer:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="fl">15.1</span> <span class="fl">11.8</span> <span class="fl">21.0</span> <span class="fl">22.7</span> <span class="fl">18.6</span> <span class="fl">16.2</span> <span class="fl">11.1</span> <span class="fl">13.2</span> <span class="fl">20.4</span> <span class="fl">19.2</span> </a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="fl">21.2</span> <span class="fl">14.3</span> <span class="fl">18.6</span> <span class="fl">16.8</span> <span class="fl">20.3</span> <span class="fl">19.9</span> <span class="fl">15.0</span> <span class="fl">13.4</span> <span class="fl">19.9</span> <span class="fl">15.3</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="mean.html#cb1-1"></a><span class="fl">15.1</span> <span class="fl">11.8</span> <span class="fl">21.0</span> <span class="fl">22.7</span> <span class="fl">18.6</span> <span class="fl">16.2</span> <span class="fl">11.1</span> <span class="fl">13.2</span> <span class="fl">20.4</span> <span class="fl">19.2</span> </span>
+<span id="cb1-2"><a href="mean.html#cb1-2"></a><span class="fl">21.2</span> <span class="fl">14.3</span> <span class="fl">18.6</span> <span class="fl">16.8</span> <span class="fl">20.3</span> <span class="fl">19.9</span> <span class="fl">15.0</span> <span class="fl">13.4</span> <span class="fl">19.9</span> <span class="fl">15.3</span></span></code></pre></div>
 <p>When multiple time-to-serve measurements are taken, the likelihood function is the joint density of the actual observed values <span class="math inline">\(y_1, ..., y_n\)</span> viewed as a function of the mean <span class="math inline">\(\mu\)</span>. After some algebra (detailed derivation in Section 8.3.2), one writes the likelihood function as
 <span class="math display" id="eq:normaldiscretejointlikelihood">\[\begin{eqnarray}
 L(\mu) &amp; = &amp;\prod_{i=1}^n \frac{1}{\sqrt{2 \pi} \sigma} \exp\left\{- \frac{1}{2 \sigma^2}(y_i - \mu)^2\right\} \nonumber \\
@@ -616,12 +618,12 @@ Figure 8.3: Prior and posterior probabilities of the Normal mean <span class="ma
 <h3><span class="header-section-number">8.3.2</span> Simplification of the likelihood</h3>
 <p>The likelihood function is the joint density of the observations <span class="math inline">\(y_1, ..., y_n\)</span>, viewed as a function of the mean <span class="math inline">\(\mu\)</span> (since <span class="math inline">\(\sigma=4\)</span> is given). With <span class="math inline">\(n\)</span> observations being <em>identically and independently distributed (i.i.d.)</em> as <span class="math inline">\({\rm{Normal}}({\mu, 4})\)</span>, the likelihood function is the product of Normal density terms. In the algebra work that will be done shortly, the likelihood, as a function of <span class="math inline">\(\mu\)</span>, is found to be Normal with mean <span class="math inline">\(\bar y\)</span> and standard deviation <span class="math inline">\(\sigma / \sqrt{n}\)</span>.</p>
 <p>The calculation of the posterior probabilities is an application of Bayes’ rule illustrated in earlier chapters. One creates a data frame of values <code>mu</code> and corresponding probabilities <code>Prior</code>. One computes the likelihood values in the variable <code>Likelihood</code> and the posterior probabilities are found using the <code>bayesian_crank()</code> function.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">mu =</span> <span class="kw">seq</span>(<span class="dv">15</span>, <span class="dv">22</span>, <span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">                 <span class="dt">Prior =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">8</span>, <span class="dv">8</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Likelihood =</span> <span class="kw">dnorm</span>(mu, <span class="fl">17.2</span>, <span class="dv">4</span> <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">20</span>))) </a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">df &lt;-<span class="st"> </span><span class="kw">bayesian_crank</span>(df) </a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="kw">round</span>(df, <span class="dv">4</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="mean.html#cb2-1"></a>df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">mu =</span> <span class="kw">seq</span>(<span class="dv">15</span>, <span class="dv">22</span>, <span class="dv">1</span>),</span>
+<span id="cb2-2"><a href="mean.html#cb2-2"></a>                 <span class="dt">Prior =</span> <span class="kw">rep</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">8</span>, <span class="dv">8</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb2-3"><a href="mean.html#cb2-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Likelihood =</span> <span class="kw">dnorm</span>(mu, <span class="fl">17.2</span>, <span class="dv">4</span> <span class="op">/</span><span class="st"> </span><span class="kw">sqrt</span>(<span class="dv">20</span>))) </span>
+<span id="cb2-4"><a href="mean.html#cb2-4"></a></span>
+<span id="cb2-5"><a href="mean.html#cb2-5"></a>df &lt;-<span class="st"> </span><span class="kw">bayesian_crank</span>(df) </span>
+<span id="cb2-6"><a href="mean.html#cb2-6"></a><span class="kw">round</span>(df, <span class="dv">4</span>)</span></code></pre></div>
 <pre><code>##   mu Prior Likelihood Product Posterior
 ## 1 15 0.125     0.0217  0.0027    0.0217
 ## 2 16 0.125     0.1813  0.0227    0.1815
@@ -698,7 +700,7 @@ Figure 8.4: Two priors for the Normal mean <span class="math inline">\(\mu\)</sp
 <p>How does one in practice choose a Normal prior for <span class="math inline">\(\mu\)</span> that reflects prior beliefs about the location of this parameter? One indirect strategy for choosing for selecting values of the prior parameters <span class="math inline">\(\mu_0\)</span> and <span class="math inline">\(\sigma_0\)</span> is based on the specification of quantiles. On the basis of one’s prior beliefs, one specifies two quantiles of the Normal density. Then the Normal parameters are found by matching these two quantiles to a particular Normal curve.</p>
 <p>Recall the definition of a quantile — in this setting it is a value of the mean <span class="math inline">\(\mu\)</span> such that the probability of being smaller than that value is a given probability. To construct one’s prior for Federer’s mean time-to-serve, one thinks first about two quantiles. Suppose one specifies the 0.5 quantile to be 18 seconds — this means that <span class="math inline">\(\mu\)</span> is equally likely to be smaller or larger than 18 seconds. Next, one decides that the 0.9 quantile is 20 seconds. This means that one’s probability that <span class="math inline">\(\mu\)</span> is smaller than 20 seconds is 90%. Given values of these two quantiles, the unique Normal curve is found that matches this information.</p>
 <p>The matching is performed by the R function <code>normal.select()</code>. One inputs two quantiles by ```list} statements, and the output is the mean and standard deviation of the Normal prior.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">normal.select</span>(<span class="kw">list</span>(<span class="dt">p =</span> <span class="fl">0.5</span>, <span class="dt">x =</span> <span class="dv">18</span>), <span class="kw">list</span>(<span class="dt">p =</span> <span class="fl">0.9</span>, <span class="dt">x =</span> <span class="dv">20</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="mean.html#cb4-1"></a><span class="kw">normal.select</span>(<span class="kw">list</span>(<span class="dt">p =</span> <span class="fl">0.5</span>, <span class="dt">x =</span> <span class="dv">18</span>), <span class="kw">list</span>(<span class="dt">p =</span> <span class="fl">0.9</span>, <span class="dt">x =</span> <span class="dv">20</span>))</span></code></pre></div>
 <pre><code>## $mu
 ## [1] 18
 ## 
@@ -713,7 +715,7 @@ Figure 8.5: A person’s Normal prior for Federer’s mean time-to-serve <span c
 </div>
 <p>Since our measurement skills are limited, this prior is just an approximation to one’s beliefs about <span class="math inline">\(\mu\)</span>. We recommend in practice that one perform several checks to see if this Normal prior makes sense. Several functions are available to help in this prior checking.</p>
 <p>For example, one finds the 0.25 quantile of our prior using the <code>qnorm()</code> function.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">qnorm</span>(<span class="fl">0.25</span>, <span class="dv">18</span>, <span class="fl">1.56</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="mean.html#cb6-1"></a><span class="kw">qnorm</span>(<span class="fl">0.25</span>, <span class="dv">18</span>, <span class="fl">1.56</span>)</span></code></pre></div>
 <pre><code>## [1] 16.9478</code></pre>
 <p>This prior says that the prior probability that <span class="math inline">\(\mu\)</span> is smaller than 16.95 is 25%. If this does not seem reasonable, one would make adjustments in the values of the Normal mean and standard deviation until a reasonable Normal prior is found.</p>
 </div>
@@ -901,13 +903,13 @@ The posterior density is Normal with mean <span class="math inline">\(17.40\)</s
 </tbody>
 </table>
 <p>The Normal updating is performed by the R function <code>normal_update()</code>. One inputs two vectors – <code>prior</code> is a vector of the prior mean and standard deviation and <code>data</code> is a vector of the sample mean and standard error. The output is a vector of the posterior mean and posterior standard deviation.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">prior &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">18</span>, <span class="fl">1.56</span>)</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">data &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">17.20</span>, <span class="fl">0.89</span>)</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="kw">normal_update</span>(prior, data)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="mean.html#cb8-1"></a>prior &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">18</span>, <span class="fl">1.56</span>)</span>
+<span id="cb8-2"><a href="mean.html#cb8-2"></a>data &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">17.20</span>, <span class="fl">0.89</span>)</span>
+<span id="cb8-3"><a href="mean.html#cb8-3"></a><span class="kw">normal_update</span>(prior, data)</span></code></pre></div>
 <pre><code>## [1] 17.3964473  0.7730412</code></pre>
 <p>The prior and posterior densities are displayed in Figure 8.6. As usually the case, the posterior density has a smaller spread since the posterior has more information than the prior about Federer’s mean time-to-serve. More information about a parameter indicates less uncertainty and a smaller spread of the posterior density. In the process from prior to posterior, one sees how the data modifies one’s initial belief about the parameter <span class="math inline">\(\mu\)</span>.</p>
 <div class="figure"><span id="fig:unnamed-chunk-13"></span>
-<img src="bookdown-demo_files/figure-html/unnamed-chunk-13-1.png" alt="Prior and posterior curves for Federer's mean time-to-serve $\mu$." width="672" />
+<img src="LATEX/figures/chapter8/normalpriorpost.png" alt="Prior and posterior curves for Federer's mean time-to-serve $\mu$." width="500" />
 <p class="caption">
 Figure 8.6: Prior and posterior curves for Federer’s mean time-to-serve <span class="math inline">\(\mu\)</span>.
 </p>
@@ -930,7 +932,7 @@ L(\mu) = f(y_1, \cdots, y_n \mid \mu, \sigma) &amp;=&amp; \prod_{i=1}^{n} \frac{
 \tag{8.16}
 \end{eqnarray}\]</span></li>
 </ul>
-<p>Note that <span class="math inline">\(\sigma\)</span> is assumed known, therefore the likelihood function is only in terms of <span class="math inline">\(\mu\)</span>, i.e. <span class="math inline">\(L(\mu)\)</span>.</p>
+<p>Note that <span class="math inline">\(\sigma\)</span> is assumed known, therefore the likelihood function is only in terms of <span class="math inline">\(\mu\)</span>, i.e. <span class="math inline">\(L(\mu)\)</span>.</p>
 <ul>
 <li><p>In similar fashion, we write down the prior density for <span class="math inline">\(\mu\)</span> including the prior precision <span class="math inline">\(\phi_0\)</span>.
 <span class="math display" id="eq:update5">\[\begin{eqnarray}
@@ -1018,36 +1020,36 @@ The implication is that the posterior standard deviation will always be smaller 
 <div id="a-testing-problem" class="section level4 unnumbered">
 <h4>A testing problem</h4>
 <p>In a <em>testing</em> problem, one is interested in checking the validity of a statement about a population quantity. In our tennis example, suppose someone says that Federer takes on average at least 19 seconds to serve. Is this a reasonable statement?</p>
-<p>The current beliefs about Federer’s mean time-to-serve are summarized by a Normal distribution with mean 17.4 seconds and standard deviation 0.77 seconds. To assess if the statement ``<span class="math inline">\(\mu\)</span> is 19 seconds or more&quot; is reasonable, one simply computes its posterior probability, <span class="math inline">\(Prob(\mu \geq 19 \mid \mu_n = 17.4, \sigma_n = 0.77)\)</span>.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">19</span>, <span class="fl">17.4</span>, <span class="fl">0.77</span>)</a></code></pre></div>
+<p>The current beliefs about Federer’s mean time-to-serve are summarized by a Normal distribution with mean 17.4 seconds and standard deviation 0.77 seconds. To assess if the statement ``<span class="math inline">\(\mu\)</span> is 19 seconds or more" is reasonable, one simply computes its posterior probability, <span class="math inline">\(Prob(\mu \geq 19 \mid \mu_n = 17.4, \sigma_n = 0.77)\)</span>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="mean.html#cb10-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">19</span>, <span class="fl">17.4</span>, <span class="fl">0.77</span>)</span></code></pre></div>
 <pre><code>## [1] 0.01885827</code></pre>
 <p>This probability is about 0.019, a small value, so one would conclude that this person’s statement is unlikely to be true.</p>
 <p>This is the exact solution using the <code>pnorm()</code> function with mean 17.4 and standard deviation 0.77. As seen in Chapter 7, simulation provides an alternative approach to obtaining the probability <span class="math inline">\(Prob(\mu \geq 19 \mid \mu_n = 17.4, \sigma_n = 0.77)\)</span>.
 To implement the simulation approach, recall that one generates a large number of values from the posterior distribution and summarizes this simulated sample. In particular, using the following R script, one generates 1000 values from the <span class="math inline">\(\textrm{Normal}(17.4, 0.77)\)</span> distribution and approximates the probability of “<span class="math inline">\(\mu\)</span> is 19 seconds or more” by computing the percentage of values that falls above 19.</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">S &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb12-2" data-line-number="2">NormalSamples &lt;-<span class="st"> </span><span class="kw">rnorm</span>(S, <span class="fl">17.4</span>, <span class="fl">0.77</span>)</a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="kw">sum</span>(NormalSamples <span class="op">&gt;=</span><span class="st"> </span><span class="dv">19</span>) <span class="op">/</span><span class="st"> </span>S</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="mean.html#cb12-1"></a>S &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb12-2"><a href="mean.html#cb12-2"></a>NormalSamples &lt;-<span class="st"> </span><span class="kw">rnorm</span>(S, <span class="fl">17.4</span>, <span class="fl">0.77</span>)</span>
+<span id="cb12-3"><a href="mean.html#cb12-3"></a><span class="kw">sum</span>(NormalSamples <span class="op">&gt;=</span><span class="st"> </span><span class="dv">19</span>) <span class="op">/</span><span class="st"> </span>S</span></code></pre></div>
 <pre><code>## [1] 0.024</code></pre>
 <p>The reader might notice that the approximated value of 0.024 differs from the exact answer of 0.019 using the <code>pnorm()</code> function. One way to improve the accuracy of the approximation is by increasing the number of simulated values. For example, increasing S from 1000 to 10,000 provides a better approximation to the exact probability 0.019.</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">S &lt;-<span class="st"> </span><span class="dv">10000</span></a>
-<a class="sourceLine" id="cb14-2" data-line-number="2">NormalSamples &lt;-<span class="st"> </span><span class="kw">rnorm</span>(S, <span class="fl">17.4</span>, <span class="fl">0.77</span>)</a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="kw">sum</span>(NormalSamples <span class="op">&gt;=</span><span class="st"> </span><span class="dv">19</span>) <span class="op">/</span><span class="st"> </span>S</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="mean.html#cb14-1"></a>S &lt;-<span class="st"> </span><span class="dv">10000</span></span>
+<span id="cb14-2"><a href="mean.html#cb14-2"></a>NormalSamples &lt;-<span class="st"> </span><span class="kw">rnorm</span>(S, <span class="fl">17.4</span>, <span class="fl">0.77</span>)</span>
+<span id="cb14-3"><a href="mean.html#cb14-3"></a><span class="kw">sum</span>(NormalSamples <span class="op">&gt;=</span><span class="st"> </span><span class="dv">19</span>) <span class="op">/</span><span class="st"> </span>S</span></code></pre></div>
 <pre><code>## [1] 0.0175</code></pre>
 </div>
 <div id="a-bayesian-interval-estimate" class="section level4 unnumbered">
 <h4>A Bayesian interval estimate</h4>
 <p>Bayesian credible intervals for the mean parameter <span class="math inline">\(\mu\)</span> can be achieved both by exact calculation and simulation. Recall that a Bayesian credible interval is an interval that contains the unknown parameter with a certain probability content. For example, a 90% Bayesian credible interval for the parameter <span class="math inline">\(\mu\)</span> is an interval containing <span class="math inline">\(\mu\)</span> with a probability of 0.90.</p>
 <p>The exact interval is obtained by using the R function <code>qnorm()</code>. For example, with the posterior distribution for <span class="math inline">\(\mu\)</span> being <span class="math inline">\(\textrm{Normal}(17.4, 0.77)\)</span>, the following R script shows that a 90% central Bayesian credible interval is (16.133, 18.667). That is, the posterior probability of <span class="math inline">\(\mu\)</span> falls between 16.133 and 18.667 is exactly 90%.</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">qnorm</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>), <span class="fl">17.4</span>, <span class="fl">0.77</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="mean.html#cb16-1"></a><span class="kw">qnorm</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>), <span class="fl">17.4</span>, <span class="fl">0.77</span>)</span></code></pre></div>
 <pre><code>## [1] 16.13346 18.66654</code></pre>
 <p>For simulation-based inference, one generates a large number of values from its posterior distribution, then finds the 5th and 95th sample quantiles to obtain the middle 90% of the generated values. Below one sees that a 90% credible interval for posterior of <span class="math inline">\(\mu\)</span> is approximately (16.151, 18.691).</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">S &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb18-2" data-line-number="2">NormalSamples &lt;-<span class="st"> </span><span class="kw">rnorm</span>(S, <span class="fl">17.4</span>, <span class="fl">0.77</span>)</a>
-<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="kw">quantile</span>(NormalSamples, <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="mean.html#cb18-1"></a>S &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb18-2"><a href="mean.html#cb18-2"></a>NormalSamples &lt;-<span class="st"> </span><span class="kw">rnorm</span>(S, <span class="fl">17.4</span>, <span class="fl">0.77</span>)</span>
+<span id="cb18-3"><a href="mean.html#cb18-3"></a><span class="kw">quantile</span>(NormalSamples, <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
 <pre><code>##       5%      95% 
 ## 16.15061 18.69062</code></pre>
-<p>The Bayesian credible intervals can also be used for testing hypothesis. Suppose one again wants to evaluate the statement “Federer takes on average at least 19 seconds to serve.” One answers this question by computing the 90% credible interval. One notes that the values of <span class="math inline">\(\mu\)</span> ``at least 19&quot; are not included in the exact 90% credible interval (16.15, 18.69). The interpretation is that the probability is at least 0.90 that Federer’s average time-to-service is smaller than 19 seconds. One could obtain a wider credible interval, say by computing a central 95% credible interval (see the R output below), and observe that 19 is out of the interval. This indicates we are 95% confident that 19 seconds is not the value of Federer’s average time-to-serve.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="kw">qnorm</span>(<span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="fl">17.4</span>, <span class="fl">0.77</span>)</a></code></pre></div>
+<p>The Bayesian credible intervals can also be used for testing hypothesis. Suppose one again wants to evaluate the statement “Federer takes on average at least 19 seconds to serve.” One answers this question by computing the 90% credible interval. One notes that the values of <span class="math inline">\(\mu\)</span> ``at least 19" are not included in the exact 90% credible interval (16.15, 18.69). The interpretation is that the probability is at least 0.90 that Federer’s average time-to-service is smaller than 19 seconds. One could obtain a wider credible interval, say by computing a central 95% credible interval (see the R output below), and observe that 19 is out of the interval. This indicates we are 95% confident that 19 seconds is not the value of Federer’s average time-to-serve.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="mean.html#cb20-1"></a><span class="kw">qnorm</span>(<span class="kw">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>), <span class="fl">17.4</span>, <span class="fl">0.77</span>)</span></code></pre></div>
 <pre><code>## [1] 15.89083 18.90917</code></pre>
 <p>On the basis of this credible interval calculation, one concludes that the statement about Federer’s time-to-serve is unlikely to be true. This conclusion is consistent with the typical Bayesian hypothesis testing procedure given at the beginning of this section.</p>
 </div>
@@ -1083,7 +1085,7 @@ Then by applying our general result in Equation (8.28), the posterior predictive
 \tilde{Y} = \tilde{y} \mid y_1, \cdots, y_n, \sigma \sim \textrm{Normal}(\mu_n, \sqrt{\sigma^2 + \sigma_n^2}).
 \tag{8.30}
 \end{eqnarray}\]</span></p>
-<p>An important aspect of the predictive distribution for <span class="math inline">\(\tilde{Y}\)</span> is on the variance term <span class="math inline">\(\sigma^2 + \sigma_n^2\)</span>. The variability of a future prediction comes from two sources: (1) the data model variance <span class="math inline">\(\sigma^2\)</span>, and (2) the posterior variance <span class="math inline">\(\sigma_n^2\)</span>. Recall that the posterior variance <span class="math inline">\(\sigma_n^2 = \frac{1}{\phi_0 + n\phi}\)</span>. If one fixes values of <span class="math inline">\(\phi_0\)</span> and <span class="math inline">\(\phi\)</span> and allow the sample size <span class="math inline">\(n\)</span> to grow, the posterior variance will approach zero. In this ``large <span class="math inline">\(n\)</span>&quot; case, the uncertainty in inference about the population mean <span class="math inline">\(\mu\)</span> will decrease – essentially we are certain about the location of <span class="math inline">\(\mu\)</span>.
+<p>An important aspect of the predictive distribution for <span class="math inline">\(\tilde{Y}\)</span> is on the variance term <span class="math inline">\(\sigma^2 + \sigma_n^2\)</span>. The variability of a future prediction comes from two sources: (1) the data model variance <span class="math inline">\(\sigma^2\)</span>, and (2) the posterior variance <span class="math inline">\(\sigma_n^2\)</span>. Recall that the posterior variance <span class="math inline">\(\sigma_n^2 = \frac{1}{\phi_0 + n\phi}\)</span>. If one fixes values of <span class="math inline">\(\phi_0\)</span> and <span class="math inline">\(\phi\)</span> and allow the sample size <span class="math inline">\(n\)</span> to grow, the posterior variance will approach zero. In this ``large <span class="math inline">\(n\)</span>" case, the uncertainty in inference about the population mean <span class="math inline">\(\mu\)</span> will decrease – essentially we are certain about the location of <span class="math inline">\(\mu\)</span>.
 However the uncertainty in prediction will not decrease towards zero. In contrast, in this large sample case, the variance of <span class="math inline">\(\tilde{Y}\)</span> will decrease and approach the sampling variance <span class="math inline">\(\sigma^2\)</span>.</p>
 </div>
 <div id="predictions-by-simulation" class="section level4 unnumbered">
@@ -1102,16 +1104,16 @@ However the uncertainty in prediction will not decrease towards zero. In contras
 \end{eqnarray}\]</span></p></li>
 </ol>
 <p>This two-step procedure is implemented for our time-to-serve example using the following R script.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">sigma &lt;-<span class="st"> </span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb22-2" data-line-number="2">mu_n &lt;-<span class="st"> </span><span class="fl">17.4</span></a>
-<a class="sourceLine" id="cb22-3" data-line-number="3">sigma_n &lt;-<span class="st"> </span><span class="fl">0.77</span></a>
-<a class="sourceLine" id="cb22-4" data-line-number="4">pred_mu_sim &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, mu_n, sigma_n)</a>
-<a class="sourceLine" id="cb22-5" data-line-number="5">(pred_y_sim &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, pred_mu_sim, sigma))</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="mean.html#cb22-1"></a>sigma &lt;-<span class="st"> </span><span class="dv">4</span></span>
+<span id="cb22-2"><a href="mean.html#cb22-2"></a>mu_n &lt;-<span class="st"> </span><span class="fl">17.4</span></span>
+<span id="cb22-3"><a href="mean.html#cb22-3"></a>sigma_n &lt;-<span class="st"> </span><span class="fl">0.77</span></span>
+<span id="cb22-4"><a href="mean.html#cb22-4"></a>pred_mu_sim &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, mu_n, sigma_n)</span>
+<span id="cb22-5"><a href="mean.html#cb22-5"></a>(pred_y_sim &lt;-<span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">1</span>, pred_mu_sim, sigma))</span></code></pre></div>
 <pre><code>## [1] 16.04772</code></pre>
 <p>The script can easily be updated to create <span class="math inline">\(S\)</span> = 1000 predictions, which is helpful to make summary about predictions.</p>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1">S &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb24-2" data-line-number="2">pred_mu_sim &lt;-<span class="st"> </span><span class="kw">rnorm</span>(S, mu_n, sigma_n)</a>
-<a class="sourceLine" id="cb24-3" data-line-number="3">pred_y_sim &lt;-<span class="st"> </span><span class="kw">rnorm</span>(S, pred_mu_sim, sigma)</a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="mean.html#cb24-1"></a>S &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb24-2"><a href="mean.html#cb24-2"></a>pred_mu_sim &lt;-<span class="st"> </span><span class="kw">rnorm</span>(S, mu_n, sigma_n)</span>
+<span id="cb24-3"><a href="mean.html#cb24-3"></a>pred_y_sim &lt;-<span class="st"> </span><span class="kw">rnorm</span>(S, pred_mu_sim, sigma)</span></code></pre></div>
 <p>The vector <code>pred_y_sim</code> contains 1000 predictions of Federer’s time-to-serve.</p>
 <div class="figure"><span id="fig:unnamed-chunk-27"></span>
 <img src="bookdown-demo_files/figure-html/unnamed-chunk-27-1.png" alt="Display of the exact and simulated time-to-serve for Federer's example." width="672" />
@@ -1141,18 +1143,18 @@ Figure 8.7: Display of the exact and simulated time-to-serve for Federer’s exa
 \end{eqnarray}\]</span></p></li>
 </ol>
 <p>This method is implemented in the following R script to simulate 1000 replicated samples from the posterior predictive distribution. The vector <code>pred_mu_sim</code> contains draws from the posterior distribution and the matrix <code>ytilde</code> contains the simulated predictions where each row of the matrix is a simulated sample of 20 future times.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1">sigma &lt;-<span class="st"> </span><span class="dv">4</span></a>
-<a class="sourceLine" id="cb25-2" data-line-number="2">mu_n &lt;-<span class="st"> </span><span class="fl">17.4</span></a>
-<a class="sourceLine" id="cb25-3" data-line-number="3">sigma_n &lt;-<span class="st"> </span><span class="fl">0.77</span></a>
-<a class="sourceLine" id="cb25-4" data-line-number="4">S &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb25-5" data-line-number="5">pred_mu_sim &lt;-<span class="st"> </span><span class="kw">rnorm</span>(S, mu_n, sigma_n)</a>
-<a class="sourceLine" id="cb25-6" data-line-number="6">sim_ytilde &lt;-<span class="st"> </span><span class="cf">function</span>(j){</a>
-<a class="sourceLine" id="cb25-7" data-line-number="7">  <span class="kw">rnorm</span>(<span class="dv">20</span>, pred_mu_sim[j], sigma)</a>
-<a class="sourceLine" id="cb25-8" data-line-number="8">}</a>
-<a class="sourceLine" id="cb25-9" data-line-number="9">ytilde &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span>S, sim_ytilde))</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="mean.html#cb25-1"></a>sigma &lt;-<span class="st"> </span><span class="dv">4</span></span>
+<span id="cb25-2"><a href="mean.html#cb25-2"></a>mu_n &lt;-<span class="st"> </span><span class="fl">17.4</span></span>
+<span id="cb25-3"><a href="mean.html#cb25-3"></a>sigma_n &lt;-<span class="st"> </span><span class="fl">0.77</span></span>
+<span id="cb25-4"><a href="mean.html#cb25-4"></a>S &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb25-5"><a href="mean.html#cb25-5"></a>pred_mu_sim &lt;-<span class="st"> </span><span class="kw">rnorm</span>(S, mu_n, sigma_n)</span>
+<span id="cb25-6"><a href="mean.html#cb25-6"></a>sim_ytilde &lt;-<span class="st"> </span><span class="cf">function</span>(j){</span>
+<span id="cb25-7"><a href="mean.html#cb25-7"></a>  <span class="kw">rnorm</span>(<span class="dv">20</span>, pred_mu_sim[j], sigma)</span>
+<span id="cb25-8"><a href="mean.html#cb25-8"></a>}</span>
+<span id="cb25-9"><a href="mean.html#cb25-9"></a>ytilde &lt;-<span class="st"> </span><span class="kw">t</span>(<span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span>S, sim_ytilde))</span></code></pre></div>
 <p>To judge goodness of fit, we wish to compare these simulated replicated datasets from the posterior predictive distribution with the observed data. One convenient way to implement this comparison is to compute some “testing function”, <span class="math inline">\(T(\tilde y)\)</span>, on each replicated dataset. If we have 1000 replicated datasets, one has 1000 values of the testing function. One constructs a graph of these values and overlays the value of the testing function on the observed data <span class="math inline">\(T(y)\)</span>. If the observed value is in the tail of the posterior predictive distribution of <span class="math inline">\(T(\tilde y)\)</span>, this indicates some misfit of the observed data with the Bayesian model.</p>
 <p>To implement this procedure, one needs to choose a testing function <span class="math inline">\(T(\tilde y)\)</span>. Suppose, for example, one decides to use the sample mean <span class="math inline">\(T(\tilde y) = \sum \tilde y_j / 20\)</span>. In the R script, we compute the sample mean on each row of the simulated prediction matrix.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1">pred_ybar_sim &lt;-<span class="st"> </span><span class="kw">apply</span>(ytilde, <span class="dv">1</span>, mean)</a></code></pre></div>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="mean.html#cb26-1"></a>pred_ybar_sim &lt;-<span class="st"> </span><span class="kw">apply</span>(ytilde, <span class="dv">1</span>, mean)</span></code></pre></div>
 <p>Figure 8.8 displays a density estimate of the simulated values from the posterior predictive distribution of <span class="math inline">\(\bar Y\)</span> and the observed value of the sample mean <span class="math inline">\(\bar Y = 17.20\)</span> is displayed as a vertical line. Since this observed mean is in the middle of this distribution, one concludes that this observation is consistent with samples predicted from the Bayesian model. It should be noted that this conclusion about model fit is sensitive to the choice of checking function <span class="math inline">\(T()\)</span>. In the end-of-chapter exercises, the reader will explore the suitability of this model using alternative choices for the checking function.</p>
 <div class="figure"><span id="fig:unnamed-chunk-31"></span>
 <img src="bookdown-demo_files/figure-html/unnamed-chunk-31-1.png" alt="Display of the posterior predictive mean time-to-serve for twenty observations. The observed mean time-to-serve value is displayed by a vertical line." width="672" />
@@ -1357,7 +1359,7 @@ L(\mu) \propto \exp\left(-\frac{n}{2 \sigma^2}(\bar y - \mu)^2\right).
 <ol style="list-style-type: lower-alpha">
 <li>Assuming <span class="math inline">\(\sigma = 4\)</span>, perform the Bayes’ rule calculation to find the posterior distribution for <span class="math inline">\(\mu\)</span>.<br />
 </li>
-<li>Using the posterior, find a ``best&quot; estimate at <span class="math inline">\(\mu\)</span> and an interval of values that contains <span class="math inline">\(\mu\)</span> with probability at least 0.5.</li>
+<li>Using the posterior, find a ``best" estimate at <span class="math inline">\(\mu\)</span> and an interval of values that contains <span class="math inline">\(\mu\)</span> with probability at least 0.5.</li>
 </ol>
 <ol start="2" style="list-style-type: decimal">
 <li><strong>Temperature in Bismarck</strong></li>
@@ -1512,8 +1514,8 @@ where <span class="math inline">\(n_A = n_N = 6\)</span>.</p>
 </ol>
 <p>In Exercise 14, you should have established that the mean IQ score changes <span class="math inline">\(\mu_A\)</span> and <span class="math inline">\(\mu_N\)</span> have independent Normal posterior distributions. Assume that one has vague prior beliefs and <span class="math inline">\(\mu_A \sim \textrm{Normal}(0, 20)\)</span> and <span class="math inline">\(\mu_N \sim \textrm{Normal}(0, 20)\)</span>.</p>
 <ol style="list-style-type: lower-alpha">
-<li><p>Is the average improvement for the accelerated group larger than that for the no growth group? Consider the parameter <span class="math inline">\(\delta = \mu_A - \mu_N\)</span> to measure the difference in means. The question now becomes finding the posterior probability of <span class="math inline">\(\delta &gt; 0\)</span>, i.e. <span class="math inline">\(p(\mu_A - \mu_N &gt; 0 \mid y_A, y_N)\)</span>, where <span class="math inline">\(y_A\)</span> and <span class="math inline">\(y_N\)</span> are the vectors of recorded IQ score change. [Hint: simulate a vector <span class="math inline">\(s_A\)</span> of posterior samples of <span class="math inline">\(\mu_A\)</span> and another vector <span class="math inline">\(s_N\)</span> of posterior samples of <span class="math inline">\(\mu_N\)</span> (make sure to use the same number of samples) and subtract <span class="math inline">\(s_N\)</span> from <span class="math inline">\(s_A\)</span>, which gives us a vector of posterior differences between <span class="math inline">\(s_N\)</span> and <span class="math inline">\(s_A\)</span>. This vector of posterior differences serves as an approximation to the posterior distribution of <span class="math inline">\(\delta\)</span>.]</p></li>
-<li><p>What is the probability that a randomly selected child assigned to the accelerated group will have larger improvement than a randomly selected child assigned to the no growth group? Consider <span class="math inline">\(\tilde{Y}_A\)</span> and <span class="math inline">\(\tilde{Y}_N\)</span> to be random variables for predicted IQ score change for the accelerated group and the no growth group, respectively. The question now becomes finding the posterior predictive probability of <span class="math inline">\(\tilde{Y}_A &gt; \tilde{Y}_N\)</span>, i.e. <span class="math inline">\(p(\tilde{Y}_A &gt; \tilde{Y}_N \mid y_A, y_N)\)</span>, where <span class="math inline">\(y_A\)</span> and <span class="math inline">\(y_N\)</span> are the vectors of recorded IQ score change, each of length 6. [Hint: Show that the posterior predictive distributions of <span class="math inline">\(\tilde{Y}_A\)</span> and <span class="math inline">\(\tilde{Y}_N\)</span> are independent. Simulate predicted IQ score changes from the posterior predictive distributions for the two groups, then simulate the posterior predictive distribution of <span class="math inline">\(\tilde{Y}_A - \tilde{Y}_N\)</span> by taking the difference of simulated draws.]</p></li>
+<li><p>Is the average improvement for the accelerated group larger than that for the no growth group? Consider the parameter <span class="math inline">\(\delta = \mu_A - \mu_N\)</span> to measure the difference in means. The question now becomes finding the posterior probability of <span class="math inline">\(\delta &gt; 0\)</span>, i.e. <span class="math inline">\(p(\mu_A - \mu_N &gt; 0 \mid y_A, y_N)\)</span>, where <span class="math inline">\(y_A\)</span> and <span class="math inline">\(y_N\)</span> are the vectors of recorded IQ score change. [Hint: simulate a vector <span class="math inline">\(s_A\)</span> of posterior samples of <span class="math inline">\(\mu_A\)</span> and another vector <span class="math inline">\(s_N\)</span> of posterior samples of <span class="math inline">\(\mu_N\)</span> (make sure to use the same number of samples) and subtract <span class="math inline">\(s_N\)</span> from <span class="math inline">\(s_A\)</span>, which gives us a vector of posterior differences between <span class="math inline">\(s_N\)</span> and <span class="math inline">\(s_A\)</span>. This vector of posterior differences serves as an approximation to the posterior distribution of <span class="math inline">\(\delta\)</span>.]</p></li>
+<li><p>What is the probability that a randomly selected child assigned to the accelerated group will have larger improvement than a randomly selected child assigned to the no growth group? Consider <span class="math inline">\(\tilde{Y}_A\)</span> and <span class="math inline">\(\tilde{Y}_N\)</span> to be random variables for predicted IQ score change for the accelerated group and the no growth group, respectively. The question now becomes finding the posterior predictive probability of <span class="math inline">\(\tilde{Y}_A &gt; \tilde{Y}_N\)</span>, i.e. <span class="math inline">\(p(\tilde{Y}_A &gt; \tilde{Y}_N \mid y_A, y_N)\)</span>, where <span class="math inline">\(y_A\)</span> and <span class="math inline">\(y_N\)</span> are the vectors of recorded IQ score change, each of length 6. [Hint: Show that the posterior predictive distributions of <span class="math inline">\(\tilde{Y}_A\)</span> and <span class="math inline">\(\tilde{Y}_N\)</span> are independent. Simulate predicted IQ score changes from the posterior predictive distributions for the two groups, then simulate the posterior predictive distribution of <span class="math inline">\(\tilde{Y}_A - \tilde{Y}_N\)</span> by taking the difference of simulated draws.]</p></li>
 </ol>
 <ol start="16" style="list-style-type: decimal">
 <li><strong>Comparing Two Means - Prices of Diamonds</strong></li>
@@ -1552,7 +1554,7 @@ Figure 8.12: Two Gamma priors for the average number of visits to ER during a pa
 </p>
 </div>
 <ol style="list-style-type: lower-alpha">
-<li><p>Compare the priors of Pedro and Mia with respect to average value and spread. Which person believes that there will be more ER visits, on average? Which person is more confident of his/her ``best guess&quot; at the average number of ER visits?</p></li>
+<li><p>Compare the priors of Pedro and Mia with respect to average value and spread. Which person believes that there will be more ER visits, on average? Which person is more confident of his/her ``best guess" at the average number of ER visits?</p></li>
 <li><p>Using the <code>qgamma()</code> function, construct 90% interval estimates for <span class="math inline">\(\lambda\)</span> using Pedro’s prior and Mia’s prior.</p></li>
 <li><p>After some thought, Pedro believes that his best prior guess at <span class="math inline">\(\lambda\)</span> is correct, but he is less confident in this guess. Explain how Pedro can adjust the parameters of his Gamma prior to reflect this new prior belief.</p></li>
 <li><p>Mia also revisits her prior. Her best guess at the average number of ER visits is now 3 larger than her previous best guess, but the degree of confidence in this guess hasn’t changed. Explain how Mia can adjust the parameters of her Gamma prior to reflect this new prior belief.</p></li>
@@ -1633,7 +1635,7 @@ f(y \mid \alpha, \lambda) = \lambda \alpha y^{\alpha -1}
 \end{eqnarray}\]</span>
 Here, <span class="math inline">\(\alpha&gt;0\)</span> and <span class="math inline">\(\lambda&gt;0\)</span> are parameters of the
 distribution. For this problem, assume that <span class="math inline">\(\alpha = \alpha_0\)</span> is known, but <span class="math inline">\(\lambda\)</span> is not known, i.e. a simplified case of a one-parameter model. Also assume that
-software routines for simulating from Weibull distributions are available (e.g. ```rweibull()})</p>
+software routines for simulating from Weibull distributions are available (e.g. ```rweibull()})</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Assuming a prior distribution <span class="math inline">\(\pi(\lambda \mid \alpha  = \alpha_0) \propto 1\)</span>, find its posterior <span class="math inline">\(\pi(\lambda \mid y_1, \dots, y_n, \alpha = \alpha_0)\)</span>, where <span class="math inline">\(y_i \overset{i.i.d.}{\sim} \textrm{Weibull}(\lambda, \alpha = \alpha_0)\)</span> for <span class="math inline">\(i = 1, \cdots, n\)</span>. Write the name of the distribution and
 expressions for its parameter values.</p></li>
