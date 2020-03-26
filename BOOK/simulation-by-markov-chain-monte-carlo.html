@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 9 Simulation by Markov Chain Monte Carlo | Probability and Bayesian Modeling</title>
   <meta name="description" content="This is an introduction to probability and Bayesian modeling at the undergraduate level. It assumes the student has some background with calculus." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 9 Simulation by Markov Chain Monte Carlo | Probability and Bayesian Modeling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-01-24" />
+<meta name="date" content="2020-03-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,9 +53,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +64,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +82,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -237,7 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#Normal:Discrete:Roger"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
 <li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
 </ul></li>
@@ -373,7 +375,7 @@ Figure 9.1: Prior, likelihood, and posterior of a Normal mean with a Normal prio
 </p>
 </div>
 <p><strong>An alternative prior</strong></p>
-<p>Looking at Figure 9.1, there is some concern about this particular Bayesian analysis. Since the the main probability contents of the prior and likelihood functions have little overlap, there is serious conflict between the information in your prior and the information from the data.</p>
+<p>Looking at Figure 9.1, there is some concern about this particular Bayesian analysis. Since the main probability contents of the prior and likelihood functions have little overlap, there is serious conflict between the information in your prior and the information from the data.</p>
 <p>Since we have a prior-data conflict, it would make sense to revisit our choice for a prior density on <span class="math inline">\(\mu\)</span>. Remember you specified the quartiles for <span class="math inline">\(\mu\)</span> to be 8 and 12 inches. Another symmetric density that matches this information is a Cauchy density with location 10 inches and scale parameter 2 inches. The reader can confirm that the quantiles of a Cauchy(10, 2) do match your prior information. [Hint: use the <code>qcauchy()</code> R command.]</p>
 <p>In Figure 9.2 we compare the Normal and Cauchy priors graphically. Remember these two densities have the same quartiles at 8 and 12 inches. But the two priors have different shapes – the Cauchy prior is more peaked near the median value 10 and has tails that decrease to zero at a slower rate than the Normal. In other words, the Cauchy curve has flatter tails than the Normal curve.</p>
 
@@ -393,7 +395,7 @@ Figure 9.2: Two priors for representing prior opinion about a Normal mean.
 <p><strong>The two-parameter Normal problem</strong>
 </p>
 <p>In the problem in learning about a Normal mean <span class="math inline">\(\mu\)</span> in Chapter 8, it was assumed that the sampling standard deviation <span class="math inline">\(\sigma\)</span> was known. This is unrealistic – in most settings, if one is uncertain about the mean of the population, then likely the population standard deviation will also be unknown.
-From a Bayesian perspective, since we have two unknown parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>, this situation presents new challenges. One needs to construct a joint prior <span class="math inline">\(\pi(\mu, \sigma)\)</span> for the two parameters – up to this point, we have only discussed constructing a prior distribution for a single parameter. Also, although one can compute the posterior density by the usual ``prior times likelihood&quot; recipe, it may be difficult to get nice analytic answers with this posterior to obtain particular inferences of interest.</p>
+From a Bayesian perspective, since we have two unknown parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>, this situation presents new challenges. One needs to construct a joint prior <span class="math inline">\(\pi(\mu, \sigma)\)</span> for the two parameters – up to this point, we have only discussed constructing a prior distribution for a single parameter. Also, although one can compute the posterior density by the usual ``prior times likelihood" recipe, it may be difficult to get nice analytic answers with this posterior to obtain particular inferences of interest.</p>
 <p><strong>Overview of the chapter</strong>
 </p>
 <p>In Chapters 7 and 8, we illustrated the use of simulation to summarize posterior distributions of a specific functional form such as the Beta and Normal. In this chapter, we introduce a general class of algorithms, collectively called Markov chain Monte Carlo (MCMC), that can be used to simulate the posterior from general Bayesian models. These algorithms are based on a general probability model called a Markov chain and Section 9.2 describes this probability model for situations where the possible models are finite. Section 9.3 introduces the Metropolis sampler, a general algorithm for simulating from an arbitrary posterior distribution. Section 9.4 describes the implementation of this simulation algorithm for the Normal sampling problem with a Cauchy prior. Section 9.5 introduces another MCMC simulation algorithm, Gibbs sampling, that is well-suited for simulation from posterior distributions of many parameters. One issue in the implementation of these MCMC algorithms is that the simulation draws represent an approximate sample from the posterior distribution. Section 9.6 describes some common diagnostic methods for seeing if the simulated sample is a suitable exploration of the posterior distribution. Finally in Section 9.7, we describe the use of a general-purpose software program Just Another Gibbs Sampler (JAGS) and R interface for implementing these MCMC algorithms.</p>
@@ -458,22 +460,22 @@ p^{(j+m)} = p^{(j)} P^m,
 where <span class="math inline">\(P^m\)</span> indicates the matrix multiplication <span class="math inline">\(P \times P \times ... \times P\)</span> (the matrix <span class="math inline">\(P\)</span> multiplied by itself <span class="math inline">\(m\)</span> times).</p>
 
 <p>To illustrate for our example using R, suppose that the person begins at state 3 that is represented in R by the vector <code>p</code> with a 1 in the third entry:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">p &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="simulation-by-markov-chain-monte-carlo.html#cb2-1"></a>p &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span></code></pre></div>
 <p>We also define the transition matrix by use of the <code>matrix()</code> function.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">P &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(.<span class="dv">5</span>, <span class="fl">.5</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">              <span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">.25</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">              <span class="dv">0</span>, <span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">.25</span>, <span class="dv">0</span>, <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">              <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">.25</span>, <span class="dv">0</span>,</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">              <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">.25</span>,</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">              <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">.5</span>, <span class="fl">.5</span>),</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">              <span class="dt">nrow=</span><span class="dv">6</span>, <span class="dt">ncol=</span><span class="dv">6</span>, <span class="dt">byrow=</span><span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="simulation-by-markov-chain-monte-carlo.html#cb3-1"></a>P &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(.<span class="dv">5</span>, <span class="fl">.5</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,</span>
+<span id="cb3-2"><a href="simulation-by-markov-chain-monte-carlo.html#cb3-2"></a>              <span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">.25</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,</span>
+<span id="cb3-3"><a href="simulation-by-markov-chain-monte-carlo.html#cb3-3"></a>              <span class="dv">0</span>, <span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">.25</span>, <span class="dv">0</span>, <span class="dv">0</span>,</span>
+<span id="cb3-4"><a href="simulation-by-markov-chain-monte-carlo.html#cb3-4"></a>              <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">.25</span>, <span class="dv">0</span>,</span>
+<span id="cb3-5"><a href="simulation-by-markov-chain-monte-carlo.html#cb3-5"></a>              <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">.25</span>, <span class="fl">.5</span>, <span class="fl">.25</span>,</span>
+<span id="cb3-6"><a href="simulation-by-markov-chain-monte-carlo.html#cb3-6"></a>              <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">.5</span>, <span class="fl">.5</span>),</span>
+<span id="cb3-7"><a href="simulation-by-markov-chain-monte-carlo.html#cb3-7"></a>              <span class="dt">nrow=</span><span class="dv">6</span>, <span class="dt">ncol=</span><span class="dv">6</span>, <span class="dt">byrow=</span><span class="ot">TRUE</span>)</span></code></pre></div>
 <p>If one multiplies this vector by the matrix ```P, one obtains the probabilities of being in all six states after one move.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">print</span>(p <span class="op">%*%</span><span class="st"> </span>P, <span class="dt">digits =</span> <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="simulation-by-markov-chain-monte-carlo.html#cb4-1"></a><span class="kw">print</span>(p <span class="op">%*%</span><span class="st"> </span>P, <span class="dt">digits =</span> <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6]
 ## [1,]    0 0.25  0.5 0.25    0    0</code></pre>
 <p>After one move (starting at state 3), our walker will be at states 2, 3, and 4 with respective probabilities 0.25, 0.5, and 0.25.
 If one multiplies <code>p</code> by the matrix <code>P</code> four times, one obtains the probabilities of being in the different states after four moves.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">print</span>(p <span class="op">%*%</span><span class="st"> </span>P <span class="op">%*%</span><span class="st"> </span>P <span class="op">%*%</span><span class="st"> </span>P <span class="op">%*%</span><span class="st"> </span>P, <span class="dt">digits =</span> <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="simulation-by-markov-chain-monte-carlo.html#cb6-1"></a><span class="kw">print</span>(p <span class="op">%*%</span><span class="st"> </span>P <span class="op">%*%</span><span class="st"> </span>P <span class="op">%*%</span><span class="st"> </span>P <span class="op">%*%</span><span class="st"> </span>P, <span class="dt">digits =</span> <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>##         [,1] [,2]    [,3]    [,4]    [,5]    [,6]
 ## [1,] 0.10938 0.25 0.27734 0.21875 0.11328 0.03125</code></pre>
 <p>Starting from state 3, this particular person is most likely will be in states 2, 3, and 4 after four moves.</p>
@@ -484,11 +486,11 @@ W = \lim_{m \rightarrow \infty} P^m,
 \end{equation}\]</span>
 where <span class="math inline">\(W\)</span> has common rows equal to <span class="math inline">\(w\)</span>. The implication of this result is that, as one takes an infinite number of moves, the probability of landing at a particular state does not depend on the initial starting state.</p>
 <p>One can demonstrate this result empirically for our example. Using a loop, we take the transition matrix <span class="math inline">\(P\)</span> to the 100th power by repeatedly multiplying the transition matrix by itself. From this calculation below, note that the rows of the matrix ```Pm} appear to be approaching a constant vector. Specifically, it appears the constant vector <span class="math inline">\(w\)</span> is equal to (0.1, 0.2, 0.2, 0.2, 0.2, 0.1).</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">Pm &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">6</span>))</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>){</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">  Pm &lt;-<span class="st"> </span>Pm <span class="op">%*%</span><span class="st"> </span>P</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">}</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="kw">print</span>(Pm, <span class="dt">digits =</span> <span class="dv">5</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="simulation-by-markov-chain-monte-carlo.html#cb8-1"></a>Pm &lt;-<span class="st"> </span><span class="kw">diag</span>(<span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">6</span>))</span>
+<span id="cb8-2"><a href="simulation-by-markov-chain-monte-carlo.html#cb8-2"></a><span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="dv">100</span>){</span>
+<span id="cb8-3"><a href="simulation-by-markov-chain-monte-carlo.html#cb8-3"></a>  Pm &lt;-<span class="st"> </span>Pm <span class="op">%*%</span><span class="st"> </span>P</span>
+<span id="cb8-4"><a href="simulation-by-markov-chain-monte-carlo.html#cb8-4"></a>}</span>
+<span id="cb8-5"><a href="simulation-by-markov-chain-monte-carlo.html#cb8-5"></a><span class="kw">print</span>(Pm, <span class="dt">digits =</span> <span class="dv">5</span>)</span></code></pre></div>
 <pre><code>##          [,1]    [,2]    [,3]    [,4]    [,5]     [,6]
 ## [1,] 0.100009 0.20001 0.20001 0.19999 0.19999 0.099991
 ## [2,] 0.100007 0.20001 0.20000 0.20000 0.19999 0.099993
@@ -518,10 +520,10 @@ function to simulate one step – the arguments to this function indicate that
 we are sampling a single value from the set {1, 2, 3, 4, 5, 6} with probabilities
 given by the <span class="math inline">\(s_j^1\)</span> row of the transition matrix <span class="math inline">\(P\)</span>, where <span class="math inline">\(s_j^1\)</span> is the current
 location of our traveler.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">s &lt;-<span class="st"> </span><span class="kw">vector</span>(<span class="st">&quot;numeric&quot;</span>, <span class="dv">10000</span>)</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2">s[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">3</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">10000</span>)</a>
-<a class="sourceLine" id="cb10-4" data-line-number="4">s[j] &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">size=</span><span class="dv">1</span>, <span class="dt">prob=</span>P[s[j <span class="op">-</span><span class="st"> </span><span class="dv">1</span>], ])</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="simulation-by-markov-chain-monte-carlo.html#cb10-1"></a>s &lt;-<span class="st"> </span><span class="kw">vector</span>(<span class="st">&quot;numeric&quot;</span>, <span class="dv">10000</span>)</span>
+<span id="cb10-2"><a href="simulation-by-markov-chain-monte-carlo.html#cb10-2"></a>s[<span class="dv">1</span>] &lt;-<span class="st"> </span><span class="dv">3</span></span>
+<span id="cb10-3"><a href="simulation-by-markov-chain-monte-carlo.html#cb10-3"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">2</span><span class="op">:</span><span class="dv">10000</span>)</span>
+<span id="cb10-4"><a href="simulation-by-markov-chain-monte-carlo.html#cb10-4"></a>s[j] &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dt">size=</span><span class="dv">1</span>, <span class="dt">prob=</span>P[s[j <span class="op">-</span><span class="st"> </span><span class="dv">1</span>], ])</span></code></pre></div>
 <p>Suppose that we record the relative frequencies of each of the outcomes 1, 2, …, 6 after each iteration of the simulation. Figure 9.3 graphs the relative frequencies of each of the outcomes as a function of the iteration number.</p>
 
 <div class="figure"><span id="fig:unnamed-chunk-9"></span>
@@ -534,8 +536,8 @@ Figure 9.3: Relative frequencies of the states 1 through 6 as a function of the 
 to the stationary distribution <span class="math inline">\(w = (0.1, 0.2, 0.2, 0.2, 0.2, 0.1).\)</span> One
 confirms that this specific vector <span class="math inline">\(w\)</span> is indeed the stationary distribution of this chain by multiplying
 <span class="math inline">\(w\)</span> by the transition matrix <span class="math inline">\(P\)</span> and noticing that the product is equal to <span class="math inline">\(w\)</span>.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">w &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">2</span>,.<span class="dv">2</span>,.<span class="dv">2</span>,.<span class="dv">2</span>,.<span class="dv">1</span>), <span class="dt">nrow=</span><span class="dv">1</span>, <span class="dt">ncol=</span><span class="dv">6</span>)</a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"> w <span class="op">%*%</span><span class="st"> </span>P</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="simulation-by-markov-chain-monte-carlo.html#cb11-1"></a>w &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(.<span class="dv">1</span>,.<span class="dv">2</span>,.<span class="dv">2</span>,.<span class="dv">2</span>,.<span class="dv">2</span>,.<span class="dv">1</span>), <span class="dt">nrow=</span><span class="dv">1</span>, <span class="dt">ncol=</span><span class="dv">6</span>)</span>
+<span id="cb11-2"><a href="simulation-by-markov-chain-monte-carlo.html#cb11-2"></a> w <span class="op">%*%</span><span class="st"> </span>P</span></code></pre></div>
 <pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6]
 ## [1,]  0.1  0.2  0.2  0.2  0.2  0.1</code></pre>
 </div>
@@ -573,7 +575,7 @@ R = \frac{pd(candidate)}{pd(current)},
 the ratio of the probabilities at the candidate and current locations.</p></li>
 <li><p>We spin a continuous spinner that lands anywhere from 0 to 1 – call the random spin <span class="math inline">\(X\)</span>. If <span class="math inline">\(X\)</span> is smaller than <span class="math inline">\(R\)</span>, we move to the candidate location, and otherwise we remain at the current location.</p></li>
 </ol>
-<p>Steps 1 through 4 define an irreducible, aperiodic Markov chain on the state values {1, 2, …, 8} where Step 1 gives the starting location and the transition matrix <span class="math inline">\(P\)</span> is defined by Steps 2 through 4. One way of ``discovering&quot; the discrete probability distribution <span class="math inline">\(pd\)</span> is by starting at any location and walking through the distribution many times repeating Steps 2, 3, and 4 (propose a candidate location, compute the ratio, and decide whether to visit the candidate location). If this process is repeated for a large number of steps, the distribution of our actual visits should approximate the probability distribution <span class="math inline">\(pd\)</span>.</p>
+<p>Steps 1 through 4 define an irreducible, aperiodic Markov chain on the state values {1, 2, …, 8} where Step 1 gives the starting location and the transition matrix <span class="math inline">\(P\)</span> is defined by Steps 2 through 4. One way of ``discovering" the discrete probability distribution <span class="math inline">\(pd\)</span> is by starting at any location and walking through the distribution many times repeating Steps 2, 3, and 4 (propose a candidate location, compute the ratio, and decide whether to visit the candidate location). If this process is repeated for a large number of steps, the distribution of our actual visits should approximate the probability distribution <span class="math inline">\(pd\)</span>.</p>
 
 <p>A R function <code>random_walk()</code> is written implementing this random walk algorithm. There are three inputs to this function, the probability distribution <code>pd</code>, the starting location <code>start</code> and the number of steps of the algorithm <code>s</code>.</p>
 <pre><code>random_walk &lt;- function(pd, start, num_steps){
@@ -615,7 +617,7 @@ where <span class="math inline">\(\pi(\theta)\)</span> is the prior and <span cl
 <ol style="list-style-type: decimal">
 <li><p>(START) As in the random walk algorithm, we begin by selecting any <span class="math inline">\(\theta\)</span> value where the posterior density is positive – the value we select <span class="math inline">\(\theta^{(0)}\)</span> is the starting value.</p></li>
 <li><p>(PROPOSE) Given the current simulated value <span class="math inline">\(\theta^{(j)}\)</span> we propose a new value <span class="math inline">\(\theta^P\)</span> which is selected at random in the interval (<span class="math inline">\(\theta^{(j)} - C, \theta^{(j)} + C)\)</span> where <span class="math inline">\(C\)</span> is a preselected constant.</p></li>
-<li>(ACCEPTANCE PROBABILITY) One computes the ratio <span class="math inline">\(R\)</span> of the posterior density at the proposed value and the current value:
+<li><p>(ACCEPTANCE PROBABILITY) One computes the ratio <span class="math inline">\(R\)</span> of the posterior density at the proposed value and the current value:
 <span class="math display" id="eq:mhratio2">\[\begin{equation}
 R = \frac{\pi_n(\theta^{P})}{\pi_n(\theta^{(j)})}.
 \tag{9.6}
@@ -624,7 +626,7 @@ The acceptance probability is the minimum of <span class="math inline">\(R\)</sp
 <span class="math display" id="eq:mhprob">\[\begin{equation}
 PROB = \min\{R, 1\}.
 \tag{9.7}
-\end{equation}\]</span></li>
+\end{equation}\]</span></p></li>
 <li><p>(MOVE OR STAY?) One simulates a Uniform random variable <span class="math inline">\(U\)</span>. If <span class="math inline">\(U\)</span> is smaller than the acceptance probability <span class="math inline">\(PROB\)</span>, one moves to the proposed value <span class="math inline">\(\theta^P\)</span>; otherwise one stays at the current value <span class="math inline">\(\theta^{(j)}\)</span>. In other words, the next simulated draw <span class="math inline">\(\theta^{(j+1)}\)</span>
 <span class="math display" id="eq:mhmove">\[\begin{equation}
 \theta^{(j+1)} = 
@@ -698,7 +700,7 @@ There are four inputs to this posterior – the mean <span class="math inline">\
 </p>
 <p>In implementing this Metropolis algorithm, the user has to make two choices. One needs to select a starting value for the algorithm and select a value of <span class="math inline">\(C\)</span> which determines the width of the proposal region.</p>
 <p>Assuming that the starting value is a place where the density is positive, then this particular choice in usual practice is not critical. In the event where the probability density at the starting value is small, the algorithm will move towards the region where the density is more probable.</p>
-<p>The choice of the constant <span class="math inline">\(C\)</span> is more critical. If one chooses a very small value of <span class="math inline">\(C\)</span>, then the simulated values from the algorithm tend to be strongly correlated and it takes a relatively long time to explore the entire probability distribution. In contrast, if <span class="math inline">\(C\)</span> is chosen too large, then it is more likely that proposal values will not be accepted and the simulated values tend to get stuck at the current values. One monitors the choice of <span class="math inline">\(C\)</span> by computing the acceptance rate, the proportion of proposal values that are accepted. If the acceptance rate is large, that indicates that the simulated values are highly correlated and the algorithm is not efficiently exploring the distribution. If the acceptance rate is low, then few candidate values are accepted and the algorithm tends to be ``sticky&quot; or stuck at current draws.</p>
+<p>The choice of the constant <span class="math inline">\(C\)</span> is more critical. If one chooses a very small value of <span class="math inline">\(C\)</span>, then the simulated values from the algorithm tend to be strongly correlated and it takes a relatively long time to explore the entire probability distribution. In contrast, if <span class="math inline">\(C\)</span> is chosen too large, then it is more likely that proposal values will not be accepted and the simulated values tend to get stuck at the current values. One monitors the choice of <span class="math inline">\(C\)</span> by computing the acceptance rate, the proportion of proposal values that are accepted. If the acceptance rate is large, that indicates that the simulated values are highly correlated and the algorithm is not efficiently exploring the distribution. If the acceptance rate is low, then few candidate values are accepted and the algorithm tends to be ``sticky" or stuck at current draws.</p>
 <p>We illustrate different choices of <span class="math inline">\(C\)</span> for the mean amount of Buffalo snowfall problem. In each case, we start with the value <span class="math inline">\(\mu = 20\)</span> and try the <span class="math inline">\(C\)</span> values 0.3, 3, 30, and 200. In each case, we simulate 5000 values of the MCMC chain. Figure 9.7 shows in each case a line graph of the simulated draws against the iteration number and the acceptance rate of the algorithm is displayed.</p>
 
 <div class="figure"><span id="fig:unnamed-chunk-14"></span>
@@ -1028,7 +1030,7 @@ Figure 9.11: Trace plot of simulated draws of normal mean using the Metropolis a
 </p>
 </div>
 <p><strong>Autocorrelation plot</strong></p>
-<p>Since one is simulating a dependent sequence of values of the parameter, one is concerned about the possible strong correlation between successive draws of the sampler. One visualizes this dependence by computing the correlation of the pairs {<span class="math inline">\(\theta^{(j)}, \theta^{(j + l)}\)</span>} and plotting this ``lag-correlation&quot; as a function of the lag value <span class="math inline">\(l\)</span>. This autocorrelation plot of the simulated draws from our example is displayed in Figure 9.12. If there is a strong degree of autocorrelation in the sequence, then there will be a large correlation of these pairs even for large values of the lag value. Figure 9.12 is an example of a suitable autocorrelation graph where the lag correlation values quickly drop to zero as a function of the lag value. This autocorrelation graph is another indication that the Metropolis algorithm is providing an efficient sampler of the posterior.</p>
+<p>Since one is simulating a dependent sequence of values of the parameter, one is concerned about the possible strong correlation between successive draws of the sampler. One visualizes this dependence by computing the correlation of the pairs {<span class="math inline">\(\theta^{(j)}, \theta^{(j + l)}\)</span>} and plotting this ``lag-correlation" as a function of the lag value <span class="math inline">\(l\)</span>. This autocorrelation plot of the simulated draws from our example is displayed in Figure 9.12. If there is a strong degree of autocorrelation in the sequence, then there will be a large correlation of these pairs even for large values of the lag value. Figure 9.12 is an example of a suitable autocorrelation graph where the lag correlation values quickly drop to zero as a function of the lag value. This autocorrelation graph is another indication that the Metropolis algorithm is providing an efficient sampler of the posterior.</p>
 
 <div class="figure"><span id="fig:unnamed-chunk-19"></span>
 <img src="../LATEX/figures/chapter9/mcmc7.png" alt="Autocorrelation plot of simulated draws of normal mean using the Metropolis algorithm with $C = 20$." width="500" />
@@ -1112,7 +1114,7 @@ To obtain reproducible results, one can use the <code>initsfunction()</code> fun
                  &quot;base::Wichmann-Hill&quot;)[chain]
   return(list(.RNG.seed=.RNG.seed,
               .RNG.name=.RNG.name))</code></pre>
-<p>Alternatively, one can specify the initial values by means of a function – this will be implemented when multiple chains are discussed. If no initial values are specified, then JAGS will select initial values – these are usually a ``typical&quot; value such as a mean or median from the prior distribution.</p>
+<p>Alternatively, one can specify the initial values by means of a function – this will be implemented when multiple chains are discussed. If no initial values are specified, then JAGS will select initial values – these are usually a ``typical" value such as a mean or median from the prior distribution.</p>
 <p><strong>Generate samples from the posterior distribution</strong></p>
 <p>Now that the model definition and data have been defined, one is ready to draw samples from the posterior distribution. The <code>runjags</code> provides the R interface to the use of the JAGS software. The <code>run.jags()</code> function sets up the Bayesian model defined in <code>modelString</code>. The input <code>n.chains = 1</code> indicates that one stream of simulated values will be generated. <code>adapt = 1000</code> says that 1000 simulated iterations are used in “adapt period” to prepare for MCMC, <code>burnin = 1000</code> indicates 5000 simulated iterations are used in a “burn-in” period where the iterations are approaching the main probability region of the posterior distribution. The <code>sample = 5000</code> arguments indicates that 5000 additional iterations of the MCMC algorithm will be collected. The <code>monitor</code> arguments says that we are collecting simulated values of the mean <code>mu</code> and the standard deviation <code>sigma</code>. The output variable <code>posterior</code> includes a matrix of the simulated draws. The <code>inits = initsfunction</code> argument indicates that initial parameter values are chosen by the <code>initsfunction()</code> function.</p>
 <pre><code>posterior &lt;- run.jags(modelString,
@@ -1141,7 +1143,7 @@ Figure 9.15: Diagnostic plots of simulated draws of standard deviation using the
 </div>
 <p>The trace and autocorrelation plots in the top left and bottom right sections of the display are helpful for seeing how the sampler moves across the posterior distribution.
 In Figures 9.14 and 9.15, the trace plots show little autocorrelation in the streams of simulated draws and both simulated samples of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> appear to mix well. In the autocorrelation plots, the value of the autocorrelation drops sharply to zero as a function of the lag which confirms that we have modest autocorrelation in these samples. In each display, the bottom left graph is a histogram of the simulated draws and the top right graph is an estimate at the cumulative distribution function of the variable.</p>
-<p>Since we are encouraged by these diagnostic graphs, we go ahead and obtain summaries of the simulated samples of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> by the <code>print()</code> function on our MCMC object. The posterior mean of <span class="math inline">\(\mu\)</span> is 16.5. The standard error of this simulation estimate is the ``MCerr&quot; value of 0.0486 – this standard error takes in account the correlated nature of these simulated draws. A 90% probability interval for the mean <span class="math inline">\(\mu\)</span> is found from the output to be (10.8, 21.4). For <span class="math inline">\(\sigma\)</span>, it has a posterior mean of 17.4, and a 90% probability interval (11.8, 24).</p>
+<p>Since we are encouraged by these diagnostic graphs, we go ahead and obtain summaries of the simulated samples of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> by the <code>print()</code> function on our MCMC object. The posterior mean of <span class="math inline">\(\mu\)</span> is 16.5. The standard error of this simulation estimate is the ``MCerr" value of 0.0486 – this standard error takes in account the correlated nature of these simulated draws. A 90% probability interval for the mean <span class="math inline">\(\mu\)</span> is found from the output to be (10.8, 21.4). For <span class="math inline">\(\sigma\)</span>, it has a posterior mean of 17.4, and a 90% probability interval (11.8, 24).</p>
 <pre><code>print(posterior, digits = 3)
       Lower95 Median Upper95 Mean   SD Mode  MCerr 
 mu       10.8   16.5    21.4 16.5 2.68   -- 0.0486     
@@ -1263,7 +1265,7 @@ Figure 9.17: Histogram of the posterior predictive distribution of T(y) where T(
 </tr>
 </tbody>
 </table>
-<p>The probabilities <span class="math inline">\(p_M\)</span> and <span class="math inline">\(p_F\)</span> are displayed in Table 9.2. In this type of data structure, one is interested in the association between gender and Facebook visits. Define the odds as the ratio of the probability of “high” to the probability of “low”. The odds of “high” for the men and odds of ’high&quot; for the women are defined by
+<p>The probabilities <span class="math inline">\(p_M\)</span> and <span class="math inline">\(p_F\)</span> are displayed in Table 9.2. In this type of data structure, one is interested in the association between gender and Facebook visits. Define the odds as the ratio of the probability of “high” to the probability of “low”. The odds of “high” for the men and odds of ’high" for the women are defined by
 <span class="math display" id="eq:oddsM">\[\begin{equation}
 \frac{p_M}{1 - p_M},
 \tag{9.30}

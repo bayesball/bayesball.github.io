@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 12 Bayesian Multiple Regression and Logistic Models | Probability and Bayesian Modeling</title>
   <meta name="description" content="This is an introduction to probability and Bayesian modeling at the undergraduate level. It assumes the student has some background with calculus." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 12 Bayesian Multiple Regression and Logistic Models | Probability and Bayesian Modeling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-01-24" />
+<meta name="date" content="2020-03-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -175,7 +175,7 @@
 <li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#Normal:Discrete:Roger"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
 <li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
 </ul></li>
@@ -329,7 +329,7 @@ In addition, it assumes that the mean of <span class="math inline">\(Y_i\)</span
 \tag{12.2}
 \end{equation}\]</span>
 where <span class="math inline">\(\mathbf{x}_i = (x_{i,1}, x_{i,2}, \cdots, x_{i,r})\)</span> is a vector of <span class="math inline">\(r\)</span> known predictors for observation <span class="math inline">\(i\)</span>, and <span class="math inline">\(\mathbf{\beta} = (\beta_0, \beta_1, \cdots, \beta_r)\)</span> is a vector of unknown regression parameters (coefficients), shared among all observations.</p>
-<p>For studies where all <span class="math inline">\(r\)</span> predictors are continuous, one interprets the intercept parameter <span class="math inline">\(\beta_0\)</span> as the expected response <span class="math inline">\(\mu_i\)</span> for observation <span class="math inline">\(i\)</span>, where all of its predictors take values of 0 (i.e. <span class="math inline">\(x_{i,1} = x_{i,2} = \cdots = x_{i,r} = 0\)</span>). One can also interpret the slope parameter <span class="math inline">\(\beta_i\)</span> (<span class="math inline">\(j = 1, 2, \cdots, r\)</span>) as the change in the expected response <span class="math inline">\(\mu_i\)</span>, when the <span class="math inline">\(j\)</span>-th predictor, <span class="math inline">\(x_{i,j}\)</span>, of observation <span class="math inline">\(i\)</span> increases by a single unit while all remaining <span class="math inline">\((r-1)\)</span> predictors stay constant.</p>
+<p>For studies where all <span class="math inline">\(r\)</span> predictors are continuous, one interprets the intercept parameter <span class="math inline">\(\beta_0\)</span> as the expected response <span class="math inline">\(\mu_i\)</span> for observation <span class="math inline">\(i\)</span>, where all of its predictors take values of 0 (i.e. <span class="math inline">\(x_{i,1} = x_{i,2} = \cdots = x_{i,r} = 0\)</span>). One can also interpret the slope parameter <span class="math inline">\(\beta_i\)</span> (<span class="math inline">\(j = 1, 2, \cdots, r\)</span>) as the change in the expected response <span class="math inline">\(\mu_i\)</span>, when the <span class="math inline">\(j\)</span>-th predictor, <span class="math inline">\(x_{i,j}\)</span>, of observation <span class="math inline">\(i\)</span> increases by a single unit while all remaining <span class="math inline">\((r-1)\)</span> predictors stay constant.</p>
 <p>However in the household expenditures example from the CE data sample, not all predictors are continuous. The urban/rural status variable is a binary categorical variable, taking a value of 1 if the CU is in an urban area, and taking value of 2 if the CU is in a rural area.
 It is possible to consider the variable as continuous and interpret the associated regression coefficient as the change in the expected response <span class="math inline">\(\mu_i\)</span> when the CU’s urban/rural status changes by one unit from urban to rural (corresponding to change from one to two). But it is much more common to consider this variable as a binary categorical variable that classifies the observations into two distinct groups: the urban group and the rural group. It will be seen that this classification puts an emphasis on the difference of the expected responses between the two distinct groups.</p>
 <p>Consequently, consider the construction of a new indicator variable in place of the binary variable. This new indicator variable takes a value of 0 if the CU is in an urban area, and a value of 1 if the CU is in a rural area. To understand the implication of this indictor variable, it is helpful to consider a simplified regression model with a single predictor, the binary indicator for rural area <span class="math inline">\(x_i\)</span>. This simple linear regression model expresses the linear relationship as
@@ -351,7 +351,7 @@ Figure 12.1 displays scatterplots of log income and log expenditure where the tw
 Figure 12.1: Scatterplot of log total income and log total expenditure for the urban and rural groups.
 </p>
 </div>
-<p>Now the the data transformations are completed, one is ready to set up a multiple linear regression model for the log expenditure response including one continuous predictor and one binary categorical predictor. The expected response <span class="math inline">\(\mu_i\)</span> is expressed as a linear combination of the log income variable and the rural indicator variable.
+<p>Now that the data transformations are completed, one is ready to set up a multiple linear regression model for the log expenditure response including one continuous predictor and one binary categorical predictor. The expected response <span class="math inline">\(\mu_i\)</span> is expressed as a linear combination of the log income variable and the rural indicator variable.
 <span class="math display" id="eq:normalsampling">\[\begin{eqnarray}
 \mu_i = \beta_0 &amp;+&amp; \beta_1 x_{i, income} + \beta_2 x_{i, rural}.
 \tag{12.1}
@@ -409,7 +409,7 @@ the_data &lt;- list(&quot;y&quot; = y, &quot;x_income&quot; = x_income,
                  &quot;mu2&quot; = 0, &quot;g2&quot; = 0.0025,
                  &quot;a&quot; = 0.001, &quot;b&quot; = 0.001)</code></pre>
 <p><strong>Generate samples from the posterior distribution</strong></p>
-<p>The <code>run.jags()</code> function in the <code>runjags</code> package generates posterior samples by the MCMC algorithm using the JAGS software. The script below runs one MCMC chain with an adaption period of 1000 iterations, a burn-in period of 5000 iterations, and an additional set of 20,000 iterations to be run and collected for inference. By using the argument <code>monitor = c(&quot;beta0&quot;, &quot;beta1&quot;, &quot;beta2&quot;, &quot;sigma&quot;)</code>, one keeps tracks of all four model parameters. The output variable <code>posterior</code> contains a matrix of simulated draws.</p>
+<p>The <code>run.jags()</code> function in the <code>runjags</code> package generates posterior samples by the MCMC algorithm using the JAGS software. The script below runs one MCMC chain with an adaption period of 1000 iterations, a burn-in period of 5000 iterations, and an additional set of 20,000 iterations to be run and collected for inference. By using the argument <code>monitor = c("beta0", "beta1", "beta2", "sigma")</code>, one keeps tracks of all four model parameters. The output variable <code>posterior</code> contains a matrix of simulated draws.</p>
 <pre><code>posterior &lt;- run.jags(modelString,
                       n.chains = 1,
                       data = the_data,
@@ -505,7 +505,7 @@ Figure 12.5: Predictive distributions of the log expenditure for units with diff
 Figure 12.6: Scatterplot of age and home run rate for Mike Schmidt. Fits from linear, quadratic, and cubic models are overlaid.
 </p>
 </div>
-<p>Model 1 says that Schmidt’s true home run performance is a linear function of his age, Model 2 says that his home run performance follows a parabolic shape, and Model 3 indicates that his performance follows a cubic curve. Based on the earlier comments about the knowledge of shapes of career trajectories, the linear function of age given in Model 1 does not appear suitable in reflecting the ``down, up, down&quot; trend that we see in the scatterplot. The fits of Models 2 and 3 appear to be similar in appearance, but there are differences in the interpretation of the fits. The quadratic fit (Model 2) indicates that Schmidt’s peak performance occurs about the age of 30 while the cubic fit (Model 3) indicates that his peak performance occurs around the age of 33. How can we choose between the two models?</p>
+<p>Model 1 says that Schmidt’s true home run performance is a linear function of his age, Model 2 says that his home run performance follows a parabolic shape, and Model 3 indicates that his performance follows a cubic curve. Based on the earlier comments about the knowledge of shapes of career trajectories, the linear function of age given in Model 1 does not appear suitable in reflecting the ``down, up, down" trend that we see in the scatterplot. The fits of Models 2 and 3 appear to be similar in appearance, but there are differences in the interpretation of the fits. The quadratic fit (Model 2) indicates that Schmidt’s peak performance occurs about the age of 30 while the cubic fit (Model 3) indicates that his peak performance occurs around the age of 33. How can we choose between the two models?</p>
 <p><strong>Underfitting and overfitting</strong></p>
 <p>In model building, there are two ways of misspecifying a model that we call “underfitting” and “overfitting” that is described in the context of this career trajectory example. First, it is important that the model includes all inputs is helpful in explaining the variation in the response variable. Failure to include relevant inputs in the model will result in underfitting. In our example, age is the predictor variable and the possible inputs are age, age<span class="math inline">\(^2\)</span>, and age<span class="math inline">\(^3\)</span>. If we use Model 1 which includes only the input age, this particular model appears to underfit the data since this model does not reflect the increasing and decreasing pattern in the home run rates that we see in Figure 12.6.</p>
 <p>At the other extreme, one should be careful not to include too many inputs in the model. When one includes more inputs in our regression model than needed, one has overfitting. Model 3 possibly overfits the data, since it may not be necessary to represent a player’s trajectory by a cubic curve – perhaps a quadratic curve is sufficient. In an extreme situation, by increasing the degree of the polynomial function of age, one can find a fitted curve that goes through most of the points in the scatterplot. This would be a severe case of overfitting since it is unlikely that a player’s true career trajectory is represented by a polynomial of a high degree.</p>
@@ -563,7 +563,7 @@ Mean deviance:  -88.98
 penalty 4.817 
 Penalized deviance: -84.17</code></pre>
 <p>The value of DIC = <span class="math inline">\(-84.17\)</span> for this single quadratic regression model is not meaningful, but one compares values of DIC for
-competing models. Suppose one wishes to compare models <span class="math inline">\(M_1, M_2, M_3\)</span> and a quartic regression where one represents the home run rate as a polynomial of fourth degree of the age. For each model, a JAGS script is written where the regression coefficients and the precision parameter are assigned weakly informative priors. The <code>run.jags()</code> function is applied to produce a posterior sample and the <code>extract.runjags()</code> with the <code>dic</code> argument to extract the value of DIC. Table 12.2 displays the values of DIC for the four regression models. The ``best&quot; model is the model with the smallest value of DIC. Looking at the values in Table 12.2, one sees that the quadratic model has the smallest value of <span class="math inline">\(-84.2\)</span>. The interpretation is that the quartic model is best in the sense that it will provide the best out-of-sample predictions.</p>
+competing models. Suppose one wishes to compare models <span class="math inline">\(M_1, M_2, M_3\)</span> and a quartic regression where one represents the home run rate as a polynomial of fourth degree of the age. For each model, a JAGS script is written where the regression coefficients and the precision parameter are assigned weakly informative priors. The <code>run.jags()</code> function is applied to produce a posterior sample and the <code>extract.runjags()</code> with the <code>dic</code> argument to extract the value of DIC. Table 12.2 displays the values of DIC for the four regression models. The ``best" model is the model with the smallest value of DIC. Looking at the values in Table 12.2, one sees that the quadratic model has the smallest value of <span class="math inline">\(-84.2\)</span>. The interpretation is that the quartic model is best in the sense that it will provide the best out-of-sample predictions.</p>
 <p>Table 12.2. DIC values for four regression models fit to Mike Schmidt’s home run rates.</p>
 <table>
 <thead>
@@ -657,7 +657,7 @@ The logistic regression model writes that the logit of the probability <span cla
 \tag{12.10}
 \end{equation}\]</span></p>
 <p>It is more challenging to interpret the regression coefficients in a logistic model.
-In simple linear regression with one predictor, the interpretation of the intercept and the slope is relatively straightforward, as the linear function is directly assigned to the mean <span class="math inline">\(\mu_i\)</span>. With the logit function as in Equation (12.12), one sees the the regression coefficients <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are directly related to the log odds <span class="math inline">\(\textrm{log}\left(\frac{p_i}{1 - p_i}\right)\)</span> instead of <span class="math inline">\(p_i\)</span>.</p>
+In simple linear regression with one predictor, the interpretation of the intercept and the slope is relatively straightforward, as the linear function is directly assigned to the mean <span class="math inline">\(\mu_i\)</span>. With the logit function as in Equation (12.12), one sees that the regression coefficients <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are directly related to the log odds <span class="math inline">\(\textrm{log}\left(\frac{p_i}{1 - p_i}\right)\)</span> instead of <span class="math inline">\(p_i\)</span>.</p>
 <p>For example, the intercept <span class="math inline">\(\beta_0\)</span> is the log odds <span class="math inline">\(\textrm{log}\left(\frac{p_i}{1 - p_i}\right)\)</span> for observation <span class="math inline">\(i\)</span> when the predictor takes a value of 0. In the PSID example, it refers to the log odds of labor participation of a married woman, whose family has 0 family income exclusive of her income.</p>
 <p>The slope <span class="math inline">\(\beta_1\)</span> refers to the change in the expected log odds of labor participation of a married woman who has an additional $1000 family income exclusive of her own income.</p>
 <p>By rearranging the logistic regression Equation (12.12), one expresses the regression as a nonlinear equation for the probability of success <span class="math inline">\(p_i\)</span>:
@@ -757,7 +757,7 @@ the_data &lt;- list(&quot;y&quot; = y, &quot;x&quot; = x, &quot;N&quot; = N,
                  &quot;x1&quot; = 20, &quot;x2&quot; = 80)</code></pre>
 <p><strong>Generate samples from the posterior distribution</strong></p>
 <p>The <code>run.jags()</code> function in the <code>runjags</code> package generates posterior samples by the MCMC algorithm using the JAGS software. The script below runs one MCMC chain with an adaption period of 1000 iterations, a burn-in period of 5000 iterations, and an additional set of 5000 iterations to be simulated.
-By using the argument <code>monitor = c(&quot;beta0&quot;, &quot;beta1&quot;)</code>, one keeps tracks of the two regression coefficient parameters. The output variable ```posterior} contains a matrix of simulated draws.</p>
+By using the argument <code>monitor = c("beta0", "beta1")</code>, one keeps tracks of the two regression coefficient parameters. The output variable ```posterior} contains a matrix of simulated draws.</p>
 <pre><code>posterior &lt;- run.jags(modelString,
                       n.chains = 1,
                       data = the_data,

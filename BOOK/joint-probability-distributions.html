@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 6 Joint Probability Distributions | Probability and Bayesian Modeling</title>
   <meta name="description" content="This is an introduction to probability and Bayesian modeling at the undergraduate level. It assumes the student has some background with calculus." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 6 Joint Probability Distributions | Probability and Bayesian Modeling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-01-22" />
+<meta name="date" content="2020-03-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,9 +53,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +64,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +82,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -237,7 +239,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#Normal:Discrete:Roger"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
 <li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
 </ul></li>
@@ -333,7 +335,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <p>In Chapters 4 and 5, the focus was on probability distributions for a single random variable.
 For example, in Chapter 4, the number of successes in a Binomial experiment was explored and in Chapter 5, several popular distributions for a continuous random variable were considered. In addition, in introducing the Central Limit Theorem, the approximate distribution of a sample mean <span class="math inline">\(\bar X\)</span> was described when a sample of independent observations <span class="math inline">\(X_1, ..., X_n\)</span> is taken from a common distribution.</p>
-<p>In this chapter, examples of the general situation will be described where several random variables, e.g. <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, are observed. The joint probability mass function (discrete case) or the joint density (continuous case) are used to compute probabilities involving <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</p>
+<p>In this chapter, examples of the general situation will be described where several random variables, e.g. <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>, are observed. The joint probability mass function (discrete case) or the joint density (continuous case) are used to compute probabilities involving <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</p>
 <div id="joint-probability-mass-function-sampling-from-a-box" class="section level2">
 <h2><span class="header-section-number">6.1</span> Joint Probability Mass Function: Sampling From a Box</h2>
 <p>To begin the discussion of two random variables, we start with a familiar example. Suppose one has a box of ten balls – four are white, three are red, and three are black. One selects five balls out of the box without replacement and counts the number of white and red balls in the sample. What is the probability one observes two white and two red balls in the sample?</p>
@@ -429,25 +431,25 @@ P(X &gt; Y) &amp; = f(1, 0) + f(2, 0) + f(2, 1) + f(3, 0) + f(3, 1) + f(3, 2) \\
 
 <p><strong>Simulating sampling from a box</strong></p>
 <p>The variable  is a vector containing the colors of the ten balls in the box. The function  simulates drawing five balls from the box and computing the number of red balls and number of white balls.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">box &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;white&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;white&quot;</span>,</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">         <span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, </a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">         <span class="st">&quot;black&quot;</span>, <span class="st">&quot;black&quot;</span>, <span class="st">&quot;black&quot;</span>)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">one_rep &lt;-<span class="st"> </span><span class="cf">function</span>(){</a>
-<a class="sourceLine" id="cb1-5" data-line-number="5">  balls &lt;-<span class="st"> </span><span class="kw">sample</span>(box, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb1-6" data-line-number="6">  X &lt;-<span class="st"> </span><span class="kw">sum</span>(balls <span class="op">==</span><span class="st"> &quot;red&quot;</span>)</a>
-<a class="sourceLine" id="cb1-7" data-line-number="7">  Y &lt;-<span class="st"> </span><span class="kw">sum</span>(balls <span class="op">==</span><span class="st"> &quot;white&quot;</span>)</a>
-<a class="sourceLine" id="cb1-8" data-line-number="8">  <span class="kw">c</span>(X, Y)</a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">}</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="joint-probability-distributions.html#cb1-1"></a>box &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;white&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;white&quot;</span>, <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb1-2"><a href="joint-probability-distributions.html#cb1-2"></a>         <span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, <span class="st">&quot;red&quot;</span>, </span>
+<span id="cb1-3"><a href="joint-probability-distributions.html#cb1-3"></a>         <span class="st">&quot;black&quot;</span>, <span class="st">&quot;black&quot;</span>, <span class="st">&quot;black&quot;</span>)</span>
+<span id="cb1-4"><a href="joint-probability-distributions.html#cb1-4"></a>one_rep &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb1-5"><a href="joint-probability-distributions.html#cb1-5"></a>  balls &lt;-<span class="st"> </span><span class="kw">sample</span>(box, <span class="dt">size =</span> <span class="dv">5</span>, <span class="dt">replace =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb1-6"><a href="joint-probability-distributions.html#cb1-6"></a>  X &lt;-<span class="st"> </span><span class="kw">sum</span>(balls <span class="op">==</span><span class="st"> &quot;red&quot;</span>)</span>
+<span id="cb1-7"><a href="joint-probability-distributions.html#cb1-7"></a>  Y &lt;-<span class="st"> </span><span class="kw">sum</span>(balls <span class="op">==</span><span class="st"> &quot;white&quot;</span>)</span>
+<span id="cb1-8"><a href="joint-probability-distributions.html#cb1-8"></a>  <span class="kw">c</span>(X, Y)</span>
+<span id="cb1-9"><a href="joint-probability-distributions.html#cb1-9"></a>}</span></code></pre></div>
 <p>Using the <code>replicate()</code> function, one simulates this sampling process 1000 times, storing the outcomes in the data frame <code>results</code> with variable names <code>X</code> and <code>Y</code>. Using the <code>table()</code> function, one classifies all outcomes with respect to the two variables. By dividing the observed counts by the number of simulations, one obtains approximate probabilities similar to the exact probabilities shown in Table 6.1.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">one_rep</span>())))</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">names</span>(results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="kw">table</span>(results<span class="op">$</span>X, results<span class="op">$</span>Y) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="joint-probability-distributions.html#cb2-1"></a>results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">replicate</span>(<span class="dv">1000</span>, <span class="kw">one_rep</span>())))</span>
+<span id="cb2-2"><a href="joint-probability-distributions.html#cb2-2"></a><span class="kw">names</span>(results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)</span>
+<span id="cb2-3"><a href="joint-probability-distributions.html#cb2-3"></a><span class="kw">table</span>(results<span class="op">$</span>X, results<span class="op">$</span>Y) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></span></code></pre></div>
 <pre><code>##    
 ##         0     1     2     3     4
-##   0 0.000 0.000 0.028 0.041 0.006
-##   1 0.000 0.047 0.215 0.153 0.009
-##   2 0.011 0.135 0.208 0.046 0.000
-##   3 0.022 0.061 0.018 0.000 0.000</code></pre>
+##   0 0.000 0.000 0.018 0.047 0.006
+##   1 0.000 0.053 0.222 0.153 0.014
+##   2 0.012 0.157 0.210 0.035 0.000
+##   3 0.004 0.042 0.027 0.000 0.000</code></pre>
 <p><strong>Marginal probability functions</strong></p>
 <p>Once a joint probability mass function for <span class="math inline">\((X, Y)\)</span> has been constructed, one finds probabilities for one of the two variables. In our balls example, suppose one wants to find the probability that exactly three red balls are chosen, that is <span class="math inline">\(P(X = 3)\)</span>. This probability is found by summing values of the pmf <span class="math inline">\(f(x, y)\)</span> where <span class="math inline">\(x = 3\)</span> and <span class="math inline">\(y\)</span> can be any possible value of the random variable <span class="math inline">\(Y\)</span>, that is,
 <span class="math display">\[\begin{align*}
@@ -581,7 +583,7 @@ For example, the probability of observing two white balls given that we have two
  &amp; = f_{Y \mid X}(2 \mid X = 2) + f_{Y \mid X}(3 \mid X = 2) \\
  &amp; = \frac{54}{105} + \frac{12}{105} = \frac{66}{105}.
  \end{align*}\]</span></p>
-<p>In general, the conditional probability mass function of <span class="math inline">\(Y\)</span> conditional on <span class="math inline">\(X = x\)</span>, denoted by <span class="math inline">\(f_{Y\ mid X}(y \mid x)\)</span>, is defined to be
+<p>In general, the conditional probability mass function of <span class="math inline">\(Y\)</span> conditional on <span class="math inline">\(X = x\)</span>, denoted by <span class="math inline">\(f_{Y\mid X}(y \mid x)\)</span>, is defined to be
 <span class="math display" id="eq:dconditional">\[\begin{equation}
  f_{Y \mid X}(y \mid x)  = \frac{f(x, y)}{f_X(x)}, \, \, {\rm if} \, \, f_X(x) &gt; 0.
  \tag{6.3}
@@ -589,19 +591,19 @@ For example, the probability of observing two white balls given that we have two
 <p></p>
 <p><strong>Simulating sampling from a box</strong></p>
 <p>Recall that the data frame <code>results</code> contains the simulated outcomes for 1000 selections of balls from the box. By filtering on the value <code>X = 2</code> and tabulating the values of <code>Y</code>, one is simulating from the conditional pmf of <span class="math inline">\(Y\)</span> conditional on <span class="math inline">\(X = 2\)</span>. Note that the relative frequencies displayed below are approximately equal to the exact probabilities shown in Table 6.2.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">results <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="st">  </span><span class="kw">filter</span>(X <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="st">  </span><span class="kw">group_by</span>(Y) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">N =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">P =</span> N <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(N))</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="joint-probability-distributions.html#cb4-1"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb4-2"><a href="joint-probability-distributions.html#cb4-2"></a>results <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-3"><a href="joint-probability-distributions.html#cb4-3"></a><span class="st">  </span><span class="kw">filter</span>(X <span class="op">==</span><span class="st"> </span><span class="dv">2</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-4"><a href="joint-probability-distributions.html#cb4-4"></a><span class="st">  </span><span class="kw">group_by</span>(Y) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-5"><a href="joint-probability-distributions.html#cb4-5"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">N =</span> <span class="kw">n</span>()) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-6"><a href="joint-probability-distributions.html#cb4-6"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">P =</span> N <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(N))</span></code></pre></div>
 <pre><code>## # A tibble: 4 x 3
 ##       Y     N      P
 ##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
-## 1     0    11 0.0275
-## 2     1   135 0.338 
-## 3     2   208 0.52  
-## 4     3    46 0.115</code></pre>
+## 1     0    12 0.0290
+## 2     1   157 0.379 
+## 3     2   210 0.507 
+## 4     3    35 0.0845</code></pre>
 </div>
 <div id="multinomial-experiments" class="section level2">
 <h2><span class="header-section-number">6.2</span> Multinomial Experiments</h2>
@@ -617,15 +619,15 @@ f(x_1, ..., x_k) = \left(\frac{n!}{n_1! ... n_k!}\right) \prod_{j=1}^k p_j^{x_j}
 \tag{6.4}
 \end{equation}\]</span>
 where <span class="math inline">\(x_j = 0, 1, 2, ..., j = 1, ... k\)</span> and <span class="math inline">\(\sum_{j=1}^n x_j = n\)</span>.</p>
-<p>This formula can be used to compute a probability for our example. One has <span class="math inline">\(n = 10\)</span> trials and the outcome ``three 1’s and five 2’s&quot; is equivalent to the outcome <span class="math inline">\(X_1 = 3, X_2 = 5\)</span>. Note that the number of 3s <span class="math inline">\(X_3\)</span> is not random since we know that <span class="math inline">\(X_1 + X_2 + X_3 = 10\)</span>. The probability vector is <span class="math inline">\(p = (1/6, 2/6, 3/6)\)</span>. By substituting in the formula, we have
+<p>This formula can be used to compute a probability for our example. One has <span class="math inline">\(n = 10\)</span> trials and the outcome ``three 1’s and five 2’s" is equivalent to the outcome <span class="math inline">\(X_1 = 3, X_2 = 5\)</span>. Note that the number of 3s <span class="math inline">\(X_3\)</span> is not random since we know that <span class="math inline">\(X_1 + X_2 + X_3 = 10\)</span>. The probability vector is <span class="math inline">\(p = (1/6, 2/6, 3/6)\)</span>. By substituting in the formula, we have
 <span class="math display">\[
  P(X_1 = 3, X_2 = 5, X_3 = 2) = \left(\frac{10!}{3! \, 5! \, 2!}\right) \left(\frac{1}{6}\right)^3
  \left(\frac{2}{6}\right)^5 \left(\frac{3}{6}\right)^2.
  \]</span></p>
 <p></p>
 <p>By use of the <code>factorial()</code> function in R, we compute this probability to be 0.012.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">factorial</span>(<span class="dv">10</span>) <span class="op">/</span><span class="st"> </span>(<span class="kw">factorial</span>(<span class="dv">3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">factorial</span>(<span class="dv">5</span>) <span class="op">*</span><span class="st"> </span><span class="kw">factorial</span>(<span class="dv">2</span>)) <span class="op">*</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="st">   </span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>) <span class="op">^</span><span class="st"> </span><span class="dv">3</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>) <span class="op">^</span><span class="st"> </span><span class="dv">5</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>) <span class="op">^</span><span class="st"> </span><span class="dv">2</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="joint-probability-distributions.html#cb6-1"></a><span class="kw">factorial</span>(<span class="dv">10</span>) <span class="op">/</span><span class="st"> </span>(<span class="kw">factorial</span>(<span class="dv">3</span>) <span class="op">*</span><span class="st"> </span><span class="kw">factorial</span>(<span class="dv">5</span>) <span class="op">*</span><span class="st"> </span><span class="kw">factorial</span>(<span class="dv">2</span>)) <span class="op">*</span></span>
+<span id="cb6-2"><a href="joint-probability-distributions.html#cb6-2"></a><span class="st">   </span>(<span class="dv">1</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>) <span class="op">^</span><span class="st"> </span><span class="dv">3</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">2</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>) <span class="op">^</span><span class="st"> </span><span class="dv">5</span> <span class="op">*</span><span class="st"> </span>(<span class="dv">3</span> <span class="op">/</span><span class="st"> </span><span class="dv">6</span>) <span class="op">^</span><span class="st"> </span><span class="dv">2</span></span></code></pre></div>
 <pre><code>## [1] 0.01200274</code></pre>
 <p>Other probabilities can be found by summing the joint Multinomial pmf over sets of interest. For example, suppose one is interested in computing the probability that the number of 1s exceeds the number of 2’s in our ten dice rolls. One is interested in the probability <span class="math inline">\(P(X_1 &gt; X_2)\)</span> which is given by
 <span class="math display">\[
@@ -663,37 +665,37 @@ The results of the remaining <span class="math inline">\(10 - 3 = 7\)</span> tri
 <p></p>
 <p><strong>Simulating Multinomial experiments</strong></p>
 <p>The function <code>sim_die_rolls()</code> will simulate 10 rolls of the special weighted die. The <code>sample()</code> function draws values of 1, 2, 3 with replacement where the respective probabilities are 1/6, 2/6, and 3/6. The output are values of <span class="math inline">\(X_1\)</span>, <span class="math inline">\(X_2\)</span> and <span class="math inline">\(X_3\)</span>.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">sim_die_rolls &lt;-<span class="st"> </span><span class="cf">function</span>(){</a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">        rolls &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">10</span>,</a>
-<a class="sourceLine" id="cb8-3" data-line-number="3">                        <span class="dt">replace =</span> <span class="ot">TRUE</span>,</a>
-<a class="sourceLine" id="cb8-4" data-line-number="4">                        <span class="dt">prob =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="op">/</span><span class="st"> </span><span class="dv">6</span>)</a>
-<a class="sourceLine" id="cb8-5" data-line-number="5">        <span class="kw">c</span>(<span class="kw">sum</span>(rolls <span class="op">==</span><span class="st"> </span><span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb8-6" data-line-number="6">          <span class="kw">sum</span>(rolls <span class="op">==</span><span class="st"> </span><span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb8-7" data-line-number="7">          <span class="kw">sum</span>(rolls <span class="op">==</span><span class="st"> </span><span class="dv">3</span>))</a>
-<a class="sourceLine" id="cb8-8" data-line-number="8">}</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="joint-probability-distributions.html#cb8-1"></a>sim_die_rolls &lt;-<span class="st"> </span><span class="cf">function</span>(){</span>
+<span id="cb8-2"><a href="joint-probability-distributions.html#cb8-2"></a>        rolls &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">size =</span> <span class="dv">10</span>,</span>
+<span id="cb8-3"><a href="joint-probability-distributions.html#cb8-3"></a>                        <span class="dt">replace =</span> <span class="ot">TRUE</span>,</span>
+<span id="cb8-4"><a href="joint-probability-distributions.html#cb8-4"></a>                        <span class="dt">prob =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="op">/</span><span class="st"> </span><span class="dv">6</span>)</span>
+<span id="cb8-5"><a href="joint-probability-distributions.html#cb8-5"></a>        <span class="kw">c</span>(<span class="kw">sum</span>(rolls <span class="op">==</span><span class="st"> </span><span class="dv">1</span>),</span>
+<span id="cb8-6"><a href="joint-probability-distributions.html#cb8-6"></a>          <span class="kw">sum</span>(rolls <span class="op">==</span><span class="st"> </span><span class="dv">2</span>),</span>
+<span id="cb8-7"><a href="joint-probability-distributions.html#cb8-7"></a>          <span class="kw">sum</span>(rolls <span class="op">==</span><span class="st"> </span><span class="dv">3</span>))</span>
+<span id="cb8-8"><a href="joint-probability-distributions.html#cb8-8"></a>}</span></code></pre></div>
 <p>Using the <code>replicate()</code> function, one simulates the Multinomial experiment for 5000 iterations. The outcomes are placed in a data frame with variable names <code>X1</code>, <code>X2</code> and <code>X3</code>.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">replicate</span>(<span class="dv">5000</span>,</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2">                                <span class="kw">sim_die_rolls</span>())))</a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="kw">names</span>(results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;X3&quot;</span>)</a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="kw">head</span>(results)</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="joint-probability-distributions.html#cb9-1"></a>results &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">replicate</span>(<span class="dv">5000</span>,</span>
+<span id="cb9-2"><a href="joint-probability-distributions.html#cb9-2"></a>                                <span class="kw">sim_die_rolls</span>())))</span>
+<span id="cb9-3"><a href="joint-probability-distributions.html#cb9-3"></a><span class="kw">names</span>(results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;X3&quot;</span>)</span>
+<span id="cb9-4"><a href="joint-probability-distributions.html#cb9-4"></a><span class="kw">head</span>(results)</span></code></pre></div>
 <pre><code>##   X1 X2 X3
-## 1  3  4  3
-## 2  2  3  5
-## 3  1  3  6
-## 4  1  4  5
-## 5  2  3  5
-## 6  1  4  5</code></pre>
+## 1  4  1  5
+## 2  2  2  6
+## 3  1  5  4
+## 4  1  2  7
+## 5  2  1  7
+## 6  2  1  7</code></pre>
 <p>Given this simulated output, one can compute many different probabilities of interest. For example, suppose one is interested in <span class="math inline">\(P(X_1 + X_2 &lt; 5)\)</span>. One approximates this probability by simulation by finding the proportion of simulated pairs (<code>X1, X2</code>) where <code>X1 + X2 &lt; 5</code>.</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">results <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">P =</span> <span class="kw">sum</span>(X1 <span class="op">+</span><span class="st"> </span>X2 <span class="op">&lt;</span><span class="st"> </span><span class="dv">5</span>) <span class="op">/</span><span class="st"> </span><span class="dv">5000</span>)</a></code></pre></div>
-<pre><code>##        P
-## 1 0.3818</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="joint-probability-distributions.html#cb11-1"></a>results <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb11-2"><a href="joint-probability-distributions.html#cb11-2"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">P =</span> <span class="kw">sum</span>(X1 <span class="op">+</span><span class="st"> </span>X2 <span class="op">&lt;</span><span class="st"> </span><span class="dv">5</span>) <span class="op">/</span><span class="st"> </span><span class="dv">5000</span>)</span></code></pre></div>
+<pre><code>##       P
+## 1 0.376</code></pre>
 <p>Suppose one is interested in finding the mean of the distribution of <span class="math inline">\(X_1\)</span> conditional on <span class="math inline">\(X_2 = 3\)</span>. The <code>filter()</code> function is used to choose only the Multinomial results where <code>X2 = 3</code> and the <code>summarize()</code> function finds the mean of <code>X1</code> among these results. One estimates <span class="math inline">\(E(X_1 \mid X_2 = 3) \approx 1.79193.\)</span> Note that it was found earlier that the conditional distribution of <span class="math inline">\(X_1\)</span> conditional on <span class="math inline">\(X_2 = 3\)</span> is Binomial(<span class="math inline">\(7, 1/4\)</span>) with mean <span class="math inline">\(7 (1 /4)\)</span> which is consistent with the simulation-based calculation.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">results <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="st">  </span><span class="kw">filter</span>(X2 <span class="op">==</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">X1_M =</span> <span class="kw">mean</span>(X1))</a></code></pre></div>
-<pre><code>##     X1_M
-## 1 1.7793</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="joint-probability-distributions.html#cb13-1"></a>results <span class="op">%&gt;%</span></span>
+<span id="cb13-2"><a href="joint-probability-distributions.html#cb13-2"></a><span class="st">  </span><span class="kw">filter</span>(X2 <span class="op">==</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span></span>
+<span id="cb13-3"><a href="joint-probability-distributions.html#cb13-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">X1_M =</span> <span class="kw">mean</span>(X1))</span></code></pre></div>
+<pre><code>##       X1_M
+## 1 1.730294</code></pre>
 </div>
 <div id="joint-density-functions" class="section level2">
 <h2><span class="header-section-number">6.3</span> Joint Density Functions</h2>
@@ -728,7 +730,7 @@ f(x, y) \ge 0, \, \, {\rm for} \, {\rm all} \, \, x, y.
 \tag{6.6}
 \end{equation}\]</span></li>
 </ol>
-<p>One can check that the pdf in our example is indeed a legitimate pdf. It is pretty obvious that the density that was defined is nonnegative, but it is less clear that the integral of the density is equal to one. Since the density is a plane of constant height, one computes this double integral geometrically. Using the familiar ``one half base times height&quot; argument, the area of the triangle in the plane is <span class="math inline">\((1/2) (2) (2) = 2\)</span> and since the pdf has constant height of <span class="math inline">\(1/2\)</span>, the volume under the surface is equal to <span class="math inline">\(2 (1/2) =1\)</span>.</p>
+<p>One can check that the pdf in our example is indeed a legitimate pdf. It is pretty obvious that the density that was defined is nonnegative, but it is less clear that the integral of the density is equal to one. Since the density is a plane of constant height, one computes this double integral geometrically. Using the familiar ``one half base times height" argument, the area of the triangle in the plane is <span class="math inline">\((1/2) (2) (2) = 2\)</span> and since the pdf has constant height of <span class="math inline">\(1/2\)</span>, the volume under the surface is equal to <span class="math inline">\(2 (1/2) =1\)</span>.</p>
 <p>Probabilities about <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> are found by finding volumes under the pdf surface. For example, suppose one wants to find the probability that the sum of locations
 <span class="math inline">\(X + Y &gt; 3\)</span>, that is <span class="math inline">\(P(X + Y &gt; 3)\)</span>. The region in the <span class="math inline">\((x, y)\)</span> plane of interest is first identified, and then one finds the volume under the joint pdf over this region.</p>
 <div class="figure"><span id="fig:unnamed-chunk-10"></span>
@@ -801,7 +803,7 @@ Looking back at Figure 6.1, one sees that if <span class="math inline">\(Y = 0.8
  &amp; =  1.25, \, \, 0 &lt; x &lt; 0.8. \\
  \end{align*}\]</span>
 So if one knows that <span class="math inline">\(Y = 0.8\)</span>, then the conditional pdf for <span class="math inline">\(X\)</span> is Uniform on (0, 0.8).</p>
-<p>To find the ``expected&quot; value of <span class="math inline">\(X\)</span> knowing that <span class="math inline">\(Y = 0.8\)</span>, one finds the mean of this distribution.
+<p>To find the ``expected" value of <span class="math inline">\(X\)</span> knowing that <span class="math inline">\(Y = 0.8\)</span>, one finds the mean of this distribution.
 <span class="math display">\[\begin{align*}
  E(X \mid Y = 0.8) &amp; = \int_0^{0.8} x f_{X \mid Y}(x \mid 0.8) dx \\
  &amp; = \int_0^{0.8} x \,1.25 \, dx \\ \\
@@ -895,7 +897,7 @@ Figure 6.4: Beta(6, 6) density representing the distribution of probabilities of
 </p>
 </div>
 
-<p>One next flips this ``random&quot; coin 20 times.<br />
+<p>One next flips this ``random" coin 20 times.<br />
 Denote the outcome of this experiment by the random variable <span class="math inline">\(Y\)</span> which is equal to the count of heads. If we are given a value of the probability <span class="math inline">\(p\)</span>, then <span class="math inline">\(Y\)</span> has a Binomial distribution with <span class="math inline">\(n = 20\)</span> trials and success probability <span class="math inline">\(p\)</span>. This probability function is actually the conditional probability of observing <span class="math inline">\(y\)</span> heads given a value of the probability <span class="math inline">\(p\)</span>:
 <span class="math display">\[
  f(y \mid p) = {20 \choose y} p ^ y (1 - p) ^ {20 - y}, \, \, y = 0, 1, ..., 20.
@@ -908,11 +910,11 @@ Denote the outcome of this experiment by the random variable <span class="math i
 This is a mixed density in the sense that one variable (<span class="math inline">\(p\)</span>) is continuous and one (<span class="math inline">\(Y\)</span>) is discrete. This will not create any problems in the computation of marginal or conditional distributions, but one should be careful to understand the support of each random variable.</p>
 <p></p>
 <p><strong>Simulating from the Beta-Binomial Distribution</strong></p>
-<p>Using R it is straightforward to simulate a sample of <span class="math inline">\((p, y)\)</span> values from the Beta-Binomial distribution. Using the <code>rbeta()</code> function, one takes a random sample of 500 draws from the Beta(6, 6) distribution. Then for each probability value <span class="math inline">\(p\)</span>, one uses the <code>rbinom()</code> function to simulate the number of heads in 20 flips of this ``<span class="math inline">\(p\)</span> coin.&quot;</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">library</span>(ggplot2)</a>
-<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">data.frame</span>(<span class="dt">p =</span> <span class="kw">rbeta</span>(<span class="dv">500</span>, <span class="dv">6</span>, <span class="dv">6</span>)) <span class="op">%&gt;%</span><span class="st"> </span></a>
-<a class="sourceLine" id="cb15-3" data-line-number="3"><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Y =</span> <span class="kw">rbinom</span>(<span class="dv">500</span>, <span class="dt">size =</span> <span class="dv">20</span>, <span class="dt">prob =</span> p)) -&gt;<span class="st"> </span>df</a></code></pre></div>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(p, Y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_jitter</span>()</a></code></pre></div>
+<p>Using R it is straightforward to simulate a sample of <span class="math inline">\((p, y)\)</span> values from the Beta-Binomial distribution. Using the <code>rbeta()</code> function, one takes a random sample of 500 draws from the Beta(6, 6) distribution. Then for each probability value <span class="math inline">\(p\)</span>, one uses the <code>rbinom()</code> function to simulate the number of heads in 20 flips of this ``<span class="math inline">\(p\)</span> coin."</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="joint-probability-distributions.html#cb15-1"></a><span class="kw">library</span>(ggplot2)</span>
+<span id="cb15-2"><a href="joint-probability-distributions.html#cb15-2"></a><span class="kw">data.frame</span>(<span class="dt">p =</span> <span class="kw">rbeta</span>(<span class="dv">500</span>, <span class="dv">6</span>, <span class="dv">6</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb15-3"><a href="joint-probability-distributions.html#cb15-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">Y =</span> <span class="kw">rbinom</span>(<span class="dv">500</span>, <span class="dt">size =</span> <span class="dv">20</span>, <span class="dt">prob =</span> p)) -&gt;<span class="st"> </span>df</span></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="joint-probability-distributions.html#cb16-1"></a><span class="kw">ggplot</span>(df, <span class="kw">aes</span>(p, Y)) <span class="op">+</span><span class="st"> </span><span class="kw">geom_jitter</span>()</span></code></pre></div>
 <div class="figure"><span id="fig:unnamed-chunk-14"></span>
 <img src="bookdown-demo_files/figure-html/unnamed-chunk-14-1.png" alt="Scatterplot of 500 simulated draws from the joint density of the probability of heads $p$ and the number of heads $Y$ in 20 flips." width="672" />
 <p class="caption">
@@ -928,7 +930,7 @@ Figure 6.5: Scatterplot of 500 simulated draws from the joint density of the pro
  = &amp; {20 \choose y} \frac{B(y + 6, 26 - y)}{B(6, 6)}, \, \, y = 0, 1, 2, ..., 20.
  \end{align*}\]</span></p>
 <p>Using this formula with the substitution <span class="math inline">\(y = 10\)</span>, we use R to find the probability <span class="math inline">\(P(Y = 10)\)</span>.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">choose</span>(<span class="dv">20</span>, <span class="dv">10</span>) <span class="op">*</span><span class="st"> </span><span class="kw">beta</span>(<span class="dv">10</span> <span class="op">+</span><span class="st"> </span><span class="dv">6</span>, <span class="dv">26</span> <span class="op">-</span><span class="st"> </span><span class="dv">10</span>) <span class="op">/</span><span class="st">   </span><span class="kw">beta</span>(<span class="dv">6</span>, <span class="dv">6</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="joint-probability-distributions.html#cb17-1"></a><span class="kw">choose</span>(<span class="dv">20</span>, <span class="dv">10</span>) <span class="op">*</span><span class="st"> </span><span class="kw">beta</span>(<span class="dv">10</span> <span class="op">+</span><span class="st"> </span><span class="dv">6</span>, <span class="dv">26</span> <span class="op">-</span><span class="st"> </span><span class="dv">10</span>) <span class="op">/</span><span class="st">   </span><span class="kw">beta</span>(<span class="dv">6</span>, <span class="dv">6</span>)</span></code></pre></div>
 <pre><code>## [1] 0.1065048</code></pre>
 </div>
 <div id="bivariate-normal-distribution" class="section level2">
@@ -973,7 +975,7 @@ Similarly, if one knows that <span class="math inline">\(X = x\)</span>, then th
 <li><strong>Find the probability a student’s wrist diameter exceeds 20 cm.</strong></li>
 </ol>
 <p>Here one is interested in the probability <span class="math inline">\(P(X &gt; 20)\)</span>. From the facts above, the marginal density for <span class="math inline">\(X\)</span> will be Normal with mean <span class="math inline">\(\mu_X = 17\)</span> and standard deviation <span class="math inline">\(\sigma_X = 2\)</span>. So this probability is computed using the function <code>pnorm()</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">20</span>, <span class="dv">17</span>, <span class="dv">2</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="joint-probability-distributions.html#cb19-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">20</span>, <span class="dv">17</span>, <span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [1] 0.0668072</code></pre>
 <ol start="2" style="list-style-type: decimal">
 <li><strong>Suppose one is told that the student’s ankle diameter is 20 cm – find the conditional probability <span class="math inline">\(P(X &gt; 20 \mid Y = 20)\)</span>.</strong></li>
@@ -989,7 +991,7 @@ Similarly, if one knows that <span class="math inline">\(X = x\)</span>, then th
  &amp; =  \sqrt{2^2 (1 - 0.4^2)} \\ 
  &amp; = 1.83.
  \end{align*}\]</span></p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">20</span>, <span class="fl">16.2</span>, <span class="fl">1.83</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="joint-probability-distributions.html#cb21-1"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">20</span>, <span class="fl">16.2</span>, <span class="fl">1.83</span>)</span></code></pre></div>
 <pre><code>## [1] 0.01892374</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li><strong>Are <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> independent variables?</strong></li>
@@ -1000,19 +1002,19 @@ Similarly, if one knows that <span class="math inline">\(X = x\)</span>, then th
 </ol>
 <p><strong>Simulating Bivariate Normal measurements</strong></p>
 <p>The computation of the probability <span class="math inline">\(P(Y &gt; 1.5 X)\)</span> is not obvious from the information provided. But simulation provides an attractive method of computing this probability. One simulates a large number, say 1000, draws from the Bivariate Normal distribution and then finds the fraction of simulated <span class="math inline">\((x, y)\)</span> pairs where <span class="math inline">\(y &gt; 1.5 x\)</span>. Figure 6.7 displays a scatterplot of these simulated draws and the line <span class="math inline">\(y = 1.5 x\)</span>. The probability is estimated by the fraction of points that fall to the left of this line. In the R script below we use a function <code>sim_binorm()</code> to simulate 1000 draws from a Bivariate Normal distribution with inputted parameters <span class="math inline">\(\mu_X, \mu_Y, \sigma_X, \sigma_Y, \phi\)</span>. The bivariate normal parameters are set to the values in this example and using the function <code>sim_binorm()</code> the probability of interest is approximated by 0.242.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">sim_binorm &lt;-<span class="st"> </span><span class="cf">function</span>(mx, my, sx, sy, r){</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2">  <span class="kw">require</span>(ProbBayes)</a>
-<a class="sourceLine" id="cb23-3" data-line-number="3">  v &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(sx <span class="op">^</span><span class="st"> </span><span class="dv">2</span>, r <span class="op">*</span><span class="st"> </span>sx <span class="op">*</span><span class="st"> </span>sy, </a>
-<a class="sourceLine" id="cb23-4" data-line-number="4">                r <span class="op">*</span><span class="st"> </span>sx <span class="op">*</span><span class="st"> </span>sy, sy <span class="op">^</span><span class="st"> </span><span class="dv">2</span>),</a>
-<a class="sourceLine" id="cb23-5" data-line-number="5">                <span class="dv">2</span>, <span class="dv">2</span>)</a>
-<a class="sourceLine" id="cb23-6" data-line-number="6">  <span class="kw">as.data.frame</span>(<span class="kw">rmnorm</span>(<span class="dv">1000</span>, <span class="dt">mean =</span> <span class="kw">c</span>(mx, my), </a>
-<a class="sourceLine" id="cb23-7" data-line-number="7">                       <span class="dt">varcov =</span> v))}</a>
-<a class="sourceLine" id="cb23-8" data-line-number="8">mx &lt;-<span class="st"> </span><span class="dv">17</span>; my &lt;-<span class="st"> </span><span class="dv">23</span>; sx &lt;-<span class="st"> </span><span class="dv">2</span>; sy &lt;-<span class="st"> </span><span class="dv">3</span>; r &lt;-<span class="st"> </span><span class="fl">0.4</span></a>
-<a class="sourceLine" id="cb23-9" data-line-number="9">sdata &lt;-<span class="st"> </span><span class="kw">sim_binorm</span>(mx, my, sx, sy, r)</a>
-<a class="sourceLine" id="cb23-10" data-line-number="10"><span class="kw">names</span>(sdata) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)</a>
-<a class="sourceLine" id="cb23-11" data-line-number="11">sdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="kw">mean</span>(Y <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.5</span> <span class="op">*</span><span class="st"> </span>X))</a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="joint-probability-distributions.html#cb23-1"></a>sim_binorm &lt;-<span class="st"> </span><span class="cf">function</span>(mx, my, sx, sy, r){</span>
+<span id="cb23-2"><a href="joint-probability-distributions.html#cb23-2"></a>  <span class="kw">require</span>(ProbBayes)</span>
+<span id="cb23-3"><a href="joint-probability-distributions.html#cb23-3"></a>  v &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(sx <span class="op">^</span><span class="st"> </span><span class="dv">2</span>, r <span class="op">*</span><span class="st"> </span>sx <span class="op">*</span><span class="st"> </span>sy, </span>
+<span id="cb23-4"><a href="joint-probability-distributions.html#cb23-4"></a>                r <span class="op">*</span><span class="st"> </span>sx <span class="op">*</span><span class="st"> </span>sy, sy <span class="op">^</span><span class="st"> </span><span class="dv">2</span>),</span>
+<span id="cb23-5"><a href="joint-probability-distributions.html#cb23-5"></a>                <span class="dv">2</span>, <span class="dv">2</span>)</span>
+<span id="cb23-6"><a href="joint-probability-distributions.html#cb23-6"></a>  <span class="kw">as.data.frame</span>(<span class="kw">rmnorm</span>(<span class="dv">1000</span>, <span class="dt">mean =</span> <span class="kw">c</span>(mx, my), </span>
+<span id="cb23-7"><a href="joint-probability-distributions.html#cb23-7"></a>                       <span class="dt">varcov =</span> v))}</span>
+<span id="cb23-8"><a href="joint-probability-distributions.html#cb23-8"></a>mx &lt;-<span class="st"> </span><span class="dv">17</span>; my &lt;-<span class="st"> </span><span class="dv">23</span>; sx &lt;-<span class="st"> </span><span class="dv">2</span>; sy &lt;-<span class="st"> </span><span class="dv">3</span>; r &lt;-<span class="st"> </span><span class="fl">0.4</span></span>
+<span id="cb23-9"><a href="joint-probability-distributions.html#cb23-9"></a>sdata &lt;-<span class="st"> </span><span class="kw">sim_binorm</span>(mx, my, sx, sy, r)</span>
+<span id="cb23-10"><a href="joint-probability-distributions.html#cb23-10"></a><span class="kw">names</span>(sdata) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)</span>
+<span id="cb23-11"><a href="joint-probability-distributions.html#cb23-11"></a>sdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="kw">mean</span>(Y <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.5</span> <span class="op">*</span><span class="st"> </span>X))</span></code></pre></div>
 <pre><code>##   mean(Y &gt; 1.5 * X)
-## 1             0.217</code></pre>
+## 1             0.215</code></pre>
 <div class="figure"><span id="fig:unnamed-chunk-20"></span>
 <img src="../LATEX/figures/chapter6/Binorm_scatter.png" alt="Scatterplot of simulated draws from the Bivariate Normal in body measurement example.  The probability that $Y &gt; 1.5 X$ is approximated by the proportion of simulated points that fall to the left of the line $y = 1.5 x$." width="500" />
 <p class="caption">
@@ -1206,13 +1208,13 @@ The parameter <span class="math inline">\(\lambda\)</span> is assumed to be unif
 g(\lambda) = \exp(-\lambda), \, \, \lambda &gt; 0.
 \]</span></p>
 <ol style="list-style-type: lower-alpha">
-<li>Write down the joint density of <span class="math inline">\(X\)</span> and <span class="math inline">\(\lambda\)</span>.</li>
+<li><p>Write down the joint density of <span class="math inline">\(X\)</span> and <span class="math inline">\(\lambda\)</span>.</p></li>
 <li><p>Find the marginal density of <span class="math inline">\(X\)</span>. [Hint: it may be helpful to use the integral identity
 <span class="math display">\[
 \int_0^\infty \exp(-a \lambda) \lambda^b d\lambda = \frac{b!}{a ^ {b  + 1}},
 \]</span>
 where <span class="math inline">\(b\)</span> is a nonnegative integer.]</p></li>
-<li>Find the probability that the number of defects <span class="math inline">\(X\)</span> is equal to 0.</li>
+<li><p>Find the probability that the number of defects <span class="math inline">\(X\)</span> is equal to 0.</p></li>
 <li><p>Find the conditional density of <span class="math inline">\(\lambda\)</span> if you know that <span class="math inline">\(X = 0\)</span>.</p></li>
 </ol>
 <ol start="14" style="list-style-type: decimal">
@@ -1352,13 +1354,13 @@ Let <span class="math inline">\(Y\)</span> denote the number of heads of this �
 <ol style="list-style-type: lower-alpha">
 <li><p>Write an R function to simulate 10 balls drawn with replacement from the special weighted box (4 red, 3 black, and 3 green balls). [Hint: Section 6.3 introduces the  function for the example of a special weighted die.]</p></li>
 <li><p>Use the  function to simulate the Multinomial experiment in Exercise 6 for 5000 iterations, and approximate <span class="math inline">\(P(R = 3, B = 2)\)</span>.</p></li>
-<li><p>Use the 5000 simulated Multinomial experiments to approximate the probability that you sample more red balls than black balls, i.e. <span class="math inline">\(P(R &gt; B)\)</span>.</p></li>
+<li><p>Use the 5000 simulated Multinomial experiments to approximate the probability that you sample more red balls than black balls, i.e. <span class="math inline">\(P(R &gt; B)\)</span>.</p></li>
 <li><p>Conditional on <span class="math inline">\(B = 4\)</span>, approximate the mean number of red balls will get sampled. Compare the approximated mean value to the exact mean. [Hint: Conditional on <span class="math inline">\(B = 4\)</span>, the distribution of <span class="math inline">\(R\)</span> is a Binomial distribution.]</p></li>
 </ol>
 <ol start="21" style="list-style-type: decimal">
 <li><strong>Simulating from a Beta-Binomial Distribution</strong></li>
 </ol>
-<p>Consider a box of coins where the coin probabilities vary, and the probability of a selected coin lands heads, <span class="math inline">\(p\)</span>, follows a <span class="math inline">\(\textrm{Beta}(2, 8)\)</span> distribution. Jason then continues to flip this ``random&quot; coin 10 times, and is interested in the count of heads of the 10 flips, denoted by <span class="math inline">\(Y\)</span>.</p>
+<p>Consider a box of coins where the coin probabilities vary, and the probability of a selected coin lands heads, <span class="math inline">\(p\)</span>, follows a <span class="math inline">\(\textrm{Beta}(2, 8)\)</span> distribution. Jason then continues to flip this ``random" coin 10 times, and is interested in the count of heads of the 10 flips, denoted by <span class="math inline">\(Y\)</span>.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Write an R function to simulate 5000 samples of <span class="math inline">\((p, y)\)</span>. [Hint: Use <code>rbeta()</code> and <code>rbinom()</code> functions accordingly.]</p></li>
 <li><p>Approximate the probability that Jason observes 3 heads out of 10 flips, using the simulated 5000 samples. Compare the approximated probability to the exact probability. [Hint: Write out <span class="math inline">\(f(y)\)</span> following the work in Section 6.6, and use R to calculate the exact probability.]</p></li>
