@@ -683,10 +683,10 @@ P(2 &lt; W &lt; 4) = P(W \le 4) - P(W \le 2)  = F(4) - F(2) = \frac{4^3}{1000} -
 <p><strong>Computing Probabilities by Simulation</strong></p>
 <p>For the waiting for a bus example, the variable <code>longest_wait</code> contains 1000 simulated values of our longest waiting time. This sample is used to compute approximate probabilities. To illustrate, to find the probability that the longest wait exceeds 8 minutes, one finds the proportion of simulated values of <span class="math inline">\(W\)</span> that exceeds 8.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="continuous-distributions.html#cb3-1"></a><span class="kw">mean</span>(longest_wait <span class="op">&gt;</span><span class="st"> </span><span class="dv">8</span>)</span></code></pre></div>
-<pre><code>## [1] 0.507</code></pre>
+<pre><code>## [1] 0.468</code></pre>
 <p>In a similar fashion one approximates the probability a longest waiting time falls between 6 and 10 minutes.</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="continuous-distributions.html#cb5-1"></a><span class="kw">mean</span>(longest_wait <span class="op">&gt;</span><span class="st"> </span><span class="dv">6</span> <span class="op">&amp;</span><span class="st"> </span>longest_wait <span class="op">&lt;</span><span class="st"> </span><span class="dv">10</span>)</span></code></pre></div>
-<pre><code>## [1] 0.776</code></pre>
+<pre><code>## [1] 0.783</code></pre>
 </div>
 <div id="summarizing-a-continuous-random-variable" class="section level2">
 <h2><span class="header-section-number">5.6</span> Summarizing a Continuous Random Variable</h2>
@@ -722,9 +722,9 @@ So the standard deviation of <span class="math inline">\(X\)</span> is <span cla
 <p><strong>Computing the Mean and Standard Deviation by Simulation</strong></p>
 <p>Earlier, we demonstrated simulating 1000 values of the longest waiting time <span class="math inline">\(W\)</span>. To check the computations of the mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, one computes the sample mean and standard deviation of the simulated values.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="continuous-distributions.html#cb7-1"></a><span class="kw">mean</span>(longest_wait)</span></code></pre></div>
-<pre><code>## [1] 7.504692</code></pre>
+<pre><code>## [1] 7.467663</code></pre>
 <div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="continuous-distributions.html#cb9-1"></a><span class="kw">sd</span>(longest_wait)</span></code></pre></div>
-<pre><code>## [1] 2.00858</code></pre>
+<pre><code>## [1] 1.928283</code></pre>
 <p>One sees that these empirical values are close approximations to the exact values <span class="math inline">\(\mu = 7.5\)</span> and <span class="math inline">\(\sigma = 1.94\)</span>.</p>
 <p><strong>Percentiles</strong></p>
 <p>Another useful summary of a continuous random variable is a percentile. The 70th percentile, for example, is the value of <span class="math inline">\(X\)</span>, call it <span class="math inline">\(x\)</span>, such that 70% of the probability is to the left, shown in Figure 5.16. That is, the 70th percentile, call it <span class="math inline">\(x_{70}\)</span>, satisfies the equation
@@ -757,7 +757,7 @@ This means that if one waits many weeks for this bus, approximately 70% of the l
 For example, by use of the <code>quantile()</code> function, one finds that the 10th and 90th percentiles of <span class="math inline">\(W\)</span> are approximately 4.80 and 9.66 minutes.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="continuous-distributions.html#cb11-1"></a><span class="kw">quantile</span>(longest_wait, <span class="kw">c</span>(<span class="fl">0.1</span>, <span class="fl">0.9</span>))</span></code></pre></div>
 <pre><code>##      10%      90% 
-## 4.523211 9.682435</code></pre>
+## 4.718095 9.595449</code></pre>
 <p>The probability a longest waiting time is between 4.79 and 9.66 minutes is approximately 0.80.</p>
 </div>
 <div id="normal-distribution" class="section level2">
@@ -991,7 +991,7 @@ So if one was really able to weigh each candy in the jar, one would find the mea
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="continuous-distributions.html#cb27-1"></a>weights &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">8</span>, <span class="dv">14</span>, <span class="dv">18</span>)</span>
 <span id="cb27-2"><a href="continuous-distributions.html#cb27-2"></a>proportion &lt;-<span class="st"> </span><span class="kw">c</span>(.<span class="dv">15</span>, <span class="fl">.35</span>, <span class="fl">.2</span>, <span class="fl">.15</span>, <span class="fl">.15</span>)</span>
 <span id="cb27-3"><a href="continuous-distributions.html#cb27-3"></a><span class="kw">sample</span>(weights, <span class="dt">size =</span> <span class="dv">10</span>, <span class="dt">prob =</span> proportion, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
-<pre><code>##  [1]  5  5 18  5  2 14  5 18  5 18</code></pre>
+<pre><code>##  [1]  5  2 14  2  5  5  5 18  2  5</code></pre>
 <p>One computes the sample mean<br />
 <span class="math display">\[
 \bar X = (5+8+5+14+5+18+8+18+5+8)/10 = 9.4 \, {\rm gm}.
@@ -1394,7 +1394,6 @@ f(x) = \frac{x}{2}, 0 &lt; x &lt; 2.
 <li><strong>Attendances at Baseball Games</strong></li>
 </ol>
 <p>Attendance for home games of the Cleveland Indians for a recent baseball season can be approximated by a Normal curve with mean <span class="math inline">\(\mu\)</span> = 24,667 and standard deviation <span class="math inline">\(\sigma\)</span> = 6144.</p>
-<p><img src="../LATEX/figures/chapter5/normal6.png" width="500" /></p>
 <p>Consider the attendance for one randomly selected game during the 2006 season.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Find the probability the attendance exceeds 30,000.</li>
