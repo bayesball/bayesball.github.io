@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 7 Learning About a Binomial Probability | Probability and Bayesian Modeling</title>
   <meta name="description" content="This is an introduction to probability and Bayesian modeling at the undergraduate level. It assumes the student has some background with calculus." />
-  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.18 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 7 Learning About a Binomial Probability | Probability and Bayesian Modeling" />
   <meta property="og:type" content="book" />
@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-01-24" />
+<meta name="date" content="2020-03-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -53,9 +53,9 @@
 
 
 <style type="text/css">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 pre.sourceCode { margin: 0; }
@@ -64,14 +64,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -80,9 +82,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -238,7 +240,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="8.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>8.2.3</b> Outline of chapter</a></li>
 </ul></li>
 <li class="chapter" data-level="8.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>8.3</b> Bayesian Inference with Discrete Priors</a><ul>
-<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#example-roger-federers-time-to-serve"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="8.3.1" data-path="mean.html"><a href="mean.html#Normal:Discrete:Roger"><i class="fa fa-check"></i><b>8.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
 <li class="chapter" data-level="8.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>8.3.2</b> Simplification of the likelihood</a></li>
 <li class="chapter" data-level="8.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>8.3.3</b> Inference: Federer’s time-to-serve</a></li>
 </ul></li>
@@ -346,7 +348,7 @@ We are given the opportunity to take a random sample of 10 balls out of these 60
 <p>The classical view does not seem to work here, because we only know there are two kinds of color balls and the total number of balls is 60. Even if we take a sample of 10 balls, we are only going to observe the proportion of red balls in the sample. There does not seem to be a way for us to write down the sample space where each outcome is equally likely.</p>
 <p>The frequency view would work here. One could treat the process of obtaining a sample (i.e. taking a random sample of 10 balls from the box) as an experiment, and obtain a sample proportion <span class="math inline">\(\hat{p}\)</span> from the experiment. One then could repeat the experiment many times under the same condition, get many sample proportions <span class="math inline">\(\hat{p}\)</span>, and summarize all the <span class="math inline">\(\hat{p}\)</span>. When one repeats the experiment enough times (a large number), one gets a good sense about the proportion <span class="math inline">\(p\)</span> of red balls in the population of 60 balls in the box. This process is doable, but tedious, time-consuming, and prone to errors.</p>
 <p>The subjective view perceives the unknown proportion <span class="math inline">\(p\)</span> subjectively. It does require one to express his or her opinion about the value of <span class="math inline">\(p\)</span>, and he or she could be skeptical and unconfident about the opinion. In Chapter 1, a calibration experiment was introduced to help one sharpen an opinion about the likelihood of an event by comparisons with opinion about the likelihood of other events. In this chapter and the chapters to follow, we introduce the key ideas and practice about thinking subjectively about unknowns and quantify one’s opinions about the values of these unknowns using probability distributions.</p>
-<p>As an example, let’s think about plausible values for the proportion <span class="math inline">\(p\)</span> of red balls. As <span class="math inline">\(p\)</span> is a proportion, it can take any possible value between 0 and 1. In the calibration experiment introduced in Chapter 1, we focus on the scenario where only one value of <span class="math inline">\(p\)</span> is of interest. For example, when one thinks that <span class="math inline">\(p\)</span> is 0.5, it is saying that one’s opinion about the probability of the value <span class="math inline">\(p=0.5\)</span> is one. When we phrase it this way (``one’s opinion about the probability of <span class="math inline">\(p=0.5\)</span> is one&quot;), it sounds like a very strong opinion, because one only allows <span class="math inline">\(p\)</span> to take one possible value, and gives probability one of that happening. Since one typically has no thought about the exact value of the proportion <span class="math inline">\(p\)</span>, setting one possible value for the proportion with probability one seems too strong.</p>
+<p>As an example, let’s think about plausible values for the proportion <span class="math inline">\(p\)</span> of red balls. As <span class="math inline">\(p\)</span> is a proportion, it can take any possible value between 0 and 1. In the calibration experiment introduced in Chapter 1, we focus on the scenario where only one value of <span class="math inline">\(p\)</span> is of interest. For example, when one thinks that <span class="math inline">\(p\)</span> is 0.5, it is saying that one’s opinion about the probability of the value <span class="math inline">\(p=0.5\)</span> is one. When we phrase it this way (``one’s opinion about the probability of <span class="math inline">\(p=0.5\)</span> is one"), it sounds like a very strong opinion, because one only allows <span class="math inline">\(p\)</span> to take one possible value, and gives probability one of that happening. Since one typically has no thought about the exact value of the proportion <span class="math inline">\(p\)</span>, setting one possible value for the proportion with probability one seems too strong.</p>
 <p>Instead suppose that the proportion <span class="math inline">\(p\)</span> can take multiple values between 0 and 1. In particular, let’s consider two scenarios, in both <span class="math inline">\(p\)</span> can take 10 different values, denoted by set <span class="math inline">\(A\)</span>.</p>
 <p><span class="math display">\[\begin{eqnarray}
 A = \{0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0\}
@@ -395,7 +397,7 @@ Figure 7.1: The same ten possible values of <span class="math inline">\(p\)</spa
 <div id="example-students-dining-preference" class="section level3">
 <h3><span class="header-section-number">7.2.1</span> Example: students’ dining preference</h3>
 <p>Let’s start our Bayesian inference for proportion <span class="math inline">\(p\)</span> with discrete prior distributions with a students’ dining preference example.
-A popular restaurant in a college town has been in business for about 5 years. Though the business is doing well, the restaurant owner wishes to learn more about his customers. Specifically, he is interested in learning about the dining preferences of the students. The owner plans to conduct a survey by asking students ``what is your favorite day for eating out?&quot; In particular, he wants to find out what percentage of students prefer to dine on Friday, so he can plan ahead for ordering supplies and giving promotions.</p>
+A popular restaurant in a college town has been in business for about 5 years. Though the business is doing well, the restaurant owner wishes to learn more about his customers. Specifically, he is interested in learning about the dining preferences of the students. The owner plans to conduct a survey by asking students ``what is your favorite day for eating out?" In particular, he wants to find out what percentage of students prefer to dine on Friday, so he can plan ahead for ordering supplies and giving promotions.</p>
 <p>Let <span class="math inline">\(p\)</span> denote the proportion of all students whose answer is Friday.</p>
 </div>
 <div id="discrete-prior-distributions-for-proportion-p" class="section level3">
@@ -419,10 +421,10 @@ p = \{0.3, 0.4, 0.5, 0.6, 0.7, 0.8\}
 \label{eq:dining:expertprior}
 \tag{7.3}
 \end{eqnarray}\]</span></p>
-<p>To obtain <span class="math inline">\(\pi_e(p)\)</span> efficiently, one can use the <code>ProbBayes</code> R package. First a data frame is created by providing the list of plausible values of <span class="math inline">\(p\)</span> and corresponding weights assigned to each value using the function <code>data.frame()</code>. As one can see here, one does not have to calculate the probability – one only needs to give the weights (e.g. giving <span class="math inline">\(p = 0.3, 0.4, 0.7, 0.8\)</span> weight 1 and giving <span class="math inline">\(p = 0.5, 0.6\)</span> weight 2, to reflect the owner’s opinion ``0.5 and 0.6 are twice as likely as the other values&quot;).</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">bayes_table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">p =</span> <span class="kw">seq</span>(.<span class="dv">3</span>, <span class="fl">.8</span>, <span class="dt">by=</span>.<span class="dv">1</span>),</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">                          <span class="dt">Prior =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3">bayes_table</a></code></pre></div>
+<p>To obtain <span class="math inline">\(\pi_e(p)\)</span> efficiently, one can use the <code>ProbBayes</code> R package. First a data frame is created by providing the list of plausible values of <span class="math inline">\(p\)</span> and corresponding weights assigned to each value using the function <code>data.frame()</code>. As one can see here, one does not have to calculate the probability – one only needs to give the weights (e.g. giving <span class="math inline">\(p = 0.3, 0.4, 0.7, 0.8\)</span> weight 1 and giving <span class="math inline">\(p = 0.5, 0.6\)</span> weight 2, to reflect the owner’s opinion ``0.5 and 0.6 are twice as likely as the other values").</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="proportion.html#cb1-1"></a>bayes_table &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">p =</span> <span class="kw">seq</span>(.<span class="dv">3</span>, <span class="fl">.8</span>, <span class="dt">by=</span>.<span class="dv">1</span>),</span>
+<span id="cb1-2"><a href="proportion.html#cb1-2"></a>                          <span class="dt">Prior =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb1-3"><a href="proportion.html#cb1-3"></a>bayes_table</span></code></pre></div>
 <pre><code>##     p Prior
 ## 1 0.3     1
 ## 2 0.4     1
@@ -431,8 +433,8 @@ p = \{0.3, 0.4, 0.5, 0.6, 0.7, 0.8\}
 ## 5 0.7     1
 ## 6 0.8     1</code></pre>
 <p>One uses the function <code>mutate()</code> to normalize these weights to obtain the prior probabilities in the Prior column.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">bayes_table <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">Prior =</span> Prior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(Prior)) -&gt;<span class="st"> </span>bayes_table</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">bayes_table</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="proportion.html#cb3-1"></a>bayes_table <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">Prior =</span> Prior <span class="op">/</span><span class="st"> </span><span class="kw">sum</span>(Prior)) -&gt;<span class="st"> </span>bayes_table</span>
+<span id="cb3-2"><a href="proportion.html#cb3-2"></a>bayes_table</span></code></pre></div>
 <pre><code>##     p Prior
 ## 1 0.3 0.125
 ## 2 0.4 0.125
@@ -453,11 +455,11 @@ Figure 7.2: The restaurant owner’s prior distribution for the proportion <span
 <div id="likelihood" class="section level3">
 <h3><span class="header-section-number">7.2.3</span> Likelihood</h3>
 <p>The next step in the inference process is the data collection. The restaurant owner gives a survey to 20 student diners at the restaurant. Out of the 20 student respondents, 12 say that their favorite day for eating out is Friday. Recall the quantity of interest is proportion <span class="math inline">\(p\)</span> of the population of students choosing Friday.</p>
-<p>The likelihood is a function of the quantity of interest, which is the proportion <span class="math inline">\(p\)</span>. The owner has conducted an experiment 20 times, where each experiment involves a “yes” or “no” answer from the respondent to the rephrased question “whether Friday is your preferred day to dine out”. Then the proportion <span class="math inline">\(p\)</span> is the probability a student answers ``yes&quot;.</p>
+<p>The likelihood is a function of the quantity of interest, which is the proportion <span class="math inline">\(p\)</span>. The owner has conducted an experiment 20 times, where each experiment involves a “yes” or “no” answer from the respondent to the rephrased question “whether Friday is your preferred day to dine out”. Then the proportion <span class="math inline">\(p\)</span> is the probability a student answers ``yes".</p>
 <p>Does this ring a bell of what we have seen before? Indeed, in Chapter 4, one has seen this type of experiment, a Binomial experiment, similar to the dining survey. Recall that a Binomial experiment needs to satisfy four conditions:</p>
 <ul>
 <li>One is repeating the same basic task or trial many times – let the number of trials be denoted by <span class="math inline">\(n\)</span>.</li>
-<li>On each trial, there are two possible outcomes called <code>success&quot; or</code>failure&quot;.</li>
+<li>On each trial, there are two possible outcomes called <code>success" or</code>failure".</li>
 <li>The probability of a success, denoted by <span class="math inline">\(p\)</span>, is the same for each trial.</li>
 <li>The results of outcomes from different trials are independent.</li>
 </ul>
@@ -475,8 +477,8 @@ Likelihood = L(p) = {20 \choose 12} p ^ {12} (1 - p) ^ 8.
 <p>Generally one uses <span class="math inline">\(L\)</span> to denote a likelihood function — one sees in Equation (7.5), <span class="math inline">\(L\)</span> is a function of <span class="math inline">\(p\)</span>. Note that the value of <span class="math inline">\(n\)</span>, the total number of trials, is known and the number of successes <span class="math inline">\(Y\)</span> is observed to be 12. The proportion <span class="math inline">\(p\)</span>, is the parameter of the Binomial experiment and the likelihood is a function of the proportion <span class="math inline">\(p\)</span>.</p>
 <p>The likelihood function <span class="math inline">\(L(p)\)</span> is efficiently computed using the <code>dbinom()</code> function in R. In order to use this function, we need to know the sample size <span class="math inline">\(n\)</span> (20 in the dining survey), the number of successes <span class="math inline">\(y\)</span> (12 in the dining survey), and <span class="math inline">\(p\)</span> (the list of 6 plausible values created in Section 7.2.2; <span class="math inline">\(p = \{0.3, 0.4, 0.5, 0.6, 0.7, 0.8\}\)</span>). Note that we only need the plausible values of <span class="math inline">\(p\)</span>, not yet the assigned probabilities in the prior distribution. The prior will be used in the third step to update the opinion of <span class="math inline">\(p\)</span> to its posterior.</p>
 <p>Below is the example R code of finding the probability of 12 successes in a sample of 20 for each value of the proportion <span class="math inline">\(p\)</span>. The values are placed in the <code>Likelihood</code> column of the <code>bayes_table</code> data frame.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">bayes_table<span class="op">$</span>Likelihood &lt;-<span class="st"> </span><span class="kw">dbinom</span>(<span class="dv">12</span>, <span class="dt">size=</span><span class="dv">20</span>, <span class="dt">prob=</span>bayes_table<span class="op">$</span>p)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">bayes_table</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="proportion.html#cb5-1"></a>bayes_table<span class="op">$</span>Likelihood &lt;-<span class="st"> </span><span class="kw">dbinom</span>(<span class="dv">12</span>, <span class="dt">size=</span><span class="dv">20</span>, <span class="dt">prob=</span>bayes_table<span class="op">$</span>p)</span>
+<span id="cb5-2"><a href="proportion.html#cb5-2"></a>bayes_table</span></code></pre></div>
 <pre><code>##     p Prior  Likelihood
 ## 1 0.3 0.125 0.003859282
 ## 2 0.4 0.125 0.035497440
@@ -496,7 +498,7 @@ For discrete parameters, such as the proportion <span class="math inline">\(p\)<
 \tag{7.6}
 \end{eqnarray}\]</span>
 where <span class="math inline">\(\pi(p_i)\)</span> is the prior probability of <span class="math inline">\(p = p_i\)</span>, <span class="math inline">\(L(p_i)\)</span> is the likelihood function evaluated at <span class="math inline">\(p = p_i\)</span>, and <span class="math inline">\(\pi(p_i \mid y)\)</span> is the posterior probability of <span class="math inline">\(p = p_i\)</span> given the number of successes <span class="math inline">\(y\)</span>. By the <strong>Law of Total Probability</strong>, the denominator gives the marginal distribution of the observation <span class="math inline">\(y\)</span>.</p>
-<p>Bayes’ rule can also be expressed as ``prior times likelihood&quot;:
+<p>Bayes’ rule can also be expressed as ``prior times likelihood":
 <span class="math display" id="eq:priortimeslike">\[\begin{eqnarray}
 \pi(p_i \mid y)  \propto \pi(p_i) \times L(p_i)
 \label{eq:Discrete:bayesruleProp}
@@ -524,8 +526,8 @@ In a similar fashion, the posterior probability of <span class="math inline">\(p
 \end{eqnarray*}\]</span>
 One sees that the denominator is the same for the posterior probability calculation of every value of <span class="math inline">\(p\)</span>. This calculation gets tedious for a large number of possible values of <span class="math inline">\(p\)</span>. Relying on statistical software such as <code>R</code> helps us simplify the tasks.</p>
 <p>To use the <code>bayesian_crank()</code> function, recall that we have already created a data frame with variables <code>p</code>, <code>Prior</code>, and <code>Likelihood</code>. Then the <code>bayesian_crank()</code> function is used to compute the posterior probabilities.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">bayesian_crank</span>(bayes_table) -&gt;<span class="st"> </span>bayes_table</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">bayes_table</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="proportion.html#cb7-1"></a><span class="kw">bayesian_crank</span>(bayes_table) -&gt;<span class="st"> </span>bayes_table</span>
+<span id="cb7-2"><a href="proportion.html#cb7-2"></a>bayes_table</span></code></pre></div>
 <pre><code>##     p Prior  Likelihood      Product   Posterior
 ## 1 0.3 0.125 0.003859282 0.0004824102 0.004975901
 ## 2 0.4 0.125 0.035497440 0.0044371799 0.045768032
@@ -550,13 +552,13 @@ Figure 7.3: Prior and posterior distributions on the proportion <span class="mat
 \end{eqnarray*}\]</span>
 This means the owner is reasonably confident (with probability 0.639) that over half of the college students prefer to eat out on Friday.</p>
 <p>One easily obtains the probability from the R output, for example.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">sum</span>(bayes_table<span class="op">$</span>Posterior[bayes_table<span class="op">$</span>p <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="proportion.html#cb9-1"></a><span class="kw">sum</span>(bayes_table<span class="op">$</span>Posterior[bayes_table<span class="op">$</span>p <span class="op">&gt;</span><span class="st"> </span><span class="fl">0.5</span>])</span></code></pre></div>
 <pre><code>## [1] 0.6394696</code></pre>
 </div>
 <div id="discussion-using-a-discrete-prior" class="section level3">
 <h3><span class="header-section-number">7.2.6</span> Discussion: using a discrete prior</h3>
 <p>Specifying a discrete prior has two steps: (1) specifying a list of plausible values of the parameter of interest, and (2) assigning probabilities to the plausible values. It is important to remember the three probability axioms when specifying a discrete prior.</p>
-<p>After the prior specification, the next component is the data/likelihood, which can also be broken up into two steps. First, one constructs a suitable experiment that works for the particular scenario. Here one has a Binomial experiment for a survey to a fixed number of respondents, the answers are classified into <code>yes&quot; and</code>no&quot; or <code>success&quot; and</code>failure&quot;, the outcome of interest is the number of successes and trials are independent.
+<p>After the prior specification, the next component is the data/likelihood, which can also be broken up into two steps. First, one constructs a suitable experiment that works for the particular scenario. Here one has a Binomial experiment for a survey to a fixed number of respondents, the answers are classified into <code>yes" and</code>no" or <code>success" and</code>failure", the outcome of interest is the number of successes and trials are independent.
 From the Binomial distribution, one obtains the likelihood function which is evaluated at each possible value of the parameter of interest. In our example, the <code>dbinom()</code> R function was used to calculate the likelihood function.</p>
 <p>Last, the posterior probabilities are calculated using Bayes’ rule. In particular for the discrete case, follow Equation (7.6). The calculation of the denominator is tedious, however practice with the Bayes’ rule calculation enhances one’s understanding of Bayesian inference. R functions such as <code>bayesian_crank()</code> are helpful for implementing the Bayes’ rule calculations. Bayesian inference follows from a suitable summarization of the posterior probabilities. In our example, inference was illustrated by calculating the probability that over half of the students prefer eating out on Friday.</p>
 <p>Let’s revisit the list of plausible values of proportion <span class="math inline">\(p\)</span> of students preferring Friday in dining out in the example. Although <span class="math inline">\(p = 1.0\)</span>, that is, everyone prefers Friday, is very unlikely, one might not want to eliminate this proportion value from consideration. As one observes in the Bayes’ rule calculation process shown in Sections 7.2.3 and 7.2.4, if one does not include <span class="math inline">\(p = 1.0\)</span> as one of the plausible values in the prior distribution in Section 7.2.2, this value will also be given a probability of zero in the posterior.</p>
@@ -565,7 +567,7 @@ From the Binomial distribution, one obtains the likelihood function which is eva
 p = \{0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0\},
 \end{eqnarray*}\]</span>
 and assign a very small prior probability (e.g. 0.05 or even smaller) for <span class="math inline">\(p = 1.0\)</span> to express the opinion that <span class="math inline">\(p = 1.0\)</span> is very unlikely. One may assign small prior probabilities for other large values of <span class="math inline">\(p\)</span> such as <span class="math inline">\(p = 0.9\)</span>.</p>
-<p>This comment illustrates a limitation of specifying a discrete prior for a proportion <span class="math inline">\(p\)</span>. If a plausible value is not specified in the prior distribution (e.g. <span class="math inline">\(p = 1.0\)</span> is not in the restaurant owner’s prior distribution), it will be assigned a probability of zero in the posterior (e.g. <span class="math inline">\(p = 1.0\)</span> is not in the restaurant owner’s posterior distribution).</p>
+<p>This comment illustrates a limitation of specifying a discrete prior for a proportion <span class="math inline">\(p\)</span>. If a plausible value is not specified in the prior distribution (e.g. <span class="math inline">\(p = 1.0\)</span> is not in the restaurant owner’s prior distribution), it will be assigned a probability of zero in the posterior (e.g. <span class="math inline">\(p = 1.0\)</span> is not in the restaurant owner’s posterior distribution).</p>
 <p>It generally is more desirable to have <span class="math inline">\(p\)</span> to be any value in [0, 1] including less plausible values such as <span class="math inline">\(p = 1.0\)</span>.
 To make this happen, the proportion <span class="math inline">\(p\)</span> should be allowed to take any value between 0 and 1, which means <span class="math inline">\(p\)</span> will be a continuous variable. In this situation, it is necessary to construct a continuous prior distribution for <span class="math inline">\(p\)</span>. A popular class of continuous prior distributions for proportion is the Beta distribution which is the subject of the next section.</p>
 </div>
@@ -613,7 +615,7 @@ Figure 7.4: Illustration of nine Beta density curves.
 </ul>
 <p>For example, we
 evaluate the density function of <span class="math inline">\(\textrm{Beta}(1, 1)\)</span> at the values <span class="math inline">\(p = 0.5\)</span> and <span class="math inline">\(p = 0.8\)</span>, which should be both 1, and 0 at <span class="math inline">\(p = 1.2\)</span> which should be 0 since this value is outside of [0, 1].</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="kw">dbeta</span>(<span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.8</span>, <span class="fl">1.2</span>), <span class="dv">1</span>, <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="proportion.html#cb11-1"></a><span class="kw">dbeta</span>(<span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.8</span>, <span class="fl">1.2</span>), <span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## [1] 1 1 0</code></pre>
 <ul>
 <li><code>pbeta()</code>: the distribution function of a Beta(a; b) random variable,
@@ -621,21 +623,21 @@ which takes a value x and gives the value of the random variable at
 that value, F(x).</li>
 </ul>
 <p>For example, suppose one wishes to evaluate the distribution function of <span class="math inline">\(\textrm{Beta}(1, 1)\)</span> at <span class="math inline">\(p = 0.5\)</span> and <span class="math inline">\(p = 0.8\)</span>.</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="kw">pbeta</span>(<span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.8</span>), <span class="dv">1</span>, <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="proportion.html#cb13-1"></a><span class="kw">pbeta</span>(<span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.8</span>), <span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## [1] 0.5 0.8</code></pre>
-<p>One calculates the probability of <span class="math inline">\(p\)</span> between 0.5 and 0.8, i.e. <span class="math inline">\(Prob(0.5 \le p \le 0.8)\)</span> by taking the difference of the cdf at the two values.</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">pbeta</span>(<span class="fl">0.8</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="op">-</span><span class="st"> </span><span class="kw">pbeta</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">1</span>)</a></code></pre></div>
+<p>One calculates the probability of <span class="math inline">\(p\)</span> between 0.5 and 0.8, i.e. <span class="math inline">\(Prob(0.5 \le p \le 0.8)\)</span> by taking the difference of the cdf at the two values.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="proportion.html#cb15-1"></a><span class="kw">pbeta</span>(<span class="fl">0.8</span>, <span class="dv">1</span>, <span class="dv">1</span>) <span class="op">-</span><span class="st"> </span><span class="kw">pbeta</span>(<span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## [1] 0.3</code></pre>
 <p><code>qbeta()</code>: the quantile function of a <span class="math inline">\(\textrm{Beta}(a, b)\)</span>, which inputs a probability value <span class="math inline">\(p\)</span> and outputs the value of <span class="math inline">\(x\)</span> such that <span class="math inline">\(F(x) = p\)</span>.</p>
 <p>For example, suppose one wishes to calculate the quantile of <span class="math inline">\(\textrm{Beta}(1, 1)\)</span> at <span class="math inline">\(p = 0.5\)</span> and <span class="math inline">\(p = 0.8\)</span>.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="kw">qbeta</span>(<span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.8</span>), <span class="dv">1</span>, <span class="dv">1</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="proportion.html#cb17-1"></a><span class="kw">qbeta</span>(<span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.8</span>), <span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## [1] 0.5 0.8</code></pre>
 <ul>
 <li><code>rbeta()</code>: the random number generator for <span class="math inline">\(\textrm{Beta}(a, b)\)</span>, which inputs the size of a random sample and gives a vector of the simulated random variates.</li>
 </ul>
 <p>For example, suppose one is interested in simulating a sample of size five from <span class="math inline">\(\textrm{Beta}(1, 1)\)</span>.</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">rbeta</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>)</a></code></pre></div>
-<pre><code>## [1] 0.29129749 0.84027674 0.25982088 0.04990913 0.45311594</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="proportion.html#cb19-1"></a><span class="kw">rbeta</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## [1] 0.8810029 0.2448766 0.6293884 0.8649433 0.7246896</code></pre>
 <p>There are additional functions in the <code>ProbBayes</code> R package that aid in visualizing Beta distribution calculations.
 For example, suppose one has a <span class="math inline">\(\textrm{Beta}(7, 10)\)</span> curve and we want to find the chance that <span class="math inline">\(p\)</span> is between 0.4 and 0.8. Looking at Figure 7.5, this probability corresponds to the area of the shaded region. The special function <code>beta_area()</code> will compute and illustrate this probability. Note the use of the vector <code>c(7, 10)</code> to input the two shape parameters.</p>
 <pre><code>beta_area(0.4, 0.8, c(7, 10))</code></pre>
@@ -646,7 +648,7 @@ Figure 7.5: Area represents the probability that a Beta(7, 10) variable lies bet
 </p>
 </div>
 <p>One could also find the chance that <span class="math inline">\(p\)</span> is between 0.4 and 0.8 by subtracting two <code>pbeta()</code> functions.</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1"><span class="kw">pbeta</span>(<span class="fl">0.8</span>, <span class="dv">7</span>, <span class="dv">10</span>) <span class="op">-</span><span class="st"> </span><span class="kw">pbeta</span>(<span class="fl">0.4</span>, <span class="dv">7</span>, <span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="proportion.html#cb22-1"></a><span class="kw">pbeta</span>(<span class="fl">0.8</span>, <span class="dv">7</span>, <span class="dv">10</span>) <span class="op">-</span><span class="st"> </span><span class="kw">pbeta</span>(<span class="fl">0.4</span>, <span class="dv">7</span>, <span class="dv">10</span>)</span></code></pre></div>
 <pre><code>## [1] 0.5269265</code></pre>
 <p>The function <code>beta_quantile()</code> works in the same way as <code>qbeta()</code>, the quantile function. However, <code>beta_quantile()</code> automatically produces a plot with the shaded probability area. Figure 7.6 plots and computes the quantile to be 0.408. The chance that <span class="math inline">\(p\)</span> is smaller than 0.408 is 0.5.</p>
 <pre><code>beta_quantile(0.5, c(7, 10))</code></pre>
@@ -657,7 +659,7 @@ Figure 7.6: Illustration of a 0.5 quantile for a Beta(7, 10) variable.
 </p>
 </div>
 <p>Alternatively, use the <code>qbeta()</code> function without returning a plot.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="kw">qbeta</span>(<span class="fl">0.5</span>, <span class="dv">7</span>, <span class="dv">10</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="proportion.html#cb25-1"></a><span class="kw">qbeta</span>(<span class="fl">0.5</span>, <span class="dv">7</span>, <span class="dv">10</span>)</span></code></pre></div>
 <pre><code>## [1] 0.4082265</code></pre>
 </div>
 <div id="choosing-a-beta-density-to-represent-prior-opinion" class="section level3">
@@ -683,13 +685,13 @@ Figure 7.7: Histograms of 1000 samples of two Beta density curves Beta(4, 4) and
 </p>
 </div>
 <p>As a second example, consider a belief that <strong>a priori</strong> there are 2 successes and 9 failures, corresponding to the <span class="math inline">\(\textrm{Beta}(2, 9)\)</span> prior? One can use the <code>rbeta()</code> function take a random sample of 1000 from this prior.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" data-line-number="1">Beta29samples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1000</span>, <span class="dv">2</span>, <span class="dv">9</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="proportion.html#cb28-1"></a>Beta29samples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1000</span>, <span class="dv">2</span>, <span class="dv">9</span>)</span></code></pre></div>
 <p>Comparing the two distributions, note from Figure 7.7 that <span class="math inline">\(\textrm{Beta}(2, 9)\)</span> favors smaller proportion values than <span class="math inline">\(\textrm{Beta}(4, 4)\)</span>.</p>
 <p>To further check the quantiles of the prior, one can use the <code>quantile()</code> function on the simulated draws from the prior. For example, if one wishes to check the middle 50% range of values of <span class="math inline">\(p\)</span> from the random sample of values from <span class="math inline">\(\textrm{Beta}(4, 4)\)</span>, one types</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1">Beta44samples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1000</span>, <span class="dv">4</span>, <span class="dv">4</span>)</a>
-<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">quantile</span>(Beta44samples, <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="proportion.html#cb29-1"></a>Beta44samples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1000</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
+<span id="cb29-2"><a href="proportion.html#cb29-2"></a><span class="kw">quantile</span>(Beta44samples, <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>))</span></code></pre></div>
 <pre><code>##       25%       75% 
-## 0.3851236 0.6273883</code></pre>
+## 0.3833061 0.6215135</code></pre>
 <p>This tells us that the probability that <span class="math inline">\(p \leq 0.366\)</span> is 0.25 and the probability that <span class="math inline">\(p \geq 0.616\)</span> is also 0.25. These probability statements should be checked against one’s prior belief about <span class="math inline">\(p\)</span>. If these quantiles do not seem reasonable, one should make adjustments to the values of the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> .</p>
 <p>On the surface the two priors <span class="math inline">\(\textrm{Beta}(4, 4)\)</span> and <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> seem similar in that they both have a mean of <span class="math inline">\(0.5\)</span> and represent similar breakdowns of the success and failure counts. However, the aforementioned concept of prior sample size tells us that <span class="math inline">\(\textrm{Beta}(4, 4)\)</span> has a prior sample size of 8 while that of <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> is 80. As we will see in Section 7.4, the prior sample size determines the strength of the prior (i.e. the confidence level in the prior) and so the <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> prior represents a much stronger belief that <span class="math inline">\(p\)</span> is close to the value 0.5.</p>
 <p>A second indirect method of determining a Beta prior is by specification of quantiles of the distribution. Specifically, one determines the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> by first specifying two quantiles of the Beta density curve, and then finding the Beta density curve that matches these quantiles. Suppose the restaurant owner uses his knowledge to specify the 0.5 and 0.9 quantiles of the proportion <span class="math inline">\(p\)</span> as follows.</p>
@@ -699,8 +701,8 @@ Figure 7.7: Histograms of 1000 samples of two Beta density curves Beta(4, 4) and
 </ol>
 
 <p> One then uses the <code>beta.select()</code> function in the <code>ProbBayes</code> package to find shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> of the Beta density curve that match this information. Each quantile is specified by a list with values <span class="math inline">\(x\)</span> and <span class="math inline">\(p\)</span>. From the output, we see <span class="math inline">\(\textrm{Beta}(3.06, 2.56)\)</span> curve represents the owner’s prior beliefs.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">beta.select</span>(<span class="kw">list</span>(<span class="dt">x =</span> <span class="fl">0.55</span>, <span class="dt">p =</span> <span class="fl">0.5</span>),</a>
-<a class="sourceLine" id="cb31-2" data-line-number="2">            <span class="kw">list</span>(<span class="dt">x =</span> <span class="fl">0.80</span>, <span class="dt">p =</span> <span class="fl">0.9</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="proportion.html#cb31-1"></a><span class="kw">beta.select</span>(<span class="kw">list</span>(<span class="dt">x =</span> <span class="fl">0.55</span>, <span class="dt">p =</span> <span class="fl">0.5</span>),</span>
+<span id="cb31-2"><a href="proportion.html#cb31-2"></a>            <span class="kw">list</span>(<span class="dt">x =</span> <span class="fl">0.80</span>, <span class="dt">p =</span> <span class="fl">0.9</span>))</span></code></pre></div>
 <pre><code>## [1] 3.06 2.56</code></pre>
 <p>The owner’s Beta density curve is shown here. To make sure this prior is reasonable, the owner should compute several probabilities and quantiles for his prior distribution and see if these values correspond to his opinion.<br />
 To illustrate this checking process, Figure 7.8 shows the middle 50% area of the prior distribution. This graph shows that the probability that <span class="math inline">\(p \leq 0.402\)</span> is 0.25 and the probability that <span class="math inline">\(p \geq 0.692\)</span> is also 0.25. If these calculations do not correspond to the owner’s opinion, then maybe some change in the prior distribution would be appropriate.</p>
@@ -733,7 +735,7 @@ Likelihood = L(p) = {20 \choose 12} p ^ {12 }(1 - p) ^ 8.
 p \sim \textrm{Beta}(3.06, 2.56).
 \end{eqnarray*}\]</span>
 The symbol “<span class="math inline">\(\sim\)</span>” is read “follows”, meaning that the random variable before the symbol follows the distribution after the symbol.</p>
-<p>For the data/likelihood, we introduce proper notation. Let <span class="math inline">\(Y\)</span> be the random variable of the number of students say that their favorite day for eating out is Friday. We know that the sampling distribution for <span class="math inline">\(Y\)</span> is a Binomial distribution with number of trials <span class="math inline">\(20\)</span> and success probability <span class="math inline">\(p\)</span>. Using the notation of ``<span class="math inline">\(\sim\)</span>&quot;, we have
+<p>For the data/likelihood, we introduce proper notation. Let <span class="math inline">\(Y\)</span> be the random variable of the number of students say that their favorite day for eating out is Friday. We know that the sampling distribution for <span class="math inline">\(Y\)</span> is a Binomial distribution with number of trials <span class="math inline">\(20\)</span> and success probability <span class="math inline">\(p\)</span>. Using the notation of ``<span class="math inline">\(\sim\)</span>", we have
 <span class="math display">\[\begin{eqnarray*}
 Y \sim \textrm{Binomial}(20, p).
 \end{eqnarray*}\]</span>
@@ -768,7 +770,7 @@ One observes that the posterior density of <span class="math inline">\(p\)</span
 \end{eqnarray*}\]</span></p>
 <p>
 Note that in the posterior derivation, the constants <span class="math inline">\({20 \choose 12}\)</span> and <span class="math inline">\(\frac{1}{B(3.06, 2.56)}\)</span> are dropped due to the proportional sign “<span class="math inline">\(\propto\)</span>”. That is, the expression of <span class="math inline">\(\pi(p \mid Y = 12)\)</span> is computed up to some constant. In this case, Appendix A demonstrates the calculation of the constant.</p>
-<p>Next, one recognizes if the posterior distribution of <span class="math inline">\(p\)</span> is recognizable as a member of a familiar family of distributions. In the computation of the posterior, we have intentionally kept the expression of ``<span class="math inline">\(-1\)</span>&quot; in the powers of <span class="math inline">\(p\)</span> and <span class="math inline">\(1-p\)</span> terms, instead of using <span class="math inline">\(14.06\)</span> and <span class="math inline">\(9.56\)</span> directly. By doing this, one recognizes that the posterior density has the familiar form
+<p>Next, one recognizes if the posterior distribution of <span class="math inline">\(p\)</span> is recognizable as a member of a familiar family of distributions. In the computation of the posterior, we have intentionally kept the expression of ``<span class="math inline">\(-1\)</span>" in the powers of <span class="math inline">\(p\)</span> and <span class="math inline">\(1-p\)</span> terms, instead of using <span class="math inline">\(14.06\)</span> and <span class="math inline">\(9.56\)</span> directly. By doing this, one recognizes that the posterior density has the familiar form
 <span class="math display">\[\begin{eqnarray*}
 p^{a-1}(1-p)^{b-1}.
 \end{eqnarray*}\]</span>
@@ -828,9 +830,9 @@ p \mid Y = y \sim \textrm{Beta}(a + y, b + n - y)
 </table>
 
 <p>In the following R script we update the Beta shape parameters. We see that the owner’s posterior distribution for <span class="math inline">\(p\)</span> is Beta with shape parameters 15.06 and 10.56.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1">ab &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">3.06</span>, <span class="fl">2.56</span>)</a>
-<a class="sourceLine" id="cb33-2" data-line-number="2">yny &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">12</span>, <span class="dv">8</span>)</a>
-<a class="sourceLine" id="cb33-3" data-line-number="3">(ab_new &lt;-<span class="st"> </span>ab <span class="op">+</span><span class="st"> </span>yny)</a></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="proportion.html#cb33-1"></a>ab &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">3.06</span>, <span class="fl">2.56</span>)</span>
+<span id="cb33-2"><a href="proportion.html#cb33-2"></a>yny &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">12</span>, <span class="dv">8</span>)</span>
+<span id="cb33-3"><a href="proportion.html#cb33-3"></a>(ab_new &lt;-<span class="st"> </span>ab <span class="op">+</span><span class="st"> </span>yny)</span></code></pre></div>
 <pre><code>## [1] 15.06 10.56</code></pre>
 <p>The function <code>beta_prior_post()</code> in the <code>ProbBayes</code> R package plots the prior and posterior Beta curves together on one graph, see Figure 7.9.</p>
 <pre><code>beta_prior_post(ab, ab_new)</code></pre>
@@ -873,11 +875,11 @@ Figure 7.10: Probability of the hypothesis from the Beta posterior density.
 </p>
 </div>
 <p>This computation can be implemented using simulation. Since the posterior distribution is <span class="math inline">\(\textrm{Beta}(15.06, 10.56)\)</span>, one generates a large number of random values from this Beta distribution, then summarizes the sample of simulated draws to obtain the probability of <span class="math inline">\(p \geq 0.75\)</span>. First a sample of <span class="math inline">\(S = 1000\)</span> from the Beta posterior is taken, storing the results in the vector <code>BetaSamples</code>.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1">S &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb37-2" data-line-number="2">BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="proportion.html#cb37-1"></a>S &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb37-2"><a href="proportion.html#cb37-2"></a>BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</span></code></pre></div>
 <p>The proportion of the 1000 simulated values of <span class="math inline">\(p\)</span> that are at least 0.75 gives an approximation of the probability that <span class="math inline">\(p \geq 0.75\)</span>.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb38-1" data-line-number="1"><span class="kw">sum</span>(BetaSamples <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.75</span>) <span class="op">/</span><span class="st"> </span>S</a></code></pre></div>
-<pre><code>## [1] 0.033</code></pre>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="proportion.html#cb38-1"></a><span class="kw">sum</span>(BetaSamples <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.75</span>) <span class="op">/</span><span class="st"> </span>S</span></code></pre></div>
+<pre><code>## [1] 0.034</code></pre>
 <p>The simulation-based probability estimate is 0.037 which is an accurate approximation to the exact probability 0.04 obtained before.</p>
 <p>It would be reasonable to question the choice of the number of simulations <span class="math inline">\(S = 1000\)</span>. One can change the simulation sample size to larger or smaller values as one sees fit. In general, the larger the value of <span class="math inline">\(S\)</span>, the more accurate the approximation. Figure 7.11 shows that the shape of a histogram of the simulated values of <span class="math inline">\(p\)</span> approaches the exact posterior density as the value of <span class="math inline">\(S\)</span> changes from 100 to 10,000. The corresponding simulation-based probabilities of <span class="math inline">\(p \geq 0.75\)</span> are <span class="math inline">\(\{0.02, 0.05, 0.033, 0.0422\}\)</span> indicating that the accuracy of the approximation improves for larger simulation sample sizes.</p>
 <div class="figure"><span id="fig:unnamed-chunk-31"></span>
@@ -901,18 +903,18 @@ Figure 7.12: Display of 90% probability interval for the proportion <span class=
 </p>
 </div>
 <p>One obtains this middle 90% credible interval using the <code>qbeta()</code> function.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="kw">qbeta</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>), <span class="fl">15.06</span>, <span class="fl">10.56</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="proportion.html#cb41-1"></a><span class="kw">qbeta</span>(<span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>), <span class="fl">15.06</span>, <span class="fl">10.56</span>)</span></code></pre></div>
 <pre><code>## [1] 0.4266788 0.7410141</code></pre>
 <p>This Bayesian credible interval differs from the interpretation of a traditional confidence interval. With a traditional confidence interval, one does not have confidence that one particular interval will contain <span class="math inline">\(p\)</span>. Instead 90% confidence refers to the average coverage of the interval in repeated sampling.</p>
 <p>Other types of Bayesian credible intervals can be computed. For example, instead of a credible interval covering the middle 90% of the posterior probability, one could create a credible interval covers the lower 90%, or the upper 90%, or the middle 95%. The <code>qbeta()</code> function is helpful in achieving all of these different type of intervals, as long as we know the exact posterior distribution, that is, the two shape parameters of the posterior Beta distribution. For example, the following code computes a credible interval that covers the lower 90% of the posterior distribution.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="kw">qbeta</span>(<span class="kw">c</span>(<span class="fl">0.00</span>, <span class="fl">0.90</span>), <span class="fl">15.06</span>, <span class="fl">10.56</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="proportion.html#cb43-1"></a><span class="kw">qbeta</span>(<span class="kw">c</span>(<span class="fl">0.00</span>, <span class="fl">0.90</span>), <span class="fl">15.06</span>, <span class="fl">10.56</span>)</span></code></pre></div>
 <pre><code>## [1] 0.0000000 0.7099912</code></pre>
 <p>An alternative way of creating credible intervals is by simulation. One first takes a random sample from the <span class="math inline">\(\textrm{Beta}(15.06, 10.56)\)</span> distribution, then summarizes the simulated values by finding the two cutoff points of the middle 90% of the sample. The <code>quantile()</code> function is useful for this purpose. As a demonstration, below we simulate <span class="math inline">\(S = 1000\)</span> proportion values and compute the credible interval.</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1">S &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb45-2" data-line-number="2">BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</a>
-<a class="sourceLine" id="cb45-3" data-line-number="3"><span class="kw">quantile</span>(BetaSamples, <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="proportion.html#cb45-1"></a>S &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb45-2"><a href="proportion.html#cb45-2"></a>BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</span>
+<span id="cb45-3"><a href="proportion.html#cb45-3"></a><span class="kw">quantile</span>(BetaSamples, <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
 <pre><code>##        5%       95% 
-## 0.4322212 0.7444298</code></pre>
+## 0.4374488 0.7423057</code></pre>
 <p>The approximate middle 90% credible interval is [0.427, 0.733], which is close in value to the exact 90% credible interval [0.427, 0.741] computed using the <code>qbeta()</code> and <code>beta_interval()</code> functions. In an end-of-chapter exercise the reader is encouraged to practice and experiment with different values of the size of the simulated sample <span class="math inline">\(S\)</span>.</p>
 </div>
 <div id="bayesian-prediction" class="section level3">
@@ -945,11 +947,11 @@ This is the Beta-Binomial distribution with parameters <span class="math inline"
 To summarize, Bayesian prediction of a new observation is a Beta-Binomial distribution where <span class="math inline">\(m\)</span> is the number of trials in the new sample, <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are shape parameters from the Beta prior, and <span class="math inline">\(y\)</span> and <span class="math inline">\(n\)</span> are quantities from the data/likelihood.</p>
 
 <p>Using this Beta-Binomial distribution in our example, one computes the predictive probability that <span class="math inline">\(\tilde y\)</span> students prefer Friday in a new survey of 20 students. We illustrate the use of the <code>pbetap()</code> function from the <code>ProbBayes</code> package. The inputs to <code>pbetap()</code> are the vector of Beta shape parameters <span class="math inline">\((a, b)\)</span>, the sample size 20, and the values of <span class="math inline">\(\tilde{y}\)</span> of interest.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">a &lt;-<span class="st"> </span><span class="fl">15.06</span></a>
-<a class="sourceLine" id="cb47-2" data-line-number="2">b &lt;-<span class="st"> </span><span class="fl">10.56</span></a>
-<a class="sourceLine" id="cb47-3" data-line-number="3">prob &lt;-<span class="st"> </span><span class="kw">pbetap</span>(<span class="kw">c</span>(a, b), <span class="dv">20</span>, <span class="dv">0</span><span class="op">:</span><span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb47-4" data-line-number="4">pred_distribution &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Y =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">20</span>, </a>
-<a class="sourceLine" id="cb47-5" data-line-number="5">                                <span class="dt">Probability =</span> prob)</a></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="proportion.html#cb47-1"></a>a &lt;-<span class="st"> </span><span class="fl">15.06</span></span>
+<span id="cb47-2"><a href="proportion.html#cb47-2"></a>b &lt;-<span class="st"> </span><span class="fl">10.56</span></span>
+<span id="cb47-3"><a href="proportion.html#cb47-3"></a>prob &lt;-<span class="st"> </span><span class="kw">pbetap</span>(<span class="kw">c</span>(a, b), <span class="dv">20</span>, <span class="dv">0</span><span class="op">:</span><span class="dv">20</span>)</span>
+<span id="cb47-4"><a href="proportion.html#cb47-4"></a>pred_distribution &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Y =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">20</span>, </span>
+<span id="cb47-5"><a href="proportion.html#cb47-5"></a>                                <span class="dt">Probability =</span> prob)</span></code></pre></div>
 <pre><code>prob_plot(pred_distribution,
           Color = crcblue, Size = 4) +
   theme(text=element_text(size=18))</code></pre>
@@ -1044,7 +1046,7 @@ sample of 20.</p>
 <p>Looking at the table, the most likely number of students preferring Friday is 12. Just as in the inference situation, it is desirable to construct an interval that will contain <span class="math inline">\(\tilde Y\)</span> with a high probability. Suppose the desired probability content is 0.90. One constructs this prediction interval by putting in the most likely values of <span class="math inline">\(\tilde Y\)</span> until the probability content of the set exceeds 0.90.</p>
 
 <p>This method is implemented using the following command:</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1"><span class="kw">discint</span>(pred_distribution, <span class="fl">.9</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="proportion.html#cb49-1"></a><span class="kw">discint</span>(pred_distribution, <span class="fl">.9</span>)</span></code></pre></div>
 <pre><code>## $prob
 ## [1] 0.9185699
 ## 
@@ -1062,18 +1064,18 @@ Prob(7 \le \tilde Y \le 16) = 0.919.
 \end{eqnarray*}\]</span></p>
 
 <p> This process of simulating a single draw is implemented by the <code>rbeta()</code> and <code>rbinom()</code> functions. Let <span class="math inline">\(m = n\)</span> (the size of the future sample is the same as the size of the observed sample).</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1">a &lt;-<span class="st"> </span><span class="fl">3.06</span>; b &lt;-<span class="st"> </span><span class="fl">2.56</span></a>
-<a class="sourceLine" id="cb51-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">20</span>; y &lt;-<span class="st"> </span><span class="dv">12</span></a>
-<a class="sourceLine" id="cb51-3" data-line-number="3">pred_p_sim &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1</span>, a <span class="op">+</span><span class="st"> </span>y, b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>y)</a>
-<a class="sourceLine" id="cb51-4" data-line-number="4">(pred_y_sim &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">1</span>, n, pred_p_sim))</a></code></pre></div>
-<pre><code>## [1] 15</code></pre>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="proportion.html#cb51-1"></a>a &lt;-<span class="st"> </span><span class="fl">3.06</span>; b &lt;-<span class="st"> </span><span class="fl">2.56</span></span>
+<span id="cb51-2"><a href="proportion.html#cb51-2"></a>n &lt;-<span class="st"> </span><span class="dv">20</span>; y &lt;-<span class="st"> </span><span class="dv">12</span></span>
+<span id="cb51-3"><a href="proportion.html#cb51-3"></a>pred_p_sim &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1</span>, a <span class="op">+</span><span class="st"> </span>y, b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>y)</span>
+<span id="cb51-4"><a href="proportion.html#cb51-4"></a>(pred_y_sim &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">1</span>, n, pred_p_sim))</span></code></pre></div>
+<pre><code>## [1] 7</code></pre>
 <p>Due to the ability of R to work easily with vectors, ]the same code is essentially used for simulating <span class="math inline">\(S = 1000\)</span> draws from the predictive distribution.<br />
 In the following R script, <code>pred_p_sim</code> contains 1000 simulated draws from the posterior, and for each element of this posterior sample, the <code>rbinom()</code> function is used to simulate a corresponding value of <span class="math inline">\(\tilde Y\)</span> from the Binomial sampling density.</p>
-<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1">a &lt;-<span class="st"> </span><span class="fl">3.06</span>; b &lt;-<span class="st"> </span><span class="fl">2.56</span></a>
-<a class="sourceLine" id="cb53-2" data-line-number="2">n &lt;-<span class="st"> </span><span class="dv">20</span>; y &lt;-<span class="st"> </span><span class="dv">12</span></a>
-<a class="sourceLine" id="cb53-3" data-line-number="3">S &lt;-<span class="st"> </span><span class="dv">1000</span></a>
-<a class="sourceLine" id="cb53-4" data-line-number="4">pred_p_sim &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, a <span class="op">+</span><span class="st"> </span>y, b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>y)</a>
-<a class="sourceLine" id="cb53-5" data-line-number="5">pred_y_sim &lt;-<span class="st"> </span><span class="kw">rbinom</span>(S, n, pred_p_sim)</a></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="proportion.html#cb53-1"></a>a &lt;-<span class="st"> </span><span class="fl">3.06</span>; b &lt;-<span class="st"> </span><span class="fl">2.56</span></span>
+<span id="cb53-2"><a href="proportion.html#cb53-2"></a>n &lt;-<span class="st"> </span><span class="dv">20</span>; y &lt;-<span class="st"> </span><span class="dv">12</span></span>
+<span id="cb53-3"><a href="proportion.html#cb53-3"></a>S &lt;-<span class="st"> </span><span class="dv">1000</span></span>
+<span id="cb53-4"><a href="proportion.html#cb53-4"></a>pred_p_sim &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, a <span class="op">+</span><span class="st"> </span>y, b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>y)</span>
+<span id="cb53-5"><a href="proportion.html#cb53-5"></a>pred_y_sim &lt;-<span class="st"> </span><span class="kw">rbinom</span>(S, n, pred_p_sim)</span></code></pre></div>
 <p>Figure 7.14 displays predictive probabilities for the number of students who prefer Fridays using the exact Beta-Binomial and simulation methods. One observes good agreement using these two computation methods.</p>
 <div class="figure"><span id="fig:unnamed-chunk-41"></span>
 <img src="../LATEX/figures/chapter7/two_predictive_dist.png" alt="Display of the exact and simulated predictive probabilities for dining example." width="500" />
@@ -1086,12 +1088,12 @@ Figure 7.14: Display of the exact and simulated predictive probabilities for din
 Prob(6 \le \tilde Y \le 15) = 0.927
 \]</span>
 which is close in value to the range <span class="math inline">\(Prob(7 \le \tilde Y \le 16) = 0.919\)</span> found using the exact predictive distribution.</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb54-1" data-line-number="1">a &lt;-<span class="st"> </span><span class="fl">15.06</span></a>
-<a class="sourceLine" id="cb54-2" data-line-number="2">b &lt;-<span class="st"> </span><span class="fl">10.56</span></a>
-<a class="sourceLine" id="cb54-3" data-line-number="3">prob &lt;-<span class="st"> </span><span class="kw">pbetap</span>(<span class="kw">c</span>(a, b), <span class="dv">20</span>, <span class="dv">0</span><span class="op">:</span><span class="dv">20</span>)</a>
-<a class="sourceLine" id="cb54-4" data-line-number="4">pred_distribution &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Y =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">20</span>, </a>
-<a class="sourceLine" id="cb54-5" data-line-number="5">                                <span class="dt">Probability =</span> prob)</a>
-<a class="sourceLine" id="cb54-6" data-line-number="6"><span class="kw">discint</span>(pred_distribution, <span class="fl">.9</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="proportion.html#cb54-1"></a>a &lt;-<span class="st"> </span><span class="fl">15.06</span></span>
+<span id="cb54-2"><a href="proportion.html#cb54-2"></a>b &lt;-<span class="st"> </span><span class="fl">10.56</span></span>
+<span id="cb54-3"><a href="proportion.html#cb54-3"></a>prob &lt;-<span class="st"> </span><span class="kw">pbetap</span>(<span class="kw">c</span>(a, b), <span class="dv">20</span>, <span class="dv">0</span><span class="op">:</span><span class="dv">20</span>)</span>
+<span id="cb54-4"><a href="proportion.html#cb54-4"></a>pred_distribution &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Y =</span> <span class="dv">0</span><span class="op">:</span><span class="dv">20</span>, </span>
+<span id="cb54-5"><a href="proportion.html#cb54-5"></a>                                <span class="dt">Probability =</span> prob)</span>
+<span id="cb54-6"><a href="proportion.html#cb54-6"></a><span class="kw">discint</span>(pred_distribution, <span class="fl">.9</span>)</span></code></pre></div>
 <pre><code>## $prob
 ## [1] 0.9185699
 ## 
@@ -1164,12 +1166,12 @@ where <span class="math inline">\(f_1(Y = y)\)</span> and <span class="math inli
 </ul>
 
 <p>The function <code>binomial.beta.mix()</code> is used to find the Bayes factor for our example. One inputs the prior probabilities of the two models (priors), and the vectors of Beta shape parameters that define the owner’s prior and the worker’s prior. The displayed output is the posterior odds value of 6.77.</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb56-1" data-line-number="1">probs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>)</a>
-<a class="sourceLine" id="cb56-2" data-line-number="2">beta_par1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">3.06</span>, <span class="fl">2.56</span>)</a>
-<a class="sourceLine" id="cb56-3" data-line-number="3">beta_par2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">2.07</span>, <span class="fl">7.32</span>)</a>
-<a class="sourceLine" id="cb56-4" data-line-number="4">beta_par &lt;-<span class="st"> </span><span class="kw">rbind</span>(beta_par1, beta_par2)</a>
-<a class="sourceLine" id="cb56-5" data-line-number="5">output &lt;-<span class="st"> </span><span class="kw">binomial.beta.mix</span>(probs, beta_par, <span class="kw">c</span>(<span class="dv">12</span>, <span class="dv">8</span>))</a>
-<a class="sourceLine" id="cb56-6" data-line-number="6">(posterior_odds &lt;-<span class="st"> </span>output<span class="op">$</span>probs[<span class="dv">1</span>] <span class="op">/</span><span class="st"> </span>output<span class="op">$</span>probs[<span class="dv">2</span>])</a></code></pre></div>
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="proportion.html#cb56-1"></a>probs &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">0.5</span>, <span class="fl">0.5</span>)</span>
+<span id="cb56-2"><a href="proportion.html#cb56-2"></a>beta_par1 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">3.06</span>, <span class="fl">2.56</span>)</span>
+<span id="cb56-3"><a href="proportion.html#cb56-3"></a>beta_par2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="fl">2.07</span>, <span class="fl">7.32</span>)</span>
+<span id="cb56-4"><a href="proportion.html#cb56-4"></a>beta_par &lt;-<span class="st"> </span><span class="kw">rbind</span>(beta_par1, beta_par2)</span>
+<span id="cb56-5"><a href="proportion.html#cb56-5"></a>output &lt;-<span class="st"> </span><span class="kw">binomial.beta.mix</span>(probs, beta_par, <span class="kw">c</span>(<span class="dv">12</span>, <span class="dv">8</span>))</span>
+<span id="cb56-6"><a href="proportion.html#cb56-6"></a>(posterior_odds &lt;-<span class="st"> </span>output<span class="op">$</span>probs[<span class="dv">1</span>] <span class="op">/</span><span class="st"> </span>output<span class="op">$</span>probs[<span class="dv">2</span>])</span></code></pre></div>
 <pre><code>## beta_par1 
 ##  6.777823</code></pre>
 <p>Since the two priors are given equal probabilities, the prior odds <span class="math inline">\(q / (1 - q)\)</span> is equal to one. In this case the posterior odds is equal to the Bayes factor. The interpretation is that for the given observation (12 successes in 20 trials), there is 6.77 times more support for the owner’s prior than for the worker’s prior. This conclusion is consistent with the earlier work that showed that the observed value of <span class="math inline">\(y\)</span> was inconsistent with the Bayesian model for the worker’s prior.</p>
@@ -1242,7 +1244,7 @@ p &amp;=&amp; \{0.3, 0.4, 0.5, 0.6, 0.7, 0.8\} \nonumber \\
 <ol start="6" style="list-style-type: decimal">
 <li><strong>Comparing Beta Distributions</strong></li>
 </ol>
-<p>Consider four Beta curves: (1) (5, 5), (2) (10, 10), (3) (50, 50) and (4) (100, 100). Think of the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> as counts of <code>successes&quot; and</code>failures&quot; in a prior sample. Use one of the R beta functions (e.g. <code>rbeta()</code>, <code>beta_area()</code>, among others) to discuss the similarities and differences between these four Beta curves.</p>
+<p>Consider four Beta curves: (1) (5, 5), (2) (10, 10), (3) (50, 50) and (4) (100, 100). Think of the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> as counts of <code>successes" and</code>failures" in a prior sample. Use one of the R beta functions (e.g. <code>rbeta()</code>, <code>beta_area()</code>, among others) to discuss the similarities and differences between these four Beta curves.</p>
 <ol start="7" style="list-style-type: decimal">
 <li><strong>Specifying A Continuous Beta Prior</strong></li>
 </ol>
@@ -1394,7 +1396,7 @@ To illustrate the advantage of simulation, suppose one is interested in finding 
 </table>
 <ol style="list-style-type: lower-alpha">
 <li><p>Let <span class="math inline">\(p_{2005}\)</span> and <span class="math inline">\(p_{2015}\)</span> denote the proportions of science majors in 2005 and 2015, respectively. Assuming that <span class="math inline">\(p_{2005}\)</span> and <span class="math inline">\(p_{2015}\)</span> have independent uniform priors, obtain the joint posterior distribution of <span class="math inline">\(p_{2005}\)</span> and <span class="math inline">\(p_{2015}\)</span>. Recall that the <span class="math inline">\({\rm{Beta}}(1, 1)\)</span> distribution is equivalent to the <span class="math inline">\(\rm{Uniform}(0, 1)\)</span> distribution.</p></li>
-<li><p>Suppose one uses the parameter <span class="math inline">\(\delta = p_{2015} - p_{2005}\)</span> to measure the difference in proportions. Use simulation from the posterior distribution to answer the question ``have the proportions of science majors changed from 2005 to 2015?&quot;. [Hint: simulate a vector <span class="math inline">\(s_{2005}\)</span> of posterior samples of <span class="math inline">\(p_{2005}\)</span> and another vector <span class="math inline">\(s_{2015}\)</span> of posterior samples of <span class="math inline">\(p_{2015}\)</span> (make sure to use the same number of samples) and subtract <span class="math inline">\(s_{2005}\)</span> from <span class="math inline">\(s_{2015}\)</span> which yields a vector of simulated values from the posterior of <span class="math inline">\(\delta\)</span>.]</p></li>
+<li><p>Suppose one uses the parameter <span class="math inline">\(\delta = p_{2015} - p_{2005}\)</span> to measure the difference in proportions. Use simulation from the posterior distribution to answer the question ``have the proportions of science majors changed from 2005 to 2015?". [Hint: simulate a vector <span class="math inline">\(s_{2005}\)</span> of posterior samples of <span class="math inline">\(p_{2005}\)</span> and another vector <span class="math inline">\(s_{2015}\)</span> of posterior samples of <span class="math inline">\(p_{2015}\)</span> (make sure to use the same number of samples) and subtract <span class="math inline">\(s_{2005}\)</span> from <span class="math inline">\(s_{2015}\)</span> which yields a vector of simulated values from the posterior of <span class="math inline">\(\delta\)</span>.]</p></li>
 <li><p>Did the proportion of science majors change from 2005 to 2015? Answer this question by a posterior computation.</p></li>
 <li><p>Compile a similar dataset for your school type, and answer parts (a) through (c).</p></li>
 <li><p>What assumption is made about the proportions <span class="math inline">\(p_{2005}\)</span> and <span class="math inline">\(p_{2015}\)</span> in our assignment of priors? Do you think such assumption is justified? If not, how do you think one can adjust the approach to be more realistic?</p></li>
@@ -1407,29 +1409,29 @@ To illustrate the advantage of simulation, suppose one is interested in finding 
 <li><strong>Prior Predictive Checking - Pizza Popularity</strong>
 </li>
 </ol>
-<p>Suppose a restaurant is serving pizza of two varieties, cheese and pepperoni, and a manager is interested in the proportion <span class="math inline">\(p\)</span> of customers who prefer pepperoni. After some thought, the manager’s prior beliefs about <span class="math inline">\(p\)</span> are represented by a (6, 12) distribution.</p>
+<p>Suppose a restaurant is serving pizza of two varieties, cheese and pepperoni, and a manager is interested in the proportion <span class="math inline">\(p\)</span> of customers who prefer pepperoni. After some thought, the manager’s prior beliefs about <span class="math inline">\(p\)</span> are represented by a Beta(6, 12) distribution.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Suppose a random sample of 20 customers is surveyed on their pizza preference and let <span class="math inline">\(Y\)</span> denote the number that prefer pepperoni. Compute and graph the prior predictive density of <span class="math inline">\(Y\)</span>.</p></li>
-<li><p>Suppose 20 customers are sampled and 14 prefer pepperoni. Is the value <span class="math inline">\(y = 14\)</span> consistent with the Bayesian model where <span class="math inline">\(p\)</span> has a (6, 12) distribution? Explain why or why not.</p></li>
+<li><p>Suppose 20 customers are sampled and 14 prefer pepperoni. Is the value <span class="math inline">\(y = 14\)</span> consistent with the Bayesian model where <span class="math inline">\(p\)</span> has a Beta(6, 12) distribution? Explain why or why not.</p></li>
 </ol>
 <ol start="22" style="list-style-type: decimal">
 <li><strong>Bayes Factor - Pizza Popularity</strong>
 </li>
 </ol>
-<p>In the restaurant example of Exercise 21, suppose one of the waiters has a different opinion about the popularity of pepperoni pizza. His prior belief about the proportion <span class="math inline">\(p\)</span> preferring pizza is described by a (12, 6) distribution.</p>
+<p>In the restaurant example of Exercise 21, suppose one of the waiters has a different opinion about the popularity of pepperoni pizza. His prior belief about the proportion <span class="math inline">\(p\)</span> preferring pizza is described by a Beta(12, 6) distribution.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Find and graph the prior predictive density of the number <span class="math inline">\(y\)</span> who prefer pizza in a sample of 20 customers.</li>
 <li>If 14 out of 20 customers prefer pepperoni, is this result consistent with the predictive distribution?</li>
-<li>Compare the two Bayesian models where (1) <span class="math inline">\(p\)</span> is distributed (12, 6) and (2) <span class="math inline">\(p\)</span> is distributed (6, 12) by a Bayes factor. Interpret the value that you compute.</li>
+<li>Compare the two Bayesian models where (1) <span class="math inline">\(p\)</span> is distributed Beta(12, 6) and (2) <span class="math inline">\(p\)</span> is distributed Beta(6, 12) by a Bayes factor. Interpret the value that you compute.</li>
 </ol>
 <ol start="23" style="list-style-type: decimal">
 <li><strong>Posterior Predictive Checking - Pizza Popularity</strong></li>
 </ol>
-<p>Consider the same problem as in Exercise 22 where <span class="math inline">\(p\)</span> is the proportion of customers who prefer pepperoni and the manager’s prior beliefs are given by a (6, 12) distribution.</p>
+<p>Consider the same problem as in Exercise 22 where <span class="math inline">\(p\)</span> is the proportion of customers who prefer pepperoni and the manager’s prior beliefs are given by a Beta(6, 12) distribution.</p>
 <ol style="list-style-type: lower-alpha">
 <li><p>Suppose 14 out of 20 customers prefer pepperoni. Using the algorithm described in Section 7.6, simulate 1000 values of <span class="math inline">\(\tilde y\)</span> (out of 20 customers) from the posterior predictive distribution. Construct a histogram of these values.</p></li>
 <li><p>Is the observation (14 preferring pepperoni) consistent with this predictive distribution? Explain.</p></li>
-<li><p>Repeat parts (a) and (b) using the waiter’s (12, 6) distribution.</p></li>
+<li><p>Repeat parts (a) and (b) using the waiter’s Beta(12, 6) distribution.</p></li>
 </ol>
 <ol start="24" style="list-style-type: decimal">
 <li><strong>Learning from a Multinomial Experiment</strong></li>
