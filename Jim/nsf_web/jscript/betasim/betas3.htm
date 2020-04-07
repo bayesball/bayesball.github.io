@@ -1,0 +1,223 @@
+<form name=input>
+
+<h1 align="center">Simulating a Beta Curve
+</h1>
+
+<p align="center"><img border="0" src="beta.jpg" width="240" height="180">
+</p>
+
+<div align="center">
+  <center>
+<table border="1" width="29%">
+  <tr>
+    <td width="50%" colspan="2">
+      <p align="center">Beta curve numbers</td>
+  </tr>
+  <tr>
+    <td width="50%">a = <input type="text" name="a" size="5"></td>
+    <td width="50%">b = <input type="text" name="b" size="5"></td>
+  </tr>
+</table>
+  </center>
+</div>
+<p align="center">
+
+<input type="button" value="Simulate betas!" onClick="betas()">
+</form>
+<script>
+
+function betas()
+{
+var s=gamms(document.input.a.value);
+var t=gamms(document.input.b.value);
+var p=1;
+var ss=0;
+var ss2=0;
+var tt=new Array(20);
+j=1;
+
+for (var i=0; i<20; i++)
+{
+tt[i]=0;
+}
+
+for (var i = 0; i < 1000; i++)
+{
+ p=s[i]/(s[i]+t[i]);
+ j=Math.floor(20*p);
+ tt[j]=tt[j]+1;
+ ss=ss+p;
+ ss2=ss2+Math.pow(p,2);
+}
+
+document.Results.mean.value=Math.round(1000*ss/1000)/1000;
+document.Results.sd.value=Math.round(1000*Math.sqrt((ss2-Math.pow(ss,2)/1000)/999))/1000;
+for (var i=0; i<20; i++)
+{
+j=2*i; k=j+1;
+document.tally[j].value=tt[i];
+document.tally[k].value=tt[i]/1000;
+}
+
+}
+
+function gamms(alpha)
+{
+var id=false;
+var v1=1;
+var v2=1;
+var n=1000;
+var ss=0;
+var a=alpha-1;
+
+var s = new Array(n);
+
+for (var i = 0; i < n; i++)
+{
+   id=false;
+	while (id==false)
+	{
+		v1=-Math.log(Math.random());
+		v2=-Math.log(Math.random());
+		id=(v2>=(a*(v1-Math.log(v1)-1)));
+	}
+	s[i]=alpha*v1;
+	ss=ss+s[i];
+}
+return(s);
+}
+
+
+</script>
+</p>
+<FORM name=Results>
+<div align="center">
+  <center>
+<table border="1" width="41%">
+  <tr>
+    <td width="85%">Mean of&nbsp;p</td>
+    <td width="1%"><input type="text" name="mean" value="0" size="5"></td>
+  </tr>
+  <tr>
+    <td width="85%">Standard deviation of p</td>
+    <td width="1%"><input type="text" name="sd" value="0" size="5"></td>
+  </tr>
+ </table>
+  </center>
+</div>
+</form>
+<h3 align="center">&nbsp;Grouped count table of 1000 simulated values of p:</h3>
+
+<div align="center">
+  <center>
+  <form name=tally>
+  <table border="1" width="43%">
+    <tr>
+      <td width="36%" align="center">p</td>
+      <td width="28%" align="center">Count</td>
+      <td width="36%" align="center">Probability</td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(0, .05)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.05, .10)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.10, .15)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.15, .20)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.20, .25)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.25, .30)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.30, .35)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.35, .40)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.40, .45)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.45, .50)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.50, .55)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.55, .60)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.60, .65)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.65, .70)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.70, .75)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.75, .80)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.80, .85)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.85, .90)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.90, .95)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+    <tr>
+      <td width="36%" align="center">(.95, 1)</td>
+      <td width="28%" align="center"><input type="text" value="0" size="7"></td>
+      <td width="36%" align="center"><input type="text" value="0" size="7"></td>
+    </tr>
+  </table>
+  </form>
+  </center>
+</div>

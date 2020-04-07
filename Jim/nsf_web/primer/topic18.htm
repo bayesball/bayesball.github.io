@@ -1,0 +1,849 @@
+<HTML>  
+<HEAD>
+  <META NAME="GENERATOR" CONTENT="Adobe PageMill 3.0 Mac">
+  <META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=windows-1252">
+  <META NAME="GENERATOR" CONTENT="Microsoft FrontPage 4.0">
+  <META NAME="ProgId" CONTENT="FrontPage.Editor.Document">
+  <TITLE>A Bayesian Primer</TITLE>
+</HEAD>
+<BODY BGCOLOR="#ffcc00">
+
+<H2 ALIGN=CENTER>A Bayesian Primer</H2>
+
+<H3 ALIGN=CENTER>Topic 18: Learning About a Mean Using Discrete
+Models</H3>
+
+<P><B>Introduction</B></P>
+
+<P>This topic introduces Bayesian inference for a population mean.
+We have a population of continuous measurements and we are interested
+in learning about the mean M of the populations. As a simple example
+(Berry, 1996), suppose that you are measuring your weight (in
+pounds) on a scale. From experience, you know that the weight
+readings from the scale are variable and you imagine a population
+of measurements obtained by weighing yourself many times. You
+wish to learn about the mean M of this population of weight measurements.</P>
+
+<P><B>A Normal Curve Model</B></P>
+
+<P>How do we define a model for measurements? First, we assume
+that the distribution of measurements in the population can be
+described by a normal curve. This normal curve is described by
+two numbers -- a mean M and a standard deviation h. In this topic,
+we assume that we know the value of the population standard deviation
+h, and focus on learning about the population mean M.</P>
+
+<P>This situation is conceptually more difficult than learning
+about a proportion. In that case, a model was simply described
+by a number p that represented the proportion of successes in
+the population. Here a model is not a single number, but rather
+a distribution of measurements that is centered about the unknown
+mean value M. The figure below shows this normal curve model.</P>
+
+<P ALIGN=CENTER><IMG SRC="norm1.jpg" BORDER="0" WIDTH="305" HEIGHT="198"
+NATURALSIZEFLAG="0" ALIGN="BOTTOM"></P>
+
+<P><B>Formula for a Normal Curve</B></P>
+
+<P>In the following, we will need to know the formula for the
+normal curve that describes the population of measurements. If
+x denotes a measurement, then the normal curve is given by</P>
+
+<P ALIGN=CENTER><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-3.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:50.4pt;
+ height:30.6pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]--> <IMG SRC="topic21.gif" v:shapes="_x0000_i1025"
+WIDTH="67" HEIGHT="41" NATURALSIZEFLAG="3" ALIGN="BOTTOM"></span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033757616">
+ </o:OLEObject>
+</xml><![endif]--> </span></P>
+
+<P>where z is the standardized score obtained by subtracting the
+mean M and dividing by the standard deviation h</P>
+
+<P ALIGN=CENTER><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-12.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:68.4pt;
+ height:39pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]--> <!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:68.4pt;
+ height:39pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/02/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]--><IMG SRC="topic23.gif" v:shapes="_x0000_i1025"
+WIDTH="91" HEIGHT="52" NATURALSIZEFLAG="3" ALIGN="BOTTOM"></span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033760324">
+ </o:OLEObject>
+</xml><![endif]--> <!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033757676">
+ </o:OLEObject>
+</xml><![endif]--></span></P>
+
+<P><B>Collection of Normal Models</B></P>
+
+<P>To learn about the population mean M, we use the same discrete
+model approach that we followed in Topic 16 for a population proportion.
+First, we think of several plausible values for the population
+mean, and then assign probabilities to the different values of
+M that reflect our knowledge about likely or unlikely values.</P>
+
+<P>Suppose that we know the standard deviation of the population
+is h = 1, and we think that the population mean values M = -2,
+-.5, 1, 2.5 are all possible. The four population measurement
+models are graphed in the figure below. Note that all of the models
+have the same shape (since all have the same standard deviation).
+The only difference is in the location of the four curves.</P>
+
+<P ALIGN=CENTER><B><IMG SRC="norm2.jpg" BORDER="0" WIDTH="355"
+HEIGHT="242" NATURALSIZEFLAG="0" ALIGN="BOTTOM"></B></P>
+
+<P>In our weighing example, M is the mean of an infinite collection
+of measurements taken from my scale. What are plausible values
+for M?&nbsp; If I assume that the average measurement M from the
+scale represents my true weight, then I would list several values
+for my true weight that are displayed in the table below.</P>
+
+<P ALIGN=CENTER>
+<div align="center">
+  <center><TABLE BORDER="1" WIDTH="5%" CELLSPACING="2" 
+CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%">M (pounds)</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">140</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">142</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">144</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">146</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">148</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">150</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">152</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">154</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">156</TD> 
+  </TR>
+</TABLE></center>
+</div>
+
+<P><B>Prior</B></P>
+
+<P>After a list of plausible values for M is made, probabilities
+are assigned; that reflect my beliefs about the likelihood of
+the different values.; In this case, suppose that I think that
+each of the nine values listed above are equally plausible, resulting
+in the following assignment of prior probabilities.</P>
+
+<P ALIGN=CENTER>
+<div align="center">
+  <center><TABLE BORDER="1" WIDTH="5%" CELLSPACING="2" 
+CELLPADDING="0">
+  <TR>
+    <TD WIDTH="100%">M(pounds)</TD> 
+    <TD WIDTH="100%" ALIGN="CENTER">PRIOR</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">140</TD> 
+    <TD WIDTH="100%" ALIGN="CENTER">1/9</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">142</TD> 
+    <TD WIDTH="100%" ALIGN="CENTER">1/9</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">144</TD> 
+    <TD WIDTH="100%" ALIGN="CENTER">1/9</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">146</TD> 
+    <TD WIDTH="100%" ALIGN="CENTER">1/9</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">148</TD> 
+    <TD WIDTH="100%" ALIGN="CENTER">1/9</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">150</TD> 
+    <TD WIDTH="100%" ALIGN="CENTER">1/9</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">152</TD> 
+    <TD WIDTH="100%" ALIGN="CENTER">1/9</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">154</TD> 
+    <TD WIDTH="100%" ALIGN="CENTER">1/9</TD> 
+  </TR>
+  <TR>
+    <TD WIDTH="100%">156</TD> 
+    <TD WIDTH="100%" ALIGN="CENTER">1/9</TD> 
+  </TR>
+</TABLE></center>
+</div>
+
+<P><B>Computing Posterior Probabilities Using One Observation</B></P>
+
+<P>Suppose that I weigh myself one time and the reading is 147
+pounds.&nbsp; What have I learned about my true weight?</P>
+
+<P>We compute the new or posterior probabilities for M by means
+of Bayes' rule.</P>
+
+<P><B>Likelihoods.</B>&nbsp; For each model, we compute the likelihood
+which is the probability of our observed data.&nbsp; Suppose that
+our data result is denoted by x.&nbsp; Then the likelihood of
+the model M is given by</P>
+
+<P ALIGN=CENTER><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-3.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:149.4pt;
+ height:24pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/02/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]--> <!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:176.4pt;
+ height:28.2pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/02/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]--><IMG SRC="topic24.gif" v:shapes="_x0000_i1025"
+WIDTH="235" HEIGHT="38" NATURALSIZEFLAG="3" ALIGN="BOTTOM"></span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033762268">
+ </o:OLEObject>
+</xml><![endif]--> <!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033762198">
+ </o:OLEObject>
+</xml><![endif]--></span></P>
+
+<P><span style="font-size: 12.0pt; font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">where
+z is the standardized score</span></P>
+
+<P ALIGN=CENTER><span style="mso-text-raise:-12.0pt"> <IMG SRC="topic23.gif"
+v:shapes="_x0000_i1025" WIDTH="91" HEIGHT="52" NATURALSIZEFLAG="3"
+ALIGN="BOTTOM"></span></P>
+
+<P>In this example, our observed measurement is x = 147.&nbsp;&nbsp;
+Suppose that we know (from previous experience working with scales)
+that the standard deviation of the population of measurements
+is h = 2.&nbsp; Then the likelihood would have the above form,
+where the standardized score is</P>
+
+<P ALIGN=CENTER><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-12.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:82.2pt;
+ height:39pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/02/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]--> <IMG SRC="topic25.gif" v:shapes="_x0000_i1025"
+WIDTH="110" HEIGHT="52" NATURALSIZEFLAG="3" ALIGN="BOTTOM"></span></span></P>
+
+<P><span style="mso-text-raise: -12.0pt; font-size: 12.0pt; font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA"><B>Bayes'
+rule.</B>&nbsp; Once the likelihoods are defined, then posterior
+probabilities for the population mean M are defined using the
+familiar &quot;multiply, sum, divide&quot; recipe that we used
+to compute posterior probabilities in Topic 16 for a population
+proportion.&nbsp; The calculations are shown in the following
+Bayes' table.&nbsp;</span></P>
+
+<OL>
+  <LI><span style="mso-text-raise: -12.0pt; font-size: 12.0pt; font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">The
+  M and PRIOR columns are copied from above.</span>
+  <LI><span style="mso-text-raise: -12.0pt; font-size: 12.0pt; font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">The
+  Z column contains the standardized scores that are used in computing
+  the likelihood.</span>
+  <LI><span style="mso-text-raise: -12.0pt; font-size: 12.0pt; font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">The
+  LIKELIHOOD column contains the likelihood values.</span>
+  <LI><span style="mso-text-raise: -12.0pt; font-size: 12.0pt; font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">The
+  PRODUCT column contains the products of the prior and likelihood
+  values.</span>
+  <LI><span style="mso-text-raise: -12.0pt; font-size: 12.0pt; font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">The
+  POSTERIOR column contains the posterior probabilities that are
+  found by dividing each product by the sum of the products.</span><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033762757">
+ </o:OLEObject>
+</xml><![endif]--> </span>
+</OL>
+
+<PRE>
+ M   PRIOR     Z     LIKELIHOOD PRODUCT	 POSTERIOR
+--------------------------------------------------
+140  .1111  -3.5000    0.0022    0.0002    0.0009
+142  .1111  -2.5000    0.0439    0.0049    0.0175
+144  .1111  -1.5000    0.3247    0.0361    0.1295
+146  .1111  -0.5000    0.8825    0.0981    0.3521
+148  .1111   0.5000    0.8825    0.0981    0.3521
+150  .1111   1.5000    0.3247    0.0361    0.1295
+152  .1111   2.5000    0.0439    0.0049    0.0175
+154  .1111   3.5000    0.0022    0.0002    0.0009
+156  .1111   4.5000    0.0000    0.0000    0.0000</PRE>
+
+<P>What have I learned about my true weight?&nbsp; Initially I
+thought that each of the nine possible means 140, ..., 156 had
+the same probability.&nbsp; Now, after observing my single measurement,
+I note that the two values M = 146 and M = 148 have the largest
+probabilities of .3521. To get some idea of the uncertainty in
+my knowledge about the mean, we can find a set of values which
+contains M with a high probability. Looking at the posterior probability
+table, we see that </P>
+
+<P ALIGN=CENTER>Prob(M = 144, 146, 148, 150) = .1295 + .3521 +
+.3521 + .1295 = .9632 .</P>
+
+<P>So the set {144, 146, 148, 150} is a 96.32% probability interval
+for the mean M of the population of weight measurements.</P>
+
+<P><B>Computing Posterior Probabilities Using a Sample of Observations</B></P>
+
+<P>Actually we didn't learn about the mean M of measurements above,
+since we took only a single reading. Suppose instead that we can
+take a sample of n independent measurements x1, ..., xn. How do
+we perform inference about M in this situation?</P>
+
+<P>The only change is how we compute the likelihoods. In the case
+where we have independent observations, then the likelihood for
+M is found by multiplying the probabilities of the individual
+data values.</P>
+
+<p align="center"><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-3.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:266.4pt;
+ height:29.4pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<img width="355" height="39" src="topic26.gif" v:shapes="_x0000_i1025"></span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033829213">
+ </o:OLEObject>
+</xml><![endif]-->
+</span></p>
+
+<P>where z<sub>1</sub>, ... , z<sub>n</sub> are the standardized scores for the n observations.</P>
+
+<p align="center"><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-12.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:172.2pt;
+ height:37.8pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+ z<sub><span style="text-transform: capitalize">1</span></sub> = (x<sub>1</sub>
+- M)/h, ..., z<sub>n</sub> = (x<sub>n</sub> - M)/h</span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033830376">
+ </o:OLEObject>
+</xml><![endif]-->
+</span></p>
+
+<P>It turns that one can show that this product is equivalent
+to</P>
+
+<p align="center"><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-3.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:183.6pt;
+ height:29.4pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+ <!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:183.6pt;
+ height:29.4pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/03/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<img src="topic_19_1.gif" v:shapes="_x0000_i1025" width="245" height="39"><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033831256">
+ </o:OLEObject>
+</xml><![endif]-->
+</span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033829458">
+ </o:OLEObject>
+</xml><![endif]-->
+</span></p>
+
+<P>where z<sub>m</sub> is the standardized score of the sample mean</P>
+
+<P align="center"><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-12.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:101.4pt;
+ height:41.4pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+ <!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:101.4pt;
+ height:41.4pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/03/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<img src="topic_19_2.gif" v:shapes="_x0000_i1025" width="135" height="55"><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033831317">
+ </o:OLEObject>
+</xml><![endif]-->
+</span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033829675">
+ </o:OLEObject>
+</xml><![endif]-->
+</span></P>
+
+<P>To compute the posterior probabilities for the values of M,
+we follow the same Bayes' rule recipe as we did in the single
+observation case. To illustrate, suppose that I take five measurements
+from my scale:</P>
+
+<P ALIGN=CENTER>147, 146, 150, 147, 145</P>
+
+<P>Here we have taken n = 5 measurements and</P>
+
+<P align="center"><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-3.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:19.8pt;
+ height:22.8pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<span style="mso-text-raise:-12.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:331.8pt;
+ height:54.6pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:284.4pt;
+ height:46.8pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+ <!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:284.4pt;
+ height:46.8pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/03/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<img src="topic19_4.gif" v:shapes="_x0000_i1025" width="379" height="62"><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033831139">
+ </o:OLEObject>
+</xml><![endif]-->
+<!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033830575">
+ </o:OLEObject>
+</xml><![endif]-->
+</span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033830554">
+ </o:OLEObject>
+</xml><![endif]-->
+</span></span></P>
+
+<P>To compute the likelihoods, we first compute the standardized
+scores</P>
+
+<P align="center"><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-12.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:113.4pt;
+ height:41.4pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<img width="151" height="55" src="topic_19_3.gif" v:shapes="_x0000_i1025"></span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033830734">
+ </o:OLEObject>
+</xml><![endif]-->
+</span></P>
+
+<P>for each possible value of M, and then LIKELIHOOD = exp(-z<sub>m</sub><sup>2</sup>/2).&nbsp;
+The table following displays the posterior probabilities after observing these
+five weighings.</P>
+
+<PRE>M   PRIOR LIKELIHOOD POSTERIOR
+----------------------------
+140  .1111   0.0000  0.0000
+142  .1111   0.0000  0.0000
+144  .1111   0.0036  0.0033
+146  .1111   0.5353  0.4967
+148  .1111   0.5353  0.4967
+150  .1111   0.0036  0.0033
+152  .1111   0.0000  0.0000
+154  .1111   0.0000  0.0000
+156  .1111   0.0000  0.0000</PRE>
+
+Note that we have learned more about the mean M from this sample of size 5 than
+we did from a single weighing.&nbsp; The probability that M is 146 or 148 is
+.4967 + .4967 = .9934 and so it is extremely unlikely that my true weight is
+smaller than 146 or larger than 148.
+
+<HR ALIGN=LEFT>
+
+<P><I>Page Author: Jim Albert (c);<BR>
+albert@math.bgsu.edu;<BR>
+Document: http://math-80.bgsu.edu/nsf_web/main.htm/primer/topic18.htm;<BR>
+Last Modified: October 17, 2000</I>
+
+</BODY>
+</HTML>

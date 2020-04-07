@@ -1,0 +1,147 @@
+<html>
+
+<HEAD>
+
+<SCRIPT LANGUAGE="JavaScript">
+
+<!-- Begin
+function quad(form) {
+
+a=parseFloat(form.a.value);
+b=parseFloat(form.b.value);
+x=parseFloat(form.x.value);
+prob1=(a<=0);
+prob2=(b<=0);
+prob3=(x<0)||(x>1);
+
+if (isNaN(a)|isNaN(b)|isNaN(x)|prob1|prob2|prob3)
+   {
+   form.Fx.value = 'NaN';
+   alert("Please specify proper values for a, b, and x")
+   }
+else
+   form.Fx.value = Math.round(10000*betai(x,a,b))/10000;
+}
+
+function betai(x,a,b)
+{
+var bt=Math.exp(gammln(a+b)-gammln(a)-gammln(b)+a*Math.log(x)+b*Math.log(1-x));
+var val
+if (x<((a+1)/(a+b+2)))
+   val=bt*betacf(a,b,x)/a;
+else
+   val=1-bt*betacf(b,a,1-x)/b;
+return val;
+}
+
+function betacf(a,b,x)
+{
+var itmax=100; 
+var eps=3e-7;
+var am=1; 
+var bm=1; 
+var az=1;
+var qab=a+b; 
+var qap=a+1; 
+var qam=a-1;
+var bz=1-qab*x/qap;
+var m, em, tem, d, ap, bp, app, bpp, aold, bz
+for (m=1; m<(itmax+1); m++)
+{
+   em=m; 
+   tem=em+em;
+   d=em*(b-m)*x/((qam+tem)*(a+tem));
+   ap=az+d*am; 
+   bp=bz+d*bm;
+   d=-(a+em)*(qab+em)*x/((a+tem)*(qap+tem));
+   app=ap+d*az; 
+   bpp=bp+d*bz;
+   aold=az;
+   am=ap/bpp; 
+   bm=bp/bpp; 
+   az=app/bpp; 
+   bz=1;
+   if (Math.abs(az-aold) <  (eps*Math.abs(az)))
+      break;
+ }
+return az;
+}
+
+
+function gammln(xx)
+{
+var cof=[76.18009173, -86.50532033, 24.01409822, -1.231739516, .120858003e-2, -.536382e-5];
+var stp=2.5066287465;
+var fpf=5.5;
+var x=xx-1;
+var tmp=x+fpf;
+tmp=(x+.5)*Math.log(tmp)-tmp;
+var ser=1;
+var j
+for (j=0; j<6; j++)
+{
+   x=x+1;
+   ser=ser+cof[j]/x;
+}
+return tmp+Math.log(stp*ser);
+
+}
+
+// End -->
+
+
+</SCRIPT>
+</head>
+
+<!-- STEP TWO: Copy this code into the BODY of your HTML document  -->
+
+<BODY>
+
+<center>
+<form name=form>
+<h2>Beta Area Calculator</h2>
+<p><img border="0" src="beta_cdf.jpg" width="266" height="208"></p>
+<table border=0 cellpadding=2 width="426">
+<tr>
+<td width="223">
+<center><table border=1 width=196 cellpadding=2>
+<tr>
+<td align=center width="176" colspan="2"><b>Beta Numbers</b></td>
+</tr>
+<tr>
+<td align=center width="84"><b>a =</b></td>
+<td align=center width="92"><input type=text size=6 name="a"></td>
+</tr>
+<tr>
+<td align=center width="84"><b>b =</b></td>
+<td align=center width="92"><input type=text size=6 name="b"></td>
+</tr>
+</table>
+</center>
+</td>
+<td width="185">
+<center><table border=1 width=183 cellpadding=2>
+<tr>
+<td align=center width="109"><b>x&nbsp; =</b></td>
+<td align=center width="54"><input type=text size=6 name="x"></td>
+</tr>
+<tr>
+<td align=center width="109"><b>Prob(X &lt;= x)</b></td>
+<td align=center width="54"><input type=text size=6 name="Fx"></td>
+</tr>
+<tr>
+<td colspan=2 align=center width="171"><input type=button value="Compute Probability" onClick="quad(this.form)"></td>
+</tr>
+</table>
+</center>
+</td>
+</tr>
+</table>
+</form>
+</center>
+<p>
+
+<!-- Script Size:  2.01 KB  -->
+
+</html>
+

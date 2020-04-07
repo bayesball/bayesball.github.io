@@ -1,0 +1,814 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>A Bayesian Primer</title>
+</head>
+
+<body bgcolor="#FFCC00">
+
+<h2 align="center">A Bayesian Primer</h2>
+<h3 align="center">Topic 16:&nbsp; Learning About a Proportion (Discrete Models)</h3>
+<p align="left"><b>Introduction</b></p>
+<p align="left">This topic introduces Bayesian statistical inference for a
+population proportion.&nbsp; We imagine a hypothetical population of two types
+which we will call &quot;successes&quot; and &quot;failures&quot;.&nbsp; The
+proportion of successes in the population is denoted p.&nbsp; We take a random
+sample from the population -- we observe s successes and f failures.&nbsp; The
+goal is to learn about the unknown proportion p on the basis of this data.</p>
+<p align="left"><b>A Model and Prior</b></p>
+<p align="left">In this setting, a model is represented by the population
+proportion p.&nbsp; We don't know it's value, and you represent your beliefs
+about its location in terms of a prior probability distribution.&nbsp; In this
+topic, we introduce proportion inference by using a discrete prior distribution
+for p.</p>
+<p align="left">You construct a prior by</p>
+<ul>
+  <li>
+    <p align="left">specifying a list of plausible values for the proportion p</li>
+  <li>
+    <p align="left">assigning probabilities to these values that reflect your
+    knowledge about p</li>
+</ul>
+<p align="left">It is generally difficult to construct a prior since most of us
+have had little experience doing it.&nbsp; In the classroom setting, it is
+helpful to use standard types of prior distributions which are relatively easy
+to specify.&nbsp;&nbsp;</p>
+<p align="left">One type of standard &quot;noninformative&quot; prior</p>
+<ul>
+  <li>
+    <p align="left">lets the proportion p be one of the equally spaced values 0,
+    .1, .2, ..., .9, 1</li>
+  <li>
+    <p align="left">assigns each value of p the same probability 1/11</li>
+</ul>
+<p align="left">This prior is certainly convenient and works reasonably well
+when you don't have a lot of data.&nbsp; But, as in the following example
+illustrates, it is relatively easy to construct a prior when there exists
+significant prior information about the proportion of interest.</p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho"><b>An
+Example:&nbsp; Who's
+Better?</b></span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">Suppose
+that Andre Agassi is playing Boris Becker in a tennis match.<span style="mso-spacerun: yes">&nbsp;
+</span>A model is a description of the relative abilities of Agassi and Becker.<span style="mso-spacerun: yes">&nbsp;
+</span>You can use various expressions to describe models.<span style="mso-spacerun: yes">&nbsp;
+</span>You might think<span style="mso-spacerun: yes">&nbsp; </span>the two
+players &quot;are evenly matched&quot;.<span style="mso-spacerun: yes">&nbsp; </span>Maybe
+you're &quot;sure Agassi will win&quot;, or maybe you think it is "likely, but not
+a sure thing&quot; that Becker will win.<span style="mso-spacerun: yes">&nbsp; </span>In
+statistical inference, it is helpful if you can quantify these opinions.<span style="mso-spacerun: yes">&nbsp;
+</span>Let p be the probability that Agassi wins.<span style="mso-spacerun: yes">&nbsp;
+</span>One can view p as the proportion of times Agassi would win if the two
+players could play a large number of tennis matches under identical conditions.<o:p>&nbsp;
+(Here the hypothetical population consists of all matches between the two
+players which result in either a success where Agassi wins, or a failure where
+Becker wins.)</o:p>
+</span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">Next
+you choose some plausible models, or values of the proportion p.<span style="mso-spacerun: yes">&nbsp;
+</span>Suppose you think there are three possibilities --- Agassi is a little
+better player than Becker, or they are evenly matched, or Becker is a little
+better. <o:p>
+</o:p>
+</span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">We
+match these statements with the respective proportion values p = .6, .5, .4.<span style="mso-spacerun: yes">&nbsp;
+</span>The value p = .6 is chosen by imagining about how many matches Agassi
+would win against Becker in a series of 100 contests, if Agassi was indeed the
+better player.<span style="mso-spacerun:
+yes">&nbsp; </span>The value p = .4 can be chosen in a similar way.<o:p>
+</o:p>
+</span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">After
+you choose the models, you may think that some values of the proportion p are
+more or less likely. These opinions are reflected in a choice of prior
+probabilities on the set of models.<span style="mso-spacerun: yes">&nbsp; </span>For
+example, if you think Agassi will defeat Becker, then the proportion value p=.6 should get a larger prior probability that the value
+p = .4.<span style="mso-spacerun: yes">&nbsp; Likewise, if you thought Becker
+was a better player, then p=.4 would get more probability.&nbsp; In the
+following discussion, we will illustrate inference for a person who thinks
+Agassi is the superior player and assigns the following prior to p:</span></span></p>
+<div align="center">
+  <center>
+<table border="1" width="60%" bordercolor="#FF0000">
+  <tr>
+    <td width="20%">&nbsp;</td>
+    <td width="80%" align="center">&nbsp;</td>
+    <td width="34%" align="center">Prior</td>
+  </tr>
+  <tr>
+    <td width="20%" rowspan="3">MODEL</td>
+    <td width="80%" align="center">p=.4<br>
+      (Becker is better)</td>
+    <td width="34%" align="center">.2</td>
+  </tr>
+  <tr>
+    <td width="80%" align="center">p=.5<br>
+      (same ability)</td>
+    <td width="34%" align="center">.3</td>
+  </tr>
+  <tr>
+    <td width="80%" align="center">p=.6<br>
+      (Agassi is better)</td>
+    <td width="34%" align="center">.5</td>
+  </tr>
+</table>
+  </center>
+</div>
+<p class="MsoPlainText"><span style="mso-spacerun: yes; mso-fareast-font-family: MS Mincho"><b>Likelihood</b></span></p>
+<p class="MsoPlainText"><span style="mso-spacerun: yes; mso-fareast-font-family: MS Mincho">To
+use Bayes' rule, we next have to specify the likelihood.&nbsp; This is the
+probability of the actual data result for each model.</span></p>
+<p class="MsoPlainText"><span style="mso-spacerun: yes; mso-fareast-font-family: MS Mincho">Here
+the data is the number of successes, s, and the number of failures, f, in our
+random sample taken from the population.&nbsp; Our model is the proportion of
+successes p.&nbsp; If the proportion is p, then the probability of observing s
+successes and f failures is</span></p>
+<p class="MsoPlainText" align="center"><span style="font-size:10.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-5.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:220.8pt;
+ height:28.8pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:202.2pt;
+ height:26.4pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<img src="topic11.gif" v:shapes="_x0000_i1025" width="270" height="35"></span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033285396">
+ </o:OLEObject>
+</xml><![endif]-->
+<!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033285366">
+ </o:OLEObject>
+</xml><![endif]-->
+.</span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;"><b>Posterior
+Probabilities</b></span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho">Suppose
+that we have taken our sample and have observed values of s and f.&nbsp; By
+Bayes' rule, the posterior probability that the proportion takes on a value p is
+proportional to the product</span></p>
+<p class="MsoPlainText" align="center"><span style="font-size:10.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-5.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:250.8pt;
+ height:26.4pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<img src="topic12.gif" v:shapes="_x0000_i1025" width="334" height="35"></span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033285626">
+ </o:OLEObject>
+</xml><![endif]-->
+</span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">where
+Prob(p) represents our prior probability of this value.
+</span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho">The
+calculation of the posterior probabilities is conveniently displayed using a
+tabular format (called the Bayes' table).&nbsp; (In the table below, p1, ..., pk
+represent k possible values of the proportion.)</span></p>
+<table border="1" width="100%">
+  <tr>
+    <td width="20%" align="center">PROPORTION</td>
+    <td width="20%" align="center">PRIOR</td>
+    <td width="20%" align="center">LIKELIHOOD</td>
+  </tr>
+  <tr>
+    <td width="20%" align="center">p1</td>
+    <td width="20%" align="center">P(p1)</td>
+    <td width="20%" align="center"><span style="font-size:10.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-5.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:89.4pt;
+ height:26.4pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+      <img src="topic13.gif" v:shapes="_x0000_i1025" width="119" height="35"></span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033285865">
+ </o:OLEObject>
+</xml><![endif]-->
+      </span></td>
+  </tr>
+  <tr>
+    <td width="20%" align="center">p2</td>
+    <td width="20%" align="center">P(p2)</td>
+    <td width="20%" align="center"><span style="font-size:10.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-5.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:95.4pt;
+ height:26.4pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+      <img src="topic14.gif" v:shapes="_x0000_i1025" width="127" height="35"></span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033285894">
+ </o:OLEObject>
+</xml><![endif]-->
+      </span></td>
+  </tr>
+  <tr>
+    <td width="20%" align="center">&nbsp;</td>
+    <td width="20%" align="center">&nbsp;</td>
+    <td width="20%" align="center">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="20%" align="center">pk</td>
+    <td width="20%" align="center">P(pk)</td>
+    <td width="20%" align="center"><span style="font-size:10.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-5.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:95.4pt;
+ height:26.4pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+      <img src="topic15.gif" v:shapes="_x0000_i1025" width="127" height="35"></span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1033285923">
+ </o:OLEObject>
+</xml><![endif]-->
+      </span></td>
+  </tr>
+</table>
+<p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho">To
+compute the posterior probabilities, we</span></p>
+<ul>
+  <li>
+    <p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho">multiply
+    the prior and likelihood values for each proportion value to get products</span></li>
+  <li>
+    <p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho">sum
+    the products</span></li>
+  <li>
+    <p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho">divide
+    each product by the sum to get posterior probabilies</span></li>
+</ul>
+<p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho"><b>Computing
+the Posterior Probabilities for the Tennis Example</b></span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho">We
+illustrate computing the posterior probabilities in our example.&nbsp; Suppose
+Agassi and Becker play a single match and Agassi wins.&nbsp; So we have taken a
+single observation and we observed a success and so s = 1 and f = 0.</span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho">Here is
+the Bayes' table:</span></p>
+<table border="1" width="100%">
+  <tr>
+    <td width="20%">p</td>
+    <td width="20%">PRIOR</td>
+    <td width="20%">LIKELIHOOD</td>
+    <td width="20%">PRODUCT</td>
+    <td width="20%">POSTERIOR</td>
+  </tr>
+  <tr>
+    <td width="20%">.4</td>
+    <td width="20%">.2</td>
+    <td width="20%">.4</td>
+    <td width="20%">.2 x .4 =.08</td>
+    <td width="20%">.08/.53 = .15</td>
+  </tr>
+  <tr>
+    <td width="20%">.5</td>
+    <td width="20%">.3</td>
+    <td width="20%">.5</td>
+    <td width="20%">.3 x .5 =.15</td>
+    <td width="20%">.15/.53 = .28</td>
+  </tr>
+  <tr>
+    <td width="20%">.6</td>
+    <td width="20%">.5</td>
+    <td width="20%">.6</td>
+    <td width="20%">.5 x .6 =.30</td>
+    <td width="20%">.30/.53 = .57</td>
+  </tr>
+  <tr>
+    <td width="20%">SUM</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">&nbsp;</td>
+    <td width="20%">.53</td>
+    <td width="20%">&nbsp;</td>
+  </tr>
+</table>
+<p class="MsoPlainText">Before the tennis match, your probability that Agassi
+was better was .5.&nbsp; After seeing Agassi win the match, your new probability
+that Agassi is better has increased to .57.&nbsp; This means that you are now
+more confident that Agassi is better.</p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho"><b>Computing
+Posterior Probabilities using a Bayes' box:</b></span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">We
+demonstrate the Bayes' box method computing the posterior probabilities.&nbsp;
+This method helps in showing the connection between the model (value of p) and
+the data (values of s and f).&nbsp;&nbsp; In
+this example, suppose there are 300 pairs of tennis players just like Agassi (A)
+and Becker (B).<span style="mso-spacerun: yes">&nbsp; </span>(The choice of 300
+is made for convenience --- any large number divisible by 3 would be suitable.)<o:p>
+</o:p>
+</span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">Your
+prior placed probabilities .2, .3, .5 on the models "A is weaker than B&quot;, "A
+and B are equally matched&quot;, &quot;A is better than B&quot;.<o:p>
+</o:p>
+</span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">So
+you would expect 60 = 300 x .2 of the A's to be better than B's, 90 = 300 x .3 of the pairs to be
+equally matched, and 150 = 300 x .5 B's would be<o:p>
+</o:p>better
+than the A's.<span style="mso-spacerun: yes">&nbsp; </span>This knowledge is
+summarized using a table of counts.<o:p>
+</span><span style="mso-fareast-font-family: MS Mincho">&nbsp;</span></p>
+<div align="center">
+  <center>
+<table border="1" width="60%" bordercolor="#FF0000">
+  <tr>
+    <td width="20%">&nbsp;</td>
+    <td width="80%" align="center">&nbsp;</td>
+    <td width="56%" colspan="2">
+      <p align="center">DATA</p>
+    </td>
+    <td width="53%" align="center">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="20%">&nbsp;</td>
+    <td width="80%" align="center">&nbsp;</td>
+    <td width="30%" align="center">Agassi wins</td>
+    <td width="34%" align="center">Becker wins</td>
+    <td width="53%" align="center">TOTAL</td>
+  </tr>
+  <tr>
+    <td width="20%" rowspan="3">MODEL</td>
+    <td width="80%" align="center">p=.4<br>
+      (Becker is better)</td>
+    <td width="30%" align="center">&nbsp;</td>
+    <td width="34%" align="center">&nbsp;</td>
+    <td width="53%" align="center">60</td>
+  </tr>
+  <tr>
+    <td width="80%" align="center">p=.5<br>
+      (same ability)</td>
+    <td width="30%" align="center">&nbsp;</td>
+    <td width="34%" align="center">&nbsp;</td>
+    <td width="53%" align="center">90</td>
+  </tr>
+  <tr>
+    <td width="80%" align="center">p=.6<br>
+      (Agassi is better)</td>
+    <td width="30%">&nbsp;</td>
+    <td width="34%" align="center">&nbsp;</td>
+    <td width="53%" align="center">150</td>
+  </tr>
+  <tr>
+    <td width="20%">&nbsp;</td>
+    <td width="80%" align="center">TOTAL</td>
+    <td width="30%">&nbsp;</td>
+    <td width="34%" align="center">&nbsp;</td>
+    <td width="53%" align="center">300</td>
+  </tr>
+</table>
+  </center>
+</div>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">The
+data in this example is the result of one tennis match.<span style="mso-spacerun: yes">&nbsp;
+</span>There are two possible outcomes --- either "Agassi wins&quot; or "Becker wins&quot;.<o:p>
+&nbsp;
+</span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">The
+next step in this process is to relate the models to this data.<o:p>
+</o:p>
+</span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">You
+think about the frequencies of the data outcomes for each model.<span style="mso-spacerun: yes">&nbsp;
+</span>Suppose p = .4 (Becker is a better player) and<span style="mso-spacerun: yes">&nbsp;
+</span>Agassi and Becker play each other 60 times.<span style="mso-spacerun: yes">&nbsp;
+</span>Then you would expect Agassi to win 24 matches and Becker the remaining
+36.<span style="mso-spacerun:
+yes">&nbsp;&nbsp; </span>Similarly, if the players are equally good (p = .5) and
+they play 90 matches, you expect each player to win 45 matches.<span style="mso-spacerun: yes">&nbsp; </span>If
+Agassi is the superior player (p = .6) and they play 150 matches, then you expect Agassi to win
+90 and
+Becker 60.<span style="mso-spacerun: yes">&nbsp; </span>We place these counts in
+a Bayes' box in which the row corresponds to a value of the proportion p and a
+column is the result of the single tennis match.<o:p>
+</o:p>
+</span></p>
+<div align="center">
+  <center>
+<table border="1" width="60%" bordercolor="#FF0000">
+  <tr>
+    <td width="20%">&nbsp;</td>
+    <td width="80%" align="center">&nbsp;</td>
+    <td width="56%" colspan="2">
+      <p align="center">DATA</p>
+    </td>
+    <td width="53%" align="center">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="20%">&nbsp;</td>
+    <td width="80%" align="center">&nbsp;</td>
+    <td width="30%" align="center">Agassi wins</td>
+    <td width="34%" align="center">Becker wins</td>
+    <td width="53%" align="center">TOTAL</td>
+  </tr>
+  <tr>
+    <td width="20%" rowspan="3">MODEL</td>
+    <td width="80%" align="center">p=.4<br>
+      (Becker is better)</td>
+    <td width="30%" align="center">24</td>
+    <td width="34%" align="center">36</td>
+    <td width="53%" align="center">60</td>
+  </tr>
+  <tr>
+    <td width="80%" align="center">p=.5<br>
+      (same ability)</td>
+    <td width="30%" align="center">45</td>
+    <td width="34%" align="center">45</td>
+    <td width="53%" align="center">90</td>
+  </tr>
+  <tr>
+    <td width="80%" align="center">p=.6<br>
+      (Agassi is better)</td>
+    <td width="30%" align="center">90</td>
+    <td width="34%" align="center">60</td>
+    <td width="53%" align="center">150</td>
+  </tr>
+  <tr>
+    <td width="20%">&nbsp;</td>
+    <td width="80%" align="center">TOTAL</td>
+    <td width="30%">&nbsp;</td>
+    <td width="34%" align="center">&nbsp;</td>
+    <td width="53%" align="center">300</td>
+  </tr>
+</table>
+  </center>
+</div>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">Suppose
+Agassi wins the match.<span style="mso-spacerun: yes">&nbsp; </span>Presumably
+we would be more confident that Agassi is the better player.<span style="mso-spacerun: yes">&nbsp;
+</span>We can learn how much more confident by updating our probabilities about
+the models by use of Bayes' rule.<span style="mso-spacerun: yes">&nbsp; </span>This
+computation is made by looking at the Bayes' box and restricting attention to
+the observed data outcome ("Agassi wins match&quot;).<span style="mso-spacerun: yes">&nbsp;
+</span>We note that Agassi won 24 + 45 + 90 = 159 matches in our hypothetical
+experiment. <span style="mso-spacerun: yes">&nbsp;</span>Of these 159 matches,
+Becker was the better player in 24 of them, the two players were equivalent in
+45, and Agassi was better in 90.<span style="mso-spacerun: yes">&nbsp; </span>Our
+updated table of model counts and proportions is given below.<o:p>
+</o:p>
+</span></p>
+<div align="center">
+  <center>
+<table border="1" width="60%" bordercolor="#FF0000">
+  <tr>
+    <td width="20%">&nbsp;</td>
+    <td width="80%" align="center">&nbsp;</td>
+    <td width="56%">
+      <p align="center">DATA</p>
+    </td>
+    <td width="53%" align="center">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="20%">&nbsp;</td>
+    <td width="80%" align="center">&nbsp;</td>
+    <td width="30%" align="center">Agassi wins</td>
+    <td width="53%" align="center">PROPORTION</td>
+  </tr>
+  <tr>
+    <td width="20%" rowspan="3">MODEL</td>
+    <td width="80%" align="center">p=.4<br>
+      (Becker is better)</td>
+    <td width="30%" align="center">24</td>
+    <td width="53%" align="center">24/159 = .15</td>
+  </tr>
+  <tr>
+    <td width="80%" align="center">p=.5<br>
+      (same ability)</td>
+    <td width="30%" align="center">45</td>
+    <td width="53%" align="center">45/159 = .28</td>
+  </tr>
+  <tr>
+    <td width="80%" align="center">p=.6<br>
+      (Agassi is better)</td>
+    <td width="30%" align="center">90</td>
+    <td width="53%" align="center">90/159 = .57</td>
+  </tr>
+  <tr>
+    <td width="20%">&nbsp;</td>
+    <td width="80%" align="center">TOTAL</td>
+    <td width="30%">
+      <p align="center">159</td>
+    <td width="53%" align="center">1</td>
+  </tr>
+</table>
+  </center>
+</div>
+<p class="MsoPlainText"><span style="mso-fareast-font-family:&quot;MS Mincho&quot;">The
+probability that Agassi is the better player is .57 which is the same number we
+found using the Bayes' table.
+</span></p>
+<p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho"><b>Using
+a Prior with More Models and More Data</b></span></p>
+
+<p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho">We
+illustrate learning about a proportion in this same example using a different
+prior and more data.&nbsp; Suppose that one wishes to use the
+&quot;default&quot; prior where the proportion p is allowed to take one of the
+11 values 0, .1, .2, ..., .9, 1 and each proportion value is assigned the same
+prior probability.&nbsp; This prior reflects that the person has little
+knowledge about the relative abilities of Agassi and Becker.&nbsp; It is
+plausible that Becker will always defeat Agassi and p = 0, or alternately Agassi
+will always win and p = 1.&nbsp; In addition, the person is placing equal
+probabilities on these 11 different scenarios, reflecting the lack of knowledge
+about the relative abilities of professional tennis players.</span></p>
+
+<p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho">Also
+suppose that the person observes the results of ten matches between the two
+players.&nbsp; In these matches, Agassi wins 7 times and Becker wins the
+remaining 3.&nbsp; Using our notation above where a &quot;success&quot; is
+defined as Agassi winning, we observe s = 7 and f = 3.</span></p>
+
+<p class="MsoPlainText"><span style="mso-fareast-font-family: MS Mincho">We
+illustrate computing the posterior probabilities for the proportion p using the
+Minitab macro p_disc.&nbsp; To use this program, one places the values of p into
+a single column in the Minitab data table and the corresponding prior
+probabilities in a different column.&nbsp; In the output below, these columns
+are named 'p' and 'prior'.&nbsp; The computation of the posterior is
+accomplished by the Minitab command (typed in the Session Window)</span></p>
+
+<pre>
+MTB &gt; %p_disc 'p' 'prior' 7 3
+</pre>
+
+The Minitab output from this command is a Bayes' Table, showing values of p, the
+prior probabilities, the likelihood, the products, and the posterior
+probabilities.&nbsp;
+<pre>
+PRIOR AND POSTERIOR DENSITIES OF P:
+
+ Row      P       PRIOR       LIKE   PRODUCT      POSTR
+
+   1    0.0   0.0909091          0       0.0   0.000000
+   2    0.1   0.0909091         33       3.0   0.000010
+   3    0.2   0.0909091       2947     267.9   0.000864
+   4    0.3   0.0909091      33736    3066.9   0.009892
+   5    0.4   0.0909091     159156   14468.7   0.046668
+   6    0.5   0.0909091     439188   39926.1   0.128779
+   7    0.6   0.0909091     805728   73248.0   0.236256
+   8    0.7   0.0909091    1000000   90909.1   0.293220
+   9    0.8   0.0909091     754518   68592.6   0.221240
+  10    0.9   0.0909091     215104   19554.9   0.063073
+  11    1.0   0.0909091          0       0.0   0.000000
+</pre>
+
+A line graph of the posterior probabilities of p is shown below.
+  
+<p align="center"><img border="0" src="pdisc.jpg" width="480" height="360"></p>
+  
+<p align="left">Using this posterior probability distribution, we can answer
+different inferential questions.</p>
+<ul>
+  <li>
+    <p align="left"><b>What's my best guess at the relative abilities of Agassi
+    and Becker?</b>&nbsp; <br>
+    <br>
+    We measure the relative abilities of the two players by p, the proportion of
+    times Agassi would win if the two players played an infinite number of
+    matches.&nbsp; One best guess of p is the value which is assigned the
+    largest probability (the mode).&nbsp; Looking at the posterior probability
+    table, we see that p = .7 has the largest probability -- so p = .7 would be
+    our best guess.<br>
+  </li>
+  <li>
+    <p align="left"><b>Can I construct an interval of values where I am
+    confident contains the unknown value of p?&nbsp; <br>
+    <br>
+    </b>Here we find a set of values of proportion values p which contains a
+    high, say 90%, of the posterior probability distribution.&nbsp; A simple way
+    of finding this interval is to arrange the values of p from most likely to
+    least likely, and then put values of p into the interval until the
+    cumulative probability of the set exceeds .9.<br>
+    <br>
+    Below I have sorted the proportion values from most likely to least
+    likely.&nbsp; Looking at the &quot;cum prob&quot; column, we see that the
+    probability that p is in the set {.7, .6, .8, .5, .9} is .9426.&nbsp; So
+    this set is a 90% probability interval for p.</li>
+</ul>
+<div align="center">
+  <center>
+  <table bordercolor="#FF0000" border="1">
+    <col width="64" span="3" style="width:48pt">
+    <tr height="18" style="height:13.2pt">
+      <td height="18" width="64" style="height:13.2pt;width:48pt">p</td>
+      <td width="64" style="width:48pt">prob</td>
+      <td width="64" style="width:48pt">cum prob</td>
+    </tr>
+    <tr height="18" style="height:13.2pt">
+      <td height="18" align="right" style="height:13.2pt" x:num="00.7">0.7</td>
+      <td class="xl22" align="right" x:num="0.29321999999999998">0.2932</td>
+      <td class="xl23" align="right" x:num="0.29321999999999998" x:fmla="=B2">0.2932</td>
+    </tr>
+    <tr height="18" style="height:13.2pt">
+      <td height="18" align="right" style="height:13.2pt" x:num="00.6">0.6</td>
+      <td class="xl22" align="right" x:num="0.23625599999999999">0.2363</td>
+      <td class="xl23" align="right" x:num="0.52947599999999995" x:fmla="=C2+B3">0.5295</td>
+    </tr>
+    <tr height="18" style="height:13.2pt">
+      <td height="18" align="right" style="height:13.2pt" x:num="00.8">0.8</td>
+      <td class="xl22" align="right" x:num="0.22123999999999999">0.2212</td>
+      <td class="xl23" align="right" x:num="0.75071599999999994" x:fmla="=C3+B4">0.7507</td>
+    </tr>
+    <tr height="18" style="height:13.2pt">
+      <td height="18" align="right" style="height:13.2pt" x:num>0.5</td>
+      <td class="xl22" align="right" x:num="0.128779">0.1288</td>
+      <td class="xl23" align="right" x:num="0.87949499999999992" x:fmla="=C4+B5">0.8795</td>
+    </tr>
+    <tr height="18" style="height:13.2pt">
+      <td height="18" align="right" style="height:13.2pt" x:num="00.9">0.9</td>
+      <td class="xl22" align="right" x:num="6.3073000000000004E-2">0.0631</td>
+      <td class="xl23" align="right" x:num="0.94256799999999996" x:fmla="=C5+B6">0.9426</td>
+    </tr>
+    <tr height="18" style="height:13.2pt">
+      <td height="18" align="right" style="height:13.2pt" x:num="00.4">0.4</td>
+      <td class="xl22" align="right" x:num="4.6668000000000001E-2">0.0467</td>
+      <td class="xl23" align="right" x:num="0.989236" x:fmla="=C6+B7">0.9892</td>
+    </tr>
+    <tr height="18" style="height:13.2pt">
+      <td height="18" align="right" style="height:13.2pt" x:num="00.3">0.3</td>
+      <td class="xl22" align="right" x:num="9.8919999999999998E-3">0.0099</td>
+      <td class="xl23" align="right" x:num="0.99912800000000002" x:fmla="=C7+B8">0.9991</td>
+    </tr>
+    <tr height="18" style="height:13.2pt">
+      <td height="18" align="right" style="height:13.2pt" x:num="00.2">0.2</td>
+      <td class="xl22" align="right" x:num="8.6399999999999997E-4">0.0009</td>
+      <td class="xl23" align="right" x:num="0.99999199999999999" x:fmla="=C8+B9">1.0000</td>
+    </tr>
+    <tr height="18" style="height:13.2pt">
+      <td height="18" align="right" style="height:13.2pt" x:num="00.1">0.1</td>
+      <td class="xl22" align="right" x:num="1.0000000000000001E-5">0.0000</td>
+      <td class="xl23" align="right" x:num="1.0000020000000001" x:fmla="=C9+B10">1.0000</td>
+    </tr>
+    <tr height="18" style="height:13.2pt">
+      <td height="18" align="right" style="height:13.2pt" x:num>0</td>
+      <td class="xl22" align="right" x:num>0.0000</td>
+      <td class="xl23" align="right" x:num="1.0000020000000001" x:fmla="=C10+B11">1.0000</td>
+    </tr>
+    <tr height="18" style="height:13.2pt">
+      <td height="18" align="right" style="height:13.2pt" x:num>1</td>
+      <td class="xl22" align="right" x:num>0.0000</td>
+      <td class="xl23" align="right" x:num="1.0000020000000001" x:fmla="=C11+B12">1.0000</td>
+    </tr>
+  </table>
+  </center>
+</div>
+<ul>
+  <li>
+    <p align="left"><b>What is the probability that Agassi is the better
+    player?&nbsp; <br>
+    <br>
+    </b>Remember that p is the proportion of matches Agassi would win against
+    Becker if they played a large number of matches.&nbsp; To say that Agassi is
+    the better player means that p is larger than .5.&nbsp; From the posterior
+    probability table, we compute<br>
+    <br>
+    Prob(p &gt; .5) = Prob(p = .6, .7, .8, .9, 1) = .236 + .293 + .221 + .063 =
+    .813<br>
+    <br>
+    Since this probability (.813) is moderately large, we have some confidence
+    that Agassi is the superior player.</li>
+</ul>
+  
+<hr>
+<p align="left"><i>Page Author: Jim Albert (c)&nbsp;<br>
+albert@math.bgsu.edu&nbsp;<br>
+Document: http://math-80.bgsu.edu/nsf_web/main.htm/primer/topic16.htm&nbsp;<br>
+Last Modified: October 17, 2000 </i></p>
+  
+  </body>
+
+</html>

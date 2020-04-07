@@ -1,0 +1,743 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<meta name="GENERATOR" content="Microsoft FrontPage 4.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<title>A Bayesian Primer</title>
+</head>
+
+<body bgcolor="#FFCC00">
+
+<h2 align="center">A Bayesian Primer</h2>
+<h3 align="center">Topic 21:&nbsp; Learning About Two Proportions</h3>
+<p align="left"><b>Introduction</b></p>
+<p align="left">This topic considers the problem of comparing two population
+proportions.&nbsp; Suppose we are interested in comparing two methods of
+teaching statistics:&nbsp; a traditional approach using lectures and assigned
+homework problems, and an experimental approach where the students work in small
+groups in the classroom on directed activities.&nbsp; Suppose that a multiple
+choice test on basic statistics concepts is constructed.&nbsp; Suppose that 10
+out of 20 students from the traditional class pass the exam and 15 out of 20
+students from the experimental class pass the exam.&nbsp; Is there sufficient
+evidence from these data that students taught using the experimental method
+generally perform better than the students taught using the traditional method
+on this test?&nbsp;</p>
+<p align="left"><b>A Model for Two Proportions</b></p>
+<p align="left">In this problem, we consider two hypothetical populations:&nbsp;
+the population of students who will take the traditional class (including those
+who are currently taking the class and those who will take the class in the
+future), and the population of students who will take the experimental
+class.&nbsp; We measure the success rates of the two populations by p<sub>T</sub>
+and p<sub>E</sub>, the respective proportions of students from the traditional
+and experimental groups that would pass the test.&nbsp; We will focus our
+inference on the difference in proportions, d = p<sub>E&nbsp; </sub>- p<sub>T</sub>.&nbsp;
+We wonder if there is sufficient evidence from the data to conclude that d &gt;
+0 (the experimental group performs better).&nbsp;&nbsp; If we can say that d
+&gt; 0, we are interested in constructing a 90% probability interval for the
+difference in probabilities.</p>
+<p align="left"><b>Discrete Set of Models</b></p>
+<p align="left">In this setting, a <i>model</i> consists of values for the two
+proportions p<sub>E</sub> and<sub>&nbsp;</sub> p<sub>T</sub>.&nbsp; We can
+represent a collection of models by a two-way table shown below, where each cell
+of the table corresponds to a single model.&nbsp; Here
+we let each proportion take on the nine equally spaced values .1, .2, ..., .9,
+and so there are 9 x 9 = 81 possible models, or pairs of proportion values.&nbsp;&nbsp;</p>
+<div align="center">
+  <center>
+  <table border="1" width="20%">
+    <tr>
+      <td width="11%">&nbsp;</td>
+      <td width="11%">&nbsp;</td>
+      <td width="90%" colspan="9">
+        <p align="center">pT</td>
+    </tr>
+    <tr>
+      <td width="11%" rowspan="10">pE</td>
+      <td width="11%">&nbsp;</td>
+      <td width="10%">.1</td>
+      <td width="10%">.2</td>
+      <td width="10%">.3</td>
+      <td width="10%">.4</td>
+      <td width="10%">.5</td>
+      <td width="10%">.6</td>
+      <td width="10%">.7</td>
+      <td width="10%">.8</td>
+      <td width="10%">.9</td>
+    </tr>
+    <tr>
+      <td width="11%">.1&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td width="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td width="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td width="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td width="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td width="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td width="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td width="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td width="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+      <td width="10%">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="11%">.2</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="11%">.3</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="11%">.4</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="11%">.5</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="11%">.6</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="11%">.7</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="11%">.8</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+    </tr>
+    <tr>
+      <td width="11%">.9</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+      <td width="10%">&nbsp;</td>
+    </tr>
+  </table>
+  </center>
+</div>
+<p align="left"><b>Uniform Prior</b></p>
+<p align="left">To construct a prior, a probability needs to be assigned to each
+pair of proportions (p<sub>E</sub>,<sub>&nbsp;</sub> p<sub>T</sub>) that
+reflects your belief about the likelihood of this pair of proportion values.&nbsp; This is
+difficult to do, so it is convenient to assign a uniform prior where all models
+are assumed equally likely.&nbsp; This prior reflects the common situation where
+you do not have strong beliefs before sampling about the location of either
+population proportion.&nbsp; In our example, there are 81 possible models, and
+so the uniform prior would assign a probability of 1/81 to each possible pair of
+proportions, as shown in the table below.</p>
+<div align="center">
+  <center>
+  <table border="1" width="20%">
+    <tr>
+      <td width="11%">&nbsp;</td>
+      <td width="11%">&nbsp;</td>
+      <td width="90%" colspan="9">
+        <p align="center">p<sub>T</sub></td>
+    </tr>
+    <tr>
+      <td width="11%">&nbsp;</td>
+      <td width="11%">&nbsp;</td>
+      <td width="10%">.1</td>
+      <td width="10%">.2</td>
+      <td width="10%">.3</td>
+      <td width="10%">.4</td>
+      <td width="10%">.5</td>
+      <td width="10%">.6</td>
+      <td width="10%">.7</td>
+      <td width="10%">.8</td>
+      <td width="10%">.9</td>
+    </tr>
+    <tr>
+      <td width="11%" rowspan="9">p<sub>E</sub></td>
+      <td width="11%">.1</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+    </tr>
+    <tr>
+      <td width="11%">.2</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+    </tr>
+    <tr>
+      <td width="11%">.3</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+    </tr>
+    <tr>
+      <td width="11%">.4</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+    </tr>
+    <tr>
+      <td width="11%">.5</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+    </tr>
+    <tr>
+      <td width="11%">.6</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+    </tr>
+    <tr>
+      <td width="11%">.7</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+    </tr>
+    <tr>
+      <td width="11%">.8</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+    </tr>
+    <tr>
+      <td width="11%">.9</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+      <td width="10%">1/81</td>
+    </tr>
+  </table>
+  </center>
+</div>
+<p align="left"><b>Likelihood</b></p>
+<p align="left">Two random samples are taken from the two populations of&nbsp;
+interest.&nbsp; Suppose we observe s<sub>E</sub> successes and f<sub>E</sub> failures from the
+sample taken from the population with proportion value p<sub>E</sub>; we observe
+s<sub>T</sub> successes and f<sub>T</sub> failures
+from the sample taken from the second population.&nbsp; The likelihood of the model pair
+(p<sub>E</sub>, p<sub>T</sub>) is
+the probability of this sample result assuming these proportion values:</p>
+<p align="center"><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-5.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:306pt;
+ height:24.6pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<img src="topic40.gif" v:shapes="_x0000_i1025" width="408" height="33"></span><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1037476088">
+ </o:OLEObject>
+</xml><![endif]-->
+</span></p>
+<p align="left"><b>Inference</b></p>
+<p align="left">We compute the posterior model probabilities using our basic
+Bayes' rule recipe:</p>
+<ul>
+  <li>
+    <p align="left">for each model (pair of proportions), we multiply the prior
+    probability by the corresponding likelihood</li>
+  <li>
+    <p align="left">we sum all of the products</li>
+  <li>
+    <p align="left">we divide each likelihood by the sum to get the
+    corresponding posterior probability</li>
+</ul>
+<p align="left">This calculation is best left to a computer program such as
+Minitab.&nbsp; In our example, using the data values (s<sub>E</sub>, f<sub>E</sub>,
+s<sub>T</sub>, f<sub>T</sub>) = (15, 5,
+10, 10), we obtain the following table of posterior probabilities:</p>
+<div align="center">
+  <center>
+  <table border="1" width="20%">
+    <tr>
+      <td width="11%">&nbsp;</td>
+      <td width="11%">&nbsp;</td>
+      <td width="90%" colspan="9">
+        <p align="center">p<sub>T</sub></td>
+    </tr>
+    <tr>
+      <td width="11%">&nbsp;</td>
+      <td width="11%">&nbsp;</td>
+      <td width="10%">.1</td>
+      <td width="10%">.2</td>
+      <td width="10%">.3</td>
+      <td width="10%">.4</td>
+      <td width="10%">.5</td>
+      <td width="10%">.6</td>
+      <td width="10%">.7</td>
+      <td width="10%">.8</td>
+      <td width="10%">.9</td>
+    </tr>
+    <tr>
+      <td width="11%" rowspan="9">p<sub>E</sub></td>
+      <td width="11%">.1</td>
+      <td width="10%"><span style="background-color: #FFFF00">.000</span></td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+    </tr>
+    <tr>
+      <td width="11%">.2</td>
+      <td width="10%">.000</td>
+      <td width="10%"><span style="background-color: #FFFF00">.000</span></td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+    </tr>
+    <tr>
+      <td width="11%">.3</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%"><span style="background-color: #FFFF00">.000</span></td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+    </tr>
+    <tr>
+      <td width="11%">.4</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%"><span style="background-color: #FFFF00">.001</span></td>
+      <td width="10%">.001</td>
+      <td width="10%">.001</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+    </tr>
+    <tr>
+      <td width="11%">.5</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.002</td>
+      <td width="10%">.008</td>
+      <td width="10%"><span style="background-color: #FFFF00">.011</span></td>
+      <td width="10%">.008</td>
+      <td width="10%">.002</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+    </tr>
+    <tr>
+      <td width="11%">.6</td>
+      <td width="10%">.000</td>
+      <td width="10%">.001</td>
+      <td width="10%">.010</td>
+      <td width="10%">.039</td>
+      <td width="10%">.058</td>
+      <td width="10%"><span style="background-color: #FFFF00">.039</span></td>
+      <td width="10%">.010</td>
+      <td width="10%">.001</td>
+      <td width="10%">.000</td>
+    </tr>
+    <tr>
+      <td width="11%">.7</td>
+      <td width="10%">.000</td>
+      <td width="10%">.002</td>
+      <td width="10%">.024</td>
+      <td width="10%">.092</td>
+      <td width="10%">.139</td>
+      <td width="10%">.092</td>
+      <td width="10%"><span style="background-color: #FFFF00">.024</span></td>
+      <td width="10%">.002</td>
+      <td width="10%">.000</td>
+    </tr>
+    <tr>
+      <td width="11%">.8</td>
+      <td width="10%">.000</td>
+      <td width="10%">.002</td>
+      <td width="10%">.024</td>
+      <td width="10%">.090</td>
+      <td width="10%">.136</td>
+      <td width="10%">.090</td>
+      <td width="10%">.024</td>
+      <td width="10%"><span style="background-color: #FFFF00">.002</span></td>
+      <td width="10%">.000</td>
+    </tr>
+    <tr>
+      <td width="11%">.9</td>
+      <td width="10%">.000</td>
+      <td width="10%">.000</td>
+      <td width="10%">.004</td>
+      <td width="10%">.016</td>
+      <td width="10%">.025</td>
+      <td width="10%">.016</td>
+      <td width="10%">.004</td>
+      <td width="10%">.000</td>
+      <td width="10%"><span style="background-color: #FFFF00">.000</span></td>
+    </tr>
+  </table>
+  </center>
+</div>
+<p align="left">From this posterior distribution, we can compute posterior
+probabilities for the difference in proportions d = p<sub>E</sub> - p<sub>T</sub>.&nbsp;
+For example, the posterior probability that d = 0 is the sum of the diagonal
+elements of the table (shaded above) where the proportions are equal:</p>
+<p align="center">Prob(d = 0) = Prob(pT = pE) = .001 + .011 + .039 + .024 + .002
+= .076.</p>
+<p align="left">Similarly, we can find the probabilities for each possible value
+of d -- the posterior distribution is given in the table below.</p>
+
+
+<pre>
+   d=pE-pT  PROBABILITY
+   -------------------
+   -0.8000    0.0000
+   -0.7000    0.0000
+   -0.6000    0.0000
+   -0.5000    0.0000
+   -0.4000    0.0000
+   -0.3000    0.0003
+   -0.2000    0.0034
+   -0.1000    0.0204
+         0    0.0766
+    0.1000    0.1823
+    0.2000    0.2741
+    0.3000    0.2548
+    0.4000    0.1400
+    0.5000    0.0418
+    0.6000    0.0059
+    0.7000    0.0003
+    0.8000    0.0000
+    </pre>
+
+<p>Recall that we were interested in the probability that the experimental group
+is superior to the traditional group on the test -- that is, pE &gt; pT or d
+&gt; 0.&nbsp; Using this table</p>
+<p align="center">Prob(d &gt; 0) = P(d = .1, .2, .3, .4, .5, .6, .7) = .8992.</p>
+<p>
+
+<b>Using Simulation to Summarize a Beta Curve</b>
+</p>
+<p>Before we introduce continuous models for two proportions, we describe a
+simulation method of summarizing a beta probability curve.&nbsp; Suppose we are
+interested in learning about the proportion of students p who favor a new dress
+policy at your school.&nbsp; If we represent our prior beliefs about p by means
+of a flat prior, and we observe 10 students in favor of the policy and 5
+against, then the posterior curve for the proportion is given by</p>
+<p align="center"><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-5.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:70.8pt;
+ height:22.8pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<img src="topic42.gif" v:shapes="_x0000_i1025" width="94" height="30"></span></span></p>
+<p align="left"><span style="mso-text-raise: -5.0pt; font-size: 12.0pt; font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">which
+we recognize as being a beta curve with numbers 11 and 6.</span></p>
+<p align="left"><span style="mso-text-raise: -5.0pt; font-size: 12.0pt; font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">One
+convenient way of summarizing this beta curve uses simulation.&nbsp; Using
+Minitab, we simulate a random sample of size 1000 from this beta probability curve -- the
+simulated values are graphed using the dotplot below.</span></p>
+
+
+<pre>
+                                          ::
+                                        .:::.:
+                                       :::::::
+                                    :: :::::::::
+                                   .:::::::::::::
+                                .:.::::::::::::::::.
+                              ..::::::::::::::::::::.
+                      ..  ..::::::::::::::::::::::::::...
+         +---------+---------+---------+---------+---------+-p      
+      0.00      0.20      0.40      0.60      0.80      1.00
+ </pre>
+
+<p align="left">We can summarize this probability distribution by computing
+appropriate summaries from this simulated dataset.&nbsp; For example, the mean
+of this probability curve is approximated by the sample mean of these simulated
+values:</p>
+<p align="center">Mean = .646</p>
+<p align="left">The probability that p is larger than .5 can be approximated by
+the proportion of simulated values that exceed 0.</p>
+<p align="center">Prob(p &gt; 0) = .889 .</p>
+<p align="left"><b>Continuous Models for Two Proportions</b></p>
+<p align="left">As in the single proportion case, it is a bit unrealistic to
+assume that each proportion can take on only particular discrete values.&nbsp;
+It is more realistic to assume that each proportion is continuous-valued on the
+interval (0, 1).&nbsp; In our example, we assume that each proportion is
+continuous.&nbsp; Then our models are represented by all points in the unit
+square where 0 &lt; pE &lt; 1 and 0 &lt; pT &lt; 1.</p>
+<p align="left"><b>Inference Using a Uniform Prior and Beta Curves</b></p>
+<p align="left">In the situation where little prior information exists about
+either proportion, it is convenient to assign a uniform distribution on the unit
+square</p>
+<p align="center">PRIOR = 1, 0 &lt; pE &lt; 1, 0 &lt; pT &lt; 1.</p>
+<p align="left">Then, using the likelihood given above, the posterior curve has
+the form</p>
+<p align="center"><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><span style="mso-text-raise:-5.0pt"><!--[if gte vml 1]><v:shapetype
+ id="_x0000_t75" coordsize="21600,21600" o:spt="75" o:preferrelative="t"
+ path="m@4@5l@4@11@9@11@9@5xe" filled="f" stroked="f">
+ <v:stroke joinstyle="miter"/>
+ <v:formulas>
+  <v:f eqn="if lineDrawn pixelLineWidth 0"/>
+  <v:f eqn="sum @0 1 0"/>
+  <v:f eqn="sum 0 0 @1"/>
+  <v:f eqn="prod @2 1 2"/>
+  <v:f eqn="prod @3 21600 pixelWidth"/>
+  <v:f eqn="prod @3 21600 pixelHeight"/>
+  <v:f eqn="sum @0 0 1"/>
+  <v:f eqn="prod @6 1 2"/>
+  <v:f eqn="prod @7 21600 pixelWidth"/>
+  <v:f eqn="sum @8 21600 0"/>
+  <v:f eqn="prod @7 21600 pixelHeight"/>
+  <v:f eqn="sum @10 21600 0"/>
+ </v:formulas>
+ <v:path o:extrusionok="f" gradientshapeok="t" o:connecttype="rect"/>
+ <o:lock v:ext="edit" aspectratio="t"/>
+</v:shapetype><v:shape id="_x0000_i1025" type="#_x0000_t75" style='width:326.4pt;
+ height:24pt' o:ole="">
+ <v:imagedata src="file:///C:/windows/TEMP/msoclip1/01/clip_image001.wmz"
+  o:title=""/>
+</v:shape><![endif]-->
+<img src="topic41.gif" v:shapes="_x0000_i1025" width="435" height="32"></span>
+</span></p>
+<p align="left"><span style="mso-text-raise: -5.0pt; font-size: 12.0pt; font-family: Times New Roman; mso-fareast-font-family: Times New Roman; mso-ansi-language: EN-US; mso-fareast-language: EN-US; mso-bidi-language: AR-SA">Looking
+at this expression, we see that the proportions pE and pT have independent
+posterior curves, with pE distributed beta(sE+1, fE+1) and pT distributed
+beta(sT+1, fT+1).&nbsp; In our example, with sE = 15, fE = 5, sT = 10, fT =
+10,&nbsp; pE would be beta(16, 6) and pT would be beta(11, 11).</span><span style="font-size:12.0pt;font-family:&quot;Times New Roman&quot;;
+mso-fareast-font-family:&quot;Times New Roman&quot;;mso-ansi-language:EN-US;mso-fareast-language:
+EN-US;mso-bidi-language:AR-SA"><!--[if gte mso 9]><xml>
+ <o:OLEObject Type="Embed" ProgID="Equation.3" ShapeID="_x0000_i1025"
+  DrawAspect="Content" ObjectID="_1037476690">
+ </o:OLEObject>
+</xml><![endif]-->
+</span></p>
+<p align="left"><b>Using Simulation to Perform Inference</b></p>
+  
+<p align="left">In the case of using continuous models for two proportions,
+simulation gives a convenient way of summarizing the posterior distribution and
+in finding probabilities for the difference in two proportions.&nbsp; In our
+example, we simulate one value from the posterior distribution of (pE, pT) by</p>
+  
+<ul>
+  <li>
+    <p align="left">simulating pE from beta(16, 6)</li>
+  <li>
+    <p align="left">simulating pT from beta(11, 11)</li>
+</ul>
+<p align="left">On Minitab, I simulate pE =  0.6175, pT = .3916.&nbsp; The
+difference in simulated proportions, d = .6175 - .3916, represents a simulated
+value from the posterior curve of d = pE - pT.</p>
+<p align="left">The graph below plots 1000 simulated values of the two
+proportions on a scatterplot.<br>
+</p>
+  
+<p align="center"><img border="0" src="twoppost.jpg" width="480" height="360"></p>
+  
+<p align="left">By computing summaries from this set of simulated values, we can
+learn about the locations of the two proportions.&nbsp; The line pE = pT is
+drawn on the graph.&nbsp; The proportion of simulated proportions above the line
+is an estimate at Prob(pE &gt; pT) = Prob(d &gt; 0).</p>
+  
+<p align="left">We can also summarize the simulated sample of values of d = pE -
+pT to compare the two proportions.&nbsp; Below we give a grouped count table of
+the 1000&nbsp; values of d.&nbsp; To interpret this table, note that 234 values
+of d fall between .1 and 2.&nbsp; So Prob(.1 &lt; d &lt; .2) = 234/1000 =
+.234.&nbsp; To see if d &gt; 0 , we compute the probability</p>
+  
+<p align="center">P(d &gt; 0) = .938.</p>
+  
+<p align="left">This probability is approximately equal to the posterior
+probability that we found using discrete models for the proportions.</p>
+  
+<pre>
+        d=pE-pT</pre>  
+<pre>    LO	  HI     count
+    ------------------
+   -1     -0.9      0
+   -0.9   -0.8      0
+   -0.8   -0.7      0
+   -0.7   -0.6      0
+   -0.6   -0.5      0
+   -0.5   -0.4      0
+   -0.4   -0.3      0
+   -0.3   -0.2      1
+   -0.2   -0.1      8
+   -0.1    0       53
+   -0      0.1    139
+    0.1    0.2    234
+    0.2    0.3    282
+    0.3    0.4    205
+    0.4    0.5     57
+    0.5    0.6     21
+    0.6    0.7      0
+    0.7    0.8      0
+    0.8    0.9      0
+    0.9    1        0 
+</pre>  
+<hr>
+<p align="left"><i>Page Author: Jim Albert (c)&nbsp;<br>
+albert@math.bgsu.edu&nbsp;<br>
+</i></p>
+  
+  </body>
+
+</html>

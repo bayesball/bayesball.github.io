@@ -1,0 +1,169 @@
+**********************************************************************
+Errata for Bayesian Computation With R
+**********************************************************************
+Updated July 25, 2008
+Most of these errors have been corrected in the 2nd printing, June 2008.
+The errors marked with * were found after the 2nd printing.
+**********************************************************************
+
+1.  page 1, line 6.  Should be in an introductory statistics class”
+
+*2.  page 47, line 8.  The lines command should be
+
+> lines(theta,1/tau*dnorm((theta-mu)/tau),lwd=3)
+
+3.  page 54, exercise 2, part (a).  Should be "if we
+transform ..., then theta has a gamma density"
+
+4.  page 58, first full paragraph.  The R output
+should read as follows:
+
+> data(marathontimes)
+> attach(marathontimes)
+> mycontour(normchi2post, c(220, 330, 500, 9000), time)
+> title(xlab="mean",ylab="variance")
+
+(the mycontour function was assigned to a variable d
+actually, the mycontour function doesn't return any
+output)
+
+5.  page 73, exercise 5, line 7.  Should be 
+"Suppose that (a, b) are assigned the noninformative prior proportional
+to 1/(ab)^2."
+
+Also the posterior expression for (theta1, theta2) in the middle of page 73
+should have an extra factor of 1/(ab).
+
+6.  page 73, exercise 6, line 6.  Should be
+"a series of newspaper ads is run in the two areas for a period of four weeks"
+
+7.  page 74, second line.  Change .417 to 2.4 and (100, .4) to (100, 2.5).
+
+8.  page 77, line 13 from bottom.  Replace "the prior density.  The logarithm"
+with "the prior density g(theta).  The logarithm"
+
+9.  page 83, the R output at the bottom of the page should be replaced by
+
+>  se=sqrt(diag(fit$var))
+>  fit$mode-1.645*se
+          [,1]     [,2]
+[1,] -7.281247 5.663958
+
+>  fit$mode+1.645*se
+         [,1]     [,2]
+[1,] -6.35634 9.485062
+
+The last paragraph should read ...
+
+So a 90% interval estimate for logit(eta) is $(-7.28, -6.36)$, and a 90% 
+interval estimate for log K is (5.66, 9.49).
+
+10.  page 89, last line.  The standard error of the importance sampling estimate
+should be
+
+sqrt((sum(h(thetaj) - hIS) w(thetaj))^2)/sum(w(thetaj))
+
+(the square root should extend only on the numerator term)
+
+11.  page 91, line 10 from bottom.  Should be
+"sampling importance resampling"
+
+12. page 94, 7th line from bottom.  Should say ... "use of rejection sampling"
+
+13.  page 102, third paragraph, line 8.  Change wP = w to wT = w.
+
+14.  page 110.  There is a small mistake in the coding of the R function 
+groupeddatapost.R. One can correct the listing on page 110 by changing the line of code
+  z=z+freq[nbins]*log(1-pnorm(cpoints[nbins],m,s))
+to
+  z=z+freq[nbins+1]*log(1-pnorm(cpoints[nbins],m,s))
+
+With the use of the correctly coded function, the results in Section 6.7 and 6.8 will 
+change slightly (the revised printing will have different output on pages 111 through 115).
+
+15.  page 128, R code at bottom.  Insert before the first line of code
+
+> p=exp(s$par[,3])
+
+16.  page 142, 13th line from bottom.  It should say "of transplant deaths"
+
+17.  page 143, line 2.  In the R input line, lam should be lambda.
+
+18.  page 155, line 13 from bottom.  
+
+> ys24=rpois(1000,e[94]*lam94)
+
+should be replaced by
+
+> ys94=rpois(1000,e[94]*lam94)
+
+19.  page 158, ninth line from bottom.  Should be "normal density with mean mu and standard 
+deviation sigma"
+
+20.  page 174, line 3 before the last paragraph.  The last parenthesis in the R code
+should be deleted.
+
+21.  page 180, line 11 from bottom.  To get the R output as shown, the command
+
+> cbind(logK,logBF,exp(logBF))
+
+should be replaced by
+
+> cbind(logK,logBF,exp(logBF))[seq(1,26,by=5),]
+
+22.  page 188.  In the last expression before Section 9.2.3, the transpose operator
+should be ' instead of T.
+
+23.  page 208, line 6 from bottom.  PEAK should be defined as
+
+PEAK = beta0 - beta1^2/(4*beta2)
+
+also in line 4 of exercise 3, , "if beta3 < 0" should be replaced with
+"if beta2 < 0".
+
+24.  page 209, first line.  PEAK AGE should be defined as
+
+PEAK AGE = -beta1/(2 beta2)
+
+25.  page 217, line 26.  The use of solve is not efficient in this case.  The
+calculation is better done as:
+
+mn=solve(t(x)%*%x,t(x)%*%z)
+
+26.  page 219, second paragraph, line 2.  The second percentile 25th should be changed to
+50th.
+
+27.  page 220, line 3 from bottom.  Line
+
+"41-50", + "31-40", "21-30")
+
+should be replaced with
+
+"41-50",  "31-40", "21-30")
+
+28.  page 235, formula at bottom of page.  yi in the first line of the expression should
+be replaced by xi
+
+29.  page 236, exercise 4, line 5.  In the inequality, p_n should be replaced
+by p_N.
+
+30.  page 247.  In the R code at the end of Section 11.5, the R command
+
+> plot(sqrt(perot),sqrt(buchanan))
+
+should precede
+
+> lines(xo,meanp[2,])
+
+31.  page 251, fourth line.  The line containing the single character b
+should be replaced with
+
+beta[i , 1:3] ~ dmnorm(mu.beta[], R[ , ])
+
+32.  page 255, 6th line.  Should be "Fitting a binomial/beta"
+
+
+ACKNOWLEGEMENT:
+
+Thanks to David Ardia, Josue Guzman, Peter Lee, and the students of MATH 648 for finding these errors.
+
