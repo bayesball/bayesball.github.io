@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-03-26" />
+<meta name="date" content="2020-04-09" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -446,10 +446,10 @@ P(X &gt; Y) &amp; = f(1, 0) + f(2, 0) + f(2, 1) + f(3, 0) + f(3, 1) + f(3, 2) \\
 <span id="cb2-3"><a href="joint-probability-distributions.html#cb2-3"></a><span class="kw">table</span>(results<span class="op">$</span>X, results<span class="op">$</span>Y) <span class="op">/</span><span class="st"> </span><span class="dv">1000</span></span></code></pre></div>
 <pre><code>##    
 ##         0     1     2     3     4
-##   0 0.000 0.000 0.018 0.047 0.006
-##   1 0.000 0.053 0.222 0.153 0.014
-##   2 0.012 0.157 0.210 0.035 0.000
-##   3 0.004 0.042 0.027 0.000 0.000</code></pre>
+##   0 0.000 0.000 0.021 0.052 0.010
+##   1 0.000 0.039 0.219 0.128 0.009
+##   2 0.008 0.144 0.241 0.041 0.000
+##   3 0.008 0.052 0.028 0.000 0.000</code></pre>
 <p><strong>Marginal probability functions</strong></p>
 <p>Once a joint probability mass function for <span class="math inline">\((X, Y)\)</span> has been constructed, one finds probabilities for one of the two variables. In our balls example, suppose one wants to find the probability that exactly three red balls are chosen, that is <span class="math inline">\(P(X = 3)\)</span>. This probability is found by summing values of the pmf <span class="math inline">\(f(x, y)\)</span> where <span class="math inline">\(x = 3\)</span> and <span class="math inline">\(y\)</span> can be any possible value of the random variable <span class="math inline">\(Y\)</span>, that is,
 <span class="math display">\[\begin{align*}
@@ -600,10 +600,10 @@ For example, the probability of observing two white balls given that we have two
 <pre><code>## # A tibble: 4 x 3
 ##       Y     N      P
 ##   &lt;int&gt; &lt;int&gt;  &lt;dbl&gt;
-## 1     0    12 0.0290
-## 2     1   157 0.379 
-## 3     2   210 0.507 
-## 4     3    35 0.0845</code></pre>
+## 1     0     8 0.0184
+## 2     1   144 0.332 
+## 3     2   241 0.555 
+## 4     3    41 0.0945</code></pre>
 </div>
 <div id="multinomial-experiments" class="section level2">
 <h2><span class="header-section-number">6.2</span> Multinomial Experiments</h2>
@@ -679,23 +679,23 @@ The results of the remaining <span class="math inline">\(10 - 3 = 7\)</span> tri
 <span id="cb9-3"><a href="joint-probability-distributions.html#cb9-3"></a><span class="kw">names</span>(results) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X1&quot;</span>, <span class="st">&quot;X2&quot;</span>, <span class="st">&quot;X3&quot;</span>)</span>
 <span id="cb9-4"><a href="joint-probability-distributions.html#cb9-4"></a><span class="kw">head</span>(results)</span></code></pre></div>
 <pre><code>##   X1 X2 X3
-## 1  4  1  5
-## 2  2  2  6
-## 3  1  5  4
-## 4  1  2  7
-## 5  2  1  7
-## 6  2  1  7</code></pre>
+## 1  2  1  7
+## 2  1  3  6
+## 3  1  3  6
+## 4  1  3  6
+## 5  1  1  8
+## 6  3  4  3</code></pre>
 <p>Given this simulated output, one can compute many different probabilities of interest. For example, suppose one is interested in <span class="math inline">\(P(X_1 + X_2 &lt; 5)\)</span>. One approximates this probability by simulation by finding the proportion of simulated pairs (<code>X1, X2</code>) where <code>X1 + X2 &lt; 5</code>.</p>
 <div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="joint-probability-distributions.html#cb11-1"></a>results <span class="op">%&gt;%</span><span class="st"> </span></span>
 <span id="cb11-2"><a href="joint-probability-distributions.html#cb11-2"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">P =</span> <span class="kw">sum</span>(X1 <span class="op">+</span><span class="st"> </span>X2 <span class="op">&lt;</span><span class="st"> </span><span class="dv">5</span>) <span class="op">/</span><span class="st"> </span><span class="dv">5000</span>)</span></code></pre></div>
-<pre><code>##       P
-## 1 0.376</code></pre>
+<pre><code>##        P
+## 1 0.3822</code></pre>
 <p>Suppose one is interested in finding the mean of the distribution of <span class="math inline">\(X_1\)</span> conditional on <span class="math inline">\(X_2 = 3\)</span>. The <code>filter()</code> function is used to choose only the Multinomial results where <code>X2 = 3</code> and the <code>summarize()</code> function finds the mean of <code>X1</code> among these results. One estimates <span class="math inline">\(E(X_1 \mid X_2 = 3) \approx 1.79193.\)</span> Note that it was found earlier that the conditional distribution of <span class="math inline">\(X_1\)</span> conditional on <span class="math inline">\(X_2 = 3\)</span> is Binomial(<span class="math inline">\(7, 1/4\)</span>) with mean <span class="math inline">\(7 (1 /4)\)</span> which is consistent with the simulation-based calculation.</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="joint-probability-distributions.html#cb13-1"></a>results <span class="op">%&gt;%</span></span>
 <span id="cb13-2"><a href="joint-probability-distributions.html#cb13-2"></a><span class="st">  </span><span class="kw">filter</span>(X2 <span class="op">==</span><span class="st"> </span><span class="dv">3</span>) <span class="op">%&gt;%</span></span>
 <span id="cb13-3"><a href="joint-probability-distributions.html#cb13-3"></a><span class="st">  </span><span class="kw">summarize</span>(<span class="dt">X1_M =</span> <span class="kw">mean</span>(X1))</span></code></pre></div>
 <pre><code>##       X1_M
-## 1 1.730294</code></pre>
+## 1 1.783661</code></pre>
 </div>
 <div id="joint-density-functions" class="section level2">
 <h2><span class="header-section-number">6.3</span> Joint Density Functions</h2>
@@ -1014,7 +1014,7 @@ Similarly, if one knows that <span class="math inline">\(X = x\)</span>, then th
 <span id="cb23-10"><a href="joint-probability-distributions.html#cb23-10"></a><span class="kw">names</span>(sdata) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;X&quot;</span>, <span class="st">&quot;Y&quot;</span>)</span>
 <span id="cb23-11"><a href="joint-probability-distributions.html#cb23-11"></a>sdata <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">summarize</span>(<span class="kw">mean</span>(Y <span class="op">&gt;</span><span class="st"> </span><span class="fl">1.5</span> <span class="op">*</span><span class="st"> </span>X))</span></code></pre></div>
 <pre><code>##   mean(Y &gt; 1.5 * X)
-## 1             0.215</code></pre>
+## 1             0.226</code></pre>
 <div class="figure"><span id="fig:unnamed-chunk-20"></span>
 <img src="../LATEX/figures/chapter6/Binorm_scatter.png" alt="Scatterplot of simulated draws from the Bivariate Normal in body measurement example.  The probability that $Y &gt; 1.5 X$ is approximated by the proportion of simulated points that fall to the left of the line $y = 1.5 x$." width="500" />
 <p class="caption">
@@ -1096,7 +1096,7 @@ Figure 6.7: Scatterplot of simulated draws from the Bivariate Normal in body mea
 <ol start="4" style="list-style-type: decimal">
 <li><strong>Choosing Balls</strong></li>
 </ol>
-<p>Suppose you have a box with 3 red and 2 black balls. You first roll a die – if the roll is 1, 2, you sample 3 balls without replacement from the box. If you roll is 3 or higher, you sample 2 balls with replacement from the box. Let <span class="math inline">\(X\)</span> denote the number of balls you sample and <span class="math inline">\(Y\)</span> the number of red balls selected.</p>
+<p>Suppose you have a box with 3 red and 2 black balls. You first roll a die – if the roll is 1, 2, you sample 3 balls without replacement from the box. If you roll is 3 or higher, you sample 2 balls without replacement from the box. Let <span class="math inline">\(X\)</span> denote the number of balls you sample and <span class="math inline">\(Y\)</span> the number of red balls selected.</p>
 <ol style="list-style-type: lower-alpha">
 <li>Find the joint pmf of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</li>
 <li>Find the probability <span class="math inline">\(P(X = Y)\)</span>.</li>
