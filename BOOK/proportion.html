@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-03-30" />
+<meta name="date" content="2020-04-13" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -637,7 +637,7 @@ that value, F(x).</li>
 </ul>
 <p>For example, suppose one is interested in simulating a sample of size five from <span class="math inline">\(\textrm{Beta}(1, 1)\)</span>.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="proportion.html#cb19-1"></a><span class="kw">rbeta</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 0.8810029 0.2448766 0.6293884 0.8649433 0.7246896</code></pre>
+<pre><code>## [1] 0.6801673 0.4559674 0.8360953 0.8560236 0.6800339</code></pre>
 <p>There are additional functions in the <code>ProbBayes</code> R package that aid in visualizing Beta distribution calculations.
 For example, suppose one has a <span class="math inline">\(\textrm{Beta}(7, 10)\)</span> curve and we want to find the chance that <span class="math inline">\(p\)</span> is between 0.4 and 0.8. Looking at Figure 7.5, this probability corresponds to the area of the shaded region. The special function <code>beta_area()</code> will compute and illustrate this probability. Note the use of the vector <code>c(7, 10)</code> to input the two shape parameters.</p>
 <pre><code>beta_area(0.4, 0.8, c(7, 10))</code></pre>
@@ -691,7 +691,7 @@ Figure 7.7: Histograms of 1000 samples of two Beta density curves Beta(4, 4) and
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="proportion.html#cb29-1"></a>Beta44samples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1000</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
 <span id="cb29-2"><a href="proportion.html#cb29-2"></a><span class="kw">quantile</span>(Beta44samples, <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>))</span></code></pre></div>
 <pre><code>##       25%       75% 
-## 0.3833061 0.6215135</code></pre>
+## 0.3672058 0.6145679</code></pre>
 <p>This tells us that the probability that <span class="math inline">\(p \leq 0.366\)</span> is 0.25 and the probability that <span class="math inline">\(p \geq 0.616\)</span> is also 0.25. These probability statements should be checked against one’s prior belief about <span class="math inline">\(p\)</span>. If these quantiles do not seem reasonable, one should make adjustments to the values of the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> .</p>
 <p>On the surface the two priors <span class="math inline">\(\textrm{Beta}(4, 4)\)</span> and <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> seem similar in that they both have a mean of <span class="math inline">\(0.5\)</span> and represent similar breakdowns of the success and failure counts. However, the aforementioned concept of prior sample size tells us that <span class="math inline">\(\textrm{Beta}(4, 4)\)</span> has a prior sample size of 8 while that of <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> is 80. As we will see in Section 7.4, the prior sample size determines the strength of the prior (i.e. the confidence level in the prior) and so the <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> prior represents a much stronger belief that <span class="math inline">\(p\)</span> is close to the value 0.5.</p>
 <p>A second indirect method of determining a Beta prior is by specification of quantiles of the distribution. Specifically, one determines the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> by first specifying two quantiles of the Beta density curve, and then finding the Beta density curve that matches these quantiles. Suppose the restaurant owner uses his knowledge to specify the 0.5 and 0.9 quantiles of the proportion <span class="math inline">\(p\)</span> as follows.</p>
@@ -879,7 +879,7 @@ Figure 7.10: Probability of the hypothesis from the Beta posterior density.
 <span id="cb37-2"><a href="proportion.html#cb37-2"></a>BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</span></code></pre></div>
 <p>The proportion of the 1000 simulated values of <span class="math inline">\(p\)</span> that are at least 0.75 gives an approximation of the probability that <span class="math inline">\(p \geq 0.75\)</span>.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="proportion.html#cb38-1"></a><span class="kw">sum</span>(BetaSamples <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.75</span>) <span class="op">/</span><span class="st"> </span>S</span></code></pre></div>
-<pre><code>## [1] 0.034</code></pre>
+<pre><code>## [1] 0.026</code></pre>
 <p>The simulation-based probability estimate is 0.037 which is an accurate approximation to the exact probability 0.04 obtained before.</p>
 <p>It would be reasonable to question the choice of the number of simulations <span class="math inline">\(S = 1000\)</span>. One can change the simulation sample size to larger or smaller values as one sees fit. In general, the larger the value of <span class="math inline">\(S\)</span>, the more accurate the approximation. Figure 7.11 shows that the shape of a histogram of the simulated values of <span class="math inline">\(p\)</span> approaches the exact posterior density as the value of <span class="math inline">\(S\)</span> changes from 100 to 10,000. The corresponding simulation-based probabilities of <span class="math inline">\(p \geq 0.75\)</span> are <span class="math inline">\(\{0.02, 0.05, 0.033, 0.0422\}\)</span> indicating that the accuracy of the approximation improves for larger simulation sample sizes.</p>
 <div class="figure"><span id="fig:unnamed-chunk-31"></span>
@@ -914,7 +914,7 @@ Figure 7.12: Display of 90% probability interval for the proportion <span class=
 <span id="cb45-2"><a href="proportion.html#cb45-2"></a>BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</span>
 <span id="cb45-3"><a href="proportion.html#cb45-3"></a><span class="kw">quantile</span>(BetaSamples, <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
 <pre><code>##        5%       95% 
-## 0.4374488 0.7423057</code></pre>
+## 0.4238968 0.7424686</code></pre>
 <p>The approximate middle 90% credible interval is [0.427, 0.733], which is close in value to the exact 90% credible interval [0.427, 0.741] computed using the <code>qbeta()</code> and <code>beta_interval()</code> functions. In an end-of-chapter exercise the reader is encouraged to practice and experiment with different values of the size of the simulated sample <span class="math inline">\(S\)</span>.</p>
 </div>
 <div id="bayesian-prediction" class="section level3">
@@ -1068,7 +1068,7 @@ Prob(7 \le \tilde Y \le 16) = 0.919.
 <span id="cb51-2"><a href="proportion.html#cb51-2"></a>n &lt;-<span class="st"> </span><span class="dv">20</span>; y &lt;-<span class="st"> </span><span class="dv">12</span></span>
 <span id="cb51-3"><a href="proportion.html#cb51-3"></a>pred_p_sim &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1</span>, a <span class="op">+</span><span class="st"> </span>y, b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>y)</span>
 <span id="cb51-4"><a href="proportion.html#cb51-4"></a>(pred_y_sim &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">1</span>, n, pred_p_sim))</span></code></pre></div>
-<pre><code>## [1] 7</code></pre>
+<pre><code>## [1] 12</code></pre>
 <p>Due to the ability of R to work easily with vectors, ]the same code is essentially used for simulating <span class="math inline">\(S = 1000\)</span> draws from the predictive distribution.<br />
 In the following R script, <code>pred_p_sim</code> contains 1000 simulated draws from the posterior, and for each element of this posterior sample, the <code>rbinom()</code> function is used to simulate a corresponding value of <span class="math inline">\(\tilde Y\)</span> from the Binomial sampling density.</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="proportion.html#cb53-1"></a>a &lt;-<span class="st"> </span><span class="fl">3.06</span>; b &lt;-<span class="st"> </span><span class="fl">2.56</span></span>
@@ -1456,6 +1456,104 @@ one collects from <span class="math inline">\(n\)</span> sampled voters, where <
 Find the posterior distribution of <span class="math inline">\((\theta_A, \theta_B,  \theta_C)\)</span> and show that this is a Dirichlet distribution with updated parameters.</p></li>
 <li><p>Suppose in the sample of <span class="math inline">\(n = 100\)</span> voters, 53 voted for Party A, 18 voted for Party B, and 29 voted for Party C <span class="math inline">\((y_A = 53, y_B = 18, y_C = 29)\)</span>. Using the prior distribution <span class="math inline">\(\text{Dirichlet}(\alpha_A = 2, \alpha_B = 1, \alpha_C = 1)\)</span> and the generic results from part (b), obtain the posterior distribution for <span class="math inline">\((\theta_A, \theta_B, \theta_C)\)</span>. Plot the prior and the posterior distributions for <span class="math inline">\((\theta_A, \theta_B, \theta_C)\)</span> and discuss your findings.</p></li>
 <li><p>Suppose one wants to compute the ratio of odds of voting for Party A to the odds of voting for Party B, <span class="math inline">\(\frac{\theta_A/(1 - \theta_A)}{\theta_B/(1 - \theta_B)}\)</span>. Compute a 95% posterior interval for this odds ratio.</p></li>
+</ol>
+<p>E1. <strong>How Good is the Shooter?</strong></p>
+<p>Suppose you are interested in learning about <span class="math inline">\(p\)</span>, the probability that a high school basketball player will succeed in a free-throw attempt. You believe before observing any data that <span class="math inline">\(p\)</span> is equal to 0.5, 0.6, 0.7, or 0.8 and each value has the same probability. Suppose she is going to take three shots and let <span class="math inline">\(Y\)</span> denote the number of shots she makes.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Find the joint distribution of <span class="math inline">\(p\)</span> and <span class="math inline">\(Y\)</span>.</p></li>
+<li><p>Compute the predictive (marginal) distribution of <span class="math inline">\(Y\)</span>.</p></li>
+<li><p>Find the probability that she makes two shots.</p></li>
+<li><p>Find the expected number of shots she will make.</p></li>
+</ol>
+<p>E2. <strong>How Good is the Shooter? (continued)</strong></p>
+<p>Suppose that you observe the shooter make two of her three shot attempts.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>By use of a Bayes’ table, perform all of the Bayesian calculations include values of the Likelihood, Product, and Posterior.</p></li>
+<li><p>Graph the posterior distribution for <span class="math inline">\(P\)</span>.</p></li>
+<li><p>If you define an “excellent” shooter as values of <span class="math inline">\(p\)</span> of 0.7 or 0.8, what is the posterior probability she is an excellent shooter.</p></li>
+<li><p>Find the posterior mean of <span class="math inline">\(p\)</span>.</p></li>
+</ol>
+<p>E3. <strong>Does Frank Have ESP?</strong></p>
+<p>Frank claims to have extra sensory perception (ESP). You are skeptical and so you ask Frank to participate in a card reading experiment. You have a deck of cards with equal numbers of <span class="math inline">\(\diamondsuit\)</span>’s, <span class="math inline">\(\heartsuit\)</span>’s, <span class="math inline">\(\clubsuit\)</span>’s, and <span class="math inline">\(\spadesuit\)</span>’s. You shuffle the deck and hold a card up with the face away from Frank. Frank will then tell you the suit of the card. For the next trial of the experiment, you put the card back into the deck, reshuffle, and draw a new card. The experiment is completed when ten cards have been used. Let <span class="math inline">\(p\)</span> be the proportion of cards in which he correctly identifies the suit. There are two models of interest: <span class="math inline">\(p=.25\)</span>, which says that Frank does not have ESP and is essentially guessing at the suit of the card, and <span class="math inline">\(p=.5\)</span> which says that Frank does have some ability to detect the suit.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Suppose you will test Frank using 10 cards and let <span class="math inline">\(Y\)</span> denote the number of cards that are correctly identified. Suppose you are skeptical of Frank’s ability so you define the following prior.</li>
+</ol>
+<table>
+<thead>
+<tr class="header">
+<th>P</th>
+<th>Prior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.25</td>
+<td>0.2</td>
+</tr>
+<tr class="even">
+<td>0.75</td>
+<td>0.8</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li><p>Find the marginal (predictive) pmf for <span class="math inline">\(Y\)</span>.</p></li>
+<li><p>Before you observe any results, find the probability that Frank will guess 5 or more correct (that is, <span class="math inline">\(Y \ge 5\)</span>).</p></li>
+<li><p>Now the experiment is run and Frank correctly identifies <span class="math inline">\(Y = 5\)</span> of the 10 cards. By constructing a Bayes’ table, find the posterior distribution for <span class="math inline">\(p\)</span>.</p></li>
+<li><p>Based on your experiment, do you think it is likely that Frank has ESP? Explain.</p></li>
+</ol>
+<p>E4. <strong>Sampling Students</strong></p>
+<p>Suppose you are interested in learning about the proportion <span class="math inline">\(p\)</span> of undergraduate students who own Macintosh laptops. You place the following prior on the values of <span class="math inline">\(p\)</span>. (Note the prior weights, not the prior probabilities are shown.)</p>
+<table>
+<thead>
+<tr class="header">
+<th>P</th>
+<th>Prior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>0.2</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>0.3</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>0.4</td>
+<td>4</td>
+</tr>
+<tr class="odd">
+<td>0.5</td>
+<td>2</td>
+</tr>
+<tr class="even">
+<td>0.6</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>0.7</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>0.8</td>
+<td>1</td>
+</tr>
+<tr class="odd">
+<td>0.9</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li><p>You plan on sampling 20 students. Based on your prior, find the (predictive) probability that 10 or more students will own Macs. [HINT: Compute this probability by a “model/data” simulation where you simulate values <span class="math inline">\(p\)</span> and <span class="math inline">\(y\)</span>.]</p></li>
+<li><p>Suppose you now take your sample and 12 out of the 20 students own Macs. Find the posterior probability distribution for <span class="math inline">\(p\)</span> and find the posterior mean.</p></li>
+<li><p>Find an interval that you believe contains <span class="math inline">\(p\)</span> with probability 0.9.</p></li>
 </ol>
 
 </div>
