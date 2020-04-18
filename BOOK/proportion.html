@@ -637,7 +637,7 @@ that value, F(x).</li>
 </ul>
 <p>For example, suppose one is interested in simulating a sample of size five from <span class="math inline">\(\textrm{Beta}(1, 1)\)</span>.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="proportion.html#cb19-1"></a><span class="kw">rbeta</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 0.3125516 0.1686285 0.3836519 0.7904312 0.7050875</code></pre>
+<pre><code>## [1] 0.6533384 0.4464852 0.7535003 0.1388177 0.8132075</code></pre>
 <p>There are additional functions in the <code>ProbBayes</code> R package that aid in visualizing Beta distribution calculations.
 For example, suppose one has a <span class="math inline">\(\textrm{Beta}(7, 10)\)</span> curve and we want to find the chance that <span class="math inline">\(p\)</span> is between 0.4 and 0.8. Looking at Figure 7.5, this probability corresponds to the area of the shaded region. The special function <code>beta_area()</code> will compute and illustrate this probability. Note the use of the vector <code>c(7, 10)</code> to input the two shape parameters.</p>
 <pre><code>beta_area(0.4, 0.8, c(7, 10))</code></pre>
@@ -691,7 +691,7 @@ Figure 7.7: Histograms of 1000 samples of two Beta density curves Beta(4, 4) and
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="proportion.html#cb29-1"></a>Beta44samples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1000</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
 <span id="cb29-2"><a href="proportion.html#cb29-2"></a><span class="kw">quantile</span>(Beta44samples, <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>))</span></code></pre></div>
 <pre><code>##       25%       75% 
-## 0.3669642 0.6155816</code></pre>
+## 0.3794867 0.6185662</code></pre>
 <p>This tells us that the probability that <span class="math inline">\(p \leq 0.366\)</span> is 0.25 and the probability that <span class="math inline">\(p \geq 0.616\)</span> is also 0.25. These probability statements should be checked against one’s prior belief about <span class="math inline">\(p\)</span>. If these quantiles do not seem reasonable, one should make adjustments to the values of the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> .</p>
 <p>On the surface the two priors <span class="math inline">\(\textrm{Beta}(4, 4)\)</span> and <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> seem similar in that they both have a mean of <span class="math inline">\(0.5\)</span> and represent similar breakdowns of the success and failure counts. However, the aforementioned concept of prior sample size tells us that <span class="math inline">\(\textrm{Beta}(4, 4)\)</span> has a prior sample size of 8 while that of <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> is 80. As we will see in Section 7.4, the prior sample size determines the strength of the prior (i.e. the confidence level in the prior) and so the <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> prior represents a much stronger belief that <span class="math inline">\(p\)</span> is close to the value 0.5.</p>
 <p>A second indirect method of determining a Beta prior is by specification of quantiles of the distribution. Specifically, one determines the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> by first specifying two quantiles of the Beta density curve, and then finding the Beta density curve that matches these quantiles. Suppose the restaurant owner uses his knowledge to specify the 0.5 and 0.9 quantiles of the proportion <span class="math inline">\(p\)</span> as follows.</p>
@@ -879,7 +879,7 @@ Figure 7.10: Probability of the hypothesis from the Beta posterior density.
 <span id="cb37-2"><a href="proportion.html#cb37-2"></a>BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</span></code></pre></div>
 <p>The proportion of the 1000 simulated values of <span class="math inline">\(p\)</span> that are at least 0.75 gives an approximation of the probability that <span class="math inline">\(p \geq 0.75\)</span>.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="proportion.html#cb38-1"></a><span class="kw">sum</span>(BetaSamples <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.75</span>) <span class="op">/</span><span class="st"> </span>S</span></code></pre></div>
-<pre><code>## [1] 0.048</code></pre>
+<pre><code>## [1] 0.046</code></pre>
 <p>The simulation-based probability estimate is 0.037 which is an accurate approximation to the exact probability 0.04 obtained before.</p>
 <p>It would be reasonable to question the choice of the number of simulations <span class="math inline">\(S = 1000\)</span>. One can change the simulation sample size to larger or smaller values as one sees fit. In general, the larger the value of <span class="math inline">\(S\)</span>, the more accurate the approximation. Figure 7.11 shows that the shape of a histogram of the simulated values of <span class="math inline">\(p\)</span> approaches the exact posterior density as the value of <span class="math inline">\(S\)</span> changes from 100 to 10,000. The corresponding simulation-based probabilities of <span class="math inline">\(p \geq 0.75\)</span> are <span class="math inline">\(\{0.02, 0.05, 0.033, 0.0422\}\)</span> indicating that the accuracy of the approximation improves for larger simulation sample sizes.</p>
 <div class="figure"><span id="fig:unnamed-chunk-31"></span>
@@ -914,7 +914,7 @@ Figure 7.12: Display of 90% probability interval for the proportion <span class=
 <span id="cb45-2"><a href="proportion.html#cb45-2"></a>BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</span>
 <span id="cb45-3"><a href="proportion.html#cb45-3"></a><span class="kw">quantile</span>(BetaSamples, <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
 <pre><code>##        5%       95% 
-## 0.4188878 0.7433031</code></pre>
+## 0.4270349 0.7441126</code></pre>
 <p>The approximate middle 90% credible interval is [0.427, 0.733], which is close in value to the exact 90% credible interval [0.427, 0.741] computed using the <code>qbeta()</code> and <code>beta_interval()</code> functions. In an end-of-chapter exercise the reader is encouraged to practice and experiment with different values of the size of the simulated sample <span class="math inline">\(S\)</span>.</p>
 </div>
 <div id="bayesian-prediction" class="section level3">
@@ -1068,7 +1068,7 @@ Prob(7 \le \tilde Y \le 16) = 0.919.
 <span id="cb51-2"><a href="proportion.html#cb51-2"></a>n &lt;-<span class="st"> </span><span class="dv">20</span>; y &lt;-<span class="st"> </span><span class="dv">12</span></span>
 <span id="cb51-3"><a href="proportion.html#cb51-3"></a>pred_p_sim &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1</span>, a <span class="op">+</span><span class="st"> </span>y, b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>y)</span>
 <span id="cb51-4"><a href="proportion.html#cb51-4"></a>(pred_y_sim &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">1</span>, n, pred_p_sim))</span></code></pre></div>
-<pre><code>## [1] 12</code></pre>
+<pre><code>## [1] 10</code></pre>
 <p>Due to the ability of R to work easily with vectors, ]the same code is essentially used for simulating <span class="math inline">\(S = 1000\)</span> draws from the predictive distribution.<br />
 In the following R script, <code>pred_p_sim</code> contains 1000 simulated draws from the posterior, and for each element of this posterior sample, the <code>rbinom()</code> function is used to simulate a corresponding value of <span class="math inline">\(\tilde Y\)</span> from the Binomial sampling density.</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="proportion.html#cb53-1"></a>a &lt;-<span class="st"> </span><span class="fl">3.06</span>; b &lt;-<span class="st"> </span><span class="fl">2.56</span></span>
@@ -1488,11 +1488,11 @@ Find the posterior distribution of <span class="math inline">\((\theta_A, \theta
 <tbody>
 <tr class="odd">
 <td>0.25</td>
-<td>0.2</td>
+<td>0.8</td>
 </tr>
 <tr class="even">
-<td>0.75</td>
-<td>0.8</td>
+<td>0.50</td>
+<td>0.2</td>
 </tr>
 </tbody>
 </table>
