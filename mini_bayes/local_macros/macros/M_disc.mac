@@ -1,0 +1,126 @@
+macro
+
+m_disc M1 PRI PS DATA;
+ summ x n;
+ store pos;
+ plot.
+
+##################################################################
+#  MACRO 'M_DIS'                                                 #
+# -------------------------------------------------------------- #
+#  INFERENCE ABOUT A NORMAL MEAN M                               #
+#  USING A DISCRETE SET OF M MODELS.                             #
+##################################################################
+
+mcolumn M PRIOR LIKE PRODUCT POST M1 PRI DATA POS NLIKE col POSTR
+mconstant X N k v ps c100 k11 k12 k13 MEAN
+
+let M=M1
+let PRIOR=PRI
+let k=count(M)
+let v=ps**2
+
+if summ=0
+  let x=mean(data)
+  let n=count(data)
+  mean(data)
+  count(data)
+endif
+
+let prior=abs(prior)/sum(abs(prior))
+let like=-.5*n/v*(M-x)**2
+let c100=max(like)
+let like=exp(like-c100)*10**6
+let product=prior*like
+let postr=product/sum(product)
+
+if plot=1
+layout
+
+let nlike=like/sum(like)
+let k11=max(prior)
+let k12=max(nlike)
+let k13=max(postr)
+set  col
+ k11 k12 k13
+end
+let k11=max(col)
+
+plot prior*m;
+minimum 2 0;
+maximum 2 k11;
+project;
+ size 3;
+data;
+ etype 0;
+axis 1;
+ tsize 2;
+axis 2;
+ label '';
+tick 1;
+ tsize 1.5;
+tick 2;
+ tsize 1.5;
+figure 0 .5 .5 .9;
+ etype 0;
+title 'PRIOR';
+ size 2.
+
+plot NLIKE*m;
+minimum 2 0;
+maximum 2 k11;
+project;
+size 3;
+data;
+etype 0;
+axis 1;
+ tsize 2;
+axis 2;
+ label '';
+tick 1;
+ tsize 1.5;
+tick 2;
+ tsize 1.5;
+figure .5 1 .5 .9;
+etype 0;
+title 'LIKELIHOOD';
+size 2.
+
+plot POSTR*m;
+minimum 2 0;
+maximum 2 k11;
+project;
+size 3;
+data;
+etype 0;
+axis 1;
+ tsize 2;
+axis 2;
+ label '';
+tick 1;
+ tsize 1.5;
+tick 2;
+ tsize 1.5;
+figure .25 .75 .05 .45;
+etype 0;
+title 'POSTERIOR';
+size 2.
+
+endlayout
+
+endif
+
+notitle
+mtitle 'PRIOR AND POSTERIOR DENSITIES OF M:'
+print M PRIOR LIKE PRODUCT POSTR
+let mean=sum(M*PRIOR)
+mtitle 'PRIOR MEAN OF M:'
+prin mean
+let mean=sum(M*POSTR)
+mtitle 'POSTERIOR MEAN OF M:'
+prin mean
+note
+
+let POS=POSTR
+
+endmacro

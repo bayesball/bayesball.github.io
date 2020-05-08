@@ -1,0 +1,66 @@
+MTB > type 'logpost2.MTB'
+
+##################################################################                            
+#  MACRO 'LOGPOST2'                                              #                            
+# -------------------------------------------------------------- #                            
+#  DEFINITION OF THE LOGARITHM OF A TWO PARAMETER                #                            
+#  POSTERIOR DENSITY                                             #                            
+##################################################################                            
+                                                                                                                                                               
+###############################################                                                                  
+#  2 binomial problem                         #                                                                  
+#  t1 - difference in odds ratios             #                                                                  
+#  t2 - sum of odds ratios                    #                                                                  
+###############################################                                                                  
+                                                                                                                                                               
+set 'data'                                                                                                                                            
+1 10 3 12                                                                                                                                              
+                                                                                                                                                               
+let k21='data'(1)                                                                                                                              
+let k22='data'(2)                                                                                                                              
+let k23='data'(3)                                                                                                                              
+let k24='data'(4)                                                                                                                              
+                                                                                                                                                               
+let c201=('x'+'y')/2                                                                                                                        
+let c202=('y'-'x')/2                                                                                                                        
+let 'f'=k21*c201-(k21+k22)*log(1+exp(c201))+k23*c202-(k23+k24)*log(1+exp(c202))  
+
+MTB > exec 'laplace2'
+MTB > ##################################################################
+MTB > #  MACRO 'LAPLACE2'                                              #
+MTB > # -------------------------------------------------------------- #
+MTB > #  SUMMARIZING A 2-PARAMETER POSTERIOR USING LAPLACE METHOD.     #
+MTB > #  DEFINITION OF LOG POSTERIOR IN MACRO 'LOGPOST2'               #
+MTB > #--------------------------------------------------------------- #
+MTB > #  INPUT:  GUESS AT MODE                                         #
+MTB > #          NUMBER OF ITERATIONS                                  #
+MTB > #  OUTPUT: CURRENT ESTIMATE AT MODE                              #
+MTB > #          ASSOCIATED COVARIANCE MATRIX AND INTEGRAL ESTIMATE    #
+MTB > ##################################################################
+ 
+INPUT GUESS AT MODE:
+DATA> 1 1
+ 
+INPUT NUMBER OF ITERATIONS:
+DATA> 5
+
+ Row      MN_1     STD_1      MN_2     STD_2     COVAR  LOG_INTG
+
+   1  -1.04684   0.85129  -3.43018   0.85129   0.19511  -22.3648
+
+ Row       MN_1     STD_1      MN_2     STD_2     COVAR  LOG_INTG
+
+   1  -0.927094   1.20075  -3.67809   1.20075   0.69814  -8.83597
+
+ Row       MN_1     STD_1      MN_2     STD_2      COVAR  LOG_INTG
+
+   1  -0.916306   1.23626  -3.68887   1.23626   0.702681  -8.71386
+
+ Row       MN_1     STD_1      MN_2     STD_2      COVAR  LOG_INTG
+
+   1  -0.916094   1.24168  -3.68866   1.24168   0.689256  -8.69772
+
+ Row      MN_1     STD_1      MN_2     STD_2      COVAR  LOG_INTG
+
+   1  -0.91617   1.28012  -3.68882   1.28012   0.799844  -8.66131
+

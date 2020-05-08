@@ -1,0 +1,543 @@
+BAYESIAN COMPUTATIONS USING MINITAB 
+LOCAL MACROS
+NOVEMBER 1994
+
+------------------------------------------------------------
+SIMULATING PROBABILITIES:
+------------------------------------------------------------
+
+Playing the casino game craps:
+
+craps
+
+output: plays craps a number of times that is inputted.  For each game, the program keeps track of the first roll, the total number of rolls, and the outcome (win or loss).  Two-way tables of these outcomes are displayed.
+------------------------------------------------------------
+Playing the dice roll game yahtzee:
+
+yahtzee;
+ auto;
+ repeat K1 C1 C2 C3.
+
+output:plays the game - user inputs at each roll the dice to be saved
+
+subcommands:
+game is played in automatic mode - computer decides which dice to be saved
+repeat the game K1 times - store the results of roll1, roll2, roll3 in columns C1, C2, C3.
+
+------------------------------------------------------------
+Simulating a baseball season:
+
+bball C1;
+  repeat K1;
+  store C2 C3 . . . CN.
+
+input:  column C1 contains the real-valued strengths of the teams
+
+output:  using a Bradley-Terry model, simulates a baseball season where each two teams play 8 times -- the results of the games and the season wins for all teams are displayed
+
+subcommands:
+repeat simulation K1 times
+store the numbers of wins for all teams in columns C2 C2 . . . CN
+
+------------------------------------------------------------
+BAYES RULE:
+------------------------------------------------------------
+bayes_se (sets up models, priors, and likelihoods)
+
+bayes (sequentially implements bayes rule for independent sequence of observations)
+
+
+------------------------------------------------------------
+BINOMIAL P - DISCRETE MODELS:
+------------------------------------------------------------
+Learning about a proportion:
+
+p_disc C1 C2 K1 K2;
+   store C3;
+   plot.
+
+input:  C1 - column of p values 
+C2 - column of prior probabilities
+K1, K2 - number of successes and failures
+
+output:table of prior, likelihood, and posterior probabilities
+
+subcommands:
+posterior probabilities stored in column C3
+plots prior, normalized likelihood, and posterior as line graphs
+
+------------------------------------------------------------
+Predicting a future binomial experiment:
+
+p_disc_p C1 C2 K1;
+   store C3 C4;
+   succ K2 K3;
+   plot.
+
+input:  C1 - column of p values 
+C2 - column of prior probabilities
+K1 - number of trials in future binomial experiment
+
+output: table of predictive probabilities for s - number of successes
+
+subcommands:
+values of s and predictive probabilities stored in columns C3 and C4
+only compute probabilities for numbers of successes from K2 to K3
+plots predictive distribution as line graph
+
+------------------------------------------------------------
+BINOMIAL P - CONTINUOUS MODELS
+------------------------------------------------------------
+Choosing a beta prior distribution:
+
+beta_sel K1 K2;
+  store K3 K4.
+
+input:K1 - probability of a success on a single trial
+K2 - probability of a second success on a 2nd trial given a success on the first trial
+
+output:values of matching beta parameters a and b
+
+subcommands:
+values of a and b stored in constants K3 and K4
+------------------------------------------------------------
+Learning about a proportion using a beta (A, B) prior
+
+p_beta K1 K2;
+  data K3 K4;
+  cprob C1;
+  quan C2.
+
+input:K1, K2 - beta parameters A and B
+
+output:plot of beta (A, B) density
+
+subcommands:
+update prior with data: numbers of successes and failures K3 and K4
+(in this case, prior, normalized likelihood, and posterior are graphed on single plot)
+compute cumulative probabilties for values in column C1
+compute quantiles for probability values in column C2
+
+------------------------------------------------------------
+Predictive inference using a beta prior
+
+p_beta_p K1 K2 K3;
+  store C1 C2;
+  succ K4 K5;
+  plot.
+
+input:K1, K2 - (constants) - beta parameters A and B
+K3 - (constant) number of trials in future binomial experiment
+
+output: table of predictive probabilities for s - number of successes
+
+subcommands:
+values of s and predictive probabilities stored in columns C1 and C2
+only compute probabilities for numbers of successes from K4 to K5
+plots predictive distribution as line graph
+
+------------------------------------------------------------
+Testing the hypothesis that p = p0 (beta (A, B) prior on alternative values of p)
+
+p_beta_t K1 K2 K3 K4 K5 K6 
+
+input:K1 - value of p to be tested
+K2 - prior probability that p is equal to p0
+K3, K4 - beta parameters A and B
+K5, K6 - number of successes and failures in binomial experiment
+
+output:the Bayes factor supporting the hypothesis and the posterior probability that the hypothesis is true
+
+------------------------------------------------------------
+Learning about a proportion using a histogram prior
+
+p_hist_p C1 C2 K1 K2;
+  nsim K3;
+  store C3 C4.
+
+input:C1 - column of midpoints of prior histogram
+C2 - column of prior probabilities of intervals
+K1, K2 - number of successes and failures in binomial experiment
+
+output:gives posterior probabilities of the intervals of the prior histogram using 1000 simulated values
+
+subcommands:
+simulates K3 values from the prior distribution of p
+stores the simulated p values and the corresponding posterior probabilities in the columns C3 and C4.
+
+------------------------------------------------------------
+2 BINOMIAL PROPORTIONS - DISCRETE MODELS:
+------------------------------------------------------------
+Constructing a prior distribution for (p1, p2):
+
+pp_prior C1 C2 C3; 
+  gsize K1;
+  test K2;
+  limit K3 K4 K5 K6;
+  tprob C4 C5 C6-CN.
+
+output:constructs uniform prior distribution for (p1, p2) where p1 and p2 each take on 11 equally spaced values from 0 to 1.  The values of p1 and p2 on the grid are contained in columns C1 and C2 and the prior probabilities are contained in the column C3
+
+subcommands:
+gsize: p1 and p2 each take on K1 values equally spaced from 0 to 1
+test: the prior probability that p1=p2 is assumed to be K2.  On the diagonal, the values of (p1, p2) are uniformly distributed, and, off the diagonal, the values are uniformly distributed.
+limit: p1 values are chosen equally spaced from K3 to K4; the p2 values are equally spaced from K5 to K6.
+tprob: possible p1 values are in column C4, the possible p2 values in column C5, and the table of prior probabilities are in columns C6-CN.
+
+
+------------------------------------------------------------
+Inference using a discrete prior distribution for (p1, p2):
+
+pp_disc C1 C2 C3;
+  data K1 K2 K3 K4;
+  store C4;
+  plot K5;
+  pial C5;
+  pequal.
+
+input:C1 - column of p1 values
+C2 - column of p2 values
+C3 - column of prior probabilities
+
+output:gives table of the probability distribution of (p1, p2) - by default, this is the prior distribution
+
+subcommands:
+data from 1st binomial experiment (s1, f1) and 2nd experiment (s2, f2) in constants K1, K2, K3 and K4.  In this case, the posterior distribution of (p1, p2) is summarized.
+stores the current probabilities in the column C4.
+plots the probability distribution as a 2-dimensional bubble plot (K5=1), 3-dimensional line graph (K5=2), surface plot (K5=3), or a contour plot (K5=4) 
+computes the probability that P2-P1 is at least as large as each value in the column C5
+computes the probability that P1=P2 and the odds ratio Prob(P1=P2)/Prob(P1<>P2)
+
+------------------------------------------------------------
+2 BINOMIAL PROPORTIONS - CONTINUOUS MODELS:
+------------------------------------------------------------
+Inference about (p1, p2) using independent beta (A1, B1), beta (A2, B2) priors:
+
+pp_beta K1 K2 K3 K4;
+  pial C1;
+  nsim K5;
+  plot;
+  store C2 C3.
+
+input:K1, K2 - parameters of beta distribution for p1
+K3, K4 - parameters of beta distribution for p2
+
+output:gives dotplot of 1000 simulated values of the difference in probabilities p2-p1
+
+subcommands:
+computes the probabilities that p2-p1 is at least as large as each value in the column C1simulates K5 values from the posterior distribution of (p1, p2)
+plots the simulated values of (p1, p2) using a scatterplot with the marginal simulated values displayed as histograms
+stores the simulated values in columns C2 and C3
+
+------------------------------------------------------------
+Testing the hypothesis that p1=p2 using beta prior distributions
+
+pp_bet_t  K1 C1 C2 C3 C4
+
+input:K1 - prior probability that proportions are equal
+C1 - column of parameters of beta distribution when p1=p2
+C2 - parameters of beta distribution for p1 when the proportions are unequal
+C3 - parameters of beta distribution for p2 when the proportions are unequal
+C4 - column containing data from 1st binomial experiment (s1, f1) and 2nd experiment (s2, f2)
+
+output:the Bayes factor supporting the hypothesis of equality and the posterior probability that the hypothesis is true
+
+------------------------------------------------------------
+Estimating two binomial proportions using an exchangeable model
+
+pp_exch K1;
+  data K2 K3 K4 K5;
+  nsim K6;
+  plot
+  store C1 C2.
+
+input:K1 - standard deviation for the logits log(p1/(1-p1)) and log(p2/(1-p2))
+
+output:for no data, marginal plot of exchangeable distribution of (p1, p2); for data, marginal plot of posterior distribution; dotplot and descriptive statistics of the distribution of the difference in probabilities p2-p1
+
+subcommands:
+data from two binomial experiments (s1, f1) and (s2, f2) stored in K2, K3, K4, K5 
+simulates K6 values from the posterior distribution of (p1, p2)
+plots the simulated values of the posterior of (p1, p2) using a scatterplot with the marginal simulated values displayed as histograms
+stores the simulated values in columns C1 and C2
+------------------------------------------------------------
+NORMAL M - DISCRETE MODELS
+------------------------------------------------------------
+m_disc C1 C2 K1 C3;
+  summ K2 K3;
+  store C4;
+  plot.
+
+input:C1 - column of values of normal mean m
+C2 - column of prior probabilities
+K1 - value of known population standard deviation
+C3 - column containing observations
+
+output: table of prior probabilities, likelihoods, and posterior probabilities
+
+subcommands:
+data is given in summary form - mean K2 and sample size K3
+posterior probabilities are stored in the column C4
+plots prior, normalized likelihood, and posterior as line graphs
+
+------------------------------------------------------------
+NORMAL M - CONTINUOUS MODELS
+------------------------------------------------------------
+Choosing a normal prior distribution:
+
+normal_s K1 K2 K3 K4;
+  store K5 K6.
+
+input:(K1, K2) - K2 is the quantile of the distribution such that Prob(m < K2) = K1
+(K3, K4) - K4 is the quantile of the distribution such that Prob(m < K4) = K3
+
+output:the values of the normal mean and standard deviation which match these two quantiles
+
+subcommands:
+normal distribution parameters are stored in the constants K5 and K6
+
+------------------------------------------------------------
+Approximate inference about a normal mean using a normal prior:
+
+m_cont C1;
+  summ K1 K2 K3;
+  prior K4 K5;
+  mstore K6 K7;
+  ystore K8 K9;
+  quiet.
+
+input:C1 - column containing observations
+
+output:assuming (by default) a vague prior on m, gives the posterior distribution for m and the predictive distribution for a future observation
+
+subcommands:
+data is given in summary form - mean K1, standard deviation K2, and sample size K3a normal prior is chosen for m with mean K4 and standard deviation K5
+mean and standard deviation of the normal posterior distribution are stored in the K6 and K7
+mean and standard deviation of the normal predictive distribution are stored in the constants K8 and K9
+quiet:  printing of any output is suppressed
+
+------------------------------------------------------------
+Summarizing a normal distribution:
+
+normal K1 K2;
+  cprob C1;
+  quan C2.
+
+input:K1, K2 -  mean and standard deviation of the normal distribution
+
+output:plots the normal density
+
+subcommands:
+compute cumulative probabilties for values in column C1
+compute quantiles for probability values in column C2
+
+------------------------------------------------------------
+Testing the hypothesis that m = m0 (normal prior on alternative values of m)
+
+m_norm_t K1 K2 K3 C1 C2;
+  summ K4 K5.
+
+input:K1 -  the value of the normal mean that is being tested.  This is also the prior mean of m under the alternative hypothesis that the mean is not m0
+K2 - the prior probability that m= m0
+K3 - the known value of the standard deviation of the population
+C1 - column of prior standard deviations of m when the mean is not m0
+C2 - column of observations
+
+output:Bayes factor supporting the null hypothesis and the posterior probability that m=m0 for each value in the column C1
+
+subcommands:
+data is given in summary form - mean K4 and sample size K5
+
+------------------------------------------------------------
+Exact normal/chi-square inference about a normal mean using an uninformative prior
+
+m_nchi C1
+
+input:C1 - column containing observations
+
+output:  gives parameters of t and inverse chi-squared distributions for mean M and standard deviation S.  Plots joint posterior distribution of (M, S) as contour plot with both marginal densities displayed.
+
+------------------------------------------------------------
+2 NORMAL MEANS - CONTINUOUS MODELS
+------------------------------------------------------------
+Approximate normal analysis:
+
+mm_cont C1 C2;
+  summ K1 K2 K3 K4 K5 K6;
+  prior K7 K8 K9 K10;
+  mstore K11 K12.
+
+input:columns C1 and C2 containing data from two independent normal samples
+
+output:assuming (by default) a vague prior on m1 and m2, gives the posterior distribution 
+for m2 - m1 
+
+subcommands:
+data is given in summary form - for the first sample, (K1, K2, K3) are the mean, standard deviation, and sample size K3; (K4, K5, K6) are the mean, standard deviation, and sample size for the second sample. 
+independent normal priors are chosen for m1 and m2; m1 is normal with mean K7 and standard deviation K8 and m2 is normal with mean K9 and standard deviation K10
+mean and standard deviation of the normal posterior distribution for m2 - m1 are stored in constants K6 and K7
+
+------------------------------------------------------------
+Exact analysis based on t distributions:
+
+mm_tt C1 C2
+
+input:columns C1 and C2 containing data from two independent normal samples
+
+output:assuming a vague prior on m1 and m2, simulates 1000 values from t distributions for m1 and m2.  Gives dotplots of the simulated values of m1 and m2 and dotplot and descriptive statistics for the difference m2-m1.
+------------------------------------------------------------
+LINEAR REGRESSION
+------------------------------------------------------------
+lin_reg C1 C2;
+  pred C3;
+  plot.
+
+input:paired data in columns C1 and C2, where C1 is the independent variable and C2 is the response.
+
+output:assuming a vague prior on the regression coefficients, gives the marginal posterior distribution for the regression parameters.
+
+subcommands:
+pred:  for each value of the independent variable in the column C3, the posterior mean and standard deviation of the predicted response at that value are given.
+plot:  a scatterplot of the C1 C2 data is made; on top of the scatterplot, the fitted line and prediction bounds (posterior mean plus and minus two posterior standard deviations) are plotted
+
+------------------------------------------------------------
+GENERAL METHODS:
+------------------------------------------------------------
+
+Learning about discrete models:
+
+d_bayes C1 C2 C3;
+ nlik K1;
+ store C4;
+ plot.
+
+input:C1 - column of values of parameter
+C2 - column of prior probabilities
+C3 - column containing data in summary form
+
+output: table of prior probabilities, likelihoods, and posterior probabilities
+
+subcommands:
+use K1 value for likelihood (1 - binomial, 2 - normal, 3 - Poisson, 4 - Hypergeometric, 5 - Discrete uniform, 6 - Capture/recapture likelhood)
+plots prior, normalized likelihood, and posterior as line graphs
+stores posterior probabilities in column C4
+
+------------------------------------------------------------
+Learning about continuous models using the SIR algorithm
+
+sir C1 C2 C3;
+ nlik K1;
+ nsim K2;
+ plot.
+
+input:C1 - simulated values from prior distribution of parameter
+C2 - column containing data in summary form
+C3 - column where simulated values from posterior distribution are to be stored
+
+output: none
+
+subcommands:
+use K1 value for likelihood (1 - binomial, 2 - normal, 3 - Poisson, etc.)
+plots simulated values from prior and posterior distributions using parallel dotplots
+simulates K2 values from posterior distribution (default value is 1000)
+------------------------------------------------------------
+Summarizing arbitrary one and two dimensional posterior distributions using the Laplace algorithm:
+
+laplace1 K1;
+ repeat K2;
+ store C1.
+
+(definition of logarithm of a one parameter posterior is contained in local macro 'logpost')
+
+input:K1 - guess at mode of posterior
+
+output:one iteration of the Newton-Raphson algorithm is made - the program outputs the next guess at the mode, the corresponding standard deviation, and the estimate at the logarithm of the normalizing constant
+
+subcommands:
+iterates algorithm K2 times
+stores the mode and standard deviation in column C1
+
+laplace2 K1 K2;
+ repeat K3;
+ store C1.
+
+(definition of logarithm of a 2 parameter posterior is contained in local macro 'logpost2')
+
+input:K1, K2 - guess at mode of posterior
+
+output:one iteration of the Newton-Raphson algorithm is made - the program outputs the next guess at the mode, the corresponding standard deviations and covariance, and the estimate at the logarithm of the normalizing constant
+
+subcommands:
+iterates algorithm K3 times
+stores  mode (par1), stand. dev. (par1), mode (par2), stand. dev. (par2), and covariance in column C1
+
+------------------------------------------------------------
+Summarizing arbitrary one and two dimensional posterior distributions using an adaptive quadrature algorithm:
+
+ad_quad1 K1 K2;
+ store C1 C2 C3;
+ plot;
+ repeat K3.
+
+(definition of logarithm of a one parameter posterior is contained in local macro 'logpost')
+
+input:K1, K2 - guess at mean and standard deviation of posterior
+
+output:one iteration of the Naylor-Smith adaptive quadrature algorithm is made - the program outputs the next guess at the mean, the corresponding standard deviations, and the estimate at the logarithm of the normalizing constant
+
+subcommands:
+iterates algorithm K3 times
+stores  the grid values in column C1, the density values in C2, and the weights in C3.
+plot - the density values at each iteration of the algorithm are plotted.
+
+
+ad_quad2 K1 K2 K3 K4 K5;
+  store C1 C2 C3;
+  plot K6;
+  repeat K7.
+
+(definition of logarithm of a 2 parameter posterior is contained in local macro 'logpost2')
+
+input:K1, K2, K3, K4, K5 - guess at posterior moments (mean1, std1, mean2, std2, covar)
+
+output:one iteration of the Naylor-Smith adaptive quadrature algorithm is made - the program outputs the next guess at the moments and the estimate at the logarithm of the normalizing constant
+
+subcommands:
+iterates algorithm K7 times
+stores  the grid values in columns C1 (first parameter) and C2 (2nd parameter), and the density values in C3.
+plot - the density values at each iteration of the algorithm are plotted using a 2d plot (option 1) or a contour graph (option 2).
+
+
+------------------------------------------------------------
+Summarizing arbitrary one and two dimensional posterior distributions by simulation
+
+metrop K1 C1;
+  iter K2;
+  scale K3.
+
+(definition of logarithm of a 1 parameter posterior is contained in local macro 'logpost')
+
+input:K1 is starting location for simulation
+
+output:1000 values from the posterior distribution are simulated using the Metropolis algorithm.  The simulated values are stored in column C1.
+
+subcommand:
+a simulation sample size of K2 is taken
+scale factor for the Metropolis algorithm is K3
+
+gibbs K1 K2 C1 C2;
+  iter K3;
+  scale K4 K5.
+
+(definition of logarithm of a 2 parameter posterior is contained in local macro 'logpost2')
+
+input:(K1, K2) is starting location for simulation
+
+output:1000 values from the joint posterior distribution are simulated using Gibbs sampling with a Metropolis step to simulate from each conditional posterior distribution.  The simulated values are stored in columns C1 and C2.
+
+subcommand:
+iterates Gibbs sampler for K3 cycles
+scale factors for the Metropolis algorithm are K4 and K5
+
+
+

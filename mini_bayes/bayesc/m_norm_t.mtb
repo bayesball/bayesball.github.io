@@ -1,0 +1,94 @@
+echo
+##################################################################
+#  MACRO  'M_NORM_T'                                             #
+# -------------------------------------------------------------- #
+#  TESTS THE HYPOTHESIS THAT M = M0 USING A NORMAL PRIOR         #
+##################################################################
+noecho
+##################################################################
+#       Copyright - Jim Albert - April 1996                      #     
+##################################################################
+
+erase c51-c500
+erase k1-k500
+name c51 'M0' c52 'prob_H' c53 't2' c54 'input' c55 'v' c56 'MEAN' c57 'COUNT'
+name c58 'x' c59 'n' c60 'BF_HK' c61 'BF_KH' 
+
+Note
+Note ENTER THE NULL HYPOTHESIS MEAN M0:
+set 'terminal' 'M0';
+nobs 1.
+let k1='M0'
+
+Note
+NOTE ENTER THE PRIOR PROBABILITY OF M0:
+set 'terminal' 'prob_H';
+nobs 1.
+
+Note
+NOTE FOR THE ALTERNATIVE HYPOTHESIS THAT M = M0,
+note ENTER STANDARD DEVIATION(S) OF THE NORMAL PRIOR DISTRIBUTION:
+set 'terminal' 'input'
+let 't2'='input'**2
+
+note
+note ENTER THE STANDARD DEVIATION OF THE POPULATION:
+set 'terminal' 'input';
+nobs 1.
+let 'v'='input'**2
+
+note
+note OBSERVED DATA IN WORKSHEET? (TYPE 'y' OR 'n'.)
+note   IF YES, INPUT NUMBER OF COLUMN.
+note   IF NO, INPUT OBSERVED SAMPLE MEAN AND SAMPLE SIZE:
+yesno k31
+
+store
+  set 'terminal' c200;
+  nobs 1.
+
+  let k32=c200
+  name ck32 'OBS_DATA'
+  print 'OBS_DATA'
+  let k2=mean(ck32)
+  let k3=count(ck32)
+  mean(ck32)
+  count(ck32)
+end
+exec k31
+
+store
+  set 'terminal' c200;
+  nobs=2.
+  let k2=c200(1)
+  let k3=c200(2)
+  let 'MEAN'=k2
+  let 'COUNT'=k3
+  prin 'MEAN'
+  prin 'COUNT' 
+end
+let k31=1-k31
+exec k31
+
+let k11='M0'
+let 'M0'=k11*('t2'>0)
+let k11='v'
+let 'v'=k11*('t2'>0)
+let 'x'=k2*('t2'>0)
+let 'n'=k3*('t2'>0)
+let 'BF_KH'=exp(.5*('n'/'v'-1/('v'/'n'+'t2'))*('x'-'M0')**2 &
+                 +.5*(log('v'/'n')-log('v'/'n'+'t2')))
+let 'BF_HK'=1/'BF_KH'
+let 'prob_H'=1/(1+(1-'prob_H')/'prob_H'/'BF_HK')
+
+Note
+Note The Bayes factor in favor of the null hypothesis is:
+prin 'BF_HK'
+Note
+Note The Bayes factor against the null hypothesis is:
+prin 'BF_KH'
+Note 
+Note The posterior probability of the null hypothesis is:
+prin 'prob_H'
+
+erase c51-c300

@@ -1,0 +1,70 @@
+macro
+
+mm_cont data1 data2;
+  summ x1 s1 n1 x2 s2 n2;
+  prior m10 h10 m20 h20;
+  mstore mn st.
+
+##################################################################
+#  MACRO 'MM_CONT'                                               #
+# -------------------------------------------------------------- #
+#  INFERENCE ABOUT THE DIFFERENCE IN NORMAL MEANS M1 AND M2      #
+#  USING CONTINUOUS PRIOR FOR M1 AND M2.                         #
+##################################################################
+
+mcolumn data1 data2
+mconstant x1 s1 n1 x2 s2 n2 m10 h10 m20 h20
+mconstant mn1 mn2 st1 st2 mn st
+
+if summ=0
+if prior=0
+  %m_cont data1;
+   mstore mn1 st1;
+   quiet.
+  %m_cont data2;
+   mstore mn2 st2;
+   quiet.
+else
+  %m_cont data1;
+   prior m10 h10;
+   mstore mn1 st1;
+   quiet.
+  %m_cont data2;
+   prior m20 h20;
+   mstore mn2 st2;
+   quiet.
+endif
+endif
+
+if summ=1
+if prior=0
+  %m_cont data1;
+   summ x1 s1 n1;
+   mstore mn1 st1;
+   quiet.
+  %m_cont data2;
+   summ x2 s2 n2;
+   mstore mn2 st2;
+   quiet.
+else
+  %m_cont data1;
+   summ x1 s1 n1;
+   prior m10 h10;
+   mstore mn1 st1;
+   quiet.
+  %m_cont data2;
+   summ x2 s2 n2;
+   prior m20 h20;
+   mstore mn2 st2;
+   quiet.
+endif
+endif
+
+let mn=mn1-mn2
+let st=sqrt(st1**2+st2**2)
+note
+note THE POSTERIOR DENSITY FOR M1-M2 IS NORMAL
+note WITH MEAN AND STANDARD DEVIATION:
+prin mn st
+
+endmacro

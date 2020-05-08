@@ -1,0 +1,55 @@
+macro
+
+linreg y xx;
+  pred xo;
+  plot.
+
+mcolumn y xx X MEAN_Y STD_Y xo xgrid pred_hi pred_lo
+mconstant n B A r h s_B mx my sx sy xlo xhi dx 
+
+let n=count(xx)
+let mx=mean(xx)
+let my=mean(y)
+let sx=std(xx)
+let sy=std(y)
+let B=(mean(xx*y)-mx*my)/sx**2
+let A=my-B*mx
+let r=sx/sy*B
+let h=(1+20/n**2)*sy*sqrt(1-r**2)
+let s_B=h/sqrt(n)/sx
+
+note
+note THE POSTERIOR DENSITY FOR B IS NORMAL
+note WITH MEAN AND STANDARD DEVIATION:
+prin B s_B
+
+if pred=1
+  let X=xo
+  let MEAN_Y=A+B*xo
+  let STD_Y=h*sqrt((n+1)/n+(xo-mx)**2/n/sx**2)
+  note
+  note THE PREDICTIVE DENSITY OF THE NEXT OBSERVATION FOR DIFFERENT
+  note VALUES OF X IS NORMAL WITH MEAN AND STANDARD DEVIATIONS GIVEN BELOW:
+  print X MEAN_Y STD_Y
+endif
+
+if plot=1
+  let xlo=min(xx)
+  let xhi=max(xx)
+  let dx=(xhi-xlo)/49
+  set xgrid
+    xlo:xhi/dx
+  end
+  let mean_y=A+B*xgrid
+  let std_y=h*sqrt((n+1)/n+(xgrid-mx)**2/n/sx**2)
+  let pred_hi=mean_y+2*std_y
+  let pred_lo=mean_y-2*std_y
+  plot y*xx mean_y*xgrid pred_hi*xgrid pred_lo*xgrid;
+    symbol;
+    type 1 0 0 0;
+    connect;
+    type 0 1 1 1;
+    overlay.
+endif
+  
+endmacro

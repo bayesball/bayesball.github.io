@@ -1,0 +1,88 @@
+gmacro 
+
+craps
+
+##################################################################
+#  MACRO 'CRAPS'                                                 #
+# -------------------------------------------------------------- #
+#  PLAYS GAME OF CRAPS                                           #
+##################################################################
+
+erase c1-c1000
+name c1 'ROLLS' c2 'roll_num' c3 '7' c4 'point' c5 'dice1' c6 'dice2'
+name c7 'WIN?' c8 '1ST_ROLL' c9 'm' c10 'GAME'  c11 'N_ROLLS' c12 'RESULT'
+name c13 'outcomes'
+
+note
+note HOW MANY GAMES DO YOU WANT TO PLAY?
+set 'terminal' 'm';
+nobs 1.
+end
+
+let k23='m'
+set in 'outcomes';
+format (a12);
+nobs 2.
+You lose!
+You win!
+end
+
+do k33=1:k23
+if k33<=10
+  note
+  note Type 'y' and return to play:
+  yesno k55
+endif
+let k9=200
+rand k9 'dice1';
+ integer 1 6.
+rand k9 'dice2';
+ integer 1 6.
+let 'rolls'='dice1'+'dice2'		# 'roll' contains k9 sums of two dice
+set in 'roll_num'
+ 1:k9
+end
+let k1='rolls'(1)			# k1 is the first roll
+let k11=(k1=2)+(k1=3)+(k1=12)		# if k1=2 or 3 or 12, you lose
+let k12=(k1=7)+(k1=11)			# if k1=7 or 11, you win
+let k13=1-k11-k12			# else you continue
+
+let 'point'=('rolls'=k1)*'roll_num'	# when are rolls equal to point?
+let '7'=('rolls'=7)*'roll_num'		# when are rolls equal to 7?
+
+copy 'point' 'point';
+ omit 'point' 0:1.
+copy '7' '7';
+ omit '7' 0.
+let k14=(min('point')<min('7'))*(k13=1)	# win when see point again before a 7
+
+stack 'point' '7' c22
+let k23=min(c22)*(k13=1)+(k12=1)+(k11=1)# k23 is number of rolls to play game
+
+copy 'rolls' 'rolls';
+ use 1:k23.
+let k22=k12+k14				# k22 is 1 if you win; 0 otherwise
+# prin k22
+let 'win?'(k33)=k22			# store if you win, what the first roll was,
+let '1st_roll'(k33)=k1			# and the number of rolls required
+let 'n_rolls'(k33)=count('rolls')
+let 'GAME'=k33
+prin 'GAME'
+if k33<=10
+  prin 'rolls'
+  let k22=k22+1
+  copy 'outcomes' 'result';
+  use k22.
+  prin 'result'
+endif
+enddo
+
+note
+note Type 'y' and return for some summary statistics:
+yesno k55
+Table '1st_roll' 'win?';
+ Counts.
+Table 'n_rolls' 'win?';
+ Counts.
+
+endmacro

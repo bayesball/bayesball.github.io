@@ -1,0 +1,48 @@
+macro
+
+p_hist_p mids1 prior1 s f;
+ nsim m;
+ store PRIOR_PT PPROB.
+
+##################################################################
+#  MACRO 'P_HIST_P'                                              #
+# -------------------------------------------------------------- #
+#  LEARNING ABOUT A BINOMIAL PROPORTION P                        #
+#  USING A HISTOGRAM PRIOR.                                      #
+##################################################################
+
+mcolumn MIDS1 PRIOR1 rmids PRIOR_PT unifs PPROB POST w MIDS PRIOR LO HI nmids
+mconstant m s f k1 k3 k2 k4 k5
+default m=1000
+
+let k1=count(MIDS1)
+let k2=m
+let k4=s
+let k5=f
+let MIDS=MIDS1
+let PRIOR=PRIOR1
+let prior=abs(prior)/sum(abs(prior))
+
+let k3=mids(2)-mids(1)
+random k2 rmids;
+  discrete MIDS PRIOR.
+random k2 unifs;
+  uniform 0 k3.
+let PRIOR_PT=rmids+unifs-k3/2
+
+let PPROB=PRIOR_PT**k4*(1-PRIOR_PT)**k5
+let PPROB=PPROB/sum(PPROB)
+
+let LO=MIDS-k3/2
+let HI=MIDS+k3/2
+
+do k5=1:k1
+  let POST(k5)=sum((PRIOR_PT>LO(k5))*(PRIOR_PT<=HI(k5))*PPROB)
+enddo
+
+Note
+Note The prior and posterior probabilities of the intervals:
+
+prin MIDS LO HI PRIOR POST
+
+endmacro

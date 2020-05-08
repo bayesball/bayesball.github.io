@@ -1,0 +1,169 @@
+	noecho
+brief 0
+##################################################################
+#  MACRO  'M_NORM_T'                                             #
+# -------------------------------------------------------------- #
+#  TESTS THE HYPOTHESIS THAT M = M0 USING A NORMAL PRIOR         #
+##################################################################
+
+##################################################################
+#       Copyright - Jim Albert - April 1996                      #     
+##################################################################
+
+erase c51-c500
+erase k1-k500
+name c51 'M0' c52 'prob_H' c53 't2' c54 'input' c55 'v' c56 'MEAN' c57 'COUNT'
+name c58 'x' c59 'n' c60 'BF_HK' c61 'BF_KH' 
+
+name c71 'WARNING:' c72 'LIST_W'
+set 'LIST_W';
+format (a70);
+nobs 12.
+*************************
+INVALID PROBABILITY VALUE
+*************************
+********************************
+INVALID STANDARD DEVIATION VALUE
+********************************
+*******************
+INVALID SAMPLE SIZE
+*******************
+*********************
+INVALID COLUMN NUMBER
+*********************
+
+store 'error';
+ replace.
+ copy 'LIST_W' 'WARNING:';
+ use k51:k52.
+ brief 1
+ print 'WARNING:'
+ brief 0
+end
+
+brief 1
+Note
+Note ENTER THE NULL HYPOTHESIS MEAN M0:
+brief 0
+set 'terminal' 'M0';
+nobs 1.
+let k1='M0'
+
+brief 1
+Note
+NOTE ENTER THE PRIOR PROBABILITY OF M0:
+brief 0
+set 'terminal' 'prob_H';
+nobs 1.
+
+let k11=('prob_H'<=0)+('prob_H'>=1)
+let k51=1
+let k52=3
+exec 'error' k11
+
+brief 1
+Note
+NOTE FOR THE ALTERNATIVE HYPOTHESIS THAT M = M0,
+note ENTER STANDARD DEVIATION(S) OF THE NORMAL PRIOR DISTRIBUTION:
+brief 0
+set 'terminal' 'input'
+let 't2'='input'**2
+
+let k11=sum('t2'<=0)
+let k11=(k11>0)
+let k51=4
+let k52=6
+exec 'error' k11
+
+brief 1
+note
+note ENTER THE STANDARD DEVIATION OF THE POPULATION:
+brief 0
+set 'terminal' 'input';
+nobs 1.
+let 'v'='input'**2
+
+let k11=('input'<=0)
+let k51=4
+let k52=6
+exec 'error' k11
+
+brief 1
+note
+note OBSERVED DATA IN WORKSHEET? (TYPE 'y' OR 'n'.)
+note   IF YES, INPUT NUMBER OF COLUMN.
+note   IF NO, INPUT OBSERVED SAMPLE MEAN AND SAMPLE SIZE:
+brief 0
+yesno k31
+
+store
+  set 'terminal' c200;
+  nobs 1.
+
+  let k11=(c200<>round(c200))+(c200<1)
+  let k11=(k11>0)
+  let k51=10
+  let k52=12
+  exec 'error' k11
+
+  let k32=c200
+  name ck32 'OBS_DATA'
+  brief 1
+  print 'OBS_DATA'
+  let k2=mean(ck32)
+  let k3=count(ck32)
+  mean(ck32)
+  count(ck32)
+  brief 0
+end
+exec k31
+
+store
+  set 'terminal' c200;
+  nobs=2.
+  let k2=c200(1)
+  let k3=c200(2)
+  let 'MEAN'=k2
+  let 'COUNT'=k3
+  brief 1
+  prin 'MEAN'
+  prin 'COUNT' 
+  brief 0
+
+  let k11=(k3<>round(k3))+(k3<1)
+  let k11=(k11>0)
+  let k51=7
+  let k52=9
+  exec 'error' k11
+
+end
+let k31=1-k31
+exec k31
+
+let k11='M0'
+let 'M0'=k11*('t2'>0)
+let k11='v'
+let 'v'=k11*('t2'>0)
+let 'x'=k2*('t2'>0)
+let 'n'=k3*('t2'>0)
+
+#let 'BF_KH'=exp(-.5*('n'/'v'-1/('v'/'n'+'t2')*('x'-'M0')**2) &
+#                 -.5*(log('v'/'n')-log('v'/'n'+'t2')))
+# correction made below
+let 'BF_KH'=exp(.5*('n'/'v'-1/('v'/'n'+'t2'))*('x'-'M0')**2 &
+                 +.5*(log('v'/'n')-log('v'/'n'+'t2')))
+let 'BF_HK'=1/'BF_KH'
+let 'prob_H'=1/(1+(1-'prob_H')/'prob_H'/'BF_HK')
+
+brief 1
+Note
+Note The Bayes factor in favor of the null hypothesis is:
+prin 'BF_HK'
+Note
+Note The Bayes factor against the null hypothesis is:
+prin 'BF_KH'
+Note 
+Note The posterior probability of the null hypothesis is:
+prin 'prob_H'
+
+erase c51-c300

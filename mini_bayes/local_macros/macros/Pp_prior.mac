@@ -1,0 +1,38 @@
+macro
+
+pp_prior p1 p2 prior;
+  gsize k;
+  limit p1_lo p1_hi p2_lo p2_hi;
+  test p_equal;
+  tprob tp1 tp2 t.1-t.n2.
+
+mcolumn p1 p2 prior diag tp1 tp2 t.1-t.n2 temp
+mconstant k p_equal p1_lo p1_hi p2_lo p2_hi n1 i
+default k=11 p1_lo=0 p1_hi=1 p2_lo=0 p2_hi=1
+
+if tprob=0
+  %mesh p1 p1_lo p1_hi p2 p2_lo p2_hi;
+   nxmesh k;
+   nymesh k.
+   if test=0
+      let prior=1/k**2*(p1>=0)
+   else
+     let diag=(p1=p2)
+     let prior=p_equal/k*(diag=1)+(1-p_equal)/k/(k-1)*(diag=0)
+   endif
+else
+  let p2=tp2(1)+t.1*0
+  let p1=tp1
+  do i=2:n2
+    let temp=tp2(i)+t.i*0
+    stack p2 temp p2
+    stack p1 tp1 p1
+  enddo
+  stack t.1-t.n2 prior
+  let prior=abs(prior)/sum(abs(prior))
+endif
+
+
+
+
+endmacro

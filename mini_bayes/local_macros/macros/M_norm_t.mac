@@ -1,0 +1,46 @@
+macro
+
+##################################################################
+#  MACRO  'M_NORM_T'                                             #
+# -------------------------------------------------------------- #
+#  TESTS THE HYPOTHESIS THAT M = M0 USING A NORMAL PRIOR         #
+##################################################################
+
+m_norm_t m1 prob sigma ps data;
+ summ x1 n1.
+
+mcolumn t2 data M0 V x n BF_HK BF_KH PROB_H PRIOR_S ps
+mconstant m1 prob sigma x1 n1 
+
+if summ=0
+  let x1=mean(data)
+  let n1=count(data)
+  mean(data)
+  count(data)
+endif
+
+let t2=ps**2
+let M0=M1*(t2>0)
+let V=sigma**2*(t2>0)
+let x=x1*(t2>0)
+let n=n1*(t2>0)
+let BF_KH=exp(-.5*((n/v-1/(v/n+t2))*(x-M0)**2) &
+                 -.5*(log(v/n)-log(v/n+t2)))
+let BF_HK=1/BF_KH
+let prob_H=1/(1+(1-prob)/prob/BF_HK)
+
+let PRIOR_S=ps
+
+Note 
+Note In the columns below:
+Note ---------------------------------------------------------
+Note   PRIOR_S is the value of the prior standard deviation.
+Note   BF_HK is the Bayes factor in favor of the null hypothesis.
+Note   BF_KH is the Bayes factor against the null hypothesis.
+Note   prob_H is the posterior probability of the null hypothesis.
+Note
+
+print PRIOR_S BF_HK BF_KH PROB_H
+
+endmacro
+

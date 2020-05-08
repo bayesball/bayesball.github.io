@@ -1,0 +1,83 @@
+macro
+
+########################################################
+# MACRO p_disc_p                                        #
+# October 5, 1994                                      #
+#------------------------------------------------------#
+# Computes and plots prior and posterior               #
+# predictive densities for binomial proportion p       #
+# with discrete prior models                           #
+########################################################
+
+p_disc_p P1 PRI N;
+ store SUC PRD;
+ succ LO HI;
+ plot.
+
+mconstant k n s f k1 k2 k3 k4 k9 k10 m k11 k12 lo hi lor hir
+mcolumn P PRIOR LIKE PRODUCT DATA POSTR col P1 PRI
+mcolumn NUM_SUCC PRED X PRD SUC
+mmatrix m1
+default lo=0 hi=1000
+
+set col
+hi n
+end
+let hi=min(col)
+
+let P=P1
+let PRIOR=PRI
+let prior=abs(prior)/sum(abs(prior))
+set NUM_SUCC
+   lo:hi
+end
+let pred=0*NUM_SUCC
+# k1 is index of value of p
+# k2 is current value of p
+# m is number of p values
+let m=count(p)
+
+# loop through these commands m times
+do k1=1:m
+  let k2=p(k1)
+  let k9=k2+.5*(k2=0)-.5*(k2=1)
+  pdf num_succ x;
+  binomial n k9.
+  let x=x*(k2>0)*(k2<1)
+  let pred=pred+prior(k1)*x
+enddo
+
+if plot=1
+
+let lor=lo-.5
+let hir=hi+.5
+plot pred*num_succ;
+minim 1 lor;
+maxim 1 hir;
+minim 2 0;
+project;
+ size 4;
+data;
+ etype 0;
+axis 1;
+ label 'NUMBER OF SUCCESSES';
+ tsize 1;
+axis 2;
+ label '';
+tick 1 lo:hi;
+tick 2;
+ tsize 1;
+title 'PREDICTIVE DENSITY';
+ size 1.
+
+gpause
+
+endif
+
+let SUC=NUM_SUCC
+let PRD=PRED
+
+mtitle 'PREDICTIVE DISTRIBUTION OF NUMBER OF SUCCESSES:'
+print num_succ pred
+
+endmacro

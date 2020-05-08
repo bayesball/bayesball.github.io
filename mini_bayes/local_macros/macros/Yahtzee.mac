@@ -1,0 +1,203 @@
+macro
+
+yahtzee;
+ auto;
+ repeat k20 roll_1 roll_2 roll_3.
+
+mcolumn rolls numbers tally name result srolls dff outcome
+mcolumn keep outcomes roll_1 roll_2 roll_3
+mcolumn c100 c101 c14 c15 c17 c18 c19 c20 c27 s_roll
+mconstant ROLL k1 k2 k3 k4 k5 k6 k9 k10 k11 k12 k13 k14 k15 k16
+mconstant k19 k20 k33 k34 k66 i GAME pr
+default k20=1
+
+##################################################################
+#  MACRO 'YAHTZEE'                                               #
+# -------------------------------------------------------------- #
+#  PLAYS GAME OF YATZEE                                          #
+#  COMPUTER DECIDES ON WHICH DICE TO DISCARD                     #
+##################################################################
+
+set numbers
+1:6
+end
+set outcome
+1:9
+end
+set name;
+format (a14);
+nobs 9.
+nothing
+1 pair
+2 pair
+3 of a kind
+full house
+small straight
+large straight
+4 of a kind
+yahtzee
+end
+
+if repeat=1
+  erase roll_1 roll_2 roll_3
+endif
+
+let pr=(auto=0)+(k20=1)
+
+do GAME=1:k20
+
+if k20>1
+print GAME
+endif
+
+do ROLL=1:3
+if pr>=1
+ note 
+ note TYPE 'y' AND RETURN TO ROLL:
+ yesno k19
+ note
+ prin ROLL
+endif
+
+random 5 rolls;
+ integer 1 6.
+
+if roll>=2
+ let rolls=s_roll*keep+rolls*(1-keep)
+endif
+# checks for type of roll
+
+if pr>=1
+ prin rolls
+endif
+let k1=sum(rolls=1)
+let k2=sum(rolls=2)
+let k3=sum(rolls=3)
+let k4=sum(rolls=4)
+let k5=sum(rolls=5)
+let k6=sum(rolls=6)
+set tally
+k1 k2 k3 k4 k5 k6
+end
+let k9=1
+let k10=sum(tally=2)+1
+let k11=sum(tally=3)*4
+let k12=sum(tally=3)*sum(tally=2)*5
+sort rolls srolls
+diff srolls dff
+let k13=(sum(dff=1)=3)*6
+set c100
+1 2 3 5 6
+end
+set c101
+1 2 4 5 6
+end
+let k33=sum(c100=srolls)
+let k34=sum(c101=srolls)
+let k13=0*(k33=5+k34=5)+k13*(k33<5)*(k34<5)
+let k14=(sum(dff=1)=4)*7
+let k15=sum(tally=4)*8
+let k16=sum(tally=5)*9
+
+set c27
+k9 k10 k11 k12 k13 k14 k15 k16
+end
+let k1=max(c27)
+copy name result; 
+ use k1.
+if pr>=1
+ prin result
+endif
+
+if repeat=1
+  if roll=1
+    let roll_1(GAME)=k1
+  elseif roll=2
+    let roll_2(GAME)=k1
+  elseif roll=3
+    let roll_3(GAME)=k1
+  endif
+endif
+
+# -------------------- what to throw away?
+if auto=0
+   if roll<=2
+     note
+     note ENTER (USING SEQUENCE OF 0'S and 1'S) WHICH DICE TO KEEP:
+     set keep;
+       file 'terminal';
+       nobs 5.
+     end
+   endif
+else
+  if ROLL<=2
+    set c17
+    1:5
+    end
+    set keep
+    1 1 1 1 1 
+    end
+    # check for 1 pair, 3 of kind, 4 of kind, or yatzee
+    let k2=(k1=2)+(k1=4)+(k1=8)+(k1=9)
+    if k2=1
+      let c14=numbers*(tally>=2)
+      copy c14 c15;
+      omit c14 0.
+      let keep=(rolls=c15)
+    endif
+
+    # check for 2 pair
+    if k1=3
+      let c14=numbers*(tally=1)
+      copy c14 c15;
+      omit c14 0.
+      let keep=(rolls<>c15)
+    endif
+
+    # check for nothing
+    if k1=1
+      let keep=rolls*0
+    endif
+
+    if k1=6
+      let k3=sum(numbers*(tally=2))
+      let k4=2*(tally(2)=0)+5*(tally(5)=0)
+      let k5=1*(k4=2)+6*(k4=5)
+      let c19=rolls*(rolls<>k5)
+      set c20
+      1 2 0 0 0
+      end
+      let c18=c17*(rolls=k3)+c20*(k3=0)
+      copy c18 c18;
+       omit c18 0.
+      copy rolls keep
+      let k13=c18(1)
+      let keep(k13)=0
+      let keep=(keep>0)*(k3>0)+(c19>0)*(k3=0)
+    endif
+
+    if pr>=1 
+      prin keep
+    endif
+  endif
+endif
+
+ 
+let k66=sum(keep)
+  if k66==5
+  break
+endif
+
+let s_roll=rolls
+enddo
+
+if ROLL<=2
+  let roll_3(GAME)=0
+endif
+if ROLL=1
+  let roll_2(GAME)=0
+endif
+
+enddo
+
+endmacro

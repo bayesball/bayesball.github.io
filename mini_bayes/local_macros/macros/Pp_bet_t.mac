@@ -1,0 +1,79 @@
+macro
+
+pp_bet_t prob a_b a1_b1 a2_b2 data
+
+##################################################################
+#  MACRO 'PP_BET_T'                                              #
+# -------------------------------------------------------------- #
+#  TEST IF 2 BINOMIAL PROPORTIONS ARE EQUAL                      #
+#  USING CONTINUOUS P1,P2 MODELS (BETA PRIORS).                  #       
+##################################################################
+
+mcolumn data bab bab1 bab2 bab_sf bab1_sf bab2_sf half 
+mcolumn a_b a1_b1 a2_b2
+mconstant BF_HK BF_KH prob prob_H
+mconstant a b a1 b1 a2 b2 s1 f1 s2 f2 k11 k12 k13 k14 k15 k16
+
+let prob_H=prob
+let a=a_b(1)
+let b=a_b(2)
+let a1=a1_b1(1)
+let b1=a1_b1(2)
+let a2=a2_b2(1)
+let b2=a2_b2(2)
+let s1=data(1)
+let f1=data(2)
+let s2=data(3)
+let f2=data(4)
+
+let k11=a+s1+s2
+let k12=b+f1+f2
+let k13=a1+s1
+let k14=b1+f1
+let k15=a2+s2
+let k16=b2+f2
+
+set half
+.5
+end
+
+PDF half bab;
+ Beta a b.
+let bab=1/bab/2**(a+b-2)
+
+pdf half bab1;
+ beta a1 b1.
+let bab1=1/bab1/2**(a1+b1-2)
+
+pdf half bab2;
+ beta a2 b2.
+let bab2=1/bab2/2**(a2+b2-2)
+
+pdf half bab_sf;
+ beta k11 k12.
+let bab_sf=1/bab_sf/2**(k11+k12-2)
+
+pdf half bab1_sf;
+ beta k13 k14.
+let bab1_sf=1/bab1_sf/2**(k13+k14-2)
+
+pdf half bab2_sf;
+ beta k15 k16.
+let bab2_sf=1/bab2_sf/2**(k15+k16-2)
+
+let BF_HK=bab_sf*bab1*bab2/bab/bab1_sf/bab2_sf
+let BF_KH=1/BF_HK
+let prob_H=1/(1+(1-prob_H)/prob_H/BF_HK)
+
+Note
+Note The Bayes factor in favor of the null hypothesis is:
+prin BF_HK
+Note
+Note The Bayes factor against the null hypothesis is:
+prin BF_KH
+Note 
+Note The posterior probability of the null hypothesis is:
+prin prob_H
+note
+
+endmacro

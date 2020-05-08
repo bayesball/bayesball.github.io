@@ -1,0 +1,83 @@
+macro
+
+########################################################
+# MACRO p_beta                                         #
+# October 5, 1994                                      #
+#------------------------------------------------------#
+# Binomial inference with beta prior for p.            #
+# Plots posterior and computes cumulative              #
+# and quantiles.                                       #
+########################################################
+
+p_beta a b;
+ data s f;
+ cprob pvalue;
+ quan qvalue.
+
+mconstant a b s f n a1 b1 s1 f1
+mcolumn pvalue qvalue density PROB_LT QUANTILE PROB P 
+mcolumn prior like post group 
+default s=0 f=0
+
+let n=s+f
+let a1=a+s
+let b1=b+f
+let s1=s+1
+let f1=f+1
+if n=0
+  Set p
+    1(0:1/.01)1
+  end
+  PDF p density;
+    beta a1 b1.
+  plot density*p;
+  connect;
+  axis 2;
+  label '';
+  title 'BETA DENSITY'.
+else
+  Set p
+    1(0:1/.01)1
+  end
+  PDF p prior;
+    beta a b.
+  pdf p like;
+    beta s1 f1.
+  pdf p post;
+    beta a1 b1.
+
+  stack p p p p
+  stack prior like post density;
+    subs group.
+
+  plot density*p;
+    connect group;
+    type 3 2 1;
+    data;
+    etype 0;
+    axis 1;
+    tsize 1.5;
+    axis 2;
+    label '';
+    title '1-PRIOR, 2-LIKELIHOOD, 3-POSTERIOR'.
+endif
+
+if cprob=1
+  notitle
+  let P=PVALUE
+  CDF pvalue PROB_LT;
+    Beta a1 b1.
+  mtitle 'CUMULATIVE PROBABILITIES:'
+  print P PROB_LT
+endif
+
+if quan=1
+  notitle
+  let PROB=qvalue
+  InvCDF qvalue QUANTILE;
+    Beta a1 b1.
+  mtitle 'QUANTILES:'
+  print PROB QUANTILE
+endif
+
+endmacro

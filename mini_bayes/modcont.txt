@@ -1,0 +1,62 @@
+MTB > name c1 'prior_s'
+MTB > rand 1000 'prior_s';
+SUBC> normal 6.9 .4.
+MTB > let 'prior_s'=exp('prior_s')
+MTB > exec 'mod_cont'
+MTB > ##################################################################
+MTB > #  MACRO 'MOD_CONT'                                              #
+MTB > # -------------------------------------------------------------- #
+MTB > #  INFERENCE USING CONTINUOUS MODELS.                            #
+MTB > #--------------------------------------------------------------- #
+MTB > #  INPUT:  SIMULATED VALUES OF PRIOR IN 'PRIOR_S'                #
+MTB > #  OUTPUT: SIMULATED VALUES FROM POSTERIOR IN 'POST_S'           #
+MTB > ##################################################################
+ 
+INPUT THE NUMBER OF THE LIKELIHOOD:
+(1-Binomial P, 2-Normal M, 3-Poisson L, 4-Hypergeometric S,
+ 5-Discrete Uniform N, 6-Capture/Recapture N, 7-Exponential M)
+DATA> 6
+
+INPUT   
+  (number of marked items, sample size, number marked in sample)   
+
+DATA> 100 40 5
+ 
+Input number of simulated values:
+DATA> 1000
+Executing from file: lk_cap_n.MTB
+
+Each dot represents 5 points
+                       .
+                     . :
+                  ::::.::
+                 ::::::::..
+                 :::::::::::
+                .::::::::::: .
+               .::::::::::::::.:
+               :::::::::::::::::::. .
+             ..::::::::::::::::::::.::::.....:  ..   .  .    .
+         +---------+---------+---------+---------+---------+-------prior_s 
+Each dot represents 7 points
+
+
+                   ..  :
+                  .::  :
+                 :::::.:
+                 :::::::: .
+                 ::::::::::
+                .::::::::::.
+               .::::::::::::...
+             . ::::::::::::::::.:........ .  .
+         +---------+---------+---------+---------+---------+-------POST_S  
+         0       700      1400      2100      2800      3500
+
+MTB > describe 'prior_s' 'post_s'
+
+Variable        N     Mean   Median   TrMean    StDev   SEMean
+prior_s      1000   1056.5    973.9   1022.2    453.8     14.4
+POST_S       1000   909.58   860.38   889.20   308.11     9.74
+
+Variable      Min      Max       Q1       Q3
+prior_s     281.2   3650.3    731.0   1271.1
+POST_S     281.21  2516.90   681.46  1063.83

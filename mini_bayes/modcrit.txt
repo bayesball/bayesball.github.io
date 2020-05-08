@@ -1,0 +1,143 @@
+MTB > name c1 'model' c2 'prior1' c3 'prior2'
+MTB > set 'model'
+DATA> .2:.34/.02
+DATA> end
+MTB > set 'prior1'
+DATA> .05 .05 .1 .25 .25 .15 .10 .05
+DATA> set 'prior2'
+DATA> .2 .2 .2 .15 .1 .05 .05 .05
+DATA> end
+MTB > prin c1-c3
+
+ Row  model  prior1  prior2
+
+   1   0.20    0.05    0.20
+   2   0.22    0.05    0.20
+   3   0.24    0.10    0.20
+   4   0.26    0.25    0.15
+   5   0.28    0.25    0.10
+   6   0.30    0.15    0.05
+   7   0.32    0.10    0.05
+   8   0.34    0.05    0.05
+
+MTB > exec 'mod_crit'
+MTB > ##################################################################
+MTB > #  MACRO 'MOD_CRIT'                                              #
+MTB > #  (CHARACTER GRAPHICS VERSION)                                  #
+MTB > # -------------------------------------------------------------- #
+MTB > #  INFERENCE USING A FINITE COLLECTION OF MODELS.                #
+MTB > #  AND TWO PRIOR DISTRIBUTIONS                                   #
+MTB > #--------------------------------------------------------------- #
+MTB > #  INPUT:  VALUES OF MODEL IN 'MODEL' AND PRIOR PROBABILITIES    #
+MTB > #          IN COLUMNS 'PRIOR1' AND 'PRIOR2'                      #
+MTB > #  OUTPUT: POSTERIOR PROBABILITIES CORRESPONDING TO 2 PRIORS     #
+MTB > #          IN COLUMN 'POST1' AND 'POST2'                         #
+MTB > #          BAYES FACTOR COMPARING TWO PRIORS                     #
+MTB > ##################################################################
+ 
+INPUT THE NUMBER OF THE LIKELIHOOD:
+(1-Binomial P, 2-Normal M, 3-Poisson L, 4-Hypergeometric S,
+ 5-Discrete Uniform N, 6-Capture/Recapture N, 7-Exponential M)
+DATA> 1
+
+INPUT   
+  (number of successes, number of failures)                        
+
+DATA> 10 20
+
+ Row  model  prior1  prior2      POST1      POST2
+
+   1   0.20    0.05    0.20   0.015655   0.084360
+   2   0.22    0.05    0.20   0.024472   0.131873
+   3   0.24    0.10    0.20   0.069496   0.187250
+   4   0.26    0.25    0.15   0.226925   0.183429
+   5   0.28    0.25    0.10   0.275262   0.148333
+   6   0.30    0.15    0.05   0.187430   0.084169
+   7   0.32    0.10    0.05   0.133430   0.089878
+   8   0.34    0.05    0.05   0.067331   0.090708
+
+TYPE 'y' AND RETURN FOR SUMMARIES:
+y
+ 
+FOR FIRST SET OF PRIOR PROBABILITIES:
+-------------------------------------
+
+PRIOR MEAN OF MODELS:
+
+MEAN    
+  0.274 
+
+POSTERIOR MEAN OF MODELS:
+
+MEAN    
+  0.283087 
+
+FOR SECOND SET OF PRIOR PROBABILITIES:
+-------------------------------------
+ 
+PRIOR MEAN OF MODELS:
+
+MEAN    
+  0.247 
+
+POSTERIOR MEAN OF MODELS:
+
+MEAN    
+  0.264901 
+
+--------------------------------------------------------
+ 
+BAYES FACTOR IN FAVOR OF FIRST SET OF PRIOR PROBABILITIES:
+
+BAYES_F 
+  1.34720 
+
+ 
+TYPE 'y' AND RETURN TO SEE PLOTS:
+y
+
+PLOT OF POSTERIOR PROBABILITIES FOR FIRST PRIOR:
+
+         -
+     0.30+
+         -                                 *
+ PROB    -                                 *
+         -                                 2
+         -                         2       *
+     0.20+                         2       2
+         -                         2       *       2
+         -                         *       2       2
+         -                         2       *       3       *
+         -                         2       2       2       3
+     0.10+                         2       *       2       3
+         -                         *       *       2       3
+         -                 6       2       2       2       3       6
+         -                 6       2       *       2       3       6
+         - 8       +       6       2       2       2       3       6
+     0.00+ +       9       3       *       *       2       2       3
+           +---------+---------+---------+---------+---------+------MODELS  
+       0.200     0.225     0.250     0.275     0.300     0.325
+
+
+PLOT OF POSTERIOR PROBABILITIES FOR SECOND PRIOR:
+
+         -                 *
+    0.180+                 *       2
+         -                 *       *
+ PROB    -                 *       *
+         -                 2       *       2
+         -         *       *       2       2
+    0.120+         2       *       *       *
+         -         2       2       *       2
+         -         2       *       2       *                       *
+         - 2       2       *       *       2       2       3       2
+         - 3       *       *       *       2       3       3       3
+    0.060+ 3       2       2       2       *       3       2       3
+         - 3       2       *       *       2       3       3       2
+         - 2       2       *       *       *       2       3       3
+         - 3       2       2       2       2       3       2       3
+         - 3       2       *       *       2       3       3       2
+    0.000+ 2       *       *       *       *       2       2       2
+           +---------+---------+---------+---------+---------+------MODELS  
+       0.200     0.225     0.250     0.275     0.300     0.325
+

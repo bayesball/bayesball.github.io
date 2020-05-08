@@ -1,0 +1,72 @@
+macro
+
+laplace2 m1 m2;
+repeat k;
+store moms.
+
+mcolumn x1 x2 f moms MN_1 MN_2 STD_1 STD_2 COVAR LOG_INTG
+mconstant h k1 k2 k3 k4 l1 l2 l3 l4 k j lint detv ITER
+mconstant d1 d2 d11 d12 d22 m1 m2 mm1 mm2 s1 cov s2 det
+default k=1
+
+notitle
+do j=1:k
+let ITER=j
+
+let h=.01
+let k1=m1-h/2
+let k2=m1+h/2
+let k3=m1-h
+let k4=m1+h
+
+let l1=m2-h/2
+let l2=m2+h/2
+let l3=m2-h
+let l4=m2+h
+
+set x1
+m1 k1 k2 m1 m1 k3 k4 m1 m1 k2 k1 k2 k1 
+end
+
+set x2
+m2 m2 m2 l1 l2 m2 m2 l3 l4 l2 l2 l1 l1
+end
+
+%logpost2 x1 x2 f
+
+let d1=(f(3)-f(2))/h
+let d2=(f(5)-f(4))/h
+let d11=(f(6)-2*f(1)+f(7))/h**2
+let d22=(f(8)-2*f(1)+f(9))/h**2
+let d12=(f(10)-f(11)-f(12)+f(13))/h**2
+
+let det=d11*d22-d12**2
+let m1=m1-(d1*d22-d2*d12)/det
+let m2=m2-(d2*d11-d1*d12)/det
+
+let s1=sqrt(-d22/det)
+let s2=sqrt(-d11/det)
+let cov=d12/det
+let detv=s1**2*s2**2-cov**2
+let lint=log(2*3.14159)+.5*log(detv)+f(1)
+
+let MN_1=m1
+let MN_2=m2
+let STD_1=s1
+let STD_2=s2
+let COVAR=cov
+let LOG_INTG=lint
+print ITER
+prin MN_1 STD_1 MN_2 STD_2 COVAR LOG_INTG
+
+enddo
+
+let mm1=m1
+let mm2=m2
+set moms
+  m1 s1 m2 s2 cov
+end
+endmacro
+
+
+

@@ -1,0 +1,120 @@
+macro
+
+d_bayes mdl prr data;
+ nlik k;
+ store post;
+ plot.
+
+mcolumn mdl prr data MODEL PRIOR LIKE POSTR post nlike
+mcolumn col PRODUCT
+mconstant k11 k12 k13 k MEAN
+
+let PRIOR=prr
+let MODEL=mdl
+
+%like model data like;
+num k.
+
+let prior=abs(prior)/sum(abs(prior))
+let product=prior*like
+let postr=product/sum(product)
+
+if plot=1
+layout
+# title 'Prior, Likelihood, and Posterior';
+# tsize 2.
+
+let nlike=like/sum(like)
+let k11=max(prior)
+let k12=max(nlike)
+let k13=max(postr)
+set  col
+ k11 k12 k13
+end
+let k11=max(col)
+
+plot PRIOR*MODEL;
+minimum 2 0;
+maximum 2 k11;
+project;
+ size 3;
+data;
+ etype 0;
+axis 1;
+ tsize 2;
+axis 2;
+ label '';
+tick 1;
+ tsize 1.5;
+tick 2;
+ tsize 1.5;
+figure 0 .5 .5 .9;
+ etype 0;
+title 'PRIOR';
+ size 2.
+
+plot NLIKE*MODEL;
+minimum 2 0;
+maximum 2 k11;
+project;
+size 3;
+data;
+etype 0;
+axis 1;
+ tsize 2;
+axis 2;
+ label '';
+tick 1;
+ tsize 1.5;
+tick 2;
+ tsize 1.5;
+figure .5 1 .5 .9;
+etype 0;
+title 'LIKELIHOOD';
+size 2.
+
+plot POSTR*MODEL;
+minimum 2 0;
+maximum 2 k11;
+project;
+size 3;
+data;
+etype 0;
+axis 1;
+ tsize 2;
+axis 2;
+ label '';
+tick 1;
+ tsize 1.5;
+tick 2;
+ tsize 1.5;
+figure .25 .75 .05 .45;
+etype 0;
+title 'POSTERIOR';
+size 2.
+gpause
+
+endlayout
+
+endif
+
+notitle
+mtitle 'PRIOR AND POSTERIOR DENSITIES OF MODELS:'
+print MODEL PRIOR LIKE PRODUCT POSTR
+let mean=sum(MODEL*PRIOR)
+mtitle 'PRIOR MEAN OF MODELS:'
+prin mean
+let mean=sum(MODEL*POSTR)
+mtitle 'POSTERIOR MEAN OF MODELS:'
+prin mean
+note
+
+let POST=POSTR
+
+endmacro
+
+
+
+
+
+

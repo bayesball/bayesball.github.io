@@ -1,0 +1,91 @@
+macro
+pp_disc pr1 pr2 PROBS;
+ data s1 f1 s2 f2;
+ store post;
+ plot num;
+ pial x1;
+ pequal.
+
+##################################################################
+#  MACRO 'PP_DISC'                                               #
+# -------------------------------------------------------------- #
+#  INFERENCE ABOUT 2 BINOMIAL PROPORTIONS                        #
+#  USING A FINITE COLLECTION OF P1,P2 MODELS                     #
+##################################################################
+
+mconstant n s1 s2 f1 f2 k2 k3 k4 num k i mx
+mcolumn  P1 P2 dat PER_1 PER_2 PROBS PIALx x post UPROB ODDS_R x1
+mcolumn pr1 pr2 PROB ind 
+notitle
+
+let P1=pr1
+let P2=pr2
+
+let PER_1=round(100*p1)
+let PER_2=round(100*p2)
+
+if data=1
+   let uprob=probs*p1**s1*(1-p1)**f1*p2**s2*(1-p2)**f2
+   let uprob=abs(uprob)/sum(abs(uprob))
+else
+   let uprob=abs(probs)/sum(abs(probs))
+endif
+let prob=uprob
+
+if plot=1
+if num=1
+   let mx=maximum(prob)
+   let ind=1+(prob>.1*mx)+(prob>.5*mx)
+   Plot P2*P1;
+     Symbol ind;
+     Type 6;
+     Size .2 .4 .8.
+elseif num=2
+  pltx PROB*P2*P1;
+  vposition -5 -3 3;
+  project;
+  minimum 3 0;
+  title 'JOINT PROBABILITIES OF P1 AND P2'.
+elseif num=3
+  SurfacePlot PROB*P2*P1;
+   Surface;
+   HSRemoval 1;
+   LShading 0 1;
+   Light 0 0 1;
+   Color 1.
+else if num=4
+  ContourPlot PROB*P2*P1;
+   Connect.
+endif
+endif
+
+Mtitle 'Probability distribution of P1 and P2:'
+Note (Rows and columns are expressed in percentage format.)
+table PER_1 PER_2;
+  data prob.
+
+if pial=1
+  let x=x1
+  let k=count(x)
+  do i=1:k
+     let PIALx(i)=sum(uprob*((p2-p1)>=x(i)))
+  enddo
+  mtitle 'Probabilities of improvement:'
+  prin x PIALx
+endif
+
+if pequal=1
+  let PROB=sum(uprob*(p1=p2))
+  let ODDS_R=PROB/(1-PROB)
+  mtitle 'Probability that P1=P2:'
+  print PROB
+  note
+  mtitle 'Odds ratio Prob(P1=P2)/Prob(P1<>P2):'
+  print ODDS_R
+endif
+ 
+if store=1
+  let post=uprob
+endif
+
+endmacro

@@ -1,0 +1,78 @@
+macro
+
+########################################################
+# MACRO p_beta_p                                       #
+# October 5, 1994                                      #
+#------------------------------------------------------#
+# Predictive inference with beta prior for p.          #
+########################################################
+
+p_beta_p a b n;
+ store suc prd;
+ plot;
+ succ lo hi.
+
+mconstant a b n lo hi p i s a1 b1 ans n1
+mcolumn suc prd col NUM_SUCC post prior fx PRED
+default lo=0 hi=1000
+
+set col
+hi n
+end
+let hi=min(col)
+let n1=n+1
+
+set NUM_SUCC
+ lo:hi
+end
+
+let p=a/(a+b)
+pdf NUM_SUCC fx;
+binomial n p.
+
+pdf p prior;
+ beta a b.
+
+do i=1:n1
+  let s=num_succ(i)
+  let a1=a+s
+  let b1=b+n-s
+  pdf p ans;
+    beta a1 b1.
+  let post(i)=ans
+enddo
+
+let pred=fx*prior/post
+
+if plot=1
+
+let lo=lo-.5
+let hi=hi+.5
+plot pred*num_succ;
+minim 1 lo;
+maxim 1 hi;
+project;
+ size 4;
+data;
+ etype 0;
+axis 1;
+ label 'NUMBER OF SUCCESSES';
+ tsize 1;
+axis 2;
+ label '';
+tick 1;
+ tsize 1;
+tick 2;
+ tsize 1;
+title 'PREDICTIVE DENSITY';
+ size 1.
+
+gpause
+
+endif
+mtitle 'PREDICTIVE DISTRIBUTION OF NUMBER OF SUCCESSES:'
+print num_succ pred
+let suc=num_succ
+let prd=pred
+
+endmacro

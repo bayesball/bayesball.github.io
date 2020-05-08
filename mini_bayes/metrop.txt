@@ -1,0 +1,59 @@
+MTB > type 'logpost1.MTB'
+
+##################################################################                            
+#  MACRO 'LOGPOST1'                                              #                            
+# -------------------------------------------------------------- #                            
+#  DEFINITION OF THE LOGARITHM OF A ONE PARAMETER                #                            
+#  POSTERIOR DENSITY                                             #                            
+##################################################################                            
+                                                                                                                                                               
+###############################################                                                                  
+#  binomial problem - cauchy prior            #                                                                  
+#  x - logit of probability                   #                                                                  
+###############################################                                                                  
+                                                                                                                                                               
+let k11=1                                                                                                                                              
+let k12=9                                                                                                                                              
+let 'f'=k11*'x'-(k11+k12)*log(1+exp('x'))-log(1+'x'**2)                                                  
+
+MTB > exec 'metrop'
+MTB > ##################################################################
+MTB > #  MACRO 'METROP'                                                #
+MTB > # -------------------------------------------------------------- #
+MTB > #  SIMULATING A 1-PARAMETER POSTERIOR USING THE METROPOLIS METHOD#
+MTB > #  DEFINITION OF LOG POSTERIOR IN MACRO 'LOGPOST1'                #
+MTB > #--------------------------------------------------------------- #
+MTB > #  INPUT:  STARTING VALUE                                        #
+MTB > #          NUMBER OF ITERATIONS                                  #
+MTB > #  OUTPUT: SIMULATED SAMPLE IN COLUMN 'POST_S'                   #
+MTB > ##################################################################
+ 
+INPUT NUMBER OF ITERATIONS:
+DATA> 500
+ 
+INPUT SCALE OF NORMAL INCREMENT DENSITY:
+DATA> 1
+ 
+INPUT STARTING VALUE:
+DATA> 0
+
+Each dot represents 2 points
+                                              :
+                                        :. :  :
+                                 :      :: :  : .
+                                 : .    ::.:. : :   .
+                                 : ::..::::::.: :.:::  .
+                              . :: ::::::::::::::::::: :   :
+                 .      .  .:.:.:::::::::::::::::::::: ::. :
+           :     :  ...:::::::::::::::::::::::::::::::::::.:..:
+         +---------+---------+---------+---------+---------+-------POST_S  
+      -5.0      -4.0      -3.0      -2.0      -1.0       0.0
+
+MTB > describe 'post_s'
+
+Variable        N     Mean   Median   TrMean    StDev   SEMean
+POST_S        500  -1.7252  -1.6693  -1.7012   0.9493   0.0425
+
+Variable      Min      Max       Q1       Q3
+POST_S    -4.7760   0.3120  -2.3659  -1.0699
+

@@ -1,0 +1,50 @@
+MTB > name c1 'p' c2 'prior'
+MTB > set c1
+DATA> .2 .25 .3 .35
+DATA> end
+MTB > set 'prior'
+DATA> .25 .25 .25 .25
+DATA> end
+MTB > exec 'p_disc'
+MTB > ##################################################################
+MTB > #  MACRO 'P_DISC'                                                #
+MTB > #  (CHARACTER GRAPHICS VERSION)                                  #
+MTB > # -------------------------------------------------------------- #
+MTB > #  INFERENCE ABOUT A BINOMIAL PROPORTION P USING                 #
+MTB > #  A FINITE COLLECTION OF P MODELS.                              #
+MTB > #--------------------------------------------------------------- #
+MTB > #  INPUT:  VALUES OF P IN COLUMN 'P' AND PRIOR PROBABILITIES     #
+MTB > #          IN COLUMN 'PRIOR'                                     #
+MTB > #  OUTPUT: POSTERIOR PROBABILITIES IN COLUMN 'POST'              #
+MTB > ##################################################################
+ 
+INPUT OBSERVED NUMBER OF SUCCESSES AND FAILURES:
+DATA> 5 15
+
+ Row      p  prior  P_x_PRIO      LIKE  PRODUCT       POST   P_x_POST
+
+   1   0.20   0.25    0.0500    862742   215686   0.255595   0.051119
+   2   0.25   0.25    0.0625   1000000   250000   0.296259   0.074065
+   3   0.30   0.25    0.0750    884011   221003   0.261897   0.078569
+   4   0.35   0.25    0.0875    628668   157167   0.186249   0.065187
+   5                  0.2750                                 0.268940
+
+         -
+     0.30+                    *
+         -                    *
+ PROB    -    *               2                *
+         -    2               *                2
+         -    *               *                *
+     0.20+    2               2                2
+         -    *               *                2                2
+         -    2               *                *                2
+         -    *               2                2                3
+         -    2               *                *                2
+     0.10+    *               *                2                2
+         -    2               2                *                2
+         -    2               *                2                2
+         -    *               *                *                2
+         -    2               2                2                2
+     0.00+    *               *                *                2
+           ------+---------+---------+---------+---------+---------+MODEL   
+             0.210     0.240     0.270     0.300     0.330     0.360

@@ -1,0 +1,55 @@
+macro
+
+########################################################
+# MACRO p_beta_t                                       #
+# October 5, 1994                                      #
+#------------------------------------------------------#
+# Test of p=p0 with beta prior for p on                #
+# alternative hypothesis.                              #
+########################################################
+
+p_beta_t p0 prob a b s f
+
+mconstant p0 prob a b BF_KH PROB_H s f
+mconstant b_a_b b_as_bf BF_HK a1 b1
+mcolumn half
+
+let a1=a+s
+let b1=b+f
+ 
+set  half
+.5
+end
+
+PDF half b_a_b;
+ Beta a b.
+let b_a_b=1/b_a_b/2**(a+b-2)
+
+pdf half b_as_bf;
+ beta a1 b1.
+let b_as_bf=1/b_as_bf/2**(a1+b1-2)
+
+let BF_HK=P0**s*(1-P0)**f*b_a_b/b_as_bf
+let BF_KH=1/BF_HK
+let prob_H=1/(1+(1-prob)/prob/BF_HK)
+
+Note
+Note The values of the beta parameters A and B are:
+note
+prin a
+prin b
+Note
+Note The Bayes factor in favor of the null hypothesis is:
+note
+prin BF_HK
+Note
+Note The Bayes factor against the null hypothesis is:
+note
+prin BF_KH
+Note 
+Note The posterior probability of the null hypothesis is:
+note
+prin prob_H
+note
+
+endmacro

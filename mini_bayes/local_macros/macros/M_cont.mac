@@ -1,0 +1,70 @@
+macro
+
+m_cont data;
+  summ x s n;
+  prior m0 h0;
+  mstore mn1 st1;
+  ystore mn2 st2;
+  quiet;
+  know_var.
+
+##################################################################
+#  MACRO 'M_CONT'                                                #
+# -------------------------------------------------------------- #
+#  INFERENCE ABOUT A NORMAL MEAN M                               #
+#  USING A CONTINUOUS PRIOR FOR M.                               #
+##################################################################
+
+mcolumn data
+mconstant x s n m0 h0 c0 h c c1 m1 h1 h2 mn1 mn2 st1 st2
+default m0=0
+
+let c0=0
+if prior=1
+  let c0=1/h0**2
+endif
+
+if summ=0  
+  let x=mean(data)
+  let n=count(data)
+  let s=stan(data)
+  mean(data)
+  stan(data)
+  count(data)
+endif
+
+if know_var=0
+  let h=s*(1+20/n**2)
+else
+  let h=s
+endif
+let c=n/h**2
+let c1=c0+c
+let m1=c0/c1*m0+c/c1*x
+let h1=sqrt(1/c1)
+
+if quiet=0
+  note
+  note THE POSTERIOR DENSITY FOR M IS NORMAL
+  note WITH MEAN AND STANDARD DEVIATION:
+  prin m1 h1  
+endif
+let h2=sqrt(h**2+1/c1)
+if quiet=0
+  note
+  note THE PREDICTIVE DENSITY OF THE NEXT OBSERVATION
+  note IS NORMAL WITH MEAN AND STANDARD DEVIATION:
+  prin m1 h2
+  note
+endif
+
+if mstore=1
+  let mn1=m1
+  let st1=h1
+endif
+if ystore=1
+  let mn2=m1
+  let st2=h2
+endif
+
+endmacro

@@ -1,0 +1,90 @@
+MTB > exec 'bayes_se'
+MTB > ##################################################################
+MTB > #  MACRO 'BAYES_SE'                                              #
+MTB > # -------------------------------------------------------------- #
+MTB > #  BAYES RULE FOR A FINITE NUMBER OF MODELS                      #
+MTB > #  AND FINITE NUMBER OF OUTCOMES.                                #
+MTB > #                                                                #
+MTB > #  THIS PROGRAM SETS UP MODELS, PRIOR, AND LIKELIHOODS.          #
+MTB > #                                                                #
+MTB > #  THE MACRO 'BAYES' IMPLEMENTS BAYES RULE FOR A SEQUENCE        #
+MTB > #  OF INDEPENDENT OUTCOMES.                                      #
+MTB > ##################################################################
+ 
+INPUT NUMBER OF MODELS:
+DATA> 2
+ 
+INPUT NAMES OF MODELS (ONE NAME ON EACH LINE):
+DATA> have disease
+DATA> don't have disease
+ 
+INPUT PRIOR PROBABILITIES OF MODELS:
+DATA> .001 .999
+ 
+INPUT THE NUMBER OF POSSIBLE OUTCOMES:
+DATA> 2
+ 
+INPUT THE NAME OF EACH OBSERVATION:
+ (ONE OBSERVATION ON A LINE)
+DATA> +
+DATA> -
+ 
+INPUT LIKELIHOODS OF EACH MODEL:
+
+MODEL   
+   1 
+
+DATA> .95 .05
+      1 rows read.
+
+MODEL   
+   2 
+
+DATA> .05 .95
+      1 rows read.
+ 
+OBSERVATION NAMES:
+
+ Row            OBS  OBS_NAME
+
+   1   OUT_1            +    
+   2   OUT_2            -    
+
+ 
+TABLE OF PROBABILITIES OF MODELS AND OUTCOMES:
+
+ Row  MODEL           NAME   PRIOR  OUT_1  OUT_2
+
+   1      1   have disease   0.001   0.95   0.05
+   2      2   don't have d   0.999   0.05   0.95
+
+MTB > exec 'bayes'
+MTB > ##################################################################
+MTB > #  MACRO 'BAYES'                                                 #
+MTB > # -------------------------------------------------------------- #
+MTB > #  IMPLEMENTS BAYES RULE FOR A SEQUENCE OF INDEPENDENT OUTCOMES. #
+MTB > #  THE PROGRAM 'BAYES_SE' MUST BE RUN FIRST TO                   #
+MTB > #  SET UP MODELS, PRIOR, AND LIKELIHOODS.                        #
+MTB > ##################################################################
+ 
+INPUT NUMBER OF OBSERVATIONS:
+DATA> 1
+ 
+INPUT OBSERVATIONS:
+ (ONE OBSERVATION NAME ON A LINE:)
+DATA> +
+
+OUTCOME 
+  +    
+
+ Row  MODEL           NAME   PRIOR   LIKE   PRODUCT       POST
+
+   1      1   have disease   0.001   0.95   0.00095   0.018664
+   2      2   don't have d   0.999   0.05   0.04995   0.981336
+
+SUMMARY OF PRIOR AND POSTERIOR MODEL PROBABILITIES:
+
+ Row  OBS_NO  OUTCOMES     PROB_M1    PROB_M2
+
+   1       0             0.0010000   0.999000
+   2       1     +       0.0186640   0.981336

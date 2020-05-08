@@ -1,0 +1,94 @@
+macro
+
+ad_quad2 mx sx my sy cov;
+ store x y f;
+ plot nplot;
+ repeat k.
+
+mcolumn gx gy wtx wty x y wx wy scale f abf wy1 y1 cf 
+mcolumn MN_1 MN_2 STD_1 STD_2 COVAR LOG_INTG
+mconstant con mx sx my sy cov my1 sy1 a cov1 lint spost k i nplot
+default k=1
+
+Set gx
+ 1( 1 : 10 / 1 )10
+End.
+set gy
+ 10( 1 : 10 / 1 )1
+End.
+let wtx=gx
+let wty=gy
+
+Code (1) -3.4362 (2) -2.5327 (3) -1.7567 (4) -1.0366 (5) -.3429  &
+     (6) .3429 (7) 1.0366 (8) 1.7567 (9) 2.5327 (10) -3.4362 gx gx
+Code (1) -3.4362 (2) -2.5327 (3) -1.7567 (4) -1.0366 (5) -.3429  &
+     (6) .3429 (7) 1.0366 (8) 1.7567 (9) 2.5327 (10) -3.4362 gy gy
+Code (1) 1.02545 (2) .82067 (3) .74144 (4) .70330 (5) .68708 &
+     (6) .68708 (7) .70330 (8) .74144 (9) .82067 (10) 1.02545 wtx wtx
+Code (1) 1.02545 (2) .82067 (3) .74144 (4) .70330 (5) .68708 &
+     (6) .68708 (7) .70330 (8) .74144 (9) .82067 (10) 1.02545 wty wty
+
+gpause
+
+do i=1:k
+let con=sqrt(2)
+
+let x=mx
+let y=my
+%logpost2 x y scale
+
+let a=-cov/sx**2
+let my1=my+a*mx
+let sy1=sqrt((a*sx)**2+sy**2+2*a*cov)
+
+let x=mx+gx*sx*con
+let y1=my1+gy*sy1*con
+let wx=wtx*sx*con
+let wy1=wty*sy1*con
+
+let y=y1-a*x
+%logpost2 x y f
+let f=f-scale
+
+let abf=exp(f)*wy1*wx
+let spost=sum(abf)
+let mx=sum(abf*x)/spost
+let sx=sqrt(sum(abf*x*x)/spost-mx**2)
+let my1=sum(abf*y1)/spost
+let sy1=sqrt(sum(abf*y1*y1)/spost-my1**2)
+let cov1=sum(abf*x*y1)/spost-mx*my1
+
+let my=my1-a*mx
+let sy=sqrt((a*sx)**2+sy1**2-2*a*cov1)
+let cov=cov1-a*sx**2
+
+let lint=log(spost)+scale
+
+if plot=1
+  let f=f-max(f)
+  let cf=1+(f>-4.6)+(f>-2.3)+(f>-.1)
+  if nplot=1
+     plot y*x;
+     symbol cf;
+     type 5 3 9 6.
+  elseif nplot=2
+     ContourPlot f*y*x;
+     Connect;
+     Level -4.6 -2.3 -.1.
+  endif
+endif
+
+let MN_1(i)=mx
+let STD_1(i)=sx
+let MN_2(i)=my
+let STD_2(i)=sy
+let COVAR(i)=cov
+let LOG_INTG(i)=lint
+
+enddo
+
+let f=exp(f)/spost
+prin MN_1 STD_1 MN_2 STD_2 COVAR LOG_INTG
+
+endmacro
+

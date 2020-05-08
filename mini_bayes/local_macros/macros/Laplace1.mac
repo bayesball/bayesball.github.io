@@ -1,0 +1,51 @@
+macro
+
+laplace1 m;
+repeat k;
+store moms.
+
+mcolumn x f moms MN STD LOG_INTG
+mconstant h k1 k2 k3 k4 j lint ITER
+mconstant d1 d11 m s cov s2 k
+default k=1
+
+notitle
+do j=1:k
+let ITER=j
+
+let h=.01
+let k1=m-h/2
+let k2=m+h/2
+let k3=m-h
+let k4=m+h
+
+set x
+m k1 k2 k3 k4 
+end
+
+%logpost x f
+
+let d1=(f(3)-f(2))/h
+let d11=(f(4)-2*f(1)+f(5))/h**2
+
+let m=m-d1/d11
+
+let s=sqrt(-1/d11)
+
+let lint=.5*log(2*3.14159)+log(s)+f(1)
+
+let MN=m
+let STD=s
+let LOG_INTG=lint
+print ITER
+prin MN STD LOG_INTG
+
+enddo
+
+set moms
+  m s
+end
+endmacro
+
+
+

@@ -1,0 +1,80 @@
+macro
+
+pp_exch lsd;
+data s1 f1 s2 f2;
+nsim m;
+plot;
+store ps_p1 ps_p2.
+
+##################################################################
+#  MACRO 'PP_EXCH'                                              #
+# -------------------------------------------------------------- #
+#  INFERENCE ABOUT 2 BINOMIAL PROPORTIONS                        #
+#  USING AN EXCHANGEABLE PRIOR FOR P1 AND P2.                    #
+##################################################################
+
+mcolumn mu theta1 theta2 pr_p1 pr_p2 loglike probs ps_p1 ps_p2 PDIFF c11
+mconstant lsd m s1 f1 s2 f2 k1
+default m=1000 s1=0 f1=0 s2=0 f2=0
+
+Random m mu;     # simulate values of mu
+  Normal 0.0 1.0.
+Random m theta1 theta2;    # simulate logits
+  Normal 0.0 1.0.
+Let theta1 = theta1*lsd + mu
+Let theta2 = theta2*lsd + mu
+
+Let pr_p1 = exp(theta1)/(1+exp(theta1))   # transform to 
+Let pr_p2 = exp(theta2)/(1+exp(theta2))   # probabilities
+
+if data=1
+# compute likelihood weights and resampling probabilities
+
+Let loglike = s1*log(pr_p1)+f1*log(1-pr_p1)+ &
+  s2*log(pr_p2)+f2*log(1-pr_p2)
+Let probs=exp(loglike-max(loglike))/sum(exp(loglike-max(loglike)))
+
+# resample to get posterior sample of (p1, p2)
+
+ Random 1 C11;
+   Integer 1 100000.
+ let k1=c11
+ base k1
+random m ps_p1;
+  discrete pr_p1 probs.
+base k1
+random m ps_p2;
+  discrete pr_p2 probs.
+else
+ let ps_p1=pr_p1
+ let ps_p2=pr_p2
+endif
+
+if plot=1
+ %margplot ps_p2 ps_p1;
+ xmin 0;
+ xmax 1;
+ ymin 0;
+ ymax 1;
+ xtick 0 .1 .2 .3 .4 .5 .6 .7 .8 .9 1;
+ ytick 0 .1 .2 .3 .4 .5 .6 .7 .8 .9 1;
+ title 'SIMULATED VALUES FROM EXCHANGEABLE DISTRIBUTION';
+ xlabel 'PROPORTION 1';
+ ylabel 'PROPORTION 2'.
+endif
+
+note
+note Distribution of proportion P1:
+dotplot ps_p1
+describe ps_p1
+note
+note Distribution of proportion P2:
+dotplot ps_p2
+describe ps_p2
+let PDIFF=ps_p2-ps_p1
+note
+note Distribution of difference in proportions P2-P1:
+dotplot PDIFF
+describe PDIFF
+
+endmacro

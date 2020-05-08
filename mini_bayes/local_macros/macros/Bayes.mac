@@ -1,0 +1,70 @@
+gmacro
+
+bayes
+
+##################################################################
+#  MACRO 'BAYES'                                                 #
+# -------------------------------------------------------------- #
+#  IMPLEMENTS BAYES RULE FOR A SEQUENCE OF INDEPENDENT OUTCOMES. #
+#  THE PROGRAM 'BAYES_SETUP' MUST BE RUN FIRST TO                #
+#  SET UP MODELS, PRIOR, AND LIKELIHOODS.                        #
+##################################################################
+
+let 'PRIOR_C'='PRIOR'
+set 'OUTCOMES'
+0
+end
+note
+note INPUT OBSERVATIONS:
+insert 'terminal' 'OUTCOMES'
+end
+
+let k21=count('OUTCOMES')-1
+set  'OBS_NO'
+0 1:k21
+end
+
+let k31=21             #  columns to store posterior model probs
+let k32=21+k1-1        #
+let k41=31 
+let k42=31+k1-1
+
+copy 'prior' m1
+trans m1 m1
+copy m1 ck31-ck32
+
+let k9=2
+do k66=1:k21
+  call update
+enddo
+
+note
+note SUMMARY OF PRIOR AND POSTERIOR MODEL PROBABILITIES:
+print 'OBS_NO' 'OUTCOMES' ck31-ck32
+
+let 'PRIOR'='PRIOR_C'
+
+endmacro
+
+###########################################################
+
+gmacro
+
+update
+
+let k5='OUTCOMES'(k9)
+let 'OUTCOME'=k5
+print 'OUTCOME'
+copy ck5 'like'
+let 'product'='prior'*'like'
+let 'post'='product'/sum('product')
+print 'model' 'name' 'prior' 'like' 'product' 'post'  
+copy 'post' 'prior'
+let k9=k9+1
+
+copy 'post' m1
+trans m1 m1
+copy m1 ck41-ck42
+stack (ck31-ck32) (ck41-ck42) (ck31-ck32)
+
+endmacro

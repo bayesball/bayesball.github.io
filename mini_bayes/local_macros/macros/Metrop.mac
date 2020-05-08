@@ -1,0 +1,32 @@
+macro
+
+metrop x vx;
+ iter k;
+ scale sx.
+
+mcolumn vx z1 u1 xx f
+mconstant x xc xn i k sx prob
+default k=1000 sx=1
+
+let xc=x
+rand k z1
+rand k u1;
+  uniform 0 1.
+
+do i=1:k
+  let xn=xc+z1(i)*sx
+  copy xc xn xx
+  %logpost xx f
+  let prob=exp(f(2)-f(1))
+  if u1(i)<prob
+    let xc=xn
+  endif
+  let vx(i)=xc
+  if i/10=round(i/10)
+    print i
+  endif
+enddo
+
+
+endmacro
+

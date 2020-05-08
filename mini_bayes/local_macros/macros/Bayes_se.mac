@@ -1,0 +1,86 @@
+gmacro
+bayes_se
+
+##################################################################
+#  MACRO 'BAYES_SE'                                              #
+# -------------------------------------------------------------- #
+#  BAYES RULE FOR A FINITE NUMBER OF MODELS                      #
+#  AND FINITE NUMBER OF OUTCOMES.                                #
+#                                                                #
+#  THIS PROGRAM SETS UP MODELS, PRIOR, AND LIKELIHOODS.          #
+#                                                                #
+#  THE MACRO 'BAYES' IMPLEMENTS BAYES RULE FOR A SEQUENCE        #
+#  OF INDEPENDENT OUTCOMES.                                      #
+##################################################################
+
+erase c1-c500
+erase k1-k500
+name c11 'MODEL' c12 'PRIOR' c13 'LIKE' c14 'PRODUCT' c15 'POST' 
+name c16 'NAME' 
+name c1 'OUT_1' c2 'OUT_2' c3 'OUT_3' c4 'OUT_4' c5 'OUT_5'
+name c6 'OUT_6' c7 'OUT_7' c8 'OUT_8' c9 'OUT_9' c10 'OUT_10'
+name c200 'OUTCOME' c201 'OUTCOMES' c202 'PRIOR_C'
+name c21 'PROB_M1' c22 'PROB_M2' c23 'PROB_M3' c24 'PROB_M4' c25 'PROB_M5'
+name c26 'PROB_M6' c27 'PROB_M7' c28 'PROB_M8' c29 'PROB_M9' c30 'PROB_M10'
+name c51 'OBS_NO'
+
+note
+note INPUT NUMBER OF MODELS:
+set 'terminal' c200;
+nobs=1.
+end
+let k1=c200
+
+note 
+note INPUT NAMES OF MODELS (ONE NAME ON EACH LINE):
+set 'terminal' 'NAME';
+format (a12);
+nobs k1.
+end
+
+note
+note INPUT PRIOR PROBABILITIES OF MODELS:
+set 'terminal' c200;
+nobs=k1.
+end
+let 'PRIOR'=c200
+let 'prior'=abs('prior')/sum(abs('prior'))
+
+note
+note INPUT NUMBER OF POSSIBLE OUTCOMES:
+set 'terminal' c200;
+nobs=1.
+end
+let k2=c200
+
+note
+note INPUT LIKELIHOODS OF EACH MODEL:
+let 'MODEL'=1
+print 'MODEL'
+read 'terminal' c1-ck2;
+nobs=1.
+end
+do k5=2:k1
+  call like
+enddo
+
+set in 'MODEL'
+1:k1
+end
+note
+note TABLE OF PROBABILITIES OF MODELS AND OUTCOMES:
+print 'MODEL'  'NAME' 'PRIOR' c1-ck2
+
+endmacro
+
+#######################################################
+gmacro
+like
+
+let 'MODEL'=k5
+print 'MODEL'
+insert 'terminal' c1-ck2;
+nobs=1.
+end
+
+endmacro

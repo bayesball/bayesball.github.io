@@ -1,0 +1,133 @@
+macro
+
+########################################################
+# MACRO p_disc                                         #
+# October 4, 1994                                      #
+#------------------------------------------------------#
+# Computes and plots posterior density                 #
+# for binomial proportion p with discrete prior models #
+########################################################
+
+p_disc P1 PRI s f;
+ store POS;
+ plot.
+
+mconstant k n s f k2 k9 a i k11 k12 k13
+mcolumn P PRIOR LIKE PRODUCT POSTR COL MEAN NLIKE
+mcolumn PRI POS P1
+
+let P=P1
+let PRIOR=PRI
+let k=count(p)
+let n=s+f
+
+let P1=P+.5*(P=0)-.5*(P=1)
+let like=s*log(P1)+(n-s)*log(1-P1)
+let like=like*(P>0)*(P<1)-999*((P=0)*(s>0)+(P=1)*(s<n))
+let like=exp(like- max(like))*10**6
+
+#do  i=1:k
+#  let k2=p(i)
+#  let k9=k2+.5*(k2=0)-.5*(k2=1)
+#  pdf s a;
+#    binomial n k9.
+#  let LIKE(i)=a*(k2>0)*(k2<1)
+#enddo
+
+let prior=abs(prior)/sum(abs(prior))
+LET PRODUCT=PRIOR*LIKE
+LET POSTR=PRODUCT/SUM(PRODUCT)
+
+if plot=1
+layout
+# title 'Prior, Likelihood, and Posterior';
+# tsize 2.
+
+let nlike=like/sum(like)
+let k11=max(prior)
+let k12=max(nlike)
+let k13=max(postr)
+set  col
+ k11 k12 k13
+end
+let k11=max(col)
+
+plot prior*p;
+minimum 2 0;
+maximum 2 k11;
+project;
+ size 3;
+data;
+ etype 0;
+axis 1;
+ tsize 2;
+axis 2;
+ label '';
+tick 1;
+ tsize 1.5;
+tick 2;
+ tsize 1.5;
+figure 0 .5 .5 .9;
+ etype 0;
+title 'PRIOR';
+ size 2.
+
+plot NLIKE*P;
+minimum 2 0;
+maximum 2 k11;
+project;
+size 3;
+data;
+etype 0;
+axis 1;
+ tsize 2;
+axis 2;
+ label '';
+tick 1;
+ tsize 1.5;
+tick 2;
+ tsize 1.5;
+figure .5 1 .5 .9;
+etype 0;
+title 'LIKELIHOOD';
+size 2.
+
+plot POSTR*P;
+minimum 2 0;
+maximum 2 k11;
+project;
+size 3;
+data;
+etype 0;
+axis 1;
+ tsize 2;
+axis 2;
+ label '';
+tick 1;
+ tsize 1.5;
+tick 2;
+ tsize 1.5;
+figure .25 .75 .05 .45;
+etype 0;
+title 'POSTERIOR';
+size 2.
+
+gpause
+endlayout
+
+endif
+
+notitle
+mtitle 'PRIOR AND POSTERIOR DENSITIES OF P:'
+print P PRIOR LIKE PRODUCT POSTR
+let mean=sum(P*PRIOR)
+mtitle 'PRIOR MEAN OF P:'
+prin mean
+let mean=sum(P*POSTR)
+mtitle 'POSTERIOR MEAN OF P:'
+prin mean
+
+let POS=POSTR
+
+endmacro
+

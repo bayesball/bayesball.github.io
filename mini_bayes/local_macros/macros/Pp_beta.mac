@@ -1,0 +1,54 @@
+macro
+
+pp_beta a1 b1 a2 b2;
+pial x;
+nsim m;
+plot;
+store pr1 pr2.
+
+##################################################################
+#  MACRO 'PP_BETA'                                               #
+# -------------------------------------------------------------- #
+#  INFERENCE ABOUT 2 BINOMIAL PROPORTIONS                        #
+#  USING INDEPENDENT BETA PRIORS FOR P1 AND P2 AND SIMULATION.   #
+##################################################################
+
+mconstant a1 b1 a2 b2 m i k
+mcolumn data diff x PIALx sim_se P1 P2 PDIFF pr1 pr2
+default m=1000
+gpause
+
+random m P1;
+  beta a1 b1.
+random m P2;
+  beta a2 b2.
+
+if plot=1
+ %Margplot P2 P1;
+   title 'MARGINAL PLOT OF SIMULATED VALUES';
+   option 3;
+   xlabel 'PROPORTION 1';
+   ylabel 'PROPORTION 2'.
+endif
+
+let Pdiff=P2-P1
+dotplot Pdiff
+
+if pial=1
+let k=count(x)
+
+do i=1:k
+  let PIALx(i)=mean(PDIFF>x(i))
+  let sim_se(i)=sqrt(PIALx(i)*(1-PIALx(i))/m)
+enddo
+
+let sim_se=round(1000*sim_se)/m
+prin x PIALx sim_se
+endif
+
+if store=1
+  let pr1=p1
+  let pr2=p2
+endif
+
+endmacro

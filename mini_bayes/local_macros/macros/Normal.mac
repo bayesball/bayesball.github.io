@@ -1,0 +1,44 @@
+macro
+
+##################################################################
+#  MACRO 'NORMAL'                                                #
+# -------------------------------------------------------------- #
+#  FOR A NORMAL(M,S) DISTRIBUTION, GRAPHS DENSITY CURVE,         #
+#  AND COMPUTES CUMULATIVE PROBABILITIES AND QUANTILES.          #
+##################################################################
+
+normal mu sigma;
+  cprob mvalue;
+  quan qvalue.
+
+mcolumn mvalue qvalue x density PROB_LT M QUANTILE PROB
+mconstant mu sigma lo hi w
+
+gpause
+
+  let lo=mu-3*sigma
+  let hi=mu+3*sigma
+  let w=(hi-lo)/100
+  set x
+    1(lo:hi/w)1
+  end
+  pdf x density;
+    normal mu sigma.
+  plot density*x;
+    connect.
+
+if cprob=1
+  CDF mvalue PROB_LT;
+    normal mu sigma.
+  let M=mvalue
+  print M PROB_LT
+endif
+
+if quan=1
+  InvCDF qvalue QUANTILE;
+   normal mu sigma.
+  let PROB=qvalue
+  print PROB QUANTILE
+endif
+
+endmacro

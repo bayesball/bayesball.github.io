@@ -1,0 +1,34 @@
+macro
+
+sir prr data pst;
+ nlik k;
+ nsim m;
+ plot.
+
+mcolumn PRIOR data POST like prr pst probs
+mconstant k m
+default m=1000.
+
+let PRIOR=prr
+
+%like prior data like;
+ num k.
+
+let probs=like/sum(like)
+
+random m post;
+ discrete prior probs.
+
+if plot=1
+  dotplot PRIOR POST;
+  same.
+endif
+
+let pst=POST
+endmacro
+
+
+
+
+
+

@@ -1,0 +1,109 @@
+macro
+
+bball strength;
+  repeat num;
+  store r.1-r.m1.
+ 
+# using bradley-terry model, simulates season 
+# where each team plays each other 8 games (4 home and 4 away)
+
+##################################################################
+#  MACRO 'BBALL'                                                 #
+# -------------------------------------------------------------- #
+#  SIMULATES A SEASON OF BASEBALL                                #
+##################################################################
+
+mcolumn strength team h_team a_team p ones h_stgth a_stgth temp equal
+mcolumn game1 game2 game3 game4 win_1 win_2 win_3 win_4 lose_1 lose_2 lose_3
+mcolumn lose_4 winner loser c99 c100 c101
+mcolumn r.1-r.m1 
+mconstant k1 k2 k3 k4 k5 k6 k7 k8 k9 k10 k11 i num j SEASON
+#mconstant s.1-s.n
+default num=1
+
+# copy s.1-s.n strength
+let k1=count(strength)
+set team
+1:k1
+end
+set ones
+1( 1 : 1 / 1 )k1
+end
+
+let h_team=team
+let h_stgth=strength
+let a_team=1*ones
+let a_stgth=strength(1)*ones
+do k3=2:k1
+ stack h_team team h_team
+ stack h_stgth strength h_stgth
+ let temp=k3*ones
+ stack a_team temp a_team
+ let temp=strength(k3)*ones
+ stack a_stgth temp a_stgth
+enddo
+
+let equal=h_team=a_team
+copy h_team a_team h_stgth a_stgth h_team a_team h_stgth a_stgth ;
+ omit equal 1.
+
+let k4=k1*(k1-1)
+
+let p=1/(1+exp(a_stgth-h_stgth))
+
+do j=1:num
+
+rand k4 game1 game2 game3 game4;
+ uniform 0.0 1.0.
+note
+let game1=game1<p
+let game2=game2<p
+let game3=game3<p
+let game4=game4<p
+
+let win_1=h_team*game1+a_team*(1-game1)
+let win_2=h_team*game2+a_team*(1-game2)
+let win_3=h_team*game3+a_team*(1-game3)
+let win_4=h_team*game4+a_team*(1-game4)
+let lose_1=a_team*game1+h_team*(1-game1)
+let lose_2=a_team*game2+h_team*(1-game2)
+let lose_3=a_team*game3+h_team*(1-game3)
+let lose_4=a_team*game4+h_team*(1-game4)
+
+stack win_1 win_2 win_3 win_4 winner
+stack lose_1 lose_2 lose_3 lose_4 loser
+if repeat=0
+  table winner loser
+endif
+
+let k6=30
+let k7=30+k1-1
+let k8=50
+let k9=50+k1-1
+let k10=70
+let k11=70+k1-1
+let SEASON=j
+if repeat=1
+  print SEASON
+endif
+tally winner;
+store c99 c100.
+
+# rank c100 c101
+# let c101=k1+1-c101
+
+if store=1
+  do i=1:k1
+    let r.i(j)=c100(i)
+  enddo
+endif
+
+# if st_pos=1
+#  do i=1:k1
+#    let t.i(j)=c101(i)
+#  enddo
+# endif
+
+enddo
+
+endmacro

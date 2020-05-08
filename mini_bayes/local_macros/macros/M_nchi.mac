@@ -1,0 +1,124 @@
+macro
+m_nchi data.
+
+mcolumn data m7 s7 lpost m1 s1 fm1 fs1 prob m_int s_int quan
+mconstant xbar ss n v se m_lo m_hi s_lo s_hi ls_lo ls_hi
+mconstant df m s
+
+let xbar=mean(data)
+let ss=sum((data-xbar)**2)
+let n=count(data)
+let v=n-1
+let se=sqrt(ss/v/n)
+
+let m_lo=xbar-4*se
+let m_hi=xbar+4*se
+let ls_lo=log(ss/v)-4*sqrt(2/v)
+let ls_hi=log(ss/v)+4*sqrt(2/v)
+
+let s_lo=exp(ls_lo/2)
+let s_lo=.001*(s_lo<.001)+s_lo*(s_lo>=.001)
+let s_hi=exp(ls_hi/2)
+
+set s1
+0:50
+end
+let s1=s_lo+(s_hi-s_lo)*s1/50
+set m1
+0:50
+end
+let m1=m_lo+(m_hi-m_lo)*m1/50
+let fs1=-n/2*log(s1**2)-.5*ss/s1**2
+let fs1=exp(fs1-max(fs1))
+let fm1=-(v+1)/2*log(1+((m1-xbar)/se)**2/v)
+let fm1=exp(fm1-max(fm1))
+
+%mesh m7 m_lo m_hi s7 s_lo s_hi;
+   nxmesh 20;
+   nymesh 20.
+
+brief 1
+let lpost=-(n+1)*log(s7)-.5/s7**2*(ss+n*(xbar-m7)**2)
+let lpost=lpost-max(lpost)
+
+layout;
+  title "POSTERIOR DISTRIBUTION OF (M, S)".
+
+  ContourPlot lpost*s7*m7;
+  Connect;
+  Level -4.6 -2.3;
+  Title "  ";
+  axis 1;
+  label 'M';
+  axis 2;
+  label 'S';
+  figure;
+  etype 0;
+  data .2 .75 .2 .75;
+  etype 0;
+  nolegend.
+
+  plot s1*fs1;
+  connect;
+  order 0;
+  minimum 1 0;
+  axis 1;
+  label ' ';
+  tfont 0;
+  type 0;
+  tick 1;
+  tfont 0;
+  type 0;
+  axis 2;
+  label ' ';
+  data .75 .9 .2 .75;
+  etype 0.
+
+plot fm1*m1;
+connect;
+  minimum 2 0;
+  axis 1;
+  label  ' ';
+  axis 2;
+  label ' ';
+  tfont 0;
+  type 0;
+ tick 2;
+  tfont 0;
+  type 0;
+data .2 .75 .75 .9;
+etype 0.
+endlayout
+
+set prob
+.975 .025
+end
+InvCDF prob quan;
+  Chisquare v.
+let s_int=sqrt(ss/quan)
+
+set prob
+.025 .975
+end
+Invcdf prob quan;
+  t v.
+let m_int=xbar+quan*se
+
+let m=xbar
+let df=v
+note
+note The mean M has a t(m,se,df) distribution with
+prin m se df
+note 
+note A 95% probability interval for M is:
+prin m_int
+let S=ss
+note
+note The standard deviation S has a inverse chi-square(S,df) distribution with
+prin s df
+note
+note A 95% probability interval for S is:
+prin s_int
+
+
+endmacro

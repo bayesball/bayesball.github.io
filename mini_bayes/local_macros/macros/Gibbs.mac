@@ -1,0 +1,46 @@
+macro
+
+gibbs x y vx vy;
+ iter k;
+ scale sx sy.
+
+mcolumn vx vy z1 z2 u1 u2 xx yy f
+mconstant x y xc yc xn yn i k sx sy prob
+default k=1000 sx=1 sy=1
+
+let xc=x
+let yc=y
+rand k z1
+rand k z2
+rand k u1;
+  uniform 0 1.
+rand k u2;
+  uniform 0 1.
+
+do i=1:k
+  let xn=xc+z1(i)*sx
+  copy xc xn xx
+  copy yc yc yy
+  %logpost2 xx yy f
+  let prob=exp(f(2)-f(1))
+  if u1(i)<prob
+    let xc=xn
+  endif
+
+  let yn=yc+z2(i)*sy
+  copy yc yn yy
+  copy xc xc xx
+  %logpost2 xx yy f
+  let prob=exp(f(2)-f(1))
+  if u2(i)<prob
+    let yc=yn
+  endif
+
+  let vx(i)=xc
+  let vy(i)=yc
+  print i
+enddo
+
+
+endmacro
+

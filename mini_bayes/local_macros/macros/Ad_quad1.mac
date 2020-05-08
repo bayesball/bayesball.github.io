@@ -1,0 +1,56 @@
+macro
+
+ad_quad1 m s;
+ store x f wx;
+ plot;
+ repeat k.
+
+mcolumn x tq wet wx f abf density MN SD LOG_INTG
+mconstant spost con mx sx smx smxx k i m s
+default k=1
+
+set tq
+-3.4362 -2.5327 -1.7567 -1.0366 -0.3429 0.3429 1.0366 1.7567 2.5327 3.4362
+end
+set wet
+1.0255 0.8207 0.7414 0.7033 0.6871 0.6871 0.7033 0.7414 0.8207 1.0255
+end
+let con=sqrt(2)
+
+let mx=m
+let sx=s
+do i=1:k
+
+  let x=mx+tq*sx*con 
+  let wx=wet*sx*con
+
+  %logpost x f
+
+  let density=exp(f)
+  let abf=density*wx
+  let spost=sum(abf)
+  let smx=sum(abf*x)
+  let smxx=sum(abf*x*x)
+  let mx=smx/spost
+  let sx=sqrt(smxx/spost-mx**2)
+
+  if plot=1
+    gpause
+    plot density*x;
+    connect.
+  endif
+
+  let SD(i)=sx
+  let MN(i)=mx 
+  let LOG_INTG(i)=log(spost)
+enddo
+
+let m=mx
+let s=sx
+let f=exp(f)/spost
+
+print MN SD LOG_INTG
+
+endmacro
+
+
