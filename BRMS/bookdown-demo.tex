@@ -288,7 +288,7 @@ We use the \texttt{brm()} function from the \texttt{brms} package to fit the mod
 \end{Shaded}
 
 \begin{verbatim}
-## Compiling the C++ model
+## Compiling Stan program...
 \end{verbatim}
 
 \begin{verbatim}
@@ -440,7 +440,7 @@ We use the \texttt{brm()} function with the family = gaussian option. Note how t
 \end{verbatim}
 
 \begin{verbatim}
-## Compiling the C++ model
+## Compiling Stan program...
 \end{verbatim}
 
 \begin{verbatim}
@@ -556,7 +556,7 @@ In this run of the \texttt{brm()} function, we assume Poisson sampling and a nor
 \end{Shaded}
 
 \begin{verbatim}
-## Compiling the C++ model
+## Compiling Stan program...
 \end{verbatim}
 
 \begin{verbatim}
@@ -769,7 +769,7 @@ Here is the run of \texttt{brm()} where I use the prior specification in \texttt
 \end{Shaded}
 
 \begin{verbatim}
-## Compiling the C++ model
+## Compiling Stan program...
 \end{verbatim}
 
 \begin{verbatim}
@@ -908,7 +908,7 @@ Here we are assume weakly informative priors on the regression parameters \(\bet
 \end{Shaded}
 
 \begin{verbatim}
-## Compiling the C++ model
+## Compiling Stan program...
 \end{verbatim}
 
 \begin{verbatim}
@@ -1021,7 +1021,7 @@ We fit the multilevel model using the `\texttt{brm()} function. Note the use of 
 \end{Shaded}
 
 \begin{verbatim}
-## Compiling the C++ model
+## Compiling Stan program...
 \end{verbatim}
 
 \begin{verbatim}
@@ -1150,7 +1150,7 @@ The parameters \(\mu_1, ..., \mu_8\) represent the mean ratings for the eight mo
 \item
   We assume the effect parameters \(\gamma_1, ..., \gamma_8\) have a normal distribution with mean 0 and standard deviation \(\tau\).
 \item
-  There are two standard deviations, the sampling standard deviation \(\sigma\) and the between-means standard deviation \(tau\). Each of these standard deviations are given weakly informative student t distributions with mean 0, scale 2.5 and 3 degrees of freedom.
+  There are two standard deviations, the sampling standard deviation \(\sigma\) and the between-means standard deviation \(\tau\). Each of these standard deviations are given weakly informative student t distributions with mean 0, scale 2.5 and 3 degrees of freedom.
 \end{enumerate}
 
 \hypertarget{bayesian-fitting}{%
@@ -1167,7 +1167,7 @@ The model is fit by use of the \texttt{brm()} function. By default, this functio
 \end{Shaded}
 
 \begin{verbatim}
-## Compiling the C++ model
+## Compiling Stan program...
 \end{verbatim}
 
 \begin{verbatim}
@@ -1236,6 +1236,344 @@ Remember that we represented the movie ratings mean as \(\mu_j = \beta + \gamma_
 \end{Shaded}
 
 \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-50-1.pdf}
+
+\hypertarget{federalist-paper-study}{%
+\chapter{Federalist Paper Study}\label{federalist-paper-study}}
+
+\hypertarget{packages-for-this-example}{%
+\section{Packages for this example}\label{packages-for-this-example}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(tidyverse)}
+\KeywordTok{library}\NormalTok{(brms)}
+\KeywordTok{library}\NormalTok{(bayesplot)}
+\KeywordTok{library}\NormalTok{(ProbBayes)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{federalist-paper-data}{%
+\section{Federalist paper data}\label{federalist-paper-data}}
+
+The data frame \texttt{federalist\_word\_study} contains frequency use of words for Federalist Papers written by either Alexander Hamilton or James Madison.
+
+We'll focus on the frequencies of the word ``can'' in groups of 1000 words written by Hamilton
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{federalist_word_study }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(word }\OperatorTok{==}\StringTok{ "can"}\NormalTok{,}
+\NormalTok{         Authorship }\OperatorTok{==}\StringTok{ "Hamilton"}\NormalTok{) ->}\StringTok{ }\NormalTok{d}
+\KeywordTok{head}\NormalTok{(d)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                   Name Total word  N         Rate Authorship Disputed
+## 65    Federalist No. 1  1622  can  3 0.0018495684   Hamilton       no
+## 1526 Federalist No. 11  2511  can  5 0.0019912386   Hamilton       no
+## 2437 Federalist No. 12  2171  can  2 0.0009212345   Hamilton       no
+## 3125 Federalist No. 13   970  can  4 0.0041237113   Hamilton       no
+## 4256 Federalist No. 15  3095  can 14 0.0045234249   Hamilton       no
+## 5530 Federalist No. 16  2047  can  1 0.0004885198   Hamilton       no
+\end{verbatim}
+
+\hypertarget{the-poisson-sampling-model}{%
+\section{The Poisson sampling model}\label{the-poisson-sampling-model}}
+
+If \(y_i\) represents the count of ``can'' in the \(i\) group of words, we assume
+
+\[
+y_i  \sim Poisson(n_i \lambda / 1000), i = 1, ..., N
+\]
+
+where \(\lambda\) is the true rate of the word among 1000 words.
+
+On log scale, the Poisson mean can be written
+
+\[
+\log E(y_i) = \log \lambda + \log(n_i / 1000)
+\]
+which can be fit as a generalized linear model with Poisson sampling, log link, intercept model with an offset of \(\log(n_i / 1000)\).
+
+We complete this model by assigning the prior
+\[
+\log \lambda \sim N(0, 2)
+\]
+
+\hypertarget{fitting-the-model}{%
+\section{Fitting the model}\label{fitting-the-model}}
+
+We use the `\texttt{brm()} function with ``family = poisson'', specifying the offset ``N'', and specifying the prior by use of the ``prior'' argument.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit <-}\StringTok{ }\KeywordTok{brm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{family =}\NormalTok{ poisson,}
+\NormalTok{    N }\OperatorTok{~}\StringTok{ }\KeywordTok{offset}\NormalTok{(}\KeywordTok{log}\NormalTok{(Total }\OperatorTok{/}\StringTok{ }\DecValTok{1000}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{,}
+    \DataTypeTok{prior =} \KeywordTok{c}\NormalTok{(}\KeywordTok{prior}\NormalTok{(}\KeywordTok{normal}\NormalTok{(}\DecValTok{0}\NormalTok{, }\DecValTok{2}\NormalTok{), }
+                    \DataTypeTok{class =}\NormalTok{ Intercept)),}
+              \DataTypeTok{refresh =} \DecValTok{0}
+\NormalTok{    )}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Compiling Stan program...
+\end{verbatim}
+
+\begin{verbatim}
+## recompiling to avoid crashing R session
+\end{verbatim}
+
+\begin{verbatim}
+## Start sampling
+\end{verbatim}
+
+We display summaries of the posterior for \(\lambda\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  Family: poisson 
+##   Links: mu = log 
+## Formula: N ~ offset(log(Total/1000)) + 1 
+##    Data: d (Number of observations: 49) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept     0.97      0.06     0.86     1.08 1.00     1553     2145
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).
+\end{verbatim}
+
+We save \texttt{post} as a matrix of simulated draws.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{post <-}\StringTok{ }\KeywordTok{posterior_samples}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+
+The function \texttt{mcmc\_areas()} displays a density estimate of the simulated draws and shows the location of a 50\% probability interval.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{mcmc_areas}\NormalTok{(post, }\DataTypeTok{pars =} \StringTok{"b_Intercept"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-56-1.pdf}
+
+\hypertarget{model-checking}{%
+\section{Model checking}\label{model-checking}}
+
+To check if the Poisson sampling model is appropriate we illustrate several posterior predictive checks.
+
+Here we display density estimates for 10 replicated samples from the posterior predictive distribution of \(y\) and overlay the observed values as a dark line.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pp_check}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Using 10 posterior samples for ppc type 'dens_overlay' by default.
+\end{verbatim}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-57-1.pdf}
+
+Here we use \((\bar y, s_y)\) as a checking function. The scatterplot represents values of \((\bar y, s_y)\) from the posterior predictive distribution of replicated data, and the observed value of \((\bar y, s_y)\) is shown as a dot.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pp_check}\NormalTok{(fit, }\DataTypeTok{type =} \StringTok{"stat_2d"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Using all posterior samples for ppc type 'stat_2d' by default.
+\end{verbatim}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-58-1.pdf}
+
+The takeaway is that the observed data shows more variability than predicted from the Poisson sampling model.
+
+\hypertarget{negative-binomial-sampling}{%
+\section{Negative binomial sampling}\label{negative-binomial-sampling}}
+
+One way to handle the extra variability is to assume that the \(y_i\) have a negative binomial distribution. (See the text for details.)
+
+Here we outline the code for fitting this model.
+
+We fit the model with the \texttt{brm()} function with the ``family = negbinomial'' option.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit_nb <-}\StringTok{ }\KeywordTok{brm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ d, }\DataTypeTok{family =}\NormalTok{ negbinomial,}
+\NormalTok{           N }\OperatorTok{~}\StringTok{ }\KeywordTok{offset}\NormalTok{(}\KeywordTok{log}\NormalTok{(Total }\OperatorTok{/}\StringTok{ }\DecValTok{1000}\NormalTok{)) }\OperatorTok{+}\StringTok{ }\DecValTok{1}\NormalTok{,}
+           \DataTypeTok{refresh =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Compiling Stan program...
+\end{verbatim}
+
+\begin{verbatim}
+## Start sampling
+\end{verbatim}
+
+Here I can checking on the default priors used by brm:
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{prior_summary}\NormalTok{(fit_nb)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                    prior     class coef group resp dpar nlpar bound
+## 1 student_t(3, 1.6, 2.5) Intercept                                 
+## 2      gamma(0.01, 0.01)     shape
+\end{verbatim}
+
+Here are the posterior summaries.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(fit_nb)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  Family: negbinomial 
+##   Links: mu = log; shape = identity 
+## Formula: N ~ offset(log(Total/1000)) + 1 
+##    Data: d (Number of observations: 49) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept     1.00      0.10     0.80     1.19 1.00     2903     2668
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## shape     3.25      1.11     1.72     5.93 1.00     3023     2533
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).
+\end{verbatim}
+
+I save the posterior samples in the data frame \texttt{post}.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{post <-}\StringTok{ }\KeywordTok{posterior_samples}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+
+I try the same posterior predictive checks as before. The message is that the negative binomial sampling model is a better fit to these data.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pp_check}\NormalTok{(fit_nb)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Using 10 posterior samples for ppc type 'dens_overlay' by default.
+\end{verbatim}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-63-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{pp_check}\NormalTok{(fit_nb, }\DataTypeTok{type =} \StringTok{"stat_2d"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Using all posterior samples for ppc type 'stat_2d' by default.
+\end{verbatim}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-64-1.pdf}
+
+\hypertarget{comparing-use-of-a-word}{%
+\section{Comparing use of a word}\label{comparing-use-of-a-word}}
+
+Next we compare Madison and Hamilton use of the word ``can''. The data frame \texttt{d2} contains only the word data for the essays that were known to be written by Hamilton or Madison.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{federalist_word_study }\OperatorTok{%>%}\StringTok{ }
+\StringTok{  }\KeywordTok{filter}\NormalTok{(word }\OperatorTok{==}\StringTok{ "can"}\NormalTok{,}
+\NormalTok{         Authorship }\OperatorTok{%in%}\StringTok{ }\KeywordTok{c}\NormalTok{(}\StringTok{"Hamilton"}\NormalTok{, }\StringTok{"Madison"}\NormalTok{)) ->}\StringTok{ }\NormalTok{d2}
+\end{Highlighting}
+\end{Shaded}
+
+Here I fit a regression model for the mean use of ``can'', where the one predictor is the categorical variable ``Authorship''.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit_nb <-}\StringTok{ }\KeywordTok{brm}\NormalTok{(}\DataTypeTok{data =}\NormalTok{ d2, }\DataTypeTok{family =}\NormalTok{ negbinomial,}
+\NormalTok{           N }\OperatorTok{~}\StringTok{ }\KeywordTok{offset}\NormalTok{(}\KeywordTok{log}\NormalTok{(Total }\OperatorTok{/}\StringTok{ }\DecValTok{1000}\NormalTok{)) }\OperatorTok{+}\StringTok{ }
+\StringTok{          }\NormalTok{Authorship ,}
+           \DataTypeTok{refresh =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Compiling Stan program...
+\end{verbatim}
+
+\begin{verbatim}
+## recompiling to avoid crashing R session
+\end{verbatim}
+
+\begin{verbatim}
+## Start sampling
+\end{verbatim}
+
+By summarizing the fit, we can see if the two authors differ in their use of the word ``can'' in their writings.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(fit_nb)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  Family: negbinomial 
+##   Links: mu = log; shape = identity 
+## Formula: N ~ offset(log(Total/1000)) + Authorship 
+##    Data: d2 (Number of observations: 74) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##                   Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept             1.00      0.10     0.81     1.19 1.00     3762     2790
+## AuthorshipMadison    -0.09      0.16    -0.41     0.23 1.00     3924     3136
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## shape     3.87      1.15     2.20     6.62 1.00     3949     2798
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).
+\end{verbatim}
 
 \hypertarget{multilevel-regression}{%
 \chapter{Multilevel Regression}\label{multilevel-regression}}
@@ -1327,7 +1665,11 @@ The fitting of this model is done using the \texttt{brm()} function.
 \end{Shaded}
 
 \begin{verbatim}
-## Compiling the C++ model
+## Compiling Stan program...
+\end{verbatim}
+
+\begin{verbatim}
+## recompiling to avoid crashing R session
 \end{verbatim}
 
 \begin{verbatim}
@@ -1366,7 +1708,7 @@ I find posterior means of the fitted trajectories for all players.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-57-1.pdf}
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-74-1.pdf}
 
 For a given player, define the peak age
 \[
@@ -1398,7 +1740,7 @@ The following graph shows the posterior distributions of the peak ages for all p
 ## Warning: Removed 2 rows containing missing values (geom_bar).
 \end{verbatim}
 
-\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-58-1.pdf}
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-75-1.pdf}
 
   \bibliography{book.bib,packages.bib}
 
