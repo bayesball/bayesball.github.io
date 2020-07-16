@@ -120,7 +120,7 @@
 
 \title{Bayesian Modeling Using Stan}
 \author{Jim Albert}
-\date{2020-07-14}
+\date{2020-07-16}
 
 \begin{document}
 \maketitle
@@ -1237,6 +1237,298 @@ Remember that we represented the movie ratings mean as \(\mu_j = \beta + \gamma_
 
 \includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-50-1.pdf}
 
+\hypertarget{multiple-regression-and-logistic-models}{%
+\chapter{Multiple Regression and Logistic Models}\label{multiple-regression-and-logistic-models}}
+
+\hypertarget{load-packages}{%
+\section{Load Packages}\label{load-packages}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{library}\NormalTok{(ProbBayes)}
+\KeywordTok{library}\NormalTok{(brms)}
+\KeywordTok{library}\NormalTok{(dplyr)}
+\KeywordTok{library}\NormalTok{(ggplot2)}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{multiple-regression-example}{%
+\section{Multiple regression example}\label{multiple-regression-example}}
+
+Exercise 1 in Chapter 12 describes a dataset that gives the winning time in seconds for the men's and women's 100 m butterfly race for the Olympics for the years 1964 through 2016. This data is available as the data frame \texttt{olympic\_butterfly} in the \texttt{ProbBayes} package.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(olympic_butterfly)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Year Gender  Time
+## 1 2016  Women 55.48
+## 2 2012  Women 55.98
+## 3 2008  Women 56.73
+## 4 2004  Women 57.72
+## 5 2000  Women 56.61
+## 6 1996  Women 59.13
+\end{verbatim}
+
+Create a new variable \texttt{year\_64} which is equal to the number of years after 1964. Also define a \texttt{gender} variable that is 1 (0) if the race is for women (men).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{olympic_butterfly }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{year_64 =}\NormalTok{ Year }\OperatorTok{-}\StringTok{ }\DecValTok{1964}\NormalTok{,}
+         \DataTypeTok{gender =} \KeywordTok{ifelse}\NormalTok{(Gender }\OperatorTok{==}\StringTok{ "Women"}\NormalTok{,}
+                         \DecValTok{1}\NormalTok{, }\DecValTok{0}\NormalTok{)) }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{filter}\NormalTok{(}\KeywordTok{is.na}\NormalTok{(Time) }\OperatorTok{==}\StringTok{ }\OtherTok{FALSE}\NormalTok{) ->}
+\StringTok{  }\NormalTok{olympic_butterfly2}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{the-model}{%
+\section{The model}\label{the-model}}
+
+Let \(y_j\) denote the winning time in seconds for the \(j\)th race. We assume that \(y_j\) is normal(\(\mu_j)\) where the means satisfy the regression model
+\[
+\mu_j = \beta_0 + \beta_1 x_{1j} + \beta_2 x_{2j},
+\]
+where \(x_{1j}\) and \(x_{2j}\) are respectively the years after 1964 and the indicator for gender.
+
+We will assume a weakly informative prior, where each of \(\beta_0\), \(\beta_1\), \(\beta_2\) and \(\sigma\) are given flat distributions with high variances.
+
+\hypertarget{fitting-the-model}{%
+\section{Fitting the model}\label{fitting-the-model}}
+
+The \texttt{brm()} function resembles the syntax of the popular \texttt{lm()} function, but this is implementing a Stan fit.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit <-}\StringTok{ }\KeywordTok{brm}\NormalTok{(Time }\OperatorTok{~}\StringTok{ }\NormalTok{year_}\DecValTok{64} \OperatorTok{+}\StringTok{ }\NormalTok{gender,}
+           \DataTypeTok{data =}\NormalTok{ olympic_butterfly2,}
+           \DataTypeTok{refresh =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Compiling Stan program...
+\end{verbatim}
+
+\begin{verbatim}
+## Start sampling
+\end{verbatim}
+
+The \texttt{plot()} function will plot trace and density graphs for each parameter.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-55-1.pdf}
+
+The \texttt{summary()} function provides posterior summaries for each parameter.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{summary}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: Time ~ year_64 + gender 
+##    Data: olympic_butterfly2 (Number of observations: 27) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept    56.91      0.49    55.95    57.85 1.00     3758     2788
+## year_64      -0.15      0.01    -0.17    -0.12 1.00     3977     2958
+## gender        6.42      0.43     5.58     7.25 1.00     4018     2651
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma     1.11      0.17     0.84     1.50 1.00     3393     2634
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).
+\end{verbatim}
+
+The \texttt{posterior\_samples()} function outputs a matrix of simulated draws of \((\beta_0, \beta_1, \beta_2, \sigma)\).
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{post <-}\StringTok{ }\KeywordTok{posterior_samples}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+
+To illustrate an inference problem, suppose one is interested in estimating the mean winning time of the men's race in 1972 which is the function
+\[
+h(\beta) = \beta_0 + 8 \beta_1
+\]
+
+Below we compute the function \(h(\beta)\) on the simulated draws and draw a posterior density estimate.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{post }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{mean_time_1972 =}
+\NormalTok{           b_Intercept }\OperatorTok{+}\StringTok{ }\DecValTok{8} \OperatorTok{*}\StringTok{ }\NormalTok{b_year_}\DecValTok{64}\NormalTok{) ->}
+\StringTok{  }\NormalTok{post}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(post, }\KeywordTok{aes}\NormalTok{(mean_time_}\DecValTok{1972}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_density}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-59-1.pdf}
+
+\hypertarget{logistic-example}{%
+\section{Logistic example}\label{logistic-example}}
+
+Exercise 8 of Chapter 12 describes a study where data was collected on some graduate student admission cases. The data is available as the data frame \texttt{GradSchoolAdmission} in the \texttt{ProbBayes} package. The variables include \(y\), a binary variable indicating admission and \(x_1\) and \(x_2\), the GRE score and GPA for the student.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{head}\NormalTok{(GradSchoolAdmission)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   Admission GRE  GPA
+## 1         0 380 3.61
+## 2         1 660 3.67
+## 3         1 800 4.00
+## 4         1 640 3.19
+## 5         0 520 2.93
+## 6         1 760 3.00
+\end{verbatim}
+
+\hypertarget{the-model-1}{%
+\section{The model}\label{the-model-1}}
+
+Let \(p_i = P(y_i = 1)\) denote the probability of admission for the \(i\)th student. We consider the logistic model
+\[
+\log \left(\frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1 x_{1j} + \beta_2 x_{2j},
+\]
+
+We assume flat, weakly informative priors for \(\beta_0, \beta_1, \beta_2\).
+
+\hypertarget{fitting-the-model-1}{%
+\section{Fitting the model}\label{fitting-the-model-1}}
+
+We use the \texttt{brm()} function for the Bayesian fitting of this model by Stan-MCMC where the syntax is similar to the \texttt{glm()} function for a traditional fit.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{fit <-}\StringTok{ }\KeywordTok{brm}\NormalTok{(Admission }\OperatorTok{~}\StringTok{ }\NormalTok{GRE }\OperatorTok{+}\StringTok{ }\NormalTok{GPA,}
+            \DataTypeTok{data =}\NormalTok{ GradSchoolAdmission,}
+            \DataTypeTok{family =} \KeywordTok{bernoulli}\NormalTok{(),}
+             \DataTypeTok{refresh =} \DecValTok{0}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Compiling Stan program...
+\end{verbatim}
+
+\begin{verbatim}
+## Start sampling
+\end{verbatim}
+
+We display trace and density estimate graphs for each regression parameter.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{plot}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-62-1.pdf}
+
+We summarize the marginal posterior distributions for each parameter.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{print}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##  Family: bernoulli 
+##   Links: mu = logit 
+## Formula: Admission ~ GRE + GPA 
+##    Data: GradSchoolAdmission (Number of observations: 400) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept    -5.00      1.08    -7.21    -2.92 1.00     2205     1937
+## GRE           0.00      0.00     0.00     0.00 1.00     4208     3302
+## GPA           0.76      0.32     0.17     1.40 1.00     1843     1661
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).
+\end{verbatim}
+
+We use the \texttt{posterior\_samples()} function to obtain the matrix of simulated draws from the joint posterior.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{post <-}\StringTok{ }\KeywordTok{posterior_samples}\NormalTok{(fit)}
+\end{Highlighting}
+\end{Shaded}
+
+Suppose we are interested in estimating the probability of admission for two students with the following covariate values
+
+\begin{itemize}
+\tightlist
+\item
+  GRE = 550, GPA = 3.5
+\item
+  GRE = 500, GPA = 4.0
+\end{itemize}
+
+Below we first define a function that computes the inverse logit of a value. By using this inverse logit function, we compute the probability of admission for each of these two students.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{invlogit <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+  \KeywordTok{exp}\NormalTok{(x) }\OperatorTok{/}\StringTok{ }\NormalTok{(}\DecValTok{1} \OperatorTok{+}\StringTok{ }\KeywordTok{exp}\NormalTok{(x))}
+\NormalTok{\}}
+\NormalTok{post }\OperatorTok{%>%}
+\StringTok{  }\KeywordTok{mutate}\NormalTok{(}\DataTypeTok{p_550_3.5 =} \KeywordTok{invlogit}\NormalTok{(b_Intercept }\OperatorTok{+}
+\StringTok{                }\NormalTok{b_GRE }\OperatorTok{*}\StringTok{ }\DecValTok{550} \OperatorTok{+}\StringTok{ }\NormalTok{b_GPA }\OperatorTok{*}\StringTok{ }\FloatTok{3.5}\NormalTok{),}
+         \DataTypeTok{p_550_4.0 =} \KeywordTok{invlogit}\NormalTok{(b_Intercept }\OperatorTok{+}
+\StringTok{                }\NormalTok{b_GRE }\OperatorTok{*}\StringTok{ }\DecValTok{550} \OperatorTok{+}\StringTok{ }\NormalTok{b_GPA }\OperatorTok{*}\StringTok{ }\FloatTok{4.0}\NormalTok{)) ->}
+\StringTok{  }\NormalTok{post}
+\end{Highlighting}
+\end{Shaded}
+
+We display density estimates for the probability of admission for these two students where the blue curve corresponds to the student where GRE = 550 and GPA = 3.5 and the red curve corresponds to the student where GRE = 550 and GPA = 4.0.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{ggplot}\NormalTok{(post, }\KeywordTok{aes}\NormalTok{(p_}\DecValTok{550}\NormalTok{_}\FloatTok{3.5}\NormalTok{)) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_density}\NormalTok{(}\DataTypeTok{color =} \StringTok{"blue"}\NormalTok{) }\OperatorTok{+}
+\StringTok{  }\KeywordTok{geom_density}\NormalTok{(}\KeywordTok{aes}\NormalTok{(p_}\DecValTok{550}\NormalTok{_}\FloatTok{4.0}\NormalTok{),}
+               \DataTypeTok{color =} \StringTok{"red"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-66-1.pdf}
+
 \hypertarget{federalist-paper-study}{%
 \chapter{Federalist Paper Study}\label{federalist-paper-study}}
 
@@ -1322,10 +1614,6 @@ We use the `\texttt{brm()} function with ``family = poisson'', specifying the of
 \end{verbatim}
 
 \begin{verbatim}
-## recompiling to avoid crashing R session
-\end{verbatim}
-
-\begin{verbatim}
 ## Start sampling
 \end{verbatim}
 
@@ -1347,7 +1635,7 @@ We display summaries of the posterior for \(\lambda\).
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept     0.97      0.06     0.86     1.08 1.00     1553     2145
+## Intercept     0.97      0.06     0.86     1.09 1.00     1602     1974
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -1370,7 +1658,7 @@ The function \texttt{mcmc\_areas()} displays a density estimate of the simulated
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-56-1.pdf}
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-72-1.pdf}
 
 \hypertarget{model-checking}{%
 \section{Model checking}\label{model-checking}}
@@ -1389,7 +1677,7 @@ Here we display density estimates for 10 replicated samples from the posterior p
 ## Using 10 posterior samples for ppc type 'dens_overlay' by default.
 \end{verbatim}
 
-\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-57-1.pdf}
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-73-1.pdf}
 
 Here we use \((\bar y, s_y)\) as a checking function. The scatterplot represents values of \((\bar y, s_y)\) from the posterior predictive distribution of replicated data, and the observed value of \((\bar y, s_y)\) is shown as a dot.
 
@@ -1403,7 +1691,7 @@ Here we use \((\bar y, s_y)\) as a checking function. The scatterplot represents
 ## Using all posterior samples for ppc type 'stat_2d' by default.
 \end{verbatim}
 
-\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-58-1.pdf}
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-74-1.pdf}
 
 The takeaway is that the observed data shows more variability than predicted from the Poisson sampling model.
 
@@ -1464,11 +1752,11 @@ Here are the posterior summaries.
 ## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept     1.00      0.10     0.80     1.19 1.00     2903     2668
+## Intercept     1.00      0.10     0.81     1.19 1.00     3457     2694
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## shape     3.25      1.11     1.72     5.93 1.00     3023     2533
+## shape     3.28      1.10     1.75     5.97 1.00     3450     2535
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -1495,7 +1783,7 @@ I try the same posterior predictive checks as before. The message is that the ne
 ## Using 10 posterior samples for ppc type 'dens_overlay' by default.
 \end{verbatim}
 
-\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-63-1.pdf}
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-79-1.pdf}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1507,7 +1795,7 @@ I try the same posterior predictive checks as before. The message is that the ne
 ## Using all posterior samples for ppc type 'stat_2d' by default.
 \end{verbatim}
 
-\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-64-1.pdf}
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-80-1.pdf}
 
 \hypertarget{comparing-use-of-a-word}{%
 \section{Comparing use of a word}\label{comparing-use-of-a-word}}
@@ -1538,10 +1826,6 @@ Here I fit a regression model for the mean use of ``can'', where the one predict
 \end{verbatim}
 
 \begin{verbatim}
-## recompiling to avoid crashing R session
-\end{verbatim}
-
-\begin{verbatim}
 ## Start sampling
 \end{verbatim}
 
@@ -1563,12 +1847,12 @@ By summarizing the fit, we can see if the two authors differ in their use of the
 ## 
 ## Population-Level Effects: 
 ##                   Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept             1.00      0.10     0.81     1.19 1.00     3762     2790
-## AuthorshipMadison    -0.09      0.16    -0.41     0.23 1.00     3924     3136
+## Intercept             1.00      0.09     0.82     1.19 1.00     3486     2799
+## AuthorshipMadison    -0.08      0.16    -0.40     0.25 1.00     3265     2711
 ## 
 ## Family Specific Parameters: 
 ##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## shape     3.87      1.15     2.20     6.62 1.00     3949     2798
+## shape     3.84      1.12     2.23     6.48 1.00     3497     2824
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
@@ -1669,10 +1953,6 @@ The fitting of this model is done using the \texttt{brm()} function.
 \end{verbatim}
 
 \begin{verbatim}
-## recompiling to avoid crashing R session
-\end{verbatim}
-
-\begin{verbatim}
 ## Start sampling
 \end{verbatim}
 
@@ -1708,7 +1988,7 @@ I find posterior means of the fitted trajectories for all players.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-74-1.pdf}
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-90-1.pdf}
 
 For a given player, define the peak age
 \[
@@ -1740,7 +2020,7 @@ The following graph shows the posterior distributions of the peak ages for all p
 ## Warning: Removed 2 rows containing missing values (geom_bar).
 \end{verbatim}
 
-\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-75-1.pdf}
+\includegraphics{bookdown-demo_files/figure-latex/unnamed-chunk-91-1.pdf}
 
   \bibliography{book.bib,packages.bib}
 

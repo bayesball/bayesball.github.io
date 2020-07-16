@@ -4,11 +4,11 @@
 
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 7 Multilevel Modeling of Proportions | Bayesian Modeling Using Stan</title>
+  <title>Chapter 9 Multiple Regression and Logistic Models | Bayesian Modeling Using Stan</title>
   <meta name="description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
 
-  <meta property="og:title" content="Chapter 7 Multilevel Modeling of Proportions | Bayesian Modeling Using Stan" />
+  <meta property="og:title" content="Chapter 9 Multiple Regression and Logistic Models | Bayesian Modeling Using Stan" />
   <meta property="og:type" content="book" />
   
   
@@ -16,7 +16,7 @@
   <meta name="github-repo" content="rstudio/bookdown-demo" />
 
   <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 7 Multilevel Modeling of Proportions | Bayesian Modeling Using Stan" />
+  <meta name="twitter:title" content="Chapter 9 Multiple Regression and Logistic Models | Bayesian Modeling Using Stan" />
   
   <meta name="twitter:description" content="This is a minimal example of using the bookdown package to write a book. The output format for this example is bookdown::gitbook." />
   
@@ -31,8 +31,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black" />
   
   
-<link rel="prev" href="comparing-rates.html"/>
-<link rel="next" href="multilevel-modeling-of-means.html"/>
+<link rel="prev" href="multilevel-modeling-of-means.html"/>
+<link rel="next" href="federalist-paper-study.html"/>
 <script src="libs/jquery-2.2.3/jquery.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
@@ -234,87 +234,164 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="multilevel-modeling-of-proportions" class="section level1">
-<h1><span class="header-section-number">Chapter 7</span> Multilevel Modeling of Proportions</h1>
-<div id="packages-for-example" class="section level2">
-<h2><span class="header-section-number">7.1</span> Packages for example</h2>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="multilevel-modeling-of-proportions.html#cb67-1"></a><span class="kw">library</span>(ProbBayes)</span>
-<span id="cb67-2"><a href="multilevel-modeling-of-proportions.html#cb67-2"></a><span class="kw">library</span>(tidyverse)</span>
-<span id="cb67-3"><a href="multilevel-modeling-of-proportions.html#cb67-3"></a><span class="kw">library</span>(brms)</span></code></pre></div>
+<div id="multiple-regression-and-logistic-models" class="section level1">
+<h1><span class="header-section-number">Chapter 9</span> Multiple Regression and Logistic Models</h1>
+<div id="load-packages" class="section level2">
+<h2><span class="header-section-number">9.1</span> Load Packages</h2>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="multiple-regression-and-logistic-models.html#cb88-1"></a><span class="kw">library</span>(ProbBayes)</span>
+<span id="cb88-2"><a href="multiple-regression-and-logistic-models.html#cb88-2"></a><span class="kw">library</span>(brms)</span>
+<span id="cb88-3"><a href="multiple-regression-and-logistic-models.html#cb88-3"></a><span class="kw">library</span>(dplyr)</span>
+<span id="cb88-4"><a href="multiple-regression-and-logistic-models.html#cb88-4"></a><span class="kw">library</span>(ggplot2)</span></code></pre></div>
 </div>
-<div id="hospital-study" class="section level2">
-<h2><span class="header-section-number">7.2</span> Hospital Study</h2>
-<p>Table 10.2 gives the number of cases and number of deaths from heart attacks for 13 hospitals in New York City. This data is contained in the data frame <code>DeathHeartAttackManhattan</code> in the <code>ProbBayes</code> package.</p>
+<div id="multiple-regression-example" class="section level2">
+<h2><span class="header-section-number">9.2</span> Multiple regression example</h2>
+<p>Exercise 1 in Chapter 12 describes a dataset that gives the winning time in seconds for the men’s and women’s 100 m butterfly race for the Olympics for the years 1964 through 2016. This data is available as the data frame <code>olympic_butterfly</code> in the <code>ProbBayes</code> package.</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="multiple-regression-and-logistic-models.html#cb89-1"></a><span class="kw">head</span>(olympic_butterfly)</span></code></pre></div>
+<pre><code>##   Year Gender  Time
+## 1 2016  Women 55.48
+## 2 2012  Women 55.98
+## 3 2008  Women 56.73
+## 4 2004  Women 57.72
+## 5 2000  Women 56.61
+## 6 1996  Women 59.13</code></pre>
+<p>Create a new variable <code>year_64</code> which is equal to the number of years after 1964. Also define a <code>gender</code> variable that is 1 (0) if the race is for women (men).</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="multiple-regression-and-logistic-models.html#cb91-1"></a>olympic_butterfly <span class="op">%&gt;%</span></span>
+<span id="cb91-2"><a href="multiple-regression-and-logistic-models.html#cb91-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year_64 =</span> Year <span class="op">-</span><span class="st"> </span><span class="dv">1964</span>,</span>
+<span id="cb91-3"><a href="multiple-regression-and-logistic-models.html#cb91-3"></a>         <span class="dt">gender =</span> <span class="kw">ifelse</span>(Gender <span class="op">==</span><span class="st"> &quot;Women&quot;</span>,</span>
+<span id="cb91-4"><a href="multiple-regression-and-logistic-models.html#cb91-4"></a>                         <span class="dv">1</span>, <span class="dv">0</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb91-5"><a href="multiple-regression-and-logistic-models.html#cb91-5"></a><span class="st">  </span><span class="kw">filter</span>(<span class="kw">is.na</span>(Time) <span class="op">==</span><span class="st"> </span><span class="ot">FALSE</span>) -&gt;</span>
+<span id="cb91-6"><a href="multiple-regression-and-logistic-models.html#cb91-6"></a><span class="st">  </span>olympic_butterfly2</span></code></pre></div>
 </div>
-<div id="a-multilevel-model" class="section level2">
-<h2><span class="header-section-number">7.3</span> A Multilevel Model</h2>
-<p>We consider a different formulation of the hierarchical model described in Section 10.3.</p>
-<p><strong>Sampling</strong></p>
-<p>We first assume that <span class="math inline">\(y_j\)</span>, the number of deaths for the <span class="math inline">\(j\)</span>th hospital, is binomial with sample size <span class="math inline">\(n_j\)</span> and probability <span class="math inline">\(p_j\)</span>. Let <span class="math inline">\(\theta_j = \log (p_j / (1 - p_j))\)</span> denote the logit for the <span class="math inline">\(j\)</span>th hospital.</p>
-<p>Write <span class="math inline">\(\theta_j = \beta + \gamma_j\)</span>.</p>
-<p><strong>Prior</strong></p>
-<ol style="list-style-type: decimal">
-<li><p>We assume the intercept <span class="math inline">\(\beta\)</span> has a student t distribution with mean 0, scale parameter 2.5 and 3 degrees of freedom.</p></li>
-<li><p>We assume <span class="math inline">\(\gamma_1, ..., \gamma_N\)</span> have a normal distribution with mean 0 and standard deviation <span class="math inline">\(\sigma\)</span>.</p></li>
-<li><p>The standard deviation <span class="math inline">\(\sigma\)</span> is assumed to have a t density with mean 0 and standard deviation 3.5.</p></li>
-</ol>
+<div id="the-model" class="section level2">
+<h2><span class="header-section-number">9.3</span> The model</h2>
+<p>Let <span class="math inline">\(y_j\)</span> denote the winning time in seconds for the <span class="math inline">\(j\)</span>th race. We assume that <span class="math inline">\(y_j\)</span> is normal(<span class="math inline">\(\mu_j)\)</span> where the means satisfy the regression model
+<span class="math display">\[
+\mu_j = \beta_0 + \beta_1 x_{1j} + \beta_2 x_{2j},
+\]</span>
+where <span class="math inline">\(x_{1j}\)</span> and <span class="math inline">\(x_{2j}\)</span> are respectively the years after 1964 and the indicator for gender.</p>
+<p>We will assume a weakly informative prior, where each of <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span>, <span class="math inline">\(\beta_2\)</span> and <span class="math inline">\(\sigma\)</span> are given flat distributions with high variances.</p>
 </div>
-<div id="fitting-the-bayesian-model" class="section level2">
-<h2><span class="header-section-number">7.4</span> Fitting the Bayesian model</h2>
-<p>We fit the multilevel model using the `<code>brm()</code> function. Note the use of the “family = binomial” argument to indicate the sampling distribution. The “(1 | Hospital)” component indicates that the <span class="math inline">\(\gamma_j\)</span> have a random distribution.</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="multilevel-modeling-of-proportions.html#cb68-1"></a>fit &lt;-<span class="st"> </span><span class="kw">brm</span>(<span class="dt">data =</span> DeathHeartAttackManhattan, </span>
-<span id="cb68-2"><a href="multilevel-modeling-of-proportions.html#cb68-2"></a>           <span class="dt">family =</span> binomial,</span>
-<span id="cb68-3"><a href="multilevel-modeling-of-proportions.html#cb68-3"></a>           Deaths <span class="op">|</span><span class="st"> </span><span class="kw">trials</span>(Cases) <span class="op">~</span><span class="st"> </span><span class="dv">1</span> <span class="op">+</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">|</span><span class="st"> </span>Hospital),</span>
-<span id="cb68-4"><a href="multilevel-modeling-of-proportions.html#cb68-4"></a>           <span class="dt">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
+<div id="fitting-the-model" class="section level2">
+<h2><span class="header-section-number">9.4</span> Fitting the model</h2>
+<p>The <code>brm()</code> function resembles the syntax of the popular <code>lm()</code> function, but this is implementing a Stan fit.</p>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="multiple-regression-and-logistic-models.html#cb92-1"></a>fit &lt;-<span class="st"> </span><span class="kw">brm</span>(Time <span class="op">~</span><span class="st"> </span>year_<span class="dv">64</span> <span class="op">+</span><span class="st"> </span>gender,</span>
+<span id="cb92-2"><a href="multiple-regression-and-logistic-models.html#cb92-2"></a>           <span class="dt">data =</span> olympic_butterfly2,</span>
+<span id="cb92-3"><a href="multiple-regression-and-logistic-models.html#cb92-3"></a>           <span class="dt">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
 <pre><code>## Compiling Stan program...</code></pre>
 <pre><code>## Start sampling</code></pre>
-<p>We didn’t specify priors, but there are default priors behind the scenes. The <code>prior_summary()</code> function displays the priors.</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="multilevel-modeling-of-proportions.html#cb71-1"></a><span class="kw">prior_summary</span>(fit)</span></code></pre></div>
-<pre><code>##                  prior     class      coef    group resp dpar nlpar bound
-## 1 student_t(3, 0, 2.5) Intercept                                         
-## 2 student_t(3, 0, 2.5)        sd                                         
-## 3                             sd           Hospital                      
-## 4                             sd Intercept Hospital</code></pre>
-</div>
-<div id="posterior-summaries-of-beta-and-sigma" class="section level2">
-<h2><span class="header-section-number">7.5</span> Posterior summaries of <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span></h2>
-<p>The <code>summary()</code> function shows posterior summaries of <span class="math inline">\(\beta\)</span> (the intercept) and the standard deviation <span class="math inline">\(\sigma\)</span>.</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="multilevel-modeling-of-proportions.html#cb73-1"></a><span class="kw">summary</span>(fit)</span></code></pre></div>
-<pre><code>##  Family: binomial 
-##   Links: mu = logit 
-## Formula: Deaths | trials(Cases) ~ 1 + (1 | Hospital) 
-##    Data: DeathHeartAttackManhattan (Number of observations: 13) 
+<p>The <code>plot()</code> function will plot trace and density graphs for each parameter.</p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="multiple-regression-and-logistic-models.html#cb95-1"></a><span class="kw">plot</span>(fit)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-55-1.png" width="672" /></p>
+<p>The <code>summary()</code> function provides posterior summaries for each parameter.</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="multiple-regression-and-logistic-models.html#cb96-1"></a><span class="kw">summary</span>(fit)</span></code></pre></div>
+<pre><code>##  Family: gaussian 
+##   Links: mu = identity; sigma = identity 
+## Formula: Time ~ year_64 + gender 
+##    Data: olympic_butterfly2 (Number of observations: 27) 
 ## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
 ##          total post-warmup samples = 4000
 ## 
-## Group-Level Effects: 
-## ~Hospital (Number of levels: 13) 
-##               Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## sd(Intercept)     0.19      0.15     0.01     0.56 1.00      913     1675
-## 
 ## Population-Level Effects: 
 ##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
-## Intercept    -2.60      0.11    -2.82    -2.37 1.00     2555     1376
+## Intercept    56.91      0.49    55.95    57.85 1.00     3758     2788
+## year_64      -0.15      0.01    -0.17    -0.12 1.00     3977     2958
+## gender        6.42      0.43     5.58     7.25 1.00     4018     2651
+## 
+## Family Specific Parameters: 
+##       Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## sigma     1.11      0.17     0.84     1.50 1.00     3393     2634
 ## 
 ## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
 ## and Tail_ESS are effective sample size measures, and Rhat is the potential
 ## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<p>The <code>posterior_samples()</code> function outputs a matrix of simulated draws of <span class="math inline">\((\beta_0, \beta_1, \beta_2, \sigma)\)</span>.</p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="multiple-regression-and-logistic-models.html#cb98-1"></a>post &lt;-<span class="st"> </span><span class="kw">posterior_samples</span>(fit)</span></code></pre></div>
+<p>To illustrate an inference problem, suppose one is interested in estimating the mean winning time of the men’s race in 1972 which is the function
+<span class="math display">\[
+h(\beta) = \beta_0 + 8 \beta_1
+\]</span></p>
+<p>Below we compute the function <span class="math inline">\(h(\beta)\)</span> on the simulated draws and draw a posterior density estimate.</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="multiple-regression-and-logistic-models.html#cb99-1"></a>post <span class="op">%&gt;%</span></span>
+<span id="cb99-2"><a href="multiple-regression-and-logistic-models.html#cb99-2"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">mean_time_1972 =</span></span>
+<span id="cb99-3"><a href="multiple-regression-and-logistic-models.html#cb99-3"></a>           b_Intercept <span class="op">+</span><span class="st"> </span><span class="dv">8</span> <span class="op">*</span><span class="st"> </span>b_year_<span class="dv">64</span>) -&gt;</span>
+<span id="cb99-4"><a href="multiple-regression-and-logistic-models.html#cb99-4"></a><span class="st">  </span>post</span></code></pre></div>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="multiple-regression-and-logistic-models.html#cb100-1"></a><span class="kw">ggplot</span>(post, <span class="kw">aes</span>(mean_time_<span class="dv">1972</span>)) <span class="op">+</span></span>
+<span id="cb100-2"><a href="multiple-regression-and-logistic-models.html#cb100-2"></a><span class="st">  </span><span class="kw">geom_density</span>()</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-59-1.png" width="672" /></p>
 </div>
-<div id="posterior-summaries-of-hospital-effects" class="section level2">
-<h2><span class="header-section-number">7.6</span> Posterior summaries of hospital effects</h2>
-<p>The <code>posterior_samples()</code> function produces a large matrix of simulated draws where the column corresponds to the parameter and the row corresponds to the iteration number.</p>
-<p>By use of the <code>pivot_longer()</code> function, I reformat the simulation matrix where there is a new variable <code>Hospital</code> indicating the name of the hospital and <code>Effect</code> is the simulated value of <span class="math inline">\(\gamma_j\)</span>. Also I create a new variable that is the number of the hospital from 1 to 13.</p>
-<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="multilevel-modeling-of-proportions.html#cb75-1"></a><span class="kw">posterior_samples</span>(fit) <span class="op">%&gt;%</span><span class="st"> </span></span>
-<span id="cb75-2"><a href="multilevel-modeling-of-proportions.html#cb75-2"></a><span class="st">  </span><span class="kw">pivot_longer</span>(<span class="kw">starts_with</span>(<span class="st">&quot;r_Hospital&quot;</span>),</span>
-<span id="cb75-3"><a href="multilevel-modeling-of-proportions.html#cb75-3"></a>               <span class="dt">names_to =</span> <span class="st">&quot;Hospital&quot;</span>,</span>
-<span id="cb75-4"><a href="multilevel-modeling-of-proportions.html#cb75-4"></a>               <span class="dt">values_to =</span> <span class="st">&quot;Effect&quot;</span>) -&gt;<span class="st"> </span>post</span>
-<span id="cb75-5"><a href="multilevel-modeling-of-proportions.html#cb75-5"></a>post<span class="op">$</span>Hospital_No &lt;-<span class="st"> </span><span class="kw">as.character</span>(<span class="kw">as.numeric</span>(<span class="kw">factor</span>(post<span class="op">$</span>Hospital)))</span></code></pre></div>
-<p>Below is a graph of the posterior distribution of the parameters {<span class="math inline">\(\beta + \gamma_j\)</span>} for all 13 hospitals.</p>
-<p>These are graphed on the logit scale. By taking the inverse logit function, one could find the posterior distributions of the death rates <span class="math inline">\(p_1, ..., p_N\)</span>.</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="multilevel-modeling-of-proportions.html#cb76-1"></a><span class="kw">ggplot</span>(post, <span class="kw">aes</span>(Hospital_No, Effect <span class="op">+</span><span class="st"> </span>b_Intercept)) <span class="op">+</span></span>
-<span id="cb76-2"><a href="multilevel-modeling-of-proportions.html#cb76-2"></a><span class="st">  </span><span class="kw">geom_boxplot</span>() <span class="op">+</span></span>
-<span id="cb76-3"><a href="multilevel-modeling-of-proportions.html#cb76-3"></a><span class="st">  </span><span class="kw">coord_flip</span>()</span></code></pre></div>
-<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-44-1.png" width="672" /></p>
+<div id="logistic-example" class="section level2">
+<h2><span class="header-section-number">9.5</span> Logistic example</h2>
+<p>Exercise 8 of Chapter 12 describes a study where data was collected on some graduate student admission cases. The data is available as the data frame <code>GradSchoolAdmission</code> in the <code>ProbBayes</code> package. The variables include <span class="math inline">\(y\)</span>, a binary variable indicating admission and <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, the GRE score and GPA for the student.</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="multiple-regression-and-logistic-models.html#cb101-1"></a><span class="kw">head</span>(GradSchoolAdmission)</span></code></pre></div>
+<pre><code>##   Admission GRE  GPA
+## 1         0 380 3.61
+## 2         1 660 3.67
+## 3         1 800 4.00
+## 4         1 640 3.19
+## 5         0 520 2.93
+## 6         1 760 3.00</code></pre>
+</div>
+<div id="the-model-1" class="section level2">
+<h2><span class="header-section-number">9.6</span> The model</h2>
+<p>Let <span class="math inline">\(p_i = P(y_i = 1)\)</span> denote the probability of admission for the <span class="math inline">\(i\)</span>th student. We consider the logistic model
+<span class="math display">\[
+\log \left(\frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1 x_{1j} + \beta_2 x_{2j},
+\]</span></p>
+<p>We assume flat, weakly informative priors for <span class="math inline">\(\beta_0, \beta_1, \beta_2\)</span>.</p>
+</div>
+<div id="fitting-the-model-1" class="section level2">
+<h2><span class="header-section-number">9.7</span> Fitting the model</h2>
+<p>We use the <code>brm()</code> function for the Bayesian fitting of this model by Stan-MCMC where the syntax is similar to the <code>glm()</code> function for a traditional fit.</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="multiple-regression-and-logistic-models.html#cb103-1"></a>fit &lt;-<span class="st"> </span><span class="kw">brm</span>(Admission <span class="op">~</span><span class="st"> </span>GRE <span class="op">+</span><span class="st"> </span>GPA,</span>
+<span id="cb103-2"><a href="multiple-regression-and-logistic-models.html#cb103-2"></a>            <span class="dt">data =</span> GradSchoolAdmission,</span>
+<span id="cb103-3"><a href="multiple-regression-and-logistic-models.html#cb103-3"></a>            <span class="dt">family =</span> <span class="kw">bernoulli</span>(),</span>
+<span id="cb103-4"><a href="multiple-regression-and-logistic-models.html#cb103-4"></a>             <span class="dt">refresh =</span> <span class="dv">0</span>)</span></code></pre></div>
+<pre><code>## Compiling Stan program...</code></pre>
+<pre><code>## Start sampling</code></pre>
+<p>We display trace and density estimate graphs for each regression parameter.</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="multiple-regression-and-logistic-models.html#cb106-1"></a><span class="kw">plot</span>(fit)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-62-1.png" width="672" /></p>
+<p>We summarize the marginal posterior distributions for each parameter.</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="multiple-regression-and-logistic-models.html#cb107-1"></a><span class="kw">print</span>(fit)</span></code></pre></div>
+<pre><code>##  Family: bernoulli 
+##   Links: mu = logit 
+## Formula: Admission ~ GRE + GPA 
+##    Data: GradSchoolAdmission (Number of observations: 400) 
+## Samples: 4 chains, each with iter = 2000; warmup = 1000; thin = 1;
+##          total post-warmup samples = 4000
+## 
+## Population-Level Effects: 
+##           Estimate Est.Error l-95% CI u-95% CI Rhat Bulk_ESS Tail_ESS
+## Intercept    -5.00      1.08    -7.21    -2.92 1.00     2205     1937
+## GRE           0.00      0.00     0.00     0.00 1.00     4208     3302
+## GPA           0.76      0.32     0.17     1.40 1.00     1843     1661
+## 
+## Samples were drawn using sampling(NUTS). For each parameter, Bulk_ESS
+## and Tail_ESS are effective sample size measures, and Rhat is the potential
+## scale reduction factor on split chains (at convergence, Rhat = 1).</code></pre>
+<p>We use the <code>posterior_samples()</code> function to obtain the matrix of simulated draws from the joint posterior.</p>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="multiple-regression-and-logistic-models.html#cb109-1"></a>post &lt;-<span class="st"> </span><span class="kw">posterior_samples</span>(fit)</span></code></pre></div>
+<p>Suppose we are interested in estimating the probability of admission for two students with the following covariate values</p>
+<ul>
+<li>GRE = 550, GPA = 3.5</li>
+<li>GRE = 500, GPA = 4.0</li>
+</ul>
+<p>Below we first define a function that computes the inverse logit of a value. By using this inverse logit function, we compute the probability of admission for each of these two students.</p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="multiple-regression-and-logistic-models.html#cb110-1"></a>invlogit &lt;-<span class="st"> </span><span class="cf">function</span>(x){</span>
+<span id="cb110-2"><a href="multiple-regression-and-logistic-models.html#cb110-2"></a>  <span class="kw">exp</span>(x) <span class="op">/</span><span class="st"> </span>(<span class="dv">1</span> <span class="op">+</span><span class="st"> </span><span class="kw">exp</span>(x))</span>
+<span id="cb110-3"><a href="multiple-regression-and-logistic-models.html#cb110-3"></a>}</span>
+<span id="cb110-4"><a href="multiple-regression-and-logistic-models.html#cb110-4"></a>post <span class="op">%&gt;%</span></span>
+<span id="cb110-5"><a href="multiple-regression-and-logistic-models.html#cb110-5"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">p_550_3.5 =</span> <span class="kw">invlogit</span>(b_Intercept <span class="op">+</span></span>
+<span id="cb110-6"><a href="multiple-regression-and-logistic-models.html#cb110-6"></a><span class="st">                </span>b_GRE <span class="op">*</span><span class="st"> </span><span class="dv">550</span> <span class="op">+</span><span class="st"> </span>b_GPA <span class="op">*</span><span class="st"> </span><span class="fl">3.5</span>),</span>
+<span id="cb110-7"><a href="multiple-regression-and-logistic-models.html#cb110-7"></a>         <span class="dt">p_550_4.0 =</span> <span class="kw">invlogit</span>(b_Intercept <span class="op">+</span></span>
+<span id="cb110-8"><a href="multiple-regression-and-logistic-models.html#cb110-8"></a><span class="st">                </span>b_GRE <span class="op">*</span><span class="st"> </span><span class="dv">550</span> <span class="op">+</span><span class="st"> </span>b_GPA <span class="op">*</span><span class="st"> </span><span class="fl">4.0</span>)) -&gt;</span>
+<span id="cb110-9"><a href="multiple-regression-and-logistic-models.html#cb110-9"></a><span class="st">  </span>post</span></code></pre></div>
+<p>We display density estimates for the probability of admission for these two students where the blue curve corresponds to the student where GRE = 550 and GPA = 3.5 and the red curve corresponds to the student where GRE = 550 and GPA = 4.0.</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="multiple-regression-and-logistic-models.html#cb111-1"></a><span class="kw">ggplot</span>(post, <span class="kw">aes</span>(p_<span class="dv">550</span>_<span class="fl">3.5</span>)) <span class="op">+</span></span>
+<span id="cb111-2"><a href="multiple-regression-and-logistic-models.html#cb111-2"></a><span class="st">  </span><span class="kw">geom_density</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
+<span id="cb111-3"><a href="multiple-regression-and-logistic-models.html#cb111-3"></a><span class="st">  </span><span class="kw">geom_density</span>(<span class="kw">aes</span>(p_<span class="dv">550</span>_<span class="fl">4.0</span>),</span>
+<span id="cb111-4"><a href="multiple-regression-and-logistic-models.html#cb111-4"></a>               <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
 
 </div>
 </div>
@@ -323,8 +400,8 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
           </div>
         </div>
       </div>
-<a href="comparing-rates.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="multilevel-modeling-of-means.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+<a href="multilevel-modeling-of-means.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="federalist-paper-study.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
@@ -355,7 +432,7 @@ gitbook.start({
 "size": 2
 },
 "edit": {
-"link": "https://github.com/rstudio/bookdown-demo/edit/master/06-multilevel_proportions.Rmd",
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/08-regression_logistic.Rmd",
 "text": "Edit"
 },
 "history": {
