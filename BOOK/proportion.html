@@ -24,7 +24,7 @@
 <meta name="author" content="Jim Albert and Jingchen Hu" />
 
 
-<meta name="date" content="2020-07-20" />
+<meta name="date" content="2020-07-30" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -410,7 +410,7 @@ p = \{0.3, 0.4, 0.5, 0.6, 0.7, 0.8\}
 \label{eq:dining:p}
 \tag{7.1}
 \end{eqnarray}\]</span></p>
-<p>Next one needs to assign probabilities to the list of plausible values of <span class="math inline">\(p\)</span>. Since one may not know much about the location of the probabilities <span class="math inline">\(p\)</span>, a good place to start is a discrete Uniform prior (recall the discrete Uniform prior distribution for <span class="math inline">\(p\)</span>, the proportion of red balls, in Section 7.1). A discrete Uniform prior distribution expresses the opinion that all plausible values of <span class="math inline">\(p\)</span> are equally likely. In the current students’ dining preference example, if one decides on six plausible values of <span class="math inline">\(p\)</span> as in Equation (7.1), each of the six values gets a prior probability of 1/6. One labels this prior as <span class="math inline">\(\pi_l\)</span>, where <span class="math inline">\(l\)</span> stands for laymen (for all of us who are not in the college town restaurant business). %Note that in the notation <span class="math inline">\(f_l(p)\)</span>, the first <span class="math inline">\(p\)</span> stands for probability, and the <span class="math inline">\(p\)</span> in the parenthesis is our quantity of interest, the proportion <span class="math inline">\(p\)</span> of students preferring to dine out on Friday.</p>
+<p>Next one needs to assign probabilities to the list of plausible values of <span class="math inline">\(p\)</span>. Since one may not know much about the location of the probabilities <span class="math inline">\(p\)</span>, a good place to start is a discrete Uniform prior (recall the discrete Uniform prior distribution for <span class="math inline">\(p\)</span>, the proportion of red balls, in Section 7.1). A discrete Uniform prior distribution expresses the opinion that all plausible values of <span class="math inline">\(p\)</span> are equally likely. In the current students’ dining preference example, if one decides on six plausible values of <span class="math inline">\(p\)</span> as in Equation (7.1), each of the six values gets a prior probability of 1/6. One labels this prior as <span class="math inline">\(\pi_l\)</span>, where <span class="math inline">\(l\)</span> stands for laymen (for all of us who are not in the college town restaurant business). Note that in the notation <span class="math inline">\(f_l(p)\)</span>, the first <span class="math inline">\(p\)</span> stands for probability, and the <span class="math inline">\(p\)</span> in the parenthesis is our quantity of interest, the proportion <span class="math inline">\(p\)</span> of students preferring to dine out on Friday.</p>
 <p><span class="math display" id="eq:prior1">\[\begin{eqnarray}
 \pi_l(p)= (1/6, 1/6, 1/6, 1/6, 1/6, 1/6)
 \label{eq:dining:laymenprior}
@@ -638,7 +638,7 @@ that value, F(x).</li>
 </ul>
 <p>For example, suppose one is interested in simulating a sample of size five from <span class="math inline">\(\textrm{Beta}(1, 1)\)</span>.</p>
 <div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="proportion.html#cb19-1"></a><span class="kw">rbeta</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div>
-<pre><code>## [1] 0.3589953 0.7634280 0.8095584 0.7574348 0.7244004</code></pre>
+<pre><code>## [1] 0.5908538 0.6020907 0.3867753 0.2924141 0.6692194</code></pre>
 <p>There are additional functions in the <code>ProbBayes</code> R package that aid in visualizing Beta distribution calculations.
 For example, suppose one has a <span class="math inline">\(\textrm{Beta}(7, 10)\)</span> curve and we want to find the chance that <span class="math inline">\(p\)</span> is between 0.4 and 0.8. Looking at Figure 7.5, this probability corresponds to the area of the shaded region. The special function <code>beta_area()</code> will compute and illustrate this probability. Note the use of the vector <code>c(7, 10)</code> to input the two shape parameters.</p>
 <pre><code>beta_area(0.4, 0.8, c(7, 10))</code></pre>
@@ -691,8 +691,8 @@ Figure 7.7: Histograms of 1000 samples of two Beta density curves Beta(4, 4) and
 <p>To further check the quantiles of the prior, one can use the <code>quantile()</code> function on the simulated draws from the prior. For example, if one wishes to check the middle 50% range of values of <span class="math inline">\(p\)</span> from the random sample of values from <span class="math inline">\(\textrm{Beta}(4, 4)\)</span>, one types</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="proportion.html#cb29-1"></a>Beta44samples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1000</span>, <span class="dv">4</span>, <span class="dv">4</span>)</span>
 <span id="cb29-2"><a href="proportion.html#cb29-2"></a><span class="kw">quantile</span>(Beta44samples, <span class="kw">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>))</span></code></pre></div>
-<pre><code>##      25%      75% 
-## 0.384948 0.625919</code></pre>
+<pre><code>##       25%       75% 
+## 0.3759192 0.6207058</code></pre>
 <p>This tells us that the probability that <span class="math inline">\(p \leq 0.366\)</span> is 0.25 and the probability that <span class="math inline">\(p \geq 0.616\)</span> is also 0.25. These probability statements should be checked against one’s prior belief about <span class="math inline">\(p\)</span>. If these quantiles do not seem reasonable, one should make adjustments to the values of the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> .</p>
 <p>On the surface the two priors <span class="math inline">\(\textrm{Beta}(4, 4)\)</span> and <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> seem similar in that they both have a mean of <span class="math inline">\(0.5\)</span> and represent similar breakdowns of the success and failure counts. However, the aforementioned concept of prior sample size tells us that <span class="math inline">\(\textrm{Beta}(4, 4)\)</span> has a prior sample size of 8 while that of <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> is 80. As we will see in Section 7.4, the prior sample size determines the strength of the prior (i.e. the confidence level in the prior) and so the <span class="math inline">\(\textrm{Beta}(40, 40)\)</span> prior represents a much stronger belief that <span class="math inline">\(p\)</span> is close to the value 0.5.</p>
 <p>A second indirect method of determining a Beta prior is by specification of quantiles of the distribution. Specifically, one determines the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> by first specifying two quantiles of the Beta density curve, and then finding the Beta density curve that matches these quantiles. Suppose the restaurant owner uses his knowledge to specify the 0.5 and 0.9 quantiles of the proportion <span class="math inline">\(p\)</span> as follows.</p>
@@ -757,17 +757,17 @@ f(Y =12 \mid p) = L(p) = {20 \choose 12}p^{12}(1-p)^{8}.
 \pi(p \mid y) \propto \pi(p) \times L(p).
 \end{eqnarray*}\]</span></p>
 <p>Substituting the current prior and likelihood, one can perform the algebra for the posterior density.
-<span class="math display">\[\begin{eqnarray}
+<span class="math display" id="eq:betaposterior">\[\begin{eqnarray}
 \pi(p \mid Y = 12) &amp;\propto&amp; \pi(p) \times f(Y = 12 \mid p) \nonumber \\
 &amp;=&amp;  \frac{1}{B(3.06, 2.56)}p^{3.06-1}(1-p)^{2.56-1} \times \nonumber \\
 &amp;&amp; {20 \choose 12}p^{12}(1-p)^{8} \nonumber \\
 \texttt{[drop the constants]} &amp;\propto&amp; p^{12}(1-p)^{8}p^{3.06-1}(1-p)^{2.56-1} \nonumber \\
 \texttt{[combine the powers]} &amp;=&amp; p^{15.06-1}(1-p)^{10.56-1}. \nonumber \\
+\tag{7.11}
 \end{eqnarray}\]</span>
 One observes that the posterior density of <span class="math inline">\(p\)</span> given <span class="math inline">\(Y = 12\)</span> is, up to a proportionality constant,
-<span class="math display" id="eq:betaposterior">\[\begin{eqnarray*}
+<span class="math display">\[\begin{eqnarray*}
 \pi(p \mid Y = 12) \propto p^{15.06-1}(1-p)^{10.56-1}.
-\tag{7.11}
 \end{eqnarray*}\]</span></p>
 <p>
 Note that in the posterior derivation, the constants <span class="math inline">\({20 \choose 12}\)</span> and <span class="math inline">\(\frac{1}{B(3.06, 2.56)}\)</span> are dropped due to the proportional sign “<span class="math inline">\(\propto\)</span>”. That is, the expression of <span class="math inline">\(\pi(p \mid Y = 12)\)</span> is computed up to some constant. In this case, Appendix A demonstrates the calculation of the constant.</p>
@@ -880,7 +880,7 @@ Figure 7.10: Probability of the hypothesis from the Beta posterior density.
 <span id="cb37-2"><a href="proportion.html#cb37-2"></a>BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</span></code></pre></div>
 <p>The proportion of the 1000 simulated values of <span class="math inline">\(p\)</span> that are at least 0.75 gives an approximation of the probability that <span class="math inline">\(p \geq 0.75\)</span>.</p>
 <div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="proportion.html#cb38-1"></a><span class="kw">sum</span>(BetaSamples <span class="op">&gt;=</span><span class="st"> </span><span class="fl">0.75</span>) <span class="op">/</span><span class="st"> </span>S</span></code></pre></div>
-<pre><code>## [1] 0.04</code></pre>
+<pre><code>## [1] 0.048</code></pre>
 <p>The simulation-based probability estimate is 0.037 which is an accurate approximation to the exact probability 0.04 obtained before.</p>
 <p>It would be reasonable to question the choice of the number of simulations <span class="math inline">\(S = 1000\)</span>. One can change the simulation sample size to larger or smaller values as one sees fit. In general, the larger the value of <span class="math inline">\(S\)</span>, the more accurate the approximation. Figure 7.11 shows that the shape of a histogram of the simulated values of <span class="math inline">\(p\)</span> approaches the exact posterior density as the value of <span class="math inline">\(S\)</span> changes from 100 to 10,000. The corresponding simulation-based probabilities of <span class="math inline">\(p \geq 0.75\)</span> are <span class="math inline">\(\{0.02, 0.05, 0.033, 0.0422\}\)</span> indicating that the accuracy of the approximation improves for larger simulation sample sizes.</p>
 <div class="figure"><span id="fig:unnamed-chunk-31"></span>
@@ -915,7 +915,7 @@ Figure 7.12: Display of 90% probability interval for the proportion <span class=
 <span id="cb45-2"><a href="proportion.html#cb45-2"></a>BetaSamples &lt;-<span class="st"> </span><span class="kw">rbeta</span>(S, <span class="fl">15.06</span>, <span class="fl">10.56</span>)</span>
 <span id="cb45-3"><a href="proportion.html#cb45-3"></a><span class="kw">quantile</span>(BetaSamples, <span class="kw">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code></pre></div>
 <pre><code>##        5%       95% 
-## 0.4306352 0.7372992</code></pre>
+## 0.4181172 0.7311519</code></pre>
 <p>The approximate middle 90% credible interval is [0.427, 0.733], which is close in value to the exact 90% credible interval [0.427, 0.741] computed using the <code>qbeta()</code> and <code>beta_interval()</code> functions. In an end-of-chapter exercise the reader is encouraged to practice and experiment with different values of the size of the simulated sample <span class="math inline">\(S\)</span>.</p>
 </div>
 <div id="bayesian-prediction" class="section level3">
@@ -1069,7 +1069,7 @@ Prob(7 \le \tilde Y \le 16) = 0.919.
 <span id="cb51-2"><a href="proportion.html#cb51-2"></a>n &lt;-<span class="st"> </span><span class="dv">20</span>; y &lt;-<span class="st"> </span><span class="dv">12</span></span>
 <span id="cb51-3"><a href="proportion.html#cb51-3"></a>pred_p_sim &lt;-<span class="st"> </span><span class="kw">rbeta</span>(<span class="dv">1</span>, a <span class="op">+</span><span class="st"> </span>y, b <span class="op">+</span><span class="st"> </span>n <span class="op">-</span><span class="st"> </span>y)</span>
 <span id="cb51-4"><a href="proportion.html#cb51-4"></a>(pred_y_sim &lt;-<span class="st"> </span><span class="kw">rbinom</span>(<span class="dv">1</span>, n, pred_p_sim))</span></code></pre></div>
-<pre><code>## [1] 15</code></pre>
+<pre><code>## [1] 7</code></pre>
 <p>Due to the ability of R to work easily with vectors, ]the same code is essentially used for simulating <span class="math inline">\(S = 1000\)</span> draws from the predictive distribution.<br />
 In the following R script, <code>pred_p_sim</code> contains 1000 simulated draws from the posterior, and for each element of this posterior sample, the <code>rbinom()</code> function is used to simulate a corresponding value of <span class="math inline">\(\tilde Y\)</span> from the Binomial sampling density.</p>
 <div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="proportion.html#cb53-1"></a>a &lt;-<span class="st"> </span><span class="fl">3.06</span>; b &lt;-<span class="st"> </span><span class="fl">2.56</span></span>
@@ -1157,8 +1157,9 @@ q(y) = \frac{q f_1(Y = y)}{q f_1(Y = y) + (1 - q) f_2(Y =y)}
 \tag{7.22}
 \end{eqnarray}\]</span>
 where <span class="math inline">\(f_1(Y = y)\)</span> and <span class="math inline">\(f_2(Y = y)\)</span> denote the predictive densities corresponding to the owner’s and worker’s priors. With a little algebra, one represents the posterior odds of the model probabilities as follows.</p>
-<p><span class="math display">\[\begin{eqnarray}
+<p><span class="math display" id="eq:bayescompare5">\[\begin{eqnarray}
 \frac{P(Prior \, 1 \mid Y = y)}{P(Prior \, 2 \mid Y = y)} = \frac{q(y)}{1 - q(y)} = \left[\frac{q}{1 - q}\right] \left[\frac{f_1(Y = y)}{f_2(Y = y)}\right]
+\tag{7.23}
 \end{eqnarray}\]</span></p>
 <p>The posterior odds of the owner’s prior <span class="math inline">\(P(Prior \, 1 \mid Y = y) / P(Prior \, 2 \mid y = y)\)</span> is written as the product of two terms.</p>
 <ul>
@@ -1439,8 +1440,9 @@ To illustrate the advantage of simulation, suppose one is interested in finding 
 </ol>
 <p>In Chapter 6 Section 6.3, we discussed the Multinomial distribution, an extension of the Binomial distribution where each trial has more than two outcomes.
 As an application of a Multinomial experiment, in an analysis of an election poll, suppose that one wants inferences for three probabilities: <span class="math inline">\(\theta_A\)</span> = probability of a vote for a candidate from Party A, <span class="math inline">\(\theta_B\)</span> = probability of a vote for a candidate from Party B and <span class="math inline">\(\theta_C\)</span> = probability of a vote for a candidate from Party C. One assumes <span class="math inline">\(\theta_A + \theta_B + \theta_C = 1\)</span> as people can vote for only one party. If a random sample of <span class="math inline">\(n\)</span> potential voters is taken, the respective voter counts <span class="math inline">\(Y_A, Y_B, Y_C\)</span> has the probability mass function</p>
-<p><span class="math display">\[\begin{equation}
+<p><span class="math display" id="eq:multinomial">\[\begin{equation}
 p(Y_A = y_A, Y_B = y_B, Y_C = y_C) = \frac{n!}{y_A! y_B! y_C!}\theta_A^{y_A}\theta_B^{y_B}\theta_C^{y_C},
+\tag{7.24}
 \end{equation}\]</span>
 where <span class="math inline">\(y_A + y_B + y_C = n\)</span> and <span class="math inline">\(y_A, y_B, y_C \geq 0\)</span>. This is written <span class="math inline">\(\textrm{Multinomial}(n; \theta_A, \theta_B, \theta_C)\)</span>.</p>
 <ol style="list-style-type: lower-alpha">
