@@ -1681,7 +1681,8 @@ div.tocify {
 <ul>
 <li><p>The <code>baseballr</code> package is useful for collecting Statcast data.</p></li>
 <li><p>The <code>mcgv</code> package contains the <code>gam()</code> function for doing the generalized additive model fitting.</p></li>
-<li><p>The <code>metR</code> package contains the <code>geom_contour_fill()</code> function for displaying the filled contour plots.</p></li>
+<li><p>The <code>ggplot2</code> package is used to construct the visualizations.</p></li>
+<li><p>The <code>metR</code> package contains the special <code>geom_contour_fill()</code> function for displaying the filled contour plots.</p></li>
 </ul>
 </div>
 <div id="installation" class="section level3">
@@ -1694,10 +1695,10 @@ install_github(&quot;bayesball/CalledStrike&quot;)</code></pre>
 <h3>Producing the Graphs</h3>
 <p>Here are the basic steps to produce these graphs.</p>
 <ul>
-<li><p>By use of one of the set_up functions, define the relevant dataset and define any new variables if needed. For example, if one wants to graph the probability of contact on a swing, then want to only consider pitches where the batter takes a swing.</p></li>
-<li><p>Use a generalized additive model to fit a smooth model to the measure over the (plate_x, plate_z) measurements. In the case where the response is binary (1 or 0) fit a binary gam with logit link. When the response is continuous, use a continous-response gam.</p></li>
-<li><p>Use the model estimates to predict the measure over a 50 by 50 grid over the zone.</p></li>
-<li><p>Use the <code>geom_tile()</code> or <code>geom_contour_fill()</code> contours to graph the predicted values</p></li>
+<li><p>By use of one of the set_up functions, define the relevant dataset and define any new variables if needed. For example, if one wants to graph the probability of contact on a swing, then want to only consider pitches where the batter takes a swing (function <code>setup_swing()</code>). To graph the probability of a called strike, one restricts the pitches to the balls or strikes that are called (function <code>setup_called()</code>).</p></li>
+<li><p>Use a generalized additive model to fit a smooth model to the measure over the (plate_x, plate_z) surface. In the case where the response is binary (1 or 0), fit a binary gam with logit link. When the response is continuous, such as a launch velocity, use a continuous-response gam.</p></li>
+<li><p>Use the model estimates to predict the measure over a 50 by 50 grid over the zone. (The <code>grid_predict()</code> function is used.)</p></li>
+<li><p>Use the <code>geom_tile()</code> or <code>geom_contour_fill()</code> geometric objects to graph the predicted values</p></li>
 </ul>
 </div>
 <div id="collecting-statcast-data" class="section level3">
