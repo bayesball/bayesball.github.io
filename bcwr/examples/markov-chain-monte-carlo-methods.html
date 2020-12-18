@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Markov Chain Monte Carlo Methods | Bayesian Computation with R Scripts</title>
+  <meta name="description" content="This contains all the worked examples from the text." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Markov Chain Monte Carlo Methods | Bayesian Computation with R Scripts" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This contains all the worked examples from the text." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Markov Chain Monte Carlo Methods | Bayesian Computation with R Scripts" />
+  
+  <meta name="twitter:description" content="This contains all the worked examples from the text." />
+  
+
+<meta name="author" content="Jim Albert" />
+
+
+<meta name="date" content="2020-12-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction-to-bayesian-computation.html"/>
+<link rel="next" href="hierarchical-modeling.html"/>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Bayesian Computation with R, 2nd Edition</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html"><i class="fa fa-check"></i><b>2</b> Introduction to Bayesian Thinking</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#learning-about-the-proportion-of-heavy-sleepers"><i class="fa fa-check"></i><b>2.1</b> Learning About the Proportion of Heavy Sleepers</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#using-a-discrete-prior"><i class="fa fa-check"></i><b>2.2</b> Using a Discrete Prior</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#using-a-beta-prior"><i class="fa fa-check"></i><b>2.3</b> Using a Beta Prior</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#using-a-histogram-prior"><i class="fa fa-check"></i><b>2.4</b> Using a Histogram Prior</a></li>
+<li class="chapter" data-level="2.5" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#prediction"><i class="fa fa-check"></i><b>2.5</b> Prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="single-parameter-models.html"><a href="single-parameter-models.html"><i class="fa fa-check"></i><b>3</b> Single-Parameter Models</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="single-parameter-models.html"><a href="single-parameter-models.html#normal-distribution-with-known-mean-but-unknown-variance"><i class="fa fa-check"></i><b>3.1</b> Normal Distribution with Known Mean but Unknown Variance</a></li>
+<li class="chapter" data-level="3.2" data-path="single-parameter-models.html"><a href="single-parameter-models.html#estimating-a-heart-transplant-mortality-rate"><i class="fa fa-check"></i><b>3.2</b> Estimating a Heart Transplant Mortality Rate</a></li>
+<li class="chapter" data-level="3.3" data-path="single-parameter-models.html"><a href="single-parameter-models.html#an-illustration-of-bayesian-robustness"><i class="fa fa-check"></i><b>3.3</b> An Illustration of Bayesian Robustness</a></li>
+<li class="chapter" data-level="3.4" data-path="single-parameter-models.html"><a href="single-parameter-models.html#mixtures-of-conjugate-priors"><i class="fa fa-check"></i><b>3.4</b> Mixtures of Conjugate Priors</a></li>
+<li class="chapter" data-level="3.5" data-path="single-parameter-models.html"><a href="single-parameter-models.html#a-bayesian-test-of-the-fairness-of-a-coin"><i class="fa fa-check"></i><b>3.5</b> A Bayesian Test of the Fairness of a Coin</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="multiparameter-models.html"><a href="multiparameter-models.html"><i class="fa fa-check"></i><b>4</b> Multiparameter Models</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="multiparameter-models.html"><a href="multiparameter-models.html#normal-data-with-both-parameters-unknown"><i class="fa fa-check"></i><b>4.1</b> Normal Data with Both Parameters Unknown</a></li>
+<li class="chapter" data-level="4.2" data-path="multiparameter-models.html"><a href="multiparameter-models.html#a-multinomial-model"><i class="fa fa-check"></i><b>4.2</b> A Multinomial Model</a></li>
+<li class="chapter" data-level="4.3" data-path="multiparameter-models.html"><a href="multiparameter-models.html#a-bioassay-experiment"><i class="fa fa-check"></i><b>4.3</b> A Bioassay Experiment</a></li>
+<li class="chapter" data-level="4.4" data-path="multiparameter-models.html"><a href="multiparameter-models.html#comparing-two-proportions"><i class="fa fa-check"></i><b>4.4</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html"><i class="fa fa-check"></i><b>5</b> Introduction to Bayesian Computation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#a-beta-binomial-model-for-overdispersion"><i class="fa fa-check"></i><b>5.1</b> A Beta-Binomial Model for Overdispersion</a></li>
+<li class="chapter" data-level="5.2" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#approximations-based-on-posterior-modes"><i class="fa fa-check"></i><b>5.2</b> Approximations Based on Posterior Modes</a></li>
+<li class="chapter" data-level="5.3" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#monte-carlo-method-for-computing-integrals"><i class="fa fa-check"></i><b>5.3</b> Monte Carlo Method for Computing Integrals</a></li>
+<li class="chapter" data-level="5.4" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#rejection-sampling"><i class="fa fa-check"></i><b>5.4</b> Rejection Sampling</a></li>
+<li class="chapter" data-level="5.5" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#importance-sampling"><i class="fa fa-check"></i><b>5.5</b> Importance Sampling</a></li>
+<li class="chapter" data-level="5.6" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#sampling-importance-resampling"><i class="fa fa-check"></i><b>5.6</b> Sampling Importance Resampling</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html"><i class="fa fa-check"></i><b>6</b> Markov Chain Monte Carlo Methods</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#introduction-to-discrete-markov-chains"><i class="fa fa-check"></i><b>6.1</b> Introduction to Discrete Markov Chains</a></li>
+<li class="chapter" data-level="6.2" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#learning-about-a-normal-population-from-grouped-data"><i class="fa fa-check"></i><b>6.2</b> Learning about a Normal Population from Grouped Data</a></li>
+<li class="chapter" data-level="6.3" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#example-of-output-analysis"><i class="fa fa-check"></i><b>6.3</b> Example of Output Analysis</a></li>
+<li class="chapter" data-level="6.4" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#modeling-data-with-cauchy-errors"><i class="fa fa-check"></i><b>6.4</b> Modeling Data with Cauchy Errors</a></li>
+<li class="chapter" data-level="6.5" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#analysis-of-the-stanford-heart-transplant-data"><i class="fa fa-check"></i><b>6.5</b> Analysis of the Stanford Heart Transplant Data</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html"><i class="fa fa-check"></i><b>7</b> Hierarchical Modeling</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#introduction-to-hierarchical-modeling"><i class="fa fa-check"></i><b>7.1</b> Introduction to Hierarchical Modeling</a></li>
+<li class="chapter" data-level="7.2" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#individual-or-combined-estimates"><i class="fa fa-check"></i><b>7.2</b> Individual or Combined Estimates</a></li>
+<li class="chapter" data-level="7.3" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#equal-mortality-rates"><i class="fa fa-check"></i><b>7.3</b> Equal Mortality Rates?</a></li>
+<li class="chapter" data-level="7.4" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#modeling-a-prior-belief-of-exchangeability"><i class="fa fa-check"></i><b>7.4</b> Modeling a Prior Belief of Exchangeability</a></li>
+<li class="chapter" data-level="7.5" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#simulating-from-the-posterior"><i class="fa fa-check"></i><b>7.5</b> Simulating from the Posterior</a></li>
+<li class="chapter" data-level="7.6" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#posterior-inferences"><i class="fa fa-check"></i><b>7.6</b> Posterior Inferences</a></li>
+<li class="chapter" data-level="7.7" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#bayesian-sensitivity-analysis"><i class="fa fa-check"></i><b>7.7</b> Bayesian Sensitivity Analysis</a></li>
+<li class="chapter" data-level="7.8" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#posterior-predictive-model-checking"><i class="fa fa-check"></i><b>7.8</b> Posterior Predictive Model Checking</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>8</b> Model Comparison</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="model-comparison.html"><a href="model-comparison.html#a-one-sided-test-of-a-normal-mean"><i class="fa fa-check"></i><b>8.1</b> A One-Sided Test of a Normal Mean</a></li>
+<li class="chapter" data-level="8.2" data-path="model-comparison.html"><a href="model-comparison.html#a-two-sided-test-of-a-normal-mean"><i class="fa fa-check"></i><b>8.2</b> A Two-Sided Test of a Normal Mean</a></li>
+<li class="chapter" data-level="8.3" data-path="model-comparison.html"><a href="model-comparison.html#models-for-soccer-goals"><i class="fa fa-check"></i><b>8.3</b> Models for Soccer Goals</a></li>
+<li class="chapter" data-level="8.4" data-path="model-comparison.html"><a href="model-comparison.html#is-a-baseball-hitter-really-streaky"><i class="fa fa-check"></i><b>8.4</b> Is a Baseball Hitter Really Streaky?</a></li>
+<li class="chapter" data-level="8.5" data-path="model-comparison.html"><a href="model-comparison.html#a-test-of-independence-in-a-two-way-contingency-table"><i class="fa fa-check"></i><b>8.5</b> A Test of Independence in a Two-Way Contingency Table</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regression-models.html"><a href="regression-models.html"><i class="fa fa-check"></i><b>9</b> Regression Models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regression-models.html"><a href="regression-models.html#an-example-of-bayesian-regression"><i class="fa fa-check"></i><b>9.1</b> An Example of Bayesian Regression</a></li>
+<li class="chapter" data-level="9.2" data-path="regression-models.html"><a href="regression-models.html#modeling-using-zellners-g-prior"><i class="fa fa-check"></i><b>9.2</b> Modeling Using Zellner’s g Prior</a></li>
+<li class="chapter" data-level="9.3" data-path="regression-models.html"><a href="regression-models.html#survival-modeling"><i class="fa fa-check"></i><b>9.3</b> Survival Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html"><i class="fa fa-check"></i><b>10</b> Gibbs Sampling</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html#robust-modeling"><i class="fa fa-check"></i><b>10.1</b> Robust Modeling</a></li>
+<li class="chapter" data-level="10.2" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html#binary-response-regression-with-a-probit-link"><i class="fa fa-check"></i><b>10.2</b> Binary Response Regression with a Probit Link</a></li>
+<li class="chapter" data-level="10.3" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html#estimating-a-table-of-means"><i class="fa fa-check"></i><b>10.3</b> Estimating a Table of Means</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Bayesian Computation with R Scripts</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="markov-chain-monte-carlo-methods" class="section level1" number="6">
+<h1><span class="header-section-number">Chapter 6</span> Markov Chain Monte Carlo Methods</h1>
+<div id="introduction-to-discrete-markov-chains" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> Introduction to Discrete Markov Chains</h2>
+<p>Illustration of sampling from a random walk distribution.</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb137-1"><a href="markov-chain-monte-carlo-methods.html#cb137-1" aria-hidden="true" tabindex="-1"></a>P <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">5</span>, .<span class="dv">5</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, </span>
+<span id="cb137-2"><a href="markov-chain-monte-carlo-methods.html#cb137-2" aria-hidden="true" tabindex="-1"></a>           .<span class="dv">25</span>, .<span class="dv">5</span>, .<span class="dv">25</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, </span>
+<span id="cb137-3"><a href="markov-chain-monte-carlo-methods.html#cb137-3" aria-hidden="true" tabindex="-1"></a>           <span class="dv">0</span>, .<span class="dv">25</span>, .<span class="dv">5</span>, .<span class="dv">25</span>, <span class="dv">0</span>, <span class="dv">0</span>,</span>
+<span id="cb137-4"><a href="markov-chain-monte-carlo-methods.html#cb137-4" aria-hidden="true" tabindex="-1"></a>           <span class="dv">0</span>, <span class="dv">0</span>, .<span class="dv">25</span>, .<span class="dv">5</span>, .<span class="dv">25</span>, <span class="dv">0</span>, </span>
+<span id="cb137-5"><a href="markov-chain-monte-carlo-methods.html#cb137-5" aria-hidden="true" tabindex="-1"></a>           <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, .<span class="dv">25</span>, .<span class="dv">5</span>, .<span class="dv">25</span>, </span>
+<span id="cb137-6"><a href="markov-chain-monte-carlo-methods.html#cb137-6" aria-hidden="true" tabindex="-1"></a>           <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, .<span class="dv">5</span>, .<span class="dv">5</span>),</span>
+<span id="cb137-7"><a href="markov-chain-monte-carlo-methods.html#cb137-7" aria-hidden="true" tabindex="-1"></a>           <span class="at">nrow=</span><span class="dv">6</span>, <span class="at">ncol=</span><span class="dv">6</span>, <span class="at">byrow=</span><span class="cn">TRUE</span>)</span>
+<span id="cb137-8"><a href="markov-chain-monte-carlo-methods.html#cb137-8" aria-hidden="true" tabindex="-1"></a> P</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6]
+## [1,] 0.50 0.50 0.00 0.00 0.00 0.00
+## [2,] 0.25 0.50 0.25 0.00 0.00 0.00
+## [3,] 0.00 0.25 0.50 0.25 0.00 0.00
+## [4,] 0.00 0.00 0.25 0.50 0.25 0.00
+## [5,] 0.00 0.00 0.00 0.25 0.50 0.25
+## [6,] 0.00 0.00 0.00 0.00 0.50 0.50</code></pre>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb139-1"><a href="markov-chain-monte-carlo-methods.html#cb139-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="dv">0</span>, <span class="fu">c</span>(<span class="dv">50000</span>, <span class="dv">1</span>))</span>
+<span id="cb139-2"><a href="markov-chain-monte-carlo-methods.html#cb139-2" aria-hidden="true" tabindex="-1"></a>s[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb139-3"><a href="markov-chain-monte-carlo-methods.html#cb139-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">50000</span>){</span>
+<span id="cb139-4"><a href="markov-chain-monte-carlo-methods.html#cb139-4" aria-hidden="true" tabindex="-1"></a>   s[j] <span class="ot">&lt;-</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">6</span>, <span class="at">size=</span><span class="dv">1</span>, <span class="at">prob=</span>P[s[j <span class="sc">-</span> <span class="dv">1</span>],])</span>
+<span id="cb139-5"><a href="markov-chain-monte-carlo-methods.html#cb139-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb140"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb140-1"><a href="markov-chain-monte-carlo-methods.html#cb140-1" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">500</span>, <span class="dv">2000</span>, <span class="dv">8000</span>, <span class="dv">50000</span>)</span>
+<span id="cb140-2"><a href="markov-chain-monte-carlo-methods.html#cb140-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>
+<span id="cb140-3"><a href="markov-chain-monte-carlo-methods.html#cb140-3" aria-hidden="true" tabindex="-1"></a>   <span class="fu">print</span>(<span class="fu">table</span>(s[<span class="dv">1</span><span class="sc">:</span>m[i]]) <span class="sc">/</span> m[i])</span>
+<span id="cb140-4"><a href="markov-chain-monte-carlo-methods.html#cb140-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## 
+##     1     2     3     4     5     6 
+## 0.102 0.224 0.208 0.186 0.236 0.044 
+## 
+##      1      2      3      4      5      6 
+## 0.1075 0.2115 0.2110 0.2180 0.1765 0.0755 
+## 
+##        1        2        3        4        5        6 
+## 0.095250 0.189875 0.219000 0.215875 0.193875 0.086125 
+## 
+##       1       2       3       4       5       6 
+## 0.09686 0.19760 0.20490 0.20618 0.19830 0.09616</code></pre>
+<div class="sourceCode" id="cb142"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb142-1"><a href="markov-chain-monte-carlo-methods.html#cb142-1" aria-hidden="true" tabindex="-1"></a>w <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="fu">c</span>(.<span class="dv">1</span>, .<span class="dv">2</span>, .<span class="dv">2</span>, .<span class="dv">2</span>, .<span class="dv">2</span>, .<span class="dv">1</span>), </span>
+<span id="cb142-2"><a href="markov-chain-monte-carlo-methods.html#cb142-2" aria-hidden="true" tabindex="-1"></a>            <span class="at">nrow=</span><span class="dv">1</span>, <span class="at">ncol=</span><span class="dv">6</span>)</span>
+<span id="cb142-3"><a href="markov-chain-monte-carlo-methods.html#cb142-3" aria-hidden="true" tabindex="-1"></a>w <span class="sc">%*%</span> P</span></code></pre></div>
+<pre><code>##      [,1] [,2] [,3] [,4] [,5] [,6]
+## [1,]  0.1  0.2  0.2  0.2  0.2  0.1</code></pre>
+</div>
+<div id="learning-about-a-normal-population-from-grouped-data" class="section level2" number="6.2">
+<h2><span class="header-section-number">6.2</span> Learning about a Normal Population from Grouped Data</h2>
+<p>Have normally distributed data where the data is observed in grouped form. Consider the posterior of <span class="math inline">\((\mu, \log \sigma)\)</span>.</p>
+<div class="sourceCode" id="cb144"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb144-1"><a href="markov-chain-monte-carlo-methods.html#cb144-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">int.lo=</span><span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="fu">seq</span>(<span class="dv">66</span>, <span class="dv">74</span>, <span class="at">by=</span><span class="dv">2</span>)),</span>
+<span id="cb144-2"><a href="markov-chain-monte-carlo-methods.html#cb144-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">int.hi=</span><span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">66</span>, <span class="dv">74</span>, <span class="at">by=</span><span class="dv">2</span>), <span class="cn">Inf</span>),</span>
+<span id="cb144-3"><a href="markov-chain-monte-carlo-methods.html#cb144-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">f=</span><span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">30</span>, <span class="dv">49</span>, <span class="dv">70</span>, <span class="dv">33</span>, <span class="dv">15</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb145-1"><a href="markov-chain-monte-carlo-methods.html#cb145-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fu">rep</span>(<span class="dv">65</span>,<span class="dv">14</span>), <span class="fu">rep</span>(<span class="dv">67</span>,<span class="dv">30</span>), <span class="fu">rep</span>(<span class="dv">69</span>,<span class="dv">49</span>),</span>
+<span id="cb145-2"><a href="markov-chain-monte-carlo-methods.html#cb145-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">rep</span>(<span class="dv">71</span>,<span class="dv">70</span>), <span class="fu">rep</span>(<span class="dv">73</span>,<span class="dv">33</span>), <span class="fu">rep</span>(<span class="dv">75</span>,<span class="dv">15</span>))</span>
+<span id="cb145-3"><a href="markov-chain-monte-carlo-methods.html#cb145-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(y)</span></code></pre></div>
+<pre><code>## [1] 70.16588</code></pre>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb147-1"><a href="markov-chain-monte-carlo-methods.html#cb147-1" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="fu">sd</span>(y))</span></code></pre></div>
+<pre><code>## [1] 0.9504117</code></pre>
+<p>First obtain normal approximation to posterior.</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb149-1"><a href="markov-chain-monte-carlo-methods.html#cb149-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">70</span>, <span class="dv">1</span>)</span>
+<span id="cb149-2"><a href="markov-chain-monte-carlo-methods.html#cb149-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">laplace</span>(groupeddatapost, start, d)</span>
+<span id="cb149-3"><a href="markov-chain-monte-carlo-methods.html#cb149-3" aria-hidden="true" tabindex="-1"></a>fit</span></code></pre></div>
+<pre><code>## $mode
+## [1] 70.169880  0.973644
+## 
+## $var
+##              [,1]         [,2]
+## [1,] 3.534713e-02 3.520776e-05
+## [2,] 3.520776e-05 3.146470e-03
+## 
+## $int
+## [1] -350.6305
+## 
+## $converge
+## [1] TRUE</code></pre>
+<p>Now use a Metropolis (random walk) MCMC algorithm.</p>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb151-1"><a href="markov-chain-monte-carlo-methods.html#cb151-1" aria-hidden="true" tabindex="-1"></a>modal.sds <span class="ot">&lt;-</span> <span class="fu">sqrt</span>(<span class="fu">diag</span>(fit<span class="sc">$</span>var))</span>
+<span id="cb151-2"><a href="markov-chain-monte-carlo-methods.html#cb151-2" aria-hidden="true" tabindex="-1"></a>proposal <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">var=</span>fit<span class="sc">$</span>var, <span class="at">scale=</span><span class="dv">2</span>)</span>
+<span id="cb151-3"><a href="markov-chain-monte-carlo-methods.html#cb151-3" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">rwmetrop</span>(groupeddatapost,</span>
+<span id="cb151-4"><a href="markov-chain-monte-carlo-methods.html#cb151-4" aria-hidden="true" tabindex="-1"></a>                 proposal,</span>
+<span id="cb151-5"><a href="markov-chain-monte-carlo-methods.html#cb151-5" aria-hidden="true" tabindex="-1"></a>                 start,</span>
+<span id="cb151-6"><a href="markov-chain-monte-carlo-methods.html#cb151-6" aria-hidden="true" tabindex="-1"></a>                 <span class="dv">10000</span>, d)</span></code></pre></div>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="markov-chain-monte-carlo-methods.html#cb152-1" aria-hidden="true" tabindex="-1"></a>fit2<span class="sc">$</span>accept</span></code></pre></div>
+<pre><code>## [1] 0.2908</code></pre>
+<div class="sourceCode" id="cb154"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb154-1"><a href="markov-chain-monte-carlo-methods.html#cb154-1" aria-hidden="true" tabindex="-1"></a>post.means <span class="ot">&lt;-</span> <span class="fu">apply</span>(fit2<span class="sc">$</span>par, <span class="dv">2</span>, mean)</span>
+<span id="cb154-2"><a href="markov-chain-monte-carlo-methods.html#cb154-2" aria-hidden="true" tabindex="-1"></a>post.sds <span class="ot">&lt;-</span> <span class="fu">apply</span>(fit2<span class="sc">$</span>par, <span class="dv">2</span>, sd)</span>
+<span id="cb154-3"><a href="markov-chain-monte-carlo-methods.html#cb154-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(<span class="fu">c</span>(fit<span class="sc">$</span>mode), modal.sds)</span></code></pre></div>
+<pre><code>##                 modal.sds
+## [1,] 70.169880 0.18800834
+## [2,]  0.973644 0.05609341</code></pre>
+<div class="sourceCode" id="cb156"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb156-1"><a href="markov-chain-monte-carlo-methods.html#cb156-1" aria-hidden="true" tabindex="-1"></a><span class="fu">cbind</span>(post.means, post.sds)</span></code></pre></div>
+<pre><code>##      post.means   post.sds
+## [1,] 70.1636783 0.18672292
+## [2,]  0.9811132 0.05767941</code></pre>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="markov-chain-monte-carlo-methods.html#cb158-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(groupeddatapost,</span>
+<span id="cb158-2"><a href="markov-chain-monte-carlo-methods.html#cb158-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">c</span>(<span class="dv">69</span>, <span class="dv">71</span>, .<span class="dv">6</span>, <span class="fl">1.3</span>), d,</span>
+<span id="cb158-3"><a href="markov-chain-monte-carlo-methods.html#cb158-3" aria-hidden="true" tabindex="-1"></a>       <span class="at">xlab=</span><span class="st">&quot;mu&quot;</span>,<span class="at">ylab=</span><span class="st">&quot;log sigma&quot;</span>)</span>
+<span id="cb158-4"><a href="markov-chain-monte-carlo-methods.html#cb158-4" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(fit2<span class="sc">$</span>par[<span class="dv">5001</span><span class="sc">:</span><span class="dv">10000</span>, <span class="dv">1</span>],</span>
+<span id="cb158-5"><a href="markov-chain-monte-carlo-methods.html#cb158-5" aria-hidden="true" tabindex="-1"></a>       fit2<span class="sc">$</span>par[<span class="dv">5001</span><span class="sc">:</span><span class="dv">10000</span>, <span class="dv">2</span>])</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-108-1.png" width="672" /></p>
+</div>
+<div id="example-of-output-analysis" class="section level2" number="6.3">
+<h2><span class="header-section-number">6.3</span> Example of Output Analysis</h2>
+<p>Illustrate MCMC diagnositics for different Metropolis chains with different proposal widths.</p>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb159-1"><a href="markov-chain-monte-carlo-methods.html#cb159-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">int.lo=</span><span class="fu">c</span>(<span class="sc">-</span><span class="cn">Inf</span>, <span class="fu">seq</span>(<span class="dv">66</span>, <span class="dv">74</span>, <span class="at">by=</span><span class="dv">2</span>)),</span>
+<span id="cb159-2"><a href="markov-chain-monte-carlo-methods.html#cb159-2" aria-hidden="true" tabindex="-1"></a>        <span class="at">int.hi=</span><span class="fu">c</span>(<span class="fu">seq</span>(<span class="dv">66</span>, <span class="dv">74</span>, <span class="at">by=</span><span class="dv">2</span>), <span class="cn">Inf</span>),</span>
+<span id="cb159-3"><a href="markov-chain-monte-carlo-methods.html#cb159-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">f=</span><span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">30</span>, <span class="dv">49</span>, <span class="dv">70</span>, <span class="dv">33</span>, <span class="dv">15</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="markov-chain-monte-carlo-methods.html#cb160-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(coda)</span>
+<span id="cb160-2"><a href="markov-chain-monte-carlo-methods.html#cb160-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lattice)</span></code></pre></div>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb161-1"><a href="markov-chain-monte-carlo-methods.html#cb161-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">70</span>,<span class="dv">1</span>)</span>
+<span id="cb161-2"><a href="markov-chain-monte-carlo-methods.html#cb161-2" aria-hidden="true" tabindex="-1"></a> fit <span class="ot">&lt;-</span> <span class="fu">laplace</span>(groupeddatapost, start, d)</span></code></pre></div>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="markov-chain-monte-carlo-methods.html#cb162-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">65</span>,<span class="dv">1</span>)</span>
+<span id="cb162-2"><a href="markov-chain-monte-carlo-methods.html#cb162-2" aria-hidden="true" tabindex="-1"></a> proposal <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">var=</span>fit<span class="sc">$</span>var, <span class="at">scale=</span><span class="fl">0.2</span>)</span>
+<span id="cb162-3"><a href="markov-chain-monte-carlo-methods.html#cb162-3" aria-hidden="true" tabindex="-1"></a> bayesfit <span class="ot">&lt;-</span> <span class="fu">rwmetrop</span>(groupeddatapost,</span>
+<span id="cb162-4"><a href="markov-chain-monte-carlo-methods.html#cb162-4" aria-hidden="true" tabindex="-1"></a>                      proposal,</span>
+<span id="cb162-5"><a href="markov-chain-monte-carlo-methods.html#cb162-5" aria-hidden="true" tabindex="-1"></a>                      start,</span>
+<span id="cb162-6"><a href="markov-chain-monte-carlo-methods.html#cb162-6" aria-hidden="true" tabindex="-1"></a>                      <span class="dv">10000</span>, d)</span></code></pre></div>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="markov-chain-monte-carlo-methods.html#cb163-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(bayesfit<span class="sc">$</span>par)[[<span class="dv">2</span>]] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;log sigma&quot;</span>)</span>
+<span id="cb163-2"><a href="markov-chain-monte-carlo-methods.html#cb163-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">xyplot</span>(<span class="fu">mcmc</span>(bayesfit<span class="sc">$</span>par[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>), ]),</span>
+<span id="cb163-3"><a href="markov-chain-monte-carlo-methods.html#cb163-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="st">&quot;black&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-113-1.png" width="672" /></p>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb164-1"><a href="markov-chain-monte-carlo-methods.html#cb164-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb164-2"><a href="markov-chain-monte-carlo-methods.html#cb164-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">autocorr.plot</span>(<span class="fu">mcmc</span>(bayesfit<span class="sc">$</span>par[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>), ]),</span>
+<span id="cb164-3"><a href="markov-chain-monte-carlo-methods.html#cb164-3" aria-hidden="true" tabindex="-1"></a>               <span class="at">auto.layout=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-114-1.png" width="672" /></p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="markov-chain-monte-carlo-methods.html#cb165-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">summary</span>(<span class="fu">mcmc</span>(bayesfit<span class="sc">$</span>par[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>), ]))</span></code></pre></div>
+<pre><code>## 
+## Iterations = 1:8000
+## Thinning interval = 1 
+## Number of chains = 1 
+## Sample size per chain = 8000 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##              Mean      SD  Naive SE Time-series SE
+## mu        70.1880 0.19752 0.0022083       0.025874
+## log sigma  0.9709 0.05422 0.0006062       0.006305
+## 
+## 2. Quantiles for each variable:
+## 
+##              2.5%     25%     50%   75%  97.5%
+## mu        69.8124 70.0563 70.1806 70.31 70.588
+## log sigma  0.8628  0.9342  0.9723  1.01  1.071</code></pre>
+<div class="sourceCode" id="cb167"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb167-1"><a href="markov-chain-monte-carlo-methods.html#cb167-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">batchSE</span>(<span class="fu">mcmc</span>(bayesfit<span class="sc">$</span>par[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>), ]),</span>
+<span id="cb167-2"><a href="markov-chain-monte-carlo-methods.html#cb167-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">batchSize=</span><span class="dv">50</span>)</span></code></pre></div>
+<pre><code>##          mu   log sigma 
+## 0.013983542 0.003739656</code></pre>
+<div class="sourceCode" id="cb169"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb169-1"><a href="markov-chain-monte-carlo-methods.html#cb169-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">70</span>,<span class="dv">1</span>)</span>
+<span id="cb169-2"><a href="markov-chain-monte-carlo-methods.html#cb169-2" aria-hidden="true" tabindex="-1"></a> proposal <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">var=</span>fit<span class="sc">$</span>var, <span class="at">scale=</span><span class="fl">2.0</span>)</span>
+<span id="cb169-3"><a href="markov-chain-monte-carlo-methods.html#cb169-3" aria-hidden="true" tabindex="-1"></a> bayesfit <span class="ot">&lt;-</span> <span class="fu">rwmetrop</span>(groupeddatapost, </span>
+<span id="cb169-4"><a href="markov-chain-monte-carlo-methods.html#cb169-4" aria-hidden="true" tabindex="-1"></a>                      proposal, </span>
+<span id="cb169-5"><a href="markov-chain-monte-carlo-methods.html#cb169-5" aria-hidden="true" tabindex="-1"></a>                      start,</span>
+<span id="cb169-6"><a href="markov-chain-monte-carlo-methods.html#cb169-6" aria-hidden="true" tabindex="-1"></a>                      <span class="dv">10000</span>, d)</span></code></pre></div>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="markov-chain-monte-carlo-methods.html#cb170-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dimnames</span>(bayesfit<span class="sc">$</span>par)[[<span class="dv">2</span>]] <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;mu&quot;</span>, <span class="st">&quot;log sigma&quot;</span>)</span>
+<span id="cb170-2"><a href="markov-chain-monte-carlo-methods.html#cb170-2" aria-hidden="true" tabindex="-1"></a>sim.parameters <span class="ot">&lt;-</span> <span class="fu">mcmc</span>(bayesfit<span class="sc">$</span>par[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>), ])</span>
+<span id="cb170-3"><a href="markov-chain-monte-carlo-methods.html#cb170-3" aria-hidden="true" tabindex="-1"></a> <span class="fu">xyplot</span>(<span class="fu">mcmc</span>(bayesfit<span class="sc">$</span>par[<span class="sc">-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2000</span>), ]), </span>
+<span id="cb170-4"><a href="markov-chain-monte-carlo-methods.html#cb170-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">col=</span><span class="st">&quot;black&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-116-1.png" width="672" /></p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb171-1"><a href="markov-chain-monte-carlo-methods.html#cb171-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">1</span>))</span>
+<span id="cb171-2"><a href="markov-chain-monte-carlo-methods.html#cb171-2" aria-hidden="true" tabindex="-1"></a> <span class="fu">autocorr.plot</span>(sim.parameters,<span class="at">auto.layout=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-117-1.png" width="672" /></p>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="markov-chain-monte-carlo-methods.html#cb172-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">summary</span>(sim.parameters)</span></code></pre></div>
+<pre><code>## 
+## Iterations = 1:8000
+## Thinning interval = 1 
+## Number of chains = 1 
+## Sample size per chain = 8000 
+## 
+## 1. Empirical mean and standard deviation for each variable,
+##    plus standard error of the mean:
+## 
+##             Mean      SD  Naive SE Time-series SE
+## mu        70.165 0.18467 0.0020646       0.005728
+## log sigma  0.982 0.05744 0.0006422       0.001770
+## 
+## 2. Quantiles for each variable:
+## 
+##              2.5%     25%     50%    75%  97.5%
+## mu        69.8097 70.0346 70.1650 70.289 70.542
+## log sigma  0.8715  0.9416  0.9817  1.021  1.101</code></pre>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb174-1"><a href="markov-chain-monte-carlo-methods.html#cb174-1" aria-hidden="true" tabindex="-1"></a> <span class="fu">batchSE</span>(sim.parameters, <span class="at">batchSize=</span><span class="dv">50</span>)</span></code></pre></div>
+<pre><code>##          mu   log sigma 
+## 0.005387819 0.001751675</code></pre>
+</div>
+<div id="modeling-data-with-cauchy-errors" class="section level2" number="6.4">
+<h2><span class="header-section-number">6.4</span> Modeling Data with Cauchy Errors</h2>
+<p>Assuming data that is sampled from a Cauchy density with a noninformative prior placed on the location and scale parameters.</p>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb176-1"><a href="markov-chain-monte-carlo-methods.html#cb176-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(darwin<span class="sc">$</span>difference)</span></code></pre></div>
+<pre><code>## [1] 21.66667</code></pre>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb178-1"><a href="markov-chain-monte-carlo-methods.html#cb178-1" aria-hidden="true" tabindex="-1"></a><span class="fu">log</span>(<span class="fu">sd</span>(darwin<span class="sc">$</span>difference))</span></code></pre></div>
+<pre><code>## [1] 3.65253</code></pre>
+<p>First illustrate normal approximation.</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb180-1"><a href="markov-chain-monte-carlo-methods.html#cb180-1" aria-hidden="true" tabindex="-1"></a><span class="fu">laplace</span>(cauchyerrorpost, </span>
+<span id="cb180-2"><a href="markov-chain-monte-carlo-methods.html#cb180-2" aria-hidden="true" tabindex="-1"></a>        <span class="fu">c</span>(<span class="fl">21.6</span>, <span class="fl">3.6</span>), </span>
+<span id="cb180-3"><a href="markov-chain-monte-carlo-methods.html#cb180-3" aria-hidden="true" tabindex="-1"></a>        darwin<span class="sc">$</span>difference)</span></code></pre></div>
+<pre><code>## $mode
+## [1] 24.701745  2.772619
+## 
+## $var
+##            [,1]      [,2]
+## [1,] 34.9600525 0.3672899
+## [2,]  0.3672899 0.1378279
+## 
+## $int
+## [1] -73.2404
+## 
+## $converge
+## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb182-1"><a href="markov-chain-monte-carlo-methods.html#cb182-1" aria-hidden="true" tabindex="-1"></a><span class="fu">laplace</span>(cauchyerrorpost, </span>
+<span id="cb182-2"><a href="markov-chain-monte-carlo-methods.html#cb182-2" aria-hidden="true" tabindex="-1"></a>        .<span class="dv">1</span> <span class="sc">*</span> <span class="fu">c</span>(<span class="fl">21.6</span>,<span class="fl">3.6</span>), </span>
+<span id="cb182-3"><a href="markov-chain-monte-carlo-methods.html#cb182-3" aria-hidden="true" tabindex="-1"></a>        darwin<span class="sc">$</span>difference)<span class="sc">$</span>mode</span></code></pre></div>
+<pre><code>## [1] 24.698151  2.772345</code></pre>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="markov-chain-monte-carlo-methods.html#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fl">24.7</span> <span class="sc">-</span> <span class="dv">4</span> <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fl">34.96</span>), <span class="fl">24.7</span> <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> <span class="fu">sqrt</span>(<span class="fl">34.96</span>))</span></code></pre></div>
+<pre><code>## [1]  1.049207 48.350793</code></pre>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="markov-chain-monte-carlo-methods.html#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(<span class="fl">2.77</span> <span class="sc">-</span> <span class="dv">4</span> <span class="sc">*</span> <span class="fu">sqrt</span>(.<span class="dv">138</span>), <span class="fl">2.77</span> <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> <span class="fu">sqrt</span>(.<span class="dv">138</span>))</span></code></pre></div>
+<pre><code>## [1] 1.284066 4.255934</code></pre>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="markov-chain-monte-carlo-methods.html#cb188-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(cauchyerrorpost,</span>
+<span id="cb188-2"><a href="markov-chain-monte-carlo-methods.html#cb188-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>, <span class="dv">1</span>, <span class="fl">4.5</span>),</span>
+<span id="cb188-3"><a href="markov-chain-monte-carlo-methods.html#cb188-3" aria-hidden="true" tabindex="-1"></a>          darwin<span class="sc">$</span>difference,</span>
+<span id="cb188-4"><a href="markov-chain-monte-carlo-methods.html#cb188-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">xlab=</span><span class="st">&quot;mu&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;log sigma&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-123-1.png" width="672" /></p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="markov-chain-monte-carlo-methods.html#cb189-1" aria-hidden="true" tabindex="-1"></a>fitlaplace <span class="ot">&lt;-</span> <span class="fu">laplace</span>(cauchyerrorpost,</span>
+<span id="cb189-2"><a href="markov-chain-monte-carlo-methods.html#cb189-2" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">c</span>(<span class="fl">21.6</span>, <span class="fl">3.6</span>), </span>
+<span id="cb189-3"><a href="markov-chain-monte-carlo-methods.html#cb189-3" aria-hidden="true" tabindex="-1"></a>                      darwin<span class="sc">$</span>difference)</span></code></pre></div>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="markov-chain-monte-carlo-methods.html#cb190-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(lbinorm,</span>
+<span id="cb190-2"><a href="markov-chain-monte-carlo-methods.html#cb190-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>, <span class="dv">1</span>, <span class="fl">4.5</span>),</span>
+<span id="cb190-3"><a href="markov-chain-monte-carlo-methods.html#cb190-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">list</span>(<span class="at">m=</span>fitlaplace<span class="sc">$</span>mode,</span>
+<span id="cb190-4"><a href="markov-chain-monte-carlo-methods.html#cb190-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">v=</span>fitlaplace<span class="sc">$</span>var), </span>
+<span id="cb190-5"><a href="markov-chain-monte-carlo-methods.html#cb190-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">xlab=</span><span class="st">&quot;mu&quot;</span>,<span class="at">ylab=</span><span class="st">&quot;log sigma&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-125-1.png" width="672" /></p>
+<p>Next illustrate random walk Metropolis.</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb191-1"><a href="markov-chain-monte-carlo-methods.html#cb191-1" aria-hidden="true" tabindex="-1"></a>proposal <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">var=</span>fitlaplace<span class="sc">$</span>var, <span class="at">scale=</span><span class="fl">2.5</span>)</span>
+<span id="cb191-2"><a href="markov-chain-monte-carlo-methods.html#cb191-2" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">3</span>)</span>
+<span id="cb191-3"><a href="markov-chain-monte-carlo-methods.html#cb191-3" aria-hidden="true" tabindex="-1"></a>m <span class="ot">&lt;-</span> <span class="dv">1000</span></span>
+<span id="cb191-4"><a href="markov-chain-monte-carlo-methods.html#cb191-4" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">rwmetrop</span>(cauchyerrorpost, proposal, </span>
+<span id="cb191-5"><a href="markov-chain-monte-carlo-methods.html#cb191-5" aria-hidden="true" tabindex="-1"></a>              start, m, darwin<span class="sc">$</span>difference)</span></code></pre></div>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="markov-chain-monte-carlo-methods.html#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(cauchyerrorpost, </span>
+<span id="cb192-2"><a href="markov-chain-monte-carlo-methods.html#cb192-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">60</span>, <span class="dv">1</span>, <span class="fl">4.5</span>),</span>
+<span id="cb192-3"><a href="markov-chain-monte-carlo-methods.html#cb192-3" aria-hidden="true" tabindex="-1"></a>          darwin<span class="sc">$</span>difference,</span>
+<span id="cb192-4"><a href="markov-chain-monte-carlo-methods.html#cb192-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">xlab=</span><span class="st">&quot;mu&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;log sigma&quot;</span>)</span>
+<span id="cb192-5"><a href="markov-chain-monte-carlo-methods.html#cb192-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">points</span>(s<span class="sc">$</span>par[,<span class="dv">1</span>], s<span class="sc">$</span>par[,<span class="dv">2</span>])</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb193-1"><a href="markov-chain-monte-carlo-methods.html#cb193-1" aria-hidden="true" tabindex="-1"></a>fitgrid <span class="ot">&lt;-</span> <span class="fu">simcontour</span>(cauchyerrorpost,</span>
+<span id="cb193-2"><a href="markov-chain-monte-carlo-methods.html#cb193-2" aria-hidden="true" tabindex="-1"></a>                      <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>,<span class="dv">60</span>,<span class="dv">1</span>,<span class="fl">4.5</span>),</span>
+<span id="cb193-3"><a href="markov-chain-monte-carlo-methods.html#cb193-3" aria-hidden="true" tabindex="-1"></a>                      darwin<span class="sc">$</span>difference,</span>
+<span id="cb193-4"><a href="markov-chain-monte-carlo-methods.html#cb193-4" aria-hidden="true" tabindex="-1"></a>                      <span class="dv">50000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="markov-chain-monte-carlo-methods.html#cb194-1" aria-hidden="true" tabindex="-1"></a>proposal <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">var=</span>fitlaplace<span class="sc">$</span>var, </span>
+<span id="cb194-2"><a href="markov-chain-monte-carlo-methods.html#cb194-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">scale=</span><span class="fl">2.5</span>)</span>
+<span id="cb194-3"><a href="markov-chain-monte-carlo-methods.html#cb194-3" aria-hidden="true" tabindex="-1"></a>                 start<span class="ot">=</span><span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">3</span>)</span>
+<span id="cb194-4"><a href="markov-chain-monte-carlo-methods.html#cb194-4" aria-hidden="true" tabindex="-1"></a>fitrw<span class="ot">=</span><span class="fu">rwmetrop</span>(cauchyerrorpost,</span>
+<span id="cb194-5"><a href="markov-chain-monte-carlo-methods.html#cb194-5" aria-hidden="true" tabindex="-1"></a>                proposal, </span>
+<span id="cb194-6"><a href="markov-chain-monte-carlo-methods.html#cb194-6" aria-hidden="true" tabindex="-1"></a>                start,</span>
+<span id="cb194-7"><a href="markov-chain-monte-carlo-methods.html#cb194-7" aria-hidden="true" tabindex="-1"></a>                <span class="dv">50000</span>,</span>
+<span id="cb194-8"><a href="markov-chain-monte-carlo-methods.html#cb194-8" aria-hidden="true" tabindex="-1"></a>                darwin<span class="sc">$</span>difference)</span></code></pre></div>
+<p>Illustrate metropolis-hastings independence chain.</p>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb195-1"><a href="markov-chain-monte-carlo-methods.html#cb195-1" aria-hidden="true" tabindex="-1"></a>proposal2 <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">var=</span>fitlaplace<span class="sc">$</span>var,</span>
+<span id="cb195-2"><a href="markov-chain-monte-carlo-methods.html#cb195-2" aria-hidden="true" tabindex="-1"></a>                  <span class="at">mu=</span><span class="fu">t</span>(fitlaplace<span class="sc">$</span>mode))</span>
+<span id="cb195-3"><a href="markov-chain-monte-carlo-methods.html#cb195-3" aria-hidden="true" tabindex="-1"></a>fitindep <span class="ot">&lt;-</span> <span class="fu">indepmetrop</span>(cauchyerrorpost, </span>
+<span id="cb195-4"><a href="markov-chain-monte-carlo-methods.html#cb195-4" aria-hidden="true" tabindex="-1"></a>                        proposal2,</span>
+<span id="cb195-5"><a href="markov-chain-monte-carlo-methods.html#cb195-5" aria-hidden="true" tabindex="-1"></a>                        start,</span>
+<span id="cb195-6"><a href="markov-chain-monte-carlo-methods.html#cb195-6" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">50000</span>,</span>
+<span id="cb195-7"><a href="markov-chain-monte-carlo-methods.html#cb195-7" aria-hidden="true" tabindex="-1"></a>                        darwin<span class="sc">$</span>difference)</span></code></pre></div>
+<p>Illustrate metropolis-within-Gibbs.</p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="markov-chain-monte-carlo-methods.html#cb196-1" aria-hidden="true" tabindex="-1"></a>fitgibbs <span class="ot">&lt;-</span> <span class="fu">gibbs</span>(cauchyerrorpost,</span>
+<span id="cb196-2"><a href="markov-chain-monte-carlo-methods.html#cb196-2" aria-hidden="true" tabindex="-1"></a>                  start,</span>
+<span id="cb196-3"><a href="markov-chain-monte-carlo-methods.html#cb196-3" aria-hidden="true" tabindex="-1"></a>                  <span class="dv">50000</span>,</span>
+<span id="cb196-4"><a href="markov-chain-monte-carlo-methods.html#cb196-4" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">c</span>(<span class="dv">12</span>,.<span class="dv">75</span>),</span>
+<span id="cb196-5"><a href="markov-chain-monte-carlo-methods.html#cb196-5" aria-hidden="true" tabindex="-1"></a>                  darwin<span class="sc">$</span>difference)</span></code></pre></div>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb197-1"><a href="markov-chain-monte-carlo-methods.html#cb197-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(fitrw<span class="sc">$</span>par,<span class="dv">2</span>,mean)</span></code></pre></div>
+<pre><code>## [1] 25.696204  2.841003</code></pre>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb199-1"><a href="markov-chain-monte-carlo-methods.html#cb199-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(fitrw<span class="sc">$</span>par,<span class="dv">2</span>,sd)</span></code></pre></div>
+<pre><code>## [1] 7.1026378 0.3778886</code></pre>
+</div>
+<div id="analysis-of-the-stanford-heart-transplant-data" class="section level2" number="6.5">
+<h2><span class="header-section-number">6.5</span> Analysis of the Stanford Heart Transplant Data</h2>
+<p>Using a Pareto model to analyze heart transplant data.</p>
+<p>Laplace fit.</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb201-1"><a href="markov-chain-monte-carlo-methods.html#cb201-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>)</span>
+<span id="cb201-2"><a href="markov-chain-monte-carlo-methods.html#cb201-2" aria-hidden="true" tabindex="-1"></a>laplacefit <span class="ot">&lt;-</span> <span class="fu">laplace</span>(transplantpost, </span>
+<span id="cb201-3"><a href="markov-chain-monte-carlo-methods.html#cb201-3" aria-hidden="true" tabindex="-1"></a>                      start, stanfordheart)</span>
+<span id="cb201-4"><a href="markov-chain-monte-carlo-methods.html#cb201-4" aria-hidden="true" tabindex="-1"></a>laplacefit</span></code></pre></div>
+<pre><code>## $mode
+## [1] -0.09210954  3.38385249 -0.72334008
+## 
+## $var
+##              [,1]         [,2]        [,3]
+## [1,]  0.172788525 -0.009282308 -0.04995160
+## [2,] -0.009282308  0.214737054  0.09301323
+## [3,] -0.049951602  0.093013230  0.06891796
+## 
+## $int
+## [1] -376.2504
+## 
+## $converge
+## [1] TRUE</code></pre>
+<p>Random walk metropolis.</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="markov-chain-monte-carlo-methods.html#cb203-1" aria-hidden="true" tabindex="-1"></a>proposal <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">var=</span>laplacefit<span class="sc">$</span>var, <span class="at">scale=</span><span class="dv">2</span>)</span>
+<span id="cb203-2"><a href="markov-chain-monte-carlo-methods.html#cb203-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">rwmetrop</span>(transplantpost, </span>
+<span id="cb203-3"><a href="markov-chain-monte-carlo-methods.html#cb203-3" aria-hidden="true" tabindex="-1"></a>              proposal, </span>
+<span id="cb203-4"><a href="markov-chain-monte-carlo-methods.html#cb203-4" aria-hidden="true" tabindex="-1"></a>              start, <span class="dv">10000</span>, stanfordheart)</span>
+<span id="cb203-5"><a href="markov-chain-monte-carlo-methods.html#cb203-5" aria-hidden="true" tabindex="-1"></a>s<span class="sc">$</span>accept</span></code></pre></div>
+<pre><code>## [1] 0.1893</code></pre>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="markov-chain-monte-carlo-methods.html#cb205-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb205-2"><a href="markov-chain-monte-carlo-methods.html#cb205-2" aria-hidden="true" tabindex="-1"></a>tau <span class="ot">&lt;-</span> <span class="fu">exp</span>(s<span class="sc">$</span>par[,<span class="dv">1</span>])</span>
+<span id="cb205-3"><a href="markov-chain-monte-carlo-methods.html#cb205-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(tau), <span class="at">main=</span><span class="st">&quot;TAU&quot;</span>)</span>
+<span id="cb205-4"><a href="markov-chain-monte-carlo-methods.html#cb205-4" aria-hidden="true" tabindex="-1"></a>lambda <span class="ot">&lt;-</span> <span class="fu">exp</span>(s<span class="sc">$</span>par[,<span class="dv">2</span>])</span>
+<span id="cb205-5"><a href="markov-chain-monte-carlo-methods.html#cb205-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(lambda), <span class="at">main=</span><span class="st">&quot;LAMBDA&quot;</span>)</span>
+<span id="cb205-6"><a href="markov-chain-monte-carlo-methods.html#cb205-6" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">exp</span>(s<span class="sc">$</span>par[,<span class="dv">3</span>])</span>
+<span id="cb205-7"><a href="markov-chain-monte-carlo-methods.html#cb205-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(p), <span class="at">main=</span><span class="st">&quot;P&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-136-1.png" width="672" /></p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb206-1"><a href="markov-chain-monte-carlo-methods.html#cb206-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(<span class="fu">exp</span>(s<span class="sc">$</span>par), <span class="dv">2</span>, quantile, <span class="fu">c</span>(.<span class="dv">05</span>, .<span class="dv">5</span>, .<span class="dv">95</span>))</span></code></pre></div>
+<pre><code>##          [,1]     [,2]      [,3]
+## 5%  0.4880657 13.43615 0.3149892
+## 50% 0.9422897 29.55993 0.4807512
+## 95% 1.9776292 64.32047 0.7666747</code></pre>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb208-1"><a href="markov-chain-monte-carlo-methods.html#cb208-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb208-2"><a href="markov-chain-monte-carlo-methods.html#cb208-2" aria-hidden="true" tabindex="-1"></a>t <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">1</span>, <span class="dv">240</span>)</span>
+<span id="cb208-3"><a href="markov-chain-monte-carlo-methods.html#cb208-3" aria-hidden="true" tabindex="-1"></a>p5 <span class="ot">&lt;-</span> <span class="dv">0</span><span class="sc">*</span>t</span>
+<span id="cb208-4"><a href="markov-chain-monte-carlo-methods.html#cb208-4" aria-hidden="true" tabindex="-1"></a>p50 <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="sc">*</span> t</span>
+<span id="cb208-5"><a href="markov-chain-monte-carlo-methods.html#cb208-5" aria-hidden="true" tabindex="-1"></a>p95 <span class="ot">&lt;-</span> <span class="dv">0</span> <span class="sc">*</span> t</span>
+<span id="cb208-6"><a href="markov-chain-monte-carlo-methods.html#cb208-6" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">240</span>){ </span>
+<span id="cb208-7"><a href="markov-chain-monte-carlo-methods.html#cb208-7" aria-hidden="true" tabindex="-1"></a>   S <span class="ot">&lt;-</span> (lambda <span class="sc">/</span> (lambda <span class="sc">+</span> t[j])) <span class="sc">^</span> p</span>
+<span id="cb208-8"><a href="markov-chain-monte-carlo-methods.html#cb208-8" aria-hidden="true" tabindex="-1"></a>   q <span class="ot">&lt;-</span> <span class="fu">quantile</span>(S, <span class="fu">c</span>(.<span class="dv">05</span>, .<span class="dv">5</span>, .<span class="dv">95</span>))</span>
+<span id="cb208-9"><a href="markov-chain-monte-carlo-methods.html#cb208-9" aria-hidden="true" tabindex="-1"></a>   p5[j] <span class="ot">&lt;-</span> q[<span class="dv">1</span>]</span>
+<span id="cb208-10"><a href="markov-chain-monte-carlo-methods.html#cb208-10" aria-hidden="true" tabindex="-1"></a>   p50[j] <span class="ot">&lt;-</span> q[<span class="dv">2</span>] </span>
+<span id="cb208-11"><a href="markov-chain-monte-carlo-methods.html#cb208-11" aria-hidden="true" tabindex="-1"></a>   p95[j] <span class="ot">&lt;-</span> q[<span class="dv">3</span>]</span>
+<span id="cb208-12"><a href="markov-chain-monte-carlo-methods.html#cb208-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Estimating a patient’s survival curve.</p>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb209-1"><a href="markov-chain-monte-carlo-methods.html#cb209-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(t, p50, <span class="at">type=</span><span class="st">&quot;l&quot;</span>, </span>
+<span id="cb209-2"><a href="markov-chain-monte-carlo-methods.html#cb209-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">1</span>), </span>
+<span id="cb209-3"><a href="markov-chain-monte-carlo-methods.html#cb209-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">&quot;Prob(Survival)&quot;</span>,</span>
+<span id="cb209-4"><a href="markov-chain-monte-carlo-methods.html#cb209-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;time&quot;</span>)</span>
+<span id="cb209-5"><a href="markov-chain-monte-carlo-methods.html#cb209-5" aria-hidden="true" tabindex="-1"></a> <span class="fu">lines</span>(t, p5, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb209-6"><a href="markov-chain-monte-carlo-methods.html#cb209-6" aria-hidden="true" tabindex="-1"></a> <span class="fu">lines</span>(t, p95, <span class="at">lty=</span><span class="dv">2</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-139-1.png" width="672" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction-to-bayesian-computation.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="hierarchical-modeling.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/05-mcmc.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

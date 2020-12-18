@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 9 Regression Models | Bayesian Computation with R Scripts</title>
+  <meta name="description" content="This contains all the worked examples from the text." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 9 Regression Models | Bayesian Computation with R Scripts" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This contains all the worked examples from the text." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 9 Regression Models | Bayesian Computation with R Scripts" />
+  
+  <meta name="twitter:description" content="This contains all the worked examples from the text." />
+  
+
+<meta name="author" content="Jim Albert" />
+
+
+<meta name="date" content="2020-12-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="model-comparison.html"/>
+<link rel="next" href="gibbs-sampling.html"/>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Bayesian Computation with R, 2nd Edition</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html"><i class="fa fa-check"></i><b>2</b> Introduction to Bayesian Thinking</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#learning-about-the-proportion-of-heavy-sleepers"><i class="fa fa-check"></i><b>2.1</b> Learning About the Proportion of Heavy Sleepers</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#using-a-discrete-prior"><i class="fa fa-check"></i><b>2.2</b> Using a Discrete Prior</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#using-a-beta-prior"><i class="fa fa-check"></i><b>2.3</b> Using a Beta Prior</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#using-a-histogram-prior"><i class="fa fa-check"></i><b>2.4</b> Using a Histogram Prior</a></li>
+<li class="chapter" data-level="2.5" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#prediction"><i class="fa fa-check"></i><b>2.5</b> Prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="single-parameter-models.html"><a href="single-parameter-models.html"><i class="fa fa-check"></i><b>3</b> Single-Parameter Models</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="single-parameter-models.html"><a href="single-parameter-models.html#normal-distribution-with-known-mean-but-unknown-variance"><i class="fa fa-check"></i><b>3.1</b> Normal Distribution with Known Mean but Unknown Variance</a></li>
+<li class="chapter" data-level="3.2" data-path="single-parameter-models.html"><a href="single-parameter-models.html#estimating-a-heart-transplant-mortality-rate"><i class="fa fa-check"></i><b>3.2</b> Estimating a Heart Transplant Mortality Rate</a></li>
+<li class="chapter" data-level="3.3" data-path="single-parameter-models.html"><a href="single-parameter-models.html#an-illustration-of-bayesian-robustness"><i class="fa fa-check"></i><b>3.3</b> An Illustration of Bayesian Robustness</a></li>
+<li class="chapter" data-level="3.4" data-path="single-parameter-models.html"><a href="single-parameter-models.html#mixtures-of-conjugate-priors"><i class="fa fa-check"></i><b>3.4</b> Mixtures of Conjugate Priors</a></li>
+<li class="chapter" data-level="3.5" data-path="single-parameter-models.html"><a href="single-parameter-models.html#a-bayesian-test-of-the-fairness-of-a-coin"><i class="fa fa-check"></i><b>3.5</b> A Bayesian Test of the Fairness of a Coin</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="multiparameter-models.html"><a href="multiparameter-models.html"><i class="fa fa-check"></i><b>4</b> Multiparameter Models</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="multiparameter-models.html"><a href="multiparameter-models.html#normal-data-with-both-parameters-unknown"><i class="fa fa-check"></i><b>4.1</b> Normal Data with Both Parameters Unknown</a></li>
+<li class="chapter" data-level="4.2" data-path="multiparameter-models.html"><a href="multiparameter-models.html#a-multinomial-model"><i class="fa fa-check"></i><b>4.2</b> A Multinomial Model</a></li>
+<li class="chapter" data-level="4.3" data-path="multiparameter-models.html"><a href="multiparameter-models.html#a-bioassay-experiment"><i class="fa fa-check"></i><b>4.3</b> A Bioassay Experiment</a></li>
+<li class="chapter" data-level="4.4" data-path="multiparameter-models.html"><a href="multiparameter-models.html#comparing-two-proportions"><i class="fa fa-check"></i><b>4.4</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html"><i class="fa fa-check"></i><b>5</b> Introduction to Bayesian Computation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#a-beta-binomial-model-for-overdispersion"><i class="fa fa-check"></i><b>5.1</b> A Beta-Binomial Model for Overdispersion</a></li>
+<li class="chapter" data-level="5.2" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#approximations-based-on-posterior-modes"><i class="fa fa-check"></i><b>5.2</b> Approximations Based on Posterior Modes</a></li>
+<li class="chapter" data-level="5.3" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#monte-carlo-method-for-computing-integrals"><i class="fa fa-check"></i><b>5.3</b> Monte Carlo Method for Computing Integrals</a></li>
+<li class="chapter" data-level="5.4" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#rejection-sampling"><i class="fa fa-check"></i><b>5.4</b> Rejection Sampling</a></li>
+<li class="chapter" data-level="5.5" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#importance-sampling"><i class="fa fa-check"></i><b>5.5</b> Importance Sampling</a></li>
+<li class="chapter" data-level="5.6" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#sampling-importance-resampling"><i class="fa fa-check"></i><b>5.6</b> Sampling Importance Resampling</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html"><i class="fa fa-check"></i><b>6</b> Markov Chain Monte Carlo Methods</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#introduction-to-discrete-markov-chains"><i class="fa fa-check"></i><b>6.1</b> Introduction to Discrete Markov Chains</a></li>
+<li class="chapter" data-level="6.2" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#learning-about-a-normal-population-from-grouped-data"><i class="fa fa-check"></i><b>6.2</b> Learning about a Normal Population from Grouped Data</a></li>
+<li class="chapter" data-level="6.3" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#example-of-output-analysis"><i class="fa fa-check"></i><b>6.3</b> Example of Output Analysis</a></li>
+<li class="chapter" data-level="6.4" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#modeling-data-with-cauchy-errors"><i class="fa fa-check"></i><b>6.4</b> Modeling Data with Cauchy Errors</a></li>
+<li class="chapter" data-level="6.5" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#analysis-of-the-stanford-heart-transplant-data"><i class="fa fa-check"></i><b>6.5</b> Analysis of the Stanford Heart Transplant Data</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html"><i class="fa fa-check"></i><b>7</b> Hierarchical Modeling</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#introduction-to-hierarchical-modeling"><i class="fa fa-check"></i><b>7.1</b> Introduction to Hierarchical Modeling</a></li>
+<li class="chapter" data-level="7.2" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#individual-or-combined-estimates"><i class="fa fa-check"></i><b>7.2</b> Individual or Combined Estimates</a></li>
+<li class="chapter" data-level="7.3" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#equal-mortality-rates"><i class="fa fa-check"></i><b>7.3</b> Equal Mortality Rates?</a></li>
+<li class="chapter" data-level="7.4" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#modeling-a-prior-belief-of-exchangeability"><i class="fa fa-check"></i><b>7.4</b> Modeling a Prior Belief of Exchangeability</a></li>
+<li class="chapter" data-level="7.5" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#simulating-from-the-posterior"><i class="fa fa-check"></i><b>7.5</b> Simulating from the Posterior</a></li>
+<li class="chapter" data-level="7.6" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#posterior-inferences"><i class="fa fa-check"></i><b>7.6</b> Posterior Inferences</a></li>
+<li class="chapter" data-level="7.7" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#bayesian-sensitivity-analysis"><i class="fa fa-check"></i><b>7.7</b> Bayesian Sensitivity Analysis</a></li>
+<li class="chapter" data-level="7.8" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#posterior-predictive-model-checking"><i class="fa fa-check"></i><b>7.8</b> Posterior Predictive Model Checking</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>8</b> Model Comparison</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="model-comparison.html"><a href="model-comparison.html#a-one-sided-test-of-a-normal-mean"><i class="fa fa-check"></i><b>8.1</b> A One-Sided Test of a Normal Mean</a></li>
+<li class="chapter" data-level="8.2" data-path="model-comparison.html"><a href="model-comparison.html#a-two-sided-test-of-a-normal-mean"><i class="fa fa-check"></i><b>8.2</b> A Two-Sided Test of a Normal Mean</a></li>
+<li class="chapter" data-level="8.3" data-path="model-comparison.html"><a href="model-comparison.html#models-for-soccer-goals"><i class="fa fa-check"></i><b>8.3</b> Models for Soccer Goals</a></li>
+<li class="chapter" data-level="8.4" data-path="model-comparison.html"><a href="model-comparison.html#is-a-baseball-hitter-really-streaky"><i class="fa fa-check"></i><b>8.4</b> Is a Baseball Hitter Really Streaky?</a></li>
+<li class="chapter" data-level="8.5" data-path="model-comparison.html"><a href="model-comparison.html#a-test-of-independence-in-a-two-way-contingency-table"><i class="fa fa-check"></i><b>8.5</b> A Test of Independence in a Two-Way Contingency Table</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regression-models.html"><a href="regression-models.html"><i class="fa fa-check"></i><b>9</b> Regression Models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regression-models.html"><a href="regression-models.html#an-example-of-bayesian-regression"><i class="fa fa-check"></i><b>9.1</b> An Example of Bayesian Regression</a></li>
+<li class="chapter" data-level="9.2" data-path="regression-models.html"><a href="regression-models.html#modeling-using-zellners-g-prior"><i class="fa fa-check"></i><b>9.2</b> Modeling Using Zellner’s g Prior</a></li>
+<li class="chapter" data-level="9.3" data-path="regression-models.html"><a href="regression-models.html#survival-modeling"><i class="fa fa-check"></i><b>9.3</b> Survival Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html"><i class="fa fa-check"></i><b>10</b> Gibbs Sampling</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html#robust-modeling"><i class="fa fa-check"></i><b>10.1</b> Robust Modeling</a></li>
+<li class="chapter" data-level="10.2" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html#binary-response-regression-with-a-probit-link"><i class="fa fa-check"></i><b>10.2</b> Binary Response Regression with a Probit Link</a></li>
+<li class="chapter" data-level="10.3" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html#estimating-a-table-of-means"><i class="fa fa-check"></i><b>10.3</b> Estimating a Table of Means</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Bayesian Computation with R Scripts</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="regression-models" class="section level1" number="9">
+<h1><span class="header-section-number">Chapter 9</span> Regression Models</h1>
+<div id="an-example-of-bayesian-regression" class="section level2" number="9.1">
+<h2><span class="header-section-number">9.1</span> An Example of Bayesian Regression</h2>
+<div class="sourceCode" id="cb301"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb301-1"><a href="regression-models.html#cb301-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(LearnBayes)</span></code></pre></div>
+<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="regression-models.html#cb302-1" aria-hidden="true" tabindex="-1"></a>logtime <span class="ot">&lt;-</span> <span class="fu">log</span>(birdextinct<span class="sc">$</span>time)</span>
+<span id="cb302-2"><a href="regression-models.html#cb302-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(birdextinct<span class="sc">$</span>nesting, logtime)</span>
+<span id="cb302-3"><a href="regression-models.html#cb302-3" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> (logtime <span class="sc">&gt;</span> <span class="dv">3</span>)</span>
+<span id="cb302-4"><a href="regression-models.html#cb302-4" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(birdextinct<span class="sc">$</span>nesting[out], logtime[out],</span>
+<span id="cb302-5"><a href="regression-models.html#cb302-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">label=</span>birdextinct<span class="sc">$</span>species[out], <span class="at">pos =</span> <span class="dv">2</span>)   </span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-208-1.png" width="672" /></p>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="regression-models.html#cb303-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">jitter</span>(birdextinct<span class="sc">$</span>size), logtime, </span>
+<span id="cb303-2"><a href="regression-models.html#cb303-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xaxp=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-209-1.png" width="672" /></p>
+<div class="sourceCode" id="cb304"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb304-1"><a href="regression-models.html#cb304-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">jitter</span>(birdextinct<span class="sc">$</span>status), logtime,</span>
+<span id="cb304-2"><a href="regression-models.html#cb304-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xaxp=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-210-1.png" width="672" /></p>
+<p>Least-squares fit:</p>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="regression-models.html#cb305-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lm</span>(logtime <span class="sc">~</span> nesting <span class="sc">+</span> size <span class="sc">+</span> status,</span>
+<span id="cb305-2"><a href="regression-models.html#cb305-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">data=</span>birdextinct, <span class="at">x=</span><span class="cn">TRUE</span>, <span class="at">y=</span><span class="cn">TRUE</span>)</span>
+<span id="cb305-3"><a href="regression-models.html#cb305-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = logtime ~ nesting + size + status, data = birdextinct, 
+##     x = TRUE, y = TRUE)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+## -1.8410 -0.2932 -0.0709  0.2165  2.5167 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.43087    0.20706   2.081 0.041870 *  
+## nesting      0.26501    0.03679   7.203 1.33e-09 ***
+## size        -0.65220    0.16667  -3.913 0.000242 ***
+## status       0.50417    0.18263   2.761 0.007712 ** 
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.6524 on 58 degrees of freedom
+## Multiple R-squared:  0.5982, Adjusted R-squared:  0.5775 
+## F-statistic: 28.79 on 3 and 58 DF,  p-value: 1.577e-11</code></pre>
+<p>Sampling from posterior using vague priors for parameters.</p>
+<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="regression-models.html#cb307-1" aria-hidden="true" tabindex="-1"></a>theta.sample <span class="ot">&lt;-</span> <span class="fu">blinreg</span>(fit<span class="sc">$</span>y, fit<span class="sc">$</span>x, <span class="dv">5000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb308"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb308-1"><a href="regression-models.html#cb308-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb308-2"><a href="regression-models.html#cb308-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(theta.sample<span class="sc">$</span>beta[,<span class="dv">2</span>], <span class="at">main=</span><span class="st">&quot;NESTING&quot;</span>,</span>
+<span id="cb308-3"><a href="regression-models.html#cb308-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span><span class="fu">expression</span>(beta[<span class="dv">1</span>]))</span>
+<span id="cb308-4"><a href="regression-models.html#cb308-4" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(theta.sample<span class="sc">$</span>beta[,<span class="dv">3</span>], <span class="at">main=</span><span class="st">&quot;SIZE&quot;</span>,</span>
+<span id="cb308-5"><a href="regression-models.html#cb308-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span><span class="fu">expression</span>(beta[<span class="dv">2</span>]))</span>
+<span id="cb308-6"><a href="regression-models.html#cb308-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(theta.sample<span class="sc">$</span>beta[,<span class="dv">4</span>], <span class="at">main=</span><span class="st">&quot;STATUS&quot;</span>,</span>
+<span id="cb308-7"><a href="regression-models.html#cb308-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span><span class="fu">expression</span>(beta[<span class="dv">3</span>]))</span>
+<span id="cb308-8"><a href="regression-models.html#cb308-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(theta.sample<span class="sc">$</span>sigma, <span class="at">main=</span><span class="st">&quot;ERROR SD&quot;</span>,</span>
+<span id="cb308-9"><a href="regression-models.html#cb308-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span><span class="fu">expression</span>(sigma))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-213-1.png" width="672" /></p>
+<div class="sourceCode" id="cb309"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb309-1"><a href="regression-models.html#cb309-1" aria-hidden="true" tabindex="-1"></a><span class="fu">apply</span>(theta.sample<span class="sc">$</span>beta, <span class="dv">2</span>, quantile,</span>
+<span id="cb309-2"><a href="regression-models.html#cb309-2" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(.<span class="dv">05</span>, .<span class="dv">5</span>, .<span class="dv">95</span>))</span></code></pre></div>
+<pre><code>##     X(Intercept)  Xnesting      Xsize   Xstatus
+## 5%    0.08301736 0.2031766 -0.9385281 0.1871552
+## 50%   0.42537546 0.2639260 -0.6541445 0.5055329
+## 95%   0.79519902 0.3258697 -0.3713111 0.8134480</code></pre>
+<div class="sourceCode" id="cb311"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb311-1"><a href="regression-models.html#cb311-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(theta.sample<span class="sc">$</span>sigma, <span class="fu">c</span>(.<span class="dv">05</span>, .<span class="dv">5</span>, .<span class="dv">95</span>))</span></code></pre></div>
+<pre><code>##        5%       50%       95% 
+## 0.5667969 0.6573449 0.7703726</code></pre>
+<p>Estimating mean extinction times:</p>
+<div class="sourceCode" id="cb313"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb313-1"><a href="regression-models.html#cb313-1" aria-hidden="true" tabindex="-1"></a>cov1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb313-2"><a href="regression-models.html#cb313-2" aria-hidden="true" tabindex="-1"></a>cov2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb313-3"><a href="regression-models.html#cb313-3" aria-hidden="true" tabindex="-1"></a>cov3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb313-4"><a href="regression-models.html#cb313-4" aria-hidden="true" tabindex="-1"></a>cov4 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb313-5"><a href="regression-models.html#cb313-5" aria-hidden="true" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(cov1, cov2, cov3, cov4)</span>
+<span id="cb313-6"><a href="regression-models.html#cb313-6" aria-hidden="true" tabindex="-1"></a>mean.draws <span class="ot">&lt;-</span> <span class="fu">blinregexpected</span>(X1, theta.sample)</span></code></pre></div>
+<div class="sourceCode" id="cb314"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb314-1"><a href="regression-models.html#cb314-1" aria-hidden="true" tabindex="-1"></a>c.labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;D&quot;</span>)</span>
+<span id="cb314-2"><a href="regression-models.html#cb314-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb314-3"><a href="regression-models.html#cb314-3" aria-hidden="true" tabindex="-1"></a> <span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>
+<span id="cb314-4"><a href="regression-models.html#cb314-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">hist</span>(mean.draws[, j],</span>
+<span id="cb314-5"><a href="regression-models.html#cb314-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">main=</span><span class="fu">paste</span>(<span class="st">&quot;Covariate set&quot;</span>,</span>
+<span id="cb314-6"><a href="regression-models.html#cb314-6" aria-hidden="true" tabindex="-1"></a>                 c.labels[j]),</span>
+<span id="cb314-7"><a href="regression-models.html#cb314-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab=</span><span class="st">&quot;log TIME&quot;</span>)</span>
+<span id="cb314-8"><a href="regression-models.html#cb314-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-217-1.png" width="672" /></p>
+<p>Predicting future extinction times:</p>
+<div class="sourceCode" id="cb315"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb315-1"><a href="regression-models.html#cb315-1" aria-hidden="true" tabindex="-1"></a>cov1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span>
+<span id="cb315-2"><a href="regression-models.html#cb315-2" aria-hidden="true" tabindex="-1"></a>cov2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">0</span>)</span>
+<span id="cb315-3"><a href="regression-models.html#cb315-3" aria-hidden="true" tabindex="-1"></a>cov3 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">0</span>, <span class="dv">1</span>)</span>
+<span id="cb315-4"><a href="regression-models.html#cb315-4" aria-hidden="true" tabindex="-1"></a>cov4 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span>
+<span id="cb315-5"><a href="regression-models.html#cb315-5" aria-hidden="true" tabindex="-1"></a>X1 <span class="ot">&lt;-</span> <span class="fu">rbind</span>(cov1, cov2, cov3, cov4)</span>
+<span id="cb315-6"><a href="regression-models.html#cb315-6" aria-hidden="true" tabindex="-1"></a>pred.draws <span class="ot">&lt;-</span> <span class="fu">blinregpred</span>(X1, theta.sample)</span></code></pre></div>
+<div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="regression-models.html#cb316-1" aria-hidden="true" tabindex="-1"></a>c.labels <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;A&quot;</span>, <span class="st">&quot;B&quot;</span>, <span class="st">&quot;C&quot;</span>, <span class="st">&quot;D&quot;</span>)</span>
+<span id="cb316-2"><a href="regression-models.html#cb316-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">2</span>))</span>
+<span id="cb316-3"><a href="regression-models.html#cb316-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>
+<span id="cb316-4"><a href="regression-models.html#cb316-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">hist</span>(pred.draws[, j],</span>
+<span id="cb316-5"><a href="regression-models.html#cb316-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">main=</span><span class="fu">paste</span>(<span class="st">&quot;Covariate set&quot;</span>,</span>
+<span id="cb316-6"><a href="regression-models.html#cb316-6" aria-hidden="true" tabindex="-1"></a>                 c.labels[j]),</span>
+<span id="cb316-7"><a href="regression-models.html#cb316-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab=</span><span class="st">&quot;log TIME&quot;</span>)</span>
+<span id="cb316-8"><a href="regression-models.html#cb316-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-219-1.png" width="672" /></p>
+<p>Model checking: posterior predictive distribution distributions of each future observation, showing actual observation as solid dot.</p>
+<div class="sourceCode" id="cb317"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb317-1"><a href="regression-models.html#cb317-1" aria-hidden="true" tabindex="-1"></a>pred.draws <span class="ot">&lt;-</span> <span class="fu">blinregpred</span>(fit<span class="sc">$</span>x, theta.sample)</span>
+<span id="cb317-2"><a href="regression-models.html#cb317-2" aria-hidden="true" tabindex="-1"></a>pred.sum <span class="ot">&lt;-</span> <span class="fu">apply</span>(pred.draws, <span class="dv">2</span>, </span>
+<span id="cb317-3"><a href="regression-models.html#cb317-3" aria-hidden="true" tabindex="-1"></a>                  quantile, <span class="fu">c</span>(.<span class="dv">05</span>,.<span class="dv">95</span>))</span>
+<span id="cb317-4"><a href="regression-models.html#cb317-4" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb317-5"><a href="regression-models.html#cb317-5" aria-hidden="true" tabindex="-1"></a>ind <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(logtime)</span>
+<span id="cb317-6"><a href="regression-models.html#cb317-6" aria-hidden="true" tabindex="-1"></a><span class="fu">matplot</span>(<span class="fu">rbind</span>(ind, ind), pred.sum, </span>
+<span id="cb317-7"><a href="regression-models.html#cb317-7" aria-hidden="true" tabindex="-1"></a>        <span class="at">type=</span><span class="st">&quot;l&quot;</span>, <span class="at">lty=</span><span class="dv">1</span>, <span class="at">col=</span><span class="dv">1</span>,</span>
+<span id="cb317-8"><a href="regression-models.html#cb317-8" aria-hidden="true" tabindex="-1"></a>        <span class="at">xlab=</span><span class="st">&quot;INDEX&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;log TIME&quot;</span>)</span>
+<span id="cb317-9"><a href="regression-models.html#cb317-9" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(ind, logtime, <span class="at">pch=</span><span class="dv">19</span>)</span>
+<span id="cb317-10"><a href="regression-models.html#cb317-10" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> (logtime <span class="sc">&gt;</span> pred.sum[<span class="dv">2</span>, ])</span>
+<span id="cb317-11"><a href="regression-models.html#cb317-11" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(ind[out], logtime[out], </span>
+<span id="cb317-12"><a href="regression-models.html#cb317-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">label=</span>birdextinct<span class="sc">$</span>species[out], <span class="at">pos =</span> <span class="dv">4</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-220-1.png" width="672" /></p>
+<p>Model checking via bayes residuals <span class="math inline">\(y_i - x_i \beta\)</span>. Graph of absolute values of residuals that exceeds a particular constant.</p>
+<div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb318-1"><a href="regression-models.html#cb318-1" aria-hidden="true" tabindex="-1"></a>prob.out <span class="ot">&lt;-</span> <span class="fu">bayesresiduals</span>(fit, theta.sample, <span class="dv">2</span>)</span>
+<span id="cb318-2"><a href="regression-models.html#cb318-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>))</span>
+<span id="cb318-3"><a href="regression-models.html#cb318-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(birdextinct<span class="sc">$</span>nesting, prob.out)</span>
+<span id="cb318-4"><a href="regression-models.html#cb318-4" aria-hidden="true" tabindex="-1"></a>out <span class="ot">=</span> (prob.out <span class="sc">&gt;</span> <span class="fl">0.35</span>)</span>
+<span id="cb318-5"><a href="regression-models.html#cb318-5" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(birdextinct<span class="sc">$</span>nesting[out], prob.out[out],</span>
+<span id="cb318-6"><a href="regression-models.html#cb318-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">label=</span>birdextinct<span class="sc">$</span>species[out], <span class="at">pos =</span> <span class="dv">4</span>)   </span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-221-1.png" width="672" /></p>
+</div>
+<div id="modeling-using-zellners-g-prior" class="section level2" number="9.2">
+<h2><span class="header-section-number">9.2</span> Modeling Using Zellner’s g Prior</h2>
+<p>Illustrating the role of the parameter c:</p>
+<div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="regression-models.html#cb319-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> <span class="fu">cbind</span>(<span class="dv">1</span>, puffin<span class="sc">$</span>Distance <span class="sc">-</span></span>
+<span id="cb319-2"><a href="regression-models.html#cb319-2" aria-hidden="true" tabindex="-1"></a>             <span class="fu">mean</span>(puffin<span class="sc">$</span>Distance))</span>
+<span id="cb319-3"><a href="regression-models.html#cb319-3" aria-hidden="true" tabindex="-1"></a>c.prior <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="fl">0.5</span>, <span class="dv">5</span>, <span class="dv">2</span>)</span>
+<span id="cb319-4"><a href="regression-models.html#cb319-4" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">vector</span>(<span class="st">&quot;list&quot;</span>, <span class="dv">4</span>)</span>
+<span id="cb319-5"><a href="regression-models.html#cb319-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>
+<span id="cb319-6"><a href="regression-models.html#cb319-6" aria-hidden="true" tabindex="-1"></a>  prior <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">b0=</span><span class="fu">c</span>(<span class="dv">8</span>, <span class="dv">0</span>), <span class="at">c0=</span>c.prior[j])</span>
+<span id="cb319-7"><a href="regression-models.html#cb319-7" aria-hidden="true" tabindex="-1"></a>  fit[[j]] <span class="ot">&lt;-</span> <span class="fu">blinreg</span>(puffin<span class="sc">$</span>Nest, X, <span class="dv">1000</span>, prior)</span>
+<span id="cb319-8"><a href="regression-models.html#cb319-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb319-9"><a href="regression-models.html#cb319-9" aria-hidden="true" tabindex="-1"></a>BETA <span class="ot">&lt;-</span> <span class="cn">NULL</span></span>
+<span id="cb319-10"><a href="regression-models.html#cb319-10" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>
+<span id="cb319-11"><a href="regression-models.html#cb319-11" aria-hidden="true" tabindex="-1"></a>  s<span class="ot">=</span><span class="fu">data.frame</span>(<span class="at">Prior=</span><span class="fu">paste</span>(<span class="st">&quot;c =&quot;</span>,</span>
+<span id="cb319-12"><a href="regression-models.html#cb319-12" aria-hidden="true" tabindex="-1"></a>                <span class="fu">as.character</span>(c.prior[j])),</span>
+<span id="cb319-13"><a href="regression-models.html#cb319-13" aria-hidden="true" tabindex="-1"></a>         <span class="at">beta0=</span>fit[[j]]<span class="sc">$</span>beta[, <span class="dv">1</span>],</span>
+<span id="cb319-14"><a href="regression-models.html#cb319-14" aria-hidden="true" tabindex="-1"></a>         <span class="at">beta1=</span>fit[[j]]<span class="sc">$</span>beta[, <span class="dv">2</span>])</span>
+<span id="cb319-15"><a href="regression-models.html#cb319-15" aria-hidden="true" tabindex="-1"></a>  BETA <span class="ot">&lt;-</span> <span class="fu">rbind</span>(BETA, s)</span>
+<span id="cb319-16"><a href="regression-models.html#cb319-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb319-17"><a href="regression-models.html#cb319-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lattice)</span>
+<span id="cb319-18"><a href="regression-models.html#cb319-18" aria-hidden="true" tabindex="-1"></a><span class="fu">with</span>(BETA,</span>
+<span id="cb319-19"><a href="regression-models.html#cb319-19" aria-hidden="true" tabindex="-1"></a>     <span class="fu">xyplot</span>(beta1 <span class="sc">~</span> beta0 <span class="sc">|</span> Prior, </span>
+<span id="cb319-20"><a href="regression-models.html#cb319-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">type=</span><span class="fu">c</span>(<span class="st">&quot;p&quot;</span>,<span class="st">&quot;g&quot;</span>),</span>
+<span id="cb319-21"><a href="regression-models.html#cb319-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">col=</span><span class="st">&quot;black&quot;</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-222-1.png" width="672" /></p>
+<p>Model selection of all regression models using g priors:</p>
+<div class="sourceCode" id="cb320"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb320-1"><a href="regression-models.html#cb320-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">y=</span>puffin<span class="sc">$</span>Nest,</span>
+<span id="cb320-2"><a href="regression-models.html#cb320-2" aria-hidden="true" tabindex="-1"></a>             <span class="at">X=</span><span class="fu">cbind</span>(<span class="dv">1</span>, puffin<span class="sc">$</span>Grass, puffin<span class="sc">$</span>Soil))</span>
+<span id="cb320-3"><a href="regression-models.html#cb320-3" aria-hidden="true" tabindex="-1"></a>prior <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">b0=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), <span class="at">c0=</span><span class="dv">100</span>)</span>
+<span id="cb320-4"><a href="regression-models.html#cb320-4" aria-hidden="true" tabindex="-1"></a>beta.start <span class="ot">&lt;-</span> <span class="fu">with</span>(puffin,</span>
+<span id="cb320-5"><a href="regression-models.html#cb320-5" aria-hidden="true" tabindex="-1"></a>          <span class="fu">lm</span>(Nest <span class="sc">~</span> Grass <span class="sc">+</span> Soil)<span class="sc">$</span>coef)</span>
+<span id="cb320-6"><a href="regression-models.html#cb320-6" aria-hidden="true" tabindex="-1"></a><span class="fu">laplace</span>(reg.gprior.post,</span>
+<span id="cb320-7"><a href="regression-models.html#cb320-7" aria-hidden="true" tabindex="-1"></a>        <span class="fu">c</span>(beta.start, <span class="dv">0</span>),</span>
+<span id="cb320-8"><a href="regression-models.html#cb320-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">list</span>(<span class="at">data=</span>data, <span class="at">prior=</span>prior))<span class="sc">$</span>int</span></code></pre></div>
+<pre><code>## [1] -136.3957</code></pre>
+<div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="regression-models.html#cb322-1" aria-hidden="true" tabindex="-1"></a>X <span class="ot">&lt;-</span> puffin[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb322-2"><a href="regression-models.html#cb322-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> puffin<span class="sc">$</span>Nest</span>
+<span id="cb322-3"><a href="regression-models.html#cb322-3" aria-hidden="true" tabindex="-1"></a>c <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb322-4"><a href="regression-models.html#cb322-4" aria-hidden="true" tabindex="-1"></a><span class="fu">bayes.model.selection</span>(y, X, c, <span class="at">constant=</span><span class="cn">FALSE</span>)</span></code></pre></div>
+<pre><code>## $mod.prob
+##    Grass  Soil Angle Distance   log.m    Prob
+## 1  FALSE FALSE FALSE    FALSE -132.18 0.00000
+## 2   TRUE FALSE FALSE    FALSE -134.05 0.00000
+## 3  FALSE  TRUE FALSE    FALSE -134.51 0.00000
+## 4   TRUE  TRUE FALSE    FALSE -136.40 0.00000
+## 5  FALSE FALSE  TRUE    FALSE -112.67 0.00000
+## 6   TRUE FALSE  TRUE    FALSE -113.18 0.00000
+## 7  FALSE  TRUE  TRUE    FALSE -114.96 0.00000
+## 8   TRUE  TRUE  TRUE    FALSE -115.40 0.00000
+## 9  FALSE FALSE FALSE     TRUE -103.30 0.03500
+## 10  TRUE FALSE FALSE     TRUE -105.57 0.00360
+## 11 FALSE  TRUE FALSE     TRUE -100.37 0.65065
+## 12  TRUE  TRUE FALSE     TRUE -102.35 0.08992
+## 13 FALSE FALSE  TRUE     TRUE -102.81 0.05682
+## 14  TRUE FALSE  TRUE     TRUE -105.09 0.00581
+## 15 FALSE  TRUE  TRUE     TRUE -101.88 0.14386
+## 16  TRUE  TRUE  TRUE     TRUE -104.19 0.01434
+## 
+## $converge
+##  [1] TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+## [16] TRUE</code></pre>
+</div>
+<div id="survival-modeling" class="section level2" number="9.3">
+<h2><span class="header-section-number">9.3</span> Survival Modeling</h2>
+<p>Traditional fit using a Weibull model:</p>
+<div class="sourceCode" id="cb324"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb324-1"><a href="regression-models.html#cb324-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(survival)</span>
+<span id="cb324-2"><a href="regression-models.html#cb324-2" aria-hidden="true" tabindex="-1"></a><span class="fu">survreg</span>(<span class="fu">Surv</span>(time, status) <span class="sc">~</span> <span class="fu">factor</span>(treat) <span class="sc">+</span> age,</span>
+<span id="cb324-3"><a href="regression-models.html#cb324-3" aria-hidden="true" tabindex="-1"></a>        <span class="at">dist=</span><span class="st">&quot;weibull&quot;</span>,</span>
+<span id="cb324-4"><a href="regression-models.html#cb324-4" aria-hidden="true" tabindex="-1"></a>        <span class="at">data =</span> chemotherapy)</span></code></pre></div>
+<pre><code>## Call:
+## survreg(formula = Surv(time, status) ~ factor(treat) + age, data = chemotherapy, 
+##     dist = &quot;weibull&quot;)
+## 
+## Coefficients:
+##    (Intercept) factor(treat)2            age 
+##    10.98683919     0.56145663    -0.07897718 
+## 
+## Scale= 0.5489202 
+## 
+## Loglik(model)= -88.7   Loglik(intercept only)= -98
+##  Chisq= 18.41 on 2 degrees of freedom, p= 0.000101 
+## n= 26</code></pre>
+<p>Bayesian fit:</p>
+<div class="sourceCode" id="cb326"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb326-1"><a href="regression-models.html#cb326-1" aria-hidden="true" tabindex="-1"></a>start <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span>.<span class="dv">5</span>, <span class="dv">9</span>, .<span class="dv">5</span>, <span class="sc">-</span>.<span class="dv">05</span>)</span>
+<span id="cb326-2"><a href="regression-models.html#cb326-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">with</span>(chemotherapy,</span>
+<span id="cb326-3"><a href="regression-models.html#cb326-3" aria-hidden="true" tabindex="-1"></a>          <span class="fu">cbind</span>(time, status, treat <span class="sc">-</span> <span class="dv">1</span>, age))</span>
+<span id="cb326-4"><a href="regression-models.html#cb326-4" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">laplace</span>(weibullregpost, start, d)</span>
+<span id="cb326-5"><a href="regression-models.html#cb326-5" aria-hidden="true" tabindex="-1"></a>fit</span></code></pre></div>
+<pre><code>## $mode
+## [1] -0.59986796 10.98663371  0.56151088 -0.07897316
+## 
+## $var
+##              [,1]        [,2]         [,3]          [,4]
+## [1,]  0.057298875  0.13530436  0.004541435 -0.0020828431
+## [2,]  0.135304360  1.67428176 -0.156631948 -0.0255278352
+## [3,]  0.004541435 -0.15663195  0.115450201  0.0017880712
+## [4,] -0.002082843 -0.02552784  0.001788071  0.0003995202
+## 
+## $int
+## [1] -25.31207
+## 
+## $converge
+## [1] TRUE</code></pre>
+<div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb328-1"><a href="regression-models.html#cb328-1" aria-hidden="true" tabindex="-1"></a>proposal <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">var=</span>fit<span class="sc">$</span>var, <span class="at">scale=</span><span class="fl">1.5</span>)</span>
+<span id="cb328-2"><a href="regression-models.html#cb328-2" aria-hidden="true" tabindex="-1"></a>bayesfit <span class="ot">&lt;-</span> <span class="fu">rwmetrop</span>(weibullregpost,</span>
+<span id="cb328-3"><a href="regression-models.html#cb328-3" aria-hidden="true" tabindex="-1"></a>                     proposal,</span>
+<span id="cb328-4"><a href="regression-models.html#cb328-4" aria-hidden="true" tabindex="-1"></a>                     fit<span class="sc">$</span>mode,</span>
+<span id="cb328-5"><a href="regression-models.html#cb328-5" aria-hidden="true" tabindex="-1"></a>                     <span class="dv">10000</span>, d)</span>
+<span id="cb328-6"><a href="regression-models.html#cb328-6" aria-hidden="true" tabindex="-1"></a>bayesfit<span class="sc">$</span>accept</span></code></pre></div>
+<pre><code>## [1] 0.2849</code></pre>
+<div class="sourceCode" id="cb330"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb330-1"><a href="regression-models.html#cb330-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb330-2"><a href="regression-models.html#cb330-2" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">exp</span>(bayesfit<span class="sc">$</span>par[, <span class="dv">1</span>])</span>
+<span id="cb330-3"><a href="regression-models.html#cb330-3" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> bayesfit<span class="sc">$</span>par[, <span class="dv">2</span>]</span>
+<span id="cb330-4"><a href="regression-models.html#cb330-4" aria-hidden="true" tabindex="-1"></a>beta1 <span class="ot">&lt;-</span> bayesfit<span class="sc">$</span>par[, <span class="dv">3</span>]</span>
+<span id="cb330-5"><a href="regression-models.html#cb330-5" aria-hidden="true" tabindex="-1"></a>beta2 <span class="ot">&lt;-</span> bayesfit<span class="sc">$</span>par[, <span class="dv">4</span>]</span>
+<span id="cb330-6"><a href="regression-models.html#cb330-6" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(beta1, <span class="at">xlab=</span><span class="st">&quot;treatment&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb330-7"><a href="regression-models.html#cb330-7" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(beta2, <span class="at">xlab=</span><span class="st">&quot;age&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb330-8"><a href="regression-models.html#cb330-8" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sigma, <span class="at">xlab=</span><span class="st">&quot;sigma&quot;</span>, <span class="at">main=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-228-1.png" width="672" /></p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="model-comparison.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="gibbs-sampling.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/08-regression.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Multiparameter Models | Bayesian Computation with R Scripts</title>
+  <meta name="description" content="This contains all the worked examples from the text." />
+  <meta name="generator" content="bookdown 0.21 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Multiparameter Models | Bayesian Computation with R Scripts" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This contains all the worked examples from the text." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Multiparameter Models | Bayesian Computation with R Scripts" />
+  
+  <meta name="twitter:description" content="This contains all the worked examples from the text." />
+  
+
+<meta name="author" content="Jim Albert" />
+
+
+<meta name="date" content="2020-12-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="single-parameter-models.html"/>
+<link rel="next" href="introduction-to-bayesian-computation.html"/>
+<script src="libs/header-attrs-2.6/header-attrs.js"></script>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Bayesian Computation with R, 2nd Edition</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html"><i class="fa fa-check"></i><b>2</b> Introduction to Bayesian Thinking</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#learning-about-the-proportion-of-heavy-sleepers"><i class="fa fa-check"></i><b>2.1</b> Learning About the Proportion of Heavy Sleepers</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#using-a-discrete-prior"><i class="fa fa-check"></i><b>2.2</b> Using a Discrete Prior</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#using-a-beta-prior"><i class="fa fa-check"></i><b>2.3</b> Using a Beta Prior</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#using-a-histogram-prior"><i class="fa fa-check"></i><b>2.4</b> Using a Histogram Prior</a></li>
+<li class="chapter" data-level="2.5" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#prediction"><i class="fa fa-check"></i><b>2.5</b> Prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="single-parameter-models.html"><a href="single-parameter-models.html"><i class="fa fa-check"></i><b>3</b> Single-Parameter Models</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="single-parameter-models.html"><a href="single-parameter-models.html#normal-distribution-with-known-mean-but-unknown-variance"><i class="fa fa-check"></i><b>3.1</b> Normal Distribution with Known Mean but Unknown Variance</a></li>
+<li class="chapter" data-level="3.2" data-path="single-parameter-models.html"><a href="single-parameter-models.html#estimating-a-heart-transplant-mortality-rate"><i class="fa fa-check"></i><b>3.2</b> Estimating a Heart Transplant Mortality Rate</a></li>
+<li class="chapter" data-level="3.3" data-path="single-parameter-models.html"><a href="single-parameter-models.html#an-illustration-of-bayesian-robustness"><i class="fa fa-check"></i><b>3.3</b> An Illustration of Bayesian Robustness</a></li>
+<li class="chapter" data-level="3.4" data-path="single-parameter-models.html"><a href="single-parameter-models.html#mixtures-of-conjugate-priors"><i class="fa fa-check"></i><b>3.4</b> Mixtures of Conjugate Priors</a></li>
+<li class="chapter" data-level="3.5" data-path="single-parameter-models.html"><a href="single-parameter-models.html#a-bayesian-test-of-the-fairness-of-a-coin"><i class="fa fa-check"></i><b>3.5</b> A Bayesian Test of the Fairness of a Coin</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="multiparameter-models.html"><a href="multiparameter-models.html"><i class="fa fa-check"></i><b>4</b> Multiparameter Models</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="multiparameter-models.html"><a href="multiparameter-models.html#normal-data-with-both-parameters-unknown"><i class="fa fa-check"></i><b>4.1</b> Normal Data with Both Parameters Unknown</a></li>
+<li class="chapter" data-level="4.2" data-path="multiparameter-models.html"><a href="multiparameter-models.html#a-multinomial-model"><i class="fa fa-check"></i><b>4.2</b> A Multinomial Model</a></li>
+<li class="chapter" data-level="4.3" data-path="multiparameter-models.html"><a href="multiparameter-models.html#a-bioassay-experiment"><i class="fa fa-check"></i><b>4.3</b> A Bioassay Experiment</a></li>
+<li class="chapter" data-level="4.4" data-path="multiparameter-models.html"><a href="multiparameter-models.html#comparing-two-proportions"><i class="fa fa-check"></i><b>4.4</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html"><i class="fa fa-check"></i><b>5</b> Introduction to Bayesian Computation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#a-beta-binomial-model-for-overdispersion"><i class="fa fa-check"></i><b>5.1</b> A Beta-Binomial Model for Overdispersion</a></li>
+<li class="chapter" data-level="5.2" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#approximations-based-on-posterior-modes"><i class="fa fa-check"></i><b>5.2</b> Approximations Based on Posterior Modes</a></li>
+<li class="chapter" data-level="5.3" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#monte-carlo-method-for-computing-integrals"><i class="fa fa-check"></i><b>5.3</b> Monte Carlo Method for Computing Integrals</a></li>
+<li class="chapter" data-level="5.4" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#rejection-sampling"><i class="fa fa-check"></i><b>5.4</b> Rejection Sampling</a></li>
+<li class="chapter" data-level="5.5" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#importance-sampling"><i class="fa fa-check"></i><b>5.5</b> Importance Sampling</a></li>
+<li class="chapter" data-level="5.6" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#sampling-importance-resampling"><i class="fa fa-check"></i><b>5.6</b> Sampling Importance Resampling</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html"><i class="fa fa-check"></i><b>6</b> Markov Chain Monte Carlo Methods</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#introduction-to-discrete-markov-chains"><i class="fa fa-check"></i><b>6.1</b> Introduction to Discrete Markov Chains</a></li>
+<li class="chapter" data-level="6.2" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#learning-about-a-normal-population-from-grouped-data"><i class="fa fa-check"></i><b>6.2</b> Learning about a Normal Population from Grouped Data</a></li>
+<li class="chapter" data-level="6.3" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#example-of-output-analysis"><i class="fa fa-check"></i><b>6.3</b> Example of Output Analysis</a></li>
+<li class="chapter" data-level="6.4" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#modeling-data-with-cauchy-errors"><i class="fa fa-check"></i><b>6.4</b> Modeling Data with Cauchy Errors</a></li>
+<li class="chapter" data-level="6.5" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#analysis-of-the-stanford-heart-transplant-data"><i class="fa fa-check"></i><b>6.5</b> Analysis of the Stanford Heart Transplant Data</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html"><i class="fa fa-check"></i><b>7</b> Hierarchical Modeling</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#introduction-to-hierarchical-modeling"><i class="fa fa-check"></i><b>7.1</b> Introduction to Hierarchical Modeling</a></li>
+<li class="chapter" data-level="7.2" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#individual-or-combined-estimates"><i class="fa fa-check"></i><b>7.2</b> Individual or Combined Estimates</a></li>
+<li class="chapter" data-level="7.3" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#equal-mortality-rates"><i class="fa fa-check"></i><b>7.3</b> Equal Mortality Rates?</a></li>
+<li class="chapter" data-level="7.4" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#modeling-a-prior-belief-of-exchangeability"><i class="fa fa-check"></i><b>7.4</b> Modeling a Prior Belief of Exchangeability</a></li>
+<li class="chapter" data-level="7.5" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#simulating-from-the-posterior"><i class="fa fa-check"></i><b>7.5</b> Simulating from the Posterior</a></li>
+<li class="chapter" data-level="7.6" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#posterior-inferences"><i class="fa fa-check"></i><b>7.6</b> Posterior Inferences</a></li>
+<li class="chapter" data-level="7.7" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#bayesian-sensitivity-analysis"><i class="fa fa-check"></i><b>7.7</b> Bayesian Sensitivity Analysis</a></li>
+<li class="chapter" data-level="7.8" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#posterior-predictive-model-checking"><i class="fa fa-check"></i><b>7.8</b> Posterior Predictive Model Checking</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>8</b> Model Comparison</a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="model-comparison.html"><a href="model-comparison.html#a-one-sided-test-of-a-normal-mean"><i class="fa fa-check"></i><b>8.1</b> A One-Sided Test of a Normal Mean</a></li>
+<li class="chapter" data-level="8.2" data-path="model-comparison.html"><a href="model-comparison.html#a-two-sided-test-of-a-normal-mean"><i class="fa fa-check"></i><b>8.2</b> A Two-Sided Test of a Normal Mean</a></li>
+<li class="chapter" data-level="8.3" data-path="model-comparison.html"><a href="model-comparison.html#models-for-soccer-goals"><i class="fa fa-check"></i><b>8.3</b> Models for Soccer Goals</a></li>
+<li class="chapter" data-level="8.4" data-path="model-comparison.html"><a href="model-comparison.html#is-a-baseball-hitter-really-streaky"><i class="fa fa-check"></i><b>8.4</b> Is a Baseball Hitter Really Streaky?</a></li>
+<li class="chapter" data-level="8.5" data-path="model-comparison.html"><a href="model-comparison.html#a-test-of-independence-in-a-two-way-contingency-table"><i class="fa fa-check"></i><b>8.5</b> A Test of Independence in a Two-Way Contingency Table</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regression-models.html"><a href="regression-models.html"><i class="fa fa-check"></i><b>9</b> Regression Models</a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="regression-models.html"><a href="regression-models.html#an-example-of-bayesian-regression"><i class="fa fa-check"></i><b>9.1</b> An Example of Bayesian Regression</a></li>
+<li class="chapter" data-level="9.2" data-path="regression-models.html"><a href="regression-models.html#modeling-using-zellners-g-prior"><i class="fa fa-check"></i><b>9.2</b> Modeling Using Zellner’s g Prior</a></li>
+<li class="chapter" data-level="9.3" data-path="regression-models.html"><a href="regression-models.html#survival-modeling"><i class="fa fa-check"></i><b>9.3</b> Survival Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html"><i class="fa fa-check"></i><b>10</b> Gibbs Sampling</a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html#robust-modeling"><i class="fa fa-check"></i><b>10.1</b> Robust Modeling</a></li>
+<li class="chapter" data-level="10.2" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html#binary-response-regression-with-a-probit-link"><i class="fa fa-check"></i><b>10.2</b> Binary Response Regression with a Probit Link</a></li>
+<li class="chapter" data-level="10.3" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html#estimating-a-table-of-means"><i class="fa fa-check"></i><b>10.3</b> Estimating a Table of Means</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Bayesian Computation with R Scripts</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="multiparameter-models" class="section level1" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Multiparameter Models</h1>
+<div id="normal-data-with-both-parameters-unknown" class="section level2" number="4.1">
+<h2><span class="header-section-number">4.1</span> Normal Data with Both Parameters Unknown</h2>
+<p>Illustrates exact posterior sampling of (<span class="math inline">\(\mu, \sigma^2\)</span>) for normal sampling with a noninformative prior.</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="multiparameter-models.html#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(LearnBayes)</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="multiparameter-models.html#cb77-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(normchi2post, </span>
+<span id="cb77-2"><a href="multiparameter-models.html#cb77-2" aria-hidden="true" tabindex="-1"></a>               <span class="fu">c</span>(<span class="dv">220</span>, <span class="dv">330</span>, <span class="dv">500</span>, <span class="dv">9000</span>), </span>
+<span id="cb77-3"><a href="multiparameter-models.html#cb77-3" aria-hidden="true" tabindex="-1"></a>               marathontimes<span class="sc">$</span>time,</span>
+<span id="cb77-4"><a href="multiparameter-models.html#cb77-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">xlab=</span><span class="st">&quot;mean&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;variance&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-53-1.png" width="672" /></p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="multiparameter-models.html#cb78-1" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">with</span>(marathontimes, </span>
+<span id="cb78-2"><a href="multiparameter-models.html#cb78-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">sum</span>((time <span class="sc">-</span> <span class="fu">mean</span>(time))<span class="sc">^</span><span class="dv">2</span>))</span>
+<span id="cb78-3"><a href="multiparameter-models.html#cb78-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(marathontimes<span class="sc">$</span>time)</span>
+<span id="cb78-4"><a href="multiparameter-models.html#cb78-4" aria-hidden="true" tabindex="-1"></a>sigma2 <span class="ot">&lt;-</span> S <span class="sc">/</span> <span class="fu">rchisq</span>(<span class="dv">1000</span>, n <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb78-5"><a href="multiparameter-models.html#cb78-5" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(<span class="dv">1000</span>, <span class="at">mean =</span> <span class="fu">mean</span>(marathontimes<span class="sc">$</span>time),</span>
+<span id="cb78-6"><a href="multiparameter-models.html#cb78-6" aria-hidden="true" tabindex="-1"></a>            <span class="at">sd =</span> <span class="fu">sqrt</span>(sigma2) <span class="sc">/</span> <span class="fu">sqrt</span>(n))</span>
+<span id="cb78-7"><a href="multiparameter-models.html#cb78-7" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(normchi2post, </span>
+<span id="cb78-8"><a href="multiparameter-models.html#cb78-8" aria-hidden="true" tabindex="-1"></a>               <span class="fu">c</span>(<span class="dv">220</span>, <span class="dv">330</span>, <span class="dv">500</span>, <span class="dv">9000</span>), </span>
+<span id="cb78-9"><a href="multiparameter-models.html#cb78-9" aria-hidden="true" tabindex="-1"></a>               marathontimes<span class="sc">$</span>time,</span>
+<span id="cb78-10"><a href="multiparameter-models.html#cb78-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">xlab=</span><span class="st">&quot;mean&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;variance&quot;</span>)</span>
+<span id="cb78-11"><a href="multiparameter-models.html#cb78-11" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(mu, sigma2)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-54-1.png" width="672" /></p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="multiparameter-models.html#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(mu, <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
+<pre><code>##     2.5%    97.5% 
+## 255.8784 300.8766</code></pre>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="multiparameter-models.html#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(<span class="fu">sqrt</span>(sigma2), <span class="fu">c</span>(<span class="fl">0.025</span>, <span class="fl">0.975</span>))</span></code></pre></div>
+<pre><code>##     2.5%    97.5% 
+## 38.16360 72.06066</code></pre>
+</div>
+<div id="a-multinomial-model" class="section level2" number="4.2">
+<h2><span class="header-section-number">4.2</span> A Multinomial Model</h2>
+<p>Multinomial data and a uniform prior placed on the proportions. Sampling from the Dirichlet posterior distribution.</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb83-1"><a href="multiparameter-models.html#cb83-1" aria-hidden="true" tabindex="-1"></a>alpha <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">728</span>, <span class="dv">584</span>, <span class="dv">138</span>)</span>
+<span id="cb83-2"><a href="multiparameter-models.html#cb83-2" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="fu">rdirichlet</span>(<span class="dv">1000</span>, alpha)</span>
+<span id="cb83-3"><a href="multiparameter-models.html#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(theta[, <span class="dv">1</span>] <span class="sc">-</span> theta[, <span class="dv">2</span>], <span class="at">main=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-57-1.png" width="672" /></p>
+<p>Considers posterior distribution of Obama electoral votes for the 2008 presidential election.</p>
+<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="multiparameter-models.html#cb84-1" aria-hidden="true" tabindex="-1"></a>prob.Obama <span class="ot">&lt;-</span> <span class="cf">function</span>(j){</span>
+<span id="cb84-2"><a href="multiparameter-models.html#cb84-2" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">with</span>(election<span class="fl">.2008</span>, </span>
+<span id="cb84-3"><a href="multiparameter-models.html#cb84-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">rdirichlet</span>(<span class="dv">5000</span>,</span>
+<span id="cb84-4"><a href="multiparameter-models.html#cb84-4" aria-hidden="true" tabindex="-1"></a>          <span class="dv">500</span> <span class="sc">*</span> <span class="fu">c</span>(M.pct[j], O.pct[j], </span>
+<span id="cb84-5"><a href="multiparameter-models.html#cb84-5" aria-hidden="true" tabindex="-1"></a>          <span class="dv">100</span> <span class="sc">-</span> M.pct[j] <span class="sc">-</span> O.pct[j]) <span class="sc">/</span> <span class="dv">100</span> <span class="sc">+</span> <span class="dv">1</span>))</span>
+<span id="cb84-6"><a href="multiparameter-models.html#cb84-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mean</span>(p[, <span class="dv">2</span>] <span class="sc">&gt;</span> p[, <span class="dv">1</span>])</span>
+<span id="cb84-7"><a href="multiparameter-models.html#cb84-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb84-8"><a href="multiparameter-models.html#cb84-8" aria-hidden="true" tabindex="-1"></a>Obama.win.probs <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span> <span class="sc">:</span> <span class="dv">51</span>, prob.Obama)</span></code></pre></div>
+<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="multiparameter-models.html#cb85-1" aria-hidden="true" tabindex="-1"></a>sim.election <span class="ot">&lt;-</span> <span class="cf">function</span>(){</span>
+<span id="cb85-2"><a href="multiparameter-models.html#cb85-2" aria-hidden="true" tabindex="-1"></a>  winner <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">51</span>, <span class="dv">1</span>, </span>
+<span id="cb85-3"><a href="multiparameter-models.html#cb85-3" aria-hidden="true" tabindex="-1"></a>              Obama.win.probs)  </span>
+<span id="cb85-4"><a href="multiparameter-models.html#cb85-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">sum</span>(election<span class="fl">.2008</span><span class="sc">$</span>EV <span class="sc">*</span> winner)         </span>
+<span id="cb85-5"><a href="multiparameter-models.html#cb85-5" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="multiparameter-models.html#cb86-1" aria-hidden="true" tabindex="-1"></a>sim.EV <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">1000</span>, <span class="fu">sim.election</span>())</span></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="multiparameter-models.html#cb87-1" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(sim.EV, <span class="fu">min</span>(sim.EV) <span class="sc">:</span> <span class="fu">max</span>(sim.EV), <span class="at">col=</span><span class="st">&quot;blue&quot;</span>)</span>
+<span id="cb87-2"><a href="multiparameter-models.html#cb87-2" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v=</span><span class="dv">365</span>, <span class="at">lwd=</span><span class="dv">3</span>)  <span class="co"># Obama received 365 votes</span></span>
+<span id="cb87-3"><a href="multiparameter-models.html#cb87-3" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="dv">375</span>, <span class="dv">30</span>, <span class="st">&quot;Actual </span><span class="sc">\n</span><span class="st"> Obama </span><span class="sc">\n</span><span class="st"> total&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-61-1.png" width="672" /></p>
+</div>
+<div id="a-bioassay-experiment" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> A Bioassay Experiment</h2>
+<p>Bayesian fitting of a logistic model using data from a dose-response experiment.</p>
+<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="multiparameter-models.html#cb88-1" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.86</span>, <span class="sc">-</span><span class="fl">0.3</span>, <span class="sc">-</span><span class="fl">0.05</span>, <span class="fl">0.73</span>)</span>
+<span id="cb88-2"><a href="multiparameter-models.html#cb88-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>, <span class="dv">5</span>)</span>
+<span id="cb88-3"><a href="multiparameter-models.html#cb88-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">5</span>)</span>
+<span id="cb88-4"><a href="multiparameter-models.html#cb88-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">cbind</span>(x, n, y)</span></code></pre></div>
+<p>Traditional logistic model fit.</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="multiparameter-models.html#cb89-1" aria-hidden="true" tabindex="-1"></a>glmdata <span class="ot">&lt;-</span> <span class="fu">cbind</span>(y, n <span class="sc">-</span> y)</span>
+<span id="cb89-2"><a href="multiparameter-models.html#cb89-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">glm</span>(glmdata <span class="sc">~</span> x, <span class="at">family =</span> binomial)</span>
+<span id="cb89-3"><a href="multiparameter-models.html#cb89-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(results)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## glm(formula = glmdata ~ x, family = binomial)
+## 
+## Deviance Residuals: 
+##        1         2         3         4  
+## -0.17236   0.08133  -0.05869   0.12237  
+## 
+## Coefficients:
+##             Estimate Std. Error z value Pr(&gt;|z|)
+## (Intercept)   0.8466     1.0191   0.831    0.406
+## x             7.7488     4.8728   1.590    0.112
+## 
+## (Dispersion parameter for binomial family taken to be 1)
+## 
+##     Null deviance: 15.791412  on 3  degrees of freedom
+## Residual deviance:  0.054742  on 2  degrees of freedom
+## AIC: 7.9648
+## 
+## Number of Fisher Scoring iterations: 7</code></pre>
+<p>Illustration of a conditional means prior. When x = -.7, median and 90th percentile of p are (.2,.4). When x = +.6, median and 90th percentile of p are (.8, .95)</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="multiparameter-models.html#cb91-1" aria-hidden="true" tabindex="-1"></a>a1.b1 <span class="ot">&lt;-</span> <span class="fu">beta.select</span>(<span class="fu">list</span>(<span class="at">p=</span>.<span class="dv">5</span>, <span class="at">x=</span>.<span class="dv">2</span>),</span>
+<span id="cb91-2"><a href="multiparameter-models.html#cb91-2" aria-hidden="true" tabindex="-1"></a>                    <span class="fu">list</span>(<span class="at">p=</span>.<span class="dv">9</span>, <span class="at">x=</span>.<span class="dv">5</span>))</span>
+<span id="cb91-3"><a href="multiparameter-models.html#cb91-3" aria-hidden="true" tabindex="-1"></a>a2.b2 <span class="ot">&lt;-</span> <span class="fu">beta.select</span>(<span class="fu">list</span>(<span class="at">p=</span>.<span class="dv">5</span>, <span class="at">x=</span>.<span class="dv">8</span>),</span>
+<span id="cb91-4"><a href="multiparameter-models.html#cb91-4" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">list</span>(<span class="at">p=</span>.<span class="dv">9</span>, <span class="at">x=</span>.<span class="dv">98</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="multiparameter-models.html#cb92-1" aria-hidden="true" tabindex="-1"></a>prior <span class="ot">&lt;-</span> <span class="fu">rbind</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.7</span>, <span class="fl">4.68</span>, <span class="fl">1.12</span>),</span>
+<span id="cb92-2"><a href="multiparameter-models.html#cb92-2" aria-hidden="true" tabindex="-1"></a>            <span class="fu">c</span>(<span class="fl">0.6</span>, <span class="fl">2.10</span>, <span class="fl">0.74</span>))</span>
+<span id="cb92-3"><a href="multiparameter-models.html#cb92-3" aria-hidden="true" tabindex="-1"></a>data.new <span class="ot">&lt;-</span> <span class="fu">rbind</span>(data, prior)</span></code></pre></div>
+<p>Plot prior.</p>
+<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="multiparameter-models.html#cb93-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>,<span class="dv">1</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="at">type=</span><span class="st">&quot;n&quot;</span>, </span>
+<span id="cb93-2"><a href="multiparameter-models.html#cb93-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;Dose&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;Prob(death)&quot;</span>)</span>
+<span id="cb93-3"><a href="multiparameter-models.html#cb93-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="sc">-</span><span class="fl">0.7</span> <span class="sc">*</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="fu">qbeta</span>(<span class="fu">c</span>(.<span class="dv">25</span>, .<span class="dv">75</span>), </span>
+<span id="cb93-4"><a href="multiparameter-models.html#cb93-4" aria-hidden="true" tabindex="-1"></a>      a1.b1[<span class="dv">1</span>], a1.b1[<span class="dv">2</span>]), <span class="at">lwd=</span><span class="dv">4</span>)</span>
+<span id="cb93-5"><a href="multiparameter-models.html#cb93-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(<span class="fl">0.6</span> <span class="sc">*</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>), <span class="fu">qbeta</span>(<span class="fu">c</span>(.<span class="dv">25</span>, .<span class="dv">75</span>), </span>
+<span id="cb93-6"><a href="multiparameter-models.html#cb93-6" aria-hidden="true" tabindex="-1"></a>      a2.b2[<span class="dv">1</span>], a2.b2[<span class="dv">2</span>]), <span class="at">lwd=</span><span class="dv">4</span>)</span>
+<span id="cb93-7"><a href="multiparameter-models.html#cb93-7" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(<span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.7</span>, <span class="fl">0.6</span>), <span class="fu">qbeta</span>(.<span class="dv">5</span>, <span class="fu">c</span>(a1.b1[<span class="dv">1</span>],</span>
+<span id="cb93-8"><a href="multiparameter-models.html#cb93-8" aria-hidden="true" tabindex="-1"></a>          a2.b2[<span class="dv">1</span>]), <span class="fu">c</span>(a1.b1[<span class="dv">2</span>], a2.b2[<span class="dv">2</span>])),</span>
+<span id="cb93-9"><a href="multiparameter-models.html#cb93-9" aria-hidden="true" tabindex="-1"></a>         <span class="at">pch=</span><span class="dv">19</span>, <span class="at">cex=</span><span class="dv">2</span>)</span>
+<span id="cb93-10"><a href="multiparameter-models.html#cb93-10" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="sc">-</span><span class="fl">0.3</span>, .<span class="dv">2</span>, <span class="st">&quot;Beta(1.12, 3.56)&quot;</span>)</span>
+<span id="cb93-11"><a href="multiparameter-models.html#cb93-11" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(.<span class="dv">2</span>, .<span class="dv">8</span>, <span class="st">&quot;Beta(2.10, 0.74)&quot;</span>)</span>
+<span id="cb93-12"><a href="multiparameter-models.html#cb93-12" aria-hidden="true" tabindex="-1"></a>response <span class="ot">&lt;-</span> <span class="fu">rbind</span>(a1.b1, a2.b2)</span>
+<span id="cb93-13"><a href="multiparameter-models.html#cb93-13" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="sc">-</span><span class="fl">0.7</span>, <span class="fl">0.6</span>)</span>
+<span id="cb93-14"><a href="multiparameter-models.html#cb93-14" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">glm</span>(response <span class="sc">~</span> x, <span class="at">family =</span> binomial)</span></code></pre></div>
+<pre><code>## Warning in eval(family$initialize): non-integer counts in a binomial glm!</code></pre>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="multiparameter-models.html#cb95-1" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">exp</span>(fit<span class="sc">$</span>coef[<span class="dv">1</span>] <span class="sc">+</span> fit<span class="sc">$</span>coef[<span class="dv">2</span>] <span class="sc">*</span> x) <span class="sc">/</span></span>
+<span id="cb95-2"><a href="multiparameter-models.html#cb95-2" aria-hidden="true" tabindex="-1"></a>     (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(fit<span class="sc">$</span>coef[<span class="dv">1</span>] <span class="sc">+</span> fit<span class="sc">$</span>coef[<span class="dv">2</span>] <span class="sc">*</span> x)),</span>
+<span id="cb95-3"><a href="multiparameter-models.html#cb95-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">add=</span>T)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-66-1.png" width="672" /></p>
+<p>Posterior of regression coefficients.</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="multiparameter-models.html#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(logisticpost, <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">9</span>), data.new,</span>
+<span id="cb96-2"><a href="multiparameter-models.html#cb96-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span><span class="st">&quot;beta0&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;beta1&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-67-1.png" width="672" /></p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="multiparameter-models.html#cb97-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(logisticpost, <span class="fu">c</span>(<span class="sc">-</span><span class="dv">3</span>, <span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">9</span>), data.new,</span>
+<span id="cb97-2"><a href="multiparameter-models.html#cb97-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">xlab=</span><span class="st">&quot;beta0&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;beta1&quot;</span>)</span>
+<span id="cb97-3"><a href="multiparameter-models.html#cb97-3" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">simcontour</span>(logisticpost, <span class="fu">c</span>(<span class="sc">-</span><span class="dv">2</span>, <span class="dv">3</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">11</span>),</span>
+<span id="cb97-4"><a href="multiparameter-models.html#cb97-4" aria-hidden="true" tabindex="-1"></a>                data.new, <span class="dv">1000</span>)</span>
+<span id="cb97-5"><a href="multiparameter-models.html#cb97-5" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(s)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-68-1.png" width="672" /></p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="multiparameter-models.html#cb98-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(s<span class="sc">$</span>y), <span class="at">xlab=</span><span class="st">&quot;beta1&quot;</span>)</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-69-1.png" width="672" /></p>
+<p>Estimation of LD50 parameter.</p>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="multiparameter-models.html#cb99-1" aria-hidden="true" tabindex="-1"></a>theta <span class="ot">&lt;-</span> <span class="sc">-</span>s<span class="sc">$</span>x <span class="sc">/</span> s<span class="sc">$</span>y</span>
+<span id="cb99-2"><a href="multiparameter-models.html#cb99-2" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(theta, <span class="at">xlab=</span><span class="st">&quot;LD-50&quot;</span>, <span class="at">breaks=</span><span class="dv">20</span>,</span>
+<span id="cb99-3"><a href="multiparameter-models.html#cb99-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="fl">1.5</span>))</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-70-1.png" width="672" /></p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="multiparameter-models.html#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(theta, <span class="fu">c</span>(.<span class="dv">025</span>, .<span class="dv">975</span>))</span></code></pre></div>
+<pre><code>##       2.5%      97.5% 
+## -0.3248469  0.4748061</code></pre>
+</div>
+<div id="comparing-two-proportions" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Comparing Two Proportions</h2>
+<p>Using Howard’s dependent prior for two proportions.
+Graph of the prior.</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="multiparameter-models.html#cb102-1" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">25</span>)</span>
+<span id="cb102-2"><a href="multiparameter-models.html#cb102-2" aria-hidden="true" tabindex="-1"></a>plo <span class="ot">&lt;-</span> .<span class="dv">0001</span>; phi <span class="ot">&lt;-</span> .<span class="dv">9999</span></span>
+<span id="cb102-3"><a href="multiparameter-models.html#cb102-3" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb102-4"><a href="multiparameter-models.html#cb102-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>
+<span id="cb102-5"><a href="multiparameter-models.html#cb102-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mycontour</span>(howardprior, </span>
+<span id="cb102-6"><a href="multiparameter-models.html#cb102-6" aria-hidden="true" tabindex="-1"></a>              <span class="fu">c</span>(plo, phi, plo, phi),</span>
+<span id="cb102-7"><a href="multiparameter-models.html#cb102-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, sigma[i]),</span>
+<span id="cb102-8"><a href="multiparameter-models.html#cb102-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">main=</span><span class="fu">paste</span>(<span class="st">&quot;sigma=&quot;</span>, <span class="fu">as.character</span>(sigma[i])),</span>
+<span id="cb102-9"><a href="multiparameter-models.html#cb102-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab=</span><span class="st">&quot;p1&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;p2&quot;</span>)</span>
+<span id="cb102-10"><a href="multiparameter-models.html#cb102-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
+<p>Graphs of the posterior.</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="multiparameter-models.html#cb103-1" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">1</span>, .<span class="dv">5</span>, .<span class="dv">25</span>)</span>
+<span id="cb103-2"><a href="multiparameter-models.html#cb103-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">2</span>, <span class="dv">2</span>))</span>
+<span id="cb103-3"><a href="multiparameter-models.html#cb103-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">4</span>){</span>
+<span id="cb103-4"><a href="multiparameter-models.html#cb103-4" aria-hidden="true" tabindex="-1"></a>   <span class="fu">mycontour</span>(howardprior,</span>
+<span id="cb103-5"><a href="multiparameter-models.html#cb103-5" aria-hidden="true" tabindex="-1"></a>             <span class="fu">c</span>(plo, phi, plo, phi),</span>
+<span id="cb103-6"><a href="multiparameter-models.html#cb103-6" aria-hidden="true" tabindex="-1"></a>     <span class="fu">c</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="dv">3</span>, <span class="dv">1</span> <span class="sc">+</span> <span class="dv">15</span>, <span class="dv">1</span> <span class="sc">+</span> <span class="dv">7</span>, <span class="dv">1</span> <span class="sc">+</span> <span class="dv">5</span>, sigma[i]),</span>
+<span id="cb103-7"><a href="multiparameter-models.html#cb103-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">main=</span><span class="fu">paste</span>(<span class="st">&quot;sigma=&quot;</span>, <span class="fu">as.character</span>(sigma[i])),</span>
+<span id="cb103-8"><a href="multiparameter-models.html#cb103-8" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">&quot;p1&quot;</span>, <span class="at">ylab=</span><span class="st">&quot;p2&quot;</span>)</span>
+<span id="cb103-9"><a href="multiparameter-models.html#cb103-9" aria-hidden="true" tabindex="-1"></a>   <span class="fu">lines</span>(<span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb103-10"><a href="multiparameter-models.html#cb103-10" aria-hidden="true" tabindex="-1"></a> }</span></code></pre></div>
+<p><img src="bookdown-demo_files/figure-html/unnamed-chunk-73-1.png" width="672" /></p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="multiparameter-models.html#cb104-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">simcontour</span>(howardprior, <span class="fu">c</span>(plo, phi, plo, phi),</span>
+<span id="cb104-2"><a href="multiparameter-models.html#cb104-2" aria-hidden="true" tabindex="-1"></a>   <span class="fu">c</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="dv">3</span>, <span class="dv">1</span> <span class="sc">+</span> <span class="dv">15</span>, <span class="dv">1</span> <span class="sc">+</span> <span class="dv">7</span>, <span class="dv">1</span> <span class="sc">+</span> <span class="dv">5</span>, <span class="dv">2</span>), <span class="dv">1000</span>)</span>
+<span id="cb104-3"><a href="multiparameter-models.html#cb104-3" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(s<span class="sc">$</span>x <span class="sc">&gt;</span> s<span class="sc">$</span>y) <span class="sc">/</span> <span class="dv">1000</span></span></code></pre></div>
+<pre><code>## [1] 0.012</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="single-parameter-models.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="introduction-to-bayesian-computation.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/03-multipar.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 11 Using R to Interface with JAGS | Bayesian Computation with R Examples</title>
+  <meta name="description" content="This contains all the worked examples from the text." />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 11 Using R to Interface with JAGS | Bayesian Computation with R Examples" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="This contains all the worked examples from the text." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 11 Using R to Interface with JAGS | Bayesian Computation with R Examples" />
+  
+  <meta name="twitter:description" content="This contains all the worked examples from the text." />
+  
+
+<meta name="author" content="Jim Albert" />
+
+
+<meta name="date" content="2020-07-18" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="gibbs-sampling.html"/>
+
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Bayesian Computation with R, 2nd Edition</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html"><i class="fa fa-check"></i><b>2</b> Introduction to Bayesian Thinking</a><ul>
+<li class="chapter" data-level="2.1" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#using-a-discrete-prior"><i class="fa fa-check"></i><b>2.1</b> Using a Discrete Prior</a></li>
+<li class="chapter" data-level="2.2" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#using-a-beta-prior"><i class="fa fa-check"></i><b>2.2</b> Using a Beta Prior</a></li>
+<li class="chapter" data-level="2.3" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#using-a-histogram-prior"><i class="fa fa-check"></i><b>2.3</b> Using a Histogram Prior</a></li>
+<li class="chapter" data-level="2.4" data-path="introduction-to-bayesian-thinking.html"><a href="introduction-to-bayesian-thinking.html#prediction"><i class="fa fa-check"></i><b>2.4</b> Prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="single-parameter-models.html"><a href="single-parameter-models.html"><i class="fa fa-check"></i><b>3</b> Single-Parameter Models</a><ul>
+<li class="chapter" data-level="3.1" data-path="single-parameter-models.html"><a href="single-parameter-models.html#normal-distribution-with-known-mean-but-unknown-variance"><i class="fa fa-check"></i><b>3.1</b> Normal Distribution with Known Mean but Unknown Variance</a></li>
+<li class="chapter" data-level="3.2" data-path="single-parameter-models.html"><a href="single-parameter-models.html#estimating-a-heart-transplant-mortality-rate"><i class="fa fa-check"></i><b>3.2</b> Estimating a Heart Transplant Mortality Rate</a></li>
+<li class="chapter" data-level="3.3" data-path="single-parameter-models.html"><a href="single-parameter-models.html#an-illustration-of-bayesian-robustness"><i class="fa fa-check"></i><b>3.3</b> An Illustration of Bayesian Robustness</a></li>
+<li class="chapter" data-level="3.4" data-path="single-parameter-models.html"><a href="single-parameter-models.html#mixtures-of-conjugate-priors"><i class="fa fa-check"></i><b>3.4</b> Mixtures of Conjugate Priors</a></li>
+<li class="chapter" data-level="3.5" data-path="single-parameter-models.html"><a href="single-parameter-models.html#a-bayesian-test-of-the-fairness-of-a-coin"><i class="fa fa-check"></i><b>3.5</b> A Bayesian Test of the Fairness of a Coin</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="multiparameter-models.html"><a href="multiparameter-models.html"><i class="fa fa-check"></i><b>4</b> Multiparameter Models</a><ul>
+<li class="chapter" data-level="4.1" data-path="multiparameter-models.html"><a href="multiparameter-models.html#normal-data-with-both-parameters-unknown"><i class="fa fa-check"></i><b>4.1</b> Normal Data with Both Parameters Unknown</a></li>
+<li class="chapter" data-level="4.2" data-path="multiparameter-models.html"><a href="multiparameter-models.html#a-multinomial-model"><i class="fa fa-check"></i><b>4.2</b> A Multinomial Model</a></li>
+<li class="chapter" data-level="4.3" data-path="multiparameter-models.html"><a href="multiparameter-models.html#a-bioassay-experiment"><i class="fa fa-check"></i><b>4.3</b> A Bioassay Experiment</a></li>
+<li class="chapter" data-level="4.4" data-path="multiparameter-models.html"><a href="multiparameter-models.html#comparing-two-proportions"><i class="fa fa-check"></i><b>4.4</b> Comparing Two Proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html"><i class="fa fa-check"></i><b>5</b> Introduction to Bayesian Computation</a><ul>
+<li class="chapter" data-level="5.1" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#a-beta-binomial-model-for-overdispersion"><i class="fa fa-check"></i><b>5.1</b> A Beta-Binomial Model for Overdispersion</a></li>
+<li class="chapter" data-level="5.2" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#the-example"><i class="fa fa-check"></i><b>5.2</b> The Example</a></li>
+<li class="chapter" data-level="5.3" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#monte-carlo-method-for-computing-integrals"><i class="fa fa-check"></i><b>5.3</b> Monte Carlo Method for Computing Integrals</a></li>
+<li class="chapter" data-level="5.4" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#rejection-sampling"><i class="fa fa-check"></i><b>5.4</b> Rejection Sampling</a></li>
+<li class="chapter" data-level="5.5" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#importance-sampling"><i class="fa fa-check"></i><b>5.5</b> Importance Sampling</a></li>
+<li class="chapter" data-level="5.6" data-path="introduction-to-bayesian-computation.html"><a href="introduction-to-bayesian-computation.html#sampling-importance-resampling"><i class="fa fa-check"></i><b>5.6</b> Sampling Importance Resampling</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html"><i class="fa fa-check"></i><b>6</b> Markov Chain Monte Carlo Methods</a><ul>
+<li class="chapter" data-level="6.1" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#introduction-to-discrete-markov-chains"><i class="fa fa-check"></i><b>6.1</b> Introduction to Discrete Markov Chains</a></li>
+<li class="chapter" data-level="6.2" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#learning-about-a-normal-population-from-grouped-data"><i class="fa fa-check"></i><b>6.2</b> Learning about a Normal Population from Grouped Data</a></li>
+<li class="chapter" data-level="6.3" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#example-of-output-analysis"><i class="fa fa-check"></i><b>6.3</b> Example of Output Analysis</a></li>
+<li class="chapter" data-level="6.4" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#modeling-data-with-cauchy-errors"><i class="fa fa-check"></i><b>6.4</b> Modeling Data with Cauchy Errors</a></li>
+<li class="chapter" data-level="6.5" data-path="markov-chain-monte-carlo-methods.html"><a href="markov-chain-monte-carlo-methods.html#analysis-of-the-stanford-heart-transplant-data"><i class="fa fa-check"></i><b>6.5</b> Analysis of the Stanford Heart Transplant Data</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html"><i class="fa fa-check"></i><b>7</b> Hierarchical Modeling</a><ul>
+<li class="chapter" data-level="7.1" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#introduction-to-hierarchical-modeling"><i class="fa fa-check"></i><b>7.1</b> Introduction to Hierarchical Modeling</a></li>
+<li class="chapter" data-level="7.2" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#individual-or-combined-estimates"><i class="fa fa-check"></i><b>7.2</b> Individual or Combined Estimates</a></li>
+<li class="chapter" data-level="7.3" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#equal-mortality-rates"><i class="fa fa-check"></i><b>7.3</b> Equal Mortality Rates?</a></li>
+<li class="chapter" data-level="7.4" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#modeling-a-prior-belief-of-exchangeability"><i class="fa fa-check"></i><b>7.4</b> Modeling a Prior Belief of Exchangeability</a></li>
+<li class="chapter" data-level="7.5" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#simulating-from-the-posterior"><i class="fa fa-check"></i><b>7.5</b> Simulating from the Posterior</a></li>
+<li class="chapter" data-level="7.6" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#posterior-inferences"><i class="fa fa-check"></i><b>7.6</b> Posterior Inferences</a></li>
+<li class="chapter" data-level="7.7" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#bayesian-sensitivity-analysis"><i class="fa fa-check"></i><b>7.7</b> Bayesian Sensitivity Analysis</a></li>
+<li class="chapter" data-level="7.8" data-path="hierarchical-modeling.html"><a href="hierarchical-modeling.html#posterior-predictive-model-checking"><i class="fa fa-check"></i><b>7.8</b> Posterior Predictive Model Checking</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="model-comparison.html"><a href="model-comparison.html"><i class="fa fa-check"></i><b>8</b> Model Comparison</a><ul>
+<li class="chapter" data-level="8.1" data-path="model-comparison.html"><a href="model-comparison.html#a-one-sided-test-of-a-normal-mean"><i class="fa fa-check"></i><b>8.1</b> A One-Sided Test of a Normal Mean</a></li>
+<li class="chapter" data-level="8.2" data-path="model-comparison.html"><a href="model-comparison.html#a-two-sided-test-of-a-normal-mean"><i class="fa fa-check"></i><b>8.2</b> A Two-Sided Test of a Normal Mean</a></li>
+<li class="chapter" data-level="8.3" data-path="model-comparison.html"><a href="model-comparison.html#models-for-soccer-goals"><i class="fa fa-check"></i><b>8.3</b> Models for Soccer Goals</a></li>
+<li class="chapter" data-level="8.4" data-path="model-comparison.html"><a href="model-comparison.html#is-a-baseball-hitter-really-streaky"><i class="fa fa-check"></i><b>8.4</b> Is a Baseball Hitter Really Streaky?</a></li>
+<li class="chapter" data-level="8.5" data-path="model-comparison.html"><a href="model-comparison.html#a-test-of-independence-in-a-two-way-contingency-table"><i class="fa fa-check"></i><b>8.5</b> A Test of Independence in a Two-Way Contingency Table</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="regression-models.html"><a href="regression-models.html"><i class="fa fa-check"></i><b>9</b> Regression Models</a><ul>
+<li class="chapter" data-level="9.1" data-path="regression-models.html"><a href="regression-models.html#an-example"><i class="fa fa-check"></i><b>9.1</b> An Example</a></li>
+<li class="chapter" data-level="9.2" data-path="regression-models.html"><a href="regression-models.html#modeling-using-zellners-g-prior"><i class="fa fa-check"></i><b>9.2</b> Modeling Using Zellner’s g Prior</a></li>
+<li class="chapter" data-level="9.3" data-path="regression-models.html"><a href="regression-models.html#survival-modeling"><i class="fa fa-check"></i><b>9.3</b> Survival Modeling</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="gibbs-sampling.html"><a href="gibbs-sampling.html"><i class="fa fa-check"></i><b>10</b> Gibbs Sampling</a></li>
+<li class="chapter" data-level="11" data-path="using-r-to-interface-with-jags.html"><a href="using-r-to-interface-with-jags.html"><i class="fa fa-check"></i><b>11</b> Using R to Interface with JAGS</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Bayesian Computation with R Examples</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="using-r-to-interface-with-jags" class="section level1">
+<h1><span class="header-section-number">Chapter 11</span> Using R to Interface with JAGS</h1>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="gibbs-sampling.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/10-jags.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>
