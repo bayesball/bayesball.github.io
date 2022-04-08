@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>20 Extended Fit | A Course in Exploratory Data Analysis</title>
+  <meta name="description" content="20 Extended Fit | A Course in Exploratory Data Analysis" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="20 Extended Fit | A Course in Exploratory Data Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="20 Extended Fit | A Course in Exploratory Data Analysis" />
+  
+  
+  
+
+<meta name="author" content="Jim Albert" />
+
+
+<meta name="date" content="2022-04-08" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="multiplicative-fit.html"/>
+<link rel="next" href="binned-data.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Course in Exploratory Data Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface<span></span></a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#an-eda-course"><i class="fa fa-check"></i><b>1.1</b> An EDA Course<span></span></a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i><b>1.2</b> Organization<span></span></a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#preface-excerpt-from-eda-by-john-w.-tukey-addison-wesley-1977"><i class="fa fa-check"></i><b>1.3</b> Preface Excerpt from <em>EDA</em> by John W. Tukey (Addison-Wesley, 1977)<span></span></a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#examples-not-case-histories"><i class="fa fa-check"></i><b>1.3.1</b> Examples, NOT case histories<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction<span></span></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#what-is-data-analysis"><i class="fa fa-check"></i><b>2.1</b> What is data analysis?<span></span></a></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#what-is-data-and-where-do-we-find-it"><i class="fa fa-check"></i><b>2.2</b> What is data and where do we find it?<span></span></a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#meet-our-first-data"><i class="fa fa-check"></i><b>2.3</b> Meet our first data<span></span></a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#how-does-exploratory-data-analysis-eda-differ-from-confirmatory-data-analysis-cda"><i class="fa fa-check"></i><b>2.4</b> How does exploratory data analysis (EDA) differ from confirmatory data analysis (CDA)?<span></span></a></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#how-is-eda-different-from-cda"><i class="fa fa-check"></i><b>2.5</b> How is EDA different from CDA?<span></span></a></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#john-tukeys-contribution"><i class="fa fa-check"></i><b>2.6</b> John Tukey’s contribution<span></span></a></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#four-principles-of-eda-the-four-rs"><i class="fa fa-check"></i><b>2.7</b> Four principles of EDA (the four R’s)}<span></span></a></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#an-exploratory-look-at-our-data"><i class="fa fa-check"></i><b>2.8</b> An exploratory look at our data<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html"><i class="fa fa-check"></i><b>3</b> Working with a Single Batch – Displays<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#meet-the-data"><i class="fa fa-check"></i><b>3.1</b> Meet the Data<span></span></a></li>
+<li class="chapter" data-level="3.2" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#the-basic-stemplot"><i class="fa fa-check"></i><b>3.2</b> The Basic Stemplot<span></span></a></li>
+<li class="chapter" data-level="3.3" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#looking-at-a-data-distribution"><i class="fa fa-check"></i><b>3.3</b> Looking at a Data Distribution<span></span></a></li>
+<li class="chapter" data-level="3.4" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#stemplot-variations-breaking-the-stem-at-different-locations"><i class="fa fa-check"></i><b>3.4</b> Stemplot variations – breaking the stem at different locations<span></span></a></li>
+<li class="chapter" data-level="3.5" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#stemplot-variations-2-5-and-10-leaves-per-stem"><i class="fa fa-check"></i><b>3.5</b> Stemplot variations – 2, 5, and 10 leaves per stem<span></span></a></li>
+<li class="chapter" data-level="3.6" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#guidance-in-constructing-a-stemplot"><i class="fa fa-check"></i><b>3.6</b> Guidance in Constructing a Stemplot<span></span></a></li>
+<li class="chapter" data-level="3.7" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#making-the-stemplot-resistant"><i class="fa fa-check"></i><b>3.7</b> Making the Stemplot Resistant<span></span></a></li>
+<li class="chapter" data-level="3.8" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#a-few-closing-comments"><i class="fa fa-check"></i><b>3.8</b> A Few Closing Comments<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html"><i class="fa fa-check"></i><b>4</b> Single Batch: Summaries<span></span></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#meet-the-data-1"><i class="fa fa-check"></i><b>4.1</b> Meet the Data<span></span></a></li>
+<li class="chapter" data-level="4.2" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#ranks-and-depths"><i class="fa fa-check"></i><b>4.2</b> Ranks and Depths<span></span></a></li>
+<li class="chapter" data-level="4.3" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#letter-values-a-set-of-summary-values"><i class="fa fa-check"></i><b>4.3</b> Letter Values: A Set of Summary Values<span></span></a></li>
+<li class="chapter" data-level="4.4" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#counting-in"><i class="fa fa-check"></i><b>4.4</b> Counting In<span></span></a></li>
+<li class="chapter" data-level="4.5" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#five-number-summary"><i class="fa fa-check"></i><b>4.5</b> Five-number Summary<span></span></a></li>
+<li class="chapter" data-level="4.6" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#other-letter-values"><i class="fa fa-check"></i><b>4.6</b> Other Letter Values<span></span></a></li>
+<li class="chapter" data-level="4.7" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#measures-of-center"><i class="fa fa-check"></i><b>4.7</b> Measures of Center<span></span></a></li>
+<li class="chapter" data-level="4.8" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#measures-of-spread"><i class="fa fa-check"></i><b>4.8</b> Measures of Spread<span></span></a></li>
+<li class="chapter" data-level="4.9" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#identifying-outliers"><i class="fa fa-check"></i><b>4.9</b> Identifying Outliers<span></span></a></li>
+<li class="chapter" data-level="4.10" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#a-new-example"><i class="fa fa-check"></i><b>4.10</b> A New Example<span></span></a></li>
+<li class="chapter" data-level="4.11" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#relationship-with-normal-data"><i class="fa fa-check"></i><b>4.11</b> Relationship with Normal Data<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="boxplots.html"><a href="boxplots.html"><i class="fa fa-check"></i><b>5</b> Boxplots<span></span></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="boxplots.html"><a href="boxplots.html#the-data"><i class="fa fa-check"></i><b>5.1</b> The Data:<span></span></a></li>
+<li class="chapter" data-level="5.2" data-path="boxplots.html"><a href="boxplots.html#constructing-a-single-boxplot"><i class="fa fa-check"></i><b>5.2</b> Constructing A Single Boxplot<span></span></a></li>
+<li class="chapter" data-level="5.3" data-path="boxplots.html"><a href="boxplots.html#interpreting-a-boxplot"><i class="fa fa-check"></i><b>5.3</b> Interpreting a Boxplot<span></span></a></li>
+<li class="chapter" data-level="5.4" data-path="boxplots.html"><a href="boxplots.html#boxplots-to-compare-batches"><i class="fa fa-check"></i><b>5.4</b> Boxplots to Compare Batches<span></span></a></li>
+<li class="chapter" data-level="5.5" data-path="boxplots.html"><a href="boxplots.html#comparisons-using-medians"><i class="fa fa-check"></i><b>5.5</b> Comparisons using Medians<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="spread-level-plot.html"><a href="spread-level-plot.html"><i class="fa fa-check"></i><b>6</b> Spread Level Plot<span></span></a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="spread-level-plot.html"><a href="spread-level-plot.html#lets-meet-the-data"><i class="fa fa-check"></i><b>6.1</b> Let’s Meet the Data<span></span></a></li>
+<li class="chapter" data-level="6.2" data-path="spread-level-plot.html"><a href="spread-level-plot.html#comparing-batches-in-the-raw-scale"><i class="fa fa-check"></i><b>6.2</b> Comparing Batches in the Raw Scale<span></span></a></li>
+<li class="chapter" data-level="6.3" data-path="spread-level-plot.html"><a href="spread-level-plot.html#whats-wrong"><i class="fa fa-check"></i><b>6.3</b> What’s Wrong?<span></span></a></li>
+<li class="chapter" data-level="6.4" data-path="spread-level-plot.html"><a href="spread-level-plot.html#the-spread-vs-level-plot"><i class="fa fa-check"></i><b>6.4</b> The Spread vs Level Plot<span></span></a></li>
+<li class="chapter" data-level="6.5" data-path="spread-level-plot.html"><a href="spread-level-plot.html#reexpression"><i class="fa fa-check"></i><b>6.5</b> Reexpression<span></span></a></li>
+<li class="chapter" data-level="6.6" data-path="spread-level-plot.html"><a href="spread-level-plot.html#reanalysis-of-the-data-in-new-scale"><i class="fa fa-check"></i><b>6.6</b> Reanalysis of the data in new scale<span></span></a></li>
+<li class="chapter" data-level="6.7" data-path="spread-level-plot.html"><a href="spread-level-plot.html#wrap-up"><i class="fa fa-check"></i><b>6.7</b> Wrap Up<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html"><i class="fa fa-check"></i><b>7</b> Comparing Batches III<span></span></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#a-case-study-where-the-spread-vs-level-plot-works"><i class="fa fa-check"></i><b>7.1</b> A Case Study where the Spread vs Level Plot Works<span></span></a></li>
+<li class="chapter" data-level="7.2" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#a-case-study-where-the-spread-vs-level-plot-doesnt-work"><i class="fa fa-check"></i><b>7.2</b> A Case Study where the Spread vs Level Plot Doesn’t Work<span></span></a></li>
+<li class="chapter" data-level="7.3" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#some-final-comments-about-spread-vs.-level-plots"><i class="fa fa-check"></i><b>7.3</b> Some final comments about spread vs. level plots<span></span></a></li>
+<li class="chapter" data-level="7.4" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#why-does-the-spread-vs.-level-plot-work"><i class="fa fa-check"></i><b>7.4</b> Why does the spread vs. level plot work?<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="transformations.html"><a href="transformations.html"><i class="fa fa-check"></i><b>8</b> Transformations<span></span></a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="transformations.html"><a href="transformations.html#why-do-we-rexpress-data"><i class="fa fa-check"></i><b>8.1</b> Why do we rexpress data?<span></span></a></li>
+<li class="chapter" data-level="8.2" data-path="transformations.html"><a href="transformations.html#the-shape-of-the-data"><i class="fa fa-check"></i><b>8.2</b> The shape of the data<span></span></a></li>
+<li class="chapter" data-level="8.3" data-path="transformations.html"><a href="transformations.html#trivial-reexpressions"><i class="fa fa-check"></i><b>8.3</b> Trivial reexpressions<span></span></a></li>
+<li class="chapter" data-level="8.4" data-path="transformations.html"><a href="transformations.html#nontrivial-expressions-the-power-family"><i class="fa fa-check"></i><b>8.4</b> Nontrivial expressions: the power family<span></span></a></li>
+<li class="chapter" data-level="8.5" data-path="transformations.html"><a href="transformations.html#some-properties-of-the-power-family"><i class="fa fa-check"></i><b>8.5</b> Some properties of the power family<span></span></a></li>
+<li class="chapter" data-level="8.6" data-path="transformations.html"><a href="transformations.html#the-log-transformation"><i class="fa fa-check"></i><b>8.6</b> The log transformation<span></span></a></li>
+<li class="chapter" data-level="8.7" data-path="transformations.html"><a href="transformations.html#ladders-of-powers"><i class="fa fa-check"></i><b>8.7</b> Ladders of powers<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html"><i class="fa fa-check"></i><b>9</b> Reexpressing for Symmetry<span></span></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#data-for-the-day"><i class="fa fa-check"></i><b>9.1</b> Data for the day<span></span></a></li>
+<li class="chapter" data-level="9.2" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#why-is-this-data-hard-to-interpret"><i class="fa fa-check"></i><b>9.2</b> Why is this data hard to interpret?<span></span></a></li>
+<li class="chapter" data-level="9.3" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#checking-for-symmetry-by-looking-at-midsummaries"><i class="fa fa-check"></i><b>9.3</b> Checking for symmetry by looking at midsummaries<span></span></a></li>
+<li class="chapter" data-level="9.4" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#reexpressing-to-achieve-approximate-symmetry"><i class="fa fa-check"></i><b>9.4</b> Reexpressing to achieve approximate symmetry<span></span></a></li>
+<li class="chapter" data-level="9.5" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#hinkleys-quick-method"><i class="fa fa-check"></i><b>9.5</b> Hinkley’s quick method<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html"><i class="fa fa-check"></i><b>10</b> Reexpressing for Symmetry II<span></span></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#data-for-the-day-1"><i class="fa fa-check"></i><b>10.1</b> Data for the day<span></span></a></li>
+<li class="chapter" data-level="10.2" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#symmetry-plot"><i class="fa fa-check"></i><b>10.2</b> Symmetry plot<span></span></a></li>
+<li class="chapter" data-level="10.3" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#roots-and-logs"><i class="fa fa-check"></i><b>10.3</b> Roots and logs<span></span></a></li>
+<li class="chapter" data-level="10.4" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#hinkleys-method"><i class="fa fa-check"></i><b>10.4</b> Hinkley’s method<span></span></a></li>
+<li class="chapter" data-level="10.5" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#matched-transformations"><i class="fa fa-check"></i><b>10.5</b> Matched transformations<span></span></a></li>
+<li class="chapter" data-level="10.6" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#matching-method-1"><i class="fa fa-check"></i><b>10.6</b> Matching Method 1<span></span></a></li>
+<li class="chapter" data-level="10.7" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#matching-method-2"><i class="fa fa-check"></i><b>10.7</b> Matching Method 2<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="transformations-summary.html"><a href="transformations-summary.html"><i class="fa fa-check"></i><b>11</b> Transformations Summary<span></span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="transformations-summary.html"><a href="transformations-summary.html#why-do-we-reexpress-data"><i class="fa fa-check"></i><b>11.1</b> Why do we reexpress data?<span></span></a></li>
+<li class="chapter" data-level="11.2" data-path="transformations-summary.html"><a href="transformations-summary.html#serendipitous-effects-of-transformation"><i class="fa fa-check"></i><b>11.2</b> Serendipitous effects of transformation<span></span></a></li>
+<li class="chapter" data-level="11.3" data-path="transformations-summary.html"><a href="transformations-summary.html#when-is-it-worthwhile-to-transform"><i class="fa fa-check"></i><b>11.3</b> When is it worthwhile to transform?<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html"><i class="fa fa-check"></i><b>12</b> Introduction to Plotting<span></span></a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#meet-the-data-2"><i class="fa fa-check"></i><b>12.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="12.2" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#graph-the-data"><i class="fa fa-check"></i><b>12.2</b> Graph the data<span></span></a></li>
+<li class="chapter" data-level="12.3" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#describing-the-fit"><i class="fa fa-check"></i><b>12.3</b> Describing the fit<span></span></a></li>
+<li class="chapter" data-level="12.4" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#looking-at-the-residuals"><i class="fa fa-check"></i><b>12.4</b> Looking at the residuals<span></span></a></li>
+<li class="chapter" data-level="12.5" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#an-alternative-fit"><i class="fa fa-check"></i><b>12.5</b> An alternative fit<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="resistant-line.html"><a href="resistant-line.html"><i class="fa fa-check"></i><b>13</b> Resistant Line<span></span></a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="resistant-line.html"><a href="resistant-line.html#meet-the-data-3"><i class="fa fa-check"></i><b>13.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="13.2" data-path="resistant-line.html"><a href="resistant-line.html#three-summary-points"><i class="fa fa-check"></i><b>13.2</b> Three summary points<span></span></a></li>
+<li class="chapter" data-level="13.3" data-path="resistant-line.html"><a href="resistant-line.html#fitting-a-line-to-three-points"><i class="fa fa-check"></i><b>13.3</b> Fitting a line to three points<span></span></a></li>
+<li class="chapter" data-level="13.4" data-path="resistant-line.html"><a href="resistant-line.html#improving-the-line-by-fitting-a-line-to-the-residuals"><i class="fa fa-check"></i><b>13.4</b> Improving the line by fitting a line to the residuals<span></span></a></li>
+<li class="chapter" data-level="13.5" data-path="resistant-line.html"><a href="resistant-line.html#comparison-with-a-least-squares-fit"><i class="fa fa-check"></i><b>13.5</b> Comparison with a Least-Squares Fit<span></span></a></li>
+<li class="chapter" data-level="13.6" data-path="resistant-line.html"><a href="resistant-line.html#interpreting-the-fit"><i class="fa fa-check"></i><b>13.6</b> Interpreting the fit<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="plotting-ii.html"><a href="plotting-ii.html"><i class="fa fa-check"></i><b>14</b> Plotting II<span></span></a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="plotting-ii.html"><a href="plotting-ii.html#fitting-a-line-to-the-population-in-the-later-years"><i class="fa fa-check"></i><b>14.1</b> Fitting a line to the population in the later years<span></span></a></li>
+<li class="chapter" data-level="14.2" data-path="plotting-ii.html"><a href="plotting-ii.html#fitting-a-line-to-the-log-population-in-the-early-years"><i class="fa fa-check"></i><b>14.2</b> Fitting a line to the log population in the early years<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="straightening.html"><a href="straightening.html"><i class="fa fa-check"></i><b>15</b> Straightening<span></span></a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="straightening.html"><a href="straightening.html#meet-the-data-4"><i class="fa fa-check"></i><b>15.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="15.2" data-path="straightening.html"><a href="straightening.html#a-nonlinear-relationship"><i class="fa fa-check"></i><b>15.2</b> A nonlinear relationship<span></span></a></li>
+<li class="chapter" data-level="15.3" data-path="straightening.html"><a href="straightening.html#three-summary-points-and-measuring-curvature"><i class="fa fa-check"></i><b>15.3</b> Three summary points and measuring curvature<span></span></a></li>
+<li class="chapter" data-level="15.4" data-path="straightening.html"><a href="straightening.html#reexpressing-to-reduce-curvature"><i class="fa fa-check"></i><b>15.4</b> Reexpressing to reduce curvature<span></span></a></li>
+<li class="chapter" data-level="15.5" data-path="straightening.html"><a href="straightening.html#straightening-in-the-example"><i class="fa fa-check"></i><b>15.5</b> Straightening in the example<span></span></a></li>
+<li class="chapter" data-level="15.6" data-path="straightening.html"><a href="straightening.html#making-sense-of-the-reexpression"><i class="fa fa-check"></i><b>15.6</b> Making sense of the reexpression<span></span></a></li>
+<li class="chapter" data-level="15.7" data-path="straightening.html"><a href="straightening.html#straightening-fitting-and-flattening"><i class="fa fa-check"></i><b>15.7</b> Straightening, fitting, and flattening<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="smoothing.html"><a href="smoothing.html"><i class="fa fa-check"></i><b>16</b> Smoothing<span></span></a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="smoothing.html"><a href="smoothing.html#meet-the-data-5"><i class="fa fa-check"></i><b>16.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="16.2" data-path="smoothing.html"><a href="smoothing.html#we-need-to-smooth"><i class="fa fa-check"></i><b>16.2</b> We need to smooth<span></span></a></li>
+<li class="chapter" data-level="16.3" data-path="smoothing.html"><a href="smoothing.html#running-medians"><i class="fa fa-check"></i><b>16.3</b> Running medians<span></span></a></li>
+<li class="chapter" data-level="16.4" data-path="smoothing.html"><a href="smoothing.html#end-value-smoothing"><i class="fa fa-check"></i><b>16.4</b> End-value smoothing<span></span></a></li>
+<li class="chapter" data-level="16.5" data-path="smoothing.html"><a href="smoothing.html#splitting"><i class="fa fa-check"></i><b>16.5</b> Splitting<span></span></a></li>
+<li class="chapter" data-level="16.6" data-path="smoothing.html"><a href="smoothing.html#hanning"><i class="fa fa-check"></i><b>16.6</b> Hanning<span></span></a></li>
+<li class="chapter" data-level="16.7" data-path="smoothing.html"><a href="smoothing.html#the-smooth-and-the-rough"><i class="fa fa-check"></i><b>16.7</b> The smooth and the rough<span></span></a></li>
+<li class="chapter" data-level="16.8" data-path="smoothing.html"><a href="smoothing.html#reroughing"><i class="fa fa-check"></i><b>16.8</b> Reroughing<span></span></a></li>
+<li class="chapter" data-level="16.9" data-path="smoothing.html"><a href="smoothing.html#interpreting-the-final-smooth-and-rough"><i class="fa fa-check"></i><b>16.9</b> Interpreting the final smooth and rough<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="median-polish.html"><a href="median-polish.html"><i class="fa fa-check"></i><b>17</b> Median Polish<span></span></a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="median-polish.html"><a href="median-polish.html#meet-the-data-6"><i class="fa fa-check"></i><b>17.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="17.2" data-path="median-polish.html"><a href="median-polish.html#an-additive-model"><i class="fa fa-check"></i><b>17.2</b> An additive model<span></span></a></li>
+<li class="chapter" data-level="17.3" data-path="median-polish.html"><a href="median-polish.html#median-polish-1"><i class="fa fa-check"></i><b>17.3</b> Median polish<span></span></a></li>
+<li class="chapter" data-level="17.4" data-path="median-polish.html"><a href="median-polish.html#interpreting-the-additive-model"><i class="fa fa-check"></i><b>17.4</b> Interpreting the additive model<span></span></a>
+<ul>
+<li class="chapter" data-level="17.4.1" data-path="median-polish.html"><a href="median-polish.html#interpreting-the-row-and-column-effects"><i class="fa fa-check"></i><b>17.4.1</b> Interpreting the row and column effects<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="median-polish.html"><a href="median-polish.html#looking-at-the-residuals-1"><i class="fa fa-check"></i><b>17.5</b> Looking at the residuals<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html"><i class="fa fa-check"></i><b>18</b> Plotting an Additive Plot<span></span></a>
+<ul>
+<li class="chapter" data-level="18.1" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#the-data-1"><i class="fa fa-check"></i><b>18.1</b> The data<span></span></a></li>
+<li class="chapter" data-level="18.2" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#plotting-the-two-terms-of-the-additive-fit"><i class="fa fa-check"></i><b>18.2</b> Plotting the two terms of the additive fit<span></span></a></li>
+<li class="chapter" data-level="18.3" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#making-sense-of-the-display"><i class="fa fa-check"></i><b>18.3</b> Making sense of the display<span></span></a></li>
+<li class="chapter" data-level="18.4" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#adding-information-about-the-residuals-to-the-display"><i class="fa fa-check"></i><b>18.4</b> Adding information about the residuals to the display<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html"><i class="fa fa-check"></i><b>19</b> Multiplicative Fit<span></span></a>
+<ul>
+<li class="chapter" data-level="19.1" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#meet-the-data-7"><i class="fa fa-check"></i><b>19.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="19.2" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#an-additive-model-isnt-suitable"><i class="fa fa-check"></i><b>19.2</b> An additive model isn’t suitable<span></span></a></li>
+<li class="chapter" data-level="19.3" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#fitting-our-model-to-the-data"><i class="fa fa-check"></i><b>19.3</b> Fitting our model to the data<span></span></a></li>
+<li class="chapter" data-level="19.4" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#interpreting-the-fit-1"><i class="fa fa-check"></i><b>19.4</b> Interpreting the fit<span></span></a></li>
+<li class="chapter" data-level="19.5" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#interpreting-the-residuals"><i class="fa fa-check"></i><b>19.5</b> Interpreting the residuals<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="extended-fit.html"><a href="extended-fit.html"><i class="fa fa-check"></i><b>20</b> Extended Fit<span></span></a>
+<ul>
+<li class="chapter" data-level="20.1" data-path="extended-fit.html"><a href="extended-fit.html#meet-the-data-8"><i class="fa fa-check"></i><b>20.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="20.2" data-path="extended-fit.html"><a href="extended-fit.html#an-additive-fit"><i class="fa fa-check"></i><b>20.2</b> An additive fit<span></span></a></li>
+<li class="chapter" data-level="20.3" data-path="extended-fit.html"><a href="extended-fit.html#looking-at-the-residuals-2"><i class="fa fa-check"></i><b>20.3</b> Looking at the residuals<span></span></a></li>
+<li class="chapter" data-level="20.4" data-path="extended-fit.html"><a href="extended-fit.html#comparison-values"><i class="fa fa-check"></i><b>20.4</b> Comparison values<span></span></a></li>
+<li class="chapter" data-level="20.5" data-path="extended-fit.html"><a href="extended-fit.html#extending-the-additive-model-by-one-more-term"><i class="fa fa-check"></i><b>20.5</b> Extending the additive model by one more term<span></span></a></li>
+<li class="chapter" data-level="20.6" data-path="extended-fit.html"><a href="extended-fit.html#finding-k"><i class="fa fa-check"></i><b>20.6</b> Finding k<span></span></a></li>
+<li class="chapter" data-level="20.7" data-path="extended-fit.html"><a href="extended-fit.html#relationship-with-multiplicative-fit"><i class="fa fa-check"></i><b>20.7</b> Relationship with multiplicative fit<span></span></a></li>
+<li class="chapter" data-level="20.8" data-path="extended-fit.html"><a href="extended-fit.html#extended-fits-and-transformations"><i class="fa fa-check"></i><b>20.8</b> Extended fits and transformations<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="binned-data.html"><a href="binned-data.html"><i class="fa fa-check"></i><b>21</b> Binned Data<span></span></a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="binned-data.html"><a href="binned-data.html#meet-the-data-9"><i class="fa fa-check"></i><b>21.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="21.2" data-path="binned-data.html"><a href="binned-data.html#constructing-a-histogram"><i class="fa fa-check"></i><b>21.2</b> Constructing a histogram<span></span></a></li>
+<li class="chapter" data-level="21.3" data-path="binned-data.html"><a href="binned-data.html#a-rootogram"><i class="fa fa-check"></i><b>21.3</b> A rootogram<span></span></a></li>
+<li class="chapter" data-level="21.4" data-path="binned-data.html"><a href="binned-data.html#fitting-a-gaussian-comparison-curve"><i class="fa fa-check"></i><b>21.4</b> Fitting a Gaussian comparison curve<span></span></a></li>
+<li class="chapter" data-level="21.5" data-path="binned-data.html"><a href="binned-data.html#residuals"><i class="fa fa-check"></i><b>21.5</b> Residuals<span></span></a></li>
+<li class="chapter" data-level="21.6" data-path="binned-data.html"><a href="binned-data.html#hanging-rootogram"><i class="fa fa-check"></i><b>21.6</b> Hanging rootogram<span></span></a></li>
+<li class="chapter" data-level="21.7" data-path="binned-data.html"><a href="binned-data.html#interpreting-the-residuals-1"><i class="fa fa-check"></i><b>21.7</b> Interpreting the residuals<span></span></a></li>
+<li class="chapter" data-level="21.8" data-path="binned-data.html"><a href="binned-data.html#other-definitions-of-residuals-double-root-residuals"><i class="fa fa-check"></i><b>21.8</b> Other definitions of residuals (Double Root Residuals)<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="binned-data-ii.html"><a href="binned-data-ii.html"><i class="fa fa-check"></i><b>22</b> Binned Data II<span></span></a>
+<ul>
+<li class="chapter" data-level="22.1" data-path="binned-data-ii.html"><a href="binned-data-ii.html#introduction-1"><i class="fa fa-check"></i><b>22.1</b> Introduction<span></span></a></li>
+<li class="chapter" data-level="22.2" data-path="binned-data-ii.html"><a href="binned-data-ii.html#meet-a-simulated-but-famous-dataset"><i class="fa fa-check"></i><b>22.2</b> Meet a simulated, but famous, dataset<span></span></a></li>
+<li class="chapter" data-level="22.3" data-path="binned-data-ii.html"><a href="binned-data-ii.html#smoothing-the-root-counts"><i class="fa fa-check"></i><b>22.3</b> Smoothing the root counts<span></span></a></li>
+<li class="chapter" data-level="22.4" data-path="binned-data-ii.html"><a href="binned-data-ii.html#fitting-a-symmetric-curve"><i class="fa fa-check"></i><b>22.4</b> Fitting a symmetric curve<span></span></a></li>
+<li class="chapter" data-level="22.5" data-path="binned-data-ii.html"><a href="binned-data-ii.html#is-it-a-reasonable-fit"><i class="fa fa-check"></i><b>22.5</b> Is it a reasonable fit?<span></span></a></li>
+<li class="chapter" data-level="22.6" data-path="binned-data-ii.html"><a href="binned-data-ii.html#the-famous-brewer"><i class="fa fa-check"></i><b>22.6</b> The famous brewer<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="fraction-data.html"><a href="fraction-data.html"><i class="fa fa-check"></i><b>23</b> Fraction Data<span></span></a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="fraction-data.html"><a href="fraction-data.html#the-quality-of-students-at-bgsu"><i class="fa fa-check"></i><b>23.1</b> The Quality of Students at BGSU<span></span></a></li>
+<li class="chapter" data-level="23.2" data-path="fraction-data.html"><a href="fraction-data.html#meet-the-data-10"><i class="fa fa-check"></i><b>23.2</b> Meet the Data<span></span></a></li>
+<li class="chapter" data-level="23.3" data-path="fraction-data.html"><a href="fraction-data.html#counted-fractions"><i class="fa fa-check"></i><b>23.3</b> Counted Fractions<span></span></a></li>
+<li class="chapter" data-level="23.4" data-path="fraction-data.html"><a href="fraction-data.html#started-counts-and-split-counts"><i class="fa fa-check"></i><b>23.4</b> Started Counts and Split Counts<span></span></a></li>
+<li class="chapter" data-level="23.5" data-path="fraction-data.html"><a href="fraction-data.html#three-matched-scales-for-counted-fractions-folded-fractions-roots-and-logs"><i class="fa fa-check"></i><b>23.5</b> Three Matched Scales for Counted Fractions (folded fractions, roots, and logs)<span></span></a></li>
+<li class="chapter" data-level="23.6" data-path="fraction-data.html"><a href="fraction-data.html#an-example-illustrating-the-benefits-of-reexpressing-fractions"><i class="fa fa-check"></i><b>23.6</b> An Example Illustrating the Benefits of Reexpressing Fractions<span></span></a></li>
+<li class="chapter" data-level="23.7" data-path="fraction-data.html"><a href="fraction-data.html#a-tukey-example-where-careful-reexpression-pays-off"><i class="fa fa-check"></i><b>23.7</b> A Tukey Example Where Careful Reexpression Pays Off<span></span></a></li>
+<li class="chapter" data-level="23.8" data-path="fraction-data.html"><a href="fraction-data.html#back-to-the-data-an-analysis-based-on-flogs"><i class="fa fa-check"></i><b>23.8</b> Back to the Data – An Analysis Based on Flogs<span></span></a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Course in Exploratory Data Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="extended-fit" class="section level1 hasAnchor" number="20">
+<h1><span class="header-section-number">20</span> Extended Fit<a href="extended-fit.html#extended-fit" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In the two previous lectures, we have talked about two ways of fitting a model to a two-way table. We can fit an additive model using median polish – this seemed to work well for our temperature data that was classified by city and month. In other situations, like the Olympics swimming times classified by year and distance, it seemed better to use a multiplicative fit. For an arbitrary dataset, how can we tell if an additive fit or a multiplicative fit is more suitable?</p>
+<p>Here we describe a way of extending the additive model, called an extended fit, that will help us in situations where an additive model does not fit the data well. We will see that this extended fit has a strong connection with the multiplicative fit that we saw earlier.</p>
+<div id="meet-the-data-8" class="section level2 hasAnchor" number="20.1">
+<h2><span class="header-section-number">20.1</span> Meet the data<a href="extended-fit.html#meet-the-data-8" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The New York Times Almanac has a lot of interesting data about housing in the United States.</p>
+<p>When you are considering taking a new job, one factor in your decision-making is the cost of living in the city where you are thinking of moving. The almanac gives the average price of apartments and houses for many cities in the country.</p>
+<p>The table shown below gives the market price of five different types of apartments for nine cities. These cities were chosen to get a good spread in cost of housing – we see that San Francisco is over twice as expensive than Tulsa.</p>
+<div class="sourceCode" id="cb285"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb285-1"><a href="extended-fit.html#cb285-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(LearnEDAfunctions)</span>
+<span id="cb285-2"><a href="extended-fit.html#cb285-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb285-3"><a href="extended-fit.html#cb285-3" aria-hidden="true" tabindex="-1"></a>prices <span class="ot">&lt;-</span> rent.prices[, <span class="sc">-</span><span class="dv">1</span>]</span>
+<span id="cb285-4"><a href="extended-fit.html#cb285-4" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(prices) <span class="ot">&lt;-</span> rent.prices[, <span class="dv">1</span>]</span>
+<span id="cb285-5"><a href="extended-fit.html#cb285-5" aria-hidden="true" tabindex="-1"></a>prices</span></code></pre></div>
+<pre><code>##               Studio One.Bedroom Two.Bedroom Three.Bedroom
+## Albuquerque      397         473         592           816
+## Atlanta          613         682         795          1060
+## Boston           695         782         979          1223
+## Columbus         398         471         605           768
+## Honolulu         595         713         839          1134
+## Miami            461         579         722           991
+## Philadelphia     497         611         755           945
+## San_Francisco    891        1154        1459          2001
+## Tulsa            392         470         625           869
+##               Four.Bedroom
+## Albuquerque            963
+## Atlanta               1282
+## Boston                1437
+## Columbus               883
+## Honolulu              1226
+## Miami                 1149
+## Philadelphia          1185
+## San_Francisco         2118
+## Tulsa                 1025</code></pre>
+<p>The goal here is to gain some understanding about the difference in rentals between different cities, and between apartments of different types. Is an additive model appropriate for these data? Well, you might not know, so we will be na"{}ve and start by trying an additive fit.</p>
+</div>
+<div id="an-additive-fit" class="section level2 hasAnchor" number="20.2">
+<h2><span class="header-section-number">20.2</span> An additive fit<a href="extended-fit.html#an-additive-fit" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We first use R to fit an additive model using median polish. The fitted model (common, row and column effects) and the residuals are shown in the below table.</p>
+<div class="sourceCode" id="cb287"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb287-1"><a href="extended-fit.html#cb287-1" aria-hidden="true" tabindex="-1"></a>(additive.fit <span class="ot">&lt;-</span> <span class="fu">medpolish</span>(prices))</span></code></pre></div>
+<pre><code>## 1: 2011
+## 2: 1938
+## Final: 1938</code></pre>
+<pre><code>## 
+## Median Polish Results (Dataset: &quot;prices&quot;)
+## 
+## Overall: 754
+## 
+## Row Effects:
+##   Albuquerque       Atlanta        Boston      Columbus 
+##          -162            71           225          -149 
+##      Honolulu         Miami  Philadelphia San_Francisco 
+##            85           -32             0           705 
+##         Tulsa 
+##          -129 
+## 
+## Column Effects:
+##        Studio   One.Bedroom   Two.Bedroom Three.Bedroom 
+##          -244          -143             0           244 
+##  Four.Bedroom 
+##           427 
+## 
+## Residuals:
+##               Studio One.Bedroom Two.Bedroom Three.Bedroom
+## Albuquerque       49          24           0           -20
+## Atlanta           32           0         -30            -9
+## Boston           -40         -54           0             0
+## Columbus          37           9           0           -81
+## Honolulu           0          17           0            51
+## Miami            -17           0           0            25
+## Philadelphia     -13           0           1           -53
+## San_Francisco   -324        -162           0           298
+## Tulsa             11         -12           0             0
+##               Four.Bedroom
+## Albuquerque            -56
+## Atlanta                 30
+## Boston                  31
+## Columbus              -149
+## Honolulu               -40
+## Miami                    0
+## Philadelphia             4
+## San_Francisco          232
+## Tulsa                  -27</code></pre>
+<p>For the following, it will be helpful to order the rows and columns of the table by the effects. Actually, the columns are already ordered by effects – a studio apartment tends to be cheaper than a 1 bedroom apartment which is cheaper than a 2 bedroom apartment and so on. But the rows were not originally ordered by effects and so we’ve reordered the cities with the cheapest cities on top.</p>
+<div class="sourceCode" id="cb290"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb290-1"><a href="extended-fit.html#cb290-1" aria-hidden="true" tabindex="-1"></a>prices <span class="ot">&lt;-</span> prices[<span class="fu">order</span>(additive.fit<span class="sc">$</span>row), ]</span>
+<span id="cb290-2"><a href="extended-fit.html#cb290-2" aria-hidden="true" tabindex="-1"></a>additive.fit <span class="ot">&lt;-</span> <span class="fu">medpolish</span>(prices)</span></code></pre></div>
+<pre><code>## 1: 2011
+## 2: 1938
+## Final: 1938</code></pre>
+<div class="sourceCode" id="cb292"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb292-1"><a href="extended-fit.html#cb292-1" aria-hidden="true" tabindex="-1"></a>additive.fit<span class="sc">$</span>residual</span></code></pre></div>
+<pre><code>##               Studio One.Bedroom Two.Bedroom Three.Bedroom
+## Albuquerque       49          24           0           -20
+## Columbus          37           9           0           -81
+## Tulsa             11         -12           0             0
+## Miami            -17           0           0            25
+## Philadelphia     -13           0           1           -53
+## Atlanta           32           0         -30            -9
+## Honolulu           0          17           0            51
+## Boston           -40         -54           0             0
+## San_Francisco   -324        -162           0           298
+##               Four.Bedroom
+## Albuquerque            -56
+## Columbus              -149
+## Tulsa                  -27
+## Miami                    0
+## Philadelphia             4
+## Atlanta                 30
+## Honolulu               -40
+## Boston                  31
+## San_Francisco          232</code></pre>
+<p><img src="figures/medpolish/newplot1.png" width="40%" /></p>
+<p>We’ve drawn some lines to divide the table. The rows above (below) the center horizontal line have negative (positive) effects. Similarly, the columns to the left (right) of the center vertical line have negative (positive) effects.</p>
+<p>Looking at the row and column effects, we see</p>
+<ul>
+<li>San Francisco is the most expensive place to rent. Comparing effects, San Francisco is $705 - $225 = $480 more expensive than the next most expensive city Boston. Albuquerque and Columbus are the cheapest cities.</li>
+<li>A 4-bedroom apartment is, on the average, $183 more expensive than a 3-bedroom apartment. A 1-bedroom apartment is about $100 more expensive than a studio apartment.</li>
+</ul>
+</div>
+<div id="looking-at-the-residuals-2" class="section level2 hasAnchor" number="20.3">
+<h2><span class="header-section-number">20.3</span> Looking at the residuals<a href="extended-fit.html#looking-at-the-residuals-2" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Looking at the residuals, we see a lot of large values – in particular, we note one residual larger than 300 in absolute value, two residual in the 200’s, and two residuals in the 100’s. These large residuals are in the same order of magnitude as the effects, so this additive model doesn’t appear to fit very well.</p>
+<p>The residuals appear large – also they show a distinctive pattern.</p>
+<p><img src="figures/medpolish/newplot2.png" width="40%" /></p>
+<p>The residuals generally are positive in the upper left and lower right quadrants, and negative in the upper right and lower left quadrants.</p>
+<p>Can we improve the additive model to remove this residual pattern?</p>
+</div>
+<div id="comparison-values" class="section level2 hasAnchor" number="20.4">
+<h2><span class="header-section-number">20.4</span> Comparison values<a href="extended-fit.html#comparison-values" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In the above figure, we also show the sign of the row effects and the column effects. Suppose that we multiply the row effect by the column effect for each cell of the table. Then we would observe the same pattern as we saw in the residuals above. This observation motivates adding a single new term to improve our additive fit.</p>
+<p>For each cell in the two-way table, we define a comparison value (cv) as
+<span class="math display">\[
+cv = \frac{ROWEFF \times COLEFF}{COMMON}.
+\]</span></p>
+<p>To illustrate computing a comparison value, consider the upper left cell of the table that corresponds to a studio apartment in Albuquerque. The corresponding row effect is -162, the corresponding column effect is -244, and the common value is 754; so the comparison value for this cell is (-162)(-244)/754 = 52.424. The table below shows the comparison values for all cells of the table.</p>
+<pre><code>                         1          2        3        4 
+              Studio  Bedroom   Bedrooms Bedrooms Bedrooms  REFF
+  
+ Albuquerque     52.424   30.724    0   -52.424  -91.743  -162 
+ Columbus        48.218   28.259    0   -48.218  -84.381  -149
+ Tulsa           41.745   24.466    0   -41.745  -73.054  -129 
+ Miami           10.355    6.069    0   -10.355  -18.122  -32 
+ Philadelphia     0.000    0.000    0     0.000    0.000    0 
+ Atlanta        -22.976  -13.466    0    22.976   40.208   71 
+ Honolulu       -27.507  -16.121    0    27.507   48.137   85  
+ Boston         -72.812  -42.672    0    72.812  127.420   225 
+ San Francisco -228.143 -133.707    0   228.143  399.251   705 
+ CEFF            -244     -143      0     244     427      754</code></pre>
+<p>Note that these comparison values exhibit the same basic pattern that we saw in the residuals.</p>
+</div>
+<div id="extending-the-additive-model-by-one-more-term" class="section level2 hasAnchor" number="20.5">
+<h2><span class="header-section-number">20.5</span> Extending the additive model by one more term<a href="extended-fit.html#extending-the-additive-model-by-one-more-term" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We add a single term to our additive model to account for the pattern that we see in the residuals. This new model, called an extended model, has the form
+<span class="math display">\[
+FIT = COMMON + ROW \, EFF + COL \, EFF + k CV,
+\]</span>
+where <span class="math inline">\(CV\)</span> is the comparison value and <span class="math inline">\(k\)</span> is a constant chosen that the new model is a good fit to the data.</p>
+</div>
+<div id="finding-k" class="section level2 hasAnchor" number="20.6">
+<h2><span class="header-section-number">20.6</span> Finding k<a href="extended-fit.html#finding-k" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>How do we find the coefficient <span class="math inline">\(k\)</span> of the comparison value in our extended model? We plot the residuals from the additive fit (vertical) against the comparison values (horizontal). As expected, we see a positive relationship between the residuals and the cv’s. The slope of a line fitted to this plot is our estimate at the coefficient <span class="math inline">\(k\)</span>.</p>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="extended-fit.html#cb295-1" aria-hidden="true" tabindex="-1"></a>cv <span class="ot">&lt;-</span> <span class="fu">with</span>(additive.fit,</span>
+<span id="cb295-2"><a href="extended-fit.html#cb295-2" aria-hidden="true" tabindex="-1"></a>           <span class="fu">outer</span>(row, col, <span class="st">&quot;*&quot;</span>) <span class="sc">/</span> overall)</span>
+<span id="cb295-3"><a href="extended-fit.html#cb295-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Comparison_Value =</span> <span class="fu">as.vector</span>(cv),</span>
+<span id="cb295-4"><a href="extended-fit.html#cb295-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">Residual =</span> <span class="fu">as.vector</span>(additive.fit<span class="sc">$</span>residuals))</span>
+<span id="cb295-5"><a href="extended-fit.html#cb295-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(Comparison_Value, Residual)) <span class="sc">+</span> <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-146-1.png" width="672" /></p>
+<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb296-1"><a href="extended-fit.html#cb296-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rline</span>(Residual <span class="sc">~</span> Comparison_Value, df)<span class="sc">$</span>b</span></code></pre></div>
+<pre><code>## [1] 0.5669006</code></pre>
+<p>We check the suitability of our line fit by looking at the residuals and seeing if we have removed the trend from the scatterplot. (It appears from the graph that we have indeed removed the trend from the plot.)</p>
+<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb298-1"><a href="extended-fit.html#cb298-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df, <span class="fu">aes</span>(Comparison_Value, </span>
+<span id="cb298-2"><a href="extended-fit.html#cb298-2" aria-hidden="true" tabindex="-1"></a>               Residual <span class="sc">-</span> <span class="fl">0.56</span> <span class="sc">*</span> Comparison_Value)) <span class="sc">+</span></span>
+<span id="cb298-3"><a href="extended-fit.html#cb298-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb298-4"><a href="extended-fit.html#cb298-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-147-1.png" width="672" /></p>
+<p>The slope of this line, .56, is our estimate at the coefficient k. So our improved fit to these data has the form</p>
+<p><span class="math display">\[
+FIT = COMMON + ROW \, EFF + COL \, EFF + 0.56 CV,
+\]</span></p>
+</div>
+<div id="relationship-with-multiplicative-fit" class="section level2 hasAnchor" number="20.7">
+<h2><span class="header-section-number">20.7</span> Relationship with multiplicative fit<a href="extended-fit.html#relationship-with-multiplicative-fit" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In our extended fit, we found that a suitable choice for the coefficient k of the comparison value was k = .8. What if we chose the nearby value k = 1? Then the extended model is (using more concise notation)
+<span class="math display">\[
+COMMON + ROW + COL + \frac{ROW \times COL}{COMMON}
+\]</span>
+Using a little algebra, note that this fit can be rewritten as
+<span class="math display">\[
+COMMON \left(1 + \frac{ROW}{COMMON} + \frac{COL}{COMMON} +
+\frac{ROW \times COL}{COMMON^2}\right)
+\]</span>
+<span class="math display">\[
+= COMMON \left(1 + \frac{ROW}{COMMON}\right) \left(1 + \frac{COL}{COMMON}\right),
+\]</span>
+which is a multiplicative fit with
+<span class="math display">\[
+ROWEFF = \left(1 + \frac{ROW}{COMMON}\right), \,
+COLEFF = \left(1 + \frac{COL}{COMMON}\right).
+\]</span></p>
+<p>We have already discussed this type of fit. Specifically, we found that one could find a multiplicative fit for a two-way table by taking an additive fit of the log response.</p>
+</div>
+<div id="extended-fits-and-transformations" class="section level2 hasAnchor" number="20.8">
+<h2><span class="header-section-number">20.8</span> Extended fits and transformations<a href="extended-fit.html#extended-fits-and-transformations" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s summarize what we’ve learned in our example.</p>
+<ol style="list-style-type: decimal">
+<li><p>The additive fit was unsatisfactory – there was a very clear pattern in the residuals.</p></li>
+<li><p>The special pattern in the residuals motivated the consideration of an extended fit. By plotting the residuals against the comparison values, we saw that the slope of the comparison values was .8 which is pretty close to 1.</p></li>
+<li><p>If we use <span class="math inline">\(k=1\)</span> in our extended fit, this is equivalent to a multiplicative model which we can fit by fitting an additive model to the log rents. So this analysis suggests that we should reexpress the response by taking a log which is a power transformation with <span class="math inline">\(p = 0\)</span>.</p></li>
+<li><p>Actually, what we found here can be generalized. Suppose that the slope of the (residual, comparison value) plot is <span class="math inline">\(k\)</span>. Then the recommendation is to perform an additive fit to transformed data where the data is reexpressed using a power transformation with power <span class="math inline">\(p = 1 - k\)</span>.</p></li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="multiplicative-fit.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="binned-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/20-ExtendedFit.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Course in Exploratory Data Analysis.pdf", "Course in Exploratory Data Analysis.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
