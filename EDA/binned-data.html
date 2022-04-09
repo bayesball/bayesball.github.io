@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>21 Binned Data | A Course in Exploratory Data Analysis</title>
+  <meta name="description" content="21 Binned Data | A Course in Exploratory Data Analysis" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="21 Binned Data | A Course in Exploratory Data Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="21 Binned Data | A Course in Exploratory Data Analysis" />
+  
+  
+  
+
+<meta name="author" content="Jim Albert" />
+
+
+<meta name="date" content="2022-04-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="extended-fit.html"/>
+<link rel="next" href="binned-data-ii.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Course in Exploratory Data Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface<span></span></a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#an-eda-course"><i class="fa fa-check"></i><b>1.1</b> An EDA Course<span></span></a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i><b>1.2</b> Organization<span></span></a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#preface-excerpt-from-eda-by-john-w.-tukey-addison-wesley-1977"><i class="fa fa-check"></i><b>1.3</b> Preface Excerpt from <em>EDA</em> by John W. Tukey (Addison-Wesley, 1977)<span></span></a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#examples-not-case-histories"><i class="fa fa-check"></i><b>1.3.1</b> Examples, NOT case histories<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction<span></span></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#what-is-data-analysis"><i class="fa fa-check"></i><b>2.1</b> What is data analysis?<span></span></a></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#what-is-data-and-where-do-we-find-it"><i class="fa fa-check"></i><b>2.2</b> What is data and where do we find it?<span></span></a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#meet-our-first-data"><i class="fa fa-check"></i><b>2.3</b> Meet our first data<span></span></a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#how-does-exploratory-data-analysis-eda-differ-from-confirmatory-data-analysis-cda"><i class="fa fa-check"></i><b>2.4</b> How does exploratory data analysis (EDA) differ from confirmatory data analysis (CDA)?<span></span></a></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#how-is-eda-different-from-cda"><i class="fa fa-check"></i><b>2.5</b> How is EDA different from CDA?<span></span></a></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#john-tukeys-contribution"><i class="fa fa-check"></i><b>2.6</b> John Tukey’s contribution<span></span></a></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#four-principles-of-eda-the-four-rs"><i class="fa fa-check"></i><b>2.7</b> Four principles of EDA (the four R’s)}<span></span></a></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#an-exploratory-look-at-our-data"><i class="fa fa-check"></i><b>2.8</b> An exploratory look at our data<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html"><i class="fa fa-check"></i><b>3</b> Working with a Single Batch – Displays<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#meet-the-data"><i class="fa fa-check"></i><b>3.1</b> Meet the Data<span></span></a></li>
+<li class="chapter" data-level="3.2" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#the-basic-stemplot"><i class="fa fa-check"></i><b>3.2</b> The Basic Stemplot<span></span></a></li>
+<li class="chapter" data-level="3.3" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#looking-at-a-data-distribution"><i class="fa fa-check"></i><b>3.3</b> Looking at a Data Distribution<span></span></a></li>
+<li class="chapter" data-level="3.4" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#stemplot-variations-breaking-the-stem-at-different-locations"><i class="fa fa-check"></i><b>3.4</b> Stemplot variations – breaking the stem at different locations<span></span></a></li>
+<li class="chapter" data-level="3.5" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#stemplot-variations-2-5-and-10-leaves-per-stem"><i class="fa fa-check"></i><b>3.5</b> Stemplot variations – 2, 5, and 10 leaves per stem<span></span></a></li>
+<li class="chapter" data-level="3.6" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#guidance-in-constructing-a-stemplot"><i class="fa fa-check"></i><b>3.6</b> Guidance in Constructing a Stemplot<span></span></a></li>
+<li class="chapter" data-level="3.7" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#making-the-stemplot-resistant"><i class="fa fa-check"></i><b>3.7</b> Making the Stemplot Resistant<span></span></a></li>
+<li class="chapter" data-level="3.8" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#a-few-closing-comments"><i class="fa fa-check"></i><b>3.8</b> A Few Closing Comments<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html"><i class="fa fa-check"></i><b>4</b> Single Batch: Summaries<span></span></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#meet-the-data-1"><i class="fa fa-check"></i><b>4.1</b> Meet the Data<span></span></a></li>
+<li class="chapter" data-level="4.2" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#ranks-and-depths"><i class="fa fa-check"></i><b>4.2</b> Ranks and Depths<span></span></a></li>
+<li class="chapter" data-level="4.3" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#letter-values-a-set-of-summary-values"><i class="fa fa-check"></i><b>4.3</b> Letter Values: A Set of Summary Values<span></span></a></li>
+<li class="chapter" data-level="4.4" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#counting-in"><i class="fa fa-check"></i><b>4.4</b> Counting In<span></span></a></li>
+<li class="chapter" data-level="4.5" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#five-number-summary"><i class="fa fa-check"></i><b>4.5</b> Five-number Summary<span></span></a></li>
+<li class="chapter" data-level="4.6" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#other-letter-values"><i class="fa fa-check"></i><b>4.6</b> Other Letter Values<span></span></a></li>
+<li class="chapter" data-level="4.7" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#measures-of-center"><i class="fa fa-check"></i><b>4.7</b> Measures of Center<span></span></a></li>
+<li class="chapter" data-level="4.8" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#measures-of-spread"><i class="fa fa-check"></i><b>4.8</b> Measures of Spread<span></span></a></li>
+<li class="chapter" data-level="4.9" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#identifying-outliers"><i class="fa fa-check"></i><b>4.9</b> Identifying Outliers<span></span></a></li>
+<li class="chapter" data-level="4.10" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#a-new-example"><i class="fa fa-check"></i><b>4.10</b> A New Example<span></span></a></li>
+<li class="chapter" data-level="4.11" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#relationship-with-normal-data"><i class="fa fa-check"></i><b>4.11</b> Relationship with Normal Data<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="boxplots.html"><a href="boxplots.html"><i class="fa fa-check"></i><b>5</b> Boxplots<span></span></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="boxplots.html"><a href="boxplots.html#the-data"><i class="fa fa-check"></i><b>5.1</b> The Data:<span></span></a></li>
+<li class="chapter" data-level="5.2" data-path="boxplots.html"><a href="boxplots.html#constructing-a-single-boxplot"><i class="fa fa-check"></i><b>5.2</b> Constructing A Single Boxplot<span></span></a></li>
+<li class="chapter" data-level="5.3" data-path="boxplots.html"><a href="boxplots.html#interpreting-a-boxplot"><i class="fa fa-check"></i><b>5.3</b> Interpreting a Boxplot<span></span></a></li>
+<li class="chapter" data-level="5.4" data-path="boxplots.html"><a href="boxplots.html#boxplots-to-compare-batches"><i class="fa fa-check"></i><b>5.4</b> Boxplots to Compare Batches<span></span></a></li>
+<li class="chapter" data-level="5.5" data-path="boxplots.html"><a href="boxplots.html#comparisons-using-medians"><i class="fa fa-check"></i><b>5.5</b> Comparisons using Medians<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="spread-level-plot.html"><a href="spread-level-plot.html"><i class="fa fa-check"></i><b>6</b> Spread Level Plot<span></span></a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="spread-level-plot.html"><a href="spread-level-plot.html#lets-meet-the-data"><i class="fa fa-check"></i><b>6.1</b> Let’s Meet the Data<span></span></a></li>
+<li class="chapter" data-level="6.2" data-path="spread-level-plot.html"><a href="spread-level-plot.html#comparing-batches-in-the-raw-scale"><i class="fa fa-check"></i><b>6.2</b> Comparing Batches in the Raw Scale<span></span></a></li>
+<li class="chapter" data-level="6.3" data-path="spread-level-plot.html"><a href="spread-level-plot.html#whats-wrong"><i class="fa fa-check"></i><b>6.3</b> What’s Wrong?<span></span></a></li>
+<li class="chapter" data-level="6.4" data-path="spread-level-plot.html"><a href="spread-level-plot.html#the-spread-vs-level-plot"><i class="fa fa-check"></i><b>6.4</b> The Spread vs Level Plot<span></span></a></li>
+<li class="chapter" data-level="6.5" data-path="spread-level-plot.html"><a href="spread-level-plot.html#reexpression"><i class="fa fa-check"></i><b>6.5</b> Reexpression<span></span></a></li>
+<li class="chapter" data-level="6.6" data-path="spread-level-plot.html"><a href="spread-level-plot.html#reanalysis-of-the-data-in-new-scale"><i class="fa fa-check"></i><b>6.6</b> Reanalysis of the data in new scale<span></span></a></li>
+<li class="chapter" data-level="6.7" data-path="spread-level-plot.html"><a href="spread-level-plot.html#wrap-up"><i class="fa fa-check"></i><b>6.7</b> Wrap Up<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html"><i class="fa fa-check"></i><b>7</b> Comparing Batches III<span></span></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#a-case-study-where-the-spread-vs-level-plot-works"><i class="fa fa-check"></i><b>7.1</b> A Case Study where the Spread vs Level Plot Works<span></span></a></li>
+<li class="chapter" data-level="7.2" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#a-case-study-where-the-spread-vs-level-plot-doesnt-work"><i class="fa fa-check"></i><b>7.2</b> A Case Study where the Spread vs Level Plot Doesn’t Work<span></span></a></li>
+<li class="chapter" data-level="7.3" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#some-final-comments-about-spread-vs.-level-plots"><i class="fa fa-check"></i><b>7.3</b> Some final comments about spread vs. level plots<span></span></a></li>
+<li class="chapter" data-level="7.4" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#why-does-the-spread-vs.-level-plot-work"><i class="fa fa-check"></i><b>7.4</b> Why does the spread vs. level plot work?<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="transformations.html"><a href="transformations.html"><i class="fa fa-check"></i><b>8</b> Transformations<span></span></a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="transformations.html"><a href="transformations.html#why-do-we-rexpress-data"><i class="fa fa-check"></i><b>8.1</b> Why do we rexpress data?<span></span></a></li>
+<li class="chapter" data-level="8.2" data-path="transformations.html"><a href="transformations.html#the-shape-of-the-data"><i class="fa fa-check"></i><b>8.2</b> The shape of the data<span></span></a></li>
+<li class="chapter" data-level="8.3" data-path="transformations.html"><a href="transformations.html#trivial-reexpressions"><i class="fa fa-check"></i><b>8.3</b> Trivial reexpressions<span></span></a></li>
+<li class="chapter" data-level="8.4" data-path="transformations.html"><a href="transformations.html#nontrivial-expressions-the-power-family"><i class="fa fa-check"></i><b>8.4</b> Nontrivial expressions: the power family<span></span></a></li>
+<li class="chapter" data-level="8.5" data-path="transformations.html"><a href="transformations.html#some-properties-of-the-power-family"><i class="fa fa-check"></i><b>8.5</b> Some properties of the power family<span></span></a></li>
+<li class="chapter" data-level="8.6" data-path="transformations.html"><a href="transformations.html#the-log-transformation"><i class="fa fa-check"></i><b>8.6</b> The log transformation<span></span></a></li>
+<li class="chapter" data-level="8.7" data-path="transformations.html"><a href="transformations.html#ladders-of-powers"><i class="fa fa-check"></i><b>8.7</b> Ladders of powers<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html"><i class="fa fa-check"></i><b>9</b> Reexpressing for Symmetry<span></span></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#data-for-the-day"><i class="fa fa-check"></i><b>9.1</b> Data for the day<span></span></a></li>
+<li class="chapter" data-level="9.2" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#why-is-this-data-hard-to-interpret"><i class="fa fa-check"></i><b>9.2</b> Why is this data hard to interpret?<span></span></a></li>
+<li class="chapter" data-level="9.3" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#checking-for-symmetry-by-looking-at-midsummaries"><i class="fa fa-check"></i><b>9.3</b> Checking for symmetry by looking at midsummaries<span></span></a></li>
+<li class="chapter" data-level="9.4" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#reexpressing-to-achieve-approximate-symmetry"><i class="fa fa-check"></i><b>9.4</b> Reexpressing to achieve approximate symmetry<span></span></a></li>
+<li class="chapter" data-level="9.5" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#hinkleys-quick-method"><i class="fa fa-check"></i><b>9.5</b> Hinkley’s quick method<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html"><i class="fa fa-check"></i><b>10</b> Reexpressing for Symmetry II<span></span></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#data-for-the-day-1"><i class="fa fa-check"></i><b>10.1</b> Data for the day<span></span></a></li>
+<li class="chapter" data-level="10.2" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#symmetry-plot"><i class="fa fa-check"></i><b>10.2</b> Symmetry plot<span></span></a></li>
+<li class="chapter" data-level="10.3" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#roots-and-logs"><i class="fa fa-check"></i><b>10.3</b> Roots and logs<span></span></a></li>
+<li class="chapter" data-level="10.4" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#hinkleys-method"><i class="fa fa-check"></i><b>10.4</b> Hinkley’s method<span></span></a></li>
+<li class="chapter" data-level="10.5" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#matched-transformations"><i class="fa fa-check"></i><b>10.5</b> Matched transformations<span></span></a></li>
+<li class="chapter" data-level="10.6" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#matching-method-1"><i class="fa fa-check"></i><b>10.6</b> Matching Method 1<span></span></a></li>
+<li class="chapter" data-level="10.7" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#matching-method-2"><i class="fa fa-check"></i><b>10.7</b> Matching Method 2<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="transformations-summary.html"><a href="transformations-summary.html"><i class="fa fa-check"></i><b>11</b> Transformations Summary<span></span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="transformations-summary.html"><a href="transformations-summary.html#why-do-we-reexpress-data"><i class="fa fa-check"></i><b>11.1</b> Why do we reexpress data?<span></span></a></li>
+<li class="chapter" data-level="11.2" data-path="transformations-summary.html"><a href="transformations-summary.html#serendipitous-effects-of-transformation"><i class="fa fa-check"></i><b>11.2</b> Serendipitous effects of transformation<span></span></a></li>
+<li class="chapter" data-level="11.3" data-path="transformations-summary.html"><a href="transformations-summary.html#when-is-it-worthwhile-to-transform"><i class="fa fa-check"></i><b>11.3</b> When is it worthwhile to transform?<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html"><i class="fa fa-check"></i><b>12</b> Introduction to Plotting<span></span></a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#meet-the-data-2"><i class="fa fa-check"></i><b>12.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="12.2" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#graph-the-data"><i class="fa fa-check"></i><b>12.2</b> Graph the data<span></span></a></li>
+<li class="chapter" data-level="12.3" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#describing-the-fit"><i class="fa fa-check"></i><b>12.3</b> Describing the fit<span></span></a></li>
+<li class="chapter" data-level="12.4" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#looking-at-the-residuals"><i class="fa fa-check"></i><b>12.4</b> Looking at the residuals<span></span></a></li>
+<li class="chapter" data-level="12.5" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#an-alternative-fit"><i class="fa fa-check"></i><b>12.5</b> An alternative fit<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="resistant-line.html"><a href="resistant-line.html"><i class="fa fa-check"></i><b>13</b> Resistant Line<span></span></a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="resistant-line.html"><a href="resistant-line.html#meet-the-data-3"><i class="fa fa-check"></i><b>13.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="13.2" data-path="resistant-line.html"><a href="resistant-line.html#three-summary-points"><i class="fa fa-check"></i><b>13.2</b> Three summary points<span></span></a></li>
+<li class="chapter" data-level="13.3" data-path="resistant-line.html"><a href="resistant-line.html#fitting-a-line-to-three-points"><i class="fa fa-check"></i><b>13.3</b> Fitting a line to three points<span></span></a></li>
+<li class="chapter" data-level="13.4" data-path="resistant-line.html"><a href="resistant-line.html#improving-the-line-by-fitting-a-line-to-the-residuals"><i class="fa fa-check"></i><b>13.4</b> Improving the line by fitting a line to the residuals<span></span></a></li>
+<li class="chapter" data-level="13.5" data-path="resistant-line.html"><a href="resistant-line.html#comparison-with-a-least-squares-fit"><i class="fa fa-check"></i><b>13.5</b> Comparison with a Least-Squares Fit<span></span></a></li>
+<li class="chapter" data-level="13.6" data-path="resistant-line.html"><a href="resistant-line.html#interpreting-the-fit"><i class="fa fa-check"></i><b>13.6</b> Interpreting the fit<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="plotting-ii.html"><a href="plotting-ii.html"><i class="fa fa-check"></i><b>14</b> Plotting II<span></span></a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="plotting-ii.html"><a href="plotting-ii.html#fitting-a-line-to-the-population-in-the-later-years"><i class="fa fa-check"></i><b>14.1</b> Fitting a line to the population in the later years<span></span></a></li>
+<li class="chapter" data-level="14.2" data-path="plotting-ii.html"><a href="plotting-ii.html#fitting-a-line-to-the-log-population-in-the-early-years"><i class="fa fa-check"></i><b>14.2</b> Fitting a line to the log population in the early years<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="straightening.html"><a href="straightening.html"><i class="fa fa-check"></i><b>15</b> Straightening<span></span></a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="straightening.html"><a href="straightening.html#meet-the-data-4"><i class="fa fa-check"></i><b>15.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="15.2" data-path="straightening.html"><a href="straightening.html#a-nonlinear-relationship"><i class="fa fa-check"></i><b>15.2</b> A nonlinear relationship<span></span></a></li>
+<li class="chapter" data-level="15.3" data-path="straightening.html"><a href="straightening.html#three-summary-points-and-measuring-curvature"><i class="fa fa-check"></i><b>15.3</b> Three summary points and measuring curvature<span></span></a></li>
+<li class="chapter" data-level="15.4" data-path="straightening.html"><a href="straightening.html#reexpressing-to-reduce-curvature"><i class="fa fa-check"></i><b>15.4</b> Reexpressing to reduce curvature<span></span></a></li>
+<li class="chapter" data-level="15.5" data-path="straightening.html"><a href="straightening.html#straightening-in-the-example"><i class="fa fa-check"></i><b>15.5</b> Straightening in the example<span></span></a></li>
+<li class="chapter" data-level="15.6" data-path="straightening.html"><a href="straightening.html#making-sense-of-the-reexpression"><i class="fa fa-check"></i><b>15.6</b> Making sense of the reexpression<span></span></a></li>
+<li class="chapter" data-level="15.7" data-path="straightening.html"><a href="straightening.html#straightening-fitting-and-flattening"><i class="fa fa-check"></i><b>15.7</b> Straightening, fitting, and flattening<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="smoothing.html"><a href="smoothing.html"><i class="fa fa-check"></i><b>16</b> Smoothing<span></span></a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="smoothing.html"><a href="smoothing.html#meet-the-data-5"><i class="fa fa-check"></i><b>16.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="16.2" data-path="smoothing.html"><a href="smoothing.html#we-need-to-smooth"><i class="fa fa-check"></i><b>16.2</b> We need to smooth<span></span></a></li>
+<li class="chapter" data-level="16.3" data-path="smoothing.html"><a href="smoothing.html#running-medians"><i class="fa fa-check"></i><b>16.3</b> Running medians<span></span></a></li>
+<li class="chapter" data-level="16.4" data-path="smoothing.html"><a href="smoothing.html#end-value-smoothing"><i class="fa fa-check"></i><b>16.4</b> End-value smoothing<span></span></a></li>
+<li class="chapter" data-level="16.5" data-path="smoothing.html"><a href="smoothing.html#splitting"><i class="fa fa-check"></i><b>16.5</b> Splitting<span></span></a></li>
+<li class="chapter" data-level="16.6" data-path="smoothing.html"><a href="smoothing.html#hanning"><i class="fa fa-check"></i><b>16.6</b> Hanning<span></span></a></li>
+<li class="chapter" data-level="16.7" data-path="smoothing.html"><a href="smoothing.html#the-smooth-and-the-rough"><i class="fa fa-check"></i><b>16.7</b> The smooth and the rough<span></span></a></li>
+<li class="chapter" data-level="16.8" data-path="smoothing.html"><a href="smoothing.html#reroughing"><i class="fa fa-check"></i><b>16.8</b> Reroughing<span></span></a></li>
+<li class="chapter" data-level="16.9" data-path="smoothing.html"><a href="smoothing.html#interpreting-the-final-smooth-and-rough"><i class="fa fa-check"></i><b>16.9</b> Interpreting the final smooth and rough<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="median-polish.html"><a href="median-polish.html"><i class="fa fa-check"></i><b>17</b> Median Polish<span></span></a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="median-polish.html"><a href="median-polish.html#meet-the-data-6"><i class="fa fa-check"></i><b>17.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="17.2" data-path="median-polish.html"><a href="median-polish.html#an-additive-model"><i class="fa fa-check"></i><b>17.2</b> An additive model<span></span></a></li>
+<li class="chapter" data-level="17.3" data-path="median-polish.html"><a href="median-polish.html#median-polish-1"><i class="fa fa-check"></i><b>17.3</b> Median polish<span></span></a></li>
+<li class="chapter" data-level="17.4" data-path="median-polish.html"><a href="median-polish.html#interpreting-the-additive-model"><i class="fa fa-check"></i><b>17.4</b> Interpreting the additive model<span></span></a>
+<ul>
+<li class="chapter" data-level="17.4.1" data-path="median-polish.html"><a href="median-polish.html#interpreting-the-row-and-column-effects"><i class="fa fa-check"></i><b>17.4.1</b> Interpreting the row and column effects<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="median-polish.html"><a href="median-polish.html#looking-at-the-residuals-1"><i class="fa fa-check"></i><b>17.5</b> Looking at the residuals<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html"><i class="fa fa-check"></i><b>18</b> Plotting an Additive Plot<span></span></a>
+<ul>
+<li class="chapter" data-level="18.1" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#the-data-1"><i class="fa fa-check"></i><b>18.1</b> The data<span></span></a></li>
+<li class="chapter" data-level="18.2" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#plotting-the-two-terms-of-the-additive-fit"><i class="fa fa-check"></i><b>18.2</b> Plotting the two terms of the additive fit<span></span></a></li>
+<li class="chapter" data-level="18.3" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#making-sense-of-the-display"><i class="fa fa-check"></i><b>18.3</b> Making sense of the display<span></span></a></li>
+<li class="chapter" data-level="18.4" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#adding-information-about-the-residuals-to-the-display"><i class="fa fa-check"></i><b>18.4</b> Adding information about the residuals to the display<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html"><i class="fa fa-check"></i><b>19</b> Multiplicative Fit<span></span></a>
+<ul>
+<li class="chapter" data-level="19.1" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#meet-the-data-7"><i class="fa fa-check"></i><b>19.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="19.2" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#an-additive-model-isnt-suitable"><i class="fa fa-check"></i><b>19.2</b> An additive model isn’t suitable<span></span></a></li>
+<li class="chapter" data-level="19.3" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#fitting-our-model-to-the-data"><i class="fa fa-check"></i><b>19.3</b> Fitting our model to the data<span></span></a></li>
+<li class="chapter" data-level="19.4" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#interpreting-the-fit-1"><i class="fa fa-check"></i><b>19.4</b> Interpreting the fit<span></span></a></li>
+<li class="chapter" data-level="19.5" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#interpreting-the-residuals"><i class="fa fa-check"></i><b>19.5</b> Interpreting the residuals<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="extended-fit.html"><a href="extended-fit.html"><i class="fa fa-check"></i><b>20</b> Extended Fit<span></span></a>
+<ul>
+<li class="chapter" data-level="20.1" data-path="extended-fit.html"><a href="extended-fit.html#meet-the-data-8"><i class="fa fa-check"></i><b>20.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="20.2" data-path="extended-fit.html"><a href="extended-fit.html#an-additive-fit"><i class="fa fa-check"></i><b>20.2</b> An additive fit<span></span></a></li>
+<li class="chapter" data-level="20.3" data-path="extended-fit.html"><a href="extended-fit.html#looking-at-the-residuals-2"><i class="fa fa-check"></i><b>20.3</b> Looking at the residuals<span></span></a></li>
+<li class="chapter" data-level="20.4" data-path="extended-fit.html"><a href="extended-fit.html#comparison-values"><i class="fa fa-check"></i><b>20.4</b> Comparison values<span></span></a></li>
+<li class="chapter" data-level="20.5" data-path="extended-fit.html"><a href="extended-fit.html#extending-the-additive-model-by-one-more-term"><i class="fa fa-check"></i><b>20.5</b> Extending the additive model by one more term<span></span></a></li>
+<li class="chapter" data-level="20.6" data-path="extended-fit.html"><a href="extended-fit.html#finding-k"><i class="fa fa-check"></i><b>20.6</b> Finding k<span></span></a></li>
+<li class="chapter" data-level="20.7" data-path="extended-fit.html"><a href="extended-fit.html#relationship-with-multiplicative-fit"><i class="fa fa-check"></i><b>20.7</b> Relationship with multiplicative fit<span></span></a></li>
+<li class="chapter" data-level="20.8" data-path="extended-fit.html"><a href="extended-fit.html#extended-fits-and-transformations"><i class="fa fa-check"></i><b>20.8</b> Extended fits and transformations<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="binned-data.html"><a href="binned-data.html"><i class="fa fa-check"></i><b>21</b> Binned Data<span></span></a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="binned-data.html"><a href="binned-data.html#meet-the-data-9"><i class="fa fa-check"></i><b>21.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="21.2" data-path="binned-data.html"><a href="binned-data.html#constructing-a-histogram"><i class="fa fa-check"></i><b>21.2</b> Constructing a histogram<span></span></a></li>
+<li class="chapter" data-level="21.3" data-path="binned-data.html"><a href="binned-data.html#a-rootogram"><i class="fa fa-check"></i><b>21.3</b> A rootogram<span></span></a></li>
+<li class="chapter" data-level="21.4" data-path="binned-data.html"><a href="binned-data.html#fitting-a-gaussian-comparison-curve"><i class="fa fa-check"></i><b>21.4</b> Fitting a Gaussian comparison curve<span></span></a></li>
+<li class="chapter" data-level="21.5" data-path="binned-data.html"><a href="binned-data.html#residuals"><i class="fa fa-check"></i><b>21.5</b> Residuals<span></span></a></li>
+<li class="chapter" data-level="21.6" data-path="binned-data.html"><a href="binned-data.html#hanging-rootogram"><i class="fa fa-check"></i><b>21.6</b> Hanging rootogram<span></span></a></li>
+<li class="chapter" data-level="21.7" data-path="binned-data.html"><a href="binned-data.html#interpreting-the-residuals-1"><i class="fa fa-check"></i><b>21.7</b> Interpreting the residuals<span></span></a></li>
+<li class="chapter" data-level="21.8" data-path="binned-data.html"><a href="binned-data.html#other-definitions-of-residuals-double-root-residuals"><i class="fa fa-check"></i><b>21.8</b> Other definitions of residuals (Double Root Residuals)<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="binned-data-ii.html"><a href="binned-data-ii.html"><i class="fa fa-check"></i><b>22</b> Binned Data II<span></span></a>
+<ul>
+<li class="chapter" data-level="22.1" data-path="binned-data-ii.html"><a href="binned-data-ii.html#introduction-1"><i class="fa fa-check"></i><b>22.1</b> Introduction<span></span></a></li>
+<li class="chapter" data-level="22.2" data-path="binned-data-ii.html"><a href="binned-data-ii.html#meet-a-simulated-but-famous-dataset"><i class="fa fa-check"></i><b>22.2</b> Meet a simulated, but famous, dataset<span></span></a></li>
+<li class="chapter" data-level="22.3" data-path="binned-data-ii.html"><a href="binned-data-ii.html#smoothing-the-root-counts"><i class="fa fa-check"></i><b>22.3</b> Smoothing the root counts<span></span></a></li>
+<li class="chapter" data-level="22.4" data-path="binned-data-ii.html"><a href="binned-data-ii.html#fitting-a-symmetric-curve"><i class="fa fa-check"></i><b>22.4</b> Fitting a symmetric curve<span></span></a></li>
+<li class="chapter" data-level="22.5" data-path="binned-data-ii.html"><a href="binned-data-ii.html#is-it-a-reasonable-fit"><i class="fa fa-check"></i><b>22.5</b> Is it a reasonable fit?<span></span></a></li>
+<li class="chapter" data-level="22.6" data-path="binned-data-ii.html"><a href="binned-data-ii.html#the-famous-brewer"><i class="fa fa-check"></i><b>22.6</b> The famous brewer<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="fraction-data.html"><a href="fraction-data.html"><i class="fa fa-check"></i><b>23</b> Fraction Data<span></span></a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="fraction-data.html"><a href="fraction-data.html#the-quality-of-students-at-bgsu"><i class="fa fa-check"></i><b>23.1</b> The Quality of Students at BGSU<span></span></a></li>
+<li class="chapter" data-level="23.2" data-path="fraction-data.html"><a href="fraction-data.html#meet-the-data-10"><i class="fa fa-check"></i><b>23.2</b> Meet the Data<span></span></a></li>
+<li class="chapter" data-level="23.3" data-path="fraction-data.html"><a href="fraction-data.html#counted-fractions"><i class="fa fa-check"></i><b>23.3</b> Counted Fractions<span></span></a></li>
+<li class="chapter" data-level="23.4" data-path="fraction-data.html"><a href="fraction-data.html#started-counts-and-split-counts"><i class="fa fa-check"></i><b>23.4</b> Started Counts and Split Counts<span></span></a></li>
+<li class="chapter" data-level="23.5" data-path="fraction-data.html"><a href="fraction-data.html#three-matched-scales-for-counted-fractions-folded-fractions-roots-and-logs"><i class="fa fa-check"></i><b>23.5</b> Three Matched Scales for Counted Fractions (folded fractions, roots, and logs)<span></span></a></li>
+<li class="chapter" data-level="23.6" data-path="fraction-data.html"><a href="fraction-data.html#an-example-illustrating-the-benefits-of-reexpressing-fractions"><i class="fa fa-check"></i><b>23.6</b> An Example Illustrating the Benefits of Reexpressing Fractions<span></span></a></li>
+<li class="chapter" data-level="23.7" data-path="fraction-data.html"><a href="fraction-data.html#a-tukey-example-where-careful-reexpression-pays-off"><i class="fa fa-check"></i><b>23.7</b> A Tukey Example Where Careful Reexpression Pays Off<span></span></a></li>
+<li class="chapter" data-level="23.8" data-path="fraction-data.html"><a href="fraction-data.html#back-to-the-data-an-analysis-based-on-flogs"><i class="fa fa-check"></i><b>23.8</b> Back to the Data – An Analysis Based on Flogs<span></span></a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Course in Exploratory Data Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="binned-data" class="section level1 hasAnchor" number="21">
+<h1><span class="header-section-number">21</span> Binned Data<a href="binned-data.html#binned-data" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="meet-the-data-9" class="section level2 hasAnchor" number="21.1">
+<h2><span class="header-section-number">21.1</span> Meet the data<a href="binned-data.html#meet-the-data-9" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Our data are the times (in seconds) in running Grandma’s Marathon (run in Duluth, Minnesota) for women of ages 19 to 34. (<a href="http://www.grandmamarathon.org" class="uri">http://www.grandmamarathon.org</a>) This data is stored as the dataset <code>grandma.19.40</code> in the <code>LearnEDAfunctions</code> package.</p>
+<div class="sourceCode" id="cb295"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb295-1"><a href="binned-data.html#cb295-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(LearnEDAfunctions)</span>
+<span id="cb295-2"><a href="binned-data.html#cb295-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div>
+<p>Here are the top ten times:</p>
+<div class="sourceCode" id="cb296"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb296-1"><a href="binned-data.html#cb296-1" aria-hidden="true" tabindex="-1"></a>grandma.<span class="fl">19.40</span> <span class="sc">%&gt;%</span> </span>
+<span id="cb296-2"><a href="binned-data.html#cb296-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(time) <span class="sc">%&gt;%</span> </span>
+<span id="cb296-3"><a href="binned-data.html#cb296-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">slice</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>)</span></code></pre></div>
+<pre><code>##     time
+## 1   9233
+## 2   9400
+## 3   9473
+## 4  10051
+## 5  10325
+## 6  10565
+## 7  10723
+## 8  10779
+## 9  10840
+## 10 10988</code></pre>
+<p>There are 1208 women that ran this particular race. Some questions come to mind:</p>
+<ul>
+<li>How do we display this batch of data effectively?</li>
+<li>How do we compare this display with a standardized shape, such as the normal.</li>
+<li>What are ``good” residuals to compute that compare the batch with the standardized shape?</li>
+</ul>
+</div>
+<div id="constructing-a-histogram" class="section level2 hasAnchor" number="21.2">
+<h2><span class="header-section-number">21.2</span> Constructing a histogram<a href="binned-data.html#constructing-a-histogram" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>When we have a lot of data, we first group the data into bins and then construct a histogram of the group counts.</p>
+<p>Scanning the data, we see that the times (in seconds) range between 9233 and 21595. Let’s cut the range into bins of width 1000 as follows:</p>
+<div class="sourceCode" id="cb298"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb298-1"><a href="binned-data.html#cb298-1" aria-hidden="true" tabindex="-1"></a>bins <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="dv">8000</span>, <span class="dv">23000</span>, <span class="dv">1000</span>)</span>
+<span id="cb298-2"><a href="binned-data.html#cb298-2" aria-hidden="true" tabindex="-1"></a>bin.mids <span class="ot">&lt;-</span> (bins[<span class="sc">-</span><span class="dv">1</span>] <span class="sc">+</span> bins[<span class="sc">-</span><span class="fu">length</span>(bins)]) <span class="sc">/</span> <span class="dv">2</span></span></code></pre></div>
+<p>I used R to construct a histogram of the race times using this choice of bins.</p>
+<div class="sourceCode" id="cb299"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb299-1"><a href="binned-data.html#cb299-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(grandma.<span class="fl">19.40</span>, <span class="fu">aes</span>(time)) <span class="sc">+</span></span>
+<span id="cb299-2"><a href="binned-data.html#cb299-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">breaks =</span> bins,</span>
+<span id="cb299-3"><a href="binned-data.html#cb299-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">fill =</span> <span class="st">&quot;white&quot;</span>, </span>
+<span id="cb299-4"><a href="binned-data.html#cb299-4" aria-hidden="true" tabindex="-1"></a>                 <span class="at">color =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-151-1.png" width="672" /></p>
+<p>Whenever we construct a bar graph or histogram, it is important to adhere to the area principle.</p>
+<p><strong>AREA PRINCIPLE:</strong> Each data value should be represented by the
+same amount of area in the graphical display.</p>
+<p>This is an important principle since the visual impact of a bar is proportional to an area. (You can probably think of misleading graphs that you have seen in newspapers or magazines where the area principle is not followed and the resulting graphical display is not an accurate representation of the data.) The histogram with equally spaced bins (like the ones we chose) does obey the area principle.</p>
+<p>What we see in this histogram of the marathon race times?</p>
+<ol style="list-style-type: decimal">
+<li><p>The first thing that we should notice is the approximate bell-shape of the times. Most of the runners have time in the 13000-20000 seconds range and it pretty uncommon to have a time close to 10000 or larger than 20000 seconds. Since the most popular bell-shape is the normal or Gaussian curve, we might wonder how well these data fit a normal curve.</p></li>
+<li><p>There is one problem interpreting the shape of histograms. The heights of the bars correspond to the counts in the bins. There is a basic fact about counts:</p></li>
+</ol>
+<p><strong>Large counts show more variability than small counts.</strong></p>
+<p>Another way of saying this is that there is more variation in the bar heights in bins with long bars than in bins with short bars. We see this in our histogram. As shown in the figure below, there appears to be more spread in the heights of the tallest bars than in the heights of the shortest bars. This will make it harder to compare our histogram with a normal curve.</p>
+</div>
+<div id="a-rootogram" class="section level2 hasAnchor" number="21.3">
+<h2><span class="header-section-number">21.3</span> A rootogram<a href="binned-data.html#a-rootogram" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>What we see in the heights of the histogram bars illustrates a general pattern of counts. Large counts tend to have more variability than small counts. This histogram illustrates a dependence between spread and level that we talked about when we were comparing batches. We can remove the dependence between spread and level by using a reexpression. From experience, the most helpful reexpression is a square root – so it is better to work with the square root of the frequencies than the frequencies. In the table below, we show the bins, the frequencies (we use the symbol <span class="math inline">\(d\)</span> to denote a frequency) and the root frequencies.</p>
+<div class="sourceCode" id="cb300"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb300-1"><a href="binned-data.html#cb300-1" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(grandma.<span class="fl">19.40</span>, <span class="fu">aes</span>(time)) <span class="sc">+</span></span>
+<span id="cb300-2"><a href="binned-data.html#cb300-2" aria-hidden="true" tabindex="-1"></a>     <span class="fu">geom_histogram</span>(<span class="at">breaks =</span> bins)</span>
+<span id="cb300-3"><a href="binned-data.html#cb300-3" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">ggplot_build</span>(p)<span class="sc">$</span>data[[<span class="dv">1</span>]]</span>
+<span id="cb300-4"><a href="binned-data.html#cb300-4" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(out, count, x, xmin, xmax)</span></code></pre></div>
+<pre><code>##    count     x  xmin  xmax
+## 1      0  8500  8000  9000
+## 2      3  9500  9000 10000
+## 3      7 10500 10000 11000
+## 4     15 11500 11000 12000
+## 5     79 12500 12000 13000
+## 6    139 13500 13000 14000
+## 7    225 14500 14000 15000
+## 8    191 15500 15000 16000
+## 9    201 16500 16000 17000
+## 10   141 17500 17000 18000
+## 11    89 18500 18000 19000
+## 12    68 19500 19000 20000
+## 13    31 20500 20000 21000
+## 14    19 21500 21000 22000
+## 15     0 22500 22000 23000</code></pre>
+<p>A rootogram is simply a bar graph where the heights of the bars are the root frequencies. Here is a rootogram for our data:</p>
+<div class="sourceCode" id="cb302"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb302-1"><a href="binned-data.html#cb302-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(out, <span class="fu">aes</span>(x, <span class="fu">sqrt</span>(count))) <span class="sc">+</span></span>
+<span id="cb302-2"><a href="binned-data.html#cb302-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>()</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-153-1.png" width="672" /></p>
+<p>How is this an improvement over the histogram? By taking a root reexpression, the variability of the heights of the bars is approximately the same for small and large counts. By making the variability constant, it will be easier to make comparisons between the observed counts and fitted counts from a Gaussian curve.</p>
+<p>But there is a downside to a rootogram. By taking the root, the areas in the bars are no longer proportional to the number of data values. So we are violating the area principle. But we think that the issue of ease of comparison of the observed and fitted counts is more important here than the accuracy of the display.</p>
+</div>
+<div id="fitting-a-gaussian-comparison-curve" class="section level2 hasAnchor" number="21.4">
+<h2><span class="header-section-number">21.4</span> Fitting a Gaussian comparison curve<a href="binned-data.html#fitting-a-gaussian-comparison-curve" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Next, we’d like to fit a Gaussian (normal) curve to these data. You may have done this type of before – specifically, in the context of learning about the chi-square goodness of fit test procedure.</p>
+<p>We want first to find a Gaussian curve that matches the data. We could find the Gaussian curve that has the same mean and standard deviation as the observed data. But the mean and standard deviation of the data are nonresistant measures that can be distorted by extreme values in the sample. So we use resistant measures (median, fourths, etc.) to find the matching Gaussian parameters.</p>
+<ol style="list-style-type: decimal">
+<li><p>We find the Gaussian mean by taking the average of the lower and upper fourths:
+<span class="math display">\[
+m = \frac{F_U + F_L}{2}.
+\]</span></p></li>
+<li><p>We use the fourth-spread of the sample to estimate the Gaussian standard deviation. Remember that the middle 50% of a normal curve has width 1.349 <span class="math inline">\(s\)</span>, where <span class="math inline">\(s\)</span> is the standard deviation. Using this fact, the Gaussian standard deviation <span class="math inline">\(s\)</span> is given by
+<span class="math display">\[
+s = \frac{F_U - F_L}{1.349}.
+\]</span></p></li>
+</ol>
+<p>Let’s illustrate finding the matching Gaussian parameters for our marathon times data.</p>
+<p>Here the fourths are 14296 and 17321. So the matching mean is
+<span class="math display">\[
+m = \frac{14296 + 17321} {2} = 15808
+\]</span>
+and the matching standard deviation is
+<span class="math display">\[
+s = \frac{17321 - 14296} {1.349} = 2242
+\]</span>
+So our matching Gaussian curve is N(15808, 2242).</p>
+<p>From our Gaussian curve, we can find expected counts for each bin.</p>
+<ul>
+<li><p>First, we find the probability that a running time falls in each bin using the normal curve. To illustrate, the probability that a time falls in the interval (9000, 10000) is
+<span class="math display">\[
+PROB = \Phi\left(\frac{10000-m}{s}\right) -
+\Phi\left(\frac{9000-m}{s}\right),
+\]</span>
+where <span class="math inline">\(m\)</span> and <span class="math inline">\(s\)</span> are the normal mean and standard deviation found above and <span class="math inline">\(\Phi(z)\)</span> is the area under the standard normal curve to for values smaller than <span class="math inline">\(z\)</span>.</p></li>
+<li><p>We then find the expected number in a bin (we call this expected count <span class="math inline">\(e\)</span>) by multiplying the total sample size (here 1208) by the probability.</p></li>
+</ul>
+<p>The table below gives the observed count (<span class="math inline">\(d\)</span>) and expected count (<span class="math inline">\(e\)</span>) for all the intervals.</p>
+<div class="sourceCode" id="cb303"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb303-1"><a href="binned-data.html#cb303-1" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">fit.gaussian</span>(grandma.<span class="fl">19.40</span><span class="sc">$</span>time, bins, <span class="dv">15808</span>, <span class="dv">2242</span>)</span>
+<span id="cb303-2"><a href="binned-data.html#cb303-2" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits=</span><span class="dv">3</span>)</span>
+<span id="cb303-3"><a href="binned-data.html#cb303-3" aria-hidden="true" tabindex="-1"></a>(df <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Mid=</span>bin.mids, <span class="at">d=</span>s<span class="sc">$</span>counts, <span class="at">sqrt.d=</span><span class="fu">sqrt</span>(s<span class="sc">$</span>counts),</span>
+<span id="cb303-4"><a href="binned-data.html#cb303-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">Prob=</span>s<span class="sc">$</span>probs, <span class="at">e=</span>s<span class="sc">$</span>expected, <span class="at">sqrt.e=</span><span class="fu">sqrt</span>(s<span class="sc">$</span>expected),</span>
+<span id="cb303-5"><a href="binned-data.html#cb303-5" aria-hidden="true" tabindex="-1"></a>           <span class="at">Residual=</span>s<span class="sc">$</span>residual))</span></code></pre></div>
+<pre><code>##      Mid   d sqrt.d     Prob      e sqrt.e Residual
+## 1   8500   0   0.00 0.000948   1.15   1.07  -1.0702
+## 2   9500   3   1.73 0.003595   4.34   2.08  -0.3518
+## 3  10500   7   2.65 0.011205  13.54   3.68  -1.0333
+## 4  11500  15   3.87 0.028712  34.68   5.89  -2.0164
+## 5  12500  79   8.89 0.060494  73.08   8.55   0.3397
+## 6  13500 139  11.79 0.104797 126.59  11.25   0.5384
+## 7  14500 225  15.00 0.149277 180.33  13.43   1.5714
+## 8  15500 191  13.82 0.174846 211.21  14.53  -0.7129
+## 9  16500 201  14.18 0.168399 203.43  14.26  -0.0853
+## 10 17500 141  11.87 0.133366 161.11  12.69  -0.8184
+## 11 18500  89   9.43 0.086849 104.91  10.24  -0.8088
+## 12 19500  68   8.25 0.046504  56.18   7.50   0.7511
+## 13 20500  31   5.57 0.020474  24.73   4.97   0.5946
+## 14 21500  19   4.36 0.007411   8.95   2.99   1.3669
+## 15 22500   0   0.00 0.002205   2.66   1.63  -1.6322</code></pre>
+<p>This table also gives the root expected counts for all bins. The figure below is a rootogram with a smooth curve on top that corresponds to the root expected counts.</p>
+<div class="sourceCode" id="cb305"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb305-1"><a href="binned-data.html#cb305-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(out, <span class="fu">aes</span>(x, <span class="fu">sqrt</span>(count))) <span class="sc">+</span></span>
+<span id="cb305-2"><a href="binned-data.html#cb305-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_col</span>() <span class="sc">+</span></span>
+<span id="cb305-3"><a href="binned-data.html#cb305-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">data =</span> df,</span>
+<span id="cb305-4"><a href="binned-data.html#cb305-4" aria-hidden="true" tabindex="-1"></a>            <span class="fu">aes</span>(bin.mids, sqrt.e), <span class="at">color=</span><span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-155-1.png" width="672" /></p>
+</div>
+<div id="residuals" class="section level2 hasAnchor" number="21.5">
+<h2><span class="header-section-number">21.5</span> Residuals<a href="binned-data.html#residuals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We want to see how well this Gaussian curve fits our histogram. To do this, we want to look at residuals which compare the counts with the expected counts using the normal model. What is a good definition of residual in this case?</p>
+<p>A simple rootogram residual is based on the difference between the root count and the root of the expected count:
+<span class="math display">\[
+r = \sqrt{d} - \sqrt{e}.
+\]</span>
+These residuals are displayed in the above table. Residuals that are unusually large (either positive or negative) correspond to bins that have counts that deviate from what would be expected from a Gaussian distribution.</p>
+</div>
+<div id="hanging-rootogram" class="section level2 hasAnchor" number="21.6">
+<h2><span class="header-section-number">21.6</span> Hanging rootogram<a href="binned-data.html#hanging-rootogram" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>There is a clever alternative way of displaying the rootogram that gives attention to the residuals.</p>
+<ol style="list-style-type: decimal">
+<li><p>First, we graph <span class="math inline">\(\sqrt{e}\)</span>, the square root of the fitted counts. This is shown as the red bell-shape curve on the figure below.</p></li>
+<li><p>Next, we graph <span class="math inline">\(\sqrt{e}-\sqrt{d}\)</span> by subtracting the rootogram bars (of height <span class="math inline">\(\sqrt{d}\)</span> ) to the bell-shape curve. This is called a <strong>hanging rootogram</strong>, since we are in effect hanging the rootogram on the Gaussian fit.</p></li>
+</ol>
+<div class="sourceCode" id="cb306"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb306-1"><a href="binned-data.html#cb306-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(vcd)</span>
+<span id="cb306-2"><a href="binned-data.html#cb306-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rootogram</span>(s<span class="sc">$</span>counts, s<span class="sc">$</span>expected)</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-156-1.png" width="672" /></p>
+<p>The focus of this graph is different from that of the rootogram. In the rootogram we were looking at the heights of the bars. In a hanging rootogram, we notice how the bars fall above or below the horizontal line at 0. Bars that fall below (above) the line correspond to positive (negative) residuals.</p>
+<p>You might be more comfortable with a residual plot like below where hanging bars have been removed and bars are plotted with heights .</p>
+<div class="sourceCode" id="cb307"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb307-1"><a href="binned-data.html#cb307-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rootogram</span>(s<span class="sc">$</span>counts, s<span class="sc">$</span>expected, <span class="at">type=</span><span class="st">&quot;deviation&quot;</span>)</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-157-1.png" width="672" /></p>
+</div>
+<div id="interpreting-the-residuals-1" class="section level2 hasAnchor" number="21.7">
+<h2><span class="header-section-number">21.7</span> Interpreting the residuals<a href="binned-data.html#interpreting-the-residuals-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We see some lack of fit of the Gaussian curve:</p>
+<ul>
+<li>the number of small times seems a bit low</li>
+<li>we see too many times around 14000 seconds and larger than 18000 seconds</li>
+</ul>
+<p>How can we interpret this lack of fit? In a race such as a marathon, it makes sense that there are relatively few (even fewer than predicted by a normal curve) runners that are very fast. Also, there are a relatively large number of slow runners – these are the runners who are most interested in finishing the race and the time they run isn’t that important. This is interesting. By looking beyond the general bell-shape of the data, we get some extra insight about the times of a marathon race.</p>
+</div>
+<div id="other-definitions-of-residuals-double-root-residuals" class="section level2 hasAnchor" number="21.8">
+<h2><span class="header-section-number">21.8</span> Other definitions of residuals (Double Root Residuals)<a href="binned-data.html#other-definitions-of-residuals-double-root-residuals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Although we focused on the use of R, the package MINITAB also constructs a suspended rootogram. But the output looks a bit different and needs some extra explanation.</p>
+<p>I entered the raw data (from “grandma.txt”) into MINITAB. I created a new column called “bins” that contained the cutpoints for the bins that I want to use – these are the numbers 9000, 10000, 11000, etc. I then executed the rootogram command – you indicate the column that contains the race times and the column that has the bin cutpoints.</p>
+<p>Here is the output.</p>
+<p><img src="figures/binning/minitabrootogram.png" /></p>
+<p>The Bin and Count columns are self-explanatory. The column RawRes contains the raw residuals that are simply $d – $e (no roots). The DRRs contains the so-called “double-root residuals”. This is a slight variation of the root residuals that we used above. It is defined by
+<span class="math display">\[
+DRR = \sqrt{2 + 4d} - \sqrt{1+ 4e}
+\]</span>
+Actually a DRR is approximately equal to twice the residual we defined. (Can you guess why this is called a double-root residual?)
+<span class="math display">\[
+DRR = 2( \sqrt{d} - \sqrt{e})
+\]</span>
+The extra 2 and 1 inside the radical helps out when one has small bin counts – the DRR makes sense even when there are no observations in the bin.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="extended-fit.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="binned-data-ii.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/21-BinningData.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Course in Exploratory Data Analysis.pdf", "Course in Exploratory Data Analysis.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

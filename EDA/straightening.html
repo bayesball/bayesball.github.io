@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>15 Straightening | A Course in Exploratory Data Analysis</title>
+  <meta name="description" content="15 Straightening | A Course in Exploratory Data Analysis" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="15 Straightening | A Course in Exploratory Data Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="15 Straightening | A Course in Exploratory Data Analysis" />
+  
+  
+  
+
+<meta name="author" content="Jim Albert" />
+
+
+<meta name="date" content="2022-04-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="plotting-ii.html"/>
+<link rel="next" href="smoothing.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Course in Exploratory Data Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface<span></span></a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#an-eda-course"><i class="fa fa-check"></i><b>1.1</b> An EDA Course<span></span></a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i><b>1.2</b> Organization<span></span></a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#preface-excerpt-from-eda-by-john-w.-tukey-addison-wesley-1977"><i class="fa fa-check"></i><b>1.3</b> Preface Excerpt from <em>EDA</em> by John W. Tukey (Addison-Wesley, 1977)<span></span></a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#examples-not-case-histories"><i class="fa fa-check"></i><b>1.3.1</b> Examples, NOT case histories<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction<span></span></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#what-is-data-analysis"><i class="fa fa-check"></i><b>2.1</b> What is data analysis?<span></span></a></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#what-is-data-and-where-do-we-find-it"><i class="fa fa-check"></i><b>2.2</b> What is data and where do we find it?<span></span></a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#meet-our-first-data"><i class="fa fa-check"></i><b>2.3</b> Meet our first data<span></span></a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#how-does-exploratory-data-analysis-eda-differ-from-confirmatory-data-analysis-cda"><i class="fa fa-check"></i><b>2.4</b> How does exploratory data analysis (EDA) differ from confirmatory data analysis (CDA)?<span></span></a></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#how-is-eda-different-from-cda"><i class="fa fa-check"></i><b>2.5</b> How is EDA different from CDA?<span></span></a></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#john-tukeys-contribution"><i class="fa fa-check"></i><b>2.6</b> John Tukey’s contribution<span></span></a></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#four-principles-of-eda-the-four-rs"><i class="fa fa-check"></i><b>2.7</b> Four principles of EDA (the four R’s)}<span></span></a></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#an-exploratory-look-at-our-data"><i class="fa fa-check"></i><b>2.8</b> An exploratory look at our data<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html"><i class="fa fa-check"></i><b>3</b> Working with a Single Batch – Displays<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#meet-the-data"><i class="fa fa-check"></i><b>3.1</b> Meet the Data<span></span></a></li>
+<li class="chapter" data-level="3.2" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#the-basic-stemplot"><i class="fa fa-check"></i><b>3.2</b> The Basic Stemplot<span></span></a></li>
+<li class="chapter" data-level="3.3" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#looking-at-a-data-distribution"><i class="fa fa-check"></i><b>3.3</b> Looking at a Data Distribution<span></span></a></li>
+<li class="chapter" data-level="3.4" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#stemplot-variations-breaking-the-stem-at-different-locations"><i class="fa fa-check"></i><b>3.4</b> Stemplot variations – breaking the stem at different locations<span></span></a></li>
+<li class="chapter" data-level="3.5" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#stemplot-variations-2-5-and-10-leaves-per-stem"><i class="fa fa-check"></i><b>3.5</b> Stemplot variations – 2, 5, and 10 leaves per stem<span></span></a></li>
+<li class="chapter" data-level="3.6" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#guidance-in-constructing-a-stemplot"><i class="fa fa-check"></i><b>3.6</b> Guidance in Constructing a Stemplot<span></span></a></li>
+<li class="chapter" data-level="3.7" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#making-the-stemplot-resistant"><i class="fa fa-check"></i><b>3.7</b> Making the Stemplot Resistant<span></span></a></li>
+<li class="chapter" data-level="3.8" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#a-few-closing-comments"><i class="fa fa-check"></i><b>3.8</b> A Few Closing Comments<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html"><i class="fa fa-check"></i><b>4</b> Single Batch: Summaries<span></span></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#meet-the-data-1"><i class="fa fa-check"></i><b>4.1</b> Meet the Data<span></span></a></li>
+<li class="chapter" data-level="4.2" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#ranks-and-depths"><i class="fa fa-check"></i><b>4.2</b> Ranks and Depths<span></span></a></li>
+<li class="chapter" data-level="4.3" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#letter-values-a-set-of-summary-values"><i class="fa fa-check"></i><b>4.3</b> Letter Values: A Set of Summary Values<span></span></a></li>
+<li class="chapter" data-level="4.4" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#counting-in"><i class="fa fa-check"></i><b>4.4</b> Counting In<span></span></a></li>
+<li class="chapter" data-level="4.5" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#five-number-summary"><i class="fa fa-check"></i><b>4.5</b> Five-number Summary<span></span></a></li>
+<li class="chapter" data-level="4.6" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#other-letter-values"><i class="fa fa-check"></i><b>4.6</b> Other Letter Values<span></span></a></li>
+<li class="chapter" data-level="4.7" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#measures-of-center"><i class="fa fa-check"></i><b>4.7</b> Measures of Center<span></span></a></li>
+<li class="chapter" data-level="4.8" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#measures-of-spread"><i class="fa fa-check"></i><b>4.8</b> Measures of Spread<span></span></a></li>
+<li class="chapter" data-level="4.9" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#identifying-outliers"><i class="fa fa-check"></i><b>4.9</b> Identifying Outliers<span></span></a></li>
+<li class="chapter" data-level="4.10" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#a-new-example"><i class="fa fa-check"></i><b>4.10</b> A New Example<span></span></a></li>
+<li class="chapter" data-level="4.11" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#relationship-with-normal-data"><i class="fa fa-check"></i><b>4.11</b> Relationship with Normal Data<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="boxplots.html"><a href="boxplots.html"><i class="fa fa-check"></i><b>5</b> Boxplots<span></span></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="boxplots.html"><a href="boxplots.html#the-data"><i class="fa fa-check"></i><b>5.1</b> The Data:<span></span></a></li>
+<li class="chapter" data-level="5.2" data-path="boxplots.html"><a href="boxplots.html#constructing-a-single-boxplot"><i class="fa fa-check"></i><b>5.2</b> Constructing A Single Boxplot<span></span></a></li>
+<li class="chapter" data-level="5.3" data-path="boxplots.html"><a href="boxplots.html#interpreting-a-boxplot"><i class="fa fa-check"></i><b>5.3</b> Interpreting a Boxplot<span></span></a></li>
+<li class="chapter" data-level="5.4" data-path="boxplots.html"><a href="boxplots.html#boxplots-to-compare-batches"><i class="fa fa-check"></i><b>5.4</b> Boxplots to Compare Batches<span></span></a></li>
+<li class="chapter" data-level="5.5" data-path="boxplots.html"><a href="boxplots.html#comparisons-using-medians"><i class="fa fa-check"></i><b>5.5</b> Comparisons using Medians<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="spread-level-plot.html"><a href="spread-level-plot.html"><i class="fa fa-check"></i><b>6</b> Spread Level Plot<span></span></a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="spread-level-plot.html"><a href="spread-level-plot.html#lets-meet-the-data"><i class="fa fa-check"></i><b>6.1</b> Let’s Meet the Data<span></span></a></li>
+<li class="chapter" data-level="6.2" data-path="spread-level-plot.html"><a href="spread-level-plot.html#comparing-batches-in-the-raw-scale"><i class="fa fa-check"></i><b>6.2</b> Comparing Batches in the Raw Scale<span></span></a></li>
+<li class="chapter" data-level="6.3" data-path="spread-level-plot.html"><a href="spread-level-plot.html#whats-wrong"><i class="fa fa-check"></i><b>6.3</b> What’s Wrong?<span></span></a></li>
+<li class="chapter" data-level="6.4" data-path="spread-level-plot.html"><a href="spread-level-plot.html#the-spread-vs-level-plot"><i class="fa fa-check"></i><b>6.4</b> The Spread vs Level Plot<span></span></a></li>
+<li class="chapter" data-level="6.5" data-path="spread-level-plot.html"><a href="spread-level-plot.html#reexpression"><i class="fa fa-check"></i><b>6.5</b> Reexpression<span></span></a></li>
+<li class="chapter" data-level="6.6" data-path="spread-level-plot.html"><a href="spread-level-plot.html#reanalysis-of-the-data-in-new-scale"><i class="fa fa-check"></i><b>6.6</b> Reanalysis of the data in new scale<span></span></a></li>
+<li class="chapter" data-level="6.7" data-path="spread-level-plot.html"><a href="spread-level-plot.html#wrap-up"><i class="fa fa-check"></i><b>6.7</b> Wrap Up<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html"><i class="fa fa-check"></i><b>7</b> Comparing Batches III<span></span></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#a-case-study-where-the-spread-vs-level-plot-works"><i class="fa fa-check"></i><b>7.1</b> A Case Study where the Spread vs Level Plot Works<span></span></a></li>
+<li class="chapter" data-level="7.2" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#a-case-study-where-the-spread-vs-level-plot-doesnt-work"><i class="fa fa-check"></i><b>7.2</b> A Case Study where the Spread vs Level Plot Doesn’t Work<span></span></a></li>
+<li class="chapter" data-level="7.3" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#some-final-comments-about-spread-vs.-level-plots"><i class="fa fa-check"></i><b>7.3</b> Some final comments about spread vs. level plots<span></span></a></li>
+<li class="chapter" data-level="7.4" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#why-does-the-spread-vs.-level-plot-work"><i class="fa fa-check"></i><b>7.4</b> Why does the spread vs. level plot work?<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="transformations.html"><a href="transformations.html"><i class="fa fa-check"></i><b>8</b> Transformations<span></span></a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="transformations.html"><a href="transformations.html#why-do-we-rexpress-data"><i class="fa fa-check"></i><b>8.1</b> Why do we rexpress data?<span></span></a></li>
+<li class="chapter" data-level="8.2" data-path="transformations.html"><a href="transformations.html#the-shape-of-the-data"><i class="fa fa-check"></i><b>8.2</b> The shape of the data<span></span></a></li>
+<li class="chapter" data-level="8.3" data-path="transformations.html"><a href="transformations.html#trivial-reexpressions"><i class="fa fa-check"></i><b>8.3</b> Trivial reexpressions<span></span></a></li>
+<li class="chapter" data-level="8.4" data-path="transformations.html"><a href="transformations.html#nontrivial-expressions-the-power-family"><i class="fa fa-check"></i><b>8.4</b> Nontrivial expressions: the power family<span></span></a></li>
+<li class="chapter" data-level="8.5" data-path="transformations.html"><a href="transformations.html#some-properties-of-the-power-family"><i class="fa fa-check"></i><b>8.5</b> Some properties of the power family<span></span></a></li>
+<li class="chapter" data-level="8.6" data-path="transformations.html"><a href="transformations.html#the-log-transformation"><i class="fa fa-check"></i><b>8.6</b> The log transformation<span></span></a></li>
+<li class="chapter" data-level="8.7" data-path="transformations.html"><a href="transformations.html#ladders-of-powers"><i class="fa fa-check"></i><b>8.7</b> Ladders of powers<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html"><i class="fa fa-check"></i><b>9</b> Reexpressing for Symmetry<span></span></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#data-for-the-day"><i class="fa fa-check"></i><b>9.1</b> Data for the day<span></span></a></li>
+<li class="chapter" data-level="9.2" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#why-is-this-data-hard-to-interpret"><i class="fa fa-check"></i><b>9.2</b> Why is this data hard to interpret?<span></span></a></li>
+<li class="chapter" data-level="9.3" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#checking-for-symmetry-by-looking-at-midsummaries"><i class="fa fa-check"></i><b>9.3</b> Checking for symmetry by looking at midsummaries<span></span></a></li>
+<li class="chapter" data-level="9.4" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#reexpressing-to-achieve-approximate-symmetry"><i class="fa fa-check"></i><b>9.4</b> Reexpressing to achieve approximate symmetry<span></span></a></li>
+<li class="chapter" data-level="9.5" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#hinkleys-quick-method"><i class="fa fa-check"></i><b>9.5</b> Hinkley’s quick method<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html"><i class="fa fa-check"></i><b>10</b> Reexpressing for Symmetry II<span></span></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#data-for-the-day-1"><i class="fa fa-check"></i><b>10.1</b> Data for the day<span></span></a></li>
+<li class="chapter" data-level="10.2" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#symmetry-plot"><i class="fa fa-check"></i><b>10.2</b> Symmetry plot<span></span></a></li>
+<li class="chapter" data-level="10.3" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#roots-and-logs"><i class="fa fa-check"></i><b>10.3</b> Roots and logs<span></span></a></li>
+<li class="chapter" data-level="10.4" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#hinkleys-method"><i class="fa fa-check"></i><b>10.4</b> Hinkley’s method<span></span></a></li>
+<li class="chapter" data-level="10.5" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#matched-transformations"><i class="fa fa-check"></i><b>10.5</b> Matched transformations<span></span></a></li>
+<li class="chapter" data-level="10.6" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#matching-method-1"><i class="fa fa-check"></i><b>10.6</b> Matching Method 1<span></span></a></li>
+<li class="chapter" data-level="10.7" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#matching-method-2"><i class="fa fa-check"></i><b>10.7</b> Matching Method 2<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="transformations-summary.html"><a href="transformations-summary.html"><i class="fa fa-check"></i><b>11</b> Transformations Summary<span></span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="transformations-summary.html"><a href="transformations-summary.html#why-do-we-reexpress-data"><i class="fa fa-check"></i><b>11.1</b> Why do we reexpress data?<span></span></a></li>
+<li class="chapter" data-level="11.2" data-path="transformations-summary.html"><a href="transformations-summary.html#serendipitous-effects-of-transformation"><i class="fa fa-check"></i><b>11.2</b> Serendipitous effects of transformation<span></span></a></li>
+<li class="chapter" data-level="11.3" data-path="transformations-summary.html"><a href="transformations-summary.html#when-is-it-worthwhile-to-transform"><i class="fa fa-check"></i><b>11.3</b> When is it worthwhile to transform?<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html"><i class="fa fa-check"></i><b>12</b> Introduction to Plotting<span></span></a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#meet-the-data-2"><i class="fa fa-check"></i><b>12.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="12.2" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#graph-the-data"><i class="fa fa-check"></i><b>12.2</b> Graph the data<span></span></a></li>
+<li class="chapter" data-level="12.3" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#describing-the-fit"><i class="fa fa-check"></i><b>12.3</b> Describing the fit<span></span></a></li>
+<li class="chapter" data-level="12.4" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#looking-at-the-residuals"><i class="fa fa-check"></i><b>12.4</b> Looking at the residuals<span></span></a></li>
+<li class="chapter" data-level="12.5" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#an-alternative-fit"><i class="fa fa-check"></i><b>12.5</b> An alternative fit<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="resistant-line.html"><a href="resistant-line.html"><i class="fa fa-check"></i><b>13</b> Resistant Line<span></span></a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="resistant-line.html"><a href="resistant-line.html#meet-the-data-3"><i class="fa fa-check"></i><b>13.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="13.2" data-path="resistant-line.html"><a href="resistant-line.html#three-summary-points"><i class="fa fa-check"></i><b>13.2</b> Three summary points<span></span></a></li>
+<li class="chapter" data-level="13.3" data-path="resistant-line.html"><a href="resistant-line.html#fitting-a-line-to-three-points"><i class="fa fa-check"></i><b>13.3</b> Fitting a line to three points<span></span></a></li>
+<li class="chapter" data-level="13.4" data-path="resistant-line.html"><a href="resistant-line.html#improving-the-line-by-fitting-a-line-to-the-residuals"><i class="fa fa-check"></i><b>13.4</b> Improving the line by fitting a line to the residuals<span></span></a></li>
+<li class="chapter" data-level="13.5" data-path="resistant-line.html"><a href="resistant-line.html#comparison-with-a-least-squares-fit"><i class="fa fa-check"></i><b>13.5</b> Comparison with a Least-Squares Fit<span></span></a></li>
+<li class="chapter" data-level="13.6" data-path="resistant-line.html"><a href="resistant-line.html#interpreting-the-fit"><i class="fa fa-check"></i><b>13.6</b> Interpreting the fit<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="plotting-ii.html"><a href="plotting-ii.html"><i class="fa fa-check"></i><b>14</b> Plotting II<span></span></a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="plotting-ii.html"><a href="plotting-ii.html#fitting-a-line-to-the-population-in-the-later-years"><i class="fa fa-check"></i><b>14.1</b> Fitting a line to the population in the later years<span></span></a></li>
+<li class="chapter" data-level="14.2" data-path="plotting-ii.html"><a href="plotting-ii.html#fitting-a-line-to-the-log-population-in-the-early-years"><i class="fa fa-check"></i><b>14.2</b> Fitting a line to the log population in the early years<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="straightening.html"><a href="straightening.html"><i class="fa fa-check"></i><b>15</b> Straightening<span></span></a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="straightening.html"><a href="straightening.html#meet-the-data-4"><i class="fa fa-check"></i><b>15.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="15.2" data-path="straightening.html"><a href="straightening.html#a-nonlinear-relationship"><i class="fa fa-check"></i><b>15.2</b> A nonlinear relationship<span></span></a></li>
+<li class="chapter" data-level="15.3" data-path="straightening.html"><a href="straightening.html#three-summary-points-and-measuring-curvature"><i class="fa fa-check"></i><b>15.3</b> Three summary points and measuring curvature<span></span></a></li>
+<li class="chapter" data-level="15.4" data-path="straightening.html"><a href="straightening.html#reexpressing-to-reduce-curvature"><i class="fa fa-check"></i><b>15.4</b> Reexpressing to reduce curvature<span></span></a></li>
+<li class="chapter" data-level="15.5" data-path="straightening.html"><a href="straightening.html#straightening-in-the-example"><i class="fa fa-check"></i><b>15.5</b> Straightening in the example<span></span></a></li>
+<li class="chapter" data-level="15.6" data-path="straightening.html"><a href="straightening.html#making-sense-of-the-reexpression"><i class="fa fa-check"></i><b>15.6</b> Making sense of the reexpression<span></span></a></li>
+<li class="chapter" data-level="15.7" data-path="straightening.html"><a href="straightening.html#straightening-fitting-and-flattening"><i class="fa fa-check"></i><b>15.7</b> Straightening, fitting, and flattening<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="smoothing.html"><a href="smoothing.html"><i class="fa fa-check"></i><b>16</b> Smoothing<span></span></a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="smoothing.html"><a href="smoothing.html#meet-the-data-5"><i class="fa fa-check"></i><b>16.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="16.2" data-path="smoothing.html"><a href="smoothing.html#we-need-to-smooth"><i class="fa fa-check"></i><b>16.2</b> We need to smooth<span></span></a></li>
+<li class="chapter" data-level="16.3" data-path="smoothing.html"><a href="smoothing.html#running-medians"><i class="fa fa-check"></i><b>16.3</b> Running medians<span></span></a></li>
+<li class="chapter" data-level="16.4" data-path="smoothing.html"><a href="smoothing.html#end-value-smoothing"><i class="fa fa-check"></i><b>16.4</b> End-value smoothing<span></span></a></li>
+<li class="chapter" data-level="16.5" data-path="smoothing.html"><a href="smoothing.html#splitting"><i class="fa fa-check"></i><b>16.5</b> Splitting<span></span></a></li>
+<li class="chapter" data-level="16.6" data-path="smoothing.html"><a href="smoothing.html#hanning"><i class="fa fa-check"></i><b>16.6</b> Hanning<span></span></a></li>
+<li class="chapter" data-level="16.7" data-path="smoothing.html"><a href="smoothing.html#the-smooth-and-the-rough"><i class="fa fa-check"></i><b>16.7</b> The smooth and the rough<span></span></a></li>
+<li class="chapter" data-level="16.8" data-path="smoothing.html"><a href="smoothing.html#reroughing"><i class="fa fa-check"></i><b>16.8</b> Reroughing<span></span></a></li>
+<li class="chapter" data-level="16.9" data-path="smoothing.html"><a href="smoothing.html#interpreting-the-final-smooth-and-rough"><i class="fa fa-check"></i><b>16.9</b> Interpreting the final smooth and rough<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="median-polish.html"><a href="median-polish.html"><i class="fa fa-check"></i><b>17</b> Median Polish<span></span></a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="median-polish.html"><a href="median-polish.html#meet-the-data-6"><i class="fa fa-check"></i><b>17.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="17.2" data-path="median-polish.html"><a href="median-polish.html#an-additive-model"><i class="fa fa-check"></i><b>17.2</b> An additive model<span></span></a></li>
+<li class="chapter" data-level="17.3" data-path="median-polish.html"><a href="median-polish.html#median-polish-1"><i class="fa fa-check"></i><b>17.3</b> Median polish<span></span></a></li>
+<li class="chapter" data-level="17.4" data-path="median-polish.html"><a href="median-polish.html#interpreting-the-additive-model"><i class="fa fa-check"></i><b>17.4</b> Interpreting the additive model<span></span></a>
+<ul>
+<li class="chapter" data-level="17.4.1" data-path="median-polish.html"><a href="median-polish.html#interpreting-the-row-and-column-effects"><i class="fa fa-check"></i><b>17.4.1</b> Interpreting the row and column effects<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="median-polish.html"><a href="median-polish.html#looking-at-the-residuals-1"><i class="fa fa-check"></i><b>17.5</b> Looking at the residuals<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html"><i class="fa fa-check"></i><b>18</b> Plotting an Additive Plot<span></span></a>
+<ul>
+<li class="chapter" data-level="18.1" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#the-data-1"><i class="fa fa-check"></i><b>18.1</b> The data<span></span></a></li>
+<li class="chapter" data-level="18.2" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#plotting-the-two-terms-of-the-additive-fit"><i class="fa fa-check"></i><b>18.2</b> Plotting the two terms of the additive fit<span></span></a></li>
+<li class="chapter" data-level="18.3" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#making-sense-of-the-display"><i class="fa fa-check"></i><b>18.3</b> Making sense of the display<span></span></a></li>
+<li class="chapter" data-level="18.4" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#adding-information-about-the-residuals-to-the-display"><i class="fa fa-check"></i><b>18.4</b> Adding information about the residuals to the display<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html"><i class="fa fa-check"></i><b>19</b> Multiplicative Fit<span></span></a>
+<ul>
+<li class="chapter" data-level="19.1" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#meet-the-data-7"><i class="fa fa-check"></i><b>19.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="19.2" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#an-additive-model-isnt-suitable"><i class="fa fa-check"></i><b>19.2</b> An additive model isn’t suitable<span></span></a></li>
+<li class="chapter" data-level="19.3" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#fitting-our-model-to-the-data"><i class="fa fa-check"></i><b>19.3</b> Fitting our model to the data<span></span></a></li>
+<li class="chapter" data-level="19.4" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#interpreting-the-fit-1"><i class="fa fa-check"></i><b>19.4</b> Interpreting the fit<span></span></a></li>
+<li class="chapter" data-level="19.5" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#interpreting-the-residuals"><i class="fa fa-check"></i><b>19.5</b> Interpreting the residuals<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="extended-fit.html"><a href="extended-fit.html"><i class="fa fa-check"></i><b>20</b> Extended Fit<span></span></a>
+<ul>
+<li class="chapter" data-level="20.1" data-path="extended-fit.html"><a href="extended-fit.html#meet-the-data-8"><i class="fa fa-check"></i><b>20.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="20.2" data-path="extended-fit.html"><a href="extended-fit.html#an-additive-fit"><i class="fa fa-check"></i><b>20.2</b> An additive fit<span></span></a></li>
+<li class="chapter" data-level="20.3" data-path="extended-fit.html"><a href="extended-fit.html#looking-at-the-residuals-2"><i class="fa fa-check"></i><b>20.3</b> Looking at the residuals<span></span></a></li>
+<li class="chapter" data-level="20.4" data-path="extended-fit.html"><a href="extended-fit.html#comparison-values"><i class="fa fa-check"></i><b>20.4</b> Comparison values<span></span></a></li>
+<li class="chapter" data-level="20.5" data-path="extended-fit.html"><a href="extended-fit.html#extending-the-additive-model-by-one-more-term"><i class="fa fa-check"></i><b>20.5</b> Extending the additive model by one more term<span></span></a></li>
+<li class="chapter" data-level="20.6" data-path="extended-fit.html"><a href="extended-fit.html#finding-k"><i class="fa fa-check"></i><b>20.6</b> Finding k<span></span></a></li>
+<li class="chapter" data-level="20.7" data-path="extended-fit.html"><a href="extended-fit.html#relationship-with-multiplicative-fit"><i class="fa fa-check"></i><b>20.7</b> Relationship with multiplicative fit<span></span></a></li>
+<li class="chapter" data-level="20.8" data-path="extended-fit.html"><a href="extended-fit.html#extended-fits-and-transformations"><i class="fa fa-check"></i><b>20.8</b> Extended fits and transformations<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="binned-data.html"><a href="binned-data.html"><i class="fa fa-check"></i><b>21</b> Binned Data<span></span></a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="binned-data.html"><a href="binned-data.html#meet-the-data-9"><i class="fa fa-check"></i><b>21.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="21.2" data-path="binned-data.html"><a href="binned-data.html#constructing-a-histogram"><i class="fa fa-check"></i><b>21.2</b> Constructing a histogram<span></span></a></li>
+<li class="chapter" data-level="21.3" data-path="binned-data.html"><a href="binned-data.html#a-rootogram"><i class="fa fa-check"></i><b>21.3</b> A rootogram<span></span></a></li>
+<li class="chapter" data-level="21.4" data-path="binned-data.html"><a href="binned-data.html#fitting-a-gaussian-comparison-curve"><i class="fa fa-check"></i><b>21.4</b> Fitting a Gaussian comparison curve<span></span></a></li>
+<li class="chapter" data-level="21.5" data-path="binned-data.html"><a href="binned-data.html#residuals"><i class="fa fa-check"></i><b>21.5</b> Residuals<span></span></a></li>
+<li class="chapter" data-level="21.6" data-path="binned-data.html"><a href="binned-data.html#hanging-rootogram"><i class="fa fa-check"></i><b>21.6</b> Hanging rootogram<span></span></a></li>
+<li class="chapter" data-level="21.7" data-path="binned-data.html"><a href="binned-data.html#interpreting-the-residuals-1"><i class="fa fa-check"></i><b>21.7</b> Interpreting the residuals<span></span></a></li>
+<li class="chapter" data-level="21.8" data-path="binned-data.html"><a href="binned-data.html#other-definitions-of-residuals-double-root-residuals"><i class="fa fa-check"></i><b>21.8</b> Other definitions of residuals (Double Root Residuals)<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="binned-data-ii.html"><a href="binned-data-ii.html"><i class="fa fa-check"></i><b>22</b> Binned Data II<span></span></a>
+<ul>
+<li class="chapter" data-level="22.1" data-path="binned-data-ii.html"><a href="binned-data-ii.html#introduction-1"><i class="fa fa-check"></i><b>22.1</b> Introduction<span></span></a></li>
+<li class="chapter" data-level="22.2" data-path="binned-data-ii.html"><a href="binned-data-ii.html#meet-a-simulated-but-famous-dataset"><i class="fa fa-check"></i><b>22.2</b> Meet a simulated, but famous, dataset<span></span></a></li>
+<li class="chapter" data-level="22.3" data-path="binned-data-ii.html"><a href="binned-data-ii.html#smoothing-the-root-counts"><i class="fa fa-check"></i><b>22.3</b> Smoothing the root counts<span></span></a></li>
+<li class="chapter" data-level="22.4" data-path="binned-data-ii.html"><a href="binned-data-ii.html#fitting-a-symmetric-curve"><i class="fa fa-check"></i><b>22.4</b> Fitting a symmetric curve<span></span></a></li>
+<li class="chapter" data-level="22.5" data-path="binned-data-ii.html"><a href="binned-data-ii.html#is-it-a-reasonable-fit"><i class="fa fa-check"></i><b>22.5</b> Is it a reasonable fit?<span></span></a></li>
+<li class="chapter" data-level="22.6" data-path="binned-data-ii.html"><a href="binned-data-ii.html#the-famous-brewer"><i class="fa fa-check"></i><b>22.6</b> The famous brewer<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="fraction-data.html"><a href="fraction-data.html"><i class="fa fa-check"></i><b>23</b> Fraction Data<span></span></a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="fraction-data.html"><a href="fraction-data.html#the-quality-of-students-at-bgsu"><i class="fa fa-check"></i><b>23.1</b> The Quality of Students at BGSU<span></span></a></li>
+<li class="chapter" data-level="23.2" data-path="fraction-data.html"><a href="fraction-data.html#meet-the-data-10"><i class="fa fa-check"></i><b>23.2</b> Meet the Data<span></span></a></li>
+<li class="chapter" data-level="23.3" data-path="fraction-data.html"><a href="fraction-data.html#counted-fractions"><i class="fa fa-check"></i><b>23.3</b> Counted Fractions<span></span></a></li>
+<li class="chapter" data-level="23.4" data-path="fraction-data.html"><a href="fraction-data.html#started-counts-and-split-counts"><i class="fa fa-check"></i><b>23.4</b> Started Counts and Split Counts<span></span></a></li>
+<li class="chapter" data-level="23.5" data-path="fraction-data.html"><a href="fraction-data.html#three-matched-scales-for-counted-fractions-folded-fractions-roots-and-logs"><i class="fa fa-check"></i><b>23.5</b> Three Matched Scales for Counted Fractions (folded fractions, roots, and logs)<span></span></a></li>
+<li class="chapter" data-level="23.6" data-path="fraction-data.html"><a href="fraction-data.html#an-example-illustrating-the-benefits-of-reexpressing-fractions"><i class="fa fa-check"></i><b>23.6</b> An Example Illustrating the Benefits of Reexpressing Fractions<span></span></a></li>
+<li class="chapter" data-level="23.7" data-path="fraction-data.html"><a href="fraction-data.html#a-tukey-example-where-careful-reexpression-pays-off"><i class="fa fa-check"></i><b>23.7</b> A Tukey Example Where Careful Reexpression Pays Off<span></span></a></li>
+<li class="chapter" data-level="23.8" data-path="fraction-data.html"><a href="fraction-data.html#back-to-the-data-an-analysis-based-on-flogs"><i class="fa fa-check"></i><b>23.8</b> Back to the Data – An Analysis Based on Flogs<span></span></a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Course in Exploratory Data Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="straightening" class="section level1 hasAnchor" number="15">
+<h1><span class="header-section-number">15</span> Straightening<a href="straightening.html#straightening" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>We have talked about methods for working with <span class="math inline">\((x, y)\)</span> data. First we graph the data to explore the relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, next we fit a simple line model to describe the relationship, and then we look at the residuals to look for finer structure in the data. In our U.S. population example, we saw that there may be a non-linear relationship in the plot, and we transformed the <span class="math inline">\(y\)</span> variable (population) to first straighten the plot before we fit a line. In this lecture, we further discuss the situation where a non-linear pattern exists in the scatterplot, and discuss how we can reexpress the <span class="math inline">\(x\)</span> and/or the <span class="math inline">\(y\)</span> variables to make the pattern straight.</p>
+<div id="meet-the-data-4" class="section level2 hasAnchor" number="15.1">
+<h2><span class="header-section-number">15.1</span> Meet the data<a href="straightening.html#meet-the-data-4" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We work with a “golden oldie” dataset – this is a dataset that has been used in the statistics literature to illustrate transforming data. This data is a nice illustration of a nonlinear relationship. The transformation of the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> variables in this example suggests that the data may not have been measured in the most convenient scale.</p>
+<p>A number of measurements were made on 38 1978-79 model automobiles. (Data was supplied by Consumer Reports and was used in the article “Building Regression Models Interactively.” by H. V. Henderson and P. F. Velleman (1981), Biometrics, 37, 391-411.)</p>
+<p>For each car, we measure (1) the nationality of the manufacturer, (2) the name, (3) the mileage, measured in miles per gallon (MPG), (4) the weight, (5) the drive ratio, (6) the horsepower, (7) the displacement of the car (in cubic inches), and (8) the number of cylinders. The data follow:</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb184-1"><a href="straightening.html#cb184-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(LearnEDAfunctions)</span>
+<span id="cb184-2"><a href="straightening.html#cb184-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb184-3"><a href="straightening.html#cb184-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(car.measurements)</span></code></pre></div>
+<pre><code>##   Country                       Car  MPG Weight Drive.Ratio Horsepower
+## 1    U.S.        Buick_Estate_Wagon 16.9  4.360        2.73        155
+## 2    U.S. Ford_Country_Squire_Wagon 15.5  4.054        2.26        142
+## 3    U.S.        Chevy_Malibu_Wagon 19.2  3.605        2.56        125
+## 4    U.S.    Chrysler_LeBaron_Wagon 18.5  3.940        2.45        150
+## 5    U.S.                  Chevette 30.0  2.155        3.70         68
+## 6   Japan             Toyota_Corona 27.5  2.560        3.05         95
+##   Displacement Cylinders
+## 1          350         8
+## 2          351         8
+## 3          267         8
+## 4          360         8
+## 5           98         4
+## 6          134         4</code></pre>
+</div>
+<div id="a-nonlinear-relationship" class="section level2 hasAnchor" number="15.2">
+<h2><span class="header-section-number">15.2</span> A nonlinear relationship<a href="straightening.html#a-nonlinear-relationship" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Here we explore the relationship between a car’s mileage and it’s displacement. Now most of us are aware of a relationship – smaller cars generally get better gas mileage. Our goal here is to describe the relationship between size and mileage and look for cars that deviate from this general pattern.</p>
+<p>We plot mileage against displacement below.</p>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb186-1"><a href="straightening.html#cb186-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(car.measurements,</span>
+<span id="cb186-2"><a href="straightening.html#cb186-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(Displacement, MPG)) <span class="sc">+</span></span>
+<span id="cb186-3"><a href="straightening.html#cb186-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-93-1.png" width="672" /></p>
+<p>As expected, we see a pretty strong negative relationship. But what is evident is that this is not a straight-line relationship. Rather it looks curved – a curve drawn through the points makes this clear.</p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb187-1"><a href="straightening.html#cb187-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(car.measurements,</span>
+<span id="cb187-2"><a href="straightening.html#cb187-2" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(Displacement, MPG)) <span class="sc">+</span></span>
+<span id="cb187-3"><a href="straightening.html#cb187-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb187-4"><a href="straightening.html#cb187-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">&quot;loess&quot;</span>, <span class="at">se =</span> <span class="cn">FALSE</span>)</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-94-1.png" width="672" /></p>
+<p>Recall what we did in our U.S. population study when we detected a curved relationship between population and year. We reexpressed the population using a log transformation and fit a line to the (year, log pop) data. We follow a similar strategy here. The difference is that we may reexpress the <span class="math inline">\(x\)</span> and/or the <span class="math inline">\(y\)</span> variables, and we use the family of power transformations (using different choices for the power <span class="math inline">\(p\)</span>) in our reexpression.</p>
+</div>
+<div id="three-summary-points-and-measuring-curvature" class="section level2 hasAnchor" number="15.3">
+<h2><span class="header-section-number">15.3</span> Three summary points and measuring curvature<a href="straightening.html#three-summary-points-and-measuring-curvature" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Recall that our method of fitting a line, the resistant line, is based on working with three summary points. Likewise, we use three summary points to measure the curvature in the plot and help us choose an appropriate reexpression to straighten.</p>
+<p>As before, we find three summary points by breaking the <span class="math inline">\(x\)</span>-values (here <span class="math inline">\(x\)</span> is displacement) into three groups of approximate equal size (low, middle, and high), and finding the median <span class="math inline">\(x\)</span>-value and the median <span class="math inline">\(y\)</span>-value in each group. Here the three summary points are
+<span class="math display">\[
+(x_L, y_L) = (98, 31), (x_M, y_M) = (148.5, 24.25), (x_R, y_R) = (302, 18.2).  
+\]</span>
+These points are plotted as red dots in the figure below.</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb188-1"><a href="straightening.html#cb188-1" aria-hidden="true" tabindex="-1"></a>summary.points <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">x =</span> <span class="fu">c</span>(<span class="dv">98</span>, <span class="fl">148.5</span>, <span class="dv">302</span>),</span>
+<span id="cb188-2"><a href="straightening.html#cb188-2" aria-hidden="true" tabindex="-1"></a>                             <span class="at">y =</span> <span class="fu">c</span>(<span class="dv">31</span>, <span class="fl">24.25</span>, <span class="fl">18.2</span>))</span>
+<span id="cb188-3"><a href="straightening.html#cb188-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(car.measurements,</span>
+<span id="cb188-4"><a href="straightening.html#cb188-4" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(Displacement, MPG)) <span class="sc">+</span></span>
+<span id="cb188-5"><a href="straightening.html#cb188-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb188-6"><a href="straightening.html#cb188-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> summary.points,</span>
+<span id="cb188-7"><a href="straightening.html#cb188-7" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(x, y), <span class="at">color=</span><span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>)</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-95-1.png" width="672" /></p>
+<p>We can measure the curvature in this plot by first computing the “left slope” (the slope of the line connecting the left and middle summary points), the “right slope” (the slope of the segment connecting the middle and right summary points). The ratio of the right slope to the left slope, the so-called half-slope ratio, is a measure of the curvature of the plot.</p>
+<p>The figure below illustrates the computation of the half-slope ratio. The left slope of the segment connecting the left two points is
+<span class="math display">\[
+m_L = (31-24.25)/(98-148.5) = -.144
+\]</span>
+and the slope of the segment connecting the two right points is
+<span class="math display">\[
+m_R = (24.25-18.2)/(148.5-302) = -.039.
+\]</span></p>
+<p>So the half-slope ratio, denoted <span class="math inline">\(b_{HS}\)</span>, is
+<span class="math display">\[
+b_{HS} = \frac{m_R}{m_L} = \frac{-.039}{-.144} = .27.
+\]</span></p>
+<div class="sourceCode" id="cb189"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb189-1"><a href="straightening.html#cb189-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb189-2"><a href="straightening.html#cb189-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> car.measurements,</span>
+<span id="cb189-3"><a href="straightening.html#cb189-3" aria-hidden="true" tabindex="-1"></a>       <span class="fu">aes</span>(Displacement, MPG)) <span class="sc">+</span></span>
+<span id="cb189-4"><a href="straightening.html#cb189-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> summary.points,</span>
+<span id="cb189-5"><a href="straightening.html#cb189-5" aria-hidden="true" tabindex="-1"></a>              <span class="fu">aes</span>(x, y), <span class="at">color=</span><span class="st">&quot;red&quot;</span>, <span class="at">size =</span> <span class="dv">3</span>) <span class="sc">+</span></span>
+<span id="cb189-6"><a href="straightening.html#cb189-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data =</span> <span class="fu">filter</span>(summary.points, x <span class="sc">&lt;</span> <span class="dv">150</span>),</span>
+<span id="cb189-7"><a href="straightening.html#cb189-7" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(x, y), <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">color=</span><span class="st">&quot;blue&quot;</span>) <span class="sc">+</span></span>
+<span id="cb189-8"><a href="straightening.html#cb189-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data =</span> <span class="fu">filter</span>(summary.points, x  <span class="sc">&gt;</span> <span class="dv">145</span>),</span>
+<span id="cb189-9"><a href="straightening.html#cb189-9" aria-hidden="true" tabindex="-1"></a>               <span class="fu">aes</span>(x, y), <span class="at">method =</span> <span class="st">&quot;lm&quot;</span>, <span class="at">color=</span><span class="st">&quot;blue&quot;</span>)</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-96-1.png" width="672" /></p>
+<p>A half-slope ratio close to the value indicates straightness in the plot. Here the value <span class="math inline">\(b_{HS}\)</span> = .27 which indicates curvature that is concave up.</p>
+</div>
+<div id="reexpressing-to-reduce-curvature" class="section level2 hasAnchor" number="15.4">
+<h2><span class="header-section-number">15.4</span> Reexpressing to reduce curvature<a href="straightening.html#reexpressing-to-reduce-curvature" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>In many cases, we can reduce the curvature in the plot by applying a suitable power transformation to either the <span class="math inline">\(x\)</span> or <span class="math inline">\(y\)</span> variables. Recall the ladder of power transformations:</p>
+<p>We start with the raw data which corresponds to <span class="math inline">\(p = 1\)</span> and either go up or down the ladder of transformations to change the shape of the data. How do we decide which direction on the ladder to transform the x and y variables? There is a simple rule based on the type of curvature in the plot.</p>
+<p>Suppose that we observe a graph with the following curvature.</p>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-97-1.png" width="672" /></p>
+<p>We look at the direction of the bulge in the curvature that we indicate by an arrow. Note that the curvature bulges towards small values of <span class="math inline">\(x\)</span> and small values of <span class="math inline">\(y\)</span>. If the direction of the bulge for one variable goes towards small values, we go down the ladder of transformations; if the bulge is towards large values, we go up the ladder of transformations. Since this graph bulges towards small values for both variable, we can reexpress <span class="math inline">\(x\)</span> by square root of <span class="math inline">\(x\)</span>, or log <span class="math inline">\(x\)</span>, or we could reexpress <span class="math inline">\(y\)</span> by a root or a log.</p>
+<p>Actually, there are four types of curvature that can be improved by a power transformation, shown below.</p>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-98-1.png" width="672" /></p>
+<p>Once you see the direction of the bulge, the direction to transform the variables is clear. For example, look at the bottom right graph. The bulge in this curvature is towards small <span class="math inline">\(x\)</span> and large <span class="math inline">\(y\)</span>. To straighten this plot, we could either</p>
+<ul>
+<li>reexpress <span class="math inline">\(x\)</span> by a root (moving down the ladder) or</li>
+<li>reexpress <span class="math inline">\(y\)</span> by a square (moving up the ladder).</li>
+</ul>
+</div>
+<div id="straightening-in-the-example" class="section level2 hasAnchor" number="15.5">
+<h2><span class="header-section-number">15.5</span> Straightening in the example<a href="straightening.html#straightening-in-the-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Let’s illustrate this procedure for our data. We do our calculations in a spreadsheet where it is easy to change power transformations for <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. For ease of comparison of different transformations, we use the matched transformations
+<span class="math display">\[
+\frac{x^p - 1}{p}, \, \, \frac{y^p - 1}{p}.
+\]</span></p>
+<p>Below we write a short function <code>straightening.work</code>
+to illustrate the computations. We start with the original data – the following table shows the left, center, and right summary points, the transformed summary points (tx, ty), the left and right slopes and the half-slope ratio. This is old news – the ratio is .275 which indicates curvature in the plot.</p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb190-1"><a href="straightening.html#cb190-1" aria-hidden="true" tabindex="-1"></a>straightening.work <span class="ot">&lt;-</span> <span class="cf">function</span>(sp, px, py){</span>
+<span id="cb190-2"><a href="straightening.html#cb190-2" aria-hidden="true" tabindex="-1"></a>   sp<span class="sc">$</span>tx <span class="ot">&lt;-</span> <span class="fu">with</span>(sp, (x <span class="sc">^</span> px <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span> px)</span>
+<span id="cb190-3"><a href="straightening.html#cb190-3" aria-hidden="true" tabindex="-1"></a>   sp<span class="sc">$</span>ty <span class="ot">&lt;-</span> <span class="fu">with</span>(sp, (y <span class="sc">^</span> py <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">/</span> py)</span>
+<span id="cb190-4"><a href="straightening.html#cb190-4" aria-hidden="true" tabindex="-1"></a>   sp<span class="sc">$</span>slope[<span class="dv">1</span>] <span class="ot">&lt;-</span> <span class="fu">with</span>(sp, <span class="fu">diff</span>(ty[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]) <span class="sc">/</span> <span class="fu">diff</span>(tx[<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>]))</span>
+<span id="cb190-5"><a href="straightening.html#cb190-5" aria-hidden="true" tabindex="-1"></a>   sp<span class="sc">$</span>slope[<span class="dv">2</span>] <span class="ot">&lt;-</span> <span class="fu">with</span>(sp, <span class="fu">diff</span>(ty[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]) <span class="sc">/</span> <span class="fu">diff</span>(tx[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>]))</span>
+<span id="cb190-6"><a href="straightening.html#cb190-6" aria-hidden="true" tabindex="-1"></a>   sp<span class="sc">$</span>half.slope.ratio <span class="ot">&lt;-</span> <span class="fu">with</span>(sp, slope[<span class="dv">2</span>] <span class="sc">/</span> slope[<span class="dv">1</span>])</span>
+<span id="cb190-7"><a href="straightening.html#cb190-7" aria-hidden="true" tabindex="-1"></a>   sp<span class="sc">$</span>slope[<span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb190-8"><a href="straightening.html#cb190-8" aria-hidden="true" tabindex="-1"></a>   sp<span class="sc">$</span>half.slope.ratio[<span class="dv">2</span><span class="sc">:</span><span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb190-9"><a href="straightening.html#cb190-9" aria-hidden="true" tabindex="-1"></a>   <span class="fu">row.names</span>(sp) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">&quot;Left&quot;</span>, <span class="st">&quot;Center&quot;</span>, <span class="st">&quot;Right&quot;</span>)</span>
+<span id="cb190-10"><a href="straightening.html#cb190-10" aria-hidden="true" tabindex="-1"></a>   sp}</span>
+<span id="cb190-11"><a href="straightening.html#cb190-11" aria-hidden="true" tabindex="-1"></a><span class="fu">straightening.work</span>(summary.points, <span class="dv">1</span>, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>##            x     y    tx    ty       slope half.slope.ratio
+## Left    98.0 31.00  97.0 30.00 -0.13366337        0.2948727
+## Center 148.5 24.25 147.5 23.25 -0.03941368               NA
+## Right  302.0 18.20 301.0 17.20          NA               NA</code></pre>
+<p>Remember the bulge is towards small values of <span class="math inline">\(x\)</span> (displacement), so we’ll try taking a square root of <span class="math inline">\(x\)</span>:</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb192-1"><a href="straightening.html#cb192-1" aria-hidden="true" tabindex="-1"></a><span class="fu">straightening.work</span>(summary.points, <span class="fl">0.5</span>, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>##            x     y       tx    ty      slope half.slope.ratio
+## Left    98.0 31.00 17.79899 30.00 -1.4760147        0.3947231
+## Center 148.5 24.25 22.37212 23.25 -0.5826171               NA
+## Right  302.0 18.20 32.75629 17.20         NA               NA</code></pre>
+<p>This is better – the half-slope ratio has increased from .275 to .368, but it’s still not close to the goal value of 1. Let’s go further down the ladder of transformations for <span class="math inline">\(x\)</span> – we’ll try a log (<span class="math inline">\(p\)</span> = 0) – we actually use <span class="math inline">\(p\)</span> = .001 in the spreadsheet that approximates a log.</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb194-1"><a href="straightening.html#cb194-1" aria-hidden="true" tabindex="-1"></a><span class="fu">straightening.work</span>(summary.points, <span class="fl">0.001</span>, <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>##            x     y       tx    ty      slope half.slope.ratio
+## Left    98.0 31.00 4.595495 30.00 -16.163243        0.5244925
+## Center 148.5 24.25 5.013109 23.25  -8.477499               NA
+## Right  302.0 18.20 5.726763 17.20         NA               NA</code></pre>
+<p>We’re doing better – the half-slope ratio is now .488. Let’s now try to move towards straightness by reexpressing <span class="math inline">\(y\)</span>. The bulge goes towards small <span class="math inline">\(y\)</span>, so we’ll try a log (<span class="math inline">\(p\)</span> = 0) for <span class="math inline">\(y\)</span> (mileage):</p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb196-1"><a href="straightening.html#cb196-1" aria-hidden="true" tabindex="-1"></a><span class="fu">straightening.work</span>(summary.points, <span class="fl">0.001</span>, <span class="fl">0.001</span>)</span></code></pre></div>
+<pre><code>##            x     y       tx       ty      slope half.slope.ratio
+## Left    98.0 31.00 4.595495 3.439890 -0.5899825         0.683707
+## Center 148.5 24.25 5.013109 3.193505 -0.4033752               NA
+## Right  302.0 18.20 5.726763 2.905635         NA               NA</code></pre>
+<p>The ratio is now <span class="math inline">\(b_{HS}\)</span> = .642 (the power for <span class="math inline">\(x\)</span> is <span class="math inline">\(p\)</span> = 0, for <span class="math inline">\(y\)</span> is <span class="math inline">\(p\)</span> =0). Let’s keep going down the ladder for <span class="math inline">\(y\)</span> and try <span class="math inline">\(p\)</span> = -1 that corresponds to reciprocals.</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb198-1"><a href="straightening.html#cb198-1" aria-hidden="true" tabindex="-1"></a><span class="fu">straightening.work</span>(summary.points, <span class="fl">0.001</span>, <span class="sc">-</span><span class="dv">1</span>)</span></code></pre></div>
+<pre><code>##            x     y       tx        ty       slope half.slope.ratio
+## Left    98.0 31.00 4.595495 0.9677419 -0.02150082        0.8933663
+## Center 148.5 24.25 5.013109 0.9587629 -0.01920811               NA
+## Right  302.0 18.20 5.726763 0.9450549          NA               NA</code></pre>
+<p>Now we’re close – <span class="math inline">\(b_{HS} = .845\)</span>. Last, we try moving <span class="math inline">\(x\)</span> down the ladder to <span class="math inline">\(p = -.33\)</span> (we’ll explain this choice soon).</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb200-1"><a href="straightening.html#cb200-1" aria-hidden="true" tabindex="-1"></a><span class="fu">straightening.work</span>(summary.points, <span class="sc">-</span><span class="fl">0.33</span>, <span class="sc">-</span><span class="dv">1</span>)</span></code></pre></div>
+<pre><code>##            x     y       tx        ty      slope half.slope.ratio
+## Left    98.0 31.00 2.362910 0.9677419 -0.1049744         1.074659
+## Center 148.5 24.25 2.448446 0.9587629 -0.1128117               NA
+## Right  302.0 18.20 2.569958 0.9450549         NA               NA</code></pre>
+<p>Bingo – the half-slope ratio is <span class="math inline">\(b_{HS}\)</span> = 1.017, so it appears that we’ve straightened the plot by transforming <span class="math inline">\(x\)</span> to the -1/3 power and <span class="math inline">\(y\)</span> to the -1 power.</p>
+</div>
+<div id="making-sense-of-the-reexpression" class="section level2 hasAnchor" number="15.6">
+<h2><span class="header-section-number">15.6</span> Making sense of the reexpression<a href="straightening.html#making-sense-of-the-reexpression" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We started by plotting mileage against displacement of a car, where mileage was measured in miles per gallon and displacement is measured in cubic inches. What are the units of the transformed variables? If we change mileage to mileage<span class="math inline">\(^{-1}\)</span>, then the units are gallons per mile; if we change displacement to displacement<span class="math inline">\(^{-1/3}\)</span>, the new units are 1/inches. So we have found a linear relationship between
+mileage (in gallons per mile) and displacement (measured as 1/inches).</p>
+<p>This suggests that gallons per mile may be a more suitable scale for measuring mileage.</p>
+</div>
+<div id="straightening-fitting-and-flattening" class="section level2 hasAnchor" number="15.7">
+<h2><span class="header-section-number">15.7</span> Straightening, fitting, and flattening<a href="straightening.html#straightening-fitting-and-flattening" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We found a suitable transformation by working only on three summary points. We have to check out our proposed reexpression to see if we have indeed straightened the plot</p>
+<p>In the plot below, we graph <span class="math inline">\(-1/y\)</span> against <span class="math inline">\(-1/x^{.33}\)</span>.</p>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb202-1"><a href="straightening.html#cb202-1" aria-hidden="true" tabindex="-1"></a>car.measurements <span class="ot">&lt;-</span> <span class="fu">mutate</span>(car.measurements,</span>
+<span id="cb202-2"><a href="straightening.html#cb202-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">new.x =</span> Displacement <span class="sc">^</span> (<span class="sc">-</span> <span class="fl">0.33</span>),</span>
+<span id="cb202-3"><a href="straightening.html#cb202-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">new.y =</span> <span class="sc">-</span> <span class="dv">1</span> <span class="sc">/</span> MPG)</span>
+<span id="cb202-4"><a href="straightening.html#cb202-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(car.measurements, <span class="fu">aes</span>(new.x, new.y)) <span class="sc">+</span></span>
+<span id="cb202-5"><a href="straightening.html#cb202-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-105-1.png" width="672" /></p>
+<p>This looks pretty straight. To detect any remaining curvature, we will fit a line and inspect the residuals.</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb203-1"><a href="straightening.html#cb203-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">rline</span>(new.y <span class="sc">~</span> new.x, </span>
+<span id="cb203-2"><a href="straightening.html#cb203-2" aria-hidden="true" tabindex="-1"></a>             car.measurements, <span class="at">iter=</span><span class="dv">5</span>)</span>
+<span id="cb203-3"><a href="straightening.html#cb203-3" aria-hidden="true" tabindex="-1"></a><span class="fu">c</span>(fit<span class="sc">$</span>a, fit<span class="sc">$</span>b, fit<span class="sc">$</span>xC)</span></code></pre></div>
+<pre><code>## [1] -0.04249751  0.34584665  0.19202478</code></pre>
+<p>We fit a line shown below – it has intercept <span class="math inline">\(-0.0424\)</span>, slope <span class="math inline">\(-0.3458\)</span>, and <span class="math inline">\(x_C = -0.1920\)</span>, so our line fit is</p>
+<p><span class="math display">\[
+Mileage  = -0.0424 - 0.3458 \left(\frac{-1}{displacement^{.33}} + 0.1920\right)
+\]</span></p>
+<p>The residuals from this line fit are shown below.</p>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb205-1"><a href="straightening.html#cb205-1" aria-hidden="true" tabindex="-1"></a>car.measurements <span class="ot">&lt;-</span> <span class="fu">mutate</span>(car.measurements,</span>
+<span id="cb205-2"><a href="straightening.html#cb205-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">Residual =</span> fit<span class="sc">$</span>residual)</span>
+<span id="cb205-3"><a href="straightening.html#cb205-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(car.measurements, <span class="fu">aes</span>(new.x, Residual)) <span class="sc">+</span></span>
+<span id="cb205-4"><a href="straightening.html#cb205-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb205-5"><a href="straightening.html#cb205-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>)</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-107-1.png" width="672" /></p>
+<p>What do we see in this residual plot?</p>
+<ul>
+<li>First, I don’t see any obvious curvature in the plot. This means that we were successful in straightening the association pattern in the graph.</li>
+<li>Two unusual small residuals stand out. These correspond to cars that had unusually small mileages given their size. I might avoid buying these cars if there were similar cars available with better mileages.</li>
+</ul>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="plotting-ii.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="smoothing.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/15-Straightening.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Course in Exploratory Data Analysis.pdf", "Course in Exploratory Data Analysis.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

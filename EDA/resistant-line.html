@@ -1,0 +1,768 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>13 Resistant Line | A Course in Exploratory Data Analysis</title>
+  <meta name="description" content="13 Resistant Line | A Course in Exploratory Data Analysis" />
+  <meta name="generator" content="bookdown 0.25 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="13 Resistant Line | A Course in Exploratory Data Analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="13 Resistant Line | A Course in Exploratory Data Analysis" />
+  
+  
+  
+
+<meta name="author" content="Jim Albert" />
+
+
+<meta name="date" content="2022-04-09" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="introduction-to-plotting.html"/>
+<link rel="next" href="plotting-ii.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Course in Exploratory Data Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface<span></span></a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#an-eda-course"><i class="fa fa-check"></i><b>1.1</b> An EDA Course<span></span></a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#organization"><i class="fa fa-check"></i><b>1.2</b> Organization<span></span></a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#preface-excerpt-from-eda-by-john-w.-tukey-addison-wesley-1977"><i class="fa fa-check"></i><b>1.3</b> Preface Excerpt from <em>EDA</em> by John W. Tukey (Addison-Wesley, 1977)<span></span></a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="index.html"><a href="index.html#examples-not-case-histories"><i class="fa fa-check"></i><b>1.3.1</b> Examples, NOT case histories<span></span></a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>2</b> Introduction<span></span></a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="introduction.html"><a href="introduction.html#what-is-data-analysis"><i class="fa fa-check"></i><b>2.1</b> What is data analysis?<span></span></a></li>
+<li class="chapter" data-level="2.2" data-path="introduction.html"><a href="introduction.html#what-is-data-and-where-do-we-find-it"><i class="fa fa-check"></i><b>2.2</b> What is data and where do we find it?<span></span></a></li>
+<li class="chapter" data-level="2.3" data-path="introduction.html"><a href="introduction.html#meet-our-first-data"><i class="fa fa-check"></i><b>2.3</b> Meet our first data<span></span></a></li>
+<li class="chapter" data-level="2.4" data-path="introduction.html"><a href="introduction.html#how-does-exploratory-data-analysis-eda-differ-from-confirmatory-data-analysis-cda"><i class="fa fa-check"></i><b>2.4</b> How does exploratory data analysis (EDA) differ from confirmatory data analysis (CDA)?<span></span></a></li>
+<li class="chapter" data-level="2.5" data-path="introduction.html"><a href="introduction.html#how-is-eda-different-from-cda"><i class="fa fa-check"></i><b>2.5</b> How is EDA different from CDA?<span></span></a></li>
+<li class="chapter" data-level="2.6" data-path="introduction.html"><a href="introduction.html#john-tukeys-contribution"><i class="fa fa-check"></i><b>2.6</b> John Tukey’s contribution<span></span></a></li>
+<li class="chapter" data-level="2.7" data-path="introduction.html"><a href="introduction.html#four-principles-of-eda-the-four-rs"><i class="fa fa-check"></i><b>2.7</b> Four principles of EDA (the four R’s)}<span></span></a></li>
+<li class="chapter" data-level="2.8" data-path="introduction.html"><a href="introduction.html#an-exploratory-look-at-our-data"><i class="fa fa-check"></i><b>2.8</b> An exploratory look at our data<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html"><i class="fa fa-check"></i><b>3</b> Working with a Single Batch – Displays<span></span></a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#meet-the-data"><i class="fa fa-check"></i><b>3.1</b> Meet the Data<span></span></a></li>
+<li class="chapter" data-level="3.2" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#the-basic-stemplot"><i class="fa fa-check"></i><b>3.2</b> The Basic Stemplot<span></span></a></li>
+<li class="chapter" data-level="3.3" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#looking-at-a-data-distribution"><i class="fa fa-check"></i><b>3.3</b> Looking at a Data Distribution<span></span></a></li>
+<li class="chapter" data-level="3.4" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#stemplot-variations-breaking-the-stem-at-different-locations"><i class="fa fa-check"></i><b>3.4</b> Stemplot variations – breaking the stem at different locations<span></span></a></li>
+<li class="chapter" data-level="3.5" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#stemplot-variations-2-5-and-10-leaves-per-stem"><i class="fa fa-check"></i><b>3.5</b> Stemplot variations – 2, 5, and 10 leaves per stem<span></span></a></li>
+<li class="chapter" data-level="3.6" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#guidance-in-constructing-a-stemplot"><i class="fa fa-check"></i><b>3.6</b> Guidance in Constructing a Stemplot<span></span></a></li>
+<li class="chapter" data-level="3.7" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#making-the-stemplot-resistant"><i class="fa fa-check"></i><b>3.7</b> Making the Stemplot Resistant<span></span></a></li>
+<li class="chapter" data-level="3.8" data-path="working-with-a-single-batch-displays.html"><a href="working-with-a-single-batch-displays.html#a-few-closing-comments"><i class="fa fa-check"></i><b>3.8</b> A Few Closing Comments<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html"><i class="fa fa-check"></i><b>4</b> Single Batch: Summaries<span></span></a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#meet-the-data-1"><i class="fa fa-check"></i><b>4.1</b> Meet the Data<span></span></a></li>
+<li class="chapter" data-level="4.2" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#ranks-and-depths"><i class="fa fa-check"></i><b>4.2</b> Ranks and Depths<span></span></a></li>
+<li class="chapter" data-level="4.3" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#letter-values-a-set-of-summary-values"><i class="fa fa-check"></i><b>4.3</b> Letter Values: A Set of Summary Values<span></span></a></li>
+<li class="chapter" data-level="4.4" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#counting-in"><i class="fa fa-check"></i><b>4.4</b> Counting In<span></span></a></li>
+<li class="chapter" data-level="4.5" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#five-number-summary"><i class="fa fa-check"></i><b>4.5</b> Five-number Summary<span></span></a></li>
+<li class="chapter" data-level="4.6" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#other-letter-values"><i class="fa fa-check"></i><b>4.6</b> Other Letter Values<span></span></a></li>
+<li class="chapter" data-level="4.7" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#measures-of-center"><i class="fa fa-check"></i><b>4.7</b> Measures of Center<span></span></a></li>
+<li class="chapter" data-level="4.8" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#measures-of-spread"><i class="fa fa-check"></i><b>4.8</b> Measures of Spread<span></span></a></li>
+<li class="chapter" data-level="4.9" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#identifying-outliers"><i class="fa fa-check"></i><b>4.9</b> Identifying Outliers<span></span></a></li>
+<li class="chapter" data-level="4.10" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#a-new-example"><i class="fa fa-check"></i><b>4.10</b> A New Example<span></span></a></li>
+<li class="chapter" data-level="4.11" data-path="single-batch-summaries.html"><a href="single-batch-summaries.html#relationship-with-normal-data"><i class="fa fa-check"></i><b>4.11</b> Relationship with Normal Data<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="boxplots.html"><a href="boxplots.html"><i class="fa fa-check"></i><b>5</b> Boxplots<span></span></a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="boxplots.html"><a href="boxplots.html#the-data"><i class="fa fa-check"></i><b>5.1</b> The Data:<span></span></a></li>
+<li class="chapter" data-level="5.2" data-path="boxplots.html"><a href="boxplots.html#constructing-a-single-boxplot"><i class="fa fa-check"></i><b>5.2</b> Constructing A Single Boxplot<span></span></a></li>
+<li class="chapter" data-level="5.3" data-path="boxplots.html"><a href="boxplots.html#interpreting-a-boxplot"><i class="fa fa-check"></i><b>5.3</b> Interpreting a Boxplot<span></span></a></li>
+<li class="chapter" data-level="5.4" data-path="boxplots.html"><a href="boxplots.html#boxplots-to-compare-batches"><i class="fa fa-check"></i><b>5.4</b> Boxplots to Compare Batches<span></span></a></li>
+<li class="chapter" data-level="5.5" data-path="boxplots.html"><a href="boxplots.html#comparisons-using-medians"><i class="fa fa-check"></i><b>5.5</b> Comparisons using Medians<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="spread-level-plot.html"><a href="spread-level-plot.html"><i class="fa fa-check"></i><b>6</b> Spread Level Plot<span></span></a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="spread-level-plot.html"><a href="spread-level-plot.html#lets-meet-the-data"><i class="fa fa-check"></i><b>6.1</b> Let’s Meet the Data<span></span></a></li>
+<li class="chapter" data-level="6.2" data-path="spread-level-plot.html"><a href="spread-level-plot.html#comparing-batches-in-the-raw-scale"><i class="fa fa-check"></i><b>6.2</b> Comparing Batches in the Raw Scale<span></span></a></li>
+<li class="chapter" data-level="6.3" data-path="spread-level-plot.html"><a href="spread-level-plot.html#whats-wrong"><i class="fa fa-check"></i><b>6.3</b> What’s Wrong?<span></span></a></li>
+<li class="chapter" data-level="6.4" data-path="spread-level-plot.html"><a href="spread-level-plot.html#the-spread-vs-level-plot"><i class="fa fa-check"></i><b>6.4</b> The Spread vs Level Plot<span></span></a></li>
+<li class="chapter" data-level="6.5" data-path="spread-level-plot.html"><a href="spread-level-plot.html#reexpression"><i class="fa fa-check"></i><b>6.5</b> Reexpression<span></span></a></li>
+<li class="chapter" data-level="6.6" data-path="spread-level-plot.html"><a href="spread-level-plot.html#reanalysis-of-the-data-in-new-scale"><i class="fa fa-check"></i><b>6.6</b> Reanalysis of the data in new scale<span></span></a></li>
+<li class="chapter" data-level="6.7" data-path="spread-level-plot.html"><a href="spread-level-plot.html#wrap-up"><i class="fa fa-check"></i><b>6.7</b> Wrap Up<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html"><i class="fa fa-check"></i><b>7</b> Comparing Batches III<span></span></a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#a-case-study-where-the-spread-vs-level-plot-works"><i class="fa fa-check"></i><b>7.1</b> A Case Study where the Spread vs Level Plot Works<span></span></a></li>
+<li class="chapter" data-level="7.2" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#a-case-study-where-the-spread-vs-level-plot-doesnt-work"><i class="fa fa-check"></i><b>7.2</b> A Case Study where the Spread vs Level Plot Doesn’t Work<span></span></a></li>
+<li class="chapter" data-level="7.3" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#some-final-comments-about-spread-vs.-level-plots"><i class="fa fa-check"></i><b>7.3</b> Some final comments about spread vs. level plots<span></span></a></li>
+<li class="chapter" data-level="7.4" data-path="comparing-batches-iii.html"><a href="comparing-batches-iii.html#why-does-the-spread-vs.-level-plot-work"><i class="fa fa-check"></i><b>7.4</b> Why does the spread vs. level plot work?<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="transformations.html"><a href="transformations.html"><i class="fa fa-check"></i><b>8</b> Transformations<span></span></a>
+<ul>
+<li class="chapter" data-level="8.1" data-path="transformations.html"><a href="transformations.html#why-do-we-rexpress-data"><i class="fa fa-check"></i><b>8.1</b> Why do we rexpress data?<span></span></a></li>
+<li class="chapter" data-level="8.2" data-path="transformations.html"><a href="transformations.html#the-shape-of-the-data"><i class="fa fa-check"></i><b>8.2</b> The shape of the data<span></span></a></li>
+<li class="chapter" data-level="8.3" data-path="transformations.html"><a href="transformations.html#trivial-reexpressions"><i class="fa fa-check"></i><b>8.3</b> Trivial reexpressions<span></span></a></li>
+<li class="chapter" data-level="8.4" data-path="transformations.html"><a href="transformations.html#nontrivial-expressions-the-power-family"><i class="fa fa-check"></i><b>8.4</b> Nontrivial expressions: the power family<span></span></a></li>
+<li class="chapter" data-level="8.5" data-path="transformations.html"><a href="transformations.html#some-properties-of-the-power-family"><i class="fa fa-check"></i><b>8.5</b> Some properties of the power family<span></span></a></li>
+<li class="chapter" data-level="8.6" data-path="transformations.html"><a href="transformations.html#the-log-transformation"><i class="fa fa-check"></i><b>8.6</b> The log transformation<span></span></a></li>
+<li class="chapter" data-level="8.7" data-path="transformations.html"><a href="transformations.html#ladders-of-powers"><i class="fa fa-check"></i><b>8.7</b> Ladders of powers<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html"><i class="fa fa-check"></i><b>9</b> Reexpressing for Symmetry<span></span></a>
+<ul>
+<li class="chapter" data-level="9.1" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#data-for-the-day"><i class="fa fa-check"></i><b>9.1</b> Data for the day<span></span></a></li>
+<li class="chapter" data-level="9.2" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#why-is-this-data-hard-to-interpret"><i class="fa fa-check"></i><b>9.2</b> Why is this data hard to interpret?<span></span></a></li>
+<li class="chapter" data-level="9.3" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#checking-for-symmetry-by-looking-at-midsummaries"><i class="fa fa-check"></i><b>9.3</b> Checking for symmetry by looking at midsummaries<span></span></a></li>
+<li class="chapter" data-level="9.4" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#reexpressing-to-achieve-approximate-symmetry"><i class="fa fa-check"></i><b>9.4</b> Reexpressing to achieve approximate symmetry<span></span></a></li>
+<li class="chapter" data-level="9.5" data-path="reexpressing-for-symmetry.html"><a href="reexpressing-for-symmetry.html#hinkleys-quick-method"><i class="fa fa-check"></i><b>9.5</b> Hinkley’s quick method<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html"><i class="fa fa-check"></i><b>10</b> Reexpressing for Symmetry II<span></span></a>
+<ul>
+<li class="chapter" data-level="10.1" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#data-for-the-day-1"><i class="fa fa-check"></i><b>10.1</b> Data for the day<span></span></a></li>
+<li class="chapter" data-level="10.2" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#symmetry-plot"><i class="fa fa-check"></i><b>10.2</b> Symmetry plot<span></span></a></li>
+<li class="chapter" data-level="10.3" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#roots-and-logs"><i class="fa fa-check"></i><b>10.3</b> Roots and logs<span></span></a></li>
+<li class="chapter" data-level="10.4" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#hinkleys-method"><i class="fa fa-check"></i><b>10.4</b> Hinkley’s method<span></span></a></li>
+<li class="chapter" data-level="10.5" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#matched-transformations"><i class="fa fa-check"></i><b>10.5</b> Matched transformations<span></span></a></li>
+<li class="chapter" data-level="10.6" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#matching-method-1"><i class="fa fa-check"></i><b>10.6</b> Matching Method 1<span></span></a></li>
+<li class="chapter" data-level="10.7" data-path="reexpressing-for-symmetry-ii.html"><a href="reexpressing-for-symmetry-ii.html#matching-method-2"><i class="fa fa-check"></i><b>10.7</b> Matching Method 2<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="transformations-summary.html"><a href="transformations-summary.html"><i class="fa fa-check"></i><b>11</b> Transformations Summary<span></span></a>
+<ul>
+<li class="chapter" data-level="11.1" data-path="transformations-summary.html"><a href="transformations-summary.html#why-do-we-reexpress-data"><i class="fa fa-check"></i><b>11.1</b> Why do we reexpress data?<span></span></a></li>
+<li class="chapter" data-level="11.2" data-path="transformations-summary.html"><a href="transformations-summary.html#serendipitous-effects-of-transformation"><i class="fa fa-check"></i><b>11.2</b> Serendipitous effects of transformation<span></span></a></li>
+<li class="chapter" data-level="11.3" data-path="transformations-summary.html"><a href="transformations-summary.html#when-is-it-worthwhile-to-transform"><i class="fa fa-check"></i><b>11.3</b> When is it worthwhile to transform?<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="12" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html"><i class="fa fa-check"></i><b>12</b> Introduction to Plotting<span></span></a>
+<ul>
+<li class="chapter" data-level="12.1" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#meet-the-data-2"><i class="fa fa-check"></i><b>12.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="12.2" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#graph-the-data"><i class="fa fa-check"></i><b>12.2</b> Graph the data<span></span></a></li>
+<li class="chapter" data-level="12.3" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#describing-the-fit"><i class="fa fa-check"></i><b>12.3</b> Describing the fit<span></span></a></li>
+<li class="chapter" data-level="12.4" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#looking-at-the-residuals"><i class="fa fa-check"></i><b>12.4</b> Looking at the residuals<span></span></a></li>
+<li class="chapter" data-level="12.5" data-path="introduction-to-plotting.html"><a href="introduction-to-plotting.html#an-alternative-fit"><i class="fa fa-check"></i><b>12.5</b> An alternative fit<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="13" data-path="resistant-line.html"><a href="resistant-line.html"><i class="fa fa-check"></i><b>13</b> Resistant Line<span></span></a>
+<ul>
+<li class="chapter" data-level="13.1" data-path="resistant-line.html"><a href="resistant-line.html#meet-the-data-3"><i class="fa fa-check"></i><b>13.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="13.2" data-path="resistant-line.html"><a href="resistant-line.html#three-summary-points"><i class="fa fa-check"></i><b>13.2</b> Three summary points<span></span></a></li>
+<li class="chapter" data-level="13.3" data-path="resistant-line.html"><a href="resistant-line.html#fitting-a-line-to-three-points"><i class="fa fa-check"></i><b>13.3</b> Fitting a line to three points<span></span></a></li>
+<li class="chapter" data-level="13.4" data-path="resistant-line.html"><a href="resistant-line.html#improving-the-line-by-fitting-a-line-to-the-residuals"><i class="fa fa-check"></i><b>13.4</b> Improving the line by fitting a line to the residuals<span></span></a></li>
+<li class="chapter" data-level="13.5" data-path="resistant-line.html"><a href="resistant-line.html#comparison-with-a-least-squares-fit"><i class="fa fa-check"></i><b>13.5</b> Comparison with a Least-Squares Fit<span></span></a></li>
+<li class="chapter" data-level="13.6" data-path="resistant-line.html"><a href="resistant-line.html#interpreting-the-fit"><i class="fa fa-check"></i><b>13.6</b> Interpreting the fit<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="14" data-path="plotting-ii.html"><a href="plotting-ii.html"><i class="fa fa-check"></i><b>14</b> Plotting II<span></span></a>
+<ul>
+<li class="chapter" data-level="14.1" data-path="plotting-ii.html"><a href="plotting-ii.html#fitting-a-line-to-the-population-in-the-later-years"><i class="fa fa-check"></i><b>14.1</b> Fitting a line to the population in the later years<span></span></a></li>
+<li class="chapter" data-level="14.2" data-path="plotting-ii.html"><a href="plotting-ii.html#fitting-a-line-to-the-log-population-in-the-early-years"><i class="fa fa-check"></i><b>14.2</b> Fitting a line to the log population in the early years<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="15" data-path="straightening.html"><a href="straightening.html"><i class="fa fa-check"></i><b>15</b> Straightening<span></span></a>
+<ul>
+<li class="chapter" data-level="15.1" data-path="straightening.html"><a href="straightening.html#meet-the-data-4"><i class="fa fa-check"></i><b>15.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="15.2" data-path="straightening.html"><a href="straightening.html#a-nonlinear-relationship"><i class="fa fa-check"></i><b>15.2</b> A nonlinear relationship<span></span></a></li>
+<li class="chapter" data-level="15.3" data-path="straightening.html"><a href="straightening.html#three-summary-points-and-measuring-curvature"><i class="fa fa-check"></i><b>15.3</b> Three summary points and measuring curvature<span></span></a></li>
+<li class="chapter" data-level="15.4" data-path="straightening.html"><a href="straightening.html#reexpressing-to-reduce-curvature"><i class="fa fa-check"></i><b>15.4</b> Reexpressing to reduce curvature<span></span></a></li>
+<li class="chapter" data-level="15.5" data-path="straightening.html"><a href="straightening.html#straightening-in-the-example"><i class="fa fa-check"></i><b>15.5</b> Straightening in the example<span></span></a></li>
+<li class="chapter" data-level="15.6" data-path="straightening.html"><a href="straightening.html#making-sense-of-the-reexpression"><i class="fa fa-check"></i><b>15.6</b> Making sense of the reexpression<span></span></a></li>
+<li class="chapter" data-level="15.7" data-path="straightening.html"><a href="straightening.html#straightening-fitting-and-flattening"><i class="fa fa-check"></i><b>15.7</b> Straightening, fitting, and flattening<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="16" data-path="smoothing.html"><a href="smoothing.html"><i class="fa fa-check"></i><b>16</b> Smoothing<span></span></a>
+<ul>
+<li class="chapter" data-level="16.1" data-path="smoothing.html"><a href="smoothing.html#meet-the-data-5"><i class="fa fa-check"></i><b>16.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="16.2" data-path="smoothing.html"><a href="smoothing.html#we-need-to-smooth"><i class="fa fa-check"></i><b>16.2</b> We need to smooth<span></span></a></li>
+<li class="chapter" data-level="16.3" data-path="smoothing.html"><a href="smoothing.html#running-medians"><i class="fa fa-check"></i><b>16.3</b> Running medians<span></span></a></li>
+<li class="chapter" data-level="16.4" data-path="smoothing.html"><a href="smoothing.html#end-value-smoothing"><i class="fa fa-check"></i><b>16.4</b> End-value smoothing<span></span></a></li>
+<li class="chapter" data-level="16.5" data-path="smoothing.html"><a href="smoothing.html#splitting"><i class="fa fa-check"></i><b>16.5</b> Splitting<span></span></a></li>
+<li class="chapter" data-level="16.6" data-path="smoothing.html"><a href="smoothing.html#hanning"><i class="fa fa-check"></i><b>16.6</b> Hanning<span></span></a></li>
+<li class="chapter" data-level="16.7" data-path="smoothing.html"><a href="smoothing.html#the-smooth-and-the-rough"><i class="fa fa-check"></i><b>16.7</b> The smooth and the rough<span></span></a></li>
+<li class="chapter" data-level="16.8" data-path="smoothing.html"><a href="smoothing.html#reroughing"><i class="fa fa-check"></i><b>16.8</b> Reroughing<span></span></a></li>
+<li class="chapter" data-level="16.9" data-path="smoothing.html"><a href="smoothing.html#interpreting-the-final-smooth-and-rough"><i class="fa fa-check"></i><b>16.9</b> Interpreting the final smooth and rough<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="17" data-path="median-polish.html"><a href="median-polish.html"><i class="fa fa-check"></i><b>17</b> Median Polish<span></span></a>
+<ul>
+<li class="chapter" data-level="17.1" data-path="median-polish.html"><a href="median-polish.html#meet-the-data-6"><i class="fa fa-check"></i><b>17.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="17.2" data-path="median-polish.html"><a href="median-polish.html#an-additive-model"><i class="fa fa-check"></i><b>17.2</b> An additive model<span></span></a></li>
+<li class="chapter" data-level="17.3" data-path="median-polish.html"><a href="median-polish.html#median-polish-1"><i class="fa fa-check"></i><b>17.3</b> Median polish<span></span></a></li>
+<li class="chapter" data-level="17.4" data-path="median-polish.html"><a href="median-polish.html#interpreting-the-additive-model"><i class="fa fa-check"></i><b>17.4</b> Interpreting the additive model<span></span></a>
+<ul>
+<li class="chapter" data-level="17.4.1" data-path="median-polish.html"><a href="median-polish.html#interpreting-the-row-and-column-effects"><i class="fa fa-check"></i><b>17.4.1</b> Interpreting the row and column effects<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="17.5" data-path="median-polish.html"><a href="median-polish.html#looking-at-the-residuals-1"><i class="fa fa-check"></i><b>17.5</b> Looking at the residuals<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="18" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html"><i class="fa fa-check"></i><b>18</b> Plotting an Additive Plot<span></span></a>
+<ul>
+<li class="chapter" data-level="18.1" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#the-data-1"><i class="fa fa-check"></i><b>18.1</b> The data<span></span></a></li>
+<li class="chapter" data-level="18.2" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#plotting-the-two-terms-of-the-additive-fit"><i class="fa fa-check"></i><b>18.2</b> Plotting the two terms of the additive fit<span></span></a></li>
+<li class="chapter" data-level="18.3" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#making-sense-of-the-display"><i class="fa fa-check"></i><b>18.3</b> Making sense of the display<span></span></a></li>
+<li class="chapter" data-level="18.4" data-path="plotting-an-additive-plot.html"><a href="plotting-an-additive-plot.html#adding-information-about-the-residuals-to-the-display"><i class="fa fa-check"></i><b>18.4</b> Adding information about the residuals to the display<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="19" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html"><i class="fa fa-check"></i><b>19</b> Multiplicative Fit<span></span></a>
+<ul>
+<li class="chapter" data-level="19.1" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#meet-the-data-7"><i class="fa fa-check"></i><b>19.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="19.2" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#an-additive-model-isnt-suitable"><i class="fa fa-check"></i><b>19.2</b> An additive model isn’t suitable<span></span></a></li>
+<li class="chapter" data-level="19.3" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#fitting-our-model-to-the-data"><i class="fa fa-check"></i><b>19.3</b> Fitting our model to the data<span></span></a></li>
+<li class="chapter" data-level="19.4" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#interpreting-the-fit-1"><i class="fa fa-check"></i><b>19.4</b> Interpreting the fit<span></span></a></li>
+<li class="chapter" data-level="19.5" data-path="multiplicative-fit.html"><a href="multiplicative-fit.html#interpreting-the-residuals"><i class="fa fa-check"></i><b>19.5</b> Interpreting the residuals<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="20" data-path="extended-fit.html"><a href="extended-fit.html"><i class="fa fa-check"></i><b>20</b> Extended Fit<span></span></a>
+<ul>
+<li class="chapter" data-level="20.1" data-path="extended-fit.html"><a href="extended-fit.html#meet-the-data-8"><i class="fa fa-check"></i><b>20.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="20.2" data-path="extended-fit.html"><a href="extended-fit.html#an-additive-fit"><i class="fa fa-check"></i><b>20.2</b> An additive fit<span></span></a></li>
+<li class="chapter" data-level="20.3" data-path="extended-fit.html"><a href="extended-fit.html#looking-at-the-residuals-2"><i class="fa fa-check"></i><b>20.3</b> Looking at the residuals<span></span></a></li>
+<li class="chapter" data-level="20.4" data-path="extended-fit.html"><a href="extended-fit.html#comparison-values"><i class="fa fa-check"></i><b>20.4</b> Comparison values<span></span></a></li>
+<li class="chapter" data-level="20.5" data-path="extended-fit.html"><a href="extended-fit.html#extending-the-additive-model-by-one-more-term"><i class="fa fa-check"></i><b>20.5</b> Extending the additive model by one more term<span></span></a></li>
+<li class="chapter" data-level="20.6" data-path="extended-fit.html"><a href="extended-fit.html#finding-k"><i class="fa fa-check"></i><b>20.6</b> Finding k<span></span></a></li>
+<li class="chapter" data-level="20.7" data-path="extended-fit.html"><a href="extended-fit.html#relationship-with-multiplicative-fit"><i class="fa fa-check"></i><b>20.7</b> Relationship with multiplicative fit<span></span></a></li>
+<li class="chapter" data-level="20.8" data-path="extended-fit.html"><a href="extended-fit.html#extended-fits-and-transformations"><i class="fa fa-check"></i><b>20.8</b> Extended fits and transformations<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="21" data-path="binned-data.html"><a href="binned-data.html"><i class="fa fa-check"></i><b>21</b> Binned Data<span></span></a>
+<ul>
+<li class="chapter" data-level="21.1" data-path="binned-data.html"><a href="binned-data.html#meet-the-data-9"><i class="fa fa-check"></i><b>21.1</b> Meet the data<span></span></a></li>
+<li class="chapter" data-level="21.2" data-path="binned-data.html"><a href="binned-data.html#constructing-a-histogram"><i class="fa fa-check"></i><b>21.2</b> Constructing a histogram<span></span></a></li>
+<li class="chapter" data-level="21.3" data-path="binned-data.html"><a href="binned-data.html#a-rootogram"><i class="fa fa-check"></i><b>21.3</b> A rootogram<span></span></a></li>
+<li class="chapter" data-level="21.4" data-path="binned-data.html"><a href="binned-data.html#fitting-a-gaussian-comparison-curve"><i class="fa fa-check"></i><b>21.4</b> Fitting a Gaussian comparison curve<span></span></a></li>
+<li class="chapter" data-level="21.5" data-path="binned-data.html"><a href="binned-data.html#residuals"><i class="fa fa-check"></i><b>21.5</b> Residuals<span></span></a></li>
+<li class="chapter" data-level="21.6" data-path="binned-data.html"><a href="binned-data.html#hanging-rootogram"><i class="fa fa-check"></i><b>21.6</b> Hanging rootogram<span></span></a></li>
+<li class="chapter" data-level="21.7" data-path="binned-data.html"><a href="binned-data.html#interpreting-the-residuals-1"><i class="fa fa-check"></i><b>21.7</b> Interpreting the residuals<span></span></a></li>
+<li class="chapter" data-level="21.8" data-path="binned-data.html"><a href="binned-data.html#other-definitions-of-residuals-double-root-residuals"><i class="fa fa-check"></i><b>21.8</b> Other definitions of residuals (Double Root Residuals)<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="22" data-path="binned-data-ii.html"><a href="binned-data-ii.html"><i class="fa fa-check"></i><b>22</b> Binned Data II<span></span></a>
+<ul>
+<li class="chapter" data-level="22.1" data-path="binned-data-ii.html"><a href="binned-data-ii.html#introduction-1"><i class="fa fa-check"></i><b>22.1</b> Introduction<span></span></a></li>
+<li class="chapter" data-level="22.2" data-path="binned-data-ii.html"><a href="binned-data-ii.html#meet-a-simulated-but-famous-dataset"><i class="fa fa-check"></i><b>22.2</b> Meet a simulated, but famous, dataset<span></span></a></li>
+<li class="chapter" data-level="22.3" data-path="binned-data-ii.html"><a href="binned-data-ii.html#smoothing-the-root-counts"><i class="fa fa-check"></i><b>22.3</b> Smoothing the root counts<span></span></a></li>
+<li class="chapter" data-level="22.4" data-path="binned-data-ii.html"><a href="binned-data-ii.html#fitting-a-symmetric-curve"><i class="fa fa-check"></i><b>22.4</b> Fitting a symmetric curve<span></span></a></li>
+<li class="chapter" data-level="22.5" data-path="binned-data-ii.html"><a href="binned-data-ii.html#is-it-a-reasonable-fit"><i class="fa fa-check"></i><b>22.5</b> Is it a reasonable fit?<span></span></a></li>
+<li class="chapter" data-level="22.6" data-path="binned-data-ii.html"><a href="binned-data-ii.html#the-famous-brewer"><i class="fa fa-check"></i><b>22.6</b> The famous brewer<span></span></a></li>
+</ul></li>
+<li class="chapter" data-level="23" data-path="fraction-data.html"><a href="fraction-data.html"><i class="fa fa-check"></i><b>23</b> Fraction Data<span></span></a>
+<ul>
+<li class="chapter" data-level="23.1" data-path="fraction-data.html"><a href="fraction-data.html#the-quality-of-students-at-bgsu"><i class="fa fa-check"></i><b>23.1</b> The Quality of Students at BGSU<span></span></a></li>
+<li class="chapter" data-level="23.2" data-path="fraction-data.html"><a href="fraction-data.html#meet-the-data-10"><i class="fa fa-check"></i><b>23.2</b> Meet the Data<span></span></a></li>
+<li class="chapter" data-level="23.3" data-path="fraction-data.html"><a href="fraction-data.html#counted-fractions"><i class="fa fa-check"></i><b>23.3</b> Counted Fractions<span></span></a></li>
+<li class="chapter" data-level="23.4" data-path="fraction-data.html"><a href="fraction-data.html#started-counts-and-split-counts"><i class="fa fa-check"></i><b>23.4</b> Started Counts and Split Counts<span></span></a></li>
+<li class="chapter" data-level="23.5" data-path="fraction-data.html"><a href="fraction-data.html#three-matched-scales-for-counted-fractions-folded-fractions-roots-and-logs"><i class="fa fa-check"></i><b>23.5</b> Three Matched Scales for Counted Fractions (folded fractions, roots, and logs)<span></span></a></li>
+<li class="chapter" data-level="23.6" data-path="fraction-data.html"><a href="fraction-data.html#an-example-illustrating-the-benefits-of-reexpressing-fractions"><i class="fa fa-check"></i><b>23.6</b> An Example Illustrating the Benefits of Reexpressing Fractions<span></span></a></li>
+<li class="chapter" data-level="23.7" data-path="fraction-data.html"><a href="fraction-data.html#a-tukey-example-where-careful-reexpression-pays-off"><i class="fa fa-check"></i><b>23.7</b> A Tukey Example Where Careful Reexpression Pays Off<span></span></a></li>
+<li class="chapter" data-level="23.8" data-path="fraction-data.html"><a href="fraction-data.html#back-to-the-data-an-analysis-based-on-flogs"><i class="fa fa-check"></i><b>23.8</b> Back to the Data – An Analysis Based on Flogs<span></span></a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">A Course in Exploratory Data Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="resistant-line" class="section level1 hasAnchor" number="13">
+<h1><span class="header-section-number">13</span> Resistant Line<a href="resistant-line.html#resistant-line" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In this chapter, we start to explore paired data where you suspect a relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>. The focus here on how to fit a line to data in a “resistant” fashion, so the fit is relatively insensitive to extreme points.</p>
+<div id="meet-the-data-3" class="section level2 hasAnchor" number="13.1">
+<h2><span class="header-section-number">13.1</span> Meet the data<a href="resistant-line.html#meet-the-data-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Our data today is taken from the 2001 New York Times Almanac, p. 287. A table is shown which gives the median sales prices (in thousands of dollars) of existing single-family homes for selected metropolitan areas for the years 1985, 1990, 1995, 1999, and 2000. We will look only at the years 1985 and 2000 and delete the cities for which either the 1985 or the 2000 median house price is missing.</p>
+<p>This dataset is available as <code>home.prices</code> in the <code>LearnEDAfunctions</code> package:</p>
+<div class="sourceCode" id="cb150"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb150-1"><a href="resistant-line.html#cb150-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(LearnEDAfunctions)</span>
+<span id="cb150-2"><a href="resistant-line.html#cb150-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb150-3"><a href="resistant-line.html#cb150-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(home.prices)</span></code></pre></div>
+<pre><code>##         City y1985 y2000
+## 1    Atlanta  66.2 125.4
+## 2  Baltimore  72.6 145.2
+## 3    Chicago  81.1 166.7
+## 4 Cincinnati  60.2 124.0
+## 5  Cleveland  64.4 121.3
+## 6     Denver  84.3 181.5</code></pre>
+<p>We start by plotting these data on a scatterplot where the <span class="math inline">\(x\)</span> variable is the 1985 price and the <span class="math inline">\(y\)</span> variable is the 2000 price. We get the following figure.</p>
+<div class="sourceCode" id="cb152"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb152-1"><a href="resistant-line.html#cb152-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(home.prices, <span class="fu">aes</span>(y1985, y2000)) <span class="sc">+</span></span>
+<span id="cb152-2"><a href="resistant-line.html#cb152-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-71-1.png" width="672" /></p>
+<p>We see a positive trend in this graph which makes sense – cities that had high house prices in 1985 tended also to have high prices in 2000. We want to describe this relationship using a simple function like a line.</p>
+<p>But this is not the best graph of these data. Why? Well, most of the points fall in the lower left portion of the figure. This happens since both the set of 1985 house prices and the 2000 house prices are right skewed. We can improve this plot by reexpressing both the x and y variables by a power transformation. We’ll talk more later about reexpressing variables in graphs, but take my word that a good reexpression to use in this case is a log.</p>
+<p>If we take logs of both sets of house prices, we get a new scatterplot of the log (1985 prices) and log (2000 prices). Looking at the figure, note that the points are more evenly spread out – from left to right and from down to up.</p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb153-1"><a href="resistant-line.html#cb153-1" aria-hidden="true" tabindex="-1"></a>home.prices <span class="sc">%&gt;%</span> </span>
+<span id="cb153-2"><a href="resistant-line.html#cb153-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log.1985 =</span> <span class="fu">log10</span>(y1985),</span>
+<span id="cb153-3"><a href="resistant-line.html#cb153-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">log.2000 =</span> <span class="fu">log10</span>(y2000)) <span class="ot">-&gt;</span> home.prices </span>
+<span id="cb153-4"><a href="resistant-line.html#cb153-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(home.prices, <span class="fu">aes</span>(log<span class="fl">.1985</span>, log<span class="fl">.2000</span>)) <span class="sc">+</span></span>
+<span id="cb153-5"><a href="resistant-line.html#cb153-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-72-1.png" width="672" /></p>
+<p>Since there appears to be a linear relationship between log (2000 price) and log (1985 price), it seems reasonable to fit a line. We describe a simple way of fitting a line that is not sensitive to outlying points – we call this procedure a resistant line.</p>
+</div>
+<div id="three-summary-points" class="section level2 hasAnchor" number="13.2">
+<h2><span class="header-section-number">13.2</span> Three summary points<a href="resistant-line.html#three-summary-points" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The first step to fitting a line</p>
+<ul>
+<li>divides the data into three groups and then</li>
+<li>finds a summary point in each group</li>
+</ul>
+<p>We divide the data by the <span class="math inline">\(x\)</span>-values – the lower third of the <span class="math inline">\(x\)</span>-values form the first group, the middle third of the <span class="math inline">\(x\)</span>-values form the 2nd group, and the upper third of the <span class="math inline">\(x\)</span>-values make up the third group. This works fine if we have, say 15 points – then an equal number will be in each group. If we have 16 points, it’s reasonable to make the group sizes 5, 6, 5; if we have 17 points, then a symmetric way to go assigns 6, 5, 6 to the groups.</p>
+<p>Here we have 21 cities, so there will be 7 cities in each group.</p>
+<p>Our summary point for a group will be</p>
+<pre><code>(median x value, median y value).</code></pre>
+<p>In the below table, the data has been sorted by 1985 price.</p>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb155-1"><a href="resistant-line.html#cb155-1" aria-hidden="true" tabindex="-1"></a>home.prices <span class="sc">%&gt;%</span> </span>
+<span id="cb155-2"><a href="resistant-line.html#cb155-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(City, log<span class="fl">.1985</span>, log<span class="fl">.2000</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb155-3"><a href="resistant-line.html#cb155-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(log<span class="fl">.1985</span>)</span></code></pre></div>
+<pre><code>##             City log.1985 log.2000
+## 1        Detroit 1.713491 2.137354
+## 2          Tampa 1.766413 2.016197
+## 3     Cincinnati 1.779596 2.093422
+## 4    Kansas_City 1.788168 2.077004
+## 5      Cleveland 1.808886 2.083861
+## 6      St._Louis 1.817565 1.999565
+## 7        Atlanta 1.820858 2.098298
+## 8      Milwaukee 1.829304 2.139564
+## 9      Baltimore 1.860937 2.161967
+## 10  Philadelphia 1.869232 2.065953
+## 11       Phoenix 1.873902 2.116940
+## 12   Minneapolis 1.876218 2.148294
+## 13       Houston 1.895423 2.024486
+## 14         Miami 1.905796 2.140508
+## 15       Chicago 1.909021 2.221936
+## 16        Denver 1.925828 2.258877
+## 17    Wash._D.C. 1.987219 2.249198
+## 18     San_Diego 2.031004 2.400365
+## 19   Los_Angeles 2.097604 2.307282
+## 20 New_York_City 2.127105 2.345374
+## 21 San_Francisco 2.161667 2.621799</code></pre>
+<p>The first group consists of the seven cities with the smallest 1985 house prices. The median of the log 1985 prices for this group is 1.79 and the median of the log 2000 prices is 2.08 – so the left summary point is
+<span class="math display">\[
+(x_L, y_L) = (1.79, 2.08).
+\]</span></p>
+<p>In a similar fashion, we find summary points for the center and right groups:
+<span class="math display">\[
+(x_C, y_C) =  (1.87, 2.14), \, \,    (x_R, y_R) = (2.03, 2.31).
+\]</span>
+(Note that a summary point may or may not be an actual data point.)</p>
+<p>In the figure below, we’ve drawn vertical lines showing the division of the points into three groups, and the summary points are indicated by red dots.</p>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb157-1"><a href="resistant-line.html#cb157-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(home.prices, <span class="fu">aes</span>(log<span class="fl">.1985</span>, log<span class="fl">.2000</span>)) <span class="sc">+</span></span>
+<span id="cb157-2"><a href="resistant-line.html#cb157-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb157-3"><a href="resistant-line.html#cb157-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">c</span>(<span class="fl">1.825</span>, <span class="fl">1.91</span>)) <span class="sc">+</span></span>
+<span id="cb157-4"><a href="resistant-line.html#cb157-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(<span class="at">x=</span><span class="fu">c</span>(<span class="fl">1.79</span>, <span class="fl">1.87</span>, <span class="fl">2.03</span>), </span>
+<span id="cb157-5"><a href="resistant-line.html#cb157-5" aria-hidden="true" tabindex="-1"></a>                       <span class="at">y=</span><span class="fu">c</span>(<span class="fl">2.08</span>, <span class="fl">2.14</span>, <span class="fl">2.31</span>)),</span>
+<span id="cb157-6"><a href="resistant-line.html#cb157-6" aria-hidden="true" tabindex="-1"></a>             <span class="fu">aes</span>(x, y), <span class="at">size =</span> <span class="dv">3</span>, <span class="at">color=</span><span class="st">&quot;red&quot;</span>,</span>
+<span id="cb157-7"><a href="resistant-line.html#cb157-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">shape =</span> <span class="dv">4</span>, <span class="at">stroke =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-74-1.png" width="672" /></p>
+</div>
+<div id="fitting-a-line-to-three-points" class="section level2 hasAnchor" number="13.3">
+<h2><span class="header-section-number">13.3</span> Fitting a line to three points<a href="resistant-line.html#fitting-a-line-to-three-points" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We all know how to fit a line that goes through two points. How about a line that goes through (approximately) three points?</p>
+<p>We write the line in the form
+<span class="math display">\[
+  y = a_0 + b_0 (x - x_C) ,
+\]</span>
+where <span class="math inline">\(b_0\)</span> is the slope and <span class="math inline">\(a_0\)</span> is the value of <span class="math inline">\(y\)</span> when <span class="math inline">\(x\)</span> is equal to the middle summary point <span class="math inline">\(x_C\)</span>.</p>
+<p>We find the slope of this line by using the left and right summary points:
+<span class="math display">\[
+  b_0 = \frac{y_R - y_L}{x_R - x_L} .
+\]</span>
+Actually, it is better to work with the summary points in R computed to higher precision. Here the slope would be</p>
+<div class="sourceCode" id="cb158"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb158-1"><a href="resistant-line.html#cb158-1" aria-hidden="true" tabindex="-1"></a>(b0 <span class="ot">&lt;-</span> <span class="fl">0.920</span>)</span></code></pre></div>
+<pre><code>## [1] 0.92</code></pre>
+<p>To find the intercept, we first note that
+<span class="math display">\[
+a_0 = y - b_0 (x - x_C),
+\]</span>
+and then define <span class="math inline">\(a_0\)</span> to be the mean of the {<span class="math inline">\(y - b_0(x - x_C)\)</span>}, averaged over the three summary points:
+<span class="math display">\[
+a_0 = \frac{1}{3} \left([y_L - b_0 (x_L - x_C)] + y_C + [y_R - b_0 (x_R - x_C) ] \right).
+\]</span>
+Here the intercept turns out to be</p>
+<div class="sourceCode" id="cb160"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb160-1"><a href="resistant-line.html#cb160-1" aria-hidden="true" tabindex="-1"></a>(a0 <span class="ot">&lt;-</span> <span class="fl">2.155</span>)</span></code></pre></div>
+<pre><code>## [1] 2.155</code></pre>
+<p>So the three-group line is
+<span class="math display">\[          
+          y = .920 (x - 1.87) + 2.155
+\]</span><br />
+This line is graphed on the scatterplot below.</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb162-1"><a href="resistant-line.html#cb162-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(home.prices, <span class="fu">aes</span>(log<span class="fl">.1985</span>, log<span class="fl">.2000</span>)) <span class="sc">+</span></span>
+<span id="cb162-2"><a href="resistant-line.html#cb162-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb162-3"><a href="resistant-line.html#cb162-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="fl">0.920</span>,</span>
+<span id="cb162-4"><a href="resistant-line.html#cb162-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">intercept =</span> <span class="sc">-</span><span class="fl">0.920</span> <span class="sc">*</span> <span class="fl">1.87</span> <span class="sc">+</span> <span class="fl">2.155</span>) </span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-77-1.png" width="672" /></p>
+</div>
+<div id="improving-the-line-by-fitting-a-line-to-the-residuals" class="section level2 hasAnchor" number="13.4">
+<h2><span class="header-section-number">13.4</span> Improving the line by fitting a line to the residuals<a href="resistant-line.html#improving-the-line-by-fitting-a-line-to-the-residuals" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Is this the best line through the points? To check, we examine the residuals which are the vertical deviations from the points to the line. A little more formally, we define a residual as
+<span class="math display">\[
+          RESIDUAL = DATA - FIT,
+\]</span>
+where <span class="math inline">\(DATA\)</span> is the <span class="math inline">\(y\)</span> value and <span class="math inline">\(FIT\)</span> is the predicted value of <span class="math inline">\(y\)</span> from the line fit:</p>
+<p><span class="math display">\[           
+            FIT = a_0 + b_0 (x - x_C).
+\]</span></p>
+<p>Let’s find the residual for Detroit. Its <span class="math inline">\(y\)</span> value (log 2000 house price) is <span class="math inline">\(DATA = 2.14\)</span> and its predicted value from the line is
+<span class="math display">\[          
+          FIT = .920 (1.71 - 1.87) + 2.155 = 2.01
+\]</span><br />
+so Detroit’s residual is
+<span class="math display">\[
+          RESIDUAL = 2.14 - 2.01 = .013 .
+\]</span></p>
+<p>The following R code uses the function <code>rline</code> to fit a single iteration of the resistant line. Outputs of this function are the intercept and slope, value of <span class="math inline">\(x_C\)</span>, and the residuals. We create
+a data frame that shows the fits and residuals for all cities.</p>
+<div class="sourceCode" id="cb163"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb163-1"><a href="resistant-line.html#cb163-1" aria-hidden="true" tabindex="-1"></a>myfit <span class="ot">&lt;-</span> <span class="fu">rline</span>(log<span class="fl">.2000</span> <span class="sc">~</span> log<span class="fl">.1985</span>, home.prices)</span>
+<span id="cb163-2"><a href="resistant-line.html#cb163-2" aria-hidden="true" tabindex="-1"></a>home.prices <span class="ot">&lt;-</span> </span>
+<span id="cb163-3"><a href="resistant-line.html#cb163-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(home.prices,</span>
+<span id="cb163-4"><a href="resistant-line.html#cb163-4" aria-hidden="true" tabindex="-1"></a>         <span class="at">FIT =</span> myfit<span class="sc">$</span>a <span class="sc">+</span> myfit<span class="sc">$</span>b <span class="sc">*</span> (log<span class="fl">.1985</span> <span class="sc">-</span> myfit<span class="sc">$</span>xC),</span>
+<span id="cb163-5"><a href="resistant-line.html#cb163-5" aria-hidden="true" tabindex="-1"></a>         <span class="at">RESIDUAL =</span> log<span class="fl">.2000</span> <span class="sc">-</span> FIT)  </span>
+<span id="cb163-6"><a href="resistant-line.html#cb163-6" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(home.prices, City, log<span class="fl">.1985</span>, log<span class="fl">.2000</span>, FIT, RESIDUAL)</span></code></pre></div>
+<pre><code>##             City log.1985 log.2000      FIT      RESIDUAL
+## 1        Atlanta 1.820858 2.098298 2.106212 -0.0079142188
+## 2      Baltimore 1.860937 2.161967 2.143086  0.0188805053
+## 3        Chicago 1.909021 2.221936 2.187326  0.0346095764
+## 4     Cincinnati 1.779596 2.093422 2.068249  0.0251725826
+## 5      Cleveland 1.808886 2.083861 2.095197 -0.0113360002
+## 6         Denver 1.925828 2.258877 2.202789  0.0560875782
+## 7        Detroit 1.713491 2.137354 2.007428  0.1299258047
+## 8        Houston 1.895423 2.024486 2.174815 -0.1503292285
+## 9    Kansas_City 1.788168 2.077004 2.076136  0.0008686638
+## 10   Los_Angeles 2.097604 2.307282 2.360832 -0.0535502542
+## 11         Miami 1.905796 2.140508 2.184359 -0.0438508423
+## 12     Milwaukee 1.829304 2.139564 2.113982  0.0255819655
+## 13   Minneapolis 1.876218 2.148294 2.157146 -0.0088515042
+## 14 New_York_City 2.127105 2.345374 2.387974 -0.0426004858
+## 15  Philadelphia 1.869232 2.065953 2.150718 -0.0847650389
+## 16       Phoenix 1.873902 2.116940 2.155015 -0.0380748953
+## 17     St._Louis 1.817565 1.999565 2.103182 -0.1036168913
+## 18     San_Diego 2.031004 2.400365 2.299557  0.1008083642
+## 19 San_Francisco 2.161667 2.621799 2.419774  0.2020256651
+## 20         Tampa 1.766413 2.016197 2.056119 -0.0399221336
+## 21    Wash._D.C. 1.987219 2.249198 2.259272 -0.0100741031</code></pre>
+<p>We graph the residuals on the vertical axis against the log 1985 prices below.</p>
+<div class="sourceCode" id="cb165"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb165-1"><a href="resistant-line.html#cb165-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(home.prices, <span class="fu">aes</span>(log<span class="fl">.1985</span>, RESIDUAL)) <span class="sc">+</span></span>
+<span id="cb165-2"><a href="resistant-line.html#cb165-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb165-3"><a href="resistant-line.html#cb165-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">color =</span> <span class="st">&quot;red&quot;</span>)</span></code></pre></div>
+<p><img src="Course-in-Exploratory-Data-Analysis_files/figure-html/unnamed-chunk-79-1.png" width="672" /></p>
+<p>To see if we have fit a good line, we look for a pattern in the residuals. If there is some pattern – say, the residual plot seems to be increasing, then this tells us that we can improve our line fit.</p>
+<p>We try to improve our line fit by fitting a line to the <span class="math inline">\((x, RESIDUAL)\)</span> data. We use the same 3-group method to fit our line. Some of the calculations are summarized in the table above.</p>
+<ul>
+<li><p>We first find three summary points. We already know the summary <span class="math inline">\(x\)</span> values are 1.79, 1.87, 2.03. Looking at the residuals in each group, we find the summary residual values are respectively 0, -.03, .03. So our 3 summary points are
+<span class="math display">\[         
+        (1.79, 0), (1.87, -.03), (2.03, .03)
+\]</span></p></li>
+<li><p>We find the slope <span class="math inline">\(d0\)</span> and the intercept <span class="math inline">\(g0\)</span> as we did before. The slope is
+<span class="math display">\[ d0 = (.03 - 0) / (2.03 - 1.79) = .125\]</span>
+and the intercept is
+<span class="math display">\[
+g0 = 1/3[(0 - .125 (1.79 - 1.87)) + (-.03) + (.03 - .125 (2.03 - 1.87))] = -.003
+\]</span>
+So our line fit to the <span class="math inline">\((x, RESIDUAL)\)</span> data is
+<span class="math display">\[          
+        RESID = -.003 + .125 (x - 1.87)
+\]</span></p></li>
+<li><p>Our new fit to the <span class="math inline">\((x, y)\)</span> data has the form
+<span class="math display">\[          
+        y = a_1 + b_1 (x - x_C),
+\]</span><br />
+where we find the slope <span class="math inline">\(b_1\)</span> and the intercept <span class="math inline">\(a_1\)</span> are found by adding the slopes and intercepts from the two fits:
+<span class="math display">\[
+b_1 = b_0 + d_0,  a_1 = a_0 + g_0.      
+\]</span>
+Here
+<span class="math display">\[ b_1 = .958 + .125 = 1.083, a_1 = 2.151 - .003 = 2.148.\]</span>
+So our new fit to the data is
+<span class="math display">\[          
+        y = 1.083 (x - 1.87) + 2.15
+\]</span></p></li>
+</ul>
+<p>Now we can continue this procedure as follows:</p>
+<ul>
+<li>Find the residuals from this fit.</li>
+<li>Find three summary points of <span class="math inline">\((x, RESID)\)</span> and fit a 3-group line.</li>
+<li>Update the slope and intercept of the fit to the <span class="math inline">\((x, y)\)</span> data.</li>
+</ul>
+<p>In practice, we do this on R, and continue this procedure until there is little change in the adjustments to the slope and intercept.</p>
+<p>For our example, I had the the function <code>rline</code> do ten iterations of this procedure with the following results (SLOPE is the current estimate of the slope of the resistant line and INTERCEPT is the current estimate at the intercept).</p>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb166-1"><a href="resistant-line.html#cb166-1" aria-hidden="true" tabindex="-1"></a>Results <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(<span class="at">Iteration=</span><span class="cn">NULL</span>, <span class="at">Slope=</span><span class="cn">NULL</span>, <span class="at">Intercept=</span><span class="cn">NULL</span>)</span>
+<span id="cb166-2"><a href="resistant-line.html#cb166-2" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(iterations <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>){</span>
+<span id="cb166-3"><a href="resistant-line.html#cb166-3" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">&lt;-</span> <span class="fu">rline</span>(log<span class="fl">.2000</span> <span class="sc">~</span> log<span class="fl">.1985</span>, home.prices,  </span>
+<span id="cb166-4"><a href="resistant-line.html#cb166-4" aria-hidden="true" tabindex="-1"></a>               <span class="at">iter=</span>iterations)</span>
+<span id="cb166-5"><a href="resistant-line.html#cb166-5" aria-hidden="true" tabindex="-1"></a>  Results <span class="ot">&lt;-</span> <span class="fu">rbind</span>(Results,</span>
+<span id="cb166-6"><a href="resistant-line.html#cb166-6" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">data.frame</span>(<span class="at">Iteration=</span>iterations, </span>
+<span id="cb166-7"><a href="resistant-line.html#cb166-7" aria-hidden="true" tabindex="-1"></a>                              <span class="at">Slope=</span>fit<span class="sc">$</span>b, <span class="at">Intercept=</span>fit<span class="sc">$</span>a))</span>
+<span id="cb166-8"><a href="resistant-line.html#cb166-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb166-9"><a href="resistant-line.html#cb166-9" aria-hidden="true" tabindex="-1"></a>Results</span></code></pre></div>
+<pre><code>##    Iteration     Slope Intercept
+## 1          1 0.9200503  2.155015
+## 2          2 1.0951636  2.147055
+## 3          3 1.2067010  2.149614
+## 4          4 1.2777029  2.151248
+## 5          5 1.3194267  2.152652
+## 6          6 1.3439454  2.153477
+## 7          7 1.3583537  2.153962
+## 8          8 1.3668206  2.154247
+## 9          9 1.3717961  2.154415
+## 10        10 1.3747200  2.154513</code></pre>
+<p>Note that after ten iterations, the procedure has essentially converged and the resistant line has equation
+<span class="math display">\[          
+          y = 1.3747 (x - 1.87) + 2.1545
+\]</span><br />
+This is typically the case, although there exist some examples where the procedure doesn’t converge.</p>
+</div>
+<div id="comparison-with-a-least-squares-fit" class="section level2 hasAnchor" number="13.5">
+<h2><span class="header-section-number">13.5</span> Comparison with a Least-Squares Fit<a href="resistant-line.html#comparison-with-a-least-squares-fit" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We have just described a resistant method of fitting a line. We should explain why this is preferable to the popular least-squares fit that you learned in your first stats course.</p>
+<p>The least-squares fit to these data is given by</p>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb168-1"><a href="resistant-line.html#cb168-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(log<span class="fl">.2000</span> <span class="sc">~</span> <span class="fu">I</span>(log<span class="fl">.1985</span> <span class="sc">-</span> <span class="fl">1.87</span>), <span class="at">data=</span>home.prices)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = log.2000 ~ I(log.1985 - 1.87), data = home.prices)
+## 
+## Coefficients:
+##        (Intercept)  I(log.1985 - 1.87)  
+##              2.148               1.044</code></pre>
+<p>If you compare the resistant line with the least-squares line, they look pretty close. The slope of the resistant line is .88 which is a little bit smaller than the least-squares slope of 1.04.</p>
+<p>The big difference between the two fits is how they react to outliers. To illustrate this, notice that San Francisco has an median house price of 418.6 (thousand dollars). Suppose instead that the median price was 1000, so log median price = 3.00 (instead of 2.62). What effect would this change have on our line fits?</p>
+<p>We refit these data (with the unusally large price) using the resistant and least-squares methods.</p>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb170-1"><a href="resistant-line.html#cb170-1" aria-hidden="true" tabindex="-1"></a>home.prices <span class="sc">%&gt;%</span> </span>
+<span id="cb170-2"><a href="resistant-line.html#cb170-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">log.2000a =</span> log<span class="fl">.2000</span>,</span>
+<span id="cb170-3"><a href="resistant-line.html#cb170-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">log.2000a =</span> <span class="fu">replace</span>(log<span class="fl">.2000</span>a, y2000 <span class="sc">==</span> <span class="fl">418.6</span>,</span>
+<span id="cb170-4"><a href="resistant-line.html#cb170-4" aria-hidden="true" tabindex="-1"></a>                             <span class="fl">3.00</span>)) <span class="ot">-&gt;</span> home.prices</span>
+<span id="cb170-5"><a href="resistant-line.html#cb170-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb170-6"><a href="resistant-line.html#cb170-6" aria-hidden="true" tabindex="-1"></a><span class="fu">rline</span>(log<span class="fl">.2000</span>a <span class="sc">~</span> log<span class="fl">.1985</span>, </span>
+<span id="cb170-7"><a href="resistant-line.html#cb170-7" aria-hidden="true" tabindex="-1"></a>      home.prices, <span class="dv">5</span>)[<span class="fu">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;xC&quot;</span>)]</span></code></pre></div>
+<pre><code>## $a
+## [1] 2.152652
+## 
+## $b
+## [1] 1.319427
+## 
+## $xC
+## [1] 1.873902</code></pre>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb172-1"><a href="resistant-line.html#cb172-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(log<span class="fl">.2000</span>a <span class="sc">~</span> <span class="fu">I</span>(log<span class="fl">.1985</span> <span class="sc">-</span> <span class="fl">1.874</span>), <span class="at">data =</span> home.prices)</span></code></pre></div>
+<pre><code>## 
+## Call:
+## lm(formula = log.2000a ~ I(log.1985 - 1.874), data = home.prices)
+## 
+## Coefficients:
+##         (Intercept)  I(log.1985 - 1.874)  
+##               2.162                1.384</code></pre>
+<p>The resistant line is
+<span class="math display">\[        
+          y = 1.319 (x - 1.874) + 2.153
+\]</span><br />
+which is identical to the line that we found earlier. The change in the largest house price had no effect on the fits since the resistant line is based on computing median values of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> in each group.</p>
+<p>In contrast, the least-squares fit with the large house price is
+<span class="math display">\[          
+          y = - 0.408 + 1.38 x
+\]</span><br />
+which is different from the earlier least-squares fit – the slope has increased from 1.04 to 1.37. So a single extreme observation can have a big effect on the least-squares fit. The least-squares line suffers from the same lack-of-resistance problem as our familiar measure of center, the mean.</p>
+</div>
+<div id="interpreting-the-fit" class="section level2 hasAnchor" number="13.6">
+<h2><span class="header-section-number">13.6</span> Interpreting the fit<a href="resistant-line.html#interpreting-the-fit" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Remember we initially reexpressed the house price data to logs – can we express our ``best line” in terms of the original house price data?</p>
+<p>Our resistant line fit was
+<span class="math display">\[          
+          y = 1.3747 (x - 1.87) + 2.1545
+\]</span><br />
+or
+<span class="math display">\[
+y = 1.3747 x -0.416189
+\]</span><br />
+which means
+<span class="math display">\[        
+          \log ({\rm house \, price \,  in \, 2000}) = 1.3747 \log(
+          {\rm house \, price \, in \, 1985}) -0.416189.
+\]</span></p>
+<p>If we take each side to the 10th power, we get the equivalent equation
+<span class="math display">\[  
+{\rm house \, price \, in \, 2000} = [{\rm house \, price \, in \, 2000}]^{1.3747} \times 10^{- 0.416}.
+\]</span></p>
+<p>So a linear fit to the <span class="math inline">\((\log x, \log y)\)</span> data is the same as an exponential-type fit in the <span class="math inline">\((x, y)\)</span> data.</p>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="introduction-to-plotting.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="plotting-ii.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/13-ResistantLine.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["Course in Exploratory Data Analysis.pdf", "Course in Exploratory Data Analysis.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
