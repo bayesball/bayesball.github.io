@@ -405,21 +405,21 @@ I repeated this process (take a sample of 8 normals and compute R) 1000 times, r
 <span id="cb314-3"><a href="binned-data-ii.html#cb314-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">breaks =</span> bins)</span>
 <span id="cb314-4"><a href="binned-data-ii.html#cb314-4" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">ggplot_build</span>(p)<span class="sc">$</span>data[[<span class="dv">1</span>]]</span>
 <span id="cb314-5"><a href="binned-data-ii.html#cb314-5" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(out, count, x, xmin, xmax)</span></code></pre></div>
-<pre><code>##    count       x   xmin   xmax
-## 1      1 -1.6678 -1.791 -1.544
-## 2      3 -1.4206 -1.544 -1.297
-## 3      9 -1.1734 -1.297 -1.050
-## 4     20 -0.9262 -1.050 -0.803
-## 5     47 -0.6790 -0.803 -0.555
-## 6    121 -0.4318 -0.555 -0.308
-## 7    230 -0.1846 -0.308 -0.061
-## 8    267  0.0626 -0.061  0.186
-## 9    179  0.3098  0.186  0.433
-## 10    81  0.5570  0.433  0.681
-## 11    24  0.8042  0.681  0.928
-## 12     9  1.0514  0.928  1.175
-## 13     7  1.2986  1.175  1.422
-## 14     2  1.5458  1.422  1.669</code></pre>
+<pre><code>##    count      x   xmin   xmax
+## 1      2 -1.351 -1.476 -1.226
+## 2      6 -1.101 -1.226 -0.976
+## 3     25 -0.851 -0.976 -0.726
+## 4     84 -0.600 -0.726 -0.475
+## 5    159 -0.350 -0.475 -0.225
+## 6    258 -0.100 -0.225  0.025
+## 7    225  0.150  0.025  0.275
+## 8    161  0.400  0.275  0.525
+## 9     42  0.650  0.525  0.775
+## 10    22  0.901  0.775  1.026
+## 11     7  1.151  1.026  1.276
+## 12     7  1.401  1.276  1.526
+## 13     0  1.651  1.526  1.776
+## 14     2  1.901  1.776  2.026</code></pre>
 </div>
 <div id="smoothing-the-root-counts" class="section level2 hasAnchor" number="22.3">
 <h2><span class="header-section-number">22.3</span> Smoothing the root counts<a href="binned-data-ii.html#smoothing-the-root-counts" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -427,21 +427,21 @@ I repeated this process (take a sample of 8 normals and compute R) 1000 times, r
 <p>So the first thing we do is to take the roots of the counts, shown below.</p>
 <div class="sourceCode" id="cb316"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb316-1"><a href="binned-data-ii.html#cb316-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">mutate</span>(out, <span class="at">ROOT =</span> <span class="fu">sqrt</span>(count))</span>
 <span id="cb316-2"><a href="binned-data-ii.html#cb316-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(out, count, x, xmin, xmax, ROOT)</span></code></pre></div>
-<pre><code>##    count       x   xmin   xmax  ROOT
-## 1      1 -1.6678 -1.791 -1.544  1.00
-## 2      3 -1.4206 -1.544 -1.297  1.73
-## 3      9 -1.1734 -1.297 -1.050  3.00
-## 4     20 -0.9262 -1.050 -0.803  4.47
-## 5     47 -0.6790 -0.803 -0.555  6.86
-## 6    121 -0.4318 -0.555 -0.308 11.00
-## 7    230 -0.1846 -0.308 -0.061 15.17
-## 8    267  0.0626 -0.061  0.186 16.34
-## 9    179  0.3098  0.186  0.433 13.38
-## 10    81  0.5570  0.433  0.681  9.00
-## 11    24  0.8042  0.681  0.928  4.90
-## 12     9  1.0514  0.928  1.175  3.00
-## 13     7  1.2986  1.175  1.422  2.65
-## 14     2  1.5458  1.422  1.669  1.41</code></pre>
+<pre><code>##    count      x   xmin   xmax  ROOT
+## 1      2 -1.351 -1.476 -1.226  1.41
+## 2      6 -1.101 -1.226 -0.976  2.45
+## 3     25 -0.851 -0.976 -0.726  5.00
+## 4     84 -0.600 -0.726 -0.475  9.17
+## 5    159 -0.350 -0.475 -0.225 12.61
+## 6    258 -0.100 -0.225  0.025 16.06
+## 7    225  0.150  0.025  0.275 15.00
+## 8    161  0.400  0.275  0.525 12.69
+## 9     42  0.650  0.525  0.775  6.48
+## 10    22  0.901  0.775  1.026  4.69
+## 11     7  1.151  1.026  1.276  2.65
+## 12     7  1.401  1.276  1.526  2.65
+## 13     0  1.651  1.526  1.776  0.00
+## 14     2  1.901  1.776  2.026  1.41</code></pre>
 <p>We plot the root counts using a line graph.</p>
 <div class="sourceCode" id="cb318"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb318-1"><a href="binned-data-ii.html#cb318-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(out, <span class="fu">aes</span>(x, ROOT)) <span class="sc">+</span></span>
 <span id="cb318-2"><a href="binned-data-ii.html#cb318-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
@@ -451,21 +451,21 @@ I repeated this process (take a sample of 8 normals and compute R) 1000 times, r
 <div class="sourceCode" id="cb319"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb319-1"><a href="binned-data-ii.html#cb319-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">mutate</span>(out,</span>
 <span id="cb319-2"><a href="binned-data-ii.html#cb319-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">Smooth.Root =</span> <span class="fu">as.vector</span>(<span class="fu">smooth</span>(ROOT, <span class="at">twiceit =</span> <span class="cn">TRUE</span>)))</span>
 <span id="cb319-3"><a href="binned-data-ii.html#cb319-3" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(out, count, x, ROOT, Smooth.Root)</span></code></pre></div>
-<pre><code>##    count       x  ROOT Smooth.Root
-## 1      1 -1.6678  1.00        1.00
-## 2      3 -1.4206  1.73        1.73
-## 3      9 -1.1734  3.00        3.00
-## 4     20 -0.9262  4.47        4.47
-## 5     47 -0.6790  6.86        6.86
-## 6    121 -0.4318 11.00       11.00
-## 7    230 -0.1846 15.17       15.17
-## 8    267  0.0626 16.34       15.17
-## 9    179  0.3098 13.38       13.38
-## 10    81  0.5570  9.00        9.00
-## 11    24  0.8042  4.90        4.90
-## 12     9  1.0514  3.00        3.00
-## 13     7  1.2986  2.65        2.65
-## 14     2  1.5458  1.41        1.94</code></pre>
+<pre><code>##    count      x  ROOT Smooth.Root
+## 1      2 -1.351  1.41        1.41
+## 2      6 -1.101  2.45        2.45
+## 3     25 -0.851  5.00        5.00
+## 4     84 -0.600  9.17        9.17
+## 5    159 -0.350 12.61       12.61
+## 6    258 -0.100 16.06       15.00
+## 7    225  0.150 15.00       15.00
+## 8    161  0.400 12.69       12.69
+## 9     42  0.650  6.48        6.48
+## 10    22  0.901  4.69        4.69
+## 11     7  1.151  2.65        2.65
+## 12     7  1.401  2.65        2.65
+## 13     0  1.651  0.00        1.41
+## 14     2  1.901  1.41        1.41</code></pre>
 <div class="sourceCode" id="cb321"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb321-1"><a href="binned-data-ii.html#cb321-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(out, <span class="fu">aes</span>(x, ROOT)) <span class="sc">+</span></span>
 <span id="cb321-2"><a href="binned-data-ii.html#cb321-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
 <span id="cb321-3"><a href="binned-data-ii.html#cb321-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(x, Smooth.Root), <span class="at">color=</span><span class="st">&quot;red&quot;</span>) <span class="sc">+</span></span>
@@ -500,21 +500,21 @@ where <span class="math inline">\(shift\)</span> is the difference between the b
 </ol>
 <div class="sourceCode" id="cb322"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb322-1"><a href="binned-data-ii.html#cb322-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">mutate</span>(out, <span class="at">Shift.Sq =</span> <span class="fu">round</span>((x <span class="sc">-</span> <span class="dv">0</span>) <span class="sc">^</span> <span class="dv">2</span>, <span class="dv">2</span>))</span>
 <span id="cb322-2"><a href="binned-data-ii.html#cb322-2" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(out, count, x, ROOT, Smooth.Root, Shift.Sq)</span></code></pre></div>
-<pre><code>##    count       x  ROOT Smooth.Root Shift.Sq
-## 1      1 -1.6678  1.00        1.00     2.78
-## 2      3 -1.4206  1.73        1.73     2.02
-## 3      9 -1.1734  3.00        3.00     1.38
-## 4     20 -0.9262  4.47        4.47     0.86
-## 5     47 -0.6790  6.86        6.86     0.46
-## 6    121 -0.4318 11.00       11.00     0.19
-## 7    230 -0.1846 15.17       15.17     0.03
-## 8    267  0.0626 16.34       15.17     0.00
-## 9    179  0.3098 13.38       13.38     0.10
-## 10    81  0.5570  9.00        9.00     0.31
-## 11    24  0.8042  4.90        4.90     0.65
-## 12     9  1.0514  3.00        3.00     1.11
-## 13     7  1.2986  2.65        2.65     1.69
-## 14     2  1.5458  1.41        1.94     2.39</code></pre>
+<pre><code>##    count      x  ROOT Smooth.Root Shift.Sq
+## 1      2 -1.351  1.41        1.41     1.83
+## 2      6 -1.101  2.45        2.45     1.21
+## 3     25 -0.851  5.00        5.00     0.72
+## 4     84 -0.600  9.17        9.17     0.36
+## 5    159 -0.350 12.61       12.61     0.12
+## 6    258 -0.100 16.06       15.00     0.01
+## 7    225  0.150 15.00       15.00     0.02
+## 8    161  0.400 12.69       12.69     0.16
+## 9     42  0.650  6.48        6.48     0.42
+## 10    22  0.901  4.69        4.69     0.81
+## 11     7  1.151  2.65        2.65     1.32
+## 12     7  1.401  2.65        2.65     1.96
+## 13     0  1.651  0.00        1.41     2.73
+## 14     2  1.901  1.41        1.41     3.61</code></pre>
 <ol start="3" style="list-style-type: decimal">
 <li>To find the appropriate reexpression, we plot <span class="math inline">\(\sqrt{smoothed \, root}\)</span> against the squared shift for all bins.</li>
 </ol>
@@ -567,21 +567,21 @@ $, to find the fitted smoothed count, and then take the square root to find the 
 <span id="cb326-6"><a href="binned-data-ii.html#cb326-6" aria-hidden="true" tabindex="-1"></a>      (b[<span class="dv">1</span>] <span class="sc">+</span> b[<span class="dv">2</span>] <span class="sc">*</span> Shift.Sq) <span class="sc">^</span> (<span class="sc">-</span><span class="dv">2</span> <span class="sc">/</span> <span class="fl">0.75</span>),</span>
 <span id="cb326-7"><a href="binned-data-ii.html#cb326-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">Final.S.Root =</span> <span class="fu">sqrt</span>(Final.Smooth))</span>
 <span id="cb326-8"><a href="binned-data-ii.html#cb326-8" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(out, count, x, ROOT, Final.Smooth, Final.S.Root)</span></code></pre></div>
-<pre><code>##    count       x  ROOT Final.Smooth Final.S.Root
-## 1      1 -1.6678  1.00         1.56         1.25
-## 2      3 -1.4206  1.73         3.21         1.79
-## 3      9 -1.1734  3.00         7.22         2.69
-## 4     20 -0.9262  4.47        17.89         4.23
-## 5     47 -0.6790  6.86        48.42         6.96
-## 6    121 -0.4318 11.00       128.07        11.32
-## 7    230 -0.1846 15.17       286.68        16.93
-## 8    267  0.0626 16.34       344.08        18.55
-## 9    179  0.3098 13.38       195.51        13.98
-## 10    81  0.5570  9.00        79.53         8.92
-## 11    24  0.8042  4.90        28.81         5.37
-## 12     9  1.0514  3.00        11.13         3.34
-## 13     7  1.2986  2.65         4.73         2.18
-## 14     2  1.5458  1.41         2.21         1.49</code></pre>
+<pre><code>##    count      x  ROOT Final.Smooth Final.S.Root
+## 1      2 -1.351  1.41         5.16         2.27
+## 2      6 -1.101  2.45        10.75         3.28
+## 3     25 -0.851  5.00        23.17         4.81
+## 4     84 -0.600  9.17        49.04         7.00
+## 5    159 -0.350 12.61        93.99         9.69
+## 6    258 -0.100 16.06       134.85        11.61
+## 7    225  0.150 15.00       130.22        11.41
+## 8    161  0.400 12.69        83.35         9.13
+## 9     42  0.650  6.48        42.61         6.53
+## 10    22  0.901  4.69        19.77         4.45
+## 11     7  1.151  2.65         9.29         3.05
+## 12     7  1.401  2.65         4.53         2.13
+## 13     0  1.651  0.00         2.32         1.52
+## 14     2  1.901  1.41         1.27         1.13</code></pre>
 <p>On the following figure, we graph the original bin counts against the shift and overlay the symmetric fitting curve.</p>
 <div class="sourceCode" id="cb328"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb328-1"><a href="binned-data-ii.html#cb328-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(out, <span class="fu">aes</span>(x, ROOT)) <span class="sc">+</span></span>
 <span id="cb328-2"><a href="binned-data-ii.html#cb328-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
