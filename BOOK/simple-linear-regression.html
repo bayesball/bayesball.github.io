@@ -567,7 +567,7 @@ Since this is not a familiar probability distribution, one needs to use an MCMC 
 <p>It is convenient to draw an MCMC sample from a regression model using the JAGS software.
 One attractive feature of JAGS is that it is straightforward to transpose the statement of the Bayesian model (sampling density and prior) directly to the JAGS model script.</p>
 <p><strong>Describe the model by a script</strong></p>
-<p>The first step in using JAGS is writing the following script defining the linear regression model, saving the script in the character string ```modelString}.</p>
+<p>The first step in using JAGS is writing the following script defining the linear regression model, saving the script in the character string modelString.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="simple-linear-regression.html#cb1-1"></a>modelString &lt;-<span class="st">&quot;</span></span>
 <span id="cb1-2"><a href="simple-linear-regression.html#cb1-2"></a><span class="st">model {</span></span>
 <span id="cb1-3"><a href="simple-linear-regression.html#cb1-3"></a><span class="st">## sampling</span></span>
@@ -656,7 +656,7 @@ Each pair of values (<span class="math inline">\(\beta_0, \beta_1\)</span>) corr
 <span class="math display">\[\begin{equation*}
 y = \tilde{\beta_0} + \tilde{\beta_1} x
 \end{equation*}\]</span>
-corresponds to a ``best" line of fit through the data.</p>
+corresponds to a "best" line of fit through the data.</p>
 <p>This best line represents a most likely value of the line <span class="math inline">\(\beta_0 + \beta_1 x\)</span> from the posterior distribution. One learns about the uncertainty of this line estimate by drawing a sample of <span class="math inline">\(J\)</span> rows from the matrix of posterior draws of <span class="math inline">\((\beta_0, \beta_1)\)</span> and collecting the line estimates
 <span class="math display">\[\begin{equation*}
 \tilde{\beta_0}^{(j)} + \tilde{\beta_1}^{(j)} x, j = 1, ..., J.
@@ -726,7 +726,7 @@ As shown in Equation (11.11), the sampling model of <span class="math inline">\(
 \text{simulate}\,\, E[y]^{(S)} = \beta_0^{(S)} + \beta_1^{(S)} x &amp;\rightarrow&amp; \text{sample}\,\, \tilde{y}^{(S)} \sim {\rm{Normal}}(E[y]^{(S)}, \sigma^{(S)})\\
 \end{eqnarray*}\]</span></p>
 
-<p>The R function <code>one_predicted()</code> obtains a simulated sample of the predictive distribution of the house price given a value of the house size. First one uses the posterior sample of <span class="math inline">\((\beta_0, \beta_1)\)</span> to obtain a posterior sample of the ``linear response" <span class="math inline">\(\beta_0 + \beta_1 x\)</span>. Then it simulates draws of the future observation by simulating from a Normal distribution with mean <span class="math inline">\(\beta_0 + \beta_1 x\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, where draws of <span class="math inline">\(\sigma\)</span> are taken from its posterior distribution.</p>
+<p>The R function <code>one_predicted()</code> obtains a simulated sample of the predictive distribution of the house price given a value of the house size. First one uses the posterior sample of <span class="math inline">\((\beta_0, \beta_1)\)</span> to obtain a posterior sample of the "linear response" <span class="math inline">\(\beta_0 + \beta_1 x\)</span>. Then it simulates draws of the future observation by simulating from a Normal distribution with mean <span class="math inline">\(\beta_0 + \beta_1 x\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, where draws of <span class="math inline">\(\sigma\)</span> are taken from its posterior distribution.</p>
 <pre><code>one_predicted &lt;- function(x){
   lp &lt;- post[ , &quot;beta0&quot;] +  x * post[ , &quot;beta1&quot;]
   y &lt;- rnorm(5000, lp, post[, &quot;sigma&quot;])
@@ -854,7 +854,7 @@ If one instead is very sure of the guess that <span class="math inline">\(\beta_
 <span class="math display">\[\begin{equation*}
 \beta_1 \sim \textrm{Normal}(\mu_1, s_1),
 \end{equation*}\]</span>
-For this prior, <span class="math inline">\(\mu_1\)</span> represents one’s best guess of the correlation and <span class="math inline">\(s_1\)</span> represents the sureness of this guess. For example, if one lets <span class="math inline">\(\beta_1\)</span> be <span class="math inline">\(\textrm{Normal}(0.7, 0.15)\)</span>, this means that one’s ``best guess" of the correlation is 0.7 and one is pretty certain that the correlation falls between <span class="math inline">\(0.7 - 0.15\)</span> and <span class="math inline">\(0.7 + 0.15\)</span>. If one is not very sure of the guess of 0.7, one could choose a larger value of <span class="math inline">\(s_1\)</span>.</p>
+For this prior, <span class="math inline">\(\mu_1\)</span> represents one’s best guess of the correlation and <span class="math inline">\(s_1\)</span> represents the sureness of this guess. For example, if one lets <span class="math inline">\(\beta_1\)</span> be <span class="math inline">\(\textrm{Normal}(0.7, 0.15)\)</span>, this means that one’s "best guess" of the correlation is 0.7 and one is pretty certain that the correlation falls between <span class="math inline">\(0.7 - 0.15\)</span> and <span class="math inline">\(0.7 + 0.15\)</span>. If one is not very sure of the guess of 0.7, one could choose a larger value of <span class="math inline">\(s_1\)</span>.</p>
 <p><strong>Prior on <span class="math inline">\(\sigma\)</span></strong></p>
 <p>It is typically harder to specify informative beliefs about a standard deviation than a mean parameter such as <span class="math inline">\(\beta_0 + \beta_1 x\)</span>.
 So it seems reasonable to assign a weakly informative prior for the sampling error standard deviation <span class="math inline">\(\sigma\)</span>.
@@ -1216,7 +1216,7 @@ summary(fit)</code></pre>
 </li>
 </ol>
 <p>McDonald’s restaurant publishes nutritional information on the sandwiches they serve.
-Table 11.3 displays the serving size (in grams) and the calories for some sandwiches. (This data is available from the file ```mcdonalds.csv}.). One is interested in the model <span class="math inline">\(Y_i \sim \textrm{Normal}(\mu_i, \sigma)\)</span>, where <span class="math inline">\(\mu_i = \beta_0 + \beta_1 x_i\)</span> and <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x_i\)</span> are respectively the calories and serving size for the <span class="math inline">\(i\)</span>-th sandwich.</p>
+Table 11.3 displays the serving size (in grams) and the calories for some sandwiches. (This data is available from the file "mcdonalds.csv".). One is interested in the model <span class="math inline">\(Y_i \sim \textrm{Normal}(\mu_i, \sigma)\)</span>, where <span class="math inline">\(\mu_i = \beta_0 + \beta_1 x_i\)</span> and <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x_i\)</span> are respectively the calories and serving size for the <span class="math inline">\(i\)</span>-th sandwich.</p>
 <p>Table 11.3. Serving size (grams) and calories for some McDonalds
 sandwiches.</p>
 <table>
@@ -1599,7 +1599,7 @@ where <span class="math inline">\(x_i\)</span> is an indicator of the server whe
 <ol start="20" style="list-style-type: decimal">
 <li><strong>Two-Group Model (continued)</strong></li>
 </ol>
-<p>In Exercise 19, you constructed an informative prior for <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span> for the regression model for the time-to-serve measurements for two tennis servers. The data file ```two_players_time_to_serve.csv} contain measurements for 100 serves for the players Roger Federer and Rafael Nadal. Use JAGS to obtain a simulated sample of the posterior distribution using your prior and this data. Construct a 90% interval estimate for the regression slope <span class="math inline">\(\beta_1\)</span> that measures the differences in the mean time to serve for the two players.</p>
+<p>In Exercise 19, you constructed an informative prior for <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span> for the regression model for the time-to-serve measurements for two tennis servers. The data file "two_players_time_to_serve.csv" contain measurements for 100 serves for the players Roger Federer and Rafael Nadal. Use JAGS to obtain a simulated sample of the posterior distribution using your prior and this data. Construct a 90% interval estimate for the regression slope <span class="math inline">\(\beta_1\)</span> that measures the differences in the mean time to serve for the two players.</p>
 
 </div>
 </div>
