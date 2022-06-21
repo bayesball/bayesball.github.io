@@ -1,0 +1,919 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.309">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Bayesian Modeling - 7&nbsp; Case Studies</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<link href="./multipleregression.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Case Studies</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Bayesian Modeling</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./proportion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Learning About a Binomial Probability</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mean.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Modeling Measurement and Count Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mcmc.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Simulation by Markov Chain Monte Carlo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bayesian Hierarchical Modeling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./regression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Simple Linear Regression</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./multipleregression.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bayesian Multiple Regression and Logistic Models</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./casestudies.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Case Studies</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">7.1</span> Introduction</a></li>
+  <li><a href="#federalist-papers-study" id="toc-federalist-papers-study" class="nav-link" data-scroll-target="#federalist-papers-study"> <span class="header-section-number">7.2</span> Federalist Papers Study</a>
+  <ul class="collapse">
+  <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1"> <span class="header-section-number">7.2.1</span> Introduction</a></li>
+  <li><a href="#data-on-word-use" id="toc-data-on-word-use" class="nav-link" data-scroll-target="#data-on-word-use"> <span class="header-section-number">7.2.2</span> Data on word use</a></li>
+  <li><a href="#poisson-density-sampling" id="toc-poisson-density-sampling" class="nav-link" data-scroll-target="#poisson-density-sampling"> <span class="header-section-number">7.2.3</span> Poisson density sampling</a></li>
+  <li><a href="#negative-binomial-sampling" id="toc-negative-binomial-sampling" class="nav-link" data-scroll-target="#negative-binomial-sampling"> <span class="header-section-number">7.2.4</span> Negative Binomial sampling</a></li>
+  <li><a href="#comparison-of-rates-for-two-authors" id="toc-comparison-of-rates-for-two-authors" class="nav-link" data-scroll-target="#comparison-of-rates-for-two-authors"> <span class="header-section-number">7.2.5</span> Comparison of rates for two authors</a></li>
+  <li><a href="#which-words-distinguish-the-two-authors" id="toc-which-words-distinguish-the-two-authors" class="nav-link" data-scroll-target="#which-words-distinguish-the-two-authors"> <span class="header-section-number">7.2.6</span> Which words distinguish the two authors?</a></li>
+  </ul></li>
+  <li><a href="#career-trajectories" id="toc-career-trajectories" class="nav-link" data-scroll-target="#career-trajectories"> <span class="header-section-number">7.3</span> Career Trajectories</a>
+  <ul class="collapse">
+  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"> <span class="header-section-number">7.3.1</span> Introduction</a></li>
+  <li><a href="#measuring-hitting-performance-in-baseball" id="toc-measuring-hitting-performance-in-baseball" class="nav-link" data-scroll-target="#measuring-hitting-performance-in-baseball"> <span class="header-section-number">7.3.2</span> Measuring hitting performance in baseball</a></li>
+  <li><a href="#a-hitters-career-trajectory" id="toc-a-hitters-career-trajectory" class="nav-link" data-scroll-target="#a-hitters-career-trajectory"> <span class="header-section-number">7.3.3</span> A hitter’s career trajectory</a></li>
+  <li><a href="#estimating-a-single-trajectory" id="toc-estimating-a-single-trajectory" class="nav-link" data-scroll-target="#estimating-a-single-trajectory"> <span class="header-section-number">7.3.4</span> Estimating a single trajectory</a></li>
+  <li><a href="#estimating-many-trajectories-by-a-hierarchical-model" id="toc-estimating-many-trajectories-by-a-hierarchical-model" class="nav-link" data-scroll-target="#estimating-many-trajectories-by-a-hierarchical-model"> <span class="header-section-number">7.3.5</span> Estimating many trajectories by a hierarchical model</a></li>
+  </ul></li>
+  <li><a href="#latent-class-modeling" id="toc-latent-class-modeling" class="nav-link" data-scroll-target="#latent-class-modeling"> <span class="header-section-number">7.4</span> Latent Class Modeling</a>
+  <ul class="collapse">
+  <li><a href="#two-classes-of-test-takers" id="toc-two-classes-of-test-takers" class="nav-link" data-scroll-target="#two-classes-of-test-takers"> <span class="header-section-number">7.4.1</span> Two classes of test takers</a></li>
+  <li><a href="#a-latent-class-model-with-two-classes" id="toc-a-latent-class-model-with-two-classes" class="nav-link" data-scroll-target="#a-latent-class-model-with-two-classes"> <span class="header-section-number">7.4.2</span> A latent class model with two classes</a></li>
+  <li><a href="#disputed-authorship-of-the-federalist-papers" id="toc-disputed-authorship-of-the-federalist-papers" class="nav-link" data-scroll-target="#disputed-authorship-of-the-federalist-papers"> <span class="header-section-number">7.4.3</span> Disputed authorship of the Federalist Papers</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Case Studies</span></h1>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">7.1</span> Introduction</h2>
+<p>This chapter provides several illustrations of Bayesian modeling that extend some of the models described in earlier chapters.<br>
+Mosteller and Wallace (1963), in one of the early significant Bayesian applications, explore the frequencies of word use in the well-known Federalist Papers to determine the authorship between Alexander Hamilton and James Madison. Section 13.2 revisits this word use application. This study raises several interesting explorations such as determining a suitable sampling distribution and finding suitable ways of comparing the word use of several authors.</p>
+<p>In sports, teams are very interested in learning about the pattern of increase and decrease in the performance of a player, commonly called a career trajectory. A baseball player is believed to reach a level of peak performance at age of 30, although this “peak age” may vary between players. Section 13.3 illustrates the use of a hierarchical model to simultaneously estimate the career trajectories for a group of baseball players using on-base percentage as the measure of performance.</p>
+<p>Suppose a class is taking a multiple choice exam where there are two groups of students. Some students are well-prepared and are familiar with the exam content and other students have not studied and will essentially guess at the answers to the exam questions. Section 13.4 introduces a latent class model that assumes that the class consists of two groups of students with different success rates and the group identifications of the students are unknown. In the posterior analysis, one learns about the location of the two success rates and the group classifications of the students. Using this latent class framework, the Federalist Papers example is revisited and the frequencies of particular filler words is used to learn about the true author identity of some disputed authorship Federalist Papers.</p>
+</section>
+<section id="federalist-papers-study" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="federalist-papers-study"><span class="header-section-number">7.2</span> Federalist Papers Study</h2>
+<p></p>
+<section id="introduction-1" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">7.2.1</span> Introduction</h3>
+<p>The Federalist Papers were a collection of articles written in the late 18th century by Alexander Hamilton, James Madison and John Jay to promote the ratification of the United States Constitution. Some of these papers are known to be written by Hamilton, other papers were clearly written by Madison, and the true authorship of some of the remaining papers has been in doubt.</p>
+<p>In one of the early significant applied Bayesian papers, Mosteller and Wallace (1963) illustrate the use of Bayesian reasoning in solving the authorship problem. They focused on the frequencies of word counts. Since the topic of the article may influence the frequencies of words used, Mosteller and Wallace were careful to focus on counts of so-called filler words such as “an”, “of”, and “upon” that are not influenced by the topics of the articles.</p>
+<p>In this case study, the use of different sampling distributions is described to model word counts in a group of Federalist Papers. The Poisson distribution is perhaps a natural choice for modeling a group of word counts, but it will be seen that the Poisson can not accommodate the spread of the distribution of word counts. This motivates the use of a Negative Binomial sampling distribution and this model will be used to compare rates of use of some filler words by Hamilton and Madison.</p>
+</section>
+<section id="data-on-word-use" class="level3" data-number="7.2.2">
+<h3 data-number="7.2.2" class="anchored" data-anchor-id="data-on-word-use"><span class="header-section-number">7.2.2</span> Data on word use</h3>
+<p>To begin our study, let’s look at the occurrences of the word “can” in all of the Federalist Papers authored by Alexander Hamilton or James Madison. Table 13.1 shows the format of the data. For each paper, the total number of words, the number of occurrences of the word “can” and the rate of this word per 1000 words are recorded.</p>
+<p>Table 13.1. Portion of the data table counting the number of words and occurrences of the word “can” in 74 Federalist papers.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: right;"></th>
+<th style="text-align: left;">Name</th>
+<th style="text-align: right;">Total</th>
+<th style="text-align: left;">word</th>
+<th style="text-align: right;">y</th>
+<th style="text-align: right;">Rate</th>
+<th style="text-align: left;">Authorship</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Federalist No.&nbsp;1</td>
+<td style="text-align: right;">1622</td>
+<td style="text-align: left;">can</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.85</td>
+<td style="text-align: left;">Hamilton</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Federalist No.&nbsp;10</td>
+<td style="text-align: right;">3008</td>
+<td style="text-align: left;">can</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1.33</td>
+<td style="text-align: left;">Madison</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Federalist No.&nbsp;11</td>
+<td style="text-align: right;">2511</td>
+<td style="text-align: left;">can</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1.99</td>
+<td style="text-align: left;">Hamilton</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">Federalist No.&nbsp;12</td>
+<td style="text-align: right;">2171</td>
+<td style="text-align: left;">can</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.92</td>
+<td style="text-align: left;">Hamilton</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Federalist No.&nbsp;13</td>
+<td style="text-align: right;">970</td>
+<td style="text-align: left;">can</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4.12</td>
+<td style="text-align: left;">Hamilton</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">Federalist No.&nbsp;14</td>
+<td style="text-align: right;">2159</td>
+<td style="text-align: left;">can</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">4.17</td>
+<td style="text-align: left;">Madison</td>
+</tr>
+</tbody>
+</table>
+<p>Figure 13.1 displays parallel jittered dotplots of the rates (per 1000 words) of “can” for the Madison and Hamilton papers. Note the substantial variability in the rates across papers. But it appears that this is a slight tendency for Hamilton to use this particular word more frequently than Madison. Later in this section we will formally perform inference about the ratio of the true rates of use of “can” for the two authors.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/two_authors_can.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Observed rates of the word can in Federalist Papers authored by Hamilton and Madison.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="poisson-density-sampling" class="level3" data-number="7.2.3">
+<h3 data-number="7.2.3" class="anchored" data-anchor-id="poisson-density-sampling"><span class="header-section-number">7.2.3</span> Poisson density sampling</h3>
+<p>Consider first the word use of all of the Federalist Papers written by Hamilton. The initial task is to find a suitable sampling distribution for the counts of a particular function word such as “can”. Since Poisson is a popular sampling distribution for counts, it is initially assumed that for the <span class="math inline">\(i\)</span>-th paper the count <span class="math inline">\(y_i\)</span> of the word “can” has a Poisson density with mean <span class="math inline">\(n_i \lambda /1000\)</span> where <span class="math inline">\(n_i\)</span> is the total number of words and <span class="math inline">\(\lambda\)</span> is the true rate of the word among 1000 words. There are <span class="math inline">\(N\)</span> papers in total. Using the Poisson density expression, one writes <span class="math display">\[\begin{equation}
+f(Y_i = y_i \mid \lambda) = \frac{(n_i \lambda / 1000)^{y_i} \exp(-n_i \lambda / 1000)}{y_i!}.
+\end{equation}\]</span> Assuming independence of word use between papers, the likelihood function is the product of Poisson densities <span class="math display">\[\begin{equation}
+L(\lambda) = \prod_{i = 1}^N f(y_i \mid \lambda),
+\end{equation}\]</span> and the posterior density of <span class="math inline">\(\lambda\)</span> is given by <span class="math display">\[\begin{equation}
+\pi(\lambda \mid y_1, \cdots, y_N) \propto  L(\lambda) \pi(\lambda),
+\end{equation}\]</span> where <span class="math inline">\(\pi()\)</span> is the prior density.</p>
+<p><strong>R Work</strong> Suppose one knows little about the true rate of “can”s and to reflect this lack of information, one assigns <span class="math inline">\(\lambda\)</span> a Gamma density with parameters <span class="math inline">\(\alpha = 0.001\)</span> and <span class="math inline">\(\beta = 0.001\)</span>. Recall in Chapter 8 Section 8.8, a Gamma prior is conjugate to a Poisson sampling model. A JAGS script is written to specify this Bayesian model and by use of the <code>run.jags()</code> function, one obtains a simulated sample of 5000 draws from the posterior distribution.</p>
+<pre><code>modelString = "
+model{
+## sampling
+for (i in 1:N) {
+   y[i] ~ dpois(n[i] * lambda / 1000)
+}
+## prior
+lambda ~ dgamma(0.001, 0.001)
+}
+"</code></pre>
+<p>When one observes count data such as these, one general concern is . Do the observed counts display more variability than one would anticipate with the use of this Poisson sampling model? One can check for overdispersion by use of a posterior predictive check. First one simulates one replicated dataset from the posterior predictive distribution. This is done in two steps: 1) one simulates a value of <span class="math inline">\(\lambda\)</span> from the posterior distribution; 2) given the simulated value <span class="math inline">\(\lambda = \lambda^*\)</span>, one simulates counts <span class="math inline">\(y^{R}_1, ..., y^{R}_N\)</span> from independent Poisson distribution with means <span class="math inline">\(n_1 \lambda^* / 1000, ..., n_N \lambda^* / 1000\)</span>. Given a replicated dataset of counts {<span class="math inline">\(y^{R}_i\)</span>}, one computes the standard deviation. In this setting a standard deviation is a reasonable choice of a testing function since one is concerned about the variation or spread in the data.</p>
+<pre><code>one_rep &lt;- function(i){
+  lambda &lt;- post[i]
+  sd(rpois(length(y), n * lambda / 1000))
+}
+sapply(1:5000, one_rep) -&gt; SD</code></pre>
+<p>One repeats this process 5000 times, obtaining 5000 replicated datasets from the posterior predictive distribution and 5000 values of the standard deviation. Figure 13.2 displays a histogram of the standard deviations from the predictive distribution and the standard deviation of the observed counts {<span class="math inline">\(y_i\)</span>} is displayed as a vertical line. Note that the observed standard deviation is very large relative to the standard deviations of the counts from the predictive distribution. The takeaway is that there is more variability in the observed counts of “can”s than one would predict from the Poisson sampling model.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/hamilton_pp1.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Histogram of standard deviations from 5000 replicates from the posterior predictive distribution from the Poisson sampling model. The observed standard deviation is displayed as a vertical line.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="negative-binomial-sampling" class="level3" data-number="7.2.4">
+<h3 data-number="7.2.4" class="anchored" data-anchor-id="negative-binomial-sampling"><span class="header-section-number">7.2.4</span> Negative Binomial sampling</h3>
+<p>In the previous section, we presented evidence that the observed counts of “can” from a group of Federalist Papers of Alexander Hamilton were overdispersed in that there was more variability in the counts than predicted by the Poisson sampling model. One way of handling this overdispersion issue to find an alternative sampling density for the counts that is able to accommodate this additional variation.</p>
+<p>One popular alternative density is the Negative Binomial density. Recall that <span class="math inline">\(y_i\)</span> represents the number of “can”s in the <span class="math inline">\(i\)</span>-th Federalist Papers. Conditional on parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, one assigns <span class="math inline">\(y_i\)</span> the Negative Binomial density defined as <span class="math display">\[\begin{equation}
+f(Y_i = y_i \mid \alpha, \beta) = \frac{\Gamma(y_i + \alpha)}{\Gamma(\alpha)} p_i^\alpha (1 - p_i)^{y_i},
+\end{equation}\]</span> where <span class="math display">\[\begin{equation}
+p_i = \frac{\beta}{\beta + n_i / 1000}.
+\end{equation}\]</span> One can show that this density is a natural generalization of the Poisson density. The mean count is given by <span class="math inline">\(E(y_i) = \mu_i\)</span> where <span class="math display">\[\begin{equation}
+\mu_i = \frac{n_i}{1000}\frac{\alpha}{\beta}.
+\end{equation}\]</span> Recall that the mean count for <span class="math inline">\(y_i\)</span> the Poisson model was <span class="math inline">\(n_i \lambda / 1000\)</span>, so the ratio <span class="math inline">\(\alpha / \beta\)</span> is playing the same role as <span class="math inline">\(\lambda\)</span> – one can regard <span class="math inline">\(\alpha / \beta\)</span> as the true rate of the particular word per 1000 words.</p>
+<p>One can show that the variance of the count <span class="math inline">\(y_j\)</span> is given by <span class="math display">\[\begin{equation}
+Var(y_i) = \mu_i \left(1 + \frac{n_i}{1000 \beta}\right).
+\end{equation}\]</span> The variance for the Poisson model is equal to <span class="math inline">\(\mu_i\)</span>, so the Negative Binomial model has the extra multiplicative term <span class="math inline">\(\left(1 + \frac{n_i}{1000 \beta}\right)\)</span>. So the Negative Binomial family is able to accommodate the additional variability in the counts {<span class="math inline">\(y_i\)</span>}.</p>
+<p>The posterior analysis using a Negative Binomial density is straightforward. The counts <span class="math inline">\(y_1, ..., y_N\)</span> are independent Negative Binomial with parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> and the likelihood function is equal to <span class="math display">\[\begin{equation}
+L(\alpha, \beta) = \prod_{i=1}^N f(y_i \mid \alpha, \beta).
+\end{equation}\]</span> If little is known a priori about the locations of the positive parameter values <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>, then it reasonable to assume the two parameters are independent and assign to each <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> a Gamma density with parameters 0.001 and 0.001. Then the posterior density is given by <span class="math display">\[\begin{equation}
+\pi(\alpha, \beta \mid y_1, \cdots, y_N) \propto L(\alpha, \beta) \pi(\alpha, \beta)
+\end{equation}\]</span> where <span class="math inline">\(\pi(\alpha, \beta)\)</span> is the product of Gamma densities.</p>
+<p><strong>R Work</strong> One simulates the posterior with Negative Binomial sampling using JAGS. The Negative Binomial density is represented by the JAGS function <code>dnegbin()</code> with parameters <code>p[i]</code> and <code>alpha</code>. In the JAGS script below, note that one first defines <code>p[i]</code> in terms of the parameter <code>beta</code> and the sample size <code>n[i]</code>, and then expresses the Negative Binomial density in terms of <code>p[i]</code> and <code>alpha</code>.</p>
+<pre><code>modelString = "
+model{
+## sampling
+for(i in 1:N){
+   p[i] &lt;- beta / (beta + n[i] / 1000)
+   y[i] ~ dnegbin(p[i], alpha)
+}
+## priors
+mu &lt;- alpha / beta
+alpha ~ dgamma(.001, .001)
+beta ~ dgamma(.001, .001)
+}
+"</code></pre>
+<p>We earlier made a statement that the Negative Binomial density can accommodate the extra variability in the word counts. One can check this statement by a posterior predictive check. One replication of the posterior predictive checking method is implemented in the R function <code>one_rep()</code>. We start with a simulated value <span class="math inline">\((\alpha^*, \beta^*)\)</span> from the posterior distribution. Then we simulated a replicated dataset <span class="math inline">\(y^{R}_1, ..., y^{R}_N\)</span> where <span class="math inline">\(y^{R}_i\)</span> has a Negative Binomial distribution with parameters <span class="math inline">\(\alpha^*\)</span> and <span class="math inline">\(\beta^* / (\beta^* + n_i / 1000)\)</span>. Then we compute the standard deviation of the {<span class="math inline">\(y^{R}_i\)</span>}.</p>
+<pre><code>one_rep &lt;- function(i){
+  p &lt;- post$beta[i] / (post$beta[i] + n / 1000)
+  sd(rnbinom(length(y), size = post$alpha[i], prob = p))
+}</code></pre>
+<p>By repeating this algorithm for 5000 iterations, one has 5000 draws of the standard deviation of samples from the predictive distribution stored in the R vector</p>
+<pre><code>sapply(1:5000, one_rep) -&gt; SD</code></pre>
+<p>Figure 13.3 displays a histogram of the standard deviations of samples from the predictive distribution and the observed standard deviation of the counts is shown as a vertical line. In this case the observed standard deviation value is in the middle of the predictive distribution. The interpretation is that predictions with a Negative Binomial sampling model are consistent with the spread in the observed word counts.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/hamilton_pp2.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Histogram of standard deviations from 5000 replicates from the posterior predictive distribution in the Negative Binomial sampling model. The observed standard deviation is displayed as a vertical line.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now that the Negative Binomial model seems reasonable, one performs inferences about the mean use of the word “can” in Hamilton essays. The parameter <span class="math inline">\(\mu = \alpha / \beta\)</span> represents the true rate of use of this word per 1000 words. Figure 13.4 displays MCMC diagnostic plots for the parameter <span class="math inline">\(\mu\)</span>. The trace plot and autocorrelation plot indicate good mixing and so one believes the histogram in the lower-left section represents the marginal posterior density for <span class="math inline">\(\mu\)</span>. A 90% posterior interval estimate for the rate of “can” is (2.20, 3.29).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/hamilton_post1.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">MCMC diagnostic plots for the rate <span class="math inline">\(\mu\)</span> of use of the word can in Hamilton essays.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="comparison-of-rates-for-two-authors" class="level3" data-number="7.2.5">
+<h3 data-number="7.2.5" class="anchored" data-anchor-id="comparison-of-rates-for-two-authors"><span class="header-section-number">7.2.5</span> Comparison of rates for two authors</h3>
+<p>Recall that the original problem was to compare the word use of Alexander Hamilton with that of James Madison. Suppose we collect the counts {<span class="math inline">\(y_{1i}\)</span>} of the word “can” in the Federalist Papers authored by Hamilton and the counts {<span class="math inline">\(y_{2i}\)</span>} of “can” in the Federalist Papers authored by Madison. The general problem is to compare the true rates per 1000 words of the two authors.</p>
+<p>Since a Negative Binomial sampling model appears to be suitable in the one-sample situation, we extend this in a straightforward away to the two-sample case. The Hamilton counts <span class="math inline">\(y_{11}, ..., y_{1N_1}\)</span>, conditional on parameters <span class="math inline">\(\alpha_1\)</span> and <span class="math inline">\(\beta_1\)</span> are assumed to be independent Negative Binomial, where <span class="math inline">\(y_{1i}\)</span> is Negative Binomial(<span class="math inline">\(p_{1i}, \alpha_1\)</span>) with <span class="math display">\[\begin{equation}
+p_{1i} = \frac{\beta_1}{\beta_1 + n_{1i}/1000},
+\end{equation}\]</span> and <span class="math inline">\(\{n_{1i}\}\)</span> are the word counts for the Hamilton essays. Similarly, the Madison counts <span class="math inline">\(y_{21}, ..., y_{2N_2}\)</span>, conditional on parameters <span class="math inline">\(\alpha_2\)</span> and <span class="math inline">\(\beta_2\)</span> are assumed to be independent Negative Binomial, where <span class="math inline">\(y_{2i}\)</span> is Negative Binomial(<span class="math inline">\(p_{2i}, \alpha_2\)</span>) with <span class="math display">\[\begin{equation}
+p_{2i} = \frac{\beta_2}{\beta_2 + n_{2i}/1000},
+\end{equation}\]</span> and {<span class="math inline">\(n_{2i}\)</span>} are the word counts for the Madison essays. The focus will be to learn about <span class="math inline">\(\mu_M / \mu_H\)</span>, the ratio of the rates (per 1000 words) of use of the word “can” of the two authors, where <span class="math inline">\(\mu_M = \alpha_2 / \beta_2\)</span> and <span class="math inline">\(\mu_H = \alpha_1 / \beta_1\)</span>.</p>
+<p>Assume that the observed counts of word “can” of the two authors are independent. Moreover, assume that the prior distributions of the parameters <span class="math inline">\((\alpha_1, \beta_1)\)</span> and <span class="math inline">\((\alpha_2, \beta_2)\)</span> are independent. Then the posterior distribution is given, up to an unknown proportionality constant, by <span class="math display">\[\begin{equation}
+\pi(\alpha_1, \beta_1, \alpha_2, \beta_2 \mid \{y_{1i}\}, \{y_{12}\}) \propto \prod_{k=1}^2 \left(
+\prod_{i=1}^{n_{ki}} f(y_{ki} \mid \alpha_k, \beta_k) \pi(\alpha_k, \beta_k) \right).
+\end{equation}\]</span> We assume that the user has little prior information about the location of the Negative Binomial parameters and we assume they are independent with each parameter assigned a Gamma prior with parameters 0.001 and 0.001.</p>
+<p><strong>R Work</strong> The posterior sampling is implemented using the JAGS software. The model description script is an extension of the previous script for a single Negative Binomial sample. Note that the <code>ratio</code> parameter is defined to be the ratio of the word rates for the two samples.</p>
+<pre><code>modelString = "
+model{
+## sampling
+for(i in 1:N1){
+   p1[i] &lt;- beta1 / (beta1 + n1[i] / 1000)
+   y1[i] ~ dnegbin(p1[i], alpha1)
+}
+for(i in 1:N2){
+   p2[i] &lt;- beta2 / (beta2 + n2[i] / 1000)
+   y2[i] ~ dnegbin(p2[i], alpha2)
+}
+## priors
+alpha1 ~ dgamma(.001, .001)
+beta1 ~ dgamma(.001, .001)
+alpha2 ~ dgamma(.001, .001)
+beta2 ~ dgamma(.001, .001)
+ratio &lt;- (alpha2 / beta2) / (alpha1 / beta1)
+}"</code></pre>
+<p>Since the focus is to compare the word use of the two authors, Figure 13.5 displays MCMC diagnostics for the ratio of “can” rates <span class="math inline">\(R = \mu_M / \mu_H\)</span>. Note that most of the posterior probability of <span class="math inline">\(R\)</span> is found in an interval about the value one. From the simulated draws, one finds the posterior median is 0.92 and a 95% probability interval for <span class="math inline">\(R\)</span> is found to be (0.71, 1.19). Since this interval contains the value one, there is no significant evidence to conclude that Hamilton and Madison have different rates of the word “can”.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/two_authors_post2.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">MCMC diagnostic plots for the ratio of rates of use of the word can in Federalist Papers essays written by Hamilton and Madison.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="which-words-distinguish-the-two-authors" class="level3" data-number="7.2.6">
+<h3 data-number="7.2.6" class="anchored" data-anchor-id="which-words-distinguish-the-two-authors"><span class="header-section-number">7.2.6</span> Which words distinguish the two authors?</h3>
+<p>In the previous section, it was found that the word “can” was not a helpful discriminator between the essays written by Hamilton and the essays written by Madison. However, other words may be useful in this discrimination task. Following suggestions in Mosteller and Wallace (1963), the previous two-sample analysis was repeated for each of the following words: also, an, any, by, can, from, his, may, of, on, there, this, to, and upon. For a given word, the counts of occurrence of that word was collected for each of the essays authored by Hamilton and Madison. For each word, we focus on inferences about the parameter <span class="math inline">\(R\)</span>, the ratio of mean rates of the particular word by Madison and Hamilton. A ratio value of <span class="math inline">\(R &gt; 1\)</span> indicates that Madison was a more frequent user of the word, and a ratio value <span class="math inline">\(R &lt; 1\)</span> indicates that Hamilton used a higher rate of that word. Fourteen separate two-sample analyses were conducted and the posterior distributions of <span class="math inline">\(R\)</span> were summarized by posterior medians and 95% probability intervals.</p>
+<p>Figure 13.6 displays the locations of the posterior medians and interval estimates for all of the 14 analyses. Intervals that are completely on one side of the value <span class="math inline">\(R = 1\)</span> indicate that one author was more likely to use that particular word. Looking at the figure, one sees that the words upon, to, this, there, any, and an were more likely be used by Hamilton, and the words on, by, and also were more likely be used by Madison. The posterior intervals for the remaining words (may, his, from, can, and also) cover the value one, and so one cannot say from these data that one author was more likely to use those particular words.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/two_authors_many.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Display of posterior median and 95% interval estimates for the ratio of rates for 14 different words in Federalist Papers essays written by Hamilton and Madison.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="career-trajectories" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="career-trajectories"><span class="header-section-number">7.3</span> Career Trajectories</h2>
+<p></p>
+<section id="introduction-2" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">7.3.1</span> Introduction</h3>
+<p>For an athlete in a professional sport, his or her performance typically begins at a small level, increases to a level in the middle of his or her career where the player has peak performance, and then decreases until the player’s retirement. This pattern of performance over a player’s career is called the <strong>career trajectory.</strong> A general problem in sports is to predict future performance of a player and one relevant variable in this prediction is the player’s age. Due to the ready availability of baseball data, it is convenient to study career trajectories for baseball players, although the methodology will apply to athletes in other sports.</p>
+</section>
+<section id="measuring-hitting-performance-in-baseball" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="measuring-hitting-performance-in-baseball"><span class="header-section-number">7.3.2</span> Measuring hitting performance in baseball</h3>
+<p>Baseball is a bat and ball game first played professionally in the United States in the mid 19th century. Players are measured by their ability to hit, pitch, and field, and a wide variety of statistical measures have been developed. One of the more popular measures of batting performance is the on-base percentage or OBP. A player comes to bat during a <strong>plate appearance</strong> and it is desirable for the batter to get on base. The OBP is defined to be the fraction of plate appearances where the batter reaches a base. As an example, during the 2003 season, Chase Utley had 49 on-base events in 152 plate appearances and his OBP was <span class="math inline">\(49 / 152 = 0.322\)</span>.</p>
+</section>
+<section id="a-hitters-career-trajectory" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="a-hitters-career-trajectory"><span class="header-section-number">7.3.3</span> A hitter’s career trajectory</h3>
+<p>A baseball player typically plays between 5 to 20 years in Major League Baseball (MLB), the top-tier professional baseball league in the United States. In this case study, we explore career trajectories of the OBP measure of baseball players as a function of their ages. To illustrate a career trajectory, consider Chase Utley who played in the Major Leagues from 2003 through 2018. Figure 13.7 displays Utley’s OBP as a function of his age for all of the seasons of his career. A quadratic smoothing curve is added to the scatterplot. One sees that Utley’s OBP measure increases until about age 30 and then steadily decreases towards the end of his career.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/utley1.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Career trajectory of Chase Utley’s on-base percentages. A quadratic smoothing curve is added to the plot.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Figure 13.8 displays the career trajectory of OBP for another player Josh Phelps who had a relatively short baseball career. In contrast, Phelps does not have a clearly defined career trajectory. In fact, Phelps’ OBP values appear to be relatively constant from ages 24 to 30 and the quadratic smoothing curve indicates that Phelps had a minimum OBP at age 26. The purpose of this case study is to see if one can improve the career trajectory smooth of this player by a hierarchical Bayesian model that combines data from a number of baseball players. Recall in Chapter 10, we have seen how hierarchical Bayesian models have the pooling effect that could borrow information from other groups to improve the estimation of one group, especially for groups with small sample size.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/phelps1.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Career trajectory of Josh Phelps’ on-base percentages. A quadratic smoothing curve is added to the plot.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="estimating-a-single-trajectory" class="level3" data-number="7.3.4">
+<h3 data-number="7.3.4" class="anchored" data-anchor-id="estimating-a-single-trajectory"><span class="header-section-number">7.3.4</span> Estimating a single trajectory</h3>
+<p></p>
+<p>First we consider learning about a single hitter’s OBP career trajectory. Let <span class="math inline">\(y_j\)</span> denote the number of on-base events in <span class="math inline">\(n_j\)</span> plate appearances during a hitter’s <span class="math inline">\(j\)</span>-th season. It is reasonable to assume that <span class="math inline">\(y_j\)</span> has a Binomial distribution with parameters <span class="math inline">\(n_j\)</span> and probability of success <span class="math inline">\(p_j\)</span>. One represents the logit of the success probability as a quadratic function of the player’s age: <span class="math display">\[\begin{equation}
+\log \left(\frac{p_j}{1-p_j}\right) = \beta_0 + \beta_1 (x_j - 30) + \beta_2 (x_j - 30)^2,
+\end{equation}\]</span> where <span class="math inline">\(x_j\)</span> represents the age of the player in the <span class="math inline">\(j\)</span>-th season.</p>
+<p>Note that the age value is centered by 30 in the logistic model – this is done for ease of interpretation. The intercept <span class="math inline">\(\beta_0\)</span> is an estimate of the player’s OBP performance at age 30. Specific functions of the regression vector <span class="math inline">\(\beta = (\beta_0, \beta_1, \beta_2)\)</span> are of specific interest in this application.</p>
+<ol type="1">
+<li>The quadratic function reaches its largest value at <span class="math display">\[\begin{equation*}
+h_1(\beta) = 30 -  \frac{\beta_1}{2 \beta_2}.
+\end{equation*}\]</span> This is the age where the player is estimated to have his peak on-base performance during his career.</li>
+<li>The maximum value of the curve, on the logistic scale, is <span class="math display">\[\begin{equation*}
+h_2(\beta) = \beta_0 - \frac{\beta_1^2}{4 \beta_2}.
+\end{equation*}\]</span> The maximum value of the curve on the probability scale is <span class="math display">\[\begin{equation}
+p_{max} = \exp(h_2(\beta)) / (1 +  \exp(h_2(\beta))).
+\end{equation}\]</span> The parameter <span class="math inline">\(p_{max}\)</span> is the estimated largest OBP of the player over his career.</li>
+<li>The coefficient <span class="math inline">\(\beta_2\)</span>, typically a negative value, tells us about the degree of curvature in the quadratic function.<br>
+If a player has a “large” value of <span class="math inline">\(\beta_2\)</span>, this indicates that he more rapidly reaches his peak level and more rapidly decreases in ability until retirement. One simple interpretation is that <span class="math inline">\(\beta_2\)</span> represents the change in OBP from his peak age to one year later.</li>
+</ol>
+<p>It is straightforward to fit this Bayesian logistic model using the JAGS software. Suppose one has little prior information about the location of the regression vector <span class="math inline">\(\beta\)</span>. Then one assumes the regression coefficients are independent with each coefficient assigned a Normal prior with mean 0 and precision 0.0001. The posterior density of <span class="math inline">\(\beta\)</span> is given, up to an unknown proportionality constant, by <span class="math display">\[\begin{equation}
+\pi(\beta \mid \{y_j\}) \propto \prod_j \left( p_j ^{y_j}(1 - p_j)^{n_j - y_j} \right) \pi(\beta),
+\end{equation}\]</span> where <span class="math inline">\(p_j\)</span> is defined by the logistic model and <span class="math inline">\(\pi(\beta)\)</span> is the prior density.</p>
+<p><strong>R Work</strong> The JAGS model script is shown below. The <code>dbin()</code> function is used to define the Binomial distribution and the <code>logit()</code> function describes the log odds reexpression.</p>
+<pre><code>modelString = "
+model {
+## sampling
+for (j in 1:N){
+   y[j] ~ dbin(p[j], n[j])
+   logit(p[j]) &lt;- beta0 + beta1 * (x[j] - 30) +
+            beta2 * (x[j] - 30) * (x[j] - 30)
+}
+## priors
+beta0 ~ dnorm(0, 0.0001)
+beta1 ~ dnorm(0, 0.0001)
+beta2 ~ dnorm(0, 0.0001)
+}
+"</code></pre>
+<p>The JAGS software is used to simulate a sample from the posterior distribution of the regression vector <span class="math inline">\(\beta\)</span>. From this sample, it is straightforward to learn about any function of the regression vector of interest. To illustrate, one performs inference about the peak age function <span class="math inline">\(h_1(\beta)\)</span> by computing this function on the simulated <span class="math inline">\(\beta\)</span> draws – the output is a posterior sample from the peak age function. In a similar fashion, one obtains a sample from the posterior of the maximum value function <span class="math inline">\(p_{max}\)</span> by computing this function on the simulated <span class="math inline">\(\beta\)</span> values. Figure 13.9 displays density estimates of the simulated values of <span class="math inline">\(h_1(\beta)\)</span> and <span class="math inline">\(p_{max}\)</span>. From this graph, one sees that Utley’s peak performance was most likely achieved at age 29, although there is uncertainty about this most likely peak age. Also the posterior of the peak value <span class="math inline">\(p_{max}\)</span> indicates that Utley’s peak on-base probability ranged from 0.38 and 0.40.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/utley2.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Density estimates of the peak age and peak for logistic model on Chase Utley’s trajectory.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="estimating-many-trajectories-by-a-hierarchical-model" class="level3" data-number="7.3.5">
+<h3 data-number="7.3.5" class="anchored" data-anchor-id="estimating-many-trajectories-by-a-hierarchical-model"><span class="header-section-number">7.3.5</span> Estimating many trajectories by a hierarchical model</h3>
+<p>We have focused on estimating the career trajectory of a single baseball player such as Chase Utley. But there are many baseball players and it is reasonable to want to simultaneously estimate the career trajectories for a group of players. As an example, suppose one focuses on the Major League players who were born in the year 1978 and had at least 1000 career at-bats. Figure 13.10 displays scatterplots of age and OBP with quadratic smoothing curves for the 36 players in this group. Looking at these curves, one notices that many of the curves follow a familiar concave down shape with the player achieving peak performance near an age of 30. But for some players, especially for those players who played a small number of seasons, note that the trajectories have different shapes. Some trajectories are relatively constant over the age variable and other trajectories have an unusual concave up appearance.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/traj_all.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Career trajectories and individual quadratic fits for all players born in the year 1978 and having at least 1000 career at-bats.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In this situation, it may be desirable to partially pool the data from the 36 players using a hierarchical model to obtain improved trajectory estimates for all players. For the <span class="math inline">\(i\)</span>-th player, one observes the on-base events {<span class="math inline">\(y_{ij}\)</span>} where <span class="math inline">\(y_{ij}\)</span> is Binomial with sample size <span class="math inline">\(n_{ij}\)</span> and probability of on-base success <span class="math inline">\(p_{ij}\)</span>. The logit of the on-base probability for the <span class="math inline">\(i\)</span>-th player during the <span class="math inline">\(j\)</span>-th season is given by <span class="math display">\[\begin{equation}
+\log \left(\frac{p_{ij}}{1-p_{ij}}\right) = \beta_{i0} + \beta_{i1} (x_{ij} - 30) + \beta_{i2} (x_{ij} - 30)^2,
+\end{equation}\]</span> where <span class="math inline">\(x_{ij}\)</span> is the age of the <span class="math inline">\(i\)</span>-th player during the <span class="math inline">\(j\)</span>-th season. If <span class="math inline">\(\beta_i = (\beta_{i0}, \beta_{i1}, \beta_{i2})\)</span> represents the vector regression coefficients for the <span class="math inline">\(i\)</span>-th player, then one is interested in estimating the regression vectors <span class="math inline">\((\beta_1, ..., \beta_N)\)</span> for the <span class="math inline">\(N\)</span> players in the study.</p>
+<p>One constructs a two-stage prior on these regression vectors. In Chapter 10, one assumed that the Normal means were distributed according to a common normal distribution. In this setting, since each regression vector has three components, at the first stage of the prior, one assumes that <span class="math inline">\(\beta_1, ..., \beta_N\)</span> are independent distributed from a common multivariate Normal distribution with mean vector <span class="math inline">\(\mu_\beta\)</span> and precision matrix <span class="math inline">\(\tau_\beta\)</span>. Then, at the second stage, vague prior distributions are assigned to the unknown values of <span class="math inline">\(\mu_\beta\)</span> and <span class="math inline">\(\tau_\beta\)</span>.</p>
+<p><strong>R Work</strong> In our application, there are <span class="math inline">\(N = 36\)</span> players, so one is estimating 36 <span class="math inline">\(\times\)</span> 3 = 108 regression parameters together with unknown parameters in the prior distributions of <span class="math inline">\(\mu_\beta\)</span> and <span class="math inline">\(\tau_\beta\)</span> at the second stage. Fortunately the JAGS script defining this model is a straightforward extension of the JAGS script for a logistic regression model for a single career trajectory. The variable <code>player</code> indicates the player number, and the variables <code>beta0[i]</code>, <code>beta1[i]</code>, and <code>beta2[i]</code> represent the logistic regression parameters for the <span class="math inline">\(i\)</span>-th player. The vector <code>B[j, 1:3]</code> represents a vector of parameters for one player and <code>mu.beta</code> and <code>Tau.B</code> represent respectively the second-stage prior mean vector and precision matrix values. The variables <code>mean</code>, <code>prec</code>, <code>Omega</code> are specified parameters that indicate weak information about the parameters at the second stage.</p>
+<pre><code>modelString = "
+model {
+## sampling
+for (i in 1:N){
+   y[i] ~ dbin(p[i], n[i])
+   logit(p[i]) &lt;- beta0[player[i]] + 
+                beta1[player[i]] * (x[i] - 30) +
+                beta2[player[i]] * (x[i] - 30) * (x[i] - 30)
+}
+## priors
+for (j in 1:J){
+   beta0[j] &lt;- B[j,1]
+   beta1[j] &lt;- B[j,2]
+   beta2[j] &lt;- B[j,3]
+   B[j,1:3] ~ dmnorm (mu.beta[], Tau.B[,])
+}
+mu.beta[1:3] ~ dmnorm(mean[1:3],prec[1:3 ,1:3 ])
+Tau.B[1:3 , 1:3] ~ dwish(Omega[1:3 ,1:3 ], 3)
+}
+"</code></pre>
+<p>After JAGS is used to simulate from the posterior distribution of this hierarchical model, a variety of inferences are possible. The player trajectories <span class="math inline">\(\beta_1, ..., \beta_{36}\)</span> are a sample from a Normal distribution with mean <span class="math inline">\(\mu_\beta\)</span>. Figure 13.11 displays draws of the posterior of the mean peak age <span class="math inline">\(h_1(\mu_\beta)\)</span> expressed as probabilities over a grid of age values from 23 to 37. The takeaway if that the career trajectories appear to be centered about 29.5 – a typical MLB player in this group peaks in on-base performance about age 29.5.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/meantrajectory.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Samples from the posterior distribution of the mean peak age.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>By combining data across players, the Bayesian hierarchical model is helpful in borrowing information for estimating the career trajectories of players with limited career data. This is illustrated in Figure 13.12 that shows individual and hierarchical posterior mean fits of the career trajectories for two players. For Chase Utley, the two fits are very similar since Utley’s career trajectory was well-estimated just using his data. In contrast, we saw that Phelps had an unrealistic concave up individual estimated trajectory. In the hierarchical model, this career trajectory is corrected to be more similar to the concave down trajectory for most players.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/twoplayers.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Individual (solid line) and hierarchical (dashed line) fits of the career trajectories for Josh Phelps and Chase Utley.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="latent-class-modeling" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="latent-class-modeling"><span class="header-section-number">7.4</span> Latent Class Modeling</h2>
+<p></p>
+<section id="two-classes-of-test-takers" class="level3" data-number="7.4.1">
+<h3 data-number="7.4.1" class="anchored" data-anchor-id="two-classes-of-test-takers"><span class="header-section-number">7.4.1</span> Two classes of test takers</h3>
+<p>Suppose thirty people are given a 20-question true/false exam and the number of correct responses for all people are graphed in Figure 13.13. From this figure note that test takers 1 through 10 appear to have a low level of knowledge about the subject matter as their scores are centered around 10. The remaining test takers 11 through 30 seem to have a higher level of knowledge as their scores range from 15 to 20.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/ScorePlotText.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Scatterplot of test scores of 20 test takers. The number next to each point is the person index.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Are there really two groups of test takers, a random-guessing group and a knowledgeable group? If so, how can one separate the people in the two ability groups, and how can one make inferences about the correct rate for each group? Furthermore, can one be sure that there exists only two ability groups? Is it possible to have more than two groups of people by ability level?</p>
+<p>The above questions relate to the classification of observations and the number of classes. In the introduction of hierarchical models in Chapter 10, there was a natural grouping of the observations. For example, in the animation movie ratings example in Chapter 10, each rating was made on one animation movie, so grouping based on movie is natural, and the group assignment of the observations was known. It was then reasonable to specify a two-stage prior where the rating means shared the same prior distribution at the first stage.</p>
+<p>In contrast, in the true/false exam example, since the group assignment is not known, it not possible to proceed with a hierarchical model with a common prior at the first stage. In this testing example one believes the people fall in two ability groups, however one does not observe the actual classification of the people into groups. So it is assumed that there exists <strong>latent</strong> or unobserved classification of observations. The class assignments of the individuals are unknown and can be treated as random parameters in our Bayesian approach.</p>
+<p>If there exists two classes, the class assignment parameter for the <span class="math inline">\(i\)</span>-th observation <span class="math inline">\(z_i\)</span> is unknown and assumed to follow a Bernoulli distribution with probability <span class="math inline">\(\pi\)</span> belonging to the first class, i.e.&nbsp;<span class="math inline">\(z_i = 1\)</span>. With probability <span class="math inline">\(1 - \pi\)</span> the <span class="math inline">\(i\)</span>-th observation belongs to the second class, i.e.&nbsp;<span class="math inline">\(z_i = 0\)</span>. <span class="math display">\[\begin{equation}
+z_i \mid \pi \sim \textrm{Bernoulli}(\pi).
+\end{equation}\]</span> If one believes there are more than two classes, the class assignment parameter follows a Multinomial distribution. For ease of description of the model, we focus on the two classes situation.</p>
+<p>Once the class assignment <span class="math inline">\(z_i\)</span> is known for observation <span class="math inline">\(i\)</span>, the response variable <span class="math inline">\(Y_i\)</span> follows a data model with a group-specific parameter. In the case of a true/false exam where the outcome variable <span class="math inline">\(Y_i\)</span> is the number of correct answers, the Binomial model is a good choice for a sampling model. The response variable <span class="math inline">\(Y_i\)</span> conditional on the class assignment variable <span class="math inline">\(z_i\)</span> is assigned a Binomial distribution with probability of success <span class="math inline">\(p_{z_i}\)</span>. <span class="math display">\[\begin{equation}
+Y_i = y_i \mid z_i, p_{z_i} \sim \textrm{Binomial}(20, p_{z_i}).
+\end{equation}\]</span> One writes the success probability <span class="math inline">\(p_{z_i}\)</span> with subscript <span class="math inline">\(z_i\)</span> since this probability is class-specific. For the guessing group, the number of correct answers is Binomial with parameter <span class="math inline">\(p_1\)</span>, and for the knowledgeable group the number of correct answers is Binomial with parameter <span class="math inline">\(p_0\)</span>.</p>
+<p>This model for responses to a true/false with unknown ability levels illustrates latent class modeling. The fundamental assumption is that there exists unobserved two latent classes of observations, and each latent class has its own sampling model with class-specific parameters. All <span class="math inline">\(n\)</span> observations belong to one of the two latent classes and each observations is assigned to the latent classes one and two with respective probabilities <span class="math inline">\(\pi\)</span> and <span class="math inline">\((1 - \pi)\)</span>. From Equation (13.17), once the latent class assignment is determined, the outcome variable <span class="math inline">\(y_i\)</span> follows a class-specific data model as in Equation (13.18).</p>
+<p>The tree diagram below illustrates the latent class model.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="figures/chapter13/treediagram.png" class="img-fluid" width="500"></p>
+</div>
+</div>
+<p>To better understand this latent class model, consider in a thought experiment where one simulates outcomes <span class="math inline">\(y_1, \cdots, y_n\)</span> from this model.</p>
+<ul>
+<li><p>Step 1: First simulate the latent class assignments of the <span class="math inline">\(n\)</span> test takers. One samples <span class="math inline">\(n\)</span> values, <span class="math inline">\(z_1, \cdots, z_n\)</span>, from a Bernoulli distribution with probability <span class="math inline">\(\pi\)</span>. Once the latent class assignments are simulated, one has partitioned the test takers into the random-guessing group where <span class="math inline">\(z_i = 1\)</span> and the knowledgeable group where <span class="math inline">\(z_i = 0\)</span>.</p></li>
+<li><p>Step 2: Now that the test takers’ classifications are known, the outcomes are simulated by the use of Binomial distributions. If a test taker’s classification is <span class="math inline">\(z_i = 1\)</span>, she guesses at each question with success probability <span class="math inline">\(p_1\)</span> and one observes the test score which is the Binomial outcome <span class="math inline">\(Y_i \sim \textrm{Binomial}(20, p_1)\)</span>. Otherwise if the classification is <span class="math inline">\(z_i = 0\)</span>, she answers a question correctly with probability <span class="math inline">\(p_0\)</span> and one observes the test score <span class="math inline">\(Y_i \sim \textrm{Binomial}(20, p_0)\)</span>.</p></li>
+</ul>
+<p>Latent class models provide the flexibility of allowing unknown class assignments of observations and the ability to cluster observations with similar characteristics. In the true/false exam example, the fitted latent class model will pool one class of observations with a lower success rate and pool other class with a higher success rate. This fitted model also estimates model parameters for each class, providing insight of features of each latent class.</p>
+</section>
+<section id="a-latent-class-model-with-two-classes" class="level3" data-number="7.4.2">
+<h3 data-number="7.4.2" class="anchored" data-anchor-id="a-latent-class-model-with-two-classes"><span class="header-section-number">7.4.2</span> A latent class model with two classes</h3>
+<p>This section builds on the previous section to describe the details of the model specification of a latent class model with two classes for the true/false exam example. The JAGS software is used for MCMC simulation and several inferences are described such as identifying the class for each test taker and learning about the success rate for each class.</p>
+<p>Suppose the true/false exam has <span class="math inline">\(m\)</span> questions and <span class="math inline">\(y_i\)</span> denotes the score of observation <span class="math inline">\(i\)</span>, <span class="math inline">\(i = 1, \cdots, n\)</span>. Assume there are two latent classes and each observation belongs to one of the two latent classes. Let <span class="math inline">\(z_i\)</span> be the class assignment for observation <span class="math inline">\(i\)</span> and <span class="math inline">\(\pi\)</span> be the probability of being assigned to class 1. Given the latent class assignment <span class="math inline">\(z_i\)</span> for observation <span class="math inline">\(i\)</span>, the score <span class="math inline">\(Y_i\)</span> follows a Binomial distribution with <span class="math inline">\(m\)</span> trials and a class-specific success probability. Since there are only two possible class assignments, all observations assigned to class 1 share the same correct success parameter <span class="math inline">\(p_1\)</span> and all observations assigned to class 0 share the same success rate parameter <span class="math inline">\(p_0\)</span>. The specification of the data model is expressed as follows: <span class="math display">\[\begin{equation}
+Y_i = y_i \mid z_i, p_{z_i} \sim \textrm{Binomial}(m, p_{z_i}),
+\end{equation}\]</span> <span class="math display">\[\begin{equation}
+\label{eq:Bern2} z_i \mid \pi \sim \textrm{Bernoulli}(\pi).
+\end{equation}\]</span></p>
+<p>In this latent class model there are many unknown parameters. One does not know the class assignment probability <span class="math inline">\(\pi\)</span>, the class assignments <span class="math inline">\(z_1, ..., z_n\)</span>, and the probabilities <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_0\)</span> for the two Binomial distributions. Some possible choices for prior distributions are discussed in this section.</p>
+<ul>
+<li><p>The parameters <span class="math inline">\(\pi\)</span> and <span class="math inline">\((1 - \pi)\)</span> are the latent class assignment probabilities for the two classes. If additional information is available which indicates, for example, that 1/3 of the observations belonging to class 1, then <span class="math inline">\(\pi\)</span> is considered as fixed and set to the value of 1/3. If no such information is available, one can consider <span class="math inline">\(\pi\)</span> as unknown and assign this parameter a prior distribution. A natural choice for prior on a success probability is a Beta prior distribution with shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>.</p></li>
+<li><p>The parameters <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_0\)</span> are the success rates in the Binomial model in the two classes. If one believes that the test takers in class 1 are simply random guessers, then one fixes <span class="math inline">\(p_1\)</span> to the value of 0.5. Similarly, if one believes that test takers in class 0 have a higher success rate of 0.9, then one sets <span class="math inline">\(p_0\)</span> to the value 0.9. However, if one is uncertain about the values of <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_0\)</span>, one lets either or both success rates be random and assigned prior distributions.</p></li>
+</ul>
+<p><strong>Scenario 1: known parameter values</strong></p>
+<p>We begin with a simplified version of this latent class model. Consider the use of the fixed values <span class="math inline">\(\pi = 1/3\)</span> and <span class="math inline">\(p_1 = 0.5\)</span>, and a random <span class="math inline">\(p_0\)</span> from a Uniform distribution between 0.5 and 1. This setup indicates that one believes strongly that one third of the test takers belong to the random-guessing class, while the remaining two thirds of the test takers belong to the knowledgeable class. One is certain about the success rate of the guessing class, but the location of the correct rate of the knowledgeable class is unknown in the interval (0.5, 1).</p>
+<p><strong>R Work</strong> The JAGS model script is shown below. One introduces a new variable <code>theta[i]</code> that indicates the correct rate value for observation <code>i</code>. In the sampling section of the JAGS script, the first block is a loop over all observations, where one first determines the rate <code>theta[i]</code> based on the classification value <code>z[i]</code>. The <code>equals</code> command evaluates equality, for example, <code>equals(z[i], 0)</code> returns 1 if <code>z[i]</code> equals to <code>0</code>, and returns 0 otherwise. This indicates that the rate <code>theta[i]</code> will either be equal to <code>p1</code> or <code>p0</code> depending on the value <code>z[i]</code>.</p>
+<p>One should note in JAGS, the classification variable <code>z[i]</code> takes values of 0 and 1, corresponding to the knowledgeable and guessing classes, respectively. As <span class="math inline">\(\pi\)</span> is considered fixed and set to 1/3, the variable <code>z[i]</code> is assigned a Bernoulli distribution with probability 1/3. To conclude the script, in the prior section the guessing rate parameter <code>p1</code> is assigned the value 0.5 and the rate parameter <code>p0</code> is assigned a Beta(1, 1) distribution truncated to the interval (0.5, 1) using <code>T(0.5, 1)</code>.</p>
+<pre><code>modelString&lt;-"
+model {
+## sampling
+for (i in 1:N){
+   theta[i] &lt;- equals(z[i], 1) * p1 + equals(z[i], 0) * p0
+y[i] ~ dbin(theta[i], m)
+}
+for (i in 1:N){
+   z[i] ~ dbern(1/3)
+}
+## priors
+p1 &lt;- 0.5
+p0 ~ dbeta(1,1) T(0.5, 1)
+}"</code></pre>
+<p>One performs inference for <code>theta</code> and <code>p0</code> in JAGS by looking at their posterior summaries. Note that there are <span class="math inline">\(n = 30\)</span> test takers, each with an associated <code>theta</code> indicating the correct success rate of test taker <code>i</code>. The variable <code>p0</code> is the estimate of the correct rate of the knowledgeable class.</p>
+<p>How are the correct rates estimated for different test takers by the latent class model? Before looking at the results, let’s revisit the dataset as shown in Figure 13.13. Among the test takers with lower scores, it is obvious that test taker # 6 with a score of 6 is likely to be assigned to the random-guessing class, whereas test takers # 4 and # 5 with a score of 13 are probably assigned to the knowledgeable class. Among test takers with higher scores, test takers # 15 and # 17 with respective scores of 20 and 19 are most likely to be assigned to the knowledgeable class, and test taker # 24 with a score of 14 is also likely assigned to the knowledgeable class.</p>
+<p>Table 13.2. Posterior summaries of the correct rates <span class="math inline">\(\theta_i\)</span> of six selected test takers.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Test Taker</th>
+<th style="text-align: center;">Score</th>
+<th style="text-align: center;">Mean</th>
+<th style="text-align: center;">Median</th>
+<th style="text-align: center;">90% Credible Interval</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"># 4</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">0.553</td>
+<td style="text-align: center;">0.500</td>
+<td style="text-align: center;">(0.500, 0.876)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"># 5</td>
+<td style="text-align: center;">13</td>
+<td style="text-align: center;">0.555</td>
+<td style="text-align: center;">0.500</td>
+<td style="text-align: center;">(0.500, 0.875)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"># 6</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">0.500</td>
+<td style="text-align: center;">0.500</td>
+<td style="text-align: center;">(0.500, 0.500)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"># 15</td>
+<td style="text-align: center;">20</td>
+<td style="text-align: center;">0.879</td>
+<td style="text-align: center;">0.879</td>
+<td style="text-align: center;">(0.841, 0.917)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"># 17</td>
+<td style="text-align: center;">19</td>
+<td style="text-align: center;">0.878</td>
+<td style="text-align: center;">0.879</td>
+<td style="text-align: center;">(0.841, 0.917)</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"># 24</td>
+<td style="text-align: center;">14</td>
+<td style="text-align: center;">0.690</td>
+<td style="text-align: center;">0.831</td>
+<td style="text-align: center;">(0.500, 0.897)</td>
+</tr>
+</tbody>
+</table>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/LCM_post3.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">MCMC diagnostic plots for correct rate of the knowledgeable class, <span class="math inline">\(p_0\)</span>.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The latent class model assigns observations to one of the two latent classes at each MCMC iteration, and the posterior summaries of <code>theta</code> provide estimates of the correct rate of each test taker. Table 13.2 provides posterior summaries for six specific test takers. The posterior summaries of the correct rate of test taker # 6 indicate that the model assigns this test taker to the random-guessing group and the posterior mean and median of the correct rate is at 0.5. Test takers # 4 and # 5 have similar posterior summaries and are classified as random-guessing most of the time with posterior mean of correct rate around 0.55. Test taker # 24 has a higher posterior mean than the test takers # 4 and # 5. But with a posterior mean 0.69, the posterior probability for the true rate for # 24 is somewhat split between random guessing and knowledgeable states. Test takers # 15 and # 17 are always classified as knowledgeable with posterior mean and median of correct rate around 0.88.</p>
+<p>One also summarizes the posterior draws of <span class="math inline">\(p_0\)</span> corresponding to the success rate for the knowledgeable students. Figure 13.14 provides MCMC diagnostics of <span class="math inline">\(p_0\)</span>. Its posterior mean, median, and 90% credible interval are 0.879, 0.879, and (0.841, 0.917). These estimates are very close to the correct rate of test takers # 15 and # 17. These test takers are always classified in the knowledgeable class and their correct rate estimates are the same as <span class="math inline">\(p_0\)</span>.</p>
+<p><strong>Scenario 2: all parameters unknown</strong></p>
+<p>It is straightforward to generalize this latent class model relaxing some of the fixed parameter assumptions in Scenario 1. It was originally assumed that the class assignment parameter <span class="math inline">\(\pi = 1/3\)</span>. It is more realistic to assume that the probability of assigning an individual into the first class <span class="math inline">\(\pi\)</span> is unknown and assign this parameter a Beta distribution with specific shape parameters. Here one assumes little is known about this classification parameter and so <span class="math inline">\(\pi\)</span> is assigned a <span class="math inline">\(\textrm{Beta}(1, 1)\)</span>, i.e.&nbsp;a Uniform distribution on (0, 1). In addition, previously it was assumed that it was known that the success rate for the “guessing” group <span class="math inline">\(p_1\)</span> was equal to 1/2. Here this assumption is relaxed by assigning the success rate <span class="math inline">\(p_1\)</span> a Uniform prior on the interval (0.4, 0.6). If one knows only that that the success rate for the “knowing” group is <span class="math inline">\(p_0\)</span> is larger than <span class="math inline">\(p_1\)</span>, then one assumes <span class="math inline">\(p_0\)</span> is Uniform in the interval (<span class="math inline">\(p_1, 1\)</span>).</p>
+<p><strong>R Work</strong> The JAGS script for this more general model follows. We introduce the parameter <code>q</code> as <span class="math inline">\(\pi\)</span>, that is the class assignment parameter and assign it a Beta distribution with parameters 1 and 1. The prior distributions for <code>p1</code> and <code>p0</code> are modified to reflect the new assumptions.</p>
+<pre><code>modelString&lt;-"
+model {
+## sampling
+for (i in 1:N){
+   theta[i] &lt;- equals(z[i], 1) * p1 + equals(z[i], 0) * p0
+   y[i] ~ dbin(theta[i], m)
+}
+for (i in 1:N){
+   z[i] ~ dbern(q)
+}
+## priors
+p1 ~ dbeta(1, 1) T(0.4, 0.6)
+p0 ~ dbeta(1,1) T(p1, 1)
+q ~ dbeta(1, 1)
+}
+"</code></pre>
+<p>In Scenario 1, the posterior distributions of the correct rates <code>theta[i]</code> were summarized for all individuals. Here we instead focus on the classification parameters <code>z[i]</code> where <code>z[i] = 1</code> indicates a person classified into the random-guessing group. Figure 13.15 displays the posterior means of the <span class="math inline">\(z_i\)</span> for all individuals. As expected, individuals #1 through # 10 are classified as guessers and most individuals with labels 12 and higher are classified as knowledgeable. Individuals # 11 and # 24 have posterior classification means between 0.25 and 0.75 indicating some uncertainty about the correct classification for these people.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/ClassificationPlot.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Posterior means of classification parameters for all test takers</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Figure 13.16 displays density estimates of the simulated draws from the posterior distributions of the class assignment parameter <span class="math inline">\(\pi\)</span> and the rate parameters <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_0\)</span>. As one might expect, the posterior distributions of <span class="math inline">\(p_1\)</span> and <span class="math inline">\(p_0\)</span> are centered about values of 0.54 and 0.89. There is some uncertainty about the class assignment parameter as reflected in a wide density estimate for <span class="math inline">\(\pi\)</span> (<span class="math inline">\(q\)</span> in the figure).</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/threevarplot.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Posterior density plots of class assignment and rate parameters.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="disputed-authorship-of-the-federalist-papers" class="level3" data-number="7.4.3">
+<h3 data-number="7.4.3" class="anchored" data-anchor-id="disputed-authorship-of-the-federalist-papers"><span class="header-section-number">7.4.3</span> Disputed authorship of the Federalist Papers</h3>
+<p></p>
+<p>Returning to the Federalist Papers example of Section 13.2, the discussion focused on learning about the true rates of filler words for papers written by Alexander Hamilton and James Madison. But actually the true authorship of some of the papers was in doubt, and the primary task in Mosteller and Wallace (1963) was to learn about the true authorship of these disputed authorship papers from the data. This problem of disputed authorship can be considered a special case of latent data modeling where the latent variable is the authorship of a disputed paper. We describe how the Bayesian model of Section 13.3 can be generalized to learn about both the rates of a particular filler word and the identity of the papers of disputed authorship.</p>
+<p>In our sample there are a total of 74 Federalist Papers. We assume that 49 of these papers are known to be written by Hamilton, 15 of the papers are known to be written by Madison, and the authorship of the remaining 10 papers is disputed between the two authors. We focus on the use of the filler word “can” in these papers. Let {<span class="math inline">\((y_{1i}, n_{1i})\)</span>} denote the frequencies of “can” and total words in the Hamilton papers, {<span class="math inline">\((y_{2i}, n_{2i}\)</span>)} denote the frequencies and total words in the Madison papers, and {<span class="math inline">\((y_{i}, n_{i}\)</span>)} denote the corresponding quantities in the disputed papers. As in Section 13.2, we assume {<span class="math inline">\(y_{1i}\)</span>} are Negative Binomial(<span class="math inline">\(p_{1i}, \alpha_1\)</span>) where <span class="math inline">\(p_{1i} = \beta_1 / (\beta_1 + n_{1i}/1000)\)</span>, and {<span class="math inline">\(y_{2i}\)</span>} are Negative Binomial(<span class="math inline">\(p_{2i}, \alpha_2\)</span>) where <span class="math inline">\(p_{2i} = \beta_2 / (\beta_2 + n_{2i}/1000)\)</span>.</p>
+<p>The distribution of the frequencies {<span class="math inline">\(y_{i}\)</span>} is unknown (out of the total number of words {<span class="math inline">\(n_{i}\)</span>}) since these correspond to the papers of disputed authorship. Let <span class="math inline">\(z_i\)</span> denote the unknown authorship of paper <span class="math inline">\(i\)</span> among the disputed papers – if <span class="math inline">\(z_i = 0\)</span>, the paper was written by Hamilton and if <span class="math inline">\(z_i = 1\)</span>, the paper was written by Madison. If one knows the value of <span class="math inline">\(z_i\)</span>, the distribution of the frequency <span class="math inline">\(y_i\)</span> is known. If <span class="math inline">\(z_i = 0\)</span>, then <span class="math inline">\(y_i\)</span> is Negative Binomial(<span class="math inline">\(p_{i}, \alpha_1\)</span>) where <span class="math inline">\(p_{i} = \beta_1 / (\beta_1 + n_{i}/1000)\)</span>, and <span class="math inline">\(z_i = 1\)</span>, then <span class="math inline">\(y_i\)</span> is Negative Binomial(<span class="math inline">\(p_{i}, \alpha_2\)</span>) where <span class="math inline">\(p_{i} = \beta_2 / (\beta_2 + n_{i}/1000)\)</span>. To complete the model, one needs to assign a prior distribution to the latent authorship indicators {<span class="math inline">\(z_i\)</span>}. It is assumed <span class="math inline">\(z_i \sim \textrm{Bernoulli}(0.5)\)</span> which means that <span class="math inline">\(z_i\)</span> from the prior is equally likely to be 0 or 1.</p>
+<p>The JAGS script for the disputed authorship problem is shown below. The data is structured so that <code>N1</code> papers are known to be written by Hamilton, <code>N2</code> papers are known to be written by Madison, and the authorship of the remaining <code>N3</code> papers are in doubt. The data includes the number of occurrences of the word “can” and the total number or words in each group of papers. Note that, as in Section 13.3, weakly informative priors are placed on the Gamma priors for <span class="math inline">\(\alpha_1, \beta_1, \alpha_2\)</span> and <span class="math inline">\(\beta_2\)</span>.</p>
+<pre><code>modelString = "
+model{
+for(i in 1:N1){
+   p1[i] &lt;- beta1 / (beta1 + n1[i] / 1000)
+   y1[i] ~ dnegbin(p1[i], alpha1)
+}
+for(i in 1:N2){
+   p2[i] &lt;- beta2 / (beta2 + n2[i] / 1000)
+   y2[i] ~ dnegbin(p2[i], alpha2)
+}
+for(i in 1:N3){
+   theta[i] &lt;- equals(z[i], 0) * alpha1 +
+            equals(z[i], 1) * alpha2
+   gamma[i] &lt;- equals(z[i], 0) * beta1 +
+            equals(z[i], 1) * beta2
+   p[i] &lt;- gamma[i] / (gamma[i] + n[i] / 1000)
+   y[i] ~ dnegbin(p[i], theta[i])
+   z[i] ~ dbern(0.5)
+}
+alpha1 ~ dgamma(.001, .001)
+beta1 ~ dgamma(.001, .001)
+alpha2 ~ dgamma(.001, .001)
+beta2 ~ dgamma(.001, .001)
+}</code></pre>
+<p>Using this script, a sample of 5000 draws were taken from the posterior distribution and Figure 13.17 displays posterior means of the classification parameters <span class="math inline">\(z_1, ..., z_{10}\)</span> for the ten disputed authorship parameters. Since <span class="math inline">\(z_i = 1\)</span> if the author is Madison, this graph is showing the posterior probability the author is James Madison for each paper. Note that most of these posterior means are located near 0.5, with the one exception of Paper 4 where the posterior probability of Madison authorship is 0.174. So really one has not learned much about the identity of the true author from this data.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter13/fed_authorship.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Posterior means of classification parameters for authorship problem using rates of the filler word can.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>But we have only looked at the frequencies of one particular filler word in our analysis. In a typical study such as the one done by Mosteller and Wallace (1963), a number of filler words are used. One can extend the analysis to include a number of filler words; the approach is outlined below and the implementation details are left to the end-of-chapter exercises.</p>
+<p>Suppose <span class="math inline">\(y_{1i}^w\)</span> denotes the number of occurrences of the word <span class="math inline">\(w\)</span> in the <span class="math inline">\(i\)</span>-th paper written by Hamilton. Similarly, <span class="math inline">\(y_{2i}^w\)</span> denotes the word count of <span class="math inline">\(w\)</span> in the <span class="math inline">\(i\)</span>-th paper written by Madison and <span class="math inline">\(y_i^w\)</span> denotes the word count of <span class="math inline">\(w\)</span> in the <span class="math inline">\(i\)</span>-th paper of disputed authorship. It is assumed that each word count follows a Negative Binomial distribution where the parameters of the distribution depend on the author and the word. So, for example, for a Hamilton paper, <span class="math inline">\(y_{1i}^w\)</span> is distributed Negative Binomial(<span class="math inline">\(p_1^w, \alpha_1^w\)</span>) where <span class="math inline">\(p_1^w = \beta_1^w / (\beta_1^w + n_{1i}/1000)\)</span>. For a Madison paper, <span class="math inline">\(y_{2i}^w\)</span> is distributed Negative Binomial(<span class="math inline">\(p_2^w, \alpha_2^w\)</span>) where <span class="math inline">\(p_2^w = \beta_2^w / (\beta_2^w + n_{2i}/1000)\)</span>. For a paper of disputed authorship, the count <span class="math inline">\(y_i^w\)</span> will either be distributed according to one of the Negative Binomial distributions where the distribution depends on the value of the classification variable <span class="math inline">\(z_i\)</span>.</p>
+<p>A JAGS script can be written to fit this model with multiple filler words. In the script, one defines the matrix variable <code>y1</code> where <code>y1[i, j]</code> is defined to be the number of words of type <span class="math inline">\(j\)</span> in the <span class="math inline">\(i\)</span>-th paper of Hamilton. In a similar fashion one defines the matrices <code>y2</code> and <code>y</code> where <code>y2[i, j]</code> and <code>y[i, j]</code> denote respectively the counts of the <span class="math inline">\(j\)</span>-th word of the <span class="math inline">\(i\)</span>-th Madison and <span class="math inline">\(i\)</span>-th disputed authorship paper. One will be learning about vectors <span class="math inline">\(\alpha_1, \beta_1, \alpha_2, \beta_2\)</span> where each vector has <span class="math inline">\(W\)</span> values where <span class="math inline">\(W\)</span> is the number of words in the study. As before <code>z[i]</code> denotes the classification variable where <code>z[i] = 1</code> denotes authorship of the <span class="math inline">\(i\)</span>-th disputed paper by Madison. In an end-of-chapter exercise, the reader will be asked to implement the model fitting using a selection of filler words. One would anticipate that one would be able to discriminate between the two authors on the basis of a large group of filler words.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./multipleregression.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Bayesian Multiple Regression and Logistic Models</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
