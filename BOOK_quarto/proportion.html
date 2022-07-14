@@ -579,7 +579,7 @@ p = \{0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0\},
 <div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rbeta</span>(<span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.60378882 0.12063905 0.05708561 0.06861253 0.86353651</code></pre>
+<pre><code>[1] 0.8198822 0.8255276 0.9704141 0.9852069 0.8566363</code></pre>
 </div>
 </div>
 <p>There are additional functions in the <code>ProbBayes</code> R package that aid in visualizing Beta distribution calculations. For example, suppose one has a <span class="math inline">\(\textrm{Beta}(7, 10)\)</span> curve and we want to find the chance that <span class="math inline">\(p\)</span> is between 0.4 and 0.8. Looking at Figure 7.5, this probability corresponds to the area of the shaded region. The special function <code>beta_area()</code> will compute and illustrate this probability. Note the use of the vector <code>c(7, 10)</code> to input the two shape parameters.</p>
@@ -647,7 +647,7 @@ p = \{0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0\},
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(Beta44samples, <span class="fu">c</span>(<span class="fl">0.25</span>, <span class="fl">0.75</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>      25%       75% 
-0.3780439 0.6188571 </code></pre>
+0.3874235 0.6219760 </code></pre>
 </div>
 </div>
 <p>This tells us that the probability that <span class="math inline">\(p \leq 0.366\)</span> is 0.25 and the probability that <span class="math inline">\(p \geq 0.616\)</span> is also 0.25. These probability statements should be checked against one’s prior belief about <span class="math inline">\(p\)</span>. If these quantiles do not seem reasonable, one should make adjustments to the values of the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> .</p>
@@ -694,7 +694,7 @@ Likelihood = L(p) = {20 \choose 12} p ^ {12 }(1 - p) ^ 8.
 <p>The prior distribution of <span class="math inline">\(p\)</span>, with density <span class="math inline">\(\pi(p)\)</span>, is Beta with shape parameters <span class="math inline">\(3.06\)</span> and <span class="math inline">\(2.56\)</span> <span class="math display">\[\begin{eqnarray*}
 p \sim \textrm{Beta}(3.06, 2.56).
 \end{eqnarray*}\]</span> The symbol “<span class="math inline">\(\sim\)</span>” is read “follows”, meaning that the random variable before the symbol follows the distribution after the symbol.</p>
-<p>For the data/likelihood, we introduce proper notation. Let <span class="math inline">\(Y\)</span> be the random variable of the number of students say that their favorite day for eating out is Friday. We know that the sampling distribution for <span class="math inline">\(Y\)</span> is a Binomial distribution with number of trials <span class="math inline">\(20\)</span> and success probability <span class="math inline">\(p\)</span>. Using the notation of ``<span class="math inline">\(\sim\)</span>“, we have <span class="math display">\[\begin{eqnarray*}
+<p>For the data/likelihood, we introduce proper notation. Let <span class="math inline">\(Y\)</span> be the random variable of the number of students say that their favorite day for eating out is Friday. We know that the sampling distribution for <span class="math inline">\(Y\)</span> is a Binomial distribution with number of trials <span class="math inline">\(20\)</span> and success probability <span class="math inline">\(p\)</span>. Using the notation of “<span class="math inline">\(\sim\)</span>”, we have <span class="math display">\[\begin{eqnarray*}
 Y \sim \textrm{Binomial}(20, p).
 \end{eqnarray*}\]</span> After the value <span class="math inline">\(Y = y\)</span> is observed, <span class="math inline">\(L(p) = f(y \mid p)\)</span> denotes the likelihood, which is the probability of observing this sample value <span class="math inline">\(y\)</span> viewed as a function of the proportion <span class="math inline">\(p\)</span>. (Note that a small letter <span class="math inline">\(y\)</span> is used to denote the actual data observed, as opposed to the random variable <span class="math inline">\(Y\)</span>.) From the dining survey, we know that <span class="math inline">\(y = 12\)</span>.</p>
 <p>Now we have the following prior density and the likelihood function.</p>
@@ -835,7 +835,7 @@ From a Bayesian viewpoint, it is straightforward to implement this test. Since t
 <div class="cell">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(BetaSamples <span class="sc">&gt;=</span> <span class="fl">0.75</span>) <span class="sc">/</span> S</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.044</code></pre>
+<pre><code>[1] 0.034</code></pre>
 </div>
 </div>
 <p>The simulation-based probability estimate is 0.037 which is an accurate approximation to the exact probability 0.04 obtained before.</p>
@@ -889,7 +889,7 @@ From a Bayesian viewpoint, it is straightforward to implement this test. Since t
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">quantile</span>(BetaSamples, <span class="fu">c</span>(<span class="fl">0.05</span>, <span class="fl">0.95</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       5%       95% 
-0.4370682 0.7454987 </code></pre>
+0.4331010 0.7402514 </code></pre>
 </div>
 </div>
 <p>The approximate middle 90% credible interval is [0.427, 0.733], which is close in value to the exact 90% credible interval [0.427, 0.741] computed using the <code>qbeta()</code> and <code>beta_interval()</code> functions. In an end-of-chapter exercise the reader is encouraged to practice and experiment with different values of the size of the simulated sample <span class="math inline">\(S\)</span>.</p>
@@ -1038,7 +1038,7 @@ Prob(7 \le \tilde Y \le 16) = 0.919.
 <span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>pred_p_sim <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="dv">1</span>, a <span class="sc">+</span> y, b <span class="sc">+</span> n <span class="sc">-</span> y)</span>
 <span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>(pred_y_sim <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(<span class="dv">1</span>, n, pred_p_sim))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 16</code></pre>
+<pre><code>[1] 13</code></pre>
 </div>
 </div>
 <p>Due to the ability of R to work easily with vectors, ]the same code is essentially used for simulating <span class="math inline">\(S = 1000\)</span> draws from the predictive distribution.<br>
