@@ -243,6 +243,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#posterior-predictive-checking" id="toc-posterior-predictive-checking" class="nav-link" data-scroll-target="#posterior-predictive-checking"> <span class="header-section-number">4.7.3</span> Posterior predictive checking</a></li>
   <li><a href="#comparing-two-proportions" id="toc-comparing-two-proportions" class="nav-link" data-scroll-target="#comparing-two-proportions"> <span class="header-section-number">4.7.4</span> Comparing two proportions</a></li>
   </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">4.8</span> Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -1228,9 +1229,355 @@ post %&gt;%
 </div>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="exercises" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="exercises"><span class="header-section-number">4.8</span> Exercises</h2>
+<ol type="1">
+<li><strong>Normal and Cauchy Priors</strong></li>
+</ol>
+<p>In the example in Section 9.1.2, it was assumed that the prior for the average snowfall <span class="math inline">\(\mu\)</span> was Normal with mean 10 inches and standard deviation 3 inches.</p>
+<ol type="a">
+<li>Confirm that the 25th and 75th percentiles of this prior are equal to 8 and 12 inches, respectively.</li>
+<li>Show that under this Normal prior, it is unlikely that the mean <span class="math inline">\(\mu\)</span> is at least as large as 26.75 inches.</li>
+<li>Confirm that a Cauchy distribution with location 10 inches and scale parameter 2 inches also have 25th and 75th percentiles equal to 8 and 12 inches, respectively.</li>
+</ol>
+<ol start="2" type="1">
+<li><strong>A Random Walk</strong> </li>
+</ol>
+<p>The following matrix represents the transition matrix for a random walk on the integers {1, 2, 3, 4, 5}.</p>
+<p><span class="math display">\[
+P = \begin{bmatrix}
+.2 &amp;.8&amp; 0&amp; 0&amp; 0 \\
+.2 &amp;.2&amp; .6&amp; 0&amp; 0\\
+0 &amp;.2&amp; .6&amp; .2&amp; 0\\
+0 &amp;0&amp; .6&amp; .2&amp; .2\\
+0 &amp;0&amp; 0&amp; .8&amp; .2\\
+\end{bmatrix}
+\]</span></p>
+<ol type="a">
+<li>Suppose one starts walking at the state value 4. Find the probability of landing at each location after a single step.</li>
+<li>Starting at value 4, find the probability of landing at each location after three steps.</li>
+<li>Explain what is means for this Markov Chain to be irreducible and aperiodic.</li>
+</ol>
+<ol start="3" type="1">
+<li><strong>A Random Walk (continued)</strong></li>
+</ol>
+<p>Consider the random walk Markov chain described in Exercise 2.</p>
+<ol type="a">
+<li>Suppose one starts at the location 1. Using an R script with the ```sample()} function (see example script Section 9.2.3), simulate 1000 steps of the Markov chain using the probabilities given in the transition matrix. Store the locations of the walk in a vector.</li>
+<li>Compute the relative frequencies of the walker in the five states from the simulation output. From this computation, guess at the value of the stationary distribution vector <span class="math inline">\(w\)</span>.</li>
+<li>Confirm that your guess is indeed the stationary distribution by using the matrix computation <span class="math inline">\(w\)</span> %*% <span class="math inline">\(P\)</span>.</li>
+</ol>
+<ol start="4" type="1">
+<li><strong>Weird Weather</strong></li>
+</ol>
+<p>Suppose a city in Alaska has interesting weather. The four possible weather states are “sunny” (<span class="math inline">\(SU\)</span>), “rainy” (<span class="math inline">\(R\)</span>), “cloudy” (<span class="math inline">\(C\)</span>), and “snow” (<span class="math inline">\(SN\)</span>). If it is sunny one day, it is equally likely to be rainy, cloudy, and snow on the next day. If is currently rainy, then the probabilities of sunny, rain, cloudy, and snow on the next day are respectively 1/2, 1/6, 1/6, and 1/6. The following matrix gives the transitions of weather from one day to the next day.</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+&amp; SU &amp; R &amp; C &amp;  SN \\
+  SU &amp; 0 &amp; 1/3 &amp; 1/3 &amp; 1/3 \\
+  R &amp; 1/2 &amp; 1/6 &amp; 1/6 &amp; 1/6  \\
+  C &amp; 0 &amp; 1/4 &amp; 1/2 &amp; 1/4  \\
+  SN &amp; 0 &amp; 1/4 &amp; 1/4 &amp; 1/2  \\
+\end{bmatrix}
+\]</span></p>
+<ol type="a">
+<li>If the weather is rainy today, find the probability that is rainy two days later.</li>
+<li>Starting with a sunny day, write an R script to simulate 1000 days of weather using this Markov Chain.</li>
+<li>Find the relative frequencies of the four states. Are these values approximately the stationary distribution of the Markov chain?</li>
+</ol>
+<ol start="5" type="1">
+<li><strong>Ehrenfest Urn Model</strong></li>
+</ol>
+<p>Grinstead and Snell (2006) describe a model used to explain diffusion of gases. One version of this model is described in the setting of two urns that, between them, contains four balls. A state is the number of balls in the first urn. There are five possible states 0, 1, 2, 3, and 4. At each step, one ball is chosen at random and moved from the urn it is located to the other urn. The transition matrix for this Markov chain is shown below:</p>
+<p><span class="math display">\[
+P = \begin{bmatrix}
+0 &amp;1 &amp; 0&amp; 0&amp; 0 \\
+1/4 &amp; 0 &amp; 3/4 &amp; 0&amp; 0\\
+0 &amp; 1/2&amp; 0&amp; 1/2&amp; 0\\
+0 &amp;0&amp; 3/4 &amp; 0&amp; 1/4\\
+0 &amp;0&amp; 0&amp; 1&amp; 0\\
+\end{bmatrix}
+\]</span></p>
+<ol type="a">
+<li>Starting at state 1, find the probabilities of each state after two steps.</li>
+<li>Starting at state 1, find the probabilities of each state after three steps.</li>
+<li>Explain why this Markov Chain is not aperiodic.</li>
+<li>Does a stationary distribution exist for this Markov Chain? Why or why not?</li>
+</ol>
+<ol start="6" type="1">
+<li><strong>Metropolis Sampling in a Random Walk</strong></li>
+</ol>
+<p>Suppose the variable <span class="math inline">\(X\)</span> takes on values from 1 to 9 with respective probabilities that are proportional to the values 9, 7, 5, 3, 1, 3, 5, 7, 9. This probability distribution displayed in Figure 9.19 has a “bathtub” shape.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter9/bathtub.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Bathtub shaped probability distribution.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<ol type="a">
+<li>Write an R function that computes this probability distribution for any value of <span class="math inline">\(X\)</span>.</li>
+<li>Using the Metropolis algorithm described in Section 9.3.1 as programmed in the function <code>random_walk()</code>, simulate 10,000 draws from this probability distribution starting at the value <span class="math inline">\(X = 2\)</span>.</li>
+<li>Collect the simulated draws and find the relative frequencies of the values 1 through 9. Compare these approximate probabilities with the exact probabilities.</li>
+</ol>
+<ol start="7" type="1">
+<li><strong>Metropolis Sampling of a Binomial Distribution</strong></li>
+</ol>
+<ol type="a">
+<li>Using the Metropolis algorithm described in Section 9.3 as programmed in the function <code>random_walk()</code>, simulate 1000 draws from a Binomial distribution with parameters <span class="math inline">\(n = 20\)</span> and <span class="math inline">\(p = 0.3\)</span>.</li>
+<li>Collect the simulated draws and find the relative frequencies of the values 0 through 20. Compare these approximate probabilities with the exact probabilities.</li>
+<li>Using the simulated values, estimate the mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> of the distribution and compare these estimates with the known values of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> of a binomial distribution.</li>
+</ol>
+<ol start="8" type="1">
+<li><strong>Metropolis Sampling - Poisson-Gamma Model</strong></li>
+</ol>
+<p>Suppose we observe <span class="math inline">\(y_1, ..., y_n\)</span> from a Poisson distribution with mean <span class="math inline">\(\lambda\)</span>, and the parameter <span class="math inline">\(\lambda\)</span> has a Gamma(<span class="math inline">\(a, b\)</span>) distribution. The posterior density is proportional to <span class="math display">\[\begin{equation*}
+\pi(\lambda \mid y_1, \cdots, y_n) \propto \left[\prod_{i = 1}^n \exp(-\lambda) \lambda^{y_i} \right]
+\left[ \lambda^{a-1} \exp(-b \lambda) \right].
+\end{equation*}\]</span></p>
+<ol type="a">
+<li><p>Write a function to compute the logarithm of the posterior density. Assume that one observes the sample 2, 5, 10, 5, 6, and the prior parameters are <span class="math inline">\(a = b = 1\)</span>.</p></li>
+<li><p>Use the <code>metropolis()</code> function in Section 9.3.3 to collect 1000 draws from the posterior distribution. Use a starting value of <span class="math inline">\(\lambda = 5\)</span> and a neighborhood scale value of <span class="math inline">\(C = 2\)</span>.</p></li>
+<li><p>Inspect MCMC diagnostic graphs to assess if the simulated sample approximates the posterior density of <span class="math inline">\(\lambda\)</span>.</p></li>
+</ol>
+<ol start="9" type="1">
+<li><strong>Metropolis Sampling from a Bimodal Distribution</strong></li>
+</ol>
+<p>Suppose we observe a random sample <span class="math inline">\(y_1, ..., y_n\)</span> from a Cauchy distribution with location <span class="math inline">\(\theta\)</span> and scale parameter 1 with density <span class="math display">\[\begin{equation}
+f(y_i \mid \theta) = \frac{1}{\pi  \left[1 + (y_i - \theta)^2\right]}.
+(\#eq:cauchy)
+\end{equation}\]</span> If a Uniform prior is placed on <span class="math inline">\(\theta\)</span>, then the posterior density of <span class="math inline">\(\theta\)</span> is proportional to <span class="math display">\[\begin{equation}
+\pi(\theta \mid y_1, \cdots, y_n) \propto \prod_{i = 1}^n \frac{1}{\pi  \left[1 + (y_i - \theta)^2\right]}
+(\#eq:cauchypost)
+\end{equation}\]</span> If we observe the values 3, 6, 7, 8, 15, 14, 16, 17, Figure 9.20 displays the bimodal shape of the posterior density.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter9/bimodal.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Posterior density of location parameter with Cauchy sampling.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<ol type="a">
+<li>Write a function to compute the logarithm of the posterior density.</li>
+<li>Using the <code>metropolis()</code> function in Section 9.3.3, collect a simulated sample of 1000 from the posterior distribution. Run the sampler twice, once using a starting value of <span class="math inline">\(\theta = 10\)</span> and a neighborhood scale value of <span class="math inline">\(C = 3\)</span>, and a second time with the same starting value and a scale value of <span class="math inline">\(C = 0.2\)</span>.</li>
+<li>By inspecting MCMC diagnostic graphs, which value of <span class="math inline">\(C\)</span> appears to result in a simulated sample that is a better approximation to the posterior distribution? Explain.</li>
+</ol>
+<ol start="10" type="1">
+<li><strong>Gibbs Sampling - Poisson-Gamma Model</strong></li>
+</ol>
+<p>Suppose a single observation <span class="math inline">\(Y\)</span> conditional on <span class="math inline">\(\lambda\)</span> is Poisson with mean <span class="math inline">\(\lambda\)</span>, and <span class="math inline">\(\lambda\)</span> has a Gamma(<span class="math inline">\(a, b\)</span>) prior with density equal to <span class="math display">\[\begin{equation*}
+\pi(\lambda) = \frac{b^a}{\Gamma(a)} \lambda^{a-1} \exp(-b \lambda).
+\end{equation*}\]</span></p>
+<ol type="a">
+<li>Write down the joint density of <span class="math inline">\(Y\)</span> and <span class="math inline">\(\lambda\)</span>.</li>
+<li>Identify the conditional distribution <span class="math inline">\(Y\)</span> conditional on <span class="math inline">\(\lambda\)</span>, and the conditional distribution of <span class="math inline">\(\lambda\)</span> conditional on <span class="math inline">\(Y = y\)</span>.</li>
+<li>Use the information from part (b) to construct a Gibbs sampling algorithm to sample from the joint distribution of <span class="math inline">\((Y, \lambda)\)</span>.</li>
+<li>Write an R function to implement one cycle of Gibbs sampling, and run 1000 iterations of Gibbs sampling for the case where <span class="math inline">\(a = 3\)</span> and <span class="math inline">\(b = 3\)</span>.</li>
+<li>By integration, find the marginal density of <span class="math inline">\(Y\)</span>. Compare the exact values of the marginal density with the simulated draws of <span class="math inline">\(Y\)</span> found using Gibbs sampling.</li>
+</ol>
+<ol start="11" type="1">
+<li><strong>Gibbs Sampling - Coin Flips</strong></li>
+</ol>
+<p>Suppose one observes the outcomes of four fair coin flips <span class="math inline">\(W_1, ..., W_4\)</span> where <span class="math inline">\(W_i = 1\)</span> if the outcome is heads and <span class="math inline">\(W_i = 0\)</span> otherwise. Let <span class="math inline">\(X = W_1 + W_2 +W_3\)</span> denote the number of heads in the first three flips and <span class="math inline">\(Y = W_2 + W_3 + W_4\)</span> is the number of heads in the last three flips. The joint probability of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span> is given in Table 9.3.</p>
+<p>Table 9.3. Table of number of heads <span class="math inline">\(X\)</span> in the first three flips and number of heads <span class="math inline">\(Y\)</span> in last three flips in four flips of a fair coin.</p>
+<table class="table">
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"><span>(Y)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1/16</td>
+<td style="text-align: center;">1/16</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">(X)</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1/16</td>
+<td style="text-align: center;">3/16</td>
+<td style="text-align: center;">2/16</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">2/16</td>
+<td style="text-align: center;">3/16</td>
+<td style="text-align: center;">1/16</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1/16</td>
+<td style="text-align: center;">1/16</td>
+</tr>
+</tbody>
+</table>
+<p>The joint probability mass function (f(x, y)) of the number of heads in the first three flips (X) and the number of heads in the last three flips (Y) in four tosses of a fair coin.</p>
+<ol type="a">
+<li>Find the conditional distribution <span class="math inline">\(f(x \mid Y = 1)\)</span>.</li>
+<li>Find the conditional distribution <span class="math inline">\(f(y \mid X = 2)\)</span>.</li>
+<li>Describe how Gibbs sampling can be used to simulate from the joint distribution of <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</li>
+<li>Using the <code>gibbs_discrete()</code> function in Section 9.5.1, simulate 1000 iterations of Gibbs sampling using this probability distribution. By tabulating the <span class="math inline">\((X, Y)\)</span> output and computing relative frequencies, confirm that the relative frequencies are good approximations to the actual probabilities.</li>
+</ol>
+<ol start="12" type="1">
+<li><strong>Normal Sampling with Both Parameters Unknown</strong> </li>
+</ol>
+<p>The heights in inches of 20 college women were collected, observing the following measurements:</p>
+<table class="table">
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">47</td>
+<td style="text-align: center;">64</td>
+<td style="text-align: center;">61</td>
+<td style="text-align: center;">61</td>
+<td style="text-align: center;">63</td>
+<td style="text-align: center;">61</td>
+<td style="text-align: center;">64</td>
+<td style="text-align: center;">66</td>
+<td style="text-align: center;">63</td>
+<td style="text-align: center;">67</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">63.5</td>
+<td style="text-align: center;">65</td>
+<td style="text-align: center;">62</td>
+<td style="text-align: center;">64</td>
+<td style="text-align: center;">61</td>
+<td style="text-align: center;">56</td>
+<td style="text-align: center;">63</td>
+<td style="text-align: center;">65</td>
+<td style="text-align: center;">64</td>
+<td style="text-align: center;">59</td>
+</tr>
+</tbody>
+</table>
+<p>Suppose one assumes that the Normal mean and precision parameters are independent with <span class="math inline">\(\mu\)</span> distributed <span class="math inline">\(\textrm{Normal}(62, 1)\)</span> and <span class="math inline">\(\phi\)</span> distributed Gamma with parameters <span class="math inline">\(a = 1\)</span> and <span class="math inline">\(b = 1\)</span>.</p>
+<ol type="a">
+<li>Using the <code>gibbs_normal()</code> function in Section 9.5.3, collect a sample of 5000 from the joint posterior distribution of <span class="math inline">\((\mu, \phi)\)</span>.</li>
+<li>Find a 90% interval estimate for the standard deviation <span class="math inline">\(\sigma = 1 / \sqrt{\phi}\)</span>.</li>
+<li>Suppose one is interested in estimating the 90th percentile of the height distribution <span class="math inline">\(P_{90} = \mu + 1.645 \sigma\)</span>. Collect simulated draws from the posterior of <span class="math inline">\(P_{90}\)</span> and construct a density estimate.</li>
+</ol>
+<ol start="13" type="1">
+<li><strong>Normal Sampling with Both Parameters Unknown (continued)</strong></li>
+</ol>
+<p>In Exercise 12, one learned about the mean and precision of the heights by use of a Gibbs sampling algorithm. Use JAGS and the <code>runjags</code> package to collect MCMC draws from this model. Write a JAGS script for this Normal sampling problem and use the <code>run.jags()</code> function. Answer questions from parts (c) and (d) from Exercise 12. (Note that the sample JAGS script in Section 9.7.1 returns samples of <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span>.)</p>
+<ol start="14" type="1">
+<li><strong>Normal Sampling with Both Parameters Unknown (continued)</strong></li>
+</ol>
+<p>If one graphs the height data from Exercise 12, one notes that there is one unusually small height value, 47. One wonders if this minimum height is consistent with the fitted model.</p>
+<ol type="a">
+<li>Write a function to simulate a sample of size 20 from the posterior predictive distribution. You can use either the <code>gibbs_normal()</code> function in Section 9.5.3 or the JAGS sample script in Section 9.7.1 to generate a sample from the posterior distribution of (<span class="math inline">\(\mu, \phi\)</span>) or (<span class="math inline">\(\mu, \sigma\)</span>). For each sample, compute the minimum value <span class="math inline">\(T(\tilde y)\)</span>.</li>
+<li>Repeat the procedure 1000 times, collecting a sample of the predictive distribution of the minimum observation.</li>
+<li>Graph the predictive distribution. From comparing the observed minimum height with this distribution, what can you conclude about the suitability of the model?</li>
+</ol>
+<ol start="15" type="1">
+<li><strong>Comparing Proportions</strong></li>
+</ol>
+<p>In Section 9.7.4, the problem of comparing proportions of high visits to Facebook from male and female students was considered.</p>
+<ol type="a">
+<li>Using the same prior, use JAGS to take a simulated sample of size 5000 from the posterior of <span class="math inline">\(p_F\)</span> and <span class="math inline">\(p_M\)</span>. Construct a 90% probability interval estimate for the difference is proportions <span class="math inline">\(\delta = p_W - p_M\)</span>.</li>
+<li>Use the same simulated sample to perform inferences about the ratio of proportions <span class="math inline">\(R = p_W / p_M\)</span>. Construct a density estimate of <span class="math inline">\(R\)</span> and construct a 90% probability interval estimate.</li>
+</ol>
+<ol start="16" type="1">
+<li><strong>Comparing Poisson Rates</strong></li>
+</ol>
+<p>Suppose the number of customers <span class="math inline">\(y_j\)</span> arriving at a bank during a half-hour period in the morning is Poisson with mean <span class="math inline">\(\lambda_M\)</span>, and the number of customers <span class="math inline">\(w_j\)</span> arriving in an afternoon half-hour period is Poisson with mean <span class="math inline">\(\lambda_A\)</span>. Suppose one observes the counts 3, 3, 6, 3, 2, 3, 7, 6 for the morning periods, and the counts 11, 3, 9, 10, 10, 5, 8, 7 for the afternoon periods. Assume that <span class="math inline">\(\lambda_M\)</span> and <span class="math inline">\(\lambda_A\)</span> have independent Gamma(1, 1) priors. Use JAGS to obtain a simulated sample from the joint posterior of <span class="math inline">\((\lambda_M, \lambda_A)\)</span> and use the output to obtain a 90% posterior interval estimate for the ratio of means <span class="math inline">\(R = \lambda_A / \lambda_M\)</span>.</p>
+<ol start="17" type="1">
+<li><strong>Normal Sampling with a Cauchy Prior</strong> </li>
+</ol>
+<p>In Section 9.4, we considered the problem of estimating the mean snowfall amount in Buffalo with a Cauchy prior. The sample mean <span class="math inline">\(\bar y\)</span> is Normal with mean <span class="math inline">\(\mu\)</span> and standard error <span class="math inline">\(se\)</span> and <span class="math inline">\(\mu\)</span> is Cauchy with location 10 and scale 2. In our problem, <span class="math inline">\(\bar y= 26.785\)</span> and <span class="math inline">\(se = 3.236\)</span>. Write a JAGS script for this Bayesian model. Use the <code>run.jags()</code> function to simulate 1000 draws of the posterior distribution for <span class="math inline">\(\mu\)</span>. Compute the posterior mean and posterior standard deviation for <span class="math inline">\(\mu\)</span>.</p>
+<ol start="18" type="1">
+<li><strong>Normal Sampling with a Cauchy Prior (continued)</strong></li>
+</ol>
+<p>In Exercise 17, one used JAGS to simulate values from the posterior of <span class="math inline">\(\mu\)</span> from a single MCMC chain. Instead use two chains with the different starting values of <span class="math inline">\(\mu = 0\)</span> and <span class="math inline">\(\mu = 50\)</span>. Run JAGS with two chains and estimate the posterior mean and posterior standard deviation using output from each of the two chains. Based on the output, comment on the sensitivity of the MCMC run with the choice of the starting value.</p>
+<ol start="19" type="1">
+<li><strong>Bivariate Normal</strong></li>
+</ol>
+<p>Section 6.7 introduced the Bivariate Normal distribution. Suppose we wish to use Gibbs sampling to simulate from this distribution. In the following assume <span class="math inline">\((X, Y)\)</span> is Bivariate Normal with parameters <span class="math inline">\((\mu_X, \mu_Y, \sigma_X, \sigma_Y, \rho)\)</span>.</p>
+<ol type="a">
+<li>Using results from Section 6.7, identify the two conditional distributions <span class="math inline">\(f(x \mid y)\)</span> and <span class="math inline">\(f(y \mid x)\)</span> and write down a Gibbs sampling algorithm for simulating from the joint distribution of <span class="math inline">\((X, Y)\)</span>.</li>
+<li>Write an R function to simulate a sample from the distribution using Gibbs sampling.</li>
+<li>Assume <span class="math inline">\(\mu_X = 0, \mu_Y = 0, \sigma_X = 1, \sigma_Y = 1, \rho = 0.5\)</span> and run the simulation for 1000 iterations. Compare the means, standard deviations, and correlation computed from the simulation with the true values of the parameters.</li>
+<li>Repeat part (c) using the correlation value <span class="math inline">\(\rho= 0.95\)</span> and again compare the simulation estimates with the true values. Explain why Gibbs sampling does not appear to work as well in this situation.</li>
+</ol>
+<ol start="20" type="1">
+<li><strong>A Normal Mixture Model</strong></li>
+</ol>
+<p>Consider a three-component mixture distribution, where the density for <span class="math inline">\(x\)</span> has the form <span class="math display">\[\begin{equation}
+    f(x) =  0.45 \times \phi(x, -3, 1/3) + 0.1 \times \phi(x, 0, 1/3) + 0.45 \times \phi(x, 3, 1/3),  \\
+(\#eq:normalmix)
+\end{equation}\]</span> where <span class="math inline">\(\phi(x, \mu, \sigma)\)</span> is the Normal density with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>. Consider the following two ways of simulating from this mixture density.</p>
+<p><strong>Approach 1: Monte Carlo</strong>: Introduce a “mixture component indicator”, <span class="math inline">\(\delta\)</span>, an unobserved latent variable. The variable <span class="math inline">\(z\)</span> is equal to 1, 2, and 3 with respective probabilities 0.45, 0.1, and 0.45. The density for <span class="math inline">\(x\)</span> conditional on <span class="math inline">\(z\)</span> is normal where <span class="math inline">\([x \mid z = 1] \sim \textrm{Normal}(-3, 1/3)\)</span>, <span class="math inline">\([x \mid z = 2] \sim \textrm{Normal}(0, 1/3)\)</span>, and <span class="math inline">\([x \mid z = 3] \sim \textrm{Normal}(3, 1/3)\)</span>.</p>
+<p>One simulates <span class="math inline">\(x\)</span> by first simulating a value of <span class="math inline">\(z\)</span> from its discrete distribution and then simulating a value of <span class="math inline">\(x\)</span> from the corresponding conditional distribution. By repeating this method, one obtains a Monte Carlo simulated sample from the exact mixture distribution.</p>
+<p><strong>Approach 2: Gibbs Sampling</strong>: An alternative way of simulating from the mixture density is based on Gibbs sampling. Introduce the latent variable <span class="math inline">\(z\)</span> and consider the two conditional distributions <span class="math inline">\([x \mid z]\)</span> and <span class="math inline">\([z \mid x]\)</span>. The conditional distribution <span class="math inline">\([x \mid z]\)</span> will be a Normal density where the Normal parameters depend on the value of the latent variable. The conditional distribution <span class="math inline">\([z \mid x]\)</span> is discrete on the values 1, 2, 3 where the probabilities are proportional to <span class="math inline">\(0.45 \times \phi(x, -3, 1/3)\)</span>, <span class="math inline">\(0.1 \times \phi(x, 0, 1/3)\)</span>, <span class="math inline">\(0.45 \times \phi(x, 3, 1/3)\)</span> respectively.</p>
+<p>Write R scripts to use both the Monte Carlo and Gibbs sampling methods to simulate 1000 draws from this mixture density.</p>
+<ol start="21" type="1">
+<li><strong>A Normal Mixture Model – MCMC Diagnostics</strong></li>
+</ol>
+<p>Figure 9.21 displays histograms of simulated draws from the mixture distribution using the Monte Carlo and Gibbs sampling algorithms, and the exact mixture density is overlaid on top. It is clear from the figure that the Gibbs sampling does not appear to perform as well as the Monte Carlo method in simulating from this distribution. Using MCMC diagnostic graphs, explore the Gibbs sampling output. Are there particular features in these diagnostic graphs that would indicate problems in the convergence of the Gibbs sampling algorithm?</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter9/normalmix.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Histogram of 1000 samples of mean from the Monte Carlo and Gibbs sampling algorithms.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="22" type="1">
+<li><strong>Change Point Analysis</strong></li>
+</ol>
+<p>The World Meteorological Association collects data on tropical storms, and scientists want to find out whether the distribution of storms changed over time, and if so, when. Data on the number of storms per year has been collected for <span class="math inline">\(n\)</span> years, and let <span class="math inline">\(y_i\)</span> be the number of storms in year <span class="math inline">\(i\)</span>, where <span class="math inline">\(i = 1, \cdots, n\)</span>. Let <span class="math inline">\(M\)</span> be the year in which the distribution of <span class="math inline">\(Y\)</span> changes, where <span class="math inline">\(M \in \{1, \cdots, n-1\}\)</span>.</p>
+<p>A reasonable sampling model for <span class="math inline">\(Y\)</span> is: <span class="math display">\[\begin{eqnarray*}
+y_i \mid \lambda_1, M &amp;\sim&amp; \textrm{Poisson}(\lambda_1), \,\,\, i = 1, \cdots, M; \\
+y_i \mid \lambda_2, M &amp;\sim&amp; \textrm{Poisson}(\lambda_2), \,\,\, i = M+1, \cdots, n.
+\end{eqnarray*}\]</span></p>
+<p>Suppose one gives a Uniform prior for <span class="math inline">\(M\)</span> over integers from <span class="math inline">\(1\)</span> to <span class="math inline">\(n-1\)</span> to represent complete uncertainty about change point: <span class="math display">\[\begin{equation*}
+M \mid \lambda_1, \lambda_2 \sim \textrm{Discrete}(\frac{1}{n-1}, \cdots, \frac{1}{n-1}), \,\,\, M \in \{1, \cdots, n-1\}.
+\end{equation*}\]</span> Equivalently, you can think of the Uniform prior as: <span class="math display">\[\begin{equation*}
+Prob(M = m) = \frac{1}{n-1}, \,\,\, M \in \{1, \cdots, n-1\}.
+\end{equation*}\]</span></p>
+<p>Recall that Gamma distributions are conjugate prior distributions for Poisson data model. Suppose one uses independent conjugate Gamma priors for <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span>: <span class="math display">\[\begin{eqnarray*}
+\lambda_1 \mid a_1, b_1 &amp;\sim&amp; \textrm{Gamma}(a_1, b_1), \\
+\lambda_2 \mid a_2, b_2 &amp;\sim&amp; \textrm{Gamma}(a_2, b_2).
+\end{eqnarray*}\]</span></p>
+<ol type="a">
+<li><p>Write the joint posterior distribution, <span class="math inline">\(\pi(\lambda_1, \lambda_2, M \mid y_1, \cdots, y_n)\)</span>, up to a constant.</p></li>
+<li><p>Find the full conditional posterior distribution for <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_2\)</span>. Write the name of the distributions and expressions for their parameter values.</p></li>
+<li><p>Find the full conditional posterior distribution for <span class="math inline">\(M\)</span>, which should be a discrete distribution over <span class="math inline">\(m = 1, \cdots, n-1\)</span>.</p></li>
+<li><p>Describe how you would design a Gibbs sampling to simulate posterior draws of the set of parameters, <span class="math inline">\((\lambda_1, \lambda_2, M)\)</span>.</p></li>
+</ol>
+
+
 </section>
 
 </main> <!-- /main -->
