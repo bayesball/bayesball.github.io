@@ -1,0 +1,1958 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 4 Bayesian Hierarchical Modeling | Probability and Bayesian Modeling</title>
+  <meta name="description" content="This is an introduction to probability and Bayesian modeling at the undergraduate level. It assumes the student has some background with calculus." />
+  <meta name="generator" content="bookdown 0.27 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 4 Bayesian Hierarchical Modeling | Probability and Bayesian Modeling" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="This is an introduction to probability and Bayesian modeling at the undergraduate level. It assumes the student has some background with calculus." />
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 4 Bayesian Hierarchical Modeling | Probability and Bayesian Modeling" />
+  
+  <meta name="twitter:description" content="This is an introduction to probability and Bayesian modeling at the undergraduate level. It assumes the student has some background with calculus." />
+  
+
+<meta name="author" content="Jim Albert and Jingchen Hu" />
+
+
+<meta name="date" content="2022-06-20" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="simulation-by-markov-chain-monte-carlo.html"/>
+<link rel="next" href="simple-linear-regression.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Probability and Bayesian Modeling</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="proportion.html"><a href="proportion.html"><i class="fa fa-check"></i><b>1</b> Learning About a Binomial Probability</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="proportion.html"><a href="proportion.html#introduction-thinking-about-a-proportion-subjectively"><i class="fa fa-check"></i><b>1.1</b> Introduction: Thinking About a Proportion Subjectively</a></li>
+<li class="chapter" data-level="1.2" data-path="proportion.html"><a href="proportion.html#bayesian-inference-with-discrete-priors"><i class="fa fa-check"></i><b>1.2</b> Bayesian Inference with Discrete Priors</a>
+<ul>
+<li class="chapter" data-level="1.2.1" data-path="proportion.html"><a href="proportion.html#example-students-dining-preference"><i class="fa fa-check"></i><b>1.2.1</b> Example: students’ dining preference</a></li>
+<li class="chapter" data-level="1.2.2" data-path="proportion.html"><a href="proportion.html#discrete-prior-distributions-for-proportion-p"><i class="fa fa-check"></i><b>1.2.2</b> Discrete prior distributions for proportion <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="1.2.3" data-path="proportion.html"><a href="proportion.html#likelihood"><i class="fa fa-check"></i><b>1.2.3</b> Likelihood</a></li>
+<li class="chapter" data-level="1.2.4" data-path="proportion.html"><a href="proportion.html#posterior-distribution-for-proportion-p"><i class="fa fa-check"></i><b>1.2.4</b> Posterior distribution for proportion <span class="math inline">\(p\)</span></a></li>
+<li class="chapter" data-level="1.2.5" data-path="proportion.html"><a href="proportion.html#inference-students-dining-preference"><i class="fa fa-check"></i><b>1.2.5</b> Inference: students’ dining preference</a></li>
+<li class="chapter" data-level="1.2.6" data-path="proportion.html"><a href="proportion.html#discussion-using-a-discrete-prior"><i class="fa fa-check"></i><b>1.2.6</b> Discussion: using a discrete prior</a></li>
+</ul></li>
+<li class="chapter" data-level="1.3" data-path="proportion.html"><a href="proportion.html#continuous-priors"><i class="fa fa-check"></i><b>1.3</b> Continuous Priors</a>
+<ul>
+<li class="chapter" data-level="1.3.1" data-path="proportion.html"><a href="proportion.html#the-beta-distribution-and-probabilities"><i class="fa fa-check"></i><b>1.3.1</b> The Beta distribution and probabilities</a></li>
+<li class="chapter" data-level="1.3.2" data-path="proportion.html"><a href="proportion.html#choosing-a-beta-density-to-represent-prior-opinion"><i class="fa fa-check"></i><b>1.3.2</b> Choosing a Beta density to represent prior opinion</a></li>
+</ul></li>
+<li class="chapter" data-level="1.4" data-path="proportion.html"><a href="proportion.html#updating-the-beta-prior"><i class="fa fa-check"></i><b>1.4</b> Updating the Beta Prior</a>
+<ul>
+<li class="chapter" data-level="1.4.1" data-path="proportion.html"><a href="proportion.html#bayes-rule-calculation"><i class="fa fa-check"></i><b>1.4.1</b> Bayes’ rule calculation</a></li>
+<li class="chapter" data-level="1.4.2" data-path="proportion.html"><a href="proportion.html#from-beta-prior-to-beta-posterior"><i class="fa fa-check"></i><b>1.4.2</b> From Beta prior to Beta posterior</a></li>
+</ul></li>
+<li class="chapter" data-level="1.5" data-path="proportion.html"><a href="proportion.html#bayesian-inferences-with-continuous-priors"><i class="fa fa-check"></i><b>1.5</b> Bayesian Inferences with Continuous Priors</a>
+<ul>
+<li class="chapter" data-level="1.5.1" data-path="proportion.html"><a href="proportion.html#bayesian-hypothesis-testing"><i class="fa fa-check"></i><b>1.5.1</b> Bayesian hypothesis testing</a></li>
+<li class="chapter" data-level="1.5.2" data-path="proportion.html"><a href="proportion.html#bayesian-credible-intervals"><i class="fa fa-check"></i><b>1.5.2</b> Bayesian credible intervals</a></li>
+<li class="chapter" data-level="1.5.3" data-path="proportion.html"><a href="proportion.html#bayesian-prediction"><i class="fa fa-check"></i><b>1.5.3</b> Bayesian prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="1.6" data-path="proportion.html"><a href="proportion.html#predictive-checking"><i class="fa fa-check"></i><b>1.6</b> Predictive Checking</a>
+<ul>
+<li class="chapter" data-level="1.6.1" data-path="proportion.html"><a href="proportion.html#comparing-bayesian-models"><i class="fa fa-check"></i><b>1.6.1</b> Comparing Bayesian models</a></li>
+<li class="chapter" data-level="1.6.2" data-path="proportion.html"><a href="proportion.html#posterior-predictive-checking"><i class="fa fa-check"></i><b>1.6.2</b> Posterior predictive checking</a></li>
+</ul></li>
+<li class="chapter" data-level="1.7" data-path="proportion.html"><a href="proportion.html#exercises"><i class="fa fa-check"></i><b>1.7</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="mean.html"><a href="mean.html"><i class="fa fa-check"></i><b>2</b> Modeling Measurement and Count Data</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="mean.html"><a href="mean.html#introduction"><i class="fa fa-check"></i><b>2.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.2" data-path="mean.html"><a href="mean.html#modeling-measurements"><i class="fa fa-check"></i><b>2.2</b> Modeling Measurements</a>
+<ul>
+<li class="chapter" data-level="2.2.1" data-path="mean.html"><a href="mean.html#examples"><i class="fa fa-check"></i><b>2.2.1</b> Examples</a></li>
+<li class="chapter" data-level="2.2.2" data-path="mean.html"><a href="mean.html#the-general-approach"><i class="fa fa-check"></i><b>2.2.2</b> The general approach</a></li>
+<li class="chapter" data-level="2.2.3" data-path="mean.html"><a href="mean.html#outline-of-chapter"><i class="fa fa-check"></i><b>2.2.3</b> Outline of chapter</a></li>
+</ul></li>
+<li class="chapter" data-level="2.3" data-path="mean.html"><a href="mean.html#Normal:Discrete"><i class="fa fa-check"></i><b>2.3</b> Bayesian Inference with Discrete Priors</a>
+<ul>
+<li class="chapter" data-level="2.3.1" data-path="mean.html"><a href="mean.html#Normal:Discrete:Roger"><i class="fa fa-check"></i><b>2.3.1</b> Example: Roger Federer’s time-to-serve</a></li>
+<li class="chapter" data-level="2.3.2" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:derivation"><i class="fa fa-check"></i><b>2.3.2</b> Simplification of the likelihood</a></li>
+<li class="chapter" data-level="2.3.3" data-path="mean.html"><a href="mean.html#Normal:SamplingModel:inference"><i class="fa fa-check"></i><b>2.3.3</b> Inference: Federer’s time-to-serve</a></li>
+</ul></li>
+<li class="chapter" data-level="2.4" data-path="mean.html"><a href="mean.html#Normal:Continuous"><i class="fa fa-check"></i><b>2.4</b> Continuous Priors</a>
+<ul>
+<li class="chapter" data-level="2.4.1" data-path="mean.html"><a href="mean.html#Normal:Continuous:prior"><i class="fa fa-check"></i><b>2.4.1</b> The Normal prior for mean <span class="math inline">\(\mu\)</span></a></li>
+<li class="chapter" data-level="2.4.2" data-path="mean.html"><a href="mean.html#Normal:Continuous:choosing"><i class="fa fa-check"></i><b>2.4.2</b> Choosing a Normal prior</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate"><i class="fa fa-check"></i><b>2.5</b> Updating the Normal Prior</a>
+<ul>
+<li class="chapter" data-level="2.5.1" data-path="mean.html"><a href="mean.html#introduction-1"><i class="fa fa-check"></i><b>2.5.1</b> Introduction</a></li>
+<li class="chapter" data-level="2.5.2" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:Overview"><i class="fa fa-check"></i><b>2.5.2</b> A quick peak at the update procedure</a></li>
+<li class="chapter" data-level="2.5.3" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:BayesRule"><i class="fa fa-check"></i><b>2.5.3</b> Bayes’ rule calculation</a></li>
+<li class="chapter" data-level="2.5.4" data-path="mean.html"><a href="mean.html#Normal:ContinuousUpdate:Conjugate"><i class="fa fa-check"></i><b>2.5.4</b> Conjugate Normal prior</a></li>
+</ul></li>
+<li class="chapter" data-level="2.6" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference"><i class="fa fa-check"></i><b>2.6</b> Bayesian Inferences for Continuous Normal Mean</a>
+<ul>
+<li class="chapter" data-level="2.6.1" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference:HTandCI"><i class="fa fa-check"></i><b>2.6.1</b> Bayesian hypothesis testing and credible interval</a></li>
+<li class="chapter" data-level="2.6.2" data-path="mean.html"><a href="mean.html#Normal:ContinuousInference:Prediction"><i class="fa fa-check"></i><b>2.6.2</b> Bayesian prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="2.7" data-path="mean.html"><a href="mean.html#Normal:PPC"><i class="fa fa-check"></i><b>2.7</b> Posterior Predictive Checking</a></li>
+<li class="chapter" data-level="2.8" data-path="mean.html"><a href="mean.html#modeling-count-data"><i class="fa fa-check"></i><b>2.8</b> Modeling Count Data</a>
+<ul>
+<li class="chapter" data-level="2.8.1" data-path="mean.html"><a href="mean.html#examples-1"><i class="fa fa-check"></i><b>2.8.1</b> Examples</a></li>
+<li class="chapter" data-level="2.8.2" data-path="mean.html"><a href="mean.html#the-poisson-distribution"><i class="fa fa-check"></i><b>2.8.2</b> The Poisson distribution</a></li>
+<li class="chapter" data-level="2.8.3" data-path="mean.html"><a href="mean.html#bayesian-inferences"><i class="fa fa-check"></i><b>2.8.3</b> Bayesian inferences</a></li>
+<li class="chapter" data-level="2.8.4" data-path="mean.html"><a href="mean.html#case-study-learning-about-website-counts"><i class="fa fa-check"></i><b>2.8.4</b> Case study: Learning about website counts</a></li>
+</ul></li>
+<li class="chapter" data-level="2.9" data-path="mean.html"><a href="mean.html#exercises-1"><i class="fa fa-check"></i><b>2.9</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html"><i class="fa fa-check"></i><b>3</b> Simulation by Markov Chain Monte Carlo</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#introduction-2"><i class="fa fa-check"></i><b>3.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="3.1.1" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#the-bayesian-computation-problem"><i class="fa fa-check"></i><b>3.1.1</b> The Bayesian computation problem</a></li>
+<li class="chapter" data-level="3.1.2" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#choosing-a-prior"><i class="fa fa-check"></i><b>3.1.2</b> Choosing a prior</a></li>
+<li class="chapter" data-level="3.1.3" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#the-two-parameter-normal-problem"><i class="fa fa-check"></i><b>3.1.3</b> The two-parameter Normal problem</a></li>
+<li class="chapter" data-level="3.1.4" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#overview-of-the-chapter"><i class="fa fa-check"></i><b>3.1.4</b> Overview of the chapter</a></li>
+</ul></li>
+<li class="chapter" data-level="3.2" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#markov-chains"><i class="fa fa-check"></i><b>3.2</b> Markov Chains</a>
+<ul>
+<li class="chapter" data-level="3.2.1" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#definition"><i class="fa fa-check"></i><b>3.2.1</b> Definition</a></li>
+<li class="chapter" data-level="3.2.2" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#some-properties"><i class="fa fa-check"></i><b>3.2.2</b> Some properties</a></li>
+<li class="chapter" data-level="3.2.3" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#simulating-a-markov-chain"><i class="fa fa-check"></i><b>3.2.3</b> Simulating a Markov chain</a></li>
+</ul></li>
+<li class="chapter" data-level="3.3" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#the-metropolis-algorithm"><i class="fa fa-check"></i><b>3.3</b> The Metropolis Algorithm</a>
+<ul>
+<li class="chapter" data-level="3.3.1" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#example-walking-on-a-number-line"><i class="fa fa-check"></i><b>3.3.1</b> Example: Walking on a number line</a></li>
+<li class="chapter" data-level="3.3.2" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#the-general-algorithm"><i class="fa fa-check"></i><b>3.3.2</b> The general algorithm</a></li>
+<li class="chapter" data-level="3.3.3" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#a-general-function-for-the-metropolis-algorithm"><i class="fa fa-check"></i><b>3.3.3</b> A general function for the Metropolis algorithm</a></li>
+</ul></li>
+<li class="chapter" data-level="3.4" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#example-cauchy-normal-problem"><i class="fa fa-check"></i><b>3.4</b> Example: Cauchy-Normal problem</a>
+<ul>
+<li class="chapter" data-level="3.4.1" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#choice-of-starting-value-and-proposal-region"><i class="fa fa-check"></i><b>3.4.1</b> Choice of starting value and proposal region</a></li>
+<li class="chapter" data-level="3.4.2" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#collecting-the-simulated-draws"><i class="fa fa-check"></i><b>3.4.2</b> Collecting the simulated draws</a></li>
+</ul></li>
+<li class="chapter" data-level="3.5" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#gibbs-sampling"><i class="fa fa-check"></i><b>3.5</b> Gibbs Sampling</a>
+<ul>
+<li class="chapter" data-level="3.5.1" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#bivariate-discrete-distribution"><i class="fa fa-check"></i><b>3.5.1</b> Bivariate discrete distribution}</a></li>
+<li class="chapter" data-level="3.5.2" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#beta-binomial-sampling"><i class="fa fa-check"></i><b>3.5.2</b> Beta-binomial sampling</a></li>
+<li class="chapter" data-level="3.5.3" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#normal-sampling-both-parameters-unknown"><i class="fa fa-check"></i><b>3.5.3</b> Normal sampling – both parameters unknown</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#mcmc-inputs-and-diagnostics"><i class="fa fa-check"></i><b>3.6</b> MCMC Inputs and Diagnostics</a>
+<ul>
+<li class="chapter" data-level="3.6.1" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#burn-in-starting-values-and-multiple-chains"><i class="fa fa-check"></i><b>3.6.1</b> Burn-in, starting values, and multiple chains</a></li>
+<li class="chapter" data-level="3.6.2" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#diagnostics"><i class="fa fa-check"></i><b>3.6.2</b> Diagnostics</a></li>
+<li class="chapter" data-level="3.6.3" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#graphs-and-summaries"><i class="fa fa-check"></i><b>3.6.3</b> Graphs and summaries</a></li>
+</ul></li>
+<li class="chapter" data-level="3.7" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#using-jags"><i class="fa fa-check"></i><b>3.7</b> Using JAGS</a>
+<ul>
+<li class="chapter" data-level="3.7.1" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#normal-sampling-model"><i class="fa fa-check"></i><b>3.7.1</b> Normal sampling model</a></li>
+<li class="chapter" data-level="3.7.2" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#multiple-chains"><i class="fa fa-check"></i><b>3.7.2</b> Multiple chains</a></li>
+<li class="chapter" data-level="3.7.3" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#posterior-predictive-checking-1"><i class="fa fa-check"></i><b>3.7.3</b> Posterior predictive checking</a></li>
+<li class="chapter" data-level="3.7.4" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#comparing-two-proportions"><i class="fa fa-check"></i><b>3.7.4</b> Comparing two proportions</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="simulation-by-markov-chain-monte-carlo.html"><a href="simulation-by-markov-chain-monte-carlo.html#exercises-2"><i class="fa fa-check"></i><b>3.8</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html"><i class="fa fa-check"></i><b>4</b> Bayesian Hierarchical Modeling</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#introduction-3"><i class="fa fa-check"></i><b>4.1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="4.1.1" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#observations-in-groups"><i class="fa fa-check"></i><b>4.1.1</b> Observations in groups</a></li>
+<li class="chapter" data-level="4.1.2" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#example-standardized-test-scores"><i class="fa fa-check"></i><b>4.1.2</b> Example: standardized test scores</a></li>
+<li class="chapter" data-level="4.1.3" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#separate-estimates"><i class="fa fa-check"></i><b>4.1.3</b> Separate estimates?</a></li>
+<li class="chapter" data-level="4.1.4" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#combined-estimates"><i class="fa fa-check"></i><b>4.1.4</b> Combined estimates?</a></li>
+<li class="chapter" data-level="4.1.5" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#a-two-stage-prior-leading-to-compromise-estimates"><i class="fa fa-check"></i><b>4.1.5</b> A two-stage prior leading to compromise estimates</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#hierarchical-normal-modeling"><i class="fa fa-check"></i><b>4.2</b> Hierarchical Normal Modeling</a>
+<ul>
+<li class="chapter" data-level="4.2.1" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#example-ratings-of-animation-movies"><i class="fa fa-check"></i><b>4.2.1</b> Example: ratings of animation movies</a></li>
+<li class="chapter" data-level="4.2.2" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#a-hierarchical-normal-model-with-random-sigma"><i class="fa fa-check"></i><b>4.2.2</b> A hierarchical Normal model with random <span class="math inline">\(\sigma\)</span></a></li>
+<li class="chapter" data-level="4.2.3" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#inference-through-mcmc"><i class="fa fa-check"></i><b>4.2.3</b> Inference through MCMC</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#hierarchical-beta-binomial-modeling"><i class="fa fa-check"></i><b>4.3</b> Hierarchical Beta-Binomial Modeling</a>
+<ul>
+<li class="chapter" data-level="4.3.1" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#example-deaths-after-heart-attack"><i class="fa fa-check"></i><b>4.3.1</b> Example: Deaths after heart attack</a></li>
+<li class="chapter" data-level="4.3.2" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#a-hierarchical-beta-binomial-model"><i class="fa fa-check"></i><b>4.3.2</b> A hierarchical Beta-Binomial model</a></li>
+<li class="chapter" data-level="4.3.3" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#inference-through-mcmc-1"><i class="fa fa-check"></i><b>4.3.3</b> Inference through MCMC</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="bayesian-hierarchical-modeling.html"><a href="bayesian-hierarchical-modeling.html#exercises-3"><i class="fa fa-check"></i><b>4.4</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html"><i class="fa fa-check"></i><b>5</b> Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#introduction-4"><i class="fa fa-check"></i><b>5.1</b> Introduction</a></li>
+<li class="chapter" data-level="5.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#example-prices-and-areas-of-house-sales"><i class="fa fa-check"></i><b>5.2</b> Example: Prices and Areas of House Sales</a></li>
+<li class="chapter" data-level="5.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-simple-linear-regression-model"><i class="fa fa-check"></i><b>5.3</b> A Simple Linear Regression Model</a></li>
+<li class="chapter" data-level="5.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-weakly-informative-prior"><i class="fa fa-check"></i><b>5.4</b> A Weakly Informative Prior</a></li>
+<li class="chapter" data-level="5.5" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-analysis"><i class="fa fa-check"></i><b>5.5</b> Posterior Analysis</a></li>
+<li class="chapter" data-level="5.6" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#inference-through-mcmc-2"><i class="fa fa-check"></i><b>5.6</b> Inference through MCMC</a></li>
+<li class="chapter" data-level="5.7" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#bayesian-inferences-with-simple-linear-regression"><i class="fa fa-check"></i><b>5.7</b> Bayesian Inferences with Simple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="5.7.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#simulate-fits-from-the-regression-model"><i class="fa fa-check"></i><b>5.7.1</b> Simulate fits from the regression model</a></li>
+<li class="chapter" data-level="5.7.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#learning-about-the-expected-response"><i class="fa fa-check"></i><b>5.7.2</b> Learning about the expected response</a></li>
+<li class="chapter" data-level="5.7.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#prediction-of-future-response"><i class="fa fa-check"></i><b>5.7.3</b> Prediction of future response</a></li>
+<li class="chapter" data-level="5.7.4" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-predictive-model-checking"><i class="fa fa-check"></i><b>5.7.4</b> Posterior predictive model checking</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#informative-prior-1"><i class="fa fa-check"></i><b>5.8</b> Informative Prior</a>
+<ul>
+<li class="chapter" data-level="5.8.1" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#standardization"><i class="fa fa-check"></i><b>5.8.1</b> Standardization</a></li>
+<li class="chapter" data-level="5.8.2" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#prior-distributions"><i class="fa fa-check"></i><b>5.8.2</b> Prior distributions</a></li>
+<li class="chapter" data-level="5.8.3" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#posterior-analysis-1"><i class="fa fa-check"></i><b>5.8.3</b> Posterior Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="5.9" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#a-conditional-means-prior"><i class="fa fa-check"></i><b>5.9</b> A Conditional Means Prior</a></li>
+<li class="chapter" data-level="5.10" data-path="simple-linear-regression.html"><a href="simple-linear-regression.html#exercises-4"><i class="fa fa-check"></i><b>5.10</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html"><i class="fa fa-check"></i><b>6</b> Bayesian Multiple Regression and Logistic Models</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#introduction-5"><i class="fa fa-check"></i><b>6.1</b> Introduction</a></li>
+<li class="chapter" data-level="6.2" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#bayesian-multiple-linear-regression"><i class="fa fa-check"></i><b>6.2</b> Bayesian Multiple Linear Regression</a>
+<ul>
+<li class="chapter" data-level="6.2.1" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#example-expenditures-of-u.s.-households"><i class="fa fa-check"></i><b>6.2.1</b> Example: expenditures of U.S. households</a></li>
+<li class="chapter" data-level="6.2.2" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#a-multiple-linear-regression-model"><i class="fa fa-check"></i><b>6.2.2</b> A multiple linear regression model</a></li>
+<li class="chapter" data-level="6.2.3" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#weakly-informative-priors-and-inference-through-mcmc"><i class="fa fa-check"></i><b>6.2.3</b> Weakly informative priors and inference through MCMC</a></li>
+<li class="chapter" data-level="6.2.4" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#prediction"><i class="fa fa-check"></i><b>6.2.4</b> Prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="6.3" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#comparing-regression-models"><i class="fa fa-check"></i><b>6.3</b> Comparing Regression Models</a></li>
+<li class="chapter" data-level="6.4" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#bayesian-logistic-regression"><i class="fa fa-check"></i><b>6.4</b> Bayesian Logistic Regression </a>
+<ul>
+<li class="chapter" data-level="6.4.1" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#example-u.s.-women-labor-participation"><i class="fa fa-check"></i><b>6.4.1</b> Example: U.S. women labor participation</a></li>
+<li class="chapter" data-level="6.4.2" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#a-logistic-regression-model"><i class="fa fa-check"></i><b>6.4.2</b> A logistic regression model</a></li>
+<li class="chapter" data-level="6.4.3" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#conditional-means-priors-and-inference-through-mcmc"><i class="fa fa-check"></i><b>6.4.3</b> Conditional means priors and inference through MCMC</a></li>
+<li class="chapter" data-level="6.4.4" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#prediction-1"><i class="fa fa-check"></i><b>6.4.4</b> Prediction</a></li>
+</ul></li>
+<li class="chapter" data-level="6.5" data-path="bayesian-multiple-regression-and-logistic-models.html"><a href="bayesian-multiple-regression-and-logistic-models.html#exercises-5"><i class="fa fa-check"></i><b>6.5</b> Exercises</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="case-studies.html"><a href="case-studies.html"><i class="fa fa-check"></i><b>7</b> Case Studies</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="case-studies.html"><a href="case-studies.html#introduction-6"><i class="fa fa-check"></i><b>7.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.2" data-path="case-studies.html"><a href="case-studies.html#federalist-papers-study"><i class="fa fa-check"></i><b>7.2</b> Federalist Papers Study</a>
+<ul>
+<li class="chapter" data-level="7.2.1" data-path="case-studies.html"><a href="case-studies.html#introduction-7"><i class="fa fa-check"></i><b>7.2.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.2.2" data-path="case-studies.html"><a href="case-studies.html#data-on-word-use"><i class="fa fa-check"></i><b>7.2.2</b> Data on word use</a></li>
+<li class="chapter" data-level="7.2.3" data-path="case-studies.html"><a href="case-studies.html#poisson-density-sampling"><i class="fa fa-check"></i><b>7.2.3</b> Poisson density sampling</a></li>
+<li class="chapter" data-level="7.2.4" data-path="case-studies.html"><a href="case-studies.html#negative-binomial-sampling"><i class="fa fa-check"></i><b>7.2.4</b> Negative Binomial sampling</a></li>
+<li class="chapter" data-level="7.2.5" data-path="case-studies.html"><a href="case-studies.html#comparison-of-rates-for-two-authors"><i class="fa fa-check"></i><b>7.2.5</b> Comparison of rates for two authors</a></li>
+<li class="chapter" data-level="7.2.6" data-path="case-studies.html"><a href="case-studies.html#which-words-distinguish-the-two-authors"><i class="fa fa-check"></i><b>7.2.6</b> Which words distinguish the two authors?</a></li>
+</ul></li>
+<li class="chapter" data-level="7.3" data-path="case-studies.html"><a href="case-studies.html#career-trajectories"><i class="fa fa-check"></i><b>7.3</b> Career Trajectories</a>
+<ul>
+<li class="chapter" data-level="7.3.1" data-path="case-studies.html"><a href="case-studies.html#introduction-8"><i class="fa fa-check"></i><b>7.3.1</b> Introduction</a></li>
+<li class="chapter" data-level="7.3.2" data-path="case-studies.html"><a href="case-studies.html#measuring-hitting-performance-in-baseball"><i class="fa fa-check"></i><b>7.3.2</b> Measuring hitting performance in baseball</a></li>
+<li class="chapter" data-level="7.3.3" data-path="case-studies.html"><a href="case-studies.html#a-hitters-career-trajectory"><i class="fa fa-check"></i><b>7.3.3</b> A hitter’s career trajectory</a></li>
+<li class="chapter" data-level="7.3.4" data-path="case-studies.html"><a href="case-studies.html#estimating-a-single-trajectory"><i class="fa fa-check"></i><b>7.3.4</b> Estimating a single trajectory</a></li>
+<li class="chapter" data-level="7.3.5" data-path="case-studies.html"><a href="case-studies.html#estimating-many-trajectories-by-a-hierarchical-model"><i class="fa fa-check"></i><b>7.3.5</b> Estimating many trajectories by a hierarchical model</a></li>
+</ul></li>
+<li class="chapter" data-level="7.4" data-path="case-studies.html"><a href="case-studies.html#latent-class-modeling"><i class="fa fa-check"></i><b>7.4</b> Latent Class Modeling</a>
+<ul>
+<li class="chapter" data-level="7.4.1" data-path="case-studies.html"><a href="case-studies.html#two-classes-of-test-takers"><i class="fa fa-check"></i><b>7.4.1</b> Two classes of test takers</a></li>
+<li class="chapter" data-level="7.4.2" data-path="case-studies.html"><a href="case-studies.html#a-latent-class-model-with-two-classes"><i class="fa fa-check"></i><b>7.4.2</b> A latent class model with two classes</a></li>
+<li class="chapter" data-level="7.4.3" data-path="case-studies.html"><a href="case-studies.html#disputed-authorship-of-the-federalist-papers"><i class="fa fa-check"></i><b>7.4.3</b> Disputed authorship of the Federalist Papers</a></li>
+</ul></li>
+<li class="chapter" data-level="7.5" data-path="case-studies.html"><a href="case-studies.html#exercises-6"><i class="fa fa-check"></i><b>7.5</b> Exercises</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Probability and Bayesian Modeling</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="bayesian-hierarchical-modeling" class="section level1 hasAnchor" number="4">
+<h1><span class="header-section-number">Chapter 4</span> Bayesian Hierarchical Modeling<a href="bayesian-hierarchical-modeling.html#bayesian-hierarchical-modeling" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<div id="introduction-3" class="section level2 hasAnchor" number="4.1">
+<h2><span class="header-section-number">4.1</span> Introduction<a href="bayesian-hierarchical-modeling.html#introduction-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="observations-in-groups" class="section level3 hasAnchor" number="4.1.1">
+<h3><span class="header-section-number">4.1.1</span> Observations in groups<a href="bayesian-hierarchical-modeling.html#observations-in-groups" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Chapters 7, 8, and 9 make an underlying assumption about the source of data: observations are assumed to be identically and independently distributed (i.i.d.) following a single distribution with one or more unknown parameters.
+In Chapter 7, the Binomial data model is based on the assumptions that a student’s chance of preferring dining out on Friday is the same for all students, and the dining preferences of different students are independent. To refresh your memory, recall the four conditions of a Binomial experiment: a fixed number of trials, only two outcomes, a fixed success probability, and independent trials.
+In Chapter 8, the Normal sampling model is based on the assumptions that Roger Federer’s time-to-serves are independent observations following a single Normal distribution with an unknown mean <span class="math inline">\(\mu\)</span> and known standard deviation <span class="math inline">\(\sigma\)</span>. That is, <span class="math inline">\(Y_i \overset{i.i.d.}{\sim} \textrm{Normal}(\mu, \sigma)\)</span>.
+Similarly in Chapter 9, the underlying assumption is that the snowfall amounts in Buffalo for the last 20 Januarys follow the same <span class="math inline">\(\textrm{Normal}(\mu, \sigma)\)</span> distribution with both parameters unknown.</p>
+<p>In many situations, treating observations as i.i.d. from the same distribution with the same parameter(s) is not sensible. In our dining out example, dining preferences for students may be different from dining performances of senior citizens, so it would not make sense to use a single success probability for a combined group of students and senior citizens. In a similar fashion, if one considered time-to-serve data for a group of tennis players, then it would not be reasonable to use a single Normal distribution with a single mean to represent these data – the mean time-to-serve for a quick-serving player would likely be smaller than the mean time-to-serve for a slower player. For many applications, some observations share characteristics, such as age or player, that distinguish them from other observations, therefore multiple distinct groups are observed.</p>
+</div>
+<div id="example-standardized-test-scores" class="section level3 hasAnchor" number="4.1.2">
+<h3><span class="header-section-number">4.1.2</span> Example: standardized test scores<a href="bayesian-hierarchical-modeling.html#example-standardized-test-scores" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>As a new example, consider a study in which students’ scores of a standardized test such as the SAT are collected from five different senior high schools in a given year. Suppose a researcher is interested in learning about the mean SAT score. Since five different schools participated in this study and students’ scores might vary from school to school, it makes sense for the researcher to learn about the mean SAT score for each school and compare students’ mean performance across schools.</p>
+<p>To start modeling this education data, it is inappropriate to use <span class="math inline">\(Y_i\)</span> as the random variable for the SAT score of student <span class="math inline">\(i\)</span> (<span class="math inline">\(i = 1, \cdots, n\)</span>, where <span class="math inline">\(n\)</span> is the total number of students from all five schools) since this ignores the inherent grouping of the observations. Instead, the researcher adds a school label <span class="math inline">\(j\)</span> to <span class="math inline">\(Y_i\)</span> to reflect the grouping. Let <span class="math inline">\(Y_{ij}\)</span> denote the SAT score of student <span class="math inline">\(i\)</span> in school <span class="math inline">\(j\)</span>, where <span class="math inline">\(j = 1, \cdots, 5\)</span>, and <span class="math inline">\(i = 1, \cdots, n_j\)</span>, where <span class="math inline">\(n_j\)</span> is the number of students in school <span class="math inline">\(j\)</span>, and <span class="math inline">\(n = \sum_{j=1}^{5}n_j\)</span>.</p>
+<p>Since SAT scores are continuous, the Normal sampling model is a reasonable choice for a data distribution. Within school <span class="math inline">\(j\)</span>, one assumes that SAT scores are i.i.d. from a Normal data model with a mean and standard deviation depending on the school. Specifically, one assumes a school-specific mean <span class="math inline">\(\mu_j\)</span> and a school-specific standard deviation <span class="math inline">\(\sigma_j\)</span> for the Normal data model for school <span class="math inline">\(j\)</span>. Combining the information for the five schools, one has</p>
+<p><span class="math display" id="eq:normsampling">\[\begin{equation}
+Y_{ij} \overset{i.i.d.}{\sim} \textrm{Normal}(\mu_j, \sigma_j),
+\label{eq:introLik}
+\tag{3.15}
+\end{equation}\]</span>
+where <span class="math inline">\(j = 1, \cdots, 5\)</span> and <span class="math inline">\(j = 1, \cdots, n_j\)</span>.</p>
+</div>
+<div id="separate-estimates" class="section level3 hasAnchor" number="4.1.3">
+<h3><span class="header-section-number">4.1.3</span> Separate estimates?<a href="bayesian-hierarchical-modeling.html#separate-estimates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>One approach for handling this group estimation problem is find separate estimates for each school.
+One focuses on the observations in school <span class="math inline">\(j\)</span>,<span class="math inline">\(\{Y_{1j}, Y_{2j}, \cdots, Y_{n_jj}\}\)</span>, choose a prior distribution <span class="math inline">\(\pi(\mu_j, \sigma_j)\)</span> for the mean and the standard deviation parameters, follow the Bayesian inference procedure in Chapter 9 and obtain posterior inference on <span class="math inline">\(\mu_j\)</span> and <span class="math inline">\(\sigma_j\)</span>.<br />
+If one assumes that the prior distributions on the individual parameters for the schools are independent, one is essentially fitting five separate Bayesian models and one’s inferences about one particular school will be independent of the inferences on the remaining schools.</p>
+<p>This “separate estimates” approach may be reasonable, especially if the researcher thinks the means and the standard deviations from the five Normal models are completely unrelated to each other. That is, one’s prior beliefs about the parameters of the SAT score distribution in one school are unrelated to the prior beliefs about the distribution parameters in another school.</p>
+<p>To see if this assumption is reasonable, let us consider a thought experiment for the school testing example. Suppose you are interested in learning about the mean SAT score <span class="math inline">\(\mu_N\)</span> for school <span class="math inline">\(N\)</span>. You may not be familiar with the distribution of SAT scores and it would be difficult to construct an informative prior for <span class="math inline">\(\mu_N\)</span>. But suppose that you are told that the students from another school, call it school <span class="math inline">\(M\)</span>, average 1,200 on their SAT scores. That information would likely influence your prior on <span class="math inline">\(\mu_N\)</span>, since now you have some general idea about SAT scores. This means that your prior beliefs about the mean SAT scores <span class="math inline">\(\mu_N\)</span> and <span class="math inline">\(\mu_M\)</span> are not independent – some information about one school’s mean SAT scores would change your prior on the second school’s mean SAT score. So in many situations, this independence assumption would be questionable.</p>
+</div>
+<div id="combined-estimates" class="section level3 hasAnchor" number="4.1.4">
+<h3><span class="header-section-number">4.1.4</span> Combined estimates?<a href="bayesian-hierarchical-modeling.html#combined-estimates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Another way to handle this group estimation problem is to ignore the fact that there is a grouping variable and estimate the parameters in the combined sample. In our school example, one ignores the school variable and simply assumes that the SAT scores <span class="math inline">\(Y_i&#39;s\)</span> are distributed from a single Normal population with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>. Here, <span class="math inline">\(i = 1, \cdots, n\)</span> where <span class="math inline">\(n\)</span> is the total number of students from all five schools.</p>
+<p>If ones ignores the grouping variable, then the inference procedure described in Chapter 9 can be used. One constructs a prior for the parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\sigma\)</span> and use Gibbs sampling to obtain a simulated sample from the posterior distribution of <span class="math inline">\((\mu, \sigma)\)</span>.</p>
+<p>Using this approach, one is effectively ignoring any differences between the five schools. Although it is reasonable to assume some similarity in the SAT scores across different schools, one probably does not believe that the schools are indistinguishable. In fact, state officials assume the schools have distinct features such as student bodies with different socioeconomic statuses so that SAT scores from different schools can be substantially different. In some states in the United States, all schools are ranked on different criteria which reflects the belief that schools are different with respect to student achievement.</p>
+</div>
+<div id="a-two-stage-prior-leading-to-compromise-estimates" class="section level3 hasAnchor" number="4.1.5">
+<h3><span class="header-section-number">4.1.5</span> A two-stage prior leading to compromise estimates<a href="bayesian-hierarchical-modeling.html#a-two-stage-prior-leading-to-compromise-estimates" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>If one applies the “separate estimates” approach, one performs separate analyses on the different groups, and one ignores any prior knowledge about the similarity between the groups. On the other extreme, the “combined estimates” approach ignores the grouping variable and assumes that the groups are identical with respect to the response variable SAT score. Is there an alternative approach that compromises between the separate and combined estimate methods?</p>
+<p>Let us return to the model <span class="math inline">\(\textrm{Normal}(\mu_j, \sigma_j)\)</span> where <span class="math inline">\(\mu_j\)</span> is the parameter representing the mean SAT score of students in school <span class="math inline">\(j\)</span>. For simplicity of discussion it is assumed the standard deviation <span class="math inline">\(\sigma_j\)</span> of the <span class="math inline">\(j\)</span>-th school is known.
+Consider the collection of five mean parameters, <span class="math inline">\(\{\mu_1, \mu_2, \mu_3, \mu_4, \mu_5\}\)</span> representing the means of the five schools’ SAT scores. One believes that the <span class="math inline">\(\mu_j\)</span>’s are distinct, because each <span class="math inline">\(\mu_j\)</span> depends on the characteristics of school <span class="math inline">\(j\)</span>, such as size and socioeconomic status. But one also believes that the mean parameters are similar in size. Imagine if you were given some information about the location of one mean, say <span class="math inline">\(\mu_j\)</span>, then this information would influence your beliefs about the location of another mean <span class="math inline">\(\mu_k\)</span>. One wishes to construct a prior distribution for the five mean parameters that reflects the belief that <span class="math inline">\(\mu_1, \mu_2, \mu_3, \mu_4,\)</span> and $ _5$ are related or similar in size. This type of “similarity” prior ] allows one to combine the SAT scores of the five schools in the posterior distribution in such a way to obtain compromise estimates of the separate mean parameters.</p>
+<p>The prior belief in similarity of the means is constructed in two stages.</p>
+<ol style="list-style-type: decimal">
+<li><p>[Stage 1]
+The prior distribution for the <span class="math inline">\(j\)</span>-th mean, <span class="math inline">\(\mu_j\)</span> is Normal, where the mean and standard deviation parameters are shared among all <span class="math inline">\(\mu_j\)</span>’s:
+<span class="math display" id="eq:stage1prior">\[\begin{equation}
+\mu_j \mid \mu, \tau \sim \textrm{Normal}(\mu, \tau), \, \, j = 1, ..., 5.
+\label{eq:introPrior}
+\tag{4.1}
+\end{equation}\]</span></p></li>
+<li><p>[Stage 2] In the Stage 1 specification, the parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> are unknown. So this stage assigns the parameters a prior density <span class="math inline">\(\pi\)</span>.
+<span class="math display" id="eq:stage2prior">\[\begin{equation}
+\mu, \tau \sim \pi(\mu, \tau).
+\tag{4.2}
+\end{equation}\]</span></p></li>
+</ol>
+<p>Several comments can be made about this two-stage prior.</p>
+<ul>
+<li><p>Specifying the same prior distribution for all <span class="math inline">\(\mu_j\)</span>’s at Stage 1 does not say that the <span class="math inline">\(\mu_j\)</span>’s are the same value. Instead, Stage1 indicates that the <span class="math inline">\(\mu_j\)</span>’s a priori are related and come from the same distribution. If the prior distribution <span class="math inline">\(\textrm{Normal}(\mu, \tau)\)</span> has a large standard deviation (that is, if <span class="math inline">\(\tau\)</span> is large), the <span class="math inline">\(\mu_j\)</span>’s can be very different from each other a priori. On the other hand, if the standard deviation <span class="math inline">\(\tau\)</span> is small, the <span class="math inline">\(\mu_j\)</span>’s will be very similar in size.</p></li>
+<li><p>To follow up the previous comment, if one considers the limit of the Stage 1 prior as the standard deviation <span class="math inline">\(\tau\)</span> approaches zero, the group means <span class="math inline">\(\mu_j\)</span> will be identical. Then one is in the ``combined groups” situation where one is pooling the SAT data to learn about a single population. At the other extreme, if one allows the standard deviation <span class="math inline">\(\tau\)</span> of the Stage 1 prior to approach infinity, then one is saying that the group means <span class="math inline">\(\mu_1, ..., \mu_5\)</span> are unrelated and that leads to the separate estimates situation.</p></li>
+<li><p>In the school testing example, this prior <span class="math inline">\(\textrm{Normal}(\mu, \tau)\)</span> distribution is a model about all <span class="math inline">\(\mu_j\)</span>’s in the U.S., i.e. the population of SAT score means corresponding to all schools in the United States. The five schools in the dataset represent a sample from all schools in the U.S.</p></li>
+<li><p>Since <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> are parameters in the prior distribution, they are called hyperparameters. Learning about <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> provides information about the population of <span class="math inline">\(\mu_j\)</span>’s. Naturally in Bayesian inference, one learns about <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> by specifying a hyperprior distribution and performing inference based on the posterior distribution. In this example, inferences about <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> tell us about the location and spread of the population of mean SAT scores of schools in the U.S.</p></li>
+</ul>
+<p>To recap, one models continuous outcomes in groups through the school-specific sampling density in Equation (10.1) and the common Normal prior distribution in Equation (10.2) for the mean parameters. An important and appealing feature of this approach is learning simultaneously about each school (group) and learning about the population of schools (groups). Specifically in the current setup, the model simultaneously estimates the means for the schools (the <span class="math inline">\(\mu_j\)</span>’s) and the variation among the means (<span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span>). It will be seen that the hierarchical model posterior estimates for one school borrows information from other schools. This process is often called ``partial pooling” information among groups.</p>
+<p>From the structural point of view, due to the two stages of the model, this approach is called hierarchical or multilevel modeling. In essence, hierarchical modeling takes into account information from multiple levels, acknowledging differences and similarities among groups. In the posterior analysis, one learns simultaneously about each group and learns about the population of groups by pooling information across groups.</p>
+<p>In this chapter, hierarchical modeling is described in two situations that extend the Bayesian models for one proportion and one Normal mean described in Chapters 7 and 8, respectively.
+Section 10.2 introduces hierarchical Normal modeling using a sample of ratings of animation movies released in 2010; and Section 10.3 describes hierarchical Beta-Binomial modeling with an example of deaths after heart attack. In each section, we motivate the consideration of hierarchical models, outline the model structure, and implement model inference through Markov chain Monte Carlo simulation.</p>
+</div>
+</div>
+<div id="hierarchical-normal-modeling" class="section level2 hasAnchor" number="4.2">
+<h2><span class="header-section-number">4.2</span> Hierarchical Normal Modeling<a href="bayesian-hierarchical-modeling.html#hierarchical-normal-modeling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="example-ratings-of-animation-movies" class="section level3 hasAnchor" number="4.2.1">
+<h3><span class="header-section-number">4.2.1</span> Example: ratings of animation movies<a href="bayesian-hierarchical-modeling.html#example-ratings-of-animation-movies" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>MovieLens is a website which provides personalized movie recommendations from users who create accounts and rate movies that they have seen. Based on such information, MovieLens works to build a custom preference profile for each user and provide movie recommendations. MovieLens is run by GroupLens Research, a research lab at the University of Minnesota, who has made MovieLens rating datasets available to the public. GroupLens Research regularly updates these datasets on their website and the datasets are useful for new research, education and development initiatives.</p>
+<p>In one study, a sample from the MovieLens database was collected on movie ratings for eight different animation movies released in 2010. There are a total of 55 movie ratings, where a rating is is for a particular animation movie completed by a MovieLens user.
+The ratings are likely affected by the quality of the movie itself, as some movies are generally favored by the audience while others might be less favored. Therefore there exists a natural grouping of the 55 ratings by the movie title.</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-109"></span>
+<img src="../LATEX/figures/chapter10/ratingsplot.png" alt="Jittered dotplot of the ratings for the eight animation movies." width="500" />
+<p class="caption">
+Figure 4.1: Jittered dotplot of the ratings for the eight animation movies.
+</p>
+</div>
+<p>Figure 10.1 displays a jittered dotplot of the ratings grouped by movie title and Table 10.1 lists the sample mean, sample standard deviation, and the number of ratings for each title. Note the variability in the sample sizes – “Toy Story 3’ received 16 ratings and”Legend of the Guardians” and “Batman: Under the Red Hood” only received a single rating. For a movie with only one observed rating, such as “Legend of the Guardians” and ``Batman: Under the Red Hood”, it would be difficult to learn much about its mean rating. Here it is desirable to improve the estimate of its mean rating by using rating information from similar movies.</p>
+<p>Table 10.1. The movie title, the mean rating, the standard deviation of the ratings, and the number of ratings.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Movie Title</th>
+<th align="right">Mean</th>
+<th align="right">SD</th>
+<th align="right">N</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Batman: Under the Red Hood</td>
+<td align="right">5.00</td>
+<td align="right"></td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">Despicable Me</td>
+<td align="right">3.72</td>
+<td align="right">0.62</td>
+<td align="right">9</td>
+</tr>
+<tr class="odd">
+<td align="left">How to Train Your Dragon</td>
+<td align="right">3.41</td>
+<td align="right">0.86</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="left">Legend of the Guardians</td>
+<td align="right">4.00</td>
+<td align="right"></td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">Megamind</td>
+<td align="right">3.38</td>
+<td align="right">1.31</td>
+<td align="right">4</td>
+</tr>
+<tr class="even">
+<td align="left">Shrek Forever After</td>
+<td align="right">4.00</td>
+<td align="right">1.32</td>
+<td align="right">3</td>
+</tr>
+<tr class="odd">
+<td align="left">Tangled</td>
+<td align="right">4.20</td>
+<td align="right">0.89</td>
+<td align="right">10</td>
+</tr>
+<tr class="even">
+<td align="left">Toy Story 3</td>
+<td align="right">3.81</td>
+<td align="right">0.96</td>
+<td align="right">16</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="a-hierarchical-normal-model-with-random-sigma" class="section level3 hasAnchor" number="4.2.2">
+<h3><span class="header-section-number">4.2.2</span> A hierarchical Normal model with random <span class="math inline">\(\sigma\)</span><a href="bayesian-hierarchical-modeling.html#a-hierarchical-normal-model-with-random-sigma" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In this situation it is reasonable to develop a model for the movie ratings where the grouping variable is the movie title. We index a ratings by two subscripts, where <span class="math inline">\(Y_{ij}\)</span> denotes the <span class="math inline">\(i\)</span>-th rating for the <span class="math inline">\(j\)</span>-th movie title (<span class="math inline">\(j = 1, \cdots, 8\)</span>).</p>
+<p>What sampling model should be used for the movie ratings? Since the ratings are continuous, it is reasonable to use the Normal data model described in Chapter 8. Recall that a Normal model has two parameters, the mean and the standard deviation. Based on previous reasoning, the mean parameter is assumed to be movie-specific, so <span class="math inline">\(\mu_j\)</span> will represent the mean of the ratings for movie <span class="math inline">\(j\)</span>. Thinking about the standard deviation parameter, should the standard deviation also be movie-specific, where <span class="math inline">\(\sigma_j\)</span> represents the standard deviation of the ratings for movie <span class="math inline">\(j\)</span>? Or can we assume a common value of the standard deviation, say <span class="math inline">\(\sigma\)</span>, across movies?
+For simplicity and ease of illustration, a common and shared unknown standard deviation <span class="math inline">\(\sigma\)</span> is assumed for all Normal models. This is a simplified version of random <span class="math inline">\(\sigma_j\)</span>’s — the more flexible hierarchical model with random <span class="math inline">\(\sigma_j\)</span>’s will be left as an end-of-chapter exercise.</p>
+<p>One begins by writing down the sampling distributions for the ratings of the eight movies. Recall that <span class="math inline">\(Y_{ij}\)</span> denotes the <span class="math inline">\(i\)</span>-th rating of movie <span class="math inline">\(j\)</span>, where <span class="math inline">\(\mu_j\)</span> denote the mean of the Normal model for movie <span class="math inline">\(j\)</span>, and <span class="math inline">\(\sigma\)</span> denote the shared standard deviation of the Normal models across different movies. In our notation, <span class="math inline">\(n_j\)</span> represents the number of ratings for movie <span class="math inline">\(j\)</span>.</p>
+<ul>
+<li>Sampling, for <span class="math inline">\(j = 1, \cdots, 8\)</span> and <span class="math inline">\(i = 1, \cdots, n_j\)</span>:
+<span class="math display" id="eq:normsamp2">\[\begin{equation}
+Y_{ij} \mid \mu_j, \sigma \overset{i.i.d.}{\sim} \textrm{Normal}(\mu_j, \sigma).
+\tag{4.3}
+\end{equation}\]</span></li>
+</ul>
+<p>The next task is to set up a prior distribution for the eight mean parameters, <span class="math inline">\(\{\mu_1, \mu_2, \cdots, \mu_8\}\)</span> and the shared standard deviation parameter <span class="math inline">\(\sigma\)</span>. Focus first on the prior distribution for the mean parameters. Since these movies are all animations, it is reasonable to believe that the mean ratings are similar across movies. So one assigns each mean rating the same Normal prior distribution at the first stage:
+}
+- Prior for <span class="math inline">\(\mu_j\)</span>, <span class="math inline">\(j = 1, \cdots, 8\)</span>:
+<span class="math display" id="eq:stage1a">\[\begin{equation}
+\mu_j \mid \mu, \tau \sim \textrm{Normal}(\mu, \tau).
+\tag{4.4}
+\end{equation}\]</span></p>
+<p>As discussed in Section 10.1, this prior allows for a flexible method for pooling information across movies.
+If the prior distribution has a large standard deviation (e.g. a large value of <span class="math inline">\(\tau\)</span>), the <span class="math inline">\(\mu_j\)</span>’s are very different from each other a priori, and one would have modest pooling of the eight sets of ratings. If instead this prior has a small standard deviation (e.g. a small value of <span class="math inline">\(\tau\)</span>), the <span class="math inline">\(\mu_j\)</span>’s are very similar a priori and one would essentially be pooling the ratings to get an estimate at each of the <span class="math inline">\(\mu_j\)</span>. This shared prior <span class="math inline">\(\textrm{Normal}(\mu, \tau)\)</span> distribution among the <span class="math inline">\(\mu_j\)</span>’s simultaneously estimates both a mean for each movie (the <span class="math inline">\(\mu_j\)</span>’s) and also lets us learn about variation among the movies by the parameter <span class="math inline">\(\tau\)</span>.</p>
+<p>The hyperparameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> are treated as random since we are unsure about the degree of pooling of the eight sets of ratings. In typical practice, one specifies weakly informative hyperprior distributions for these “second-stage” parameters, indicating that one has little prior knowledge about the locations of these parameters. After observing data, inference is performed about <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> based on their posterior distributions. The posterior on the mean parameter <span class="math inline">\(\mu\)</span> is informative about an ``average” mean rating and the posterior on <span class="math inline">\(\tau\)</span> lets one know about the variation among the <span class="math inline">\(\mu_j\)</span>’s in the posterior.</p>
+<p>Treating <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> as random, one arrives at the following hierarchical model.</p>
+<ul>
+<li><p>Sampling: for <span class="math inline">\(j = 1, \cdots, 8\)</span> and <span class="math inline">\(i = 1, \cdots, n_j\)</span>:
+<span class="math display" id="eq:normsamp3">\[\begin{equation}
+Y_{ij} \mid \mu_j, \sigma \overset{i.i.d.}{\sim} \textrm{Normal}(\mu_j, \sigma).
+\tag{4.5}
+\label{eq:NormalLik}
+\end{equation}\]</span></p></li>
+<li><p>Prior for <span class="math inline">\(\mu_j\)</span>, Stage 1: <span class="math inline">\(\mu_j\)</span>, <span class="math inline">\(j = 1, \cdots, 8\)</span>:
+<span class="math display" id="eq:stage1b">\[\begin{equation}
+\mu_j \mid \mu, \tau \sim \textrm{Normal}(\mu, \tau).
+\label{eq:NormalMuPrior}
+\tag{4.6}
+\end{equation}\]</span></p></li>
+<li><p>Prior for <span class="math inline">\(\mu_j\)</span>, Stage 2:
+<span class="math display" id="eq:stage2b">\[\begin{equation}
+\mu, \tau \sim \pi(\mu, \tau).
+\label{eq:NormalMuHyperprior}
+\tag{4.7}
+\end{equation}\]</span></p></li>
+</ul>
+<p>In our model <span class="math inline">\(\pi(\mu, \tau)\)</span> denotes an arbitrary joint hyperprior distribution for the “Stage 2” hyperparameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span>. When the MovieLens ratings dataset is analyzed, the specification of this hyperprior distribution will be described.</p>
+<p>To complete the model, one needs to specify a prior distribution for the standard deviation parameter, <span class="math inline">\(\sigma\)</span>. As discussed in Chapter 9, when making inference about the standard deviation in a Normal model, one uses a Gamma prior on the precision (the inverse of the variance), for example,</p>
+<ul>
+<li>Prior for <span class="math inline">\(\sigma\)</span>:
+<span class="math display" id="eq:normalsigmaprior">\[\begin{eqnarray}
+1/\sigma^2 \mid a_{\sigma}, b_{\sigma}  &amp;\sim&amp; \textrm{Gamma}(a_{\sigma}, b_{\sigma})
+\label{eq:NormalSigmaPrior}
+\tag{4.8}
+\end{eqnarray}\]</span></li>
+</ul>
+<p>One assigns a known Gamma prior distribution for <span class="math inline">\(1/\sigma^2\)</span>, with fixed hyperparameter values <span class="math inline">\(a_{\sigma}\)</span> and <span class="math inline">\(b_{\sigma}\)</span>. In some situations, one may consider the situation where <span class="math inline">\(a_{\sigma}\)</span> and <span class="math inline">\(b_{\sigma}\)</span> are random
+and assign hyperprior distributions for these unknown hyperparameters.</p>
+<p>Before continuing to the graphical representation and simulation by MCMC using JAGS, it is helpful to contrast the two-stage prior distribution for {<span class="math inline">\(\mu_j\)</span>} and the one-stage prior distribution for <span class="math inline">\(\sigma\)</span>. The hierarchical model specifies a common prior for the means <span class="math inline">\(\mu_j\)</span>’s which induces sharing of information across ratings from different movies. On the other hand, the model uses a shared <span class="math inline">\(\sigma\)</span> for all movies which also induces sharing of information, though different from the sharing induced by the two-stage prior distribution for {<span class="math inline">\(\mu_j\)</span>}.</p>
+<p>What is the difference between the two types of sharing? For the means {<span class="math inline">\(\mu_j\)</span>}, we have discussed that specifying a common prior distribution for different <span class="math inline">\(\mu_j\)</span>’s pools information across the movies. One is simultaneously estimating both a mean for each movie (the <span class="math inline">\(\mu_j\)</span>’s) and the variation among the movies (<span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span>). For the standard deviation <span class="math inline">\(\sigma\)</span>, the hierarchical model also pools information across movies. However, all of the observations are combined in the estimation of <span class="math inline">\(\sigma\)</span>. Since separate values of <span class="math inline">\(\sigma_j\)</span>’s are not assumed, one cannot learn about the differences and similarities among the <span class="math inline">\(\sigma_j\)</span>’s.
+If one is interested in pooling information across movies for the <span class="math inline">\(\sigma_j\)</span>’s, one needs to allow random <span class="math inline">\(\sigma_j\)</span>’s, and specify a two-stage prior distribution for these parameters. Interested readers are encouraged to try out this approach as an end-of-chapter exercise.</p>
+<p><strong>Graphical representation of the hierarchical model</strong></p>
+<p>An alternative way of expressing this hierarchical model uses the following graphical representation.</p>
+<p><img src="../LATEX/figures/chapter10/treediagram1.png" width="500" /></p>
+<p>In the middle section of the graph, <span class="math inline">\(\{Y_{ij}\}\)</span> represents the collection of random variables for all ratings of movie <span class="math inline">\(j\)</span>, and the label to the left indicates the assumed Normal sampling distribution.
+The two parameters in the Normal sampling density, <span class="math inline">\(\mu_j\)</span> and <span class="math inline">\(\sigma\)</span>, are connected from above and below, with arrows pointing from the parameters to the random variables.</p>
+<p>The upper section of the graph focuses on the <span class="math inline">\(\mu_j\)</span>’s. All means follow the same prior, a Normal distribution with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\tau\)</span>. Therefore, arrows come from the common hyperparameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> to each <span class="math inline">\(\mu_j\)</span>. Since <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> are random, these second-stage parameters are associated with the prior label <span class="math inline">\(\pi(\mu, \tau)\)</span>.</p>
+<p>The lowest section of the graph is about <span class="math inline">\(\sigma\)</span>, or to be precise, <span class="math inline">\(1/\sigma^2\)</span>. If one wants to allow hyperparameters <span class="math inline">\(a_{\sigma}\)</span> and <span class="math inline">\(b_{\sigma}\)</span> to be random as well, the lower part of the graph grows further, in a similar manner as the upper section for <span class="math inline">\(\mu_j\)</span>.</p>
+<p><strong>Second-stage prior</strong></p>
+<p>The hierarchical Normal model presented in Equations (10.6) through (10.9) has not specified the hyperprior distribution <span class="math inline">\(\pi(\mu, \tau)\)</span>. How does one construct a prior on these second-stage hyperparameters?</p>
+<p>Recall that <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> are parameters for the Normal prior distribution for {<span class="math inline">\(\mu_j\)</span>} the collection of eight different Normal sampling means. The mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\tau\)</span> in this Normal prior distribution reflect respectively the mean and spread of the mean ratings across eight different movies.</p>
+<p>Following the discussion in Section 9.5.3, a typical approach for Normal models is to assign two independent prior distributions — a Normal distribution for the mean <span class="math inline">\(\mu\)</span> and a Gamma distribution for the precision <span class="math inline">\(1 / \tau^2\)</span>. Such a specification facilitates the use of the Gibbs sampling due to the availability of the conditional posterior distributions of both parameters (see the details of this work in Section 9.5.3).
+Using this approach, the density <span class="math inline">\(\pi(\mu, \tau)\)</span> is replaced by the two hyperprior distributions below.</p>
+<ul>
+<li>The hyperprior for <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span>:
+<span class="math display" id="eq:mutauprior1">\[\begin{equation}
+\mu \mid \mu_0, \gamma_0 \sim  \textrm{Normal}(\mu_0, \gamma_0)
+\tag{4.9}
+\end{equation}\]</span>
+<span class="math display" id="eq:mutauprior2">\[\begin{equation}
+1/\tau^2 \mid a, b  \sim \textrm{Gamma}(a_{\tau}, b_{\tau})
+\tag{4.10}
+\end{equation}\]</span></li>
+</ul>
+<p>The task of choosing a prior for <span class="math inline">\((\mu, \tau)\)</span> reduces to the problem of choosing values for the four hyperparameters <span class="math inline">\(\mu_0, \gamma_0, a_{\tau}\)</span>, and <span class="math inline">\(b_{\tau}\)</span>. If one believes that <span class="math inline">\(\mu\)</span> is located around the value of 3 and she is not very confident of this choice, the set of values <span class="math inline">\(\mu_0 = 3\)</span> and <span class="math inline">\(\gamma_0 = 1\)</span> could be chosen.
+As for <span class="math inline">\(\tau\)</span>, one chooses a weakly informative prior with <span class="math inline">\(a_{\tau} = b_{\tau} = 1\)</span>, as <span class="math inline">\(\textrm{Gamma}(1, 1)\)</span>. Moreover, to choose a prior for <span class="math inline">\(\sigma\)</span>, let <span class="math inline">\(a_{\sigma} = b_{\sigma} = 1\)</span> to have the weakly informative <span class="math inline">\(\textrm{Gamma}(1, 1)\)</span> prior.</p>
+</div>
+<div id="inference-through-mcmc" class="section level3 hasAnchor" number="4.2.3">
+<h3><span class="header-section-number">4.2.3</span> Inference through MCMC<a href="bayesian-hierarchical-modeling.html#inference-through-mcmc" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>With the specification of the prior, the complete hierarchical model is described as follows:</p>
+<ul>
+<li><p>Sampling: for <span class="math inline">\(j = 1, \cdots, 8\)</span> and <span class="math inline">\(i = 1, \cdots, n_j\)</span>:
+<span class="math display" id="eq:normsamp4">\[\begin{equation}
+Y_{ij} \mid \mu_j, \sigma_j \overset{i.i.d.}{\sim} \textrm{Normal}(\mu_j, \sigma_j)
+\tag{4.11}
+\end{equation}\]</span></p></li>
+<li><p>Prior for <span class="math inline">\(\mu_j\)</span>, Stage 1: for <span class="math inline">\(j = 1, \cdots, 8\)</span>:
+<span class="math display" id="eq:stage14">\[\begin{equation}
+\mu_j \mid \mu, \tau \sim \textrm{Normal}(\mu, \tau)
+\tag{4.12}
+\end{equation}\]</span></p></li>
+<li><p>Prior for <span class="math inline">\(\mu_j\)</span>, Stage 2: the hyperpriors:
+<span class="math display" id="eq:stage24a">\[\begin{equation}
+\mu \sim \textrm{Normal}(3, 1)
+\tag{4.13}
+\end{equation}\]</span>
+<span class="math display" id="eq:stage24b">\[\begin{equation}
+1/\tau^2  \sim \textrm{Gamma}(1, 1)
+\tag{4.14}
+\end{equation}\]</span></p></li>
+<li><p>Prior for <span class="math inline">\(\sigma\)</span>:
+<span class="math display" id="eq:sigmaprior4">\[\begin{equation}
+1/\sigma^2  \sim \textrm{Gamma}(1, 1)
+\tag{4.15}
+\end{equation}\]</span></p></li>
+</ul>
+<p>If one uses JAGS for simulation by MCMC, one writes out the model section by following the model structure above closely. Review Section 9.7 for an introduction and a description of several examples of JAGS.</p>
+<p><strong>Describe the model by a script</strong></p>
+<p>The first step in using the JAGS software is to write the following script defining the hierarchical model. The model is saved in the character string <code>modelString</code>.</p>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb129-1"><a href="bayesian-hierarchical-modeling.html#cb129-1" aria-hidden="true" tabindex="-1"></a>modelString <span class="ot">&lt;-</span><span class="st">&quot;</span></span>
+<span id="cb129-2"><a href="bayesian-hierarchical-modeling.html#cb129-2" aria-hidden="true" tabindex="-1"></a><span class="st">model {</span></span>
+<span id="cb129-3"><a href="bayesian-hierarchical-modeling.html#cb129-3" aria-hidden="true" tabindex="-1"></a><span class="st">## sampling</span></span>
+<span id="cb129-4"><a href="bayesian-hierarchical-modeling.html#cb129-4" aria-hidden="true" tabindex="-1"></a><span class="st">for (i in 1:N){</span></span>
+<span id="cb129-5"><a href="bayesian-hierarchical-modeling.html#cb129-5" aria-hidden="true" tabindex="-1"></a><span class="st">   y[i] ~ dnorm(mu_j[MovieIndex[i]], invsigma2)</span></span>
+<span id="cb129-6"><a href="bayesian-hierarchical-modeling.html#cb129-6" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb129-7"><a href="bayesian-hierarchical-modeling.html#cb129-7" aria-hidden="true" tabindex="-1"></a><span class="st">## priors</span></span>
+<span id="cb129-8"><a href="bayesian-hierarchical-modeling.html#cb129-8" aria-hidden="true" tabindex="-1"></a><span class="st">for (j in 1:J){</span></span>
+<span id="cb129-9"><a href="bayesian-hierarchical-modeling.html#cb129-9" aria-hidden="true" tabindex="-1"></a><span class="st">   mu_j[j] ~ dnorm(mu, invtau2)</span></span>
+<span id="cb129-10"><a href="bayesian-hierarchical-modeling.html#cb129-10" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb129-11"><a href="bayesian-hierarchical-modeling.html#cb129-11" aria-hidden="true" tabindex="-1"></a><span class="st">invsigma2 ~ dgamma(a_s, b_s)</span></span>
+<span id="cb129-12"><a href="bayesian-hierarchical-modeling.html#cb129-12" aria-hidden="true" tabindex="-1"></a><span class="st">sigma &lt;- sqrt(pow(invsigma2, -1))</span></span>
+<span id="cb129-13"><a href="bayesian-hierarchical-modeling.html#cb129-13" aria-hidden="true" tabindex="-1"></a><span class="st">## hyperpriors</span></span>
+<span id="cb129-14"><a href="bayesian-hierarchical-modeling.html#cb129-14" aria-hidden="true" tabindex="-1"></a><span class="st">mu ~ dnorm(mu0, g0)</span></span>
+<span id="cb129-15"><a href="bayesian-hierarchical-modeling.html#cb129-15" aria-hidden="true" tabindex="-1"></a><span class="st">invtau2 ~ dgamma(a_t, b_t)</span></span>
+<span id="cb129-16"><a href="bayesian-hierarchical-modeling.html#cb129-16" aria-hidden="true" tabindex="-1"></a><span class="st">tau &lt;- sqrt(pow(invtau2, -1))</span></span>
+<span id="cb129-17"><a href="bayesian-hierarchical-modeling.html#cb129-17" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb129-18"><a href="bayesian-hierarchical-modeling.html#cb129-18" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;</span></span></code></pre></div>
+<p>In the sampling part of the script, note that the loop goes from <code>1</code> to <code>N</code>, where <code>N</code> is the number of observations with index <code>i</code>. However, because now <code>N</code> observations are grouped according to movies, indicated by <code>j</code>, one needs to create one vector, <code>mu_j</code> of length eight, and use <code>MovieIndex[i]</code> to grab the corresponding <code>mu_j</code> based on the movie index.</p>
+<p>In the priors part of the script, the loop goes from <code>1</code> to <code>J</code>, and <code>J</code> = 8 in the current example. Inside the loop, the first line corresponds to the prior distribution for <code>mu_j</code>. Due to a commonly shared <code>sigma</code>, <code>invsigma2</code> follows <code>dgamma(a_g, b_g)} outside of the loop. In addition,</code>sigma &lt;- sqrt(pow(invsigma2, -1))<code>is added to help track</code>sigma``` directly.</p>
+<p>Finally in the hyperpriors section of the script, one specifies the Normal hyperprior for <code>mu</code>, a Gamma hyperprior for <code>invtau2</code>. Keep in mind that the arguments in the <code>dnorm</code> in JAGS are the mean and the precision. If one is interested instead in the standard deviation parameter <code>tau</code>, one could return it in the script by using <code>tau &lt;- sqrt(pow(invtau2, -1))</code>, enabling the tracking of its MCMC chain in the posterior inferences.</p>
+<p><strong>Define the data and prior parameters</strong></p>
+<p>After one has defined the model script, the next step is to provide the data and values for parameters of the prior. In the R script below, a list <code>the_data</code> contains the vector of observations, the vector of movie indices, the number of observations, and the number of movies. It also contains the Normal hyperparameters <code>mu0</code> and <code>g0</code>, and two sets of Gamma hyperparameters (<code>a_t</code> and <code>b_t</code>) for <code>invtau2</code>, and (<code>a_s</code> and <code>b_s</code>) for <code>invsigma2</code>.</p>
+<pre><code>y &lt;- MovieRatings$rating      
+MovieIndex &lt;- MovieRatings$Group_Number      
+N &lt;- length(y)  
+J &lt;- length(unique(MovieIndex)) 
+the_data &lt;- list(&quot;y&quot; = y, &quot;MovieIndex&quot; = MovieIndex, 
+                 &quot;N&quot; = N, &quot;J&quot; = J,
+                 &quot;mu0&quot; = 3, &quot;g0&quot; = 1,
+                 &quot;a_t&quot; = 1, &quot;b_t&quot; = 1,
+                 &quot;a_s&quot; = 1, &quot;b_s&quot; = 1)</code></pre>
+<p>One uses the <code>run.jags()</code> function in the <code>runjags</code> R package to generate posterior samples by using the MCMC algorithms in JAGS. The script below runs one MCMC chain with 1000 iterations in the adapt period (preparing for MCMC), 5000 iterations of burn-in and an additional set of 5000 iterations to be run and collected for inference. By using <code>monitor = c("mu", "tau", "mu_j", "sigma")</code>, one collects the values of all parameters in the model. In the end, the output variable <code>posterior</code> contains a matrix of simulated draws.</p>
+<pre><code>posterior &lt;- run.jags(modelString,
+                      n.chains = 1,
+                      data = the_data,
+                      monitor = c(&quot;mu&quot;, &quot;tau&quot;, &quot;mu_j&quot;, &quot;sigma&quot;),
+                      adapt = 1000,
+                      burnin = 5000,
+                      sample = 5000)</code></pre>
+<p><strong>MCMC diagnostics and summarization</strong></p>
+<p>In any implementation of MCMC sampling, diagnostics are crucial to perform to ensure convergence. To perform some MCMC diagnostics in our example, one uses the <code>plot()</code> function, specifying the variable to be checked by the <code>vars</code> argument. For example, the script below returns four diagnostic plots (trace plot, empirical PDF, histogram, and autocorrelation plot) in Figure 10.2 for the hyperparameter <span class="math inline">\(\tau\)</span>. Note that the trace plot only includes 5000 iterations in sample, although its index starts from adapt (1000 adapt + 5000 burn-in). The trace plot and autocorrelation plot suggest good mixing of the chain, therefore indicating convergence of the MCMC chain for <span class="math inline">\(\tau\)</span>.</p>
+<pre><code>plot(posterior, vars = &quot;tau&quot;)</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-112"></span>
+<img src="../LATEX/figures/chapter10/Normal_tau.png" alt="Diagnostic plots of simulated draws of $\tau$ using the JAGS software with the ```runjags``` package." width="500" />
+<p class="caption">
+Figure 4.2: Diagnostic plots of simulated draws of <span class="math inline">\(\tau\)</span> using the JAGS software with the <code>runjags</code> package.
+</p>
+</div>
+<p>In practice MCMC diagnostics should be performed for all parameters to justify the overall MCMC convergence. In our example, the above diagnostics should be implemented for each of the eleven parameters in the model: <span class="math inline">\(\mu, \tau, \mu_1, \mu_2, \cdots, \mu_8\)</span>, and <span class="math inline">\(\sigma\)</span>. Once diagnostics are done, one reports posterior summaries of the parameters using ```print()}. Note that these summaries are based on the 5000 iterations from the sample period, excluding the adapt and burn-in iterations.</p>
+<pre><code>print(posterior, digits = 3)                                                                                     
+        Lower95 Median Upper95  Mean     SD Mode   MCerr 
+mu         3.19   3.78    4.34  3.77  0.286   -- 0.00542     
+tau       0.357  0.638    1.08 0.677    0.2   -- 0.00365  
+mu_j[1]    2.96   3.47    3.99  3.47  0.262   -- 0.00376  
+mu_j[2]    3.38   3.81    4.25  3.82  0.221   -- 0.00313    
+mu_j[3]    3.07   3.91    4.75  3.91  0.425   -- 0.00677    
+mu_j[4]    3.21   3.74    4.31  3.74  0.285   -- 0.00428 
+mu_j[5]    3.09   4.15    5.43  4.18  0.588   --  0.0115   
+mu_j[6]     2.7   3.84    4.99  3.85  0.576   -- 0.00915   
+mu_j[7]    2.74   3.53    4.27  3.51  0.388   -- 0.00595  
+mu_j[8]    3.58   4.12    4.66  4.12  0.276   -- 0.00423  
+sigma     0.763   0.92    1.12  0.93 0.0923   -- 0.00142 </code></pre>
+<p>One performs various inferential summaries and inferences based on the output. For example, the movies “How to Train Your Dragon” (corresponding to <span class="math inline">\(\mu_1\)</span>) and “Megamind” (corresponding to <span class="math inline">\(\mu_7\)</span>) have the lowest average ratings with short 90% credible intervals, (2.96, 3.99) and (2.74, 4.27) respectively, whereas “Legend of the Guardians: The Owls of Ga’Hoole” (corresponding to <span class="math inline">\(\mu_6\)</span>) also has a low average rating but with a wider 90% credible interval (2.70, 4.99). The differences in the width of the credible intervals stem from the sample sizes: there are eleven ratings for “How to Train Your Dragon”, four ratings for “Megamind”, and only a single rating for ``Legend of the Guardians: The Owls of Ga’Hoole”. The smaller the sample size, the larger the variability in the inference, even if one pools information across groups.</p>
+<p>Among the movies with high average ratings, “Batman: Under the Red Hood” (corresponding to <span class="math inline">\(\mu_5\)</span>) is worth noting. This movie’s average rating <span class="math inline">\(\mu_5\)</span> has the largest median value among all <span class="math inline">\(\mu_j\)</span>’s, at 4.15, and also a wide 90% credible interval, (3.09, 5.43). “Batman: Under the Red Hood” also received one rating in the sample resulting in a wide credible interval.</p>
+<p><strong>Shrinkage</strong></p>
+<p>Recall that the two-stage prior in Equations (10.7) to (10.8) specifies a shared prior <span class="math inline">\(\textrm{Normal}(\mu, \tau)\)</span> for all <span class="math inline">\(\mu_j\)</span>’s which facilitates simultaneous estimation of the movie mean ratings (the <span class="math inline">\(\mu_j\)</span>’s), and estimation of the variation among the movie mean ratings through the parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span>. The posterior mean of the rating for a particular movie <span class="math inline">\(\mu_j\)</span> shrinks the observed mean rating towards an average rating.<br />
+Figure 10.3 displays a ``shrinkage plot” which illustrates the movement of the observed sample mean ratings towards an average rating.</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-113"></span>
+<img src="../LATEX/figures/chapter10/MovieLensPoolingb.png" alt="Shrinkage plot of sample means and posterior means of movie ratings for eight movies." width="500" />
+<p class="caption">
+Figure 4.3: Shrinkage plot of sample means and posterior means of movie ratings for eight movies.
+</p>
+</div>
+<p>The left side of Figure 10.3 plots the sample movie rating means and lines connect the sample means to the corresponding posterior means (i.e. means of the posterior draws of <span class="math inline">\(\mu_j\)</span>). The shrinkage effect is obvious for the movie “Batman: Under the Red Hood” which corresponds to the dot at the value 5.0 on the left. This movie only received one rating of 5.0 and its mean rating <span class="math inline">\(\mu_5\)</span> shrinks to the value 4.178 on the right, which is still the highest posterior mean among the nine movie posterior means. A large shrinkage is desirable for a movie with a small number of ratings such as “Batman: Under the Red Hood”. For a movie with a small sample size, information about other ratings of similar movies helps to produce a more reasonable estimate at the ``true” average movie rating. The amount of shrinkage is more modest for movies with larger sample sizes. Furthermore, by pooling ratings across movies, one is able to estimate the standard deviation <span class="math inline">\(\sigma\)</span> of the ratings. Without this pooling, one would be unable to estimate the standard deviation for a movie with only one rating.</p>
+<p><strong>Sources of variability</strong></p>
+<p>As discussed in Section 10.1, the prior distribution <span class="math inline">\(\textrm{Normal}(\mu, \tau)\)</span> is shared among the means <span class="math inline">\(\mu_j\)</span>’s of all groups in a hierarchical Normal model, and the hyperparameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> provide information about the population of <span class="math inline">\(\mu_j\)</span>’s. Specifically, the standard deviation <span class="math inline">\(\tau\)</span> measures the variability among the <span class="math inline">\(\mu_j\)</span>’s. When the hierarchical model is estimated through MCMC, summaries from the simulation draws from the posterior of <span class="math inline">\(\tau\)</span> provide information about this source of variation after analyzing the data.</p>
+<p>There are actually two sources for the variability among the observed <span class="math inline">\(Y_{ij}\)</span>’s. At the sampling level of the model, the standard deviation <span class="math inline">\(\sigma\)</span> measures variability of the <span class="math inline">\(Y_{ij}\)</span> within the groups. In contrast, the parameter <span class="math inline">\(\tau\)</span> measures the variability in the measurements between the groups. When the hierarchical model is fit through MCMC, summaries from the marginal posterior distributions of <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(\tau\)</span> provide information about the two sources of variability.</p>
+<p><span class="math display" id="eq:twosources1">\[\begin{equation}
+Y_{ij} \overset{i.i.d.}{\sim} \textrm{Normal}(\mu_j, \sigma) \,\,\, \text{[within-group variability]}
+\tag{4.16}
+\end{equation}\]</span>
+<span class="math display" id="eq:twosources2">\[\begin{equation}
+\mu_j \mid \mu, \tau \sim \textrm{Normal}(\mu, \tau) \,\,\, \text{[between-group variability]}
+\tag{4.17}
+\end{equation}\]</span></p>
+<p>The Bayesian posterior inference in the hierarchical model is able to compare these two sources of variability, taking into account the prior belief and the information from the data.
+One initially provides prior beliefs about the values of the standard deviations <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(\tau\)</span> through Gamma distributions. In the MovieLens ratings application, weakly informative priors of <span class="math inline">\(\textrm{Gamma}(1, 1)\)</span> are assigned to both <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(\tau\)</span>. These prior distributions assume a priori the within-group variability, measured by <span class="math inline">\(\sigma\)</span>, is believed to be the same size as the between-group variability measured by <span class="math inline">\(\tau\)</span>.</p>
+<p>What can be said about these two sources of variability after the estimation of the hierarchical model? As seen in the output of <code>print(posterior, digits = 3)</code>, the 90% credible interval for <span class="math inline">\(\sigma\)</span> is (0.763, 1.12) and the 90% credible interval for <span class="math inline">\(\tau\)</span> is (0.357, 1.08). After observing the data, the within-group variability in the measurements is estimated to be larger than the between-group variability.</p>
+<p>To compare these two sources of variation one computes the fraction <span class="math inline">\(R = \frac{\tau^2}{\sigma^2 + \tau^2}\)</span> from the posterior samples of <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(\tau\)</span>. The interpretation of <span class="math inline">\(R\)</span> is that it represents the fraction of the total variability in the movie ratings due to the differences between groups. If the value of <span class="math inline">\(R\)</span> is close to 1, most of the total variability is attributed to the between-group variability. On the other side, if <span class="math inline">\(R\)</span> is close to 0, most of the variation is within groups and there is little significant differences between groups.</p>
+<p>Sample code shown below computes simulated values of <span class="math inline">\(R\)</span> from the MCMC output. A density plot of <span class="math inline">\(R\)</span> is shown in Figure 10.4.</p>
+<pre><code>tau_draws &lt;- as.mcmc(posterior, vars = &quot;tau&quot;)
+sigma_draws &lt;- as.mcmc(posterior, vars = &quot;sigma&quot;)
+R &lt;- tau_draws ^ 2 / (tau_draws ^ 2 + sigma_draws ^ 2)</code></pre>
+<p>A 95% credible interval for <span class="math inline">\(R\)</span> is (0.149, 0.630). Since much of the posterior probability of <span class="math inline">\(R\)</span> is located below the value 0.5, this confirms that the variation between the mean movie rating titles is smaller than the variation of the ratings within the movie titles in this example.</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-114"></span>
+<img src="../LATEX/figures/chapter10/Normal_R.png" alt="Density plot of the ratio $R$ from the posterior samples of tau and sigma." width="500" />
+<p class="caption">
+Figure 4.4: Density plot of the ratio <span class="math inline">\(R\)</span> from the posterior samples of tau and sigma.
+</p>
+</div>
+</div>
+</div>
+<div id="hierarchical-beta-binomial-modeling" class="section level2 hasAnchor" number="4.3">
+<h2><span class="header-section-number">4.3</span> Hierarchical Beta-Binomial Modeling<a href="bayesian-hierarchical-modeling.html#hierarchical-beta-binomial-modeling" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="example-deaths-after-heart-attack" class="section level3 hasAnchor" number="4.3.1">
+<h3><span class="header-section-number">4.3.1</span> Example: Deaths after heart attack<a href="bayesian-hierarchical-modeling.html#example-deaths-after-heart-attack" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>The New York State (NYS) Department of Health collects and releases data on mortality after Acute Myocardial Infarction (AMI), commonly known as a heart attack. Their 2015 report was the initial public data release by the NYS Department of Health on risk-adjusted mortality outcomes for AMI patients at hospitals across the state.
+We focus on 13 hospitals in Manhattan, New York City, with the goal of learning about the percentages of resulted deaths from heart attack for hospitals in this sample. Table 10.2 records for each hospital the number of heart attack cases, the corresponding number of resulted deaths, and their computed percentage of resulted deaths.</p>
+<p>Table 10.2. The number of heart attack cases, the number of resulted deaths, and the percentage of resulted deaths of 13 hospitals in New York City - Manhattan in 2015. NYP stands for New York Presbyterian.</p>
+<table>
+<colgroup>
+<col width="70%" />
+<col width="8%" />
+<col width="9%" />
+<col width="11%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Hospital</th>
+<th align="right">Cases</th>
+<th align="right">Deaths</th>
+<th align="right">Death %</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Bellevue Hospital Center</td>
+<td align="right">129</td>
+<td align="right">4</td>
+<td align="right">3.101</td>
+</tr>
+<tr class="even">
+<td align="left">Harlem Hospital Center</td>
+<td align="right">35</td>
+<td align="right">1</td>
+<td align="right">2.857</td>
+</tr>
+<tr class="odd">
+<td align="left">Lenox Hill Hospital</td>
+<td align="right">228</td>
+<td align="right">18</td>
+<td align="right">7.894</td>
+</tr>
+<tr class="even">
+<td align="left">Metropolitan Hospital Center</td>
+<td align="right">84</td>
+<td align="right">7</td>
+<td align="right">8.333</td>
+</tr>
+<tr class="odd">
+<td align="left">Mount Sinai Beth Israel</td>
+<td align="right">291</td>
+<td align="right">24</td>
+<td align="right">8.247</td>
+</tr>
+<tr class="even">
+<td align="left">Mount Sinai Hospital</td>
+<td align="right">270</td>
+<td align="right">16</td>
+<td align="right">5.926</td>
+</tr>
+<tr class="odd">
+<td align="left">Mount Sinai Roosevelt</td>
+<td align="right">46</td>
+<td align="right">6</td>
+<td align="right">13.043</td>
+</tr>
+<tr class="even">
+<td align="left">Mount Sinai St. Luke’s</td>
+<td align="right">293</td>
+<td align="right">19</td>
+<td align="right">6.485</td>
+</tr>
+<tr class="odd">
+<td align="left">NYU Hospitals Center</td>
+<td align="right">241</td>
+<td align="right">15</td>
+<td align="right">6.224</td>
+</tr>
+<tr class="even">
+<td align="left">NYP Hospital - Allen Hospital</td>
+<td align="right">105</td>
+<td align="right">13</td>
+<td align="right">12.381</td>
+</tr>
+<tr class="odd">
+<td align="left">NYP Hospital - Columbia Presbyterian Center</td>
+<td align="right">353</td>
+<td align="right">25</td>
+<td align="right">7.082</td>
+</tr>
+<tr class="even">
+<td align="left">NYP Hospital - New York Weill Cornell Center</td>
+<td align="right">250</td>
+<td align="right">11</td>
+<td align="right">4.400</td>
+</tr>
+<tr class="odd">
+<td align="left">NYP/Lower Manhattan Hospital</td>
+<td align="right">41</td>
+<td align="right">4</td>
+<td align="right">9.756</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="a-hierarchical-beta-binomial-model" class="section level3 hasAnchor" number="4.3.2">
+<h3><span class="header-section-number">4.3.2</span> A hierarchical Beta-Binomial model<a href="bayesian-hierarchical-modeling.html#a-hierarchical-beta-binomial-model" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>Treating “cases” as trials and “deaths” as successes, the Binomial sampling model is a natural choice for this data, and the objective is to learn about the death probability <span class="math inline">\(p\)</span> of the hospitals. If one looks at the actual death percentages in Table <span class="math inline">\(\ref{table:DeathData}\)</span>, some hospitals have much higher death rates than other hospitals. For example, the highest death rate belongs to Mount Sinai Roosevelt, at 13.043% which is more than four times the rate of Harlem Hospital Center at 2.857%. If one assumes a common probability <span class="math inline">\(p\)</span> for all thirteen hospitals, this model does not allow for possible differences between the death rates among these hospitals.</p>
+<p>On the other hand, if one creates thirteen separate Binomial sampling models, one for each hospital, and conducts separate inferences, one loses the ability to use potential information about the death rate from hospital <span class="math inline">\(j\)</span> when making inference about that of a different hospital <span class="math inline">\(i\)</span>. Since these are all hospitals in Manhattan, New York City, they may share attributes in common related to death rates from heart attack. The separate modeling approach does not allow for the sharing of information across hospitals.</p>
+<p>A hierarchical model provides a compromise between the combined and separate modeling approaches. In Section 10.2, a hierarchical Normal density was used to model mean rating scores from different movies. In this setting, one builds a hierarchical model by assuming the hospital death rate parameters <strong>a priori</strong> come from a common distribution. Specifically, one builds a hierarchical model based on a common Beta distribution that generalizes the Beta-Binomial conjugate model described in Chapter 7.
+This modeling setup provides posterior estimates that partially pool information among hospitals</p>
+<p>Let <span class="math inline">\(Y_i\)</span> denote the number of resulted deaths from heart attack, <span class="math inline">\(n_i\)</span> the number of heart attack cases, and <span class="math inline">\(p_i\)</span> the death rate for hospital <span class="math inline">\(i\)</span>. The sampling density for <span class="math inline">\(Y_i\)</span> for hospital <span class="math inline">\(i\)</span> is a Binomial distribution with <span class="math inline">\(n_i\)</span> and <span class="math inline">\(p_i\)</span>, as in Equation (10.19).
+Suppose that the proportions {<span class="math inline">\(p_i\)</span>} independently follow the same conjugate Beta prior distribution, as in Equation (10.20). So the sampling and first stage of the prior of our model is written as follows:</p>
+<ul>
+<li><p>Sampling, for <span class="math inline">\(i, \cdots, 13\)</span>:
+<span class="math display" id="eq:binsampling">\[\begin{equation}
+Y_i \sim \textrm{Binomial}(n_i, p_i)
+\label{eq:BetaBinomialLik_v1}
+\tag{4.18}
+\end{equation}\]</span></p></li>
+<li><p>Prior for <span class="math inline">\(p_i\)</span>, <span class="math inline">\(i = 1, \cdots, 13\)</span>:
+<span class="math display" id="eq:betaprior">\[\begin{equation}
+p_i \sim \textrm{Beta}(a, b)
+\label{eq:BetaBinomialPrior_v1}
+\tag{1.9}
+\end{equation}\]</span></p></li>
+</ul>
+<p>Note that the hyperparameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are shared among all hospitals. If <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are known values, then the posterior inference for <span class="math inline">\(p_i\)</span> of hospital <span class="math inline">\(i\)</span> is simply another Beta distribution by conjugacy (review material in Chapter 7 if needed):
+<span class="math display" id="eq:betapost">\[\begin{equation}
+p_i \mid y_i \sim \textrm{Beta}(a + y_i, b + n_i - y_i).
+\tag{4.19}
+\end{equation}\]</span></p>
+<p>In the general situation where the hyperparameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are unknown, a second stage of the prior <span class="math inline">\(\pi(a, b)\)</span> needs to specified for these hyperparameters. With this specification, one arrives at the hierarchical model below.</p>
+<ul>
+<li><p>Sampling, for <span class="math inline">\(i, \cdots, 13\)</span>:
+<span class="math display" id="eq:binsampling2">\[\begin{equation}
+Y_i \sim \textrm{Binomial}(n_i, p_i)
+\label{eq:BetaBinomialLik_v2}
+\tag{4.20}
+\end{equation}\]</span></p></li>
+<li><p>Prior for <span class="math inline">\(p_i\)</span>, Stage1: for <span class="math inline">\(i = 1, \cdots, 13\)</span>:
+<span class="math display" id="eq:betaprior2">\[\begin{equation}
+p_i \sim \textrm{Beta}(a, b)
+\label{eq:BetaBinomialPrior_v2}
+\tag{4.21}
+\end{equation}\]</span></p></li>
+<li><p>Prior for <span class="math inline">\(p_i\)</span>, Stage 2: the hyperprior:
+<span class="math display" id="eq:abprior">\[\begin{eqnarray}
+a, b \sim \pi(a, b)
+\label{eq:BetaBinomialHyperprior_v1}
+\tag{4.22}
+\end{eqnarray}\]</span></p></li>
+</ul>
+<p>Wee use <span class="math inline">\(\pi(a, b)\)</span> to denote an arbitrary distribution for the joint hyperprior distribution for <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. When we start analyzing the New York State heart attack death rate dataset, the specification of this hyperprior distribution <span class="math inline">\(\pi(a, b)\)</span> will be described.</p>
+<p><strong>Graphical representations of the hierarchical model</strong></p>
+<p>Below is a sketch of a graphical representation of the hierarchical Beta-Binomial model.</p>
+<p><img src="../LATEX/figures/chapter10/treediagram2.png" width="500" /></p>
+<p>Focusing on the graph on the right, one sees that the upper section of the graph represents the sampling density, with the arrow directing from <span class="math inline">\(p_i\)</span> to <span class="math inline">\(Y_i\)</span>. Here the start of the arrow is the parameter and the end of the arrow is the random variable. The lower section of the graph represents the prior, with arrows directing from <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> to <span class="math inline">\(p_i\)</span>. In this case, the start of the arrow is the hyperparameter and the end of the arrow is the parameter.<br />
+On the left side of the display, the sampling density, prior and hyperprior distributional expressions are written next to the graphical representation.</p>
+<p>In the situation where the Beta parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are known constants, the graphical representation changes to the Beta-Binomial conjugate model displayed below.</p>
+<p><img src="../LATEX/figures/chapter10/treediagram3.png" width="500" /></p>
+<p>To illustrate another graphical representation, we display below the one for the separate models approach in the hospitals death rate application where a fully specified Beta prior is specified for each death rate. The separate models are represented by thirteen graphs, one for each hospital. This graphical structure shows clearly the separation of the subsamples and the resulting separation of the corresponding Bayesian posterior distributions.</p>
+<p><img src="../LATEX/figures/chapter10/treediagram4.png" width="500" /></p>
+<p>In comparing graphical representations for hierarchical models, the interested reader might notice that the structure for the hierarchical Beta-Binomial model looks different from the ones in Section 10.2 for the hierarchical Normal models. In this chapter, one is dealing with one-parameter models (recall that Beta-Binomial is an example of one-parameter models; other examples include Gamma-Poisson), whereas the Normal models in Section 10.2 involve two parameters. Typically, when working with one-parameter models, one starts from the top with the sampling density, then next writes down the priors and continues with the hyperpriors. When there are multiple parameters, one needs to be careful in describing the graphical structure. In fact, for a large number of parameters, a good graphical representation might not be feasible. In that case, one writes a representation that focuses on the key parts of the model.</p>
+<p>Also note that there is no unique way of sketching a graphical representation, as long as the representation is clear and shows the relationship among the random variables, parameters and hyperparameters with the arrows in the correct directions.</p>
+</div>
+<div id="inference-through-mcmc-1" class="section level3 hasAnchor" number="4.3.3">
+<h3><span class="header-section-number">4.3.3</span> Inference through MCMC<a href="bayesian-hierarchical-modeling.html#inference-through-mcmc-1" class="anchor-section" aria-label="Anchor link to header"></a></h3>
+<p>In this section the application of JAGS script for simulation by MCMC is illustrated for the hierarchical Beta-Binomial models for the New York State heart attach death rate dataset. Before this is done, we discuss the specification of the hyperprior density <span class="math inline">\(\pi(a, b)\)</span> for the hyperparameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> for the common Beta prior distribution for the proportions <span class="math inline">\(p_i\)</span>’s.</p>
+<p><strong>Second-stage prior</strong></p>
+<p>In Chapter 7, the task was to specify the values of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> for a single Beta curve <span class="math inline">\(\textrm{Beta}(a, b)\)</span> and the Beta shape parameter values were selected by trial-and-error using the <code>beta.select()</code> function in the <code>ProbBayes</code> package. In this hierarchical model setting, the shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are random and the goal is learn about these parameters from its posterior distribution.</p>
+<p>In this prior construction, it is helpful to review some facts on Beta curves from Chapter 7. For a <span class="math inline">\(\textrm{Beta}(a, b)\)</span> prior distribution for a proportion <span class="math inline">\(p\)</span>, one considers the parameter <span class="math inline">\(a\)</span> as the prior count of “successes”, the parameter <span class="math inline">\(b\)</span> as the prior count of “failures”, and the sum <span class="math inline">\(a + b\)</span> represents the prior sample size. Also the expectation of <span class="math inline">\(\textrm{Beta}(a, b)\)</span> is <span class="math inline">\(\frac{a}{a + b}\)</span>.
+From these facts, a more natural parameterization of the hyperprior distribution <span class="math inline">\(\pi(a, b)\)</span> is <span class="math inline">\(\pi(\mu, \eta)\)</span>, where <span class="math inline">\(\mu = \frac{a}{a+b}\)</span> is the hyperprior mean and <span class="math inline">\(\eta = a + b\)</span> is the hyperprior sample size. One rewrites the hyperprior distribution in terms of the new parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\eta\)</span> as follows:
+<span class="math display" id="eq:muetaprior">\[\begin{equation}
+\mu, \eta \sim \pi(\mu, \eta),
+\label{eq:BetaBinomialHyperprior_v2}
+\tag{4.23}
+\end{equation}\]</span>
+where <span class="math inline">\(a = \mu\eta\)</span> and <span class="math inline">\(b = (1-\mu)\eta\)</span>. These expressions are useful in writing the JAGS script for the hierarchical Beta-Binomial Bayesian model.</p>
+<p>A hyperprior is constructed from the <span class="math inline">\((\mu, \eta)\)</span> representation. Assume <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\eta\)</span> are independent which means that one’s beliefs about the prior mean are independent of the beliefs about the prior sample size. The hyperprior expectation <span class="math inline">\(\mu\)</span> is the mean measure for <span class="math inline">\(p_i\)</span>, the average death rate across 13 hospitals. If one has little prior knowledge about the expectation <span class="math inline">\(\mu\)</span>, one assigns this parameter a Uniform prior which is equivalent to a <span class="math inline">\(\textrm{Beta}(1, 1)\)</span> prior.</p>
+<p>To motivate the prior choice for the hyperparameter sample size <span class="math inline">\(\eta\)</span>, consider the case where the hyperparameter values are known. If <span class="math inline">\(y^*\)</span> and <span class="math inline">\(n^*\)</span> are respectively the number of deaths and number of cases for one hospital, then the posterior mean of death rate parameter <span class="math inline">\(p^*\)</span> is given by
+<span class="math display" id="eq:postmean1">\[\begin{equation}
+E(p^* \mid y^*) = \frac{y^* + \mu \eta }{n^* + \eta}.
+\tag{4.24}
+\end{equation}\]</span>
+With a little algebra, the posterior mean is rewritten as
+<span class="math display" id="eq:postmean2">\[\begin{equation}
+E(p^* \mid y^*) = (1 - \lambda) \frac{y^*}{n^*} + \lambda \mu,
+\tag{4.25}
+\end{equation}\]</span>
+where <span class="math inline">\(\lambda\)</span> is the shrinkage fraction
+<span class="math display" id="eq:shrinkage">\[\begin{equation}
+\lambda = \frac{\eta}{n^* + \eta}.
+\tag{4.26}
+\end{equation}\]</span>
+The parameter <span class="math inline">\(\lambda\)</span> falls in the interval (0, 1) and represents the degree of shrinkage of the posterior mean away from the sample proportion <span class="math inline">\(y^* / n^*\)</span> towards the prior mean <span class="math inline">\(\mu\)</span>.</p>
+<p>Suppose one believes a priori that, for a representative sample size <span class="math inline">\(n^*\)</span>, the shrinkage <span class="math inline">\(\lambda\)</span> is Uniformly distributed on (0, 1). By performing a transformation, this implies that the prior density for the prior sample size <span class="math inline">\(\eta\)</span> has the form
+<span class="math display" id="eq:etaprior">\[\begin{equation}
+\pi(\eta) = \frac{n^*}{(n^* + \eta)^2}, \, \, \eta &gt; 0.
+\tag{4.27}
+\end{equation}\]</span>
+Equivalently, the logarithm of <span class="math inline">\(\eta\)</span>, <span class="math inline">\(\theta = \log \eta\)</span>, has a Logistic distribution with location <span class="math inline">\(\log n^*\)</span> and scale 1. We represent this distribution as <span class="math inline">\(\textrm{Logistic}(\log n^*, 1)\)</span>, with pdf:
+<span class="math display" id="eq:logetaprior">\[\begin{equation}
+\pi(\theta) = \frac{e^{-(\theta - \log n^*)}}
+{(1 + e^{-(\theta - \log n^*)})^2}.
+\tag{4.28}
+\end{equation}\]</span></p>
+<p>With this specification of the hyperparameter distribution, one writes down the complete hierarchical model as follows:</p>
+<ul>
+<li><p>Sampling, for <span class="math inline">\(i, \cdots, 13\)</span>:
+<span class="math display" id="eq:bino7">\[\begin{equation}
+Y_i \sim \textrm{Binomial}(n_i, p_i)
+\label{eq:BetaBinomialLik_v3}
+\tag{4.29}
+\end{equation}\]</span></p></li>
+<li><p>Prior for <span class="math inline">\(p_i\)</span>, Stage 1: for <span class="math inline">\(i = 1, \cdots, 13\)</span>:
+<span class="math display" id="eq:beta7">\[\begin{equation}
+p_i \sim \textrm{Beta}(a, b)
+\label{eq:BetaBinomialPrior_v3}
+\tag{4.30}
+\end{equation}\]</span></p></li>
+<li><p>Prior for <span class="math inline">\(p_i\)</span>, Stage 2:
+<span class="math display" id="eq:muetaprior7a">\[\begin{equation}
+\mu \sim \textrm{Beta}(1, 1),
+\tag{4.31}
+\end{equation}\]</span>
+<span class="math display" id="eq:muetaprior7b">\[\begin{equation}
+\log \eta \sim \textrm{Logistic}(\log n^*, 1)
+\tag{4.32}
+\end{equation}\]</span>
+where <span class="math inline">\(a = \mu\eta\)</span> and <span class="math inline">\(b = (1-\mu)\eta\)</span>.</p></li>
+</ul>
+<p><strong>Writing the JAGS script</strong></p>
+<p>Following this model structure above, one writes out the model section of the JAGS script for the hierarchical Beta-Binomial model.
+The model script is saved in <code>modelString</code>.</p>
+<pre><code>modelString &lt;-&quot;
+model {
+## likelihood
+for (i in 1:N){
+   y[i] ~ dbin(p[i], n[i])
+}
+## priors
+for (i in 1:N){
+   p[i] ~ dbeta(a, b)
+}
+## hyperpriors
+a &lt;- mu*eta
+b &lt;- (1-mu)*eta
+mu ~ dbeta(mua, mub)
+eta &lt;- exp(logeta)
+logeta ~ dlogis(logn, 1)
+}
+&quot;</code></pre>
+<p>In the sampling part of the script, the loop goes from <code>1</code> to <code>N</code>, where <code>N</code> is the total number of observations, with index <code>i</code>. Another loop going from <code>1</code> to <code>N</code> is needed for the priors as each <code>p[i]</code> follows the same <code>dbeta(a, b)</code> distribution.
+The hyperpriors section uses the new parameterization of the <span class="math inline">\(Beta(a, b)\)</span> distribution in terms of <code>mu</code> and <code>eta</code>. Here one expresses the hyperparameters <code>a</code> and <code>b</code> in terms of the new hyperparameters <code>mu</code> and <code>eta</code>, and then assigns to the parameters <code>mu</code> and <code>logeta</code> the independent distributions <code>dbeta(mua, mub)</code> and <code>dlogist(logn, 1)</code>, respectively. One also needs to transform <code>logeta</code> to <code>eta</code>. The values of <code>mua</code>, <code>mub</code>, and <code>logn</code> are assigned together with the data in the setup of JAGS, following Equation (10.33) and Equation (10.34).</p>
+<p><strong>Define the data and prior parameters</strong></p>
+<p>Following the usual implementation of JAGS, the next step is to define the data and provide values for the parameters of the prior. In the script below, a list <code>the_data</code> contains the vector of death counts in <code>y</code>, the vector of hearth attack cases in <code>n</code>, the number of observations <code>N</code>, the values of <code>mua</code>, <code>mub</code>, and <code>logn</code>. Note that we are setting <span class="math inline">\(\log n^* = \log(100)\)</span> which indicates that a priori we believe the shrinkage <span class="math inline">\(\lambda = \eta / (\eta + 100)\)</span> is Uniformly distributed on (0, 1).</p>
+<pre><code>y &lt;- deathdata$Deaths     
+n &lt;- deathdata$Cases      
+N &lt;- length(y) 
+the_data &lt;- list(&quot;y&quot; = y, &quot;n&quot; = n, &quot;N&quot; = N, 
+                 &quot;mua&quot; = 1, &quot;mub&quot; = 1, 
+                 &quot;logn&quot; = log(100))</code></pre>
+<p><strong>Generate samples from the posterior distribution</strong></p>
+<p>The <code>run.jags()</code> function is used to generate samples by MCMC in JAGS following the sample script below. It runs one MCMC chain with 1000 iterations in the adapt period, 5000 iterations of burn-in and an additional set of 5000 iterations to be run and collected for inference. One keeps tracks of all parameters in the model by using the argument <code>monitor = c("p", "mu", "logeta")</code>. The output of the MCMC runs is the variable <code>posterior</code> containing a matrix of simulated draws.</p>
+<pre><code>posterior &lt;- run.jags(modelString,
+                      n.chains = 1,
+                      data = the_data,
+                      monitor = c(&quot;p&quot;, &quot;mu&quot;, &quot;logeta&quot;),
+                      adapt = 1000,
+                      burnin = 5000,
+                      sample = 5000)</code></pre>
+<p><strong>MCMC diagnostics and summarization</strong></p>
+<p>As usual, it is important to perform MCMC diagnostics to ensure convergence of the simulated sample. The <code>plot()</code> function returns diagnostics plots of a designated parameter. For brevity, the diagnostics for <span class="math inline">\(\log \eta\)</span> are performed and results shown in Figure 10.5. Readers should implement MCMC diagnostics for all parameters in the model.</p>
+<pre><code>plot(posterior, vars = &quot;logeta&quot;)</code></pre>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-118"></span>
+<img src="../LATEX/figures/chapter10/BetaBinomial_logeta.png" alt="Diagnostic plots of simulated draws of log eta using the JAGS software with the ```run.jags``` package." width="500" />
+<p class="caption">
+Figure 4.5: Diagnostic plots of simulated draws of log eta using the JAGS software with the <code>run.jags</code> package.
+</p>
+</div>
+<p>After the diagnostics are performed, one reports posterior summaries of the parameters using <code>print()</code>. Note that these summaries are based on the 5000 iterations from the sampling period (excluding the adapt and burn-in periods).</p>
+<pre><code>print(posterior, digits = 3)
+       Lower95 Median Upper95   Mean      SD Mode    MCerr 
+p[1]    0.0314 0.0602  0.0847 0.0593  0.0138   -- 0.000619   
+p[2]    0.0312  0.066   0.095 0.0654  0.0156   -- 0.000496   
+p[3]    0.0515 0.0731     0.1 0.0741  0.0122   -- 0.000398    
+p[4]     0.044 0.0726   0.105  0.074  0.0155   -- 0.000486     
+p[5]    0.0553 0.0756     0.1 0.0765  0.0116   -- 0.000348       
+p[6]    0.0435 0.0655  0.0871 0.0655  0.0111   --  0.00042     
+p[7]    0.0466 0.0765   0.119 0.0797  0.0191   -- 0.000717     
+p[8]    0.0473 0.0683  0.0889 0.0683  0.0104   -- 0.000277    
+p[9]    0.0442 0.0669  0.0879 0.0671  0.0111   -- 0.000301     
+p[10]   0.0544 0.0811   0.122 0.0845  0.0178   -- 0.000732     
+p[11]   0.0521 0.0704  0.0934 0.0711  0.0103   -- 0.000279    
+p[12]   0.0369   0.06  0.0818 0.0596  0.0116   -- 0.000504     
+p[13]   0.0444 0.0729   0.113 0.0752  0.0176   -- 0.000593     
+mu      0.0576 0.0705  0.0881 0.0714 0.00788   -- 0.000375     
+logeta    3.63   5.84    8.38   6.01    1.26   --    0.107     </code></pre>
+<p>From the posterior output, one evaluates the effect of information pooling in the hierarchical model. See Figure 10.6 displays a shrinkage plot showing how the sample proportions are shrunk towards the overall death rate. Two of the lines in the figure are labelled corresponding to the death rates for the hospitals Mount Sinai Roosevelt and NYP - Allen Hospital. Mount Sinai Roosevelt’s death rate of <span class="math inline">\(6/46 = 0.13043\)</span> exceeds the rate of NYP - Allen of <span class="math inline">\(13 / 105 = 0.12381\)</span>, but the figure shows the posterior death rate of NYP - Allen exceeds the posterior death rate of Mount Sinai Roosevelt. Due to the relatively small sample size, one has less confidence in the 0.13043 death rate of Mount Sinai and this rate is shrunk significantly towards the overall death rate in the hierarchical posterior analysis.</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-119"></span>
+<img src="../LATEX/figures/chapter10/BetaBinomialPooling.png" alt="Shrinkage plot of sample proportions and posterior means of proportions of resulted heart attack deaths of 13 hospitals. The death rates of two particular hospitals are labeled.  Due to the varying sample sizes, Mt Sinai Roosevelt has a higher observed death rate than NYP - Allen, but NYP - Allen has a higher posterior proportion than Mt Sinai Roosevelt." width="500" />
+<p class="caption">
+Figure 4.6: Shrinkage plot of sample proportions and posterior means of proportions of resulted heart attack deaths of 13 hospitals. The death rates of two particular hospitals are labeled. Due to the varying sample sizes, Mt Sinai Roosevelt has a higher observed death rate than NYP - Allen, but NYP - Allen has a higher posterior proportion than Mt Sinai Roosevelt.
+</p>
+</div>
+<p>To compare the posterior densities of the different <span class="math inline">\(p_i\)</span>, one displays the density estimates in a single graph as in Figure 10.7. Because of the relatively large number of parameters, such plots are difficult to read. Combining the graph and the output above, one sees that <span class="math inline">\(p_7\)</span> and and <span class="math inline">\(p_{10}\)</span> have the largest median values with large standard deviations. One makes inferential statements such as Mount Sinai Roosevelt’s (corresponding to <span class="math inline">\(p_7\)</span>) death rate of heart attack cases has a posterior 90% credible interval of (0.0466, 0.119), the highest among the 13 hospitals in the dataset.</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-120"></span>
+<img src="../LATEX/figures/chapter10/BetaBinomial_p.png" alt="Density plots of simulated draws of proportions using the JAGS software with the ```run.jags} package." width="500" />
+<p class="caption">
+Figure 4.7: Density plots of simulated draws of proportions using the JAGS software with the ```run.jags} package.
+</p>
+</div>
+<p><strong>Comparison of hospitals</strong></p>
+<p>One uses this MCMC output to compare the death rates of two hospitals directly, for example, NYP Hospital - Columbia Presbyterian Center and NYP Hospital - New York Weill Cornell Center corresponding respectively to <span class="math inline">\(p_{11}\)</span> and <span class="math inline">\(p_{12}\)</span>. One collects the vector of simulated values of the difference of the death rates (<span class="math inline">\(\delta = p_{11} - p_{12}\)</span>) by subtracting the sets of simulated proportion draws. From the simulated values of the difference in proportions ```diff}, one estimates the probability that <span class="math inline">\(p_{11} &gt; p_{12}\)</span> is positive.</p>
+<pre><code>p11draws &lt;- as.mcmc(posterior, vars = &quot;p[11]&quot;)
+p12draws &lt;- as.mcmc(posterior, vars = &quot;p[12]&quot;)
+diff = p11draws - p12draws
+sum(diff &gt; 0)/5000
+[1] 0.7872</code></pre>
+<p>A 78.72% posterior probability of <span class="math inline">\(p_{11} &gt; p_{12}\)</span> indicates strong posterior evidence that the death rate of NYP Hospital - Columbia Presbyterian Center is higher than that of NYP Hospital - New York Weill Cornell Center.</p>
+<p>Generally, when one presents a table such as Table 10.2, one is interested in ranking the 13 hospitals from best (smallest death rate) to worst (largest death rate). A particular hospital, say Bellevue Hospital Center, is interested in its rank among the 13 hospitals. The probability Bellevue has rank 1 is the posterior probability
+<span class="math display" id="eq:rankoneprob">\[\begin{equation}
+P(p_1 &lt; p_2, ..., p_1 &lt; p_{13} | y),
+\tag{4.33}
+\end{equation}\]</span>
+and this probability is approximated by collecting the posterior draws where the simulated value of <span class="math inline">\(p_1\)</span> is the smallest among the 13 simulated proportions. Likewise, one computes from the MCMC output the probability that Bellevue has rank 2 through 13. These rank probabilities are displayed in Figure 10.8 for two hospitals. The probability that Bellevue is the best hospital with respect to death rate is 0.25 and by summing several probabilities, the probability that Bellevue is ranked among the top three hospitals is 0.54. In contrast, from Figure 10.8, the rank of Harlem Hospital is less certain since the probability distribution is relatively flat across the 13 possible rank values. This is not surprising since this particular hospital had only 35 cases, compared to 129 cases at Bellevue.</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-121"></span>
+<img src="../LATEX/figures/chapter10/rankplot2.png" alt="Posterior probabilities of rank for two hospitals." width="500" />
+<p class="caption">
+Figure 4.8: Posterior probabilities of rank for two hospitals.
+</p>
+</div>
+<p>From a patient’s perspective, she would be interested in learning the identity of the hospital that is ranked best among the 13. For each simulation draw of <span class="math inline">\(p_1, ..., p_{13}\)</span>, one identifies the hospital with the smallest simulated value. By collecting this information over the 5000 draws, one computes the posterior probability that each hospital is ranked first. These probability probabilities are displayed in Figure 10.9. The identity of the best hospital is not certain, but the top three hospitals are Bellevue, NYP, NY Weill Corner, and Harlem with respective probabilities 0.250, 0.220, and 0.137 of being the best.</p>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-122"></span>
+<img src="../LATEX/figures/chapter10/rankplot3.png" alt="Posterior probabilities of the hospital that was ranked first." width="500" />
+<p class="caption">
+Figure 4.9: Posterior probabilities of the hospital that was ranked first.
+</p>
+</div>
+</div>
+</div>
+<div id="exercises-3" class="section level2 hasAnchor" number="4.4">
+<h2><span class="header-section-number">4.4</span> Exercises<a href="bayesian-hierarchical-modeling.html#exercises-3" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<ol style="list-style-type: decimal">
+<li><strong>Time-to-Serve for Six Tennis Players</strong>
+</li>
+</ol>
+<p>Table 10.3 displays the sample size <span class="math inline">\(n_i\)</span> and the mean time-to-serve <span class="math inline">\(\bar y_i\)</span> (in seconds) for six professional tennis players. Assume that the sample mean for the <span class="math inline">\(i\)</span>-th player <span class="math inline">\(\bar y_i\)</span> is Normally distributed with mean <span class="math inline">\(\mu_i\)</span> and standard deviation <span class="math inline">\(\sigma / \sqrt{n_i}\)</span> where we assume <span class="math inline">\(\sigma = 5.5\)</span> seconds.</p>
+<p>Table 10.3. Number of serves and mean time-to-serve for six professional tennis players.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Player</th>
+<th align="right"><span class="math inline">\(n\)</span></th>
+<th align="right"><span class="math inline">\(\bar y\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Murray</td>
+<td align="right">731</td>
+<td align="right">23.56</td>
+</tr>
+<tr class="even">
+<td align="left">Simon</td>
+<td align="right">570</td>
+<td align="right">18.07</td>
+</tr>
+<tr class="odd">
+<td align="left">Federer</td>
+<td align="right">491</td>
+<td align="right">16.21</td>
+</tr>
+<tr class="even">
+<td align="left">Ferrer</td>
+<td align="right">456</td>
+<td align="right">21.70</td>
+</tr>
+<tr class="odd">
+<td align="left">Isner</td>
+<td align="right">403</td>
+<td align="right">22.32</td>
+</tr>
+<tr class="even">
+<td align="left">Kyrgios</td>
+<td align="right">274</td>
+<td align="right">14.11</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li><p>(Separate estimate) Suppose one is interested in estimating Murray’s mean time-to-serve <span class="math inline">\(\mu_1\)</span> using only Murray’s time-to-serve data. Assume that one’s prior beliefs about <span class="math inline">\(\mu_1\)</span> are represented by a Normal density with mean 20 and standard deviation 10 seconds. Use results from Chapter 8 to find the posterior distribution of <span class="math inline">\(\mu_1\)</span> and construct a 90% interval estimate for <span class="math inline">\(\mu_1\)</span>.</p></li>
+<li><p>(Combined estimate) Suppose instead that one believes that there are no differences between players and <span class="math inline">\(\mu_1 = ... = \mu_6 = \mu\)</span>. The overall mean time-to-serve is <span class="math inline">\(\bar y = 19.9\)</span> seconds with a combined sample size <span class="math inline">\(n = 2925\)</span>. Assuming that <span class="math inline">\(\mu\)</span> has a Normal(20,10) prior, find the posterior distribution of <span class="math inline">\(\mu\)</span> and construct a 90% interval estimate for <span class="math inline">\(\mu\)</span>.</p></li>
+<li><p>Which approach, part (a) or part (b), seems more reasonable in this situation? Explain.</p></li>
+</ol>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>Time-to-Serve for Six Tennis Players (continued)</strong></li>
+</ol>
+<p>Suppose one wishes to estimate the mean time-to-serve values for the six players by the following hierarchical model. Remember that we are assuming <span class="math inline">\(\sigma = 5.5\)</span> seconds.</p>
+<p><span class="math display">\[\begin{eqnarray*}
+\bar{y}_i &amp;\sim&amp; \textrm{Normal}(\mu_i, \sigma / \sqrt{n_i}), \,\,\, i = 1, ..., 6. \\
+\mu_i &amp;\sim&amp; \textrm{Normal}(\mu, \tau), \,\,\, i = 1, ..., 6. \\
+\mu &amp;\sim&amp; \textrm{Normal}(20, 1 / 0.001), \\
+1 / \tau^2 &amp;\sim&amp; \textrm{Gamma}(0.1, 0.1).
+\end{eqnarray*}\]</span></p>
+<ol style="list-style-type: lower-alpha">
+<li>Use JAGS to simulate a sample of size 1000 from the posterior distribution from this hierarchical model, storing values of the means <span class="math inline">\(\mu_1, ..., \mu_6\)</span>.</li>
+<li>Construct a 90% interval estimate for each of the means.</li>
+<li>Compare the 90% estimate for Murray with the separate and combined interval estimates from Exercise 1.</li>
+</ol>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>Random <span class="math inline">\(\sigma_j\)</span>’s for Movie Ratings</strong></li>
+</ol>
+<p>In Section 10.2.2, consider the situation where the standard deviation of the ratings differ across movies, so <span class="math inline">\(\sigma_j\)</span> represents the standard deviation of the ratings for movie <span class="math inline">\(j\)</span>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write out the likelihood, the prior distributions, and hyperprior distributions for this varying means and varying standard deviations model.</p></li>
+<li><p>Discuss the implications of specifying varying <span class="math inline">\(\sigma_j\)</span>’s by comparing this hierarchical model to the developed model in Section 10.2.2.</p></li>
+<li><p>What prior distributions do you choose for <span class="math inline">\(\sigma_j\)</span>’s? Why?</p></li>
+<li><p>Carry out the simulation by MCMC using JAGS. Report and discuss the findings.</p></li>
+</ol>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>Smoothing Counts</strong></li>
+</ol>
+<p>A general issue in statistical inference is how to handle situations where there are zero observed counts in a sample. This exercise illustrates several Bayesian modeling approaches to this problem.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Suppose one is learning about the probability <span class="math inline">\(p\)</span> a particular player successively makes a three-point shot in basketball. One assigns a Uniform prior for <span class="math inline">\(p\)</span>. This player attempts 10 shots and one observes <span class="math inline">\(y = 0\)</span> successes. Derive the posterior density of <span class="math inline">\(p\)</span> and compute the posterior mean.</li>
+<li>Suppose that one is learning about the probabilities <span class="math inline">\(p_1\)</span>, <span class="math inline">\(p_2\)</span>, <span class="math inline">\(p_3\)</span>, <span class="math inline">\(p_4\)</span>, <span class="math inline">\(p_5\)</span> of five players making three-throw shots. You assign the following hierarchical prior on the probabilities. You assume <span class="math inline">\(p_1, ...., p_5\)</span> are independent identically distributed Beta with shape parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\alpha\)</span>, and at the second stage, you assign <span class="math inline">\(\alpha\)</span> a Uniform prior on (0, 1). Write down a graphical representation of this hierarchical model.</li>
+<li>In part (b), suppose that each player attempts 10 shots and you observe 0, 2, 3, 1, 3 successes for the five players. Use JAGS to obtain posterior samples from the parameters <span class="math inline">\(\alpha, p_1, p_2, p_3, p_4, p_5\)</span>. Compute the posterior means of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(p_1\)</span> and compare your probability estimates with the estimate of <span class="math inline">\(p\)</span> using the single-stage prior in part (a).</li>
+</ol>
+<ol start="5" style="list-style-type: decimal">
+<li><strong>Schedules and Producers in Korean Drama Ratings</strong></li>
+</ol>
+<p>The Korean entertainment industry has been continuously booming. The global audience for K-drama is exploding across Asia and even spreading to other parts of the world, notably the US and Europe. This surge of Korean cultural popularity is called “Hallyu”, literally meaning the “Korean wave”. K-dramas are popular on multiple streaming websites in the US, such as Hulu, DramaFever, and even Netflix.</p>
+<p>How are K-dramas being rated in Korea? How are the producing company and broadcasting schedule affecting the drama ratings? In one study, data were collected on 101 K-dramas from 2014 to 2016. Each drama was produced by one of the three main producers/companies, and was being broadcasted in one of four different times of the week. The ratings of dramas were collected from the AGB Nielsen Media Research Group. In particular, the national AGB TV ratings of each drama were recorded.</p>
+<p>The data is stored in <code>KDramaData.csv</code>. Table 10.4 provides information about the variables in the complete dataset.</p>
+<p>Table 10.4. Table of the variables in K-dramas application.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Name</th>
+<th align="left">Variable information</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Drama Name</td>
+<td align="left">The name of the drama</td>
+</tr>
+<tr class="even">
+<td align="left">Schedule</td>
+<td align="left">1 = Mon. <span class="math inline">\(\&amp;\)</span> Tue., 2 = Wed. <span class="math inline">\(\&amp;\)</span> Thu., 3 = Fri.,</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">4 = Sat. <span class="math inline">\(\&amp;\)</span> Sun.</td>
+</tr>
+<tr class="even">
+<td align="left">Producer</td>
+<td align="left">1 = Seoul Broadcasting System (SBS), 2 = Korean</td>
+</tr>
+<tr class="odd">
+<td align="left"></td>
+<td align="left">Broadcasting System (KBS), 3 = Munhwa Broadcasting</td>
+</tr>
+<tr class="even">
+<td align="left"></td>
+<td align="left">Corporation (MBC)</td>
+</tr>
+<tr class="odd">
+<td align="left">Viewership</td>
+<td align="left">AGB national TV ratings, in percentage</td>
+</tr>
+<tr class="even">
+<td align="left">Date</td>
+<td align="left">MM/DD/YY</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Explore the ratings graphically by schedule and by producer.</li>
+<li>Explain how the ratings differ by schedule and by producer. Are there particular days when the ratings are high or low? Does one producer tend to have larger ratings than the other producer?</li>
+<li>Choose a subset of the <code>KDramaData.csv</code> dataset for a particular producer. Develop a hierarchical model to make inference about the mean ratings of dramas across different schedules. Discuss your conclusions and the advantage of using hierarchical modeling in this situation.</li>
+</ol>
+<p>6 <strong>Homework Hours for Five Schools</strong></p>
+<p>To compare weekly hours spent on homework by students, data is collected from a sample of five different schools. The data is stored in <code>HWhours5schools.csv</code>.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Explore the weekly hours spent on homework by students from the five schools. Do the school-specific means seem significantly different from each other? What about their variances?</p></li>
+<li><p>Set up a hierarchical model with common and unknown <span class="math inline">\(\sigma\)</span> in the likelihood, as in Section 10.2.2. Write out the likelihood, the prior distributions and the hyperprior distributions.</p></li>
+<li><p>Use JAGS to obtain posterior samples of the parameters in the hierarchical model. Perform appropriate MCMC diagnostics.</p></li>
+<li><p>Compute posterior means and 95% credible intervals for every school mean. Compute the posterior probability that the mean hour in school 1 is higher than that of school 2. Discuss your findings.</p></li>
+<li><p>Compute and summarize the posterior distribution of the ratio <span class="math inline">\(R = \frac{\tau^2}{\tau^2 + \sigma^2}\)</span>. Comment on the evidence of between-school variability for this data..</p></li>
+</ol>
+<ol start="7" style="list-style-type: decimal">
+<li><strong>Heart Attack Deaths - New York City</strong>
+</li>
+</ol>
+<p>In Section 10.3, the heart attack deaths dataset of thirteen hospitals in Manhattan, New York City is analyzed using a hierarchical Beta-Binomial model. A complete dataset of heart attack death information of 45 hospitals in all 5 boroughs of New York City (Manhattan, the Bronx, Brooklyn, Queens, and Staten Island) is stored in ```DeathHeartAttackDataNYCfull.csv}. Table 10.5 lists the variables and their description.</p>
+<p>Table 10.5. The list of variables in the New York City hearth attack deaths dataset and their description.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Variable</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Hospital</td>
+<td align="left">The name of the hospital</td>
+</tr>
+<tr class="even">
+<td align="left">Borough</td>
+<td align="left">The borough that the hospital is in</td>
+</tr>
+<tr class="odd">
+<td align="left">Type</td>
+<td align="left">N = Non-PCI hospital; P = PCI hospital</td>
+</tr>
+<tr class="even">
+<td align="left">Cases</td>
+<td align="left">The number of hearth attack cases</td>
+</tr>
+<tr class="odd">
+<td align="left">Deaths</td>
+<td align="left">The number of deaths among the heart attack cases</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Write out the complete hierarchical Beta-Binomial model for the subset of thirteen hospitals in Brooklyn. Sketch a graphical representation and discuss how to choose priors and hyperpriors.</li>
+<li>Use JAGS to obtain posterior samples of the parameters in the hierarchical model. Perform appropriate MCMC diagnostics.</li>
+<li>Compute the posterior probability that the death rate of Kings County Hospital Center is higher than that of the Kingsbrook Jewish Medical Center. Report and discuss your findings.</li>
+</ol>
+<ol start="8" style="list-style-type: decimal">
+<li><strong>Heart Attack Deaths - New York City (continued)</strong></li>
+</ol>
+<p>Develop a hierarchical Beta-Binomial model for the subset of sixteen hospitals in The Bronx and Queens. Instead of allowing a <span class="math inline">\(p_i\)</span> for each hospital <span class="math inline">\(i\)</span> in the subset, allow a <span class="math inline">\(p_B\)</span> to be shared among hospitals in The Bronx, and a <span class="math inline">\(p_Q\)</span> to be shared among hospitals in Queens.</p>
+<ol style="list-style-type: lower-alpha">
+<li>How does the hierarchical Beta-Binomial model change from the specification in Exercise 7? Write out the complete hierarchical Beta-Binomial model, sketch a graphical representation. Discuss how to choose priors and hyperpriors.</li>
+<li>Use JAGS to obtain posterior samples of the parameters in the hierarchical model. Perform appropriate MCMC diagnostics.</li>
+<li>Compute the posterior probability that the death rate of all hospitals in The Bronx is higher than that of all hospitals in Queens. Report and discuss your findings.</li>
+</ol>
+<ol start="9" style="list-style-type: decimal">
+<li><strong>Heart Attack Deaths - New York City (continued)</strong></li>
+</ol>
+<p>Develop a hierarchical Beta-Binomial model for the complete dataset of 45 hospitals in New York City. Instead of allowing a <span class="math inline">\(p_i\)</span> for each hospital <span class="math inline">\(i\)</span> in the subset, allow a <span class="math inline">\(p_P\)</span> to be shared among hospitals of Type P, and a <span class="math inline">\(p_N\)</span> to be shared among hospitals of Type N.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write out the complete hierarchical Beta-Binomial model, sketch a graphical representation. Discuss how to choose priors and hyperpriors.</li>
+<li>Use JAGS to obtain posterior samples of the parameters in the hierarchical model. Perform appropriate MCMC diagnostics.</li>
+<li>Compute the posterior probability that the death rate of all hospitals of Type P higher than that of all hospitals of Type N. Report and discuss your findings.</li>
+<li>Can you develop a hierarchical Beta-Binomial model for all 45 hospitals in New York City that takes into account Borough and Type? Describe how you would design the hierarchical model, write JAGS script to obtain posterior samples of the parameters and discuss any findings from your work.</li>
+</ol>
+<ol start="10" style="list-style-type: decimal">
+<li><strong>Hierarchical Gamma-Poisson Modeling - Marriage Rates in Italy</strong></li>
+</ol>
+<p>Annual marriage counts per 1000 of the population in Italy from 1936 to 1951 were collected and recorded in Table 10.6. Can we learn something about Italians’ marriage rates during this 16-year period? The dataset is stored in ```marriage_counts.csv}.</p>
+<p>Table 10.6. The year and the marriage counts per 1000 of the population in Italy from 1936 to 1951.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Year</th>
+<th align="right">Count</th>
+<th align="left">Year</th>
+<th align="right">Count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1936</td>
+<td align="right">7</td>
+<td align="left">1944</td>
+<td align="right">5</td>
+</tr>
+<tr class="even">
+<td align="left">1937</td>
+<td align="right">9</td>
+<td align="left">1945</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td align="left">1938</td>
+<td align="right">8</td>
+<td align="left">1946</td>
+<td align="right">9</td>
+</tr>
+<tr class="even">
+<td align="left">1939</td>
+<td align="right">7</td>
+<td align="left">1947</td>
+<td align="right">10</td>
+</tr>
+<tr class="odd">
+<td align="left">1940</td>
+<td align="right">7</td>
+<td align="left">1948</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="left">1941</td>
+<td align="right">6</td>
+<td align="left">1949</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">1942</td>
+<td align="right">6</td>
+<td align="left">1950</td>
+<td align="right">8</td>
+</tr>
+<tr class="even">
+<td align="left">1943</td>
+<td align="right">5</td>
+<td align="left">1951</td>
+<td align="right">7</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li><p>Recall that with count data, a common conjugate model is the Gamma-Poisson model, introduced in Section 8.8. Write out the likelihood, the prior distribution, and its posterior distribution under the Gamma-Poisson model.</p></li>
+<li><p>Observations are considered i.i.d. in the model in part (a). Figure 10.10 plots the marriage rates in Italy across years. Discuss whether the i.i.d. assumption is reasonable.</p></li>
+</ol>
+<div class="figure"><span style="display:block;" id="fig:unnamed-chunk-123"></span>
+<img src="LATEX/figures/chapter10/marriage_ages.png" alt="Dotplot of marriage rates in Italy from 1936 to 1951." width="500" />
+<p class="caption">
+Figure 4.10: Dotplot of marriage rates in Italy from 1936 to 1951.
+</p>
+</div>
+<ol start="3" style="list-style-type: lower-alpha">
+<li><p>Suppose one believes that the mean marriage rate differs across the three time periods. Using this belief, model the Italian marriage rates in a hierarchical approach. Write out the likelihood, the prior distributions, and any hyperprior distributions under a hierarchical Gamma-Poisson model.</p></li>
+<li><p>Sketch a graphical representation of the hierarchical Gamma-Poisson model.</p></li>
+<li><p>Simulate posterior draws by MCMC using JAGS. Perform MCMC diagnostics and make sure your MCMC has converged.</p></li>
+<li><p>Do you see clear differences between the three rate parameters in the posterior? Report and discuss your findings.</p></li>
+</ol>
+<ol start="11" style="list-style-type: decimal">
+<li><strong>Hierarchical Gamma-Poisson Modeling - Fire Calls in Pennsylvania</strong></li>
+</ol>
+<p>Table 10.7 displays the number of fire calls and the number of building fires for ten counties in Montgomery County, Pennsylvania from 2015 through 2019. This data is currently described as ``Emergency - 911 Calls” from ```kaggle.com}. Suppose that the number of building fires for the <span class="math inline">\(j\)</span>-th zip code is Poisson with mean <span class="math inline">\(n_j \lambda_j\)</span>, where <span class="math inline">\(n_j\)</span> and <span class="math inline">\(\lambda_j\)</span> are respectively the number of fire calls and rate of building fires for the <span class="math inline">\(j\)</span>-th zip code.</p>
+<p>Table 10.7. The number of fire calls and building fires for ten zip codes in Montgomery County, Pennsylvania.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="right">Zip Code</th>
+<th align="right">Fire Calls</th>
+<th align="right">Building Fires</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">18054</td>
+<td align="right">266</td>
+<td align="right">12</td>
+</tr>
+<tr class="even">
+<td align="right">18103</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td align="right">19010</td>
+<td align="right">1470</td>
+<td align="right">59</td>
+</tr>
+<tr class="even">
+<td align="right">19025</td>
+<td align="right">246</td>
+<td align="right">11</td>
+</tr>
+<tr class="odd">
+<td align="right">19040</td>
+<td align="right">1093</td>
+<td align="right">47</td>
+</tr>
+<tr class="even">
+<td align="right">19066</td>
+<td align="right">435</td>
+<td align="right">26</td>
+</tr>
+<tr class="odd">
+<td align="right">19116</td>
+<td align="right">2</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="right">19406</td>
+<td align="right">2092</td>
+<td align="right">113</td>
+</tr>
+<tr class="odd">
+<td align="right">19428</td>
+<td align="right">2025</td>
+<td align="right">73</td>
+</tr>
+<tr class="even">
+<td align="right">19474</td>
+<td align="right">4</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Suppose that the building fire rates <span class="math inline">\(\lambda_1, ..., \lambda_{10}\)</span> follow a common Gamma(<span class="math inline">\(\alpha, \beta\)</span>) distribution where the hyperparameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> follow weakly informative distributions. Use JAGS to simulate a sample of size 5000 from the joint posterior distribution of all parameters of the model.<br />
+</li>
+<li>The individual estimates of the building rates for zip codes 18054 and 19010 are <span class="math inline">\(12/266\)</span> and <span class="math inline">\(59/1470\)</span>, respectively. Contrast these estimates with the posterior means of the rates <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_{3}\)</span>.</li>
+<li>The parameter <span class="math inline">\(\mu = \alpha / \beta\)</span> represents the mean building fire rates across zip codes. Construct a density estimate of the posterior distribution of <span class="math inline">\(\mu\)</span>.</li>
+<li>Suppose that the county has 50 fire calls to the zip code 19066. Use the simulated predictive distribution to construct a 90% predictive interval for the number of building fires.</li>
+</ol>
+<ol start="12" style="list-style-type: decimal">
+<li><strong>Hierarchical Gamma-Exponential Modeling - Times Between Traffic Accidents</strong></li>
+</ol>
+<p>Chapter 8 Exercise 20 describes the Exponential distribution, which is often used as a model for time between events, such as traffic accidents. The exercise also describes the Gamma distribution as a conjugate prior choice for the Exponential data model. 10 times between traffic accidents are collected: 1.5, 15, 60.3, 30.5, 2.8, 56.4, 27, 6.4, 110.7, 25.4 (in minutes).</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Suppose the 10 collected times are observed at 4 different locations, shown in Table 10.8. Use this information, model the times between traffic accidents in a hierarchical approach. Write out the likelihood, the prior distributions, and any hyperprior distributions under a hierarchical Gamma-Exponential model.</p></li>
+<li><p>Sketch a graphical representation of the hierarchical Gamma-Exponential model.</p></li>
+<li><p>Simulate posterior draws by MCMC using JAGS. Perform MCMC diagnostics and make sure your MCMC has converged.</p></li>
+<li><p>Do you see clear differences between the rate of traffic accidents at the 5 locations? Report and discuss your findings.</p></li>
+</ol>
+<p>Table 10.8. The time between traffic accidents and recorded location.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Time</th>
+<th align="right">Location</th>
+<th align="left">Time</th>
+<th align="right">Location</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">1.5</td>
+<td align="right">1</td>
+<td align="left">15</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">60.3</td>
+<td align="right">2</td>
+<td align="left">30.5</td>
+<td align="right">2</td>
+</tr>
+<tr class="odd">
+<td align="left">2.8</td>
+<td align="right">3</td>
+<td align="left">56.4</td>
+<td align="right">3</td>
+</tr>
+<tr class="even">
+<td align="left">27</td>
+<td align="right">4</td>
+<td align="left">6.4</td>
+<td align="right">4</td>
+</tr>
+<tr class="odd">
+<td align="left">110.7</td>
+<td align="right">5</td>
+<td align="left">25.4</td>
+<td align="right">5</td>
+</tr>
+</tbody>
+</table>
+<ol start="13" style="list-style-type: decimal">
+<li><strong>Bird Survey Trend Estimates</strong></li>
+</ol>
+<p>The North American Breeding Bird Survey (BBS) is a yearly survey to monitor the bird population. Regression models were used to estimate the change in population size for many species of birds between 1966 to 1999. For each of 28 particular grassland species of birds, Table 10.9 displays the trend estimate <span class="math inline">\(\hat \beta_i\)</span> and the corresponding standard error <span class="math inline">\(\sigma_i\)</span>. This data is stored in the data file <code>BBS_survey.csv</code>. Assume that the trend estimates are independent with <span class="math inline">\(\hat \beta_i \sim \textrm{Normal}(\beta_i, \sigma_i)\)</span> where we assume that the standard errors {<span class="math inline">\(\sigma_i\}\)</span> are known.</p>
+<p>Table 10.9. Trend estimate <span class="math inline">\(\hat \beta_i\)</span> and associated standard error <span class="math inline">\(\sigma_i\)</span> for 28 grassland species birds.</p>
+<table>
+<colgroup>
+<col width="35%" />
+<col width="9%" />
+<col width="6%" />
+<col width="32%" />
+<col width="9%" />
+<col width="6%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="left">Species Name</th>
+<th align="right">Trend</th>
+<th align="right">SE</th>
+<th align="left">Species Name</th>
+<th align="right">Trend</th>
+<th align="right">SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Upland Sandpiper</td>
+<td align="right">0.76</td>
+<td align="right">0.39</td>
+<td align="left">Western Meadowlark</td>
+<td align="right">-0.75</td>
+<td align="right">0.17</td>
+</tr>
+<tr class="even">
+<td align="left">Long-billed Curlew</td>
+<td align="right">-0.77</td>
+<td align="right">1.01</td>
+<td align="left">Chestnut-col Longspur</td>
+<td align="right">-1.36</td>
+<td align="right">0.68</td>
+</tr>
+<tr class="odd">
+<td align="left">Mountain Plover</td>
+<td align="right">-1.05</td>
+<td align="right">2.24</td>
+<td align="left">McCown’s Longspur</td>
+<td align="right">-9.29</td>
+<td align="right">8.27</td>
+</tr>
+<tr class="even">
+<td align="left">Greater Prairie-Chicken</td>
+<td align="right">-2.54</td>
+<td align="right">2.33</td>
+<td align="left">Vesper Sparrow</td>
+<td align="right">-0.61</td>
+<td align="right">0.24</td>
+</tr>
+<tr class="odd">
+<td align="left">Sharp-tailed Grouse</td>
+<td align="right">-0.92</td>
+<td align="right">1.43</td>
+<td align="left">Savannah Sparrow</td>
+<td align="right">-0.34</td>
+<td align="right">0.29</td>
+</tr>
+<tr class="even">
+<td align="left">Ring-necked Pheasant</td>
+<td align="right">-1.06</td>
+<td align="right">0.32</td>
+<td align="left">Baird’s Sparrow</td>
+<td align="right">-2.04</td>
+<td align="right">1.48</td>
+</tr>
+<tr class="odd">
+<td align="left">Northern Harrier</td>
+<td align="right">-0.80</td>
+<td align="right">4.00</td>
+<td align="left">Grasshopper Sparrow</td>
+<td align="right">-3.73</td>
+<td align="right">0.47</td>
+</tr>
+<tr class="even">
+<td align="left">Ferruginous Hawk</td>
+<td align="right">3.52</td>
+<td align="right">1.31</td>
+<td align="left">Henslow’s Sparrow</td>
+<td align="right">-4.82</td>
+<td align="right">2.50</td>
+</tr>
+<tr class="odd">
+<td align="left">Common Barn Owl</td>
+<td align="right">-2.00</td>
+<td align="right">2.14</td>
+<td align="left">LeConte’s Sparrow</td>
+<td align="right">0.91</td>
+<td align="right">0.95</td>
+</tr>
+<tr class="even">
+<td align="left">Short-eared Owl</td>
+<td align="right">-6.23</td>
+<td align="right">4.55</td>
+<td align="left">Cassin’s Sparrow</td>
+<td align="right">-2.10</td>
+<td align="right">0.51</td>
+</tr>
+<tr class="odd">
+<td align="left">Burrowing Owl</td>
+<td align="right">1.00</td>
+<td align="right">2.74</td>
+<td align="left">Dickcissel</td>
+<td align="right">-1.46</td>
+<td align="right">0.28</td>
+</tr>
+<tr class="even">
+<td align="left">Horned Lark</td>
+<td align="right">-1.89</td>
+<td align="right">0.22</td>
+<td align="left">Lark Bunting</td>
+<td align="right">-3.74</td>
+<td align="right">2.30</td>
+</tr>
+<tr class="odd">
+<td align="left">Bobolink</td>
+<td align="right">-1.25</td>
+<td align="right">0.31</td>
+<td align="left">Sprague’s Pipit</td>
+<td align="right">-5.62</td>
+<td align="right">1.34</td>
+</tr>
+<tr class="even">
+<td align="left">Eastern Meadlowlark</td>
+<td align="right">-2.69</td>
+<td align="right">0.17</td>
+<td align="left">Sedge Wren</td>
+<td align="right">3.18</td>
+<td align="right">0.73</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Suppose one assumes that the population trend estimates are equal, that is, <span class="math inline">\(\beta_1 = ... \ \beta_{28} = \beta\)</span>. Using JAGS to simulate from the posterior distribution of <span class="math inline">\(\beta\)</span> assuming a weakly informative prior on <span class="math inline">\(\beta\)</span>. Find the posterior mean and posterior standard deviation of <span class="math inline">\(\beta\)</span> and compare your answers to the trend estimates and standard errors in Table 10.9.</li>
+<li>Next assume that the population trend estimates <span class="math inline">\(\beta_1 = ... \ \beta_{28}\)</span> are a random sample from a Normal distribution with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\tau\)</span>. Assuming weakly informative priors on <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span>, use JAGS to simulate from the posterior distribution of all parameters. Find the posterior means of the <span class="math inline">\(\{\beta_j\}\)</span> and compare your estimates with the trend estimates in Table 10.9.</li>
+</ol>
+<ol start="14" style="list-style-type: decimal">
+<li><strong>Predicting Baseball Batting Averages</strong></li>
+</ol>
+<p>The data file <code>batting_2018.csv</code> contains batting data for every player in the 2018 Major League Baseball season. The variables <code>AB.x</code> and <code>H.x</code> in the dataset contain the number of at-bats (opportunities) and number of hits of each player in the first month of the baseball season. One assumes that <span class="math inline">\(y_i\)</span>, the number of hits of the <span class="math inline">\(i\)</span>-th player is Binomial(<span class="math inline">\(n_i, p_i\)</span>) where <span class="math inline">\(n_i\)</span> is the number of at-bats and <span class="math inline">\(p_i\)</span> is the probability of a hit.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Select a random sample of 20 players from the dataset.</p></li>
+<li><p>Assume that the hitting probabilities <span class="math inline">\(\{p_i\}\)</span> have a common Beta(<span class="math inline">\(a, b\)</span>) prior where <span class="math inline">\(a = \eta \mu\)</span> and <span class="math inline">\(b = \eta (1 - \mu)\)</span>. Assume that the hyper parameters <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\mu\)</span> are independent where <span class="math inline">\(\mu\)</span> is Uniform(0, 1) and <span class="math inline">\(\log(\eta)\)</span> has a logistic distribution with mean <span class="math inline">\(\log(50)\)</span> and scale 1.</p></li>
+<li><p>Use a JAGS script similar to what is presented in Section 10.3.3, draw a sample of 5000 from the posterior distribution, monitoring values of the <span class="math inline">\(\{p_i\}\)</span>, <span class="math inline">\(\mu\)</span>, and <span class="math inline">\(\log(\eta)\)</span>.</p></li>
+<li><p>Compare unpooled, pooled, and hierarchical estimates of the <span class="math inline">\(\{p_i\}\)</span> in predicting the batting averages in the remainder of the season.</p></li>
+</ol>
+<ol start="15" style="list-style-type: decimal">
+<li><strong>Estimating Kidney Cancer Death Rates</strong></li>
+</ol>
+<p>This exercise is a variation of an activity described in Gelman and Nolan (2017). Suppose one is interested in estimating the kidney cancer death rates for the ten Ohio counties displayed in Table 10.10. Suppose the true death rates <span class="math inline">\(\theta_1, ..., \theta_{10}\)</span> are a sample from a Gamma(<span class="math inline">\(\alpha, \beta\)</span>) distribution. The observed number of deaths <span class="math inline">\(y_j\)</span> in the <span class="math inline">\(j\)</span>th county is assumed to be Poisson(<span class="math inline">\(n_j \theta_j\)</span>) where <span class="math inline">\(n_j\)</span> is the population size.</p>
+<p>Table 10.10. Populations of ten Ohio counties from recent Census
+estimates.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">County</th>
+<th align="right">Population</th>
+<th align="left">County</th>
+<th align="right">Population</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Cuyahoga</td>
+<td align="right">1,243,857</td>
+<td align="left">Jackson</td>
+<td align="right">32,384</td>
+</tr>
+<tr class="even">
+<td align="left">Gallia</td>
+<td align="right">29,979</td>
+<td align="left">Knox</td>
+<td align="right">61,893</td>
+</tr>
+<tr class="odd">
+<td align="left">Hamilton</td>
+<td align="right">816,684</td>
+<td align="left">Noble</td>
+<td align="right">14,354</td>
+</tr>
+<tr class="even">
+<td align="left">Henry</td>
+<td align="right">27,086</td>
+<td align="left">Seneca</td>
+<td align="right">55,207</td>
+</tr>
+<tr class="odd">
+<td align="left">Holmes</td>
+<td align="right">43,892</td>
+<td align="left">Van Wert</td>
+<td align="right">28,281</td>
+</tr>
+</tbody>
+</table>
+<ol style="list-style-type: lower-alpha">
+<li>Assuming <span class="math inline">\(\alpha = 27, \beta = 58000\)</span>, simulate ten true cancer rates <span class="math inline">\(\theta_1, ..., \theta_{10}\)</span> from a Gamma(<span class="math inline">\(\alpha, \beta\)</span>) distribution. For each county, simulate the number of deaths in all counties. (Use the following R code.)</li>
+</ol>
+<pre><code>true_rates &lt;- rgamma(10, shape = 27, rate = 58000)
+pop_size &lt;- c(1243857, 29979, 816684, 27086, 43892,   
+32384, 61893, 14354, 55207, 28281)
+deaths &lt;- rpois(10, lambda = pop_size * true_rates)</code></pre>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>Compute the observed death rates {<span class="math inline">\(y_j / n_j\)</span>}. Identify the counties with the lowest and highest death rates.</p></li>
+<li><p>Using JAGS, fit a hierarchical model to the data assuming weakly informative Gamma priors on the parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. Simulate a sample of 10,000 draws from the posterior distribution and compute the posterior means of the {<span class="math inline">\(\theta_j\)</span>}.</p></li>
+<li><p>Identify the counties with the lowest and highest posterior means of the true rates. Compare these <code>best" and</code>worst” counties with the best and worst counties identified in part (b).</p></li>
+</ol>
+<p>Exercises 16 to 20 are additional Bayesian hierarchical models with more complicated structures. These exercises are here to help the reader gain familiarity of working with joint posterior distribution and deriving full conditional posterior distributions. These skills are essential to creating Metropolis and Gibbs sampling algorithms by oneself (as opposed to using JAGS).}</p>
+<ol start="16" style="list-style-type: decimal">
+<li><strong>Inference for the Binomial <span class="math inline">\(N\)</span> parameter</strong>
+</li>
+</ol>
+<p>Suppose that we want inference about an unknown number of animals <span class="math inline">\(N\)</span> in a
+fixed-size population. On five separate days, we take
+photographs of some areas where they reside, and count the number of
+animals in the photos (<span class="math inline">\(y_1, \dots, y_5\)</span>). Suppose further that
+each animal has a constant probability <span class="math inline">\(\theta\)</span> of appearing in a
+photograph and that appearances are independent across animals and
+days. A reasonable model for such data is a Binomial distribution,
+<span class="math inline">\(y_i \mid N, \theta \sim \text{Binomial}(N, \theta)\)</span>. In our setting, neither the number of trials <span class="math inline">\(N\)</span> nor the
+probability <span class="math inline">\(\theta\)</span> are known.</p>
+<p>To get a posterior distribution for <span class="math inline">\(N\)</span> and <span class="math inline">\(\theta\)</span>, we propose the following system
+of models (Raftery 1988):
+<span class="math display">\[\begin{eqnarray*}
+y_i \mid N, \theta &amp;\sim&amp; \text{Binomial}(N, \theta) \\
+N \mid \theta, \lambda &amp;\sim&amp; \text{Poisson}(\lambda / \theta) \\
+\pi(\lambda , \theta) &amp;\propto&amp; 1 / \lambda,
+\end{eqnarray*}\]</span>
+where <span class="math inline">\(\lambda &gt; 0\)</span> is a continuous random variable introduced to help
+with computations.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write down the joint posterior distribution, <span class="math inline">\(\pi(N,  \theta, \lambda \mid y_1, \dots, y_5)\)</span>, up to a multiplicative
+constant.</p></li>
+<li><p>Find an expression for the conditional distribution, <span class="math inline">\(\pi(\lambda \mid y_1,  \dots, y_5, N, \theta)\)</span>. Write the name of the distribution and
+expressions for its parameter values.</p></li>
+<li><p>Find the posterior distribution <span class="math inline">\(\pi(N, \theta  \mid y_1, \dots, y_5)\)</span> by integrating <span class="math inline">\(\pi(N, \theta, \lambda \mid y_1, \dots, y_5)\)</span> with respect to
+<span class="math inline">\(\lambda\)</span>. You don’t need to name the distribution; just write its mathematical form.</p></li>
+<li><p>Find the conditional distribution, <span class="math inline">\(\pi(\theta \mid y_1,  \dots, y_5, N)\)</span>. Write the name of the distribution and
+expressions for its parameter values.</p></li>
+</ol>
+<ol start="17" style="list-style-type: decimal">
+<li><strong>Successes and Failures in Tests</strong>
+</li>
+</ol>
+<p>A standard model for success or failure in testing situations is
+the item response model, also called the Rasch model. Suppose that
+<span class="math inline">\(J\)</span> persons are given a test with <span class="math inline">\(K\)</span> items. For <span class="math inline">\(j = 1, \dots, J\)</span>
+and <span class="math inline">\(k = 1, \dots, K\)</span>, let <span class="math inline">\(y_{jk}=1\)</span> if
+person <span class="math inline">\(j\)</span> gets item <span class="math inline">\(k\)</span> correct, and let <span class="math inline">\(y_{jk}=0\)</span> otherwise. The
+Rasch model is
+<span class="math display" id="eq:rasch1">\[\begin{equation}
+p(Y_{jk} = 1 \mid \pi_{jk}) = \text{Bernoulli}(\pi_{jk})
+\tag{4.34}
+\end{equation}\]</span>
+<span class="math display" id="eq:rasch2">\[\begin{equation}
+\log\left(\frac{\pi_{jk}}{1 - \pi_{jk}}\right) = \alpha_j - \beta_k.
+\tag{4.35}
+\end{equation}\]</span>
+Here, <span class="math inline">\(\alpha_j\)</span> represents the ability of person <span class="math inline">\(j\)</span>, and <span class="math inline">\(\beta_k\)</span>
+represents the difficulty of item <span class="math inline">\(k\)</span>. For a Bayesian version of the
+Rasch model, we use the hierarchical model distributions,
+<span class="math display">\[\begin{eqnarray*}
+\alpha_j &amp;\sim&amp; \textrm{Normal}(0, \sqrt{1/\tau}), \,\,\, \text{for } j = 1,\dots, J\\
+\beta_k &amp;\sim&amp; \textrm{Normal}(\mu, \sqrt{1/\phi}), \,\,\, \text{for } k = 1,\dots, K
+\end{eqnarray*}\]</span>
+where <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\sigma\)</span> are precisions. For prior
+distributions, we use
+<span class="math display">\[\begin{eqnarray*}
+\tau &amp;\sim&amp; \text{Gamma}(a, b), \\
+\phi &amp;\sim&amp; \text{Gamma}(c, d), \\
+\mu &amp;\sim&amp; \textrm{Normal}(0, e),
+\end{eqnarray*}\]</span>
+for known positive constants (<span class="math inline">\(a, b, c, d, e\)</span>). We intend to run an MCMC to estimate the posterior
+distributions of all parameters. This problem asks you to outline
+some of the MCMC steps.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write the joint posterior distribution of <span class="math inline">\(\pi(\alpha_1,  \dots, \alpha_J, \beta_1, \dots, \beta_K, \tau, \phi, \mu \mid \{y_{jk}\})\)</span>, up to a constant.</p></li>
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\mu\)</span> given
+<span class="math inline">\((\alpha_1, \dots, \alpha_J, \beta_1, \dots, \beta_K, \tau,  \phi, \{y_{jk}\})\)</span>.
+If you can use a Gibbs step, write the name of the full conditional posterior distribution for
+<span class="math inline">\(\mu\)</span> and its parameter values. If you use a Metropolis step, write an expression for the
+acceptance probability and suggest a family of proposal distributions.</p></li>
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\phi\)</span> given
+<span class="math inline">\((\alpha_1, \dots, \alpha_J, \beta_1, \dots, \beta_K, \tau,  \mu, \{y_{jk}\})\)</span>.
+If you can use a Gibbs step, write the name of the full conditional posterior distribution for
+<span class="math inline">\(\phi\)</span> and its parameter values. If you use a Metropolis step, write an expression for the<br />
+acceptance probability and suggest a family of proposal distributions.</p></li>
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\tau\)</span> given
+<span class="math inline">\((\alpha_1, \dots, \alpha_J, \beta_1, \dots, \beta_K, \phi,  \mu, \{y_{jk}\})\)</span>.
+If you use a Gibbs step, write the name of the full conditional distribution for
+<span class="math inline">\(\tau\)</span>. If you use a Metropolis step, write an expression for the
+acceptance probability and suggest a family of proposal
+distributions.</p></li>
+</ol>
+<ol start="18" style="list-style-type: decimal">
+<li><strong>Success and Failures in Tests (continued)</strong></li>
+</ol>
+<p>Continuing from Exercise 17.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\beta_k\)</span> given
+\<span class="math inline">\((\alpha_1, \dots, \alpha_J, \beta_1, \dots \beta_{k-1},  \beta_{k+1}, \dots, \beta_K, \tau, \phi, \mu, \{y_{jk}\})\)</span>.
+If you can use a Gibbs step, write the name of the full conditional posterior distribution for
+<span class="math inline">\(\beta_k\)</span> and its parameter values. f you use a Metropolis step, write an expression for the
+acceptance probability and suggest a family of proposal distributions.</p></li>
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\alpha_j\)</span> given
+\<span class="math inline">\((\alpha_1, \dots, \alpha_{j-1},  \alpha_{j+1}, \dots, \alpha_J, \beta_1, \dots, \beta_K, \tau,  \phi, \mu, \{y_{jk}\})\)</span>.
+If you use a Gibbs step, write the name of the full conditional distribution for
+<span class="math inline">\(\alpha_j\)</span>. If you use a Metropolis step, write an expression for the
+acceptance probability and suggest a family of proposal
+distributions.</p></li>
+</ol>
+<ol start="19" style="list-style-type: decimal">
+<li><strong>Success and Failures in Tests (continued)</strong></li>
+</ol>
+<p>Suppose that you have 1000 approximately uncorrelated draws of
+the parameters from the joint posterior distribution of the Rasch model in Exercise 17. Describe how you would do the following tasks.</p>
+<ol style="list-style-type: lower-alpha">
+<li><p>Find the posterior probability that the variability in peoples’
+abilities exceeds the variability in item difficulty.</p></li>
+<li><p>Find the item in the test that appears to be the most difficult,
+and attach a posterior probability that it in fact is the most difficult among
+all <span class="math inline">\(K\)</span> items.</p></li>
+<li><p>Perform a posterior predictive check of the model.</p></li>
+</ol>
+<ol start="20" style="list-style-type: decimal">
+<li><strong>AR(1) Models in Finance and Macroeconomics</strong>
+</li>
+</ol>
+<p>A common model in finance and macroeconomics is the AR(1) model.
+Suppose that we have <span class="math inline">\(n\)</span> measurements ordered in time. For <span class="math inline">\(j = 1,  \dots, n\)</span>, let <span class="math inline">\(y_j\)</span> be the measurement at time <span class="math inline">\(j\)</span>. Suppose we
+consider the measurement at time 1 as known (not a random variable).
+Then, for <span class="math inline">\(j=2, \dots, n\)</span>, a typical AR(1) model is <span class="math inline">\(y_j = \beta y_{j-1} + \epsilon_j\)</span> where
+<span class="math inline">\(\epsilon_j \sim \textrm{Normal}(0, \sigma)\)</span>. Equivalently, we have<br />
+<span class="math display" id="eq:arm1">\[\begin{equation}
+p(y_{j} \mid y_{j-1}, \dots, y_1, \beta, \sigma^2) = \text{Normal}(\beta
+y_{j-1}, \sigma) \,\,\,\, \text{for } j=2, \dots, n. \nonumber \\
+\tag{4.36}
+\end{equation}\]</span>
+Note that what happens at time <span class="math inline">\(j\)</span>
+only depends on what happened at time <span class="math inline">\(j-1\)</span>. For prior distributions, we will use
+<span class="math display">\[\begin{eqnarray*}
+1/\sigma^2 &amp;\sim&amp; \text{Gamma}(a, b), \\
+\beta &amp;\sim&amp; \text{Normal}(c, d),
+\end{eqnarray*}\]</span>
+for known positive constants (<span class="math inline">\(a, b, c, d\)</span>). We intend to run an MCMC
+sampler to estimate the posterior distribution of <span class="math inline">\((\beta, \sigma^2)\)</span>. Whenever possible, we will sample directly from full
+conditionals. This problem asks you to outline
+some of the MCMC steps, and to make a prediction for a future observation.</p>
+<ol style="list-style-type: lower-alpha">
+<li>Write the kernel of the joint distribution of <span class="math inline">\(\pi(\beta,  \sigma^2 \mid y_1, \dots, y_n)\)</span>. [Hint: write <span class="math inline">\(p(y_2,  \dots, y_n \mid y_1, \beta, \sigma^2) = p(y_n \mid y_{n-1},  \dots, y_2, y_1, \beta, \sigma^2) p(y_{n-1} \mid y_{n-2},  \dots, y_2, y_1, \beta, \sigma^2) \cdots\)</span></li>
+</ol>
+<p><span class="math inline">\(p(y_2 \mid y_1, \beta, \sigma^2)\)</span>.]</p>
+<ol start="2" style="list-style-type: lower-alpha">
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\sigma^2\)</span> given
+<span class="math inline">\((\beta, y_1, \dots, y_n)\)</span>.
+If you use a Gibbs step, write the name of the full conditional distribution for
+<span class="math inline">\(\sigma\)</span> and its parameter values. If you use a Metropolis step, write
+an expression for the
+acceptance probability and suggest a family of proposal
+distributions.</p></li>
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\beta\)</span> given
+<span class="math inline">\((\sigma, y_1, \dots, y_n)\)</span>.
+If you use a Gibbs step, write the name of the full conditional distribution for
+<span class="math inline">\(\beta\)</span> and its parameter values. If you use a Metropolis step, write an expression for the
+acceptance probability and suggest a family of proposal
+distributions.</p></li>
+<li><p>Describe how you would make a 95% posterior interval for the future value of <span class="math inline">\(Y_{n+2}\)</span>.</p></li>
+</ol>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="simulation-by-markov-chain-monte-carlo.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="simple-linear-regression.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/10-hierarchical.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["bookdown-demo.pdf", "bookdown-demo.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
