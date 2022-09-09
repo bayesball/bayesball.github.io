@@ -220,6 +220,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#a-hierarchical-beta-binomial-model" id="toc-a-hierarchical-beta-binomial-model" class="nav-link" data-scroll-target="#a-hierarchical-beta-binomial-model"> <span class="header-section-number">5.3.2</span> A hierarchical Beta-Binomial model</a></li>
   <li><a href="#inference-through-mcmc-1" id="toc-inference-through-mcmc-1" class="nav-link" data-scroll-target="#inference-through-mcmc-1"> <span class="header-section-number">5.3.3</span> Inference through MCMC</a></li>
   </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">5.4</span> Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -910,9 +911,720 @@ P(p_1 &lt; p_2, ..., p_1 &lt; p_{13} | y),
 </div>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="exercises" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="exercises"><span class="header-section-number">5.4</span> Exercises</h2>
+<ol type="1">
+<li><strong>Time-to-Serve for Six Tennis Players</strong> </li>
+</ol>
+<p>Table 10.3 displays the sample size <span class="math inline">\(n_i\)</span> and the mean time-to-serve <span class="math inline">\(\bar y_i\)</span> (in seconds) for six professional tennis players. Assume that the sample mean for the <span class="math inline">\(i\)</span>-th player <span class="math inline">\(\bar y_i\)</span> is Normally distributed with mean <span class="math inline">\(\mu_i\)</span> and standard deviation <span class="math inline">\(\sigma / \sqrt{n_i}\)</span> where we assume <span class="math inline">\(\sigma = 5.5\)</span> seconds.</p>
+<p>Table 10.3. Number of serves and mean time-to-serve for six professional tennis players.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Player</th>
+<th style="text-align: right;">(n)</th>
+<th style="text-align: right;">(y)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Murray</td>
+<td style="text-align: right;">731</td>
+<td style="text-align: right;">23.56</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Simon</td>
+<td style="text-align: right;">570</td>
+<td style="text-align: right;">18.07</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Federer</td>
+<td style="text-align: right;">491</td>
+<td style="text-align: right;">16.21</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ferrer</td>
+<td style="text-align: right;">456</td>
+<td style="text-align: right;">21.70</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Isner</td>
+<td style="text-align: right;">403</td>
+<td style="text-align: right;">22.32</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Kyrgios</td>
+<td style="text-align: right;">274</td>
+<td style="text-align: right;">14.11</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li><p>(Separate estimate) Suppose one is interested in estimating Murray’s mean time-to-serve <span class="math inline">\(\mu_1\)</span> using only Murray’s time-to-serve data. Assume that one’s prior beliefs about <span class="math inline">\(\mu_1\)</span> are represented by a Normal density with mean 20 and standard deviation 10 seconds. Use results from Chapter 8 to find the posterior distribution of <span class="math inline">\(\mu_1\)</span> and construct a 90% interval estimate for <span class="math inline">\(\mu_1\)</span>.</p></li>
+<li><p>(Combined estimate) Suppose instead that one believes that there are no differences between players and <span class="math inline">\(\mu_1 = ... = \mu_6 = \mu\)</span>. The overall mean time-to-serve is <span class="math inline">\(\bar y = 19.9\)</span> seconds with a combined sample size <span class="math inline">\(n = 2925\)</span>. Assuming that <span class="math inline">\(\mu\)</span> has a Normal(20,10) prior, find the posterior distribution of <span class="math inline">\(\mu\)</span> and construct a 90% interval estimate for <span class="math inline">\(\mu\)</span>.</p></li>
+<li><p>Which approach, part (a) or part (b), seems more reasonable in this situation? Explain.</p></li>
+</ol>
+<ol start="2" type="1">
+<li><strong>Time-to-Serve for Six Tennis Players (continued)</strong></li>
+</ol>
+<p>Suppose one wishes to estimate the mean time-to-serve values for the six players by the following hierarchical model. Remember that we are assuming <span class="math inline">\(\sigma = 5.5\)</span> seconds.</p>
+<p><span class="math display">\[\begin{eqnarray*}
+\bar{y}_i &amp;\sim&amp; \textrm{Normal}(\mu_i, \sigma / \sqrt{n_i}), \,\,\, i = 1, ..., 6. \\
+\mu_i &amp;\sim&amp; \textrm{Normal}(\mu, \tau), \,\,\, i = 1, ..., 6. \\
+\mu &amp;\sim&amp; \textrm{Normal}(20, 1 / 0.001), \\
+1 / \tau^2 &amp;\sim&amp; \textrm{Gamma}(0.1, 0.1).
+\end{eqnarray*}\]</span></p>
+<ol type="a">
+<li>Use JAGS to simulate a sample of size 1000 from the posterior distribution from this hierarchical model, storing values of the means <span class="math inline">\(\mu_1, ..., \mu_6\)</span>.</li>
+<li>Construct a 90% interval estimate for each of the means.</li>
+<li>Compare the 90% estimate for Murray with the separate and combined interval estimates from Exercise 1.</li>
+</ol>
+<ol start="3" type="1">
+<li><strong>Random <span class="math inline">\(\sigma_j\)</span>’s for Movie Ratings</strong></li>
+</ol>
+<p>In Section 10.2.2, consider the situation where the standard deviation of the ratings differ across movies, so <span class="math inline">\(\sigma_j\)</span> represents the standard deviation of the ratings for movie <span class="math inline">\(j\)</span>.</p>
+<ol type="a">
+<li><p>Write out the likelihood, the prior distributions, and hyperprior distributions for this varying means and varying standard deviations model.</p></li>
+<li><p>Discuss the implications of specifying varying <span class="math inline">\(\sigma_j\)</span>’s by comparing this hierarchical model to the developed model in Section 10.2.2.</p></li>
+<li><p>What prior distributions do you choose for <span class="math inline">\(\sigma_j\)</span>’s? Why?</p></li>
+<li><p>Carry out the simulation by MCMC using JAGS. Report and discuss the findings.</p></li>
+</ol>
+<ol start="4" type="1">
+<li><strong>Smoothing Counts</strong></li>
+</ol>
+<p>A general issue in statistical inference is how to handle situations where there are zero observed counts in a sample. This exercise illustrates several Bayesian modeling approaches to this problem.</p>
+<ol type="a">
+<li>Suppose one is learning about the probability <span class="math inline">\(p\)</span> a particular player successively makes a three-point shot in basketball. One assigns a Uniform prior for <span class="math inline">\(p\)</span>. This player attempts 10 shots and one observes <span class="math inline">\(y = 0\)</span> successes. Derive the posterior density of <span class="math inline">\(p\)</span> and compute the posterior mean.</li>
+<li>Suppose that one is learning about the probabilities <span class="math inline">\(p_1\)</span>, <span class="math inline">\(p_2\)</span>, <span class="math inline">\(p_3\)</span>, <span class="math inline">\(p_4\)</span>, <span class="math inline">\(p_5\)</span> of five players making three-throw shots. You assign the following hierarchical prior on the probabilities. You assume <span class="math inline">\(p_1, ...., p_5\)</span> are independent identically distributed Beta with shape parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\alpha\)</span>, and at the second stage, you assign <span class="math inline">\(\alpha\)</span> a Uniform prior on (0, 1). Write down a graphical representation of this hierarchical model.</li>
+<li>In part (b), suppose that each player attempts 10 shots and you observe 0, 2, 3, 1, 3 successes for the five players. Use JAGS to obtain posterior samples from the parameters <span class="math inline">\(\alpha, p_1, p_2, p_3, p_4, p_5\)</span>. Compute the posterior means of <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(p_1\)</span> and compare your probability estimates with the estimate of <span class="math inline">\(p\)</span> using the single-stage prior in part (a).</li>
+</ol>
+<ol start="5" type="1">
+<li><strong>Schedules and Producers in Korean Drama Ratings</strong></li>
+</ol>
+<p>The Korean entertainment industry has been continuously booming. The global audience for K-drama is exploding across Asia and even spreading to other parts of the world, notably the US and Europe. This surge of Korean cultural popularity is called “Hallyu”, literally meaning the “Korean wave”. K-dramas are popular on multiple streaming websites in the US, such as Hulu, DramaFever, and even Netflix.</p>
+<p>How are K-dramas being rated in Korea? How are the producing company and broadcasting schedule affecting the drama ratings? In one study, data were collected on 101 K-dramas from 2014 to 2016. Each drama was produced by one of the three main producers/companies, and was being broadcasted in one of four different times of the week. The ratings of dramas were collected from the AGB Nielsen Media Research Group. In particular, the national AGB TV ratings of each drama were recorded.</p>
+<p>The data is stored in <code>KDramaData.csv</code>. Table 10.4 provides information about the variables in the complete dataset.</p>
+<p>Table 10.4. Table of the variables in K-dramas application.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Name</th>
+<th style="text-align: left;">Variable information</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Drama Name</td>
+<td style="text-align: left;">The name of the drama</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Schedule</td>
+<td style="text-align: left;">1 = Mon. (&amp;) Tue., 2 = Wed. (&amp;) Thu., 3 = Fri.,</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">4 = Sat. (&amp;) Sun.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Producer</td>
+<td style="text-align: left;">1 = Seoul Broadcasting System (SBS), 2 = Korean</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Broadcasting System (KBS), 3 = Munhwa Broadcasting</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"></td>
+<td style="text-align: left;">Corporation (MBC)</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Viewership</td>
+<td style="text-align: left;">AGB national TV ratings, in percentage</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Date</td>
+<td style="text-align: left;">MM/DD/YY</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li>Explore the ratings graphically by schedule and by producer.</li>
+<li>Explain how the ratings differ by schedule and by producer. Are there particular days when the ratings are high or low? Does one producer tend to have larger ratings than the other producer?</li>
+<li>Choose a subset of the <code>KDramaData.csv</code> dataset for a particular producer. Develop a hierarchical model to make inference about the mean ratings of dramas across different schedules. Discuss your conclusions and the advantage of using hierarchical modeling in this situation.</li>
+</ol>
+<p>6 <strong>Homework Hours for Five Schools</strong></p>
+<p>To compare weekly hours spent on homework by students, data is collected from a sample of five different schools. The data is stored in <code>HWhours5schools.csv</code>.</p>
+<ol type="a">
+<li><p>Explore the weekly hours spent on homework by students from the five schools. Do the school-specific means seem significantly different from each other? What about their variances?</p></li>
+<li><p>Set up a hierarchical model with common and unknown <span class="math inline">\(\sigma\)</span> in the likelihood, as in Section 10.2.2. Write out the likelihood, the prior distributions and the hyperprior distributions.</p></li>
+<li><p>Use JAGS to obtain posterior samples of the parameters in the hierarchical model. Perform appropriate MCMC diagnostics.</p></li>
+<li><p>Compute posterior means and 95% credible intervals for every school mean. Compute the posterior probability that the mean hour in school 1 is higher than that of school 2. Discuss your findings.</p></li>
+<li><p>Compute and summarize the posterior distribution of the ratio <span class="math inline">\(R = \frac{\tau^2}{\tau^2 + \sigma^2}\)</span>. Comment on the evidence of between-school variability for this data..</p></li>
+</ol>
+<ol start="7" type="1">
+<li><strong>Heart Attack Deaths - New York City</strong> </li>
+</ol>
+<p>In Section 10.3, the heart attack deaths dataset of thirteen hospitals in Manhattan, New York City is analyzed using a hierarchical Beta-Binomial model. A complete dataset of heart attack death information of 45 hospitals in all 5 boroughs of New York City (Manhattan, the Bronx, Brooklyn, Queens, and Staten Island) is stored in ```DeathHeartAttackDataNYCfull.csv}. Table 10.5 lists the variables and their description.</p>
+<p>Table 10.5. The list of variables in the New York City hearth attack deaths dataset and their description.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Variable</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Hospital</td>
+<td style="text-align: left;">The name of the hospital</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Borough</td>
+<td style="text-align: left;">The borough that the hospital is in</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Type</td>
+<td style="text-align: left;">N = Non-PCI hospital; P = PCI hospital</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Cases</td>
+<td style="text-align: left;">The number of hearth attack cases</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Deaths</td>
+<td style="text-align: left;">The number of deaths among the heart attack cases</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li>Write out the complete hierarchical Beta-Binomial model for the subset of thirteen hospitals in Brooklyn. Sketch a graphical representation and discuss how to choose priors and hyperpriors.</li>
+<li>Use JAGS to obtain posterior samples of the parameters in the hierarchical model. Perform appropriate MCMC diagnostics.</li>
+<li>Compute the posterior probability that the death rate of Kings County Hospital Center is higher than that of the Kingsbrook Jewish Medical Center. Report and discuss your findings.</li>
+</ol>
+<ol start="8" type="1">
+<li><strong>Heart Attack Deaths - New York City (continued)</strong></li>
+</ol>
+<p>Develop a hierarchical Beta-Binomial model for the subset of sixteen hospitals in The Bronx and Queens. Instead of allowing a <span class="math inline">\(p_i\)</span> for each hospital <span class="math inline">\(i\)</span> in the subset, allow a <span class="math inline">\(p_B\)</span> to be shared among hospitals in The Bronx, and a <span class="math inline">\(p_Q\)</span> to be shared among hospitals in Queens.</p>
+<ol type="a">
+<li>How does the hierarchical Beta-Binomial model change from the specification in Exercise 7? Write out the complete hierarchical Beta-Binomial model, sketch a graphical representation. Discuss how to choose priors and hyperpriors.</li>
+<li>Use JAGS to obtain posterior samples of the parameters in the hierarchical model. Perform appropriate MCMC diagnostics.</li>
+<li>Compute the posterior probability that the death rate of all hospitals in The Bronx is higher than that of all hospitals in Queens. Report and discuss your findings.</li>
+</ol>
+<ol start="9" type="1">
+<li><strong>Heart Attack Deaths - New York City (continued)</strong></li>
+</ol>
+<p>Develop a hierarchical Beta-Binomial model for the complete dataset of 45 hospitals in New York City. Instead of allowing a <span class="math inline">\(p_i\)</span> for each hospital <span class="math inline">\(i\)</span> in the subset, allow a <span class="math inline">\(p_P\)</span> to be shared among hospitals of Type P, and a <span class="math inline">\(p_N\)</span> to be shared among hospitals of Type N.</p>
+<ol type="a">
+<li>Write out the complete hierarchical Beta-Binomial model, sketch a graphical representation. Discuss how to choose priors and hyperpriors.</li>
+<li>Use JAGS to obtain posterior samples of the parameters in the hierarchical model. Perform appropriate MCMC diagnostics.</li>
+<li>Compute the posterior probability that the death rate of all hospitals of Type P higher than that of all hospitals of Type N. Report and discuss your findings.</li>
+<li>Can you develop a hierarchical Beta-Binomial model for all 45 hospitals in New York City that takes into account Borough and Type? Describe how you would design the hierarchical model, write JAGS script to obtain posterior samples of the parameters and discuss any findings from your work.</li>
+</ol>
+<ol start="10" type="1">
+<li><strong>Hierarchical Gamma-Poisson Modeling - Marriage Rates in Italy</strong></li>
+</ol>
+<p>Annual marriage counts per 1000 of the population in Italy from 1936 to 1951 were collected and recorded in Table 10.6. Can we learn something about Italians’ marriage rates during this 16-year period? The dataset is stored in ```marriage_counts.csv}.</p>
+<p>Table 10.6. The year and the marriage counts per 1000 of the population in Italy from 1936 to 1951.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Year</th>
+<th style="text-align: right;">Count</th>
+<th style="text-align: left;">Year</th>
+<th style="text-align: right;">Count</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1936</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">1944</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1937</td>
+<td style="text-align: right;">9</td>
+<td style="text-align: left;">1945</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1938</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">1946</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1939</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">1947</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1940</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: left;">1948</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1941</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">1949</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">1942</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: left;">1950</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">1943</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">1951</td>
+<td style="text-align: right;">7</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li><p>Recall that with count data, a common conjugate model is the Gamma-Poisson model, introduced in Section 8.8. Write out the likelihood, the prior distribution, and its posterior distribution under the Gamma-Poisson model.</p></li>
+<li><p>Observations are considered i.i.d. in the model in part (a). Figure 10.10 plots the marriage rates in Italy across years. Discuss whether the i.i.d. assumption is reasonable.</p></li>
+</ol>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter10/marriage_ages.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Dotplot of marriage rates in Italy from 1936 to 1951.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<ol start="3" type="a">
+<li><p>Suppose one believes that the mean marriage rate differs across the three time periods. Using this belief, model the Italian marriage rates in a hierarchical approach. Write out the likelihood, the prior distributions, and any hyperprior distributions under a hierarchical Gamma-Poisson model.</p></li>
+<li><p>Sketch a graphical representation of the hierarchical Gamma-Poisson model.</p></li>
+<li><p>Simulate posterior draws by MCMC using JAGS. Perform MCMC diagnostics and make sure your MCMC has converged.</p></li>
+<li><p>Do you see clear differences between the three rate parameters in the posterior? Report and discuss your findings.</p></li>
+</ol>
+<ol start="11" type="1">
+<li><strong>Hierarchical Gamma-Poisson Modeling - Fire Calls in Pennsylvania</strong></li>
+</ol>
+<p>Table 10.7 displays the number of fire calls and the number of building fires for ten counties in Montgomery County, Pennsylvania from 2015 through 2019. This data is currently described as ``Emergency - 911 Calls” from ```kaggle.com}. Suppose that the number of building fires for the <span class="math inline">\(j\)</span>-th zip code is Poisson with mean <span class="math inline">\(n_j \lambda_j\)</span>, where <span class="math inline">\(n_j\)</span> and <span class="math inline">\(\lambda_j\)</span> are respectively the number of fire calls and rate of building fires for the <span class="math inline">\(j\)</span>-th zip code.</p>
+<p>Table 10.7. The number of fire calls and building fires for ten zip codes in Montgomery County, Pennsylvania.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: right;">Zip Code</th>
+<th style="text-align: right;">Fire Calls</th>
+<th style="text-align: right;">Building Fires</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">18054</td>
+<td style="text-align: right;">266</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18103</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19010</td>
+<td style="text-align: right;">1470</td>
+<td style="text-align: right;">59</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">19025</td>
+<td style="text-align: right;">246</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19040</td>
+<td style="text-align: right;">1093</td>
+<td style="text-align: right;">47</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">19066</td>
+<td style="text-align: right;">435</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19116</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">19406</td>
+<td style="text-align: right;">2092</td>
+<td style="text-align: right;">113</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">19428</td>
+<td style="text-align: right;">2025</td>
+<td style="text-align: right;">73</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">19474</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li>Suppose that the building fire rates <span class="math inline">\(\lambda_1, ..., \lambda_{10}\)</span> follow a common Gamma(<span class="math inline">\(\alpha, \beta\)</span>) distribution where the hyperparameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> follow weakly informative distributions. Use JAGS to simulate a sample of size 5000 from the joint posterior distribution of all parameters of the model.<br>
+</li>
+<li>The individual estimates of the building rates for zip codes 18054 and 19010 are <span class="math inline">\(12/266\)</span> and <span class="math inline">\(59/1470\)</span>, respectively. Contrast these estimates with the posterior means of the rates <span class="math inline">\(\lambda_1\)</span> and <span class="math inline">\(\lambda_{3}\)</span>.</li>
+<li>The parameter <span class="math inline">\(\mu = \alpha / \beta\)</span> represents the mean building fire rates across zip codes. Construct a density estimate of the posterior distribution of <span class="math inline">\(\mu\)</span>.</li>
+<li>Suppose that the county has 50 fire calls to the zip code 19066. Use the simulated predictive distribution to construct a 90% predictive interval for the number of building fires.</li>
+</ol>
+<ol start="12" type="1">
+<li><strong>Hierarchical Gamma-Exponential Modeling - Times Between Traffic Accidents</strong></li>
+</ol>
+<p>Chapter 8 Exercise 20 describes the Exponential distribution, which is often used as a model for time between events, such as traffic accidents. The exercise also describes the Gamma distribution as a conjugate prior choice for the Exponential data model. 10 times between traffic accidents are collected: 1.5, 15, 60.3, 30.5, 2.8, 56.4, 27, 6.4, 110.7, 25.4 (in minutes).</p>
+<ol type="a">
+<li><p>Suppose the 10 collected times are observed at 4 different locations, shown in Table 10.8. Use this information, model the times between traffic accidents in a hierarchical approach. Write out the likelihood, the prior distributions, and any hyperprior distributions under a hierarchical Gamma-Exponential model.</p></li>
+<li><p>Sketch a graphical representation of the hierarchical Gamma-Exponential model.</p></li>
+<li><p>Simulate posterior draws by MCMC using JAGS. Perform MCMC diagnostics and make sure your MCMC has converged.</p></li>
+<li><p>Do you see clear differences between the rate of traffic accidents at the 5 locations? Report and discuss your findings.</p></li>
+</ol>
+<p>Table 10.8. The time between traffic accidents and recorded location.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Time</th>
+<th style="text-align: right;">Location</th>
+<th style="text-align: left;">Time</th>
+<th style="text-align: right;">Location</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">1.5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">15</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">60.3</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">30.5</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2.8</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">56.4</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">27</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">6.4</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">110.7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">25.4</td>
+<td style="text-align: right;">5</td>
+</tr>
+</tbody>
+</table>
+<ol start="13" type="1">
+<li><strong>Bird Survey Trend Estimates</strong></li>
+</ol>
+<p>The North American Breeding Bird Survey (BBS) is a yearly survey to monitor the bird population. Regression models were used to estimate the change in population size for many species of birds between 1966 to 1999. For each of 28 particular grassland species of birds, Table 10.9 displays the trend estimate <span class="math inline">\(\hat \beta_i\)</span> and the corresponding standard error <span class="math inline">\(\sigma_i\)</span>. This data is stored in the data file <code>BBS_survey.csv</code>. Assume that the trend estimates are independent with <span class="math inline">\(\hat \beta_i \sim \textrm{Normal}(\beta_i, \sigma_i)\)</span> where we assume that the standard errors {<span class="math inline">\(\sigma_i\}\)</span> are known.</p>
+<p>Table 10.9. Trend estimate (_i) and associated standard error (_i) for 28 grassland species birds.</p>
+<table class="table">
+<colgroup>
+<col style="width: 35%">
+<col style="width: 9%">
+<col style="width: 6%">
+<col style="width: 32%">
+<col style="width: 9%">
+<col style="width: 6%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Species Name</th>
+<th style="text-align: right;">Trend</th>
+<th style="text-align: right;">SE</th>
+<th style="text-align: left;">Species Name</th>
+<th style="text-align: right;">Trend</th>
+<th style="text-align: right;">SE</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Upland Sandpiper</td>
+<td style="text-align: right;">0.76</td>
+<td style="text-align: right;">0.39</td>
+<td style="text-align: left;">Western Meadowlark</td>
+<td style="text-align: right;">-0.75</td>
+<td style="text-align: right;">0.17</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Long-billed Curlew</td>
+<td style="text-align: right;">-0.77</td>
+<td style="text-align: right;">1.01</td>
+<td style="text-align: left;">Chestnut-col Longspur</td>
+<td style="text-align: right;">-1.36</td>
+<td style="text-align: right;">0.68</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Mountain Plover</td>
+<td style="text-align: right;">-1.05</td>
+<td style="text-align: right;">2.24</td>
+<td style="text-align: left;">McCown’s Longspur</td>
+<td style="text-align: right;">-9.29</td>
+<td style="text-align: right;">8.27</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Greater Prairie-Chicken</td>
+<td style="text-align: right;">-2.54</td>
+<td style="text-align: right;">2.33</td>
+<td style="text-align: left;">Vesper Sparrow</td>
+<td style="text-align: right;">-0.61</td>
+<td style="text-align: right;">0.24</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Sharp-tailed Grouse</td>
+<td style="text-align: right;">-0.92</td>
+<td style="text-align: right;">1.43</td>
+<td style="text-align: left;">Savannah Sparrow</td>
+<td style="text-align: right;">-0.34</td>
+<td style="text-align: right;">0.29</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ring-necked Pheasant</td>
+<td style="text-align: right;">-1.06</td>
+<td style="text-align: right;">0.32</td>
+<td style="text-align: left;">Baird’s Sparrow</td>
+<td style="text-align: right;">-2.04</td>
+<td style="text-align: right;">1.48</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Northern Harrier</td>
+<td style="text-align: right;">-0.80</td>
+<td style="text-align: right;">4.00</td>
+<td style="text-align: left;">Grasshopper Sparrow</td>
+<td style="text-align: right;">-3.73</td>
+<td style="text-align: right;">0.47</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ferruginous Hawk</td>
+<td style="text-align: right;">3.52</td>
+<td style="text-align: right;">1.31</td>
+<td style="text-align: left;">Henslow’s Sparrow</td>
+<td style="text-align: right;">-4.82</td>
+<td style="text-align: right;">2.50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Common Barn Owl</td>
+<td style="text-align: right;">-2.00</td>
+<td style="text-align: right;">2.14</td>
+<td style="text-align: left;">LeConte’s Sparrow</td>
+<td style="text-align: right;">0.91</td>
+<td style="text-align: right;">0.95</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Short-eared Owl</td>
+<td style="text-align: right;">-6.23</td>
+<td style="text-align: right;">4.55</td>
+<td style="text-align: left;">Cassin’s Sparrow</td>
+<td style="text-align: right;">-2.10</td>
+<td style="text-align: right;">0.51</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Burrowing Owl</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">2.74</td>
+<td style="text-align: left;">Dickcissel</td>
+<td style="text-align: right;">-1.46</td>
+<td style="text-align: right;">0.28</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Horned Lark</td>
+<td style="text-align: right;">-1.89</td>
+<td style="text-align: right;">0.22</td>
+<td style="text-align: left;">Lark Bunting</td>
+<td style="text-align: right;">-3.74</td>
+<td style="text-align: right;">2.30</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bobolink</td>
+<td style="text-align: right;">-1.25</td>
+<td style="text-align: right;">0.31</td>
+<td style="text-align: left;">Sprague’s Pipit</td>
+<td style="text-align: right;">-5.62</td>
+<td style="text-align: right;">1.34</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Eastern Meadlowlark</td>
+<td style="text-align: right;">-2.69</td>
+<td style="text-align: right;">0.17</td>
+<td style="text-align: left;">Sedge Wren</td>
+<td style="text-align: right;">3.18</td>
+<td style="text-align: right;">0.73</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li>Suppose one assumes that the population trend estimates are equal, that is, <span class="math inline">\(\beta_1 = ... \ \beta_{28} = \beta\)</span>. Using JAGS to simulate from the posterior distribution of <span class="math inline">\(\beta\)</span> assuming a weakly informative prior on <span class="math inline">\(\beta\)</span>. Find the posterior mean and posterior standard deviation of <span class="math inline">\(\beta\)</span> and compare your answers to the trend estimates and standard errors in Table 10.9.</li>
+<li>Next assume that the population trend estimates <span class="math inline">\(\beta_1 = ... \ \beta_{28}\)</span> are a random sample from a Normal distribution with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\tau\)</span>. Assuming weakly informative priors on <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span>, use JAGS to simulate from the posterior distribution of all parameters. Find the posterior means of the <span class="math inline">\(\{\beta_j\}\)</span> and compare your estimates with the trend estimates in Table 10.9.</li>
+</ol>
+<ol start="14" type="1">
+<li><strong>Predicting Baseball Batting Averages</strong></li>
+</ol>
+<p>The data file <code>batting_2018.csv</code> contains batting data for every player in the 2018 Major League Baseball season. The variables <code>AB.x</code> and <code>H.x</code> in the dataset contain the number of at-bats (opportunities) and number of hits of each player in the first month of the baseball season. One assumes that <span class="math inline">\(y_i\)</span>, the number of hits of the <span class="math inline">\(i\)</span>-th player is Binomial(<span class="math inline">\(n_i, p_i\)</span>) where <span class="math inline">\(n_i\)</span> is the number of at-bats and <span class="math inline">\(p_i\)</span> is the probability of a hit.</p>
+<ol type="a">
+<li><p>Select a random sample of 20 players from the dataset.</p></li>
+<li><p>Assume that the hitting probabilities <span class="math inline">\(\{p_i\}\)</span> have a common Beta(<span class="math inline">\(a, b\)</span>) prior where <span class="math inline">\(a = \eta \mu\)</span> and <span class="math inline">\(b = \eta (1 - \mu)\)</span>. Assume that the hyper parameters <span class="math inline">\(\eta\)</span> and <span class="math inline">\(\mu\)</span> are independent where <span class="math inline">\(\mu\)</span> is Uniform(0, 1) and <span class="math inline">\(\log(\eta)\)</span> has a logistic distribution with mean <span class="math inline">\(\log(50)\)</span> and scale 1.</p></li>
+<li><p>Use a JAGS script similar to what is presented in Section 10.3.3, draw a sample of 5000 from the posterior distribution, monitoring values of the <span class="math inline">\(\{p_i\}\)</span>, <span class="math inline">\(\mu\)</span>, and <span class="math inline">\(\log(\eta)\)</span>.</p></li>
+<li><p>Compare unpooled, pooled, and hierarchical estimates of the <span class="math inline">\(\{p_i\}\)</span> in predicting the batting averages in the remainder of the season.</p></li>
+</ol>
+<ol start="15" type="1">
+<li><strong>Estimating Kidney Cancer Death Rates</strong></li>
+</ol>
+<p>This exercise is a variation of an activity described in Gelman and Nolan (2017). Suppose one is interested in estimating the kidney cancer death rates for the ten Ohio counties displayed in Table 10.10. Suppose the true death rates <span class="math inline">\(\theta_1, ..., \theta_{10}\)</span> are a sample from a Gamma(<span class="math inline">\(\alpha, \beta\)</span>) distribution. The observed number of deaths <span class="math inline">\(y_j\)</span> in the <span class="math inline">\(j\)</span>th county is assumed to be Poisson(<span class="math inline">\(n_j \theta_j\)</span>) where <span class="math inline">\(n_j\)</span> is the population size.</p>
+<p>Table 10.10. Populations of ten Ohio counties from recent Census estimates.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">County</th>
+<th style="text-align: right;">Population</th>
+<th style="text-align: left;">County</th>
+<th style="text-align: right;">Population</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Cuyahoga</td>
+<td style="text-align: right;">1,243,857</td>
+<td style="text-align: left;">Jackson</td>
+<td style="text-align: right;">32,384</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Gallia</td>
+<td style="text-align: right;">29,979</td>
+<td style="text-align: left;">Knox</td>
+<td style="text-align: right;">61,893</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Hamilton</td>
+<td style="text-align: right;">816,684</td>
+<td style="text-align: left;">Noble</td>
+<td style="text-align: right;">14,354</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Henry</td>
+<td style="text-align: right;">27,086</td>
+<td style="text-align: left;">Seneca</td>
+<td style="text-align: right;">55,207</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Holmes</td>
+<td style="text-align: right;">43,892</td>
+<td style="text-align: left;">Van Wert</td>
+<td style="text-align: right;">28,281</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li>Assuming <span class="math inline">\(\alpha = 27, \beta = 58000\)</span>, simulate ten true cancer rates <span class="math inline">\(\theta_1, ..., \theta_{10}\)</span> from a Gamma(<span class="math inline">\(\alpha, \beta\)</span>) distribution. For each county, simulate the number of deaths in all counties. (Use the following R code.)</li>
+</ol>
+<pre><code>true_rates &lt;- rgamma(10, shape = 27, rate = 58000)
+pop_size &lt;- c(1243857, 29979, 816684, 27086, 43892,   
+32384, 61893, 14354, 55207, 28281)
+deaths &lt;- rpois(10, lambda = pop_size * true_rates)</code></pre>
+<ol start="2" type="a">
+<li><p>Compute the observed death rates {<span class="math inline">\(y_j / n_j\)</span>}. Identify the counties with the lowest and highest death rates.</p></li>
+<li><p>Using JAGS, fit a hierarchical model to the data assuming weakly informative Gamma priors on the parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span>. Simulate a sample of 10,000 draws from the posterior distribution and compute the posterior means of the {<span class="math inline">\(\theta_j\)</span>}.</p></li>
+<li><p>Identify the counties with the lowest and highest posterior means of the true rates. Compare these <code>best" and</code>worst” counties with the best and worst counties identified in part (b).</p></li>
+</ol>
+<p>Exercises 16 to 20 are additional Bayesian hierarchical models with more complicated structures. These exercises are here to help the reader gain familiarity of working with joint posterior distribution and deriving full conditional posterior distributions. These skills are essential to creating Metropolis and Gibbs sampling algorithms by oneself (as opposed to using JAGS).}</p>
+<ol start="16" type="1">
+<li><strong>Inference for the Binomial <span class="math inline">\(N\)</span> parameter</strong> </li>
+</ol>
+<p>Suppose that we want inference about an unknown number of animals <span class="math inline">\(N\)</span> in a fixed-size population. On five separate days, we take photographs of some areas where they reside, and count the number of animals in the photos (<span class="math inline">\(y_1, \dots, y_5\)</span>). Suppose further that each animal has a constant probability <span class="math inline">\(\theta\)</span> of appearing in a photograph and that appearances are independent across animals and days. A reasonable model for such data is a Binomial distribution, <span class="math inline">\(y_i \mid N, \theta \sim \text{Binomial}(N, \theta)\)</span>. In our setting, neither the number of trials <span class="math inline">\(N\)</span> nor the probability <span class="math inline">\(\theta\)</span> are known.</p>
+<p>To get a posterior distribution for <span class="math inline">\(N\)</span> and <span class="math inline">\(\theta\)</span>, we propose the following system of models (Raftery 1988): <span class="math display">\[\begin{eqnarray*}
+y_i \mid N, \theta &amp;\sim&amp; \text{Binomial}(N, \theta) \\
+N \mid \theta, \lambda &amp;\sim&amp; \text{Poisson}(\lambda / \theta) \\
+\pi(\lambda , \theta) &amp;\propto&amp; 1 / \lambda,
+\end{eqnarray*}\]</span> where <span class="math inline">\(\lambda &gt; 0\)</span> is a continuous random variable introduced to help with computations.</p>
+<ol type="a">
+<li><p>Write down the joint posterior distribution, <span class="math inline">\(\pi(N,  \theta, \lambda \mid y_1, \dots, y_5)\)</span>, up to a multiplicative constant.</p></li>
+<li><p>Find an expression for the conditional distribution, <span class="math inline">\(\pi(\lambda \mid y_1,  \dots, y_5, N, \theta)\)</span>. Write the name of the distribution and expressions for its parameter values.</p></li>
+<li><p>Find the posterior distribution <span class="math inline">\(\pi(N, \theta  \mid y_1, \dots, y_5)\)</span> by integrating <span class="math inline">\(\pi(N, \theta, \lambda \mid y_1, \dots, y_5)\)</span> with respect to <span class="math inline">\(\lambda\)</span>. You don’t need to name the distribution; just write its mathematical form.</p></li>
+<li><p>Find the conditional distribution, <span class="math inline">\(\pi(\theta \mid y_1,  \dots, y_5, N)\)</span>. Write the name of the distribution and expressions for its parameter values.</p></li>
+</ol>
+<ol start="17" type="1">
+<li><strong>Successes and Failures in Tests</strong> </li>
+</ol>
+<p>A standard model for success or failure in testing situations is the item response model, also called the Rasch model. Suppose that <span class="math inline">\(J\)</span> persons are given a test with <span class="math inline">\(K\)</span> items. For <span class="math inline">\(j = 1, \dots, J\)</span> and <span class="math inline">\(k = 1, \dots, K\)</span>, let <span class="math inline">\(y_{jk}=1\)</span> if person <span class="math inline">\(j\)</span> gets item <span class="math inline">\(k\)</span> correct, and let <span class="math inline">\(y_{jk}=0\)</span> otherwise. The Rasch model is <span class="math display">\[\begin{equation}
+p(Y_{jk} = 1 \mid \pi_{jk}) = \text{Bernoulli}(\pi_{jk})
+(\#eq:rasch1)
+\end{equation}\]</span> <span class="math display">\[\begin{equation}
+\log\left(\frac{\pi_{jk}}{1 - \pi_{jk}}\right) = \alpha_j - \beta_k.
+(\#eq:rasch2)
+\end{equation}\]</span> Here, <span class="math inline">\(\alpha_j\)</span> represents the ability of person <span class="math inline">\(j\)</span>, and <span class="math inline">\(\beta_k\)</span> represents the difficulty of item <span class="math inline">\(k\)</span>. For a Bayesian version of the Rasch model, we use the hierarchical model distributions, <span class="math display">\[\begin{eqnarray*}
+\alpha_j &amp;\sim&amp; \textrm{Normal}(0, \sqrt{1/\tau}), \,\,\, \text{for } j = 1,\dots, J\\
+\beta_k &amp;\sim&amp; \textrm{Normal}(\mu, \sqrt{1/\phi}), \,\,\, \text{for } k = 1,\dots, K
+\end{eqnarray*}\]</span> where <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\sigma\)</span> are precisions. For prior distributions, we use <span class="math display">\[\begin{eqnarray*}
+\tau &amp;\sim&amp; \text{Gamma}(a, b), \\
+\phi &amp;\sim&amp; \text{Gamma}(c, d), \\
+\mu &amp;\sim&amp; \textrm{Normal}(0, e),
+\end{eqnarray*}\]</span> for known positive constants (<span class="math inline">\(a, b, c, d, e\)</span>). We intend to run an MCMC to estimate the posterior distributions of all parameters. This problem asks you to outline some of the MCMC steps.</p>
+<ol type="a">
+<li><p>Write the joint posterior distribution of <span class="math inline">\(\pi(\alpha_1,  \dots, \alpha_J, \beta_1, \dots, \beta_K, \tau, \phi, \mu \mid \{y_{jk}\})\)</span>, up to a constant.</p></li>
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\mu\)</span> given <span class="math inline">\((\alpha_1, \dots, \alpha_J, \beta_1, \dots, \beta_K, \tau,  \phi, \{y_{jk}\})\)</span>. If you can use a Gibbs step, write the name of the full conditional posterior distribution for <span class="math inline">\(\mu\)</span> and its parameter values. If you use a Metropolis step, write an expression for the acceptance probability and suggest a family of proposal distributions.</p></li>
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\phi\)</span> given <span class="math inline">\((\alpha_1, \dots, \alpha_J, \beta_1, \dots, \beta_K, \tau,  \mu, \{y_{jk}\})\)</span>. If you can use a Gibbs step, write the name of the full conditional posterior distribution for <span class="math inline">\(\phi\)</span> and its parameter values. If you use a Metropolis step, write an expression for the<br>
+acceptance probability and suggest a family of proposal distributions.</p></li>
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\tau\)</span> given <span class="math inline">\((\alpha_1, \dots, \alpha_J, \beta_1, \dots, \beta_K, \phi,  \mu, \{y_{jk}\})\)</span>. If you use a Gibbs step, write the name of the full conditional distribution for <span class="math inline">\(\tau\)</span>. If you use a Metropolis step, write an expression for the acceptance probability and suggest a family of proposal distributions.</p></li>
+</ol>
+<ol start="18" type="1">
+<li><strong>Success and Failures in Tests (continued)</strong></li>
+</ol>
+<p>Continuing from Exercise 17.</p>
+<ol type="a">
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\beta_k\)</span> given \<span class="math inline">\((\alpha_1, \dots, \alpha_J, \beta_1, \dots \beta_{k-1},  \beta_{k+1}, \dots, \beta_K, \tau, \phi, \mu, \{y_{jk}\})\)</span>. If you can use a Gibbs step, write the name of the full conditional posterior distribution for <span class="math inline">\(\beta_k\)</span> and its parameter values. f you use a Metropolis step, write an expression for the acceptance probability and suggest a family of proposal distributions.</p></li>
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\alpha_j\)</span> given \<span class="math inline">\((\alpha_1, \dots, \alpha_{j-1},  \alpha_{j+1}, \dots, \alpha_J, \beta_1, \dots, \beta_K, \tau,  \phi, \mu, \{y_{jk}\})\)</span>. If you use a Gibbs step, write the name of the full conditional distribution for <span class="math inline">\(\alpha_j\)</span>. If you use a Metropolis step, write an expression for the acceptance probability and suggest a family of proposal distributions.</p></li>
+</ol>
+<ol start="19" type="1">
+<li><strong>Success and Failures in Tests (continued)</strong></li>
+</ol>
+<p>Suppose that you have 1000 approximately uncorrelated draws of the parameters from the joint posterior distribution of the Rasch model in Exercise 17. Describe how you would do the following tasks.</p>
+<ol type="a">
+<li><p>Find the posterior probability that the variability in peoples’ abilities exceeds the variability in item difficulty.</p></li>
+<li><p>Find the item in the test that appears to be the most difficult, and attach a posterior probability that it in fact is the most difficult among all <span class="math inline">\(K\)</span> items.</p></li>
+<li><p>Perform a posterior predictive check of the model.</p></li>
+</ol>
+<ol start="20" type="1">
+<li><strong>AR(1) Models in Finance and Macroeconomics</strong> </li>
+</ol>
+<p>A common model in finance and macroeconomics is the AR(1) model. Suppose that we have <span class="math inline">\(n\)</span> measurements ordered in time. For <span class="math inline">\(j = 1,  \dots, n\)</span>, let <span class="math inline">\(y_j\)</span> be the measurement at time <span class="math inline">\(j\)</span>. Suppose we consider the measurement at time 1 as known (not a random variable). Then, for <span class="math inline">\(j=2, \dots, n\)</span>, a typical AR(1) model is <span class="math inline">\(y_j = \beta y_{j-1} + \epsilon_j\)</span> where <span class="math inline">\(\epsilon_j \sim \textrm{Normal}(0, \sigma)\)</span>. Equivalently, we have<br>
+<span class="math display">\[\begin{equation}
+p(y_{j} \mid y_{j-1}, \dots, y_1, \beta, \sigma^2) = \text{Normal}(\beta
+y_{j-1}, \sigma) \,\,\,\, \text{for } j=2, \dots, n. \nonumber \\
+(\#eq:arm1)
+\end{equation}\]</span> Note that what happens at time <span class="math inline">\(j\)</span> only depends on what happened at time <span class="math inline">\(j-1\)</span>. For prior distributions, we will use <span class="math display">\[\begin{eqnarray*}
+1/\sigma^2 &amp;\sim&amp; \text{Gamma}(a, b), \\
+\beta &amp;\sim&amp; \text{Normal}(c, d),
+\end{eqnarray*}\]</span> for known positive constants (<span class="math inline">\(a, b, c, d\)</span>). We intend to run an MCMC sampler to estimate the posterior distribution of <span class="math inline">\((\beta, \sigma^2)\)</span>. Whenever possible, we will sample directly from full conditionals. This problem asks you to outline some of the MCMC steps, and to make a prediction for a future observation.</p>
+<ol type="a">
+<li>Write the kernel of the joint distribution of <span class="math inline">\(\pi(\beta,  \sigma^2 \mid y_1, \dots, y_n)\)</span>. [Hint: write <span class="math inline">\(p(y_2,  \dots, y_n \mid y_1, \beta, \sigma^2) = p(y_n \mid y_{n-1},  \dots, y_2, y_1, \beta, \sigma^2) p(y_{n-1} \mid y_{n-2},  \dots, y_2, y_1, \beta, \sigma^2) \cdots\)</span></li>
+</ol>
+<p><span class="math inline">\(p(y_2 \mid y_1, \beta, \sigma^2)\)</span>.]</p>
+<ol start="2" type="a">
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\sigma^2\)</span> given <span class="math inline">\((\beta, y_1, \dots, y_n)\)</span>. If you use a Gibbs step, write the name of the full conditional distribution for <span class="math inline">\(\sigma\)</span> and its parameter values. If you use a Metropolis step, write an expression for the acceptance probability and suggest a family of proposal distributions.</p></li>
+<li><p>Write the steps you’d take to sample <span class="math inline">\(\beta\)</span> given <span class="math inline">\((\sigma, y_1, \dots, y_n)\)</span>. If you use a Gibbs step, write the name of the full conditional distribution for <span class="math inline">\(\beta\)</span> and its parameter values. If you use a Metropolis step, write an expression for the acceptance probability and suggest a family of proposal distributions.</p></li>
+<li><p>Describe how you would make a 95% posterior interval for the future value of <span class="math inline">\(Y_{n+2}\)</span>.</p></li>
+</ol>
+
+
 </section>
 
 </main> <!-- /main -->

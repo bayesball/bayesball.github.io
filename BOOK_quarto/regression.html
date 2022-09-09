@@ -220,6 +220,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
   <li><a href="#posterior-analysis-1" id="toc-posterior-analysis-1" class="nav-link" data-scroll-target="#posterior-analysis-1"> <span class="header-section-number">6.8.3</span> Posterior Analysis</a></li>
   </ul></li>
   <li><a href="#a-conditional-means-prior" id="toc-a-conditional-means-prior" class="nav-link" data-scroll-target="#a-conditional-means-prior"> <span class="header-section-number">6.9</span> A Conditional Means Prior</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">6.10</span> Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -816,6 +817,565 @@ mu2 ~ dnorm(m2, s2)
 \pi(\beta_0, \beta_1, \sigma)  = \pi_{CM}(\beta_0, \beta_1) \pi(\sigma),
 \end{equation*}\]</span> where <span class="math inline">\(\pi_{CM}\)</span> is the conditional means prior.</p>
 <p>Using this conditional means prior and the gas bill data, one also uses JAGS to simulate from the posterior distribution of <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span>. In the exercises, the reader will have the opportunity to perform inference about the regression line. In addition, there will be an opportunity to compare inferences using conditional means and weakly informative priors.</p>
+</section>
+<section id="exercises" class="level2" data-number="6.10">
+<h2 data-number="6.10" class="anchored" data-anchor-id="exercises"><span class="header-section-number">6.10</span> Exercises</h2>
+<ol type="1">
+<li><strong>Linear Regression Model</strong></li>
+</ol>
+<p>Suppose one is interested in predicting a person’s height <span class="math inline">\(y_i\)</span> in cm from his or her arm span <span class="math inline">\(x_i\)</span> in cm. Let <span class="math inline">\(\mu_i\)</span> denote the mean <span class="math inline">\(\mu_i = E(Y_i \mid x_i)\)</span>. Are the following linear models? If not, explain why.</p>
+<ol type="a">
+<li><span class="math inline">\(\mu_i = \beta_0 + x_i / \beta_1\)</span></li>
+<li><span class="math inline">\(\mu_i = \beta_1 x _i\)</span></li>
+<li><span class="math inline">\(\mu_i = \beta_0 + \beta_1 x_i\)</span></li>
+<li><span class="math inline">\(\mu_i = \exp(\beta_0 + \beta_1 x_i)\)</span></li>
+</ol>
+<ol start="2" type="1">
+<li><strong>Linear Regression Model</strong></li>
+</ol>
+<p>Suppose a researcher collects some daily weather data for Denver, Colorado for several winter months. She considers the regression model <span class="math inline">\(Y_i \mid \mu_i, \sigma \sim \textrm{Normal}(\mu_i, \sigma)\)</span> where <span class="math display">\[
+\mu_i = \beta_0 + \beta_1 x_i,
+\]</span> and <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span> are respectively the observed temperature (in degrees Fahrenheit) and snowfall (in inches) on data collected on the <span class="math inline">\(i\)</span>-th day.</p>
+<ol type="a">
+<li>Interpret the intercept parameter <span class="math inline">\(\beta_0\)</span>.</li>
+<li>Interpret the slope parameter <span class="math inline">\(\beta_1\)</span>.</li>
+<li>Suppose <span class="math inline">\(\beta_0 = 5\)</span>, <span class="math inline">\(\beta_1 = -0.2\)</span>, and <span class="math inline">\(\sigma = 0.2\)</span>. If the temperature is 10 degrees, use this model to predict the amount of snowfall.</li>
+<li>With the same assumptions in part (c), find a 90% interval estimate for the amount of snowfall.</li>
+</ol>
+<ol start="3" type="1">
+<li><strong>Pythagorean Result in Baseball</strong></li>
+</ol>
+<p>Table 11.2 displays the average runs scored <span class="math inline">\(R\)</span>, the average runs allowed <span class="math inline">\(RA\)</span>, the number of wins <span class="math inline">\(W\)</span>, the number of losses <span class="math inline">\(L\)</span> for 15 National League teams in the 2018 baseball season. This data is contained in the datafile <code>pythag2018.csv</code>. By the Pythagorean formula, if <span class="math inline">\(y = \log(W / L)\)</span> and <span class="math inline">\(x = \log(R / RA)\)</span>, then approximately <span class="math inline">\(y = \beta x\)</span> for some slope parameter <span class="math inline">\(\beta\)</span>. Consider the model <span class="math inline">\(Y_i \sim \textrm{Normal}(\beta x_i, \sigma)\)</span> where <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span> are the values of <span class="math inline">\(\log (R / RA)\)</span> and <span class="math inline">\(\log (W / L)\)</span> for the <span class="math inline">\(i\)</span>-th team.</p>
+<ol type="a">
+<li><p>Suppose one assumes <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span> are independent where <span class="math inline">\(\beta \sim \textrm{Normal}(0, 10)\)</span> and the precision <span class="math inline">\(\phi = 1 / \sigma^2\)</span> is Gamma with parameters 0.001 and 0.001. Write down the expression for the joint posterior density of <span class="math inline">\((\beta, \sigma)\)</span>.</p></li>
+<li><p>Using JAGS, write a script defining the Bayesian model and use MCMC to simulate a sample of 1000 draws from the posterior distribution.</p></li>
+<li><p>From the simulated output, construct 90% interval estimates for the slope <span class="math inline">\(\beta\)</span> and for the standard deviation <span class="math inline">\(\sigma\)</span>.</p></li>
+</ol>
+<p>Table 11.2. Average runs scored, average runs scored against, wins, and losses for 15 National League baseball teams in the 2018 season.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Tm</th>
+<th style="text-align: right;">R</th>
+<th style="text-align: right;">RA</th>
+<th style="text-align: right;">W</th>
+<th style="text-align: right;">L</th>
+<th style="text-align: left;">Tm</th>
+<th style="text-align: right;">R</th>
+<th style="text-align: right;">RA</th>
+<th style="text-align: right;">W</th>
+<th style="text-align: right;">L</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">MIL</td>
+<td style="text-align: right;">4.6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">96</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: left;">ARI</td>
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">80</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">CHC</td>
+<td style="text-align: right;">4.7</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">95</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: left;">PHI</td>
+<td style="text-align: right;">4.2</td>
+<td style="text-align: right;">4.50</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: right;">82</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LAD</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">3.70</td>
+<td style="text-align: right;">92</td>
+<td style="text-align: right;">71</td>
+<td style="text-align: left;">NYM</td>
+<td style="text-align: right;">4.2</td>
+<td style="text-align: right;">4.40</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: right;">85</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">COL</td>
+<td style="text-align: right;">4.8</td>
+<td style="text-align: right;">4.60</td>
+<td style="text-align: right;">91</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: left;">SFG</td>
+<td style="text-align: right;">3.7</td>
+<td style="text-align: right;">4.30</td>
+<td style="text-align: right;">73</td>
+<td style="text-align: right;">89</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">ATL</td>
+<td style="text-align: right;">4.7</td>
+<td style="text-align: right;">4.10</td>
+<td style="text-align: right;">90</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: left;">CIN</td>
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">5.10</td>
+<td style="text-align: right;">67</td>
+<td style="text-align: right;">95</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">STL</td>
+<td style="text-align: right;">4.7</td>
+<td style="text-align: right;">4.30</td>
+<td style="text-align: right;">88</td>
+<td style="text-align: right;">74</td>
+<td style="text-align: left;">SDP</td>
+<td style="text-align: right;">3.8</td>
+<td style="text-align: right;">4.70</td>
+<td style="text-align: right;">66</td>
+<td style="text-align: right;">96</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PIT</td>
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">4.30</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">79</td>
+<td style="text-align: left;">MIA</td>
+<td style="text-align: right;">3.7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: right;">98</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">WSN</td>
+<td style="text-align: right;">4.8</td>
+<td style="text-align: right;">4.20</td>
+<td style="text-align: right;">82</td>
+<td style="text-align: right;">80</td>
+<td style="text-align: left;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+</tbody>
+</table>
+<ol start="4" type="1">
+<li><strong>Pythagorean Result in Baseball (continued)</strong></li>
+</ol>
+<ol type="a">
+<li>Suppose a team scores on average 4.5 runs and allows, on average, 4.0 runs, so <span class="math inline">\(x = \log(R / RA) = \log(4.5 / 4) = 0.118\)</span>. Simulate 1000 draws from the posterior distribution of <span class="math inline">\(\mu = \beta x\)</span>.</li>
+<li>If <span class="math inline">\(x = 0.118\)</span>, use the work from part (a) to simulate repeated draws of the posterior predictive distribution of <span class="math inline">\(y = \log(W /L)\)</span> and use the output to construct a 90% prediction interval for <span class="math inline">\(y\)</span>.</li>
+<li>From the interval found in part (b), find a 90% prediction interval for the number of wins in a 162 game season.</li>
+</ol>
+<ol start="5" type="1">
+<li><strong>Pythagorean Result in Baseball (continued)</strong></li>
+</ol>
+<p>A traditional least-squares of the model <span class="math inline">\(y = \beta x\)</span> can be found by use of the <code>lm()</code> function for the 2018 team data as follows.</p>
+<pre><code>fit &lt;- lm(I(log(W / L)) ~ 0 + I(log(R / RA)), 
+             data = pythag2018)
+summary(fit)</code></pre>
+<p>The “Estimate” value is the least-squares estimate of the slope <span class="math inline">\(\beta\)</span> and the “Std. Error” provides an estimate at the sampling error of this estimate. Compare these estimates with the Bayesian posterior mean and standard deviation of <span class="math inline">\(\beta\)</span> using a weakly informative prior.</p>
+<ol start="6" type="1">
+<li><strong>Height and Arm Span</strong></li>
+</ol>
+<p>A person’s arm span is strongly related to one’s height. To investigate this relationship, arm spans and heights were measured (in cm) for a sample of 20 students and stored in the file `<code>arm_height.csv</code>. (This data was simulated using statistics from Mohanty, Babu, and Nair (2001).) Consider the regression model <span class="math inline">\(Y_i \sim \textrm{Normal}(\mu_i, \sigma)\)</span> where <span class="math inline">\(\mu_i = \beta_0 + \beta_1 x_i\)</span>, and <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x_i\)</span> are respectively the height and arm span for the <span class="math inline">\(i\)</span>-th student.</p>
+<ol type="a">
+<li><p>Suppose that one assigns a weakly informative prior to the vector <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span> where <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are independent Normal with mean 0 and standard deviation 10, and the precision <span class="math inline">\(\phi = 1/\sigma^2\)</span> is Gamma with parameters 0.1 and 0.1. Use JAGS to obtain a simulated sample from the posterior distribution. Find the posterior means of the regression intercept and slope and interpret these posterior means in the context of the problem.</p></li>
+<li><p>Rescale the heights and arm spans and consider the alternative regression model <span class="math inline">\(Y_i^* \sim \textrm{Normal}(\mu_i, \sigma)\)</span> where <span class="math inline">\(\mu_i = \beta_0 + \beta_1 x_i^*\)</span> and <span class="math inline">\(x_i^*\)</span> and <span class="math inline">\(y_i^*\)</span> are the rescaled measurements found by subtracting the respective means and dividing by the respectively standard deviations, i.e.&nbsp;standardized. By using similar weakly informative priors as in part (a), use JAGS to simulate from the joint posterior distribution. Find the posterior means of the regression parameters for this rescaled problem and interpret the means.</p></li>
+</ol>
+<ol start="7" type="1">
+<li><strong>Height and Arm Span (continued)</strong></li>
+</ol>
+<p>Consider the problem of learning about a student’s height using his or her arm span where the measurements are both standardized and one assigns weakly informative priors on the parameters.</p>
+<ol type="a">
+<li>Consider a student’s whose arm span is one standard deviation above the mean so <span class="math inline">\(x_i^* = 1\)</span>. Using the simulated sample from the posterior distribution, find the posterior mean and 90% interval estimate for the expected rescaled height.</li>
+<li>For the same value <span class="math inline">\(x_i^* = 1\)</span>, simulate a sample from the posterior predictive distribution of a future standardized height <span class="math inline">\(y_i^*\)</span>. Estimate the mean and construct a 90% prediction interval for <span class="math inline">\(y_i^*\)</span>.</li>
+<li>Compare the intervals computed in parts (a) and (b) and explain how they are different.</li>
+</ol>
+<ol start="8" type="1">
+<li><strong>Serving Size and Calories of Sandwiches</strong> </li>
+</ol>
+<p>McDonald’s restaurant publishes nutritional information on the sandwiches they serve. Table 11.3 displays the serving size (in grams) and the calories for some sandwiches. (This data is available from the file ```mcdonalds.csv}.). One is interested in the model <span class="math inline">\(Y_i \sim \textrm{Normal}(\mu_i, \sigma)\)</span>, where <span class="math inline">\(\mu_i = \beta_0 + \beta_1 x_i\)</span> and <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x_i\)</span> are respectively the calories and serving size for the <span class="math inline">\(i\)</span>-th sandwich.</p>
+<p>Table 11.3. Serving size (grams) and calories for some McDonalds sandwiches.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Sandwich</th>
+<th style="text-align: right;">Size</th>
+<th style="text-align: right;">Calories</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Hamburger</td>
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">260</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Cheeseburger</td>
+<td style="text-align: right;">119</td>
+<td style="text-align: right;">310</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Double Cheeseburger</td>
+<td style="text-align: right;">173</td>
+<td style="text-align: right;">460</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Quarter Pounder with Cheese</td>
+<td style="text-align: right;">199</td>
+<td style="text-align: right;">510</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Double Quarter Pounder with Cheese</td>
+<td style="text-align: right;">280</td>
+<td style="text-align: right;">730</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Big Mac</td>
+<td style="text-align: right;">219</td>
+<td style="text-align: right;">560</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Big N’ Tasty</td>
+<td style="text-align: right;">232</td>
+<td style="text-align: right;">470</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Filet-O-Fish</td>
+<td style="text-align: right;">141</td>
+<td style="text-align: right;">400</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">McChicken</td>
+<td style="text-align: right;">147</td>
+<td style="text-align: right;">370</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Premium Grilled Chicken Classic Sandwich</td>
+<td style="text-align: right;">229</td>
+<td style="text-align: right;">420</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Premium Crispy Chicken Classic Sandwich</td>
+<td style="text-align: right;">232</td>
+<td style="text-align: right;">500</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li><p>Using a suitable weakly informative prior for the regression parameters and the standard deviation, use JAGS to obtain a simulated sample from the joint posterior distribution.</p></li>
+<li><p>Construct a graph and 95% interval estimate for the regression slope <span class="math inline">\(\beta_1\)</span>. Is there sufficient evidence to say that sandwiches with larger serving sizes have more calories?</p></li>
+<li><p>For a sandwich with serving size 200 grams, simulate a sample from the predictive distribution of the number of calories. Construct a 95% prediction interval for the number of calories.</p></li>
+</ol>
+<ol start="9" type="1">
+<li><strong>Serving Size and Calories of Sandwiches (continued)</strong></li>
+</ol>
+<p>In Exercise 8, one obtained a simulated sample from the posterior distribution of <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span> using a weakly informative prior.</p>
+<ol type="a">
+<li><p>Suppose one is interested in learning about the expected calories <span class="math inline">\(\mu\)</span> for a sandwich where the serving size is 300 grams. From the simulated sample from the posterior, construct a sample from the posterior of <span class="math inline">\(\mu\)</span> and construct a 90% interval estimate.</p></li>
+<li><p>Suppose one is interested in learning about the value of the serving size <span class="math inline">\(x^*\)</span> such that the mean calories <span class="math inline">\(\beta_0 + \beta_1 x^*\)</span> is equal to 500. First write the serving size <span class="math inline">\(x^*\)</span> as a function of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>. Then use this representation to find a 90% interval estimate for the serving size <span class="math inline">\(x^*\)</span>.</p></li>
+</ol>
+<ol start="10" type="1">
+<li><strong>Movie Sales</strong></li>
+</ol>
+<p>Table 11.4 displays the weekend and gross sales, in millions of dollars, for ten popular movies released in 2017. This data is contained in the file <code>movies2017.csv</code>. Suppose one is interested in studying the relationship between the two variables by fitting the model <span class="math display">\[\begin{equation*}
+Y_i \mid \beta_0, \beta_1, \sigma \sim \textrm{Normal}(\beta_0 + \beta_i x_i, \sigma),
+\end{equation*}\]</span> where <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x_i\)</span> are respectively the gross sales and weekend sales for the <span class="math inline">\(i\)</span>-th movie.</p>
+<p>Table 11.4. Weekend and gross sales (in millions of dollars) for ten popular movies released in 2017.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Movie</th>
+<th style="text-align: right;">Weekend</th>
+<th style="text-align: right;">Gross</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Beauty and the Beast</td>
+<td style="text-align: right;">174</td>
+<td style="text-align: right;">504</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">The Fate of the Furious</td>
+<td style="text-align: right;">99</td>
+<td style="text-align: right;">226</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Despicable Me 3</td>
+<td style="text-align: right;">72</td>
+<td style="text-align: right;">264</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Spider-Man: Homecoming</td>
+<td style="text-align: right;">117</td>
+<td style="text-align: right;">334</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Guardians of the Galaxy, Vol 2.</td>
+<td style="text-align: right;">147</td>
+<td style="text-align: right;">389</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Thor: Ragnarok</td>
+<td style="text-align: right;">122</td>
+<td style="text-align: right;">315</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Wonder Woman</td>
+<td style="text-align: right;">103</td>
+<td style="text-align: right;">413</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Pirates of the Caribbean</td>
+<td style="text-align: right;">63</td>
+<td style="text-align: right;">173</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">It</td>
+<td style="text-align: right;">123</td>
+<td style="text-align: right;">327</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Justice League</td>
+<td style="text-align: right;">94</td>
+<td style="text-align: right;">229</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li><p>Assuming weekly informative priors on the regression parameters and the standard deviation, use JAGS to simulate from the joint posterior distribution of <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span>.</p></li>
+<li><p>Construct a scatterplot of the simulated draws of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p></li>
+<li><p>From your output, is there significant evidence that weekend sales is a useful predictor of gross sales? Explain.</p></li>
+<li><p>From the simulated draws, construct a 80% interval estimate for the average gross sales for all movies that have a $100 million weekend sales.</p></li>
+<li><p>Suppose you are interested in predicting the gross sales for a single move that has $100 million weekend sales. Construct a 80% prediction interval for the gross sales.</p></li>
+</ol>
+<ol start="11" type="1">
+<li><strong>Fog Index and Complex Words of Books</strong></li>
+</ol>
+<p>The <code>amazon.com</code> website used to provide “text statistics” for many of the books it sold. For a particular book, the website displayed the “fog index”, the number of years of formal education required to read and understand a passage of text, and the “complex words”, the percentage of words in the book with three or more syllables. Table 11.5 displays the complex words and fog index for a selection of 21 popular books. (This data is contained in the file <code>book_stats.csv</code>.) Suppose one is interested in predicting the fog index of a book given its complex words measurement. Using suitable weakly informative priors on the parameters, fit a simple regression model by simulating 5000 draws from the joint posterior distribution. Use this output to construct a 90% prediction interval for a book whose complex word measurement is 10.</p>
+<p>Table 11.5. Measures of complex words and fog index for a selection of 20 books.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Book</th>
+<th style="text-align: right;">Complex Words</th>
+<th style="text-align: right;">Fog Index</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">A Million Little Pieces</td>
+<td style="text-align: right;">4.00</td>
+<td style="text-align: right;">5.70</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">The Five People You Meet in Heaven</td>
+<td style="text-align: right;">6.00</td>
+<td style="text-align: right;">6.60</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">The Glass Castle</td>
+<td style="text-align: right;">6.00</td>
+<td style="text-align: right;">8.40</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">The Mermaid Chair</td>
+<td style="text-align: right;">7.00</td>
+<td style="text-align: right;">8.20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">The Kite Runner</td>
+<td style="text-align: right;">7.00</td>
+<td style="text-align: right;">7.10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Marley &amp; Me</td>
+<td style="text-align: right;">8.00</td>
+<td style="text-align: right;">9.20</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Memoirs of a Geisha</td>
+<td style="text-align: right;">8.00</td>
+<td style="text-align: right;">10.10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">In Cold Blood</td>
+<td style="text-align: right;">10.00</td>
+<td style="text-align: right;">9.80</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Moneyball</td>
+<td style="text-align: right;">10.00</td>
+<td style="text-align: right;">10.30</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Jim Cramer’s Real Money</td>
+<td style="text-align: right;">10.00</td>
+<td style="text-align: right;">11.70</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">The Da Vinci Code</td>
+<td style="text-align: right;">12.00</td>
+<td style="text-align: right;">9.10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Power of Thinking Without Thinking</td>
+<td style="text-align: right;">12.00</td>
+<td style="text-align: right;">11.60</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">A Mathematician at the Ballpark</td>
+<td style="text-align: right;">12.00</td>
+<td style="text-align: right;">10.20</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Misquoting Jesus</td>
+<td style="text-align: right;">13.00</td>
+<td style="text-align: right;">16.10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">The Tipping Point</td>
+<td style="text-align: right;">13.00</td>
+<td style="text-align: right;">12.60</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Freakonomics</td>
+<td style="text-align: right;">14.00</td>
+<td style="text-align: right;">11.10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Curve Ball</td>
+<td style="text-align: right;">14.00</td>
+<td style="text-align: right;">10.10</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">The World is Flat</td>
+<td style="text-align: right;">15.00</td>
+<td style="text-align: right;">15.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Confessions of an Economics Hit Man</td>
+<td style="text-align: right;">15.00</td>
+<td style="text-align: right;">12.80</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Collapse</td>
+<td style="text-align: right;">17.00</td>
+<td style="text-align: right;">18.00</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ordinal Data Modeling</td>
+<td style="text-align: right;">24.00</td>
+<td style="text-align: right;">14.60</td>
+</tr>
+</tbody>
+</table>
+<ol start="12" type="1">
+<li><strong>Distances of Batted Balls</strong> </li>
+</ol>
+<p>Figure 11.14 displays a scatterplot of the launch speed (mph) and distance traveled (feet) for batted balls hit by the baseball player Mike Trout during the 2018 season. This data is contained in the file <code>trout20.csv</code>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="figures/chapter11/troutplot.png" class="img-fluid figure-img" width="500"></p>
+<p></p><figcaption aria-hidden="true" class="figure-caption">Scatterplot of launch speed and distance traveled for batted balls of Mike Trout during the 2018 season.</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<ol type="a">
+<li><p>In R, rescale both the explanatory and response variables so each has mean 0 and standard deviation 1.</p></li>
+<li><p>Consider the regression model on the rescaled data: <span class="math inline">\(Y^*_i \sim \textrm{Normal}(\mu^*_i, \sigma)\)</span> where <span class="math display">\[\begin{equation*}
+\mu^*_i = \beta_0 + \beta_1 x^*_i,
+\end{equation*}\]</span> where <span class="math inline">\(y^*_i\)</span> and <span class="math inline">\(x^*_i\)</span> are respectively the rescaled distance traveled and rescaled launch speed of the <span class="math inline">\(i\)</span>-th batted ball. Suppose one has little prior beliefs about the values of the parameters <span class="math inline">\(\beta_0\)</span>, <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\sigma\)</span>. One assumes that the parameter are independent where <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are assigned normal priors with mean 0 and standard deviation 10, and the precision <span class="math inline">\(\phi = 1 / \sigma^2\)</span> is Gamma with parameters 0.1 and 0.1. Use JAGS to obtain a simulated sample of 5000 draws from the posterior distribution of <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span>.</p></li>
+<li><p>From the simulated output, construct a density estimate and 90% interval estimate for the slope parameter <span class="math inline">\(\beta_1\)</span>.</p></li>
+<li><p>Using the output, obtain simulated draws of the expected standardized distances when the standardized speed is equal to one. Construct a 90% interval estimate for the expected distance.</p></li>
+<li><p>Obtain a simulated sample from the predicted standardized distance when the standardized speed is equal to one. Construct a 90% prediction interval and compare this interval with the interval constructed in part (c).</p></li>
+</ol>
+<ol start="13" type="1">
+<li><strong>Distance of Batted Balls (continued)</strong></li>
+</ol>
+<p>Consider the use of the regression model on the standardized data <span class="math inline">\(Y^*_i \sim \textrm{Normal}(\mu^*_i, \sigma)\)</span> where <span class="math display">\[\begin{equation*}
+\mu^*_i = \beta_0 + \beta_1 x^*_i,
+\end{equation*}\]</span> where <span class="math inline">\(y^*_i\)</span> and <span class="math inline">\(x^*_i\)</span> are respectively the rescaled distance traveled and rescaled launch speed of the <span class="math inline">\(i\)</span>-th batted ball.</p>
+<ol type="a">
+<li>Suppose one believes that if Trout hits a ball with average speed, his expected distance is Normal with mean 350 feet and standard deviation 10 feet. In addition, one believe the correlation between launch speed and distance is Normal with mean 0.9 and a standard deviation of 0.02. Construct a prior distribution on the vector of parameters <span class="math inline">\((\beta_0, \beta_1)\)</span> that reflects this information.</li>
+<li>Use JAGS with this informative prior to obtain a simulated sample from the posterior distribution of all parameters.</li>
+<li>Construct a 90% interval estimate for the slope parameter <span class="math inline">\(\beta_1\)</span> and compare your answer with the interval estimate constructed in part (c) of Exercise 12.</li>
+</ol>
+<ol start="14" type="1">
+<li><strong>Gas Bill</strong> </li>
+</ol>
+<p>The dataset <code>gas2017.csv</code> contains the average temperature and gas bill in dollars for twelve months for a particular homeowner. This chapter described the use of a conditional means prior to construct a prior distribution on the regression vector <span class="math inline">\((\beta_0, \beta_1)\)</span> in Section 11.9.</p>
+<ol type="a">
+<li>Using this conditional means prior and a weakly informative Gamma(1, 1) prior on <span class="math inline">\(\phi = 1 / \sigma^2\)</span>, use JAGS to simulate 5000 draws from the posterior distribution of <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span>. Construct a 90% interval estimate for the regression slope <span class="math inline">\(\beta_1\)</span>.</li>
+<li>Rerun this analysis using a suitable weakly informative prior on all the parameters. Simulate 5000 draws and construct a 90% interval estimate for the slope <span class="math inline">\(\beta_1\)</span>.</li>
+<li>Compare your interval estimates for parts (a) and (b).</li>
+</ol>
+<ol start="15" type="1">
+<li><strong>Gas Bill (continued)</strong></li>
+</ol>
+<p>A traditional “maximum likelihood” fit of the model <span class="math inline">\(Y_i \mid \beta_0, \beta_1, \sigma \sim \textrm{Normal}(\beta_0 + \beta_1 x, \sigma)\)</span> can be found by use of the <code>lm()</code> function.</p>
+<pre><code>fit &lt;- lm(Bill ~ Temp, data = gas2017)
+summary(fit)</code></pre>
+<p>The output provides estimates of the regression coefficients <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> and the ’Residual standard error” provides an estimate at the standard deviation <span class="math inline">\(\sigma\)</span>. Compare these estimates with the posterior means of <span class="math inline">\(\beta_0, \beta_1, \sigma\)</span> found in Exercise 14.</p>
+<ol start="16" type="1">
+<li><strong>Conditional Means Prior</strong></li>
+</ol>
+<p>Suppose you are interested in predicting the cost of purchasing groceries based on the number of items purchased. You consider the regression model <span class="math inline">\(Y_i \mid \beta_0, \beta_1, \sigma \sim \textrm{Normal}(\beta_0 + \beta_1 x_i, \sigma)\)</span>, where <span class="math inline">\(x_i\)</span> and <span class="math inline">\(y_i\)</span> are respectively the number of grocery items and the total cost (in dollars) of the <span class="math inline">\(i\)</span>-th purchase. Use a conditional mean prior using the following information.</p>
+<p>Let <span class="math inline">\(\mu_1^* = \beta_0 + \beta_1 (10)\)</span> and <span class="math inline">\(\mu_2^* = \beta_0 + \beta_1 (30)\)</span> denote the expected cost of purchasing 10 and 30 grocery items, respectively. You assume that your beliefs about <span class="math inline">\(\mu_1^*\)</span> and <span class="math inline">\(\mu_2^*\)</span> are independent where <span class="math inline">\(\mu_1^* \sim \textrm{Normal}(20, 5)\)</span> and <span class="math inline">\(\mu_2^* \sim \textrm{Normal}(70, 5)\)</span>.</p>
+<ol type="a">
+<li>Use JAGS to simulate 1000 draws from the prior distribution of <span class="math inline">\((\beta_0, \beta_1)\)</span>.</li>
+<li>Construct a scatterplot of the values of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> and describe the relationship that you see in the scatterplot.</li>
+<li>Suppose you believe that your prior beliefs about the regression parameters are too strong. Choose a new conditional means prior that reflects this belief.</li>
+</ol>
+<ol start="17" type="1">
+<li><strong>Olympic Swimming Times</strong></li>
+</ol>
+<p>The dataset <code>olympic_butterfly.csv</code> contains the winning time in seconds for the men’s and women’s 100m butterfly race for the Olympics from 1964 through 2016. Suppose we focus on the women’s times. If <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x_i\)</span> denote respectively the winning time for the women’s 100m butterfly and year for the <span class="math inline">\(i\)</span>-th Olympics, consider the use of the regression model <span class="math display">\[\begin{equation*}
+Y_i \mid \beta_0, \beta_1, \sigma \sim \textrm{Normal}(\beta_0 + \beta_1 (x_i - 1964), \sigma).
+\end{equation*}\]</span></p>
+<ol type="a">
+<li>Give interpretations for the regression parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</li>
+<li>Assuming weakly informative priors for all parameters, use JAGS to simulate 5000 values from the joint posterior distribution.</li>
+<li>Suppose one is interested in predicting the winning time for the women’s 100m butterfly the 2020 Olympics. Simulate 5000 draws from the posterior predictive distribution and construct a 90% prediction interval for this winning time.</li>
+</ol>
+<ol start="18" type="1">
+<li><strong>Olympic Swimming Times (continued)</strong></li>
+</ol>
+<p>One way to judge the suitability of the linear model <span class="math inline">\(\mu_i = \beta_0 + \beta_1 (x_i - 1964)\)</span> for the Olympics race data is to look for a pattern in the predictive residuals <span class="math inline">\(r_i = y_i - \hat y_i\)</span>.</p>
+<ol type="a">
+<li>Using the draws from the posterior distribution of <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span>, simulate a sample from the posterior predictive distribution of the future observation <span class="math inline">\(\tilde y_i\)</span> for all <span class="math inline">\(i\)</span> using the algorithm described in Section 11.7.4.</li>
+<li>Compute the sample of predictive residuals <span class="math inline">\(r_i\)</span> and find 90% interval estimates for each <span class="math inline">\(i\)</span>.</li>
+<li>Construct a graph of the 90% intervals for <span class="math inline">\(r_i\)</span> against <span class="math inline">\(x_i\)</span>.</li>
+<li>Comment on any lack of fit of the linear model from looking at the residual graph.</li>
+</ol>
+<ol start="19" type="1">
+<li><strong>Priors for Two-Group Model</strong> </li>
+</ol>
+<p>Returning to a tennis example described in Section 8.3, suppose one is interested in comparing the time-to-serve for two tennis servers Roger Federer and Rafael Nadal. One collects the time to serve <span class="math inline">\(y_i\)</span> for both players for many serves. Once assumes that <span class="math inline">\(Y_i\)</span> is distributed Normal(<span class="math inline">\(\mu_i, \sigma\)</span>) where <span class="math display">\[
+\mu_i = \beta_0 + \beta_1 x_i,
+\]</span> where <span class="math inline">\(x_i\)</span> is an indicator of the server where <span class="math inline">\(x_i = 0\)</span> if Federer is serving and <span class="math inline">\(x_i = 1\)</span> if Nadal is serving. In this setting, <span class="math inline">\(\beta_0\)</span> is the mean time to serve for Federer and <span class="math inline">\(\beta_1\)</span> is the increase in mean serving time for Nadal.</p>
+<ol type="a">
+<li>Construct a reasonable prior for the intercept parameter <span class="math inline">\(\beta_0\)</span>.</li>
+<li>If you believe that Nadal is significantly slower than Federer in his time-to-serve, construct a prior for <span class="math inline">\(\beta_1\)</span> that reflects this belief.</li>
+<li>Suppose that the range of serving times is about 3 seconds. Construct a prior for <span class="math inline">\(\sigma\)</span> that reflects this knowledge.</li>
+<li>Construct a joint prior for <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span> using the priors constructed in parts (a), (b), and (c).</li>
+</ol>
+<ol start="20" type="1">
+<li><strong>Two-Group Model (continued)</strong></li>
+</ol>
+<p>In Exercise 19, you constructed an informative prior for <span class="math inline">\((\beta_0, \beta_1, \sigma)\)</span> for the regression model for the time-to-serve measurements for two tennis servers. The data file ```two_players_time_to_serve.csv} contain measurements for 100 serves for the players Roger Federer and Rafael Nadal. Use JAGS to obtain a simulated sample of the posterior distribution using your prior and this data. Construct a 90% interval estimate for the regression slope <span class="math inline">\(\beta_1\)</span> that measures the differences in the mean time to serve for the two players.</p>
 
 
 </section>

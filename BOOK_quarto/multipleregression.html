@@ -153,6 +153,7 @@ ul.task-list{list-style: none;}
   <li><a href="#conditional-means-priors-and-inference-through-mcmc" id="toc-conditional-means-priors-and-inference-through-mcmc" class="nav-link" data-scroll-target="#conditional-means-priors-and-inference-through-mcmc"> <span class="header-section-number">7.4.3</span> Conditional means priors and inference through MCMC</a></li>
   <li><a href="#prediction-1" id="toc-prediction-1" class="nav-link" data-scroll-target="#prediction-1"> <span class="header-section-number">7.4.4</span> Prediction</a></li>
   </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"> <span class="header-section-number">7.5</span> Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -736,9 +737,275 @@ out &lt;- sapply(seq(10, 70, by = 10),
 </div>
 </div>
 </div>
-
-
 </section>
+</section>
+<section id="exercises" class="level2" data-number="7.5">
+<h2 data-number="7.5" class="anchored" data-anchor-id="exercises"><span class="header-section-number">7.5</span> Exercises</h2>
+<ol type="1">
+<li><strong>Olympic Swimming Times</strong> </li>
+</ol>
+<p>The dataset <code>olympic_butterfly.csv</code> contains the winning time in seconds for the men’s and women’s 100m butterfly race for the Olympics from 1964 through 2016. Let <span class="math inline">\(y_i\)</span> and <span class="math inline">\(x_i\)</span> denote the winning time and year for the <span class="math inline">\(i\)</span>-th Olympics. In addition, let <span class="math inline">\(w_i\)</span> denote an indicator variable that is 1 for the women’s race and 0 for the men’s race. Consider the regression model <span class="math inline">\(Y_i \sim \textrm{Normal}(\mu_i, \sigma)\)</span>, where the mean is given by <span class="math display">\[
+\mu_i = \beta_0 + \beta_1 (x_i - 1964) + \beta_2 w_i.
+\]</span></p>
+<ol type="a">
+<li>Interpret the parameter <span class="math inline">\(\beta_0\)</span> in terms of the winning time in the race.</li>
+<li>Interpret the parameter <span class="math inline">\(\beta_0 + \beta_2\)</span>.</li>
+<li>Interpret the parameter <span class="math inline">\(\beta_0 + 8 \beta_1\)</span>.</li>
+<li>Interpret the parameter <span class="math inline">\(\beta_0 + 8 \beta_1 + \beta_2\)</span>.</li>
+</ol>
+<ol start="2" type="1">
+<li><strong>Olympic Swimming Times (continued)</strong></li>
+</ol>
+<p>Consider the regression model for the 100m Olympic butterfly race times described in Exercise 1. Suppose the regression parameters <span class="math inline">\(\beta_0, \beta_1, \beta_2\)</span> and the precision parameter <span class="math inline">\(\phi = 1 / \sigma^2\)</span> are assigned weakly informative priors.</p>
+<ol type="a">
+<li>Using JAGS, sample 5000 draws from the joint posterior distribution of all parameters.</li>
+<li>Construct 90% interval estimates for each of the regression coefficients.</li>
+<li>Based on your work, describe how the mean winning time in the butterfly race has changed over time. In addition, describe how the men times differ from the women times.</li>
+<li>Construct 90% interval estimates for the predictive residuals <span class="math inline">\(r_i = y_i - \tilde y_i\)</span> where <span class="math inline">\(\tilde y_i\)</span> is simulated from the posterior predictive distribution. Plot these interval estimates and comment on any interval that does not include zero.</li>
+</ol>
+<ol start="3" type="1">
+<li><strong>Olympic Swimming Times (continued)</strong></li>
+</ol>
+<p>For the 100m Olympic butterfly race times described in Exercise 1 consider the regression model where the mean race time has the form <span class="math display">\[
+\mu_i = \beta_0 + \beta_1 (x_i - 1964) + \beta_2 w_i + \beta_3 (x_i - 1964) w_i,
+\]</span> where <span class="math inline">\(x_i\)</span> denotes the year for the <span class="math inline">\(i\)</span>-th Olympics and <span class="math inline">\(w_i\)</span> denote an indicator variable that is 1 for the women’s race and 0 for the men’s race.</p>
+<ol type="a">
+<li><p>Write the expression for the mean time for the men’s race, and for the mean time for the women’s race. Using this expressions, interpret the parameters <span class="math inline">\(\beta_2\)</span> and <span class="math inline">\(\beta_3\)</span>.</p></li>
+<li><p>Using weakly informative priors for all parameters, use JAGS to draw a sample of 5000 draws from the joint posterior distribution.</p></li>
+<li><p>Based on your work, is there evidence that the regression model between year and mean race time differs between men and women?</p></li>
+</ol>
+<ol start="4" type="1">
+<li><strong>Prices of Personal Computers</strong></li>
+</ol>
+<p>What factors determine the price of a personal computer in the early days? A sample of 500 personal computer sales was collected from 1993 to 1995 in the United States. In addition to the sale price (price in US dollars of 486 PCs), information on clock speed in MHz, size of hard drive in MB, size of Ram in MB, and premium status of the manufacturer (e.g.&nbsp;IBM, COMPAQ) was collected. The dataset is in <code>ComputerPriceSample.csv</code>. Suppose one considers the regression model <span class="math inline">\(Y_i \sim \textrm{Normal}(\mu_i, \sigma)\)</span> where <span class="math display">\[\begin{equation*}
+\mu_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2},
+\end{equation*}\]</span> <span class="math inline">\(y_i\)</span> is the sale price, <span class="math inline">\(x_{i1}\)</span> is the clock speed, and <span class="math inline">\(x_{2i}\)</span> is the logarithm of the hard drive size.</p>
+<ol type="a">
+<li>Using a weakly informative prior on <span class="math inline">\(\beta = (\beta_0, \beta_1, \beta_2)\)</span> and <span class="math inline">\(\sigma\)</span>, use JAGS to produce a simulated sample of size 5000 from the posterior distribution on <span class="math inline">\((\beta, \sigma)\)</span>.</li>
+<li>Obtain 95% interval estimates for <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>.</li>
+<li>On the basis of your work, are both clock speed and hard drive size useful predictors of the sale price?</li>
+</ol>
+<ol start="5" type="1">
+<li><strong>Prices of Personal Computers (continued)</strong></li>
+</ol>
+<ol type="a">
+<li>Suppose a consumer is interested in a computer with a clock speed of 33 MHz and a 540 MB hard drive (so <span class="math inline">\(\log 450 = 6.1\)</span>). Simulate 5000 draws from the expected selling price <span class="math inline">\(\beta_0 + \beta_1 x_1 + \beta_2\)</span> for computer with this clock speed and hard drive size. Construct a 90% interval estimate for the expected sale price.</li>
+<li>Instead suppose the consumer wishes to predict the selling price of a computer with this clock speed and hard drive size. Simulate 5000 draws from the posterior predictive distribution and use these simulated draws to find a 90% prediction interval.</li>
+</ol>
+<ol start="6" type="1">
+<li><strong>Salaries for Professors</strong></li>
+</ol>
+<p>A sample contains the 2008-09 nine-month academic salary for Assistant Professors, Associate Professors and Professors in a college in the U.S. The data were collected as part of the on-going effort of the college’s administration to monitor salary differences between male and female faculty members. In addition to the nine-month salary (in US dollars), information on gender, rank (Assistant Professor, Associate Professor, Professor), discipline (A is “theoretical” and B is “applied”), years since PhD, and years of service were collected. The dataset is in <code>ProfessorSalary.csv</code>. Suppose that the salary of the <span class="math inline">\(i\)</span>-th professor, <span class="math inline">\(y_i\)</span>, is distributed Normal with mean <span class="math inline">\(\mu_i\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>, where the mean is given by</p>
+<p><span class="math display">\[\begin{equation*}
+\mu_i = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2},
+\end{equation*}\]</span> where <span class="math inline">\(x_{i1}\)</span> is the years of service and <span class="math inline">\(x_{i2}\)</span> is the gender (where 1 corresponds to male and 0 to female).</p>
+<ol type="a">
+<li>Assuming a weakly informative prior on <span class="math inline">\(\beta\)</span> and <span class="math inline">\(\sigma\)</span>, use JAGS to simulate a sample of 5000 draws from the posterior distribution on <span class="math inline">\((\beta, \sigma)\)</span>.</li>
+<li>Simulate 1000 draws from the posterior of <span class="math inline">\(\beta_0 + 10 \beta_1\)</span>, the mean salary among all female professors with 10 years of service.</li>
+<li>Simulate 1000 draws from the posterior of the mean salary of male professors with 10 years of service <span class="math inline">\(\beta_0 + 10 \beta_1 + \beta_2\)</span>.</li>
+<li>By comparing the intervals computed in parts (b) and (c), is there a substantial difference in the mean salaries of male and female professors with 10 years of service?</li>
+</ol>
+<ol start="7" type="1">
+<li><strong>Salaries for Professors (continued)</strong></li>
+</ol>
+<ol type="a">
+<li>Suppose the college is interested in predicting the salary of a female professor with 10 years of service. By simulating 5000 draws from the posterior predictive distribution, construct a 90% prediction interval for this salary.</li>
+<li>Use a similar method to obtain a 90% prediction interval for the salary of a male professor with 10 years of service.</li>
+</ol>
+<ol start="8" type="1">
+<li><strong>Graduate School Admission</strong> </li>
+</ol>
+<p>What factors determine admission to graduate school? In a study, data on 400 graduate school admission cases was collected. Admission is a binary response, with 0 indicating not admitted, and 1 indicating admitted. Moreover, the applicant’s GRE score, and undergraduate grade point average (GPA) are available. The dataset is in <code>GradSchoolAdmission.csv</code> (GRE score is out of 800). Let <span class="math inline">\(p_i\)</span> denote the probability that the <span class="math inline">\(i\)</span>-th student is admitted. Consider the logistic model <span class="math display">\[
+\log \left( \frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2},
+\]</span> where <span class="math inline">\(x_{1i}\)</span> and <span class="math inline">\(x_{2i}\)</span> are respectively the GRE score and the GPA for the <span class="math inline">\(i\)</span>-th student.</p>
+<ol type="a">
+<li>Assuming weakly informative priors on <span class="math inline">\(\beta_0, \beta_1\)</span>, and <span class="math inline">\(\beta_2\)</span>, write a JAGS script defining the Bayesian model.</li>
+<li>Take a sample of 5000 draws from the posterior distribution of <span class="math inline">\(\beta = (\beta_0, \beta_1, \beta_2)\)</span>.</li>
+<li>Consider a student with a 550 GRE score and a GPA of 3.50. Construct a 90% interval estimate for the probability that this student is admitted to graduate school.</li>
+<li>Construct a 90% interval estimate for the probability a student with a 500 GRE score and a 3.2 GPA is admitted to graduate school.</li>
+</ol>
+<ol start="9" type="1">
+<li><strong>Graduate School Admission (continued)</strong></li>
+</ol>
+<p>Consider the logistic model described in Exercise 8 where the logit probability of being admitted to graduate school is a linear function of his GRE score and GPA. It is assumed that JAGS is used to obtain a simulated sample from the posterior distribution of the regression vector.</p>
+<ol type="a">
+<li>Consider a student with a 580 GRE score. Construct 90% posterior interval estimates for the probability that this student achieves admission for GPA values equally spaced from 3.0 to 3.8. Graph these posterior interval estimates as a function of the GPA.</li>
+<li>Consider a student with a 3.4 GPA. Find 90% interval estimates for the probability this student is admitted for GRE score values equally spaced from 520 to 700. Graph these interval estimates as a function of the GRE score.</li>
+</ol>
+<ol start="10" type="1">
+<li><strong>Personality Determinants of Volunteering</strong></li>
+</ol>
+<p>In a study of the personality determinants of volunteering for psychological research, a subject’s neuroticism (scale from Eysenck personality inventory), extraversion (scale from Eysenck personality inventory), gender, and volunteering status were collected. One intends to find out what personality determinants affect a person’s volunteering choice. The dataset is in <code>Cowles.csv</code>. Let <span class="math inline">\(p_i\)</span> denote the probability that the <span class="math inline">\(i\)</span>-th subject elects to volunteer. Consider the logistic model <span class="math display">\[
+\log \left( \frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1 x_{i1} + \beta_2 x_{i2},
+\]</span> where <span class="math inline">\(x_{1i}\)</span> and <span class="math inline">\(x_{2i}\)</span> are respectively the neuroticism and extraversion measures for the <span class="math inline">\(i\)</span>-th subject.</p>
+<ol type="a">
+<li>Assuming weakly informative priors on <span class="math inline">\(\beta_0, \beta_1\)</span>, and <span class="math inline">\(\beta_2\)</span>, write a JAGS script defining the model and draw a sample of 5000 draws from the posterior distribution of <span class="math inline">\(\beta = (\beta_0, \beta_1, \beta_2)\)</span>.</li>
+<li>By inspecting the locations of the posterior distributions of <span class="math inline">\(\beta_1\)</span> and <span class="math inline">\(\beta_2\)</span>, which personality characteristic is most important in determining a person’s volunteering choice?</li>
+<li>Let <span class="math inline">\(O = p / (1 - p)\)</span> denote the odds of volunteering.<br>
+Construct a 90% interval estimate for the odds a student with a neuroticism score of 12 and an extraversion score of 13 will elect to volunteer.</li>
+</ol>
+<ol start="11" type="1">
+<li><strong>The Divide by Four Rule</strong></li>
+</ol>
+<p>Suppose one considers the logistic model <span class="math inline">\(\textrm{log} \left(\frac{p}{1-p}\right) = \beta_0 + \beta_1 x\)</span>. This model is rewritten as <span class="math display">\[
+p = \frac{\exp(\beta_0 + \beta_1 x)}{1 + \exp(\beta_0 + \beta_1 x)}.
+\]</span></p>
+<ol type="a">
+<li><p>Show that the derivative of <span class="math inline">\(p\)</span> with respect to <span class="math inline">\(x\)</span> is written as <span class="math display">\[
+\frac{dp}{dx} = p (1 - p) \beta_1.
+\]</span></p></li>
+<li><p>Suppose the probability is close to the value 0.5. Using part (a), what is the approximate derivative of <span class="math inline">\(p\)</span> with respect to <span class="math inline">\(x\)</span> in this region?</p></li>
+<li><p>Fill in the blank in the following sentence. In this logistic model, the quantity <span class="math inline">\(\beta_1 / 4\)</span> can be interpreted as the change in the when <span class="math inline">\(x\)</span> increases by one unit.</p></li>
+<li><p>Suppose one is interested in fitting the logistic model <span class="math inline">\(\log \frac{p}{1-p} = \beta_0 + \beta_1 x\)</span> where <span class="math inline">\(x\)</span> is the number of study hours and <span class="math inline">\(p\)</span> is the probability of passing an exam. One obtains the fitted model <span class="math display">\[
+\log \frac{\hat p}{1-\hat p} = -1 + 0.2 x.
+\]</span> Using your work in parts (b) and (c), what is the (approximate) change in the fitted pass probability if a student studies an additional hour for the exam?</p></li>
+</ol>
+<ol start="12" type="1">
+<li><strong>Football Field Goal Kicking</strong></li>
+</ol>
+<p>The data file <code>football_field_goal.csv</code> contains data on field goal attempts for professional football kickers. Focus on the kickers who played during the 2015 season. Let <span class="math inline">\(y_i\)</span> denote the response (success or failure) of a field goal attempt from <span class="math inline">\(x_i\)</span> yards. One is interested in fitting the logistic model <span class="math display">\[
+\log\frac{p_i}{1-p_i} = \beta_0 + \beta_1 x_i,
+\]</span> where <span class="math inline">\(p_i\)</span> is the probability of a successful attempt.</p>
+<ol type="a">
+<li><p>Using weakly informative priors on <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>, use JAGS to take a simulated sample from the posterior distribution of <span class="math inline">\((\beta_0, \beta_1\)</span>).</p></li>
+<li><p>Suppose a kicker is attempting a field goal from 40 yards. Construct a 90% interval estimate for the probability of a success.</p></li>
+<li><p>Suppose instead that one is interested in estimating the yardage <span class="math inline">\(x^*\)</span> where the probability of a success is equal to 0.8. First express the yardage <span class="math inline">\(x^*\)</span> as a function of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>, and then find a 90% interval estimate for <span class="math inline">\(x^*\)</span>.</p></li>
+<li><p>Suppose 50 field goals are attempted at a distance of 40 years. Simulate from the posterior predictive distribution to construct a 90% interval estimate for the number of successful attempts.</p></li>
+</ol>
+<ol start="13" type="1">
+<li><strong>Predicting Baseball Batting Averages</strong> </li>
+</ol>
+<p>The data file <code>batting_2018.csv</code> contains batting data for every player in the 2018 Major League Baseball season. The variables <code>AB.x</code> and <code>H.x</code> in the dataset contain the number of at-bats (opportunities) and number of hits of each player in the first month of the baseball season. The variables <code>AB.y</code> and <code>H.y</code> in the dataset contain the at-bats and hits of each player for the remainder of the season.</p>
+<p>Take a random sample of size 50 from <code>batting_2018.csv</code>. Suppose one is interested in predicting the players’ batting averages <span class="math inline">\(H.y / AB.y\)</span> for the remainder of the season. Consider the following three estimates:</p>
+<ul>
+<li>Individual Estimate: Use the player’s first month batting average <span class="math inline">\(H.x / AB.x\)</span>.</li>
+<li>Pooled Estimate: Use the pooled estimate <span class="math inline">\(\sum H.x / \sum AB.x\)</span>.</li>
+<li>Compromise Estimate: Use the shrinkage estimate</li>
+</ul>
+<p><span class="math display">\[
+\frac{AB.x}{AB.x + 135} \frac{H.x}{AB.x} + \frac{135}{AB.x + 135} \frac{\sum H.x}{\sum AB.x}.
+\]</span></p>
+<p>For your sample, compute values of the individual, pooled, and compromise estimates. For each set of estimates, compute the sum of squared prediction errors, where the prediction error is defined to be the difference between the estimate and the batting average in the remainder of the season. Which estimate do you prefer? Why?</p>
+<ol start="14" type="1">
+<li><strong>Predicting Baseball Batting Averages (continued)</strong></li>
+</ol>
+<p>In Exercise 13, for the <span class="math inline">\(i\)</span>-th player in the sample of 50 one observes the number of hits <span class="math inline">\(y_i\)</span> (variable <code>H.x</code>) distributed binomial with sample size <span class="math inline">\(n_i\)</span> (variable <code>AB.x</code>) and probability of success <span class="math inline">\(p_i\)</span>. Consider the logistic model <span class="math display">\[
+\log \left( \frac{p_i}{1-p_i} \right) = \gamma_i.
+\]</span> Use JAGS to simulate from the following three models:</p>
+<ul>
+<li><p>Individual Model: Assume the <span class="math inline">\(\gamma_i\)</span> values are distinct and assign each parameter a weakly informative normal distribution.</p></li>
+<li><p>Pooled Model: Assume that <span class="math inline">\(\gamma_1 = ... = \gamma_{50} = \gamma\)</span> and assign the single <span class="math inline">\(\gamma\)</span> parameter a weakly informative normal distribution.</p></li>
+<li><p>Partially Pooled Hierarchical Model: Assume that <span class="math inline">\(\gamma_i \sim Normal(\mu, \tau)\)</span> where <span class="math inline">\(\mu\)</span> and the precision <span class="math inline">\(P = 1 / \tau^2\)</span> are assigned weakly informative distributions.</p></li>
+</ul>
+<p>Focus on a particular player corresponding to the index <span class="math inline">\(k\)</span>. Contrast 90% interval for estimates for <span class="math inline">\(p_k\)</span> using the individual, pooled, and partially pooled hierarchical models fit in parts (a), (b), and (c).</p>
+<ol start="15" type="1">
+<li><strong>Comparing Career Trajectory Models</strong></li>
+</ol>
+<p>In Section 12.3, the Deviance Information Criteria (DIC) was used to compare four regression models for Mike Schmidt’s career trajectory of home run rates. By fitting the model using JAGS and using the <code>extract.runjags()</code> function, find the DIC values for fitting the linear, cubic, and quartic models and compare your answers with the values in Table <span class="math inline">\(\ref{tab:DIC}\)</span>. For each model, assume that the regression parameters and the precision parameter have weakly informative priors.</p>
+<ol start="16" type="1">
+<li><strong>Comparing Models for the CE Sample Example</strong></li>
+</ol>
+<p>For the Consumer Expenditure Survey (CE) example, the objective was to learn about a CU’s expenditure based on the person’s income and his/her urban/rural status. There are four possible regression models depending on the inclusion or exclusion of each predictor. Use JAGS to fit each of the possible models and compute the value of DIC. For each model, assume that the regression parameters and the precision parameter have weakly informative priors. By comparing the DIC values, decide on the most appropriate model and compare your results with the discussion in Section 12.2.</p>
+<ol start="17" type="1">
+<li><strong>Grades in a Calculus Class</strong></li>
+</ol>
+<p>Suppose one is interested in how the grade in a calculus class depends on the grade in the prerequisite math course. One is interested in fitting the logistic model <span class="math display">\[
+\log \left( \frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1 x_i,
+\]</span> where <span class="math inline">\(p_i\)</span> is the probability of an A of the <span class="math inline">\(i\)</span>th student and <span class="math inline">\(x_i\)</span> represents the grade of the <span class="math inline">\(i\)</span>th student in the previous math class (1 if an A was received, and 0 otherwise).</p>
+<ol type="a">
+<li><p>Suppose one believes a Beta(12, 8) prior reflects the belief about the probability of an A for a student who has received an A in the previous math, and a Beta(5, 15) prior reflects the belief about the probability of an A for a student who has not received an A in the previous course. Use JAGS to simulate 1000 draws from the prior of <span class="math inline">\((\beta_0, \beta_1)\)</span>.</p></li>
+<li><p>Data for 100 students is contained in the data file ```calculus.grades.csv}. Using JAGS to simulate 5000 draws from the posterior of <span class="math inline">\((\beta_0, \beta_1)\)</span>.</p></li>
+<li><p>Construct a 90% interval estimate for <span class="math inline">\(\beta_1\)</span>. Is there evidence that the grade in the prerequisite math course is helpful in explaining the grade in the calculus class?</p></li>
+</ol>
+<ol start="18" type="1">
+<li><strong>Grades in a Calculus Class (continued)</strong></li>
+</ol>
+<p>The traditional way of fitting the logistic model in Exercise 17 is by maximum likelihood. The variables <code>grade</code> and <code>prev.grade</code> contain the relevant variables in the data frame <code>calculus.grades</code>. The maximum likelihood is achieved by the function <code>glm()</code> with the <code>family = binomial</code> option.</p>
+<pre><code>fit &lt;- glm(grade ~ prev.grade, data = calculus.grades, 
+            family = binomial)
+summary(fit)</code></pre>
+<p>Look at the estimates and associated standard errors of the regression coefficients and contrast these values with the posterior means and standard deviations from the informative prior Bayesian analysis in Exercise 17.</p>
+<ol start="19" type="1">
+<li><strong>Logistic Model to Compare Proportions</strong></li>
+</ol>
+<p>In Exercise 19 of Chapter 7, one was comparing proportions of science majors for two years at some liberal arts colleges. One can formulation this problem in terms of logistic regression. Let <span class="math inline">\(y_i\)</span> denote the number of science majors out of a sample of <span class="math inline">\(n_i\)</span> for the <span class="math inline">\(i\)</span>th year. One assumes that <span class="math inline">\(y_i\)</span> is distributed Binomial<span class="math inline">\((n_i, p_i)\)</span> where <span class="math inline">\(p_i\)</span> satisfies the logistic model <span class="math display">\[
+\log \left(\frac{p_i}{1-p_i} \right) = \beta_0 + \beta_1 x_i,
+\]</span> where <span class="math inline">\(x_i = 0\)</span> for year 2005 and <span class="math inline">\(x = 1\)</span> for year 2015.</p>
+<ol type="a">
+<li>Assuming that <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are independent with weakly informative priors, use JAGS to simulate a sample of 5000 from the posterior distribution. (In the JAGS script, the <code>dbin(p, n)</code> denotes the Binomial distribution with probability <code>p</code> and sample size <code>n</code>.</li>
+<li>Find a 90% interval estimate for <span class="math inline">\(\beta_1\)</span>.<br>
+</li>
+<li>Use the result in (b) to describe how the proportion of science majors has changed (on the logit scale) from 2005 to 2015,</li>
+</ol>
+<ol start="20" type="1">
+<li><strong>Separation in Logistic Regression</strong></li>
+</ol>
+<p>Consider data in Table 12.4 that gives the number of class absences and the grade (1 for passing and 0 for failure) for ten students. If <span class="math inline">\(p_i\)</span> denotes the probability the <span class="math inline">\(i\)</span>th student passes the class, then consider the logistic model <span class="math display">\[
+\log \left( \frac{p_i}{1-p_i}\right) = \beta_0 + \beta_1 x_i,
+\]</span> where <span class="math inline">\(x_i\)</span> is the number of absences.</p>
+<p>Table 12.4. Number of absences and grades for ten students.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Student</th>
+<th style="text-align: center;">Absences</th>
+<th style="text-align: center;">Grade</th>
+<th style="text-align: center;">Student</th>
+<th style="text-align: center;">Absences</th>
+<th style="text-align: center;">Grade</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">6</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">7</td>
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">3</td>
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">4</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">9</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">5</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">10</td>
+<td style="text-align: center;">0</td>
+</tr>
+</tbody>
+</table>
+<ol type="a">
+<li><p>Using the <code>glm()</code> function as shown in Exercise 18, find maximum likelihood estimates of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p></li>
+<li><p>Comment on the output of implementing the <code>glm()</code> function. (The strange behavior is related to the problem of separation in logistic research.) Do some research on this topic and describe why one is observing this unusual behavior.</p></li>
+<li><p>By use of a weakly informative prior, use JAGS to simulate a sample of 5000 from the posterior distribution.</p></li>
+<li><p>Compute posterior means and standard deviations of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> and compare your results with the traditional fit in part (a).</p></li>
+</ol>
+
+
 </section>
 
 </main> <!-- /main -->
