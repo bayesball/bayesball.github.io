@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.309">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Bayesian Inference - 3&nbsp; Bayes Rule</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<link href="./proportion.html" rel="next">
+<link href="./probability.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Bayes Rule</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Bayesian Inference</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./probability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Probability</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayes_rule.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Bayes Rule</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./proportion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning About a Proportion</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">3.1</span> Introduction</a></li>
+  <li><a href="#illustrations-of-bayes-rule" id="toc-illustrations-of-bayes-rule" class="nav-link" data-scroll-target="#illustrations-of-bayes-rule"> <span class="header-section-number">3.2</span> Illustrations of Bayes’ Rule</a>
+  <ul class="collapse">
+  <li><a href="#example-student-takes-a-test" id="toc-example-student-takes-a-test" class="nav-link" data-scroll-target="#example-student-takes-a-test"> <span class="header-section-number">3.2.1</span> Example: Student Takes a Test</a></li>
+  <li><a href="#example-balls-in-a-bag" id="toc-example-balls-in-a-bag" class="nav-link" data-scroll-target="#example-balls-in-a-bag"> <span class="header-section-number">3.2.2</span> Example: Balls in a Bag</a></li>
+  </ul></li>
+  <li><a href="#new-terminology" id="toc-new-terminology" class="nav-link" data-scroll-target="#new-terminology"> <span class="header-section-number">3.3</span> New Terminology</a></li>
+  <li><a href="#example-testing-for-a-disease" id="toc-example-testing-for-a-disease" class="nav-link" data-scroll-target="#example-testing-for-a-disease"> <span class="header-section-number">3.4</span> Example: Testing for a Disease</a></li>
+  <li><a href="#example-the-three-door-problem" id="toc-example-the-three-door-problem" class="nav-link" data-scroll-target="#example-the-three-door-problem"> <span class="header-section-number">3.5</span> Example: The Three Door Problem</a></li>
+  <li><a href="#sequential-learning" id="toc-sequential-learning" class="nav-link" data-scroll-target="#sequential-learning"> <span class="header-section-number">3.6</span> Sequential Learning</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Bayes Rule</span></h1>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">3.1</span> Introduction</h2>
+<p>Here is a basic exposition of Bayes rule. Suppose you have events <span class="math inline">\(E_1, ..., E_k\)</span> that form a partition of the sample space.</p>
+<ol type="1">
+<li><p><span class="math inline">\(P(E_i), i = 1, ..., k\)</span></p></li>
+<li><p><span class="math inline">\(P(A | E_i), i = 1, ..., k\)</span></p></li>
+</ol>
+<p>One is interested in computing the probabilities <span class="math inline">\(P(E_i | A), i = 1, ..., k\)</span>. By a standard manipulation of conditional probabilities, one obtains the result:</p>
+<p><span class="math display">\[
+P(E_i | A) = \frac{P(E_i) P(A | E_i)} {\sum_{j=1}^k P(E_j) P(A | E_j)} .
+\]</span></p>
+</section>
+<section id="illustrations-of-bayes-rule" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="illustrations-of-bayes-rule"><span class="header-section-number">3.2</span> Illustrations of Bayes’ Rule</h2>
+<section id="example-student-takes-a-test" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="example-student-takes-a-test"><span class="header-section-number">3.2.1</span> Example: Student Takes a Test</h3>
+<p>Suppose a student is taking a one-question multiple choice test with four possible choices. Either the student knows the material or she doesn’t; we denote these two possibilities by <span class="math inline">\(K\)</span> and “not <span class="math inline">\(K\)</span>”. Based on previous work, the teacher decides the student likely knows the material and so assigns <span class="math inline">\(P(K) = 0.7\)</span>. Therefore, the probability the student doesn’t know the material is <span class="math inline">\(P({\rm not} \, K) = 1 - 0.7 = 0.3.\)</span> The student will take the one-question test and either she will get it correct, which we denote by <span class="math inline">\(C\)</span>. If the student knows the material, then the chance she will get the question correct is 90%. On the other hand, if the student doesn’t know the material, then we will guess and obtain the correct answer with probability 25%. Suppose the student takes the test and gets the question correct – what is the probability she really knows the material?</p>
+<p>Here the events <span class="math inline">\(K\)</span> and “not <span class="math inline">\(K\)</span>” form a partition of the sample space and we are given the probabilities of these two events. The probability the student gets the question correct depends on whether she knows the material – we are given that</p>
+<p><span class="math display">\[
+P(C | K) = 0.9, \, P(C | {\rm not} , K) = 0.25.
+\]</span></p>
+<p>Given that the student gets the question correct, we’re interested in determining the probability of <span class="math inline">\(K\)</span>; that is, we wish to compute <span class="math inline">\(P(K | C)\)</span>. By Bayes’ rule, this is given by</p>
+<p><span class="math display">\[
+P(K | C) = \frac{P(K) P(C | K)} {P(K) P(C | K) + P({\rm not} , K) P(C | {\rm not} , K)}.
+\]</span></p>
+<p>Substituting in the given values, we obtain</p>
+<p><span class="math display">\[
+P(K | C) = \frac{0.7 \times 0.9} {0.7 \times 0.9 + 0.3 \times 0.25} = \frac{0.63}{0.63+0.075} = 0.894 .
+\]</span></p>
+<p>Does this answer make sense? Before the test, the teacher believed that the student knew the material with probability 0.7. The student got the question correct which intuitively should increase the teacher’s probability that the student was a good student. Bayes’ rule allows us to explicitly compute how the probability should increase – the probability has increased from <span class="math inline">\(P(K) = 0.7\)</span> to <span class="math inline">\(P(K | C) = 0.894\)</span>.</p>
+</section>
+<section id="example-balls-in-a-bag" class="level3" data-number="3.2.2">
+<h3 data-number="3.2.2" class="anchored" data-anchor-id="example-balls-in-a-bag"><span class="header-section-number">3.2.2</span> Example: Balls in a Bag</h3>
+<p>Suppose a bag contains exactly one white ball. You roll a die and if the outcome of the die roll is <span class="math inline">\(i\)</span>, you add <span class="math inline">\(i\)</span> red balls to the bag. You then select a ball from the bag and the color of the ball is red. What is the chance that the die roll is <span class="math inline">\(i\)</span>?</p>
+<p>In this example, let <span class="math inline">\(D_i\)</span> denote the outcome that the die roll lands <span class="math inline">\(i\)</span> and let <span class="math inline">\(R\)</span> denote the outcome that a red ball is chosen. If we assume a fair die, then the six possible die rolls are equally likely, so <span class="math inline">\(P(D_1) = P(D_2) = ... = P(D_6) = 1/6\)</span>.</p>
+<p>The probability of observing a red depends on the die roll. If the die roll is <span class="math inline">\(i\)</span>, one adds <span class="math inline">\(i\)</span> red balls to the bag and the chance of choosing a red will be <span class="math inline">\(i/(i+1)\)</span>, so</p>
+<p><span class="math display">\[
+P(R | D_i) = \frac{i}{i+1}, , i = 1, ..., 6.
+\]</span></p>
+<p>In this story, a red ball is observed and we are interested in computing <span class="math inline">\(P(D_i | R)\)</span>. By applying Bayes rule</p>
+<p><span class="math display">\[
+P(D_i | R) = \frac{P(D_i) P(R | D_i)}{\sum_{j=1}^6 P(D_j) P(R | D_j)}.
+\]</span></p>
+<p>By substituting the known quantities, we have</p>
+<p><span class="math display">\[
+P(D_i | R) = \frac{\frac{1}{6} \times \frac{i}{i+1}}{\sum_{j=1}^6 \frac{1}{6} \times \frac{j}{j+1}}.
+\]</span></p>
+<p>A convenient way of computing the die roll probabilities is by use of a table. In Table 2.1, each row corresponds to a specific die roll – we call these <em>alternatives</em> in the table. For each die roll, the table gives the initial probability <span class="math inline">\(P(D_i)\)</span> and the probability of observing red for that die roll <span class="math inline">\(P(R | D_i)\)</span>. The updated probability <span class="math inline">\(P(D_i | R)\)</span> is proportional to the product <span class="math inline">\(P(D_i) P(R | D_i)\)</span> and the products are shown in the table.</p>
+<p>One computes the updated probabilities by dividing each product by the sum of the products. For example the updated probability <span class="math inline">\(P(D_1 | R)\)</span> is given by the product (1/6)(1/(1+1)) divided by the sum of the products <span class="math inline">\(1/12 + 2/18 + ... + 6/42 = 0.734\)</span> which is equal to 0.113.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Alternative</th>
+<th>Probability</th>
+<th><span class="math inline">\(P(R | {\rm Die \, \, Roll})\)</span></th>
+<th>Product</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(D_1\)</span></td>
+<td>1/6</td>
+<td>1/(1+1)</td>
+<td>1/12</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(D_2\)</span></td>
+<td>1/6</td>
+<td>2/(2+1)</td>
+<td>2/18</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(D_3\)</span></td>
+<td>1/6</td>
+<td>3/(3+1)</td>
+<td>3/24</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(D_4\)</span></td>
+<td>1/6</td>
+<td>4/(4+1)</td>
+<td>4/30</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(D_5\)</span></td>
+<td>1/6</td>
+<td>5/(5+1)</td>
+<td>5/36</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(D_6\)</span></td>
+<td>1/6</td>
+<td>6/(6+1)</td>
+<td>6/42</td>
+</tr>
+</tbody>
+</table>
+<p>To make sense of these calculations, we started assuming that all six possible rolls of the die were equally likely.</p>
+<p>With the observation of a red ball, the updated probabilities are unequal and give support for larger rolls of the die.</p>
+</section>
+</section>
+<section id="new-terminology" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="new-terminology"><span class="header-section-number">3.3</span> New Terminology</h2>
+<p>In general, we are interested in learning about <span class="math inline">\(k\)</span> different <em>models</em> that we denote by <span class="math inline">\(M_1, ..., M_k\)</span>. Initially, we have beliefs about the plausibility of these models that we express through the probabilities <span class="math inline">\(P(M_1), ..., P(M_k)\)</span>. We refer to these as <em>prior</em> probabilities since these express our opinions about the models before or prior to observing any data. Next, we observe data denoted by <span class="math inline">\(D\)</span> that will give us information about the models. We are given the probabilities of each data outcome for each model, that is, <span class="math inline">\(P(D|M_1), ..., P(D|M_k)\)</span>; these are called the <em>likelihoods</em>.</p>
+<p>Now the a particular data result <span class="math inline">\(D\)</span> is observed. How has this data result changed our beliefs about the <span class="math inline">\(k\)</span> models? Bayes’ rule is the recipe for modifying the model probabilities. It says that the new probability for model <span class="math inline">\(M_i\)</span> is proportional to the product of the prior probability and the likelihood:</p>
+<p><span class="math display">\[
+P(M_i | D) \propto P(M_i) P(D | M_i).
+\]</span></p>
+<p>The updated probabilities {<span class="math inline">\(P(M_i | D)\)</span>} are called <em>posterior</em> probabilities since they reflect our opinions about the models _after observing the data. Using words, we can write</p>
+<p>POSTERIOR <span class="math inline">\(\propto\)</span> PRIOR <span class="math inline">\(\times\)</span> LIKELIHOOD.</p>
+<p>A convenient way to performing the Bayes’ rule calculations is by use of a table similar to the example. We illustrate the use of the new terminology and the table calculations for two additional examples.</p>
+</section>
+<section id="example-testing-for-a-disease" class="level2" data-number="3.4">
+<h2 data-number="3.4" class="anchored" data-anchor-id="example-testing-for-a-disease"><span class="header-section-number">3.4</span> Example: Testing for a Disease</h2>
+<p>Suppose you are one of the many people who are tested for a rare disease. From reports, you known the the incidence of this disease is 1 out of 5000. You take the test and there are two results: either you are told “ok” or “see your doctor for further checks.” How should you feel on the basis of these two results?</p>
+<p>There are two possible models in this example: you are either “diseased” or “not disease”. Assuming that you are a representative person from your community, your prior beliefs are that</p>
+<p><span class="math display">\[
+P({\rm diseased}) = \frac{1}{5000} = 0.0002, , P({\rm not \, diseased}) = \frac{4999}{5000} = 0.9998 .
+\]</span></p>
+<p>The “data” in this example is the screening test result. There are two outcomes: either the test will be “positive” or “+”, which is some indication that you have the disease, or “negative” or “-” which is good news. From past experience, the screening test has 5% false positives and 2% false negatives.</p>
+<p>This means that if you really don’t have the disease, the chance you get a positive result is 0.05; that is,</p>
+<p><span class="math display">\[
+P(+ , {\rm result} | {\rm not \, diseased}) = 0.05,  P(- , {\rm result} | {\rm not \, diseased}) = 0.95.
+\]</span></p>
+<p>Similarly, if you really have the disease, the chance of an incorrect negative result is 0.02:</p>
+<p><span class="math display">\[
+P(- , {\rm result} | {\rm diseased}) = 0.02, \, P(+ , {\rm result} | {\rm diseased}) = 0.98.
+\]</span></p>
+<p>These values are the likelihoods – the probabilities of the data outcomes for each model.</p>
+<p>Suppose you have a positive test result (<span class="math inline">\(+\)</span>). We can find the new probabilities of diseased and not diseased by Bayes’ rule that we present in a table format in Table 2.2.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Prior</th>
+<th>Probability</th>
+<th><span class="math inline">\(P(+ | {\rm Model})\)</span></th>
+<th>Product</th>
+<th>Posterior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Not diseased</td>
+<td>0.9998</td>
+<td>0.05</td>
+<td>0.04999</td>
+<td>0.9961</td>
+</tr>
+<tr class="even">
+<td>Diseased</td>
+<td>0.0002</td>
+<td>0.98</td>
+<td>0.000196</td>
+<td>0.0039</td>
+</tr>
+</tbody>
+</table>
+<p>Before the test, your probability of having the disease was 0.02 and after getting the positive test result, this probability has increased to 0.039. This new probability is almost twice the initial probability, but you are still very unlikely to have the disease.</p>
+<p>What if you received a negative test result? We repeat the Bayes’ rule calculations in Table 2.3 with a change in the likelihood values.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Prior</th>
+<th><span class="math inline">\(P(- | {\rm Model})\)</span></th>
+<th>Product</th>
+<th>Posterior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Not diseased</td>
+<td>0.9998</td>
+<td>0.95</td>
+<td>0.949810</td>
+<td>0.999996</td>
+</tr>
+<tr class="even">
+<td>Diseased</td>
+<td>0.0002</td>
+<td>0.02</td>
+<td>0.000004</td>
+<td>0.000004</td>
+</tr>
+</tbody>
+</table>
+<p>The probability of having the disease has decreased from 0.0002 to 0.000004.</p>
+<p>These results are usually surprising to doctors and patients. It seems difficult to update probabilities accurately and people typically have a much stronger opinion they have the disease when faced with a positive test result.</p>
+</section>
+<section id="example-the-three-door-problem" class="level2" data-number="3.5">
+<h2 data-number="3.5" class="anchored" data-anchor-id="example-the-three-door-problem"><span class="header-section-number">3.5</span> Example: The Three Door Problem</h2>
+<p>There is a famous probability problem, called The Three Door Problem or The Car and the Goats that can be addressed by Bayes’ rule. There is a TV show where a contestant is showed three numbered doors, Door 1, Door 2, and Door 3, where one door is hiding a car and the other two doors hiding goats. The contestant is allowed to choose a door and win the corresponding prize. The contestant chooses Door 1. The host, who knows which door hides the car, then opens Door 2 to reveal a goat. The contestant is given the opportunity to change her selection. Should she switch her choice to Door 3?</p>
+<p>In this example the unknown model is the location of the car. We will let <span class="math inline">\(C_i\)</span> denote the event that the car is behind Door <span class="math inline">\(i, i = 1, 2, 3.\)</span> Initially, the constestant believes the car is equally likely to be behind each of the three doors, so</p>
+<p><span class="math display">\[
+P(C_1) = P(C_2) = P(C_3) = \frac{1}{3}.
+\]</span></p>
+<p>Here the data is the event that the host showed Door 2 – we’ll call this event <span class="math inline">\(H\)</span>. We wish to find the new probabilities of <span class="math inline">\(C_1, C_2\)</span> and <span class="math inline">\(C_3\)</span> conditional on the new information <span class="math inline">\(H\)</span>. We put the given information in the “Bayes’ table”:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Prior</th>
+<th><span class="math inline">\(P(H | {\rm Model})\)</span></th>
+<th>Product</th>
+<th>Posterior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(C_1\)</span></td>
+<td>1/3</td>
+<td><span class="math inline">\(P(H | C_1)\)</span></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(C_2\)</span></td>
+<td>1/3</td>
+<td><span class="math inline">\(P(H | C_2)\)</span></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(C_3\)</span></td>
+<td>1/3</td>
+<td><span class="math inline">\(P(H | C_3)\)</span></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Let’s consider the likelihood <span class="math inline">\(P(H | C_i)\)</span> that represents the probability the host shows Door 2 if the car is behind Door <span class="math inline">\(i\)</span>. Remember that the contestant chose Door 1, so the host cannot choose this door.</p>
+<ol type="1">
+<li><p>If the car is really behind door 1, the host can either show Door 2 or Door 3. We will assume that the probability he shows Door 2 is a number <span class="math inline">\(q\)</span> between 0 and 1, so <span class="math inline">\(P(H | C_1) = q\)</span>.</p></li>
+<li><p>If the car is behind door 2, the host cannot show this door. So <span class="math inline">\(P(H | C_2) = 0\)</span>.</p></li>
+<li><p>If the car is behind door 3, the host cannot show this door -- he has to show Door 2. So <span class="math inline">\(P(H | C_3) = 1\)</span>.</p></li>
+</ol>
+<p>We complete the table in Table 2.5 by filling in the likelihoods and computing the posterior probabilities.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Prior</th>
+<th><span class="math inline">\(P(H | {\rm Model})\)</span></th>
+<th>Product</th>
+<th>Posterior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(C_1\)</span></td>
+<td>1/3</td>
+<td><span class="math inline">\(q\)</span></td>
+<td><span class="math inline">\(q/3\)</span></td>
+<td><span class="math inline">\(q/(q+1)\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(C_2\)</span></td>
+<td>1/3</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(C_3\)</span></td>
+<td>1/3</td>
+<td>1</td>
+<td>1/3</td>
+<td><span class="math inline">\(1/(q+1)\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>Let’s return to our question. Remember the contestant chose Door 1 and has the opportunity to switch to Door 3. Given the data “host shows Door 2”, we have found that the probability the car is behind Door 1 is <span class="math inline">\(q/(q+1)\)</span> and the probability the car is behind Door 3 is <span class="math inline">\(1/(q+1)\)</span>. The contestant should switch if the probability of <span class="math inline">\(C_3\)</span> is greater than the probability of <span class="math inline">\(C_1\)</span>, that is,</p>
+<p><span class="math display">\[
+P(C_3 | H) &gt; P(C_1 | H)
+\]</span></p>
+<p>or</p>
+<p><span class="math display">\[
+\frac{1}{q+1} &gt; \frac{q}{q+1}
+\]</span></p>
+<p>which is true if <span class="math inline">\(q &gt; 0\)</span>. So the contestant will increase her probability of winning by switching. Remember <span class="math inline">\(q\)</span> is the probability the host will show Door 2 instead of Door 3 if he has a choice. If we assume <span class="math inline">\(q = 1/2\)</span>, that is, the host chooses a door at random, then the probability the car is behind Door 3 is <span class="math inline">\(1/(1/2 + 1) = 2/3\)</span>.</p>
+</section>
+<section id="sequential-learning" class="level2" data-number="3.6">
+<h2 data-number="3.6" class="anchored" data-anchor-id="sequential-learning"><span class="header-section-number">3.6</span> Sequential Learning</h2>
+<p>A machine in a small factory is producing a particular automotive component. Most of the time (specifically, 90% from historical records), the machine is working well and produces 95% good parts. Some days, the machine doesn’t work as well (it’s broken) and produces only 70% good parts. A worker inspects the first dozen parts produced by this machine on a particular morning and obtains the following results (<span class="math inline">\(g\)</span> represents a good component and <span class="math inline">\(b\)</span> a bad component):</p>
+<p><span class="math display">\[
+g, b, g, g, g, g, g, g, g, b, g, b.
+\]</span></p>
+<p>The worker is interested in assessing the probability the machine is working well.</p>
+<p>In this problem there are two models – either the machine is working well, or “working” for short, or it is “broken”.</p>
+<p>Based on the historical data, the worker assigns prior probabilities of 0.90 and 0.10 to the models “working” and “broken”. The data are the results of the inspection on the 12 parts. To understand the relationship between the data and the models, we compute the sampling probabilities, the probabilities of each data outcome for each model. If the machine is working, the probabilities of a good (g) part and a bad (b) part are 0.95 and 0.05, respectively. So</p>
+<p><span class="math display">\[
+P(g | {\rm working}) = 0.95,\, P(b | {\rm working}) = 0.05 .
+\]</span></p>
+<p>If instead the machine is broken, the probabilities of good and bad part are 0.70 and 0.30, respectively:</p>
+<p><span class="math display">\[
+P(g | {\rm broken}) = 0.70, \, P(b | {\rm broken}) = 0.30 .
+\]</span></p>
+<p>Now we’re ready to do the Bayes’ rule computation. The outcomes of twelve inspections of parts are the data:</p>
+<p><span class="math display">\[
+DATA = {g, b, g, g, g, g, g, g, g, b, g, b}.
+\]</span></p>
+<p>The likelihoods are the probabilities of this data result for each of the two models. Assuming independence of individual outcomes, the likelihood of the working model is given by</p>
+<p><span class="math display">\[
+LIKE({\rm working}) =  P(\{g, b, g, g, g, g, g, g, g, b, g, b\} | {\rm working})
+\]</span> <span class="math display">\[
+=  P(g | {\rm working}) \times ... \times P(b | {\rm working})
+\]</span> <span class="math display">\[ =  0.95 \times 0.05 \times 0.95 \times ... \times 0.05
+\]</span> <span class="math display">\[
+=  0.00007878.
+\]</span></p>
+<p>Similarly, the likelihood of the broken model is</p>
+<p><span class="math display">\[
+LIKE({\rm broken}) =  P(\{g, b, g, g, g, g, g, g, g, b, g, b\} | {\rm broken})
+\]</span> <span class="math display">\[
+=  0.70 \times 0.30 \times 0.70 \times ... \times 0.30
+\]</span> <span class="math display">\[
+= 0.00108955
+\]</span></p>
+<p>Using the “prior times likelihood” recipe, we compute the posterior probabilities in the following table.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Prior</th>
+<th>Likelihood</th>
+<th>Product</th>
+<th>Posterior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Working</td>
+<td>0.90</td>
+<td>0.00007878</td>
+<td>0.000070902</td>
+<td>0.3942</td>
+</tr>
+<tr class="even">
+<td>Broken</td>
+<td>0.10</td>
+<td>0.00108955</td>
+<td>0.000108955</td>
+<td>0.6058</td>
+</tr>
+</tbody>
+</table>
+<p>We see that the posterior probability that the machine is broken is over 60% and perhaps the machine should be stopped for inspection and repair.</p>
+<p>There is another way to implement Bayes’ rule when the data are observed in a sequential manner. Before any data are collected, the inspector’s probabilities of the two states of the machine, working and broken, are given by 0.90 and 0.10. He observes the quality of the first part – “g” – and then he can immediately update his probabilities by Bayes’ rule.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Prior</th>
+<th>Likelihood</th>
+<th>Product</th>
+<th>Posterior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Working</td>
+<td>0.90</td>
+<td>0.95</td>
+<td>0.855</td>
+<td>0.9243</td>
+</tr>
+<tr class="even">
+<td>Broken</td>
+<td>0.10</td>
+<td>0.70</td>
+<td>0.070</td>
+<td>0.0757</td>
+</tr>
+</tbody>
+</table>
+<p>After this single observation, he is slightly more confident (with probability 0.9243) that the machine is working.</p>
+<p>The inspector’s current probabilities of the two models are 0.9243 and 0.0757. He observes the quality of the next part – “b” – and again he can update his probabilities by Bayes’ rule. In this table “Prior” refers to his beliefs before observing the data.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Model</th>
+<th>Prior</th>
+<th>Likelihood</th>
+<th>Product</th>
+<th>Posterior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Working</td>
+<td>0.9243</td>
+<td>0.05</td>
+<td>0.046215</td>
+<td>0.6705</td>
+</tr>
+<tr class="even">
+<td>Broken</td>
+<td>0.0757</td>
+<td>0.30</td>
+<td>0.022710</td>
+<td>0.3295</td>
+</tr>
+</tbody>
+</table>
+<p>We see that, after observing two parts, the inspector’s probability that the machine is working is 0.6705.</p>
+<p>One can continue learning in this sequential manner. As one observes the quality of each single part, the inspector can update his probability of the two models by Bayes’ rule. Table 2.9 summarizes the results of this sequential learning. The first row of the table displays the prior probabilities of the working and broken models and the following rows display the probabilities after each outcome is observed. Note that the final row indicates that the probabilities after observing the 12 parts are equal to 0.3942 and 0.6058. As expected, these posterior probabilities are the same as the ones computed using the group of 12 observations as data.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Observation</th>
+<th>P(Working)</th>
+<th>P(Broken)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Prior</td>
+<td>0.9000</td>
+<td>0.1000</td>
+</tr>
+<tr class="even">
+<td>g</td>
+<td>0.9243</td>
+<td>0.0757</td>
+</tr>
+<tr class="odd">
+<td>b</td>
+<td>0.6706</td>
+<td>0.3294</td>
+</tr>
+<tr class="even">
+<td>g</td>
+<td>0.7342</td>
+<td>0.2658</td>
+</tr>
+<tr class="odd">
+<td>g</td>
+<td>0.7894</td>
+<td>0.2106</td>
+</tr>
+<tr class="even">
+<td>g</td>
+<td>0.8358</td>
+<td>0.1642</td>
+</tr>
+<tr class="odd">
+<td>g</td>
+<td>0.8735</td>
+<td>0.1265</td>
+</tr>
+<tr class="even">
+<td>g</td>
+<td>0.9036</td>
+<td>0.0964</td>
+</tr>
+<tr class="odd">
+<td>g</td>
+<td>0.9271</td>
+<td>0.0729</td>
+</tr>
+<tr class="even">
+<td>g</td>
+<td>0.9452</td>
+<td>0.0548</td>
+</tr>
+<tr class="odd">
+<td>b</td>
+<td>0.7421</td>
+<td>0.2579</td>
+</tr>
+<tr class="even">
+<td>g</td>
+<td>0.7961</td>
+<td>0.2039</td>
+</tr>
+<tr class="odd">
+<td>b</td>
+<td>0.3942</td>
+<td>0.6058</td>
+</tr>
+</tbody>
+</table>
+
+
+</section>
+
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./probability.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Probability</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./proportion.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning About a Proportion</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.309">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Bayesian Inference - 4&nbsp; Learning About a Proportion</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<link href="./bayes_rule.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning About a Proportion</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Bayesian Inference</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./probability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Probability</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayes_rule.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Bayes Rule</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./proportion.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning About a Proportion</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">4.1</span> Introduction</a></li>
+  <li><a href="#an-example-on-learning-about-a-proportion" id="toc-an-example-on-learning-about-a-proportion" class="nav-link" data-scroll-target="#an-example-on-learning-about-a-proportion"> <span class="header-section-number">4.2</span> An Example on Learning About a Proportion</a></li>
+  <li><a href="#using-a-discrete-prior" id="toc-using-a-discrete-prior" class="nav-link" data-scroll-target="#using-a-discrete-prior"> <span class="header-section-number">4.3</span> Using a Discrete Prior</a></li>
+  <li><a href="#using-a-noninformative-prior" id="toc-using-a-noninformative-prior" class="nav-link" data-scroll-target="#using-a-noninformative-prior"> <span class="header-section-number">4.4</span> Using a Noninformative Prior</a></li>
+  <li><a href="#using-a-conjugate-prior" id="toc-using-a-conjugate-prior" class="nav-link" data-scroll-target="#using-a-conjugate-prior"> <span class="header-section-number">4.5</span> Using a Conjugate Prior</a></li>
+  <li><a href="#inference" id="toc-inference" class="nav-link" data-scroll-target="#inference"> <span class="header-section-number">4.6</span> Inference</a>
+  <ul class="collapse">
+  <li><a href="#point-inference" id="toc-point-inference" class="nav-link" data-scroll-target="#point-inference"> <span class="header-section-number">4.6.1</span> Point Inference</a></li>
+  <li><a href="#interval-estimation" id="toc-interval-estimation" class="nav-link" data-scroll-target="#interval-estimation"> <span class="header-section-number">4.6.2</span> Interval Estimation</a></li>
+  <li><a href="#estimation-of-probabilities" id="toc-estimation-of-probabilities" class="nav-link" data-scroll-target="#estimation-of-probabilities"> <span class="header-section-number">4.6.3</span> Estimation of Probabilities</a></li>
+  </ul></li>
+  <li><a href="#using-alternative-priors" id="toc-using-alternative-priors" class="nav-link" data-scroll-target="#using-alternative-priors"> <span class="header-section-number">4.7</span> Using Alternative Priors</a></li>
+  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction"> <span class="header-section-number">4.8</span> Prediction</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning About a Proportion</span></h1>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">4.1</span> Introduction</h2>
+<p>Suppose data <span class="math inline">\(y\)</span> is observed from a sampling distribution <span class="math inline">\(f(y | \theta)\)</span> that depends on an unknown parameter <span class="math inline">\(\theta\)</span>. We assume that one has beliefs about <span class="math inline">\(\theta\)</span> before sampling that are expressed through a prior density <span class="math inline">\(g(\theta | y)\)</span>. Once a value of <span class="math inline">\(y\)</span> is observed, then one’s updated beliefs about the parameter <span class="math inline">\(\theta\)</span> are reflected in the posterior density, the conditional density of <span class="math inline">\(\theta\)</span> given <span class="math inline">\(y\)</span>: <span class="math display">\[
+g(\theta | y) = \frac{f(y | \theta)g(\theta) }{f(y)},
+\]</span> where <span class="math inline">\(f(y)\)</span> is the marginal density of <span class="math inline">\(y\)</span> <span class="math display">\[
+f(y) = \int  f(y | \theta) g(\theta) d\theta .
+\]</span></p>
+<p>In the computation of the posterior density, note that the only terms involving the unknown parameter <span class="math inline">\(\theta\)</span> are the likelihood function <span class="math inline">\(L(\theta) = f(y | \theta)\)</span> and the prior density <span class="math inline">\(g(\theta)\)</span>. Bayes’ rule says that the posterior density is proportional to the product of the likelihood and the prior, or <span class="math display">\[
+g(\theta | y) \propto L(\theta) g(\theta).
+\]</span></p>
+<p>In a Bayesian analysis, both the posterior density and the marginal density play important roles. The posterior density contains all information about the parameter contained in both the prior density and the data. One performs different types of inference by computing relevant summaries of the posterior density. The marginal density <span class="math inline">\(f(y)\)</span> reflects the distribution of the data <span class="math inline">\(y\)</span> before observing any data. This density is called the <em>predictive density</em> since <span class="math inline">\(f(y)\)</span> is used to make predictions about future data values.</p>
+</section>
+<section id="an-example-on-learning-about-a-proportion" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="an-example-on-learning-about-a-proportion"><span class="header-section-number">4.2</span> An Example on Learning About a Proportion</h2>
+<p>In this chapter, we discuss the basic elements of a Bayesian analysis through the problem of learning about a population proportion <span class="math inline">\(p\)</span>. We take a random sample from the population of size <span class="math inline">\(n\)</span> and observe <span class="math inline">\(y\)</span> successes – for a given value of <span class="math inline">\(p\)</span>, the probability of <span class="math inline">\(y\)</span> is given by the binomial formula <span class="math display">\[
+f(y | p) = {n \choose y} p^y (1-p)^{n - y}.
+\]</span></p>
+<p>As an example, suppose that coordinator of developmental math courses at a particular university is concerned about the proportion of students in these courses who have math anxiety, where “math anxiety” is defined by obtaining a particular score on an anxiety rating instrument. A sample of 30 students takes the instrument and 10 have math anxiety. What can be said about the proportion of all developmental math course students who have math anxiety?</p>
+<p>The standard estimate of <span class="math inline">\(p\)</span> is the proportion of successes in the sample <span class="math inline">\(\hat p = y/n\)</span> and the traditional Wald “large-sample” confidence interval for <span class="math inline">\(p\)</span> is given by <span class="math display">\[
+\left(\hat p - z_{\alpha/2} \sqrt{\frac{\hat p (1- \hat p)}{n}}, \hat p + z_{\alpha/2} \sqrt{\frac{\hat p (1- \hat p)}{n}}\right),
+\]</span> where <span class="math inline">\(z_\alpha\)</span> is the <span class="math inline">\(1-\alpha\)</span> quantile of the standard normal distribution.</p>
+<p>For large samples, this interval will cover the unknown proportion in repeated sampling with probability <span class="math inline">\(1 - \alpha\)</span>. However this interval estimate has questionable value for samples with very few observed successes or failures. Suppose that no students in our sample have math anxiety. Then <span class="math inline">\(y = 0\)</span>, <span class="math inline">\(\hat p = 0/30 = 0\)</span> and the confidence interval will be degenerate at zero. (Similarly, if all the students have math anxiety, then <span class="math inline">\(\hat p = 30/30 = 1\)</span> and the confidence interval will be degenerate at one.) Since one certainly believes that the proportion is larger than zero, this degenerate interval at zero doesn’t make any sense.</p>
+<p>One ad-hoc solution to the “zero successes” problem is to initially add two artificial successes and two artificial failures to the data, and then apply the Wald interval to this adjusted data. This is a recommended approach in the literature and the resulting confidence interval has good sampling probabilities. We will see that this ad-hoc procedure has a natural correspondence with a Bayesian interval that incorporates prior information about the proportion.</p>
+</section>
+<section id="using-a-discrete-prior" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="using-a-discrete-prior"><span class="header-section-number">4.3</span> Using a Discrete Prior</h2>
+<p>One simple way of incorporating prior information about <span class="math inline">\(p\)</span> is by use of a discrete prior. One makes a list of plausible values <span class="math inline">\(p_1, ..., p_k\)</span> for the proportion and then assigns probabilities <span class="math inline">\(P(p_1), ..., P(p_k)\)</span> to these values. It may be difficult to directly assess the individual prior probabilities, but it may be easier to think about the probability of one proportion value relative to the probabilities of other values. One might first assign a large integer value, say 10, to the value of <span class="math inline">\(p\)</span> that is believed most likely, and then assess the probabilities of the remaining values relative to the probability of the most likely value. Once the relative probabilities are determined, then the probabilities are normalized to obtain the prior probabilities.</p>
+<p>In the example, suppose one lists the possible values for the proportion of mathematics students with math anxiety displayed in the following table.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th>0.05</th>
+<th>0.10</th>
+<th>0.15</th>
+<th>0.20</th>
+<th>0.25</th>
+<th>0.30</th>
+<th>0.35</th>
+<th>0.40</th>
+<th>0.45</th>
+<th>0.50</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Prior</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>Suppose one’s best guess at the proportion of students with math anxiety is <span class="math inline">\(p = 0.20\)</span> so this value is assigned a “prior weight” of 10.<br>
+The values <span class="math inline">\(p = 0.15\)</span> and <span class="math inline">\(p = 0.25\)</span> are believed to half as likely as <span class="math inline">\(p = 0.20\)</span> so each value is assigned a prior weight of 5. The value <span class="math inline">\(p = 0.30\)</span> is thought to be only 30% as likely as <span class="math inline">\(p = 0.20\)</span> so this proportion value is assigned a weight of 3. Continuing in this fashion, one obtains the table of prior weights for <span class="math inline">\(p\)</span> as shown in Table <span class="math inline">\(\ref{table:priortable}\)</span>. One converts these prior weights to probabilities by dividing each weight by its sum. Since the sum of prior weights is 31, the prior probability of <span class="math inline">\(p = 0.5\)</span> is equal to <span class="math inline">\(P(.05) = 1/31 = 0.32\)</span>. The third row of the table display the prior probabilities.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th>0.05</th>
+<th>0.10</th>
+<th>0.15</th>
+<th>0.20</th>
+<th>0.25</th>
+<th>0.30</th>
+<th>0.35</th>
+<th>0.40</th>
+<th>0.45</th>
+<th>0.50</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Prior Weight</td>
+<td>1</td>
+<td>2</td>
+<td>5</td>
+<td>10</td>
+<td>5</td>
+<td>3</td>
+<td>2</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr class="even">
+<td>Prior</td>
+<td>.032</td>
+<td>.065</td>
+<td>.161</td>
+<td>.323</td>
+<td>.161</td>
+<td>.097</td>
+<td>.065</td>
+<td>.032</td>
+<td>.032</td>
+<td>.032</td>
+</tr>
+</tbody>
+</table>
+<p>Once this prior distribution is assigned, one can compute the posterior probabilities by use of Bayes’ rule. One observes <span class="math inline">\(y\)</span> successes in <span class="math inline">\(n\)</span> trials. The likelihood of <span class="math inline">\(p = p_i\)</span> given this result is given by <span class="math display">\[
+L(p_i) = p_i^y (1- p_i)^{n-y},
+\]</span> and the posterior probability of <span class="math inline">\(p_i\)</span> will be given (up to a proportionality constant) by multiplying the prior probability by the likelihood. <span class="math display">\[
+P(p_i | {\rm data}) \propto P(p_i) L(p_i) = P(p_i)  p_i^y (1- p_i)^{n-y}.
+\]</span> The following table displays the posterior distribution calculations in the familiar table format. The columns of the table include the values of the proportion, the values of the prior, the likelihoods, and the products of the prior and the likelihood. One normalizes the probabilities by first computing the sum of the products (denoted by SUM in the table), and then dividing each product by this sum.</p>
+<table class="table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th>Prior</th>
+<th>Likelihood</th>
+<th>Product</th>
+<th>Posterior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(p_1\)</span></td>
+<td><span class="math inline">\(P(p_1)\)</span></td>
+<td><span class="math inline">\(p_1^y(1-p_1)^{n-y}\)</span></td>
+<td><span class="math inline">\(P(p_1)\)</span> <span class="math inline">\(p_1^y(1-p_1)^{n-y}\)</span></td>
+<td><span class="math inline">\(P(p_1)\)</span> <span class="math inline">\(p_1^y(1-p_1)^{n-y}/SUM\)</span>\</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(p_2\)</span></td>
+<td><span class="math inline">\(P(p_2)\)</span></td>
+<td><span class="math inline">\(p_2^y(1-p_2)^{n-y}\)</span></td>
+<td><span class="math inline">\(P(p_2)\)</span> <span class="math inline">\(p_2^y(1-p_2)^{n-y}\)</span></td>
+<td><span class="math inline">\(P(p_2)\)</span> <span class="math inline">\(p_2^y(1-p_2)^{n-y}/SUM\)</span> \</td>
+</tr>
+<tr class="odd">
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+</tr>
+<tr class="odd">
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>–</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(p_k\)</span></td>
+<td><span class="math inline">\(P(p_k)\)</span></td>
+<td><span class="math inline">\(p_k^y(1-p_k)^{n-y}\)</span></td>
+<td><span class="math inline">\(P(p_k)\)</span> <span class="math inline">\(p_k^y(1-p_k)^{n-y}\)</span></td>
+<td><span class="math inline">\(P(p_k)\)</span> <span class="math inline">\(p_k^y(1-p_k)^{n-y}/SUM\)</span> \ </td>
+</tr>
+<tr class="odd">
+<td>–</td>
+<td>–</td>
+<td>–</td>
+<td>SUM</td>
+<td>–</td>
+</tr>
+</tbody>
+</table>
+<p>The Bayes’ rule calculations are illustrated in the following table for our math anxiety example. For the example, we observed <span class="math inline">\(y = 10\)</span> who had math anxiety in a sample of <span class="math inline">\(n = 30\)</span> and the likelihood is <span class="math inline">\(p^{10} (1-p)^{20}\)</span>. The computed values of the likelihood are very small so they have been multiplied by <span class="math inline">\(10^{12}\)</span> in the table to obtain integer values.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th><span class="math inline">\(p\)</span></th>
+<th>Prior</th>
+<th>Likelihood</th>
+<th>Product</th>
+<th>Posterior</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.05</td>
+<td>0.032</td>
+<td>0</td>
+<td>0</td>
+<td>0.000</td>
+</tr>
+<tr class="even">
+<td>0.10</td>
+<td>0.065</td>
+<td>12</td>
+<td>1</td>
+<td>0.000</td>
+</tr>
+<tr class="odd">
+<td>0.15</td>
+<td>0.161</td>
+<td>224</td>
+<td>36</td>
+<td>0.019</td>
+</tr>
+<tr class="even">
+<td>0.20</td>
+<td>0.323</td>
+<td>1181</td>
+<td>381</td>
+<td>0.200</td>
+</tr>
+<tr class="odd">
+<td>0.25</td>
+<td>0.161</td>
+<td>3024</td>
+<td>487</td>
+<td>0.255</td>
+</tr>
+<tr class="even">
+<td>0.30</td>
+<td>0.097</td>
+<td>4712</td>
+<td>457</td>
+<td>0.239</td>
+</tr>
+<tr class="odd">
+<td>0.35</td>
+<td>0.065</td>
+<td>5000</td>
+<td>325</td>
+<td>0.170</td>
+</tr>
+<tr class="even">
+<td>0.40</td>
+<td>0.032</td>
+<td>3834</td>
+<td>123</td>
+<td>0.064</td>
+</tr>
+<tr class="odd">
+<td>0.45</td>
+<td>0.032</td>
+<td>2185</td>
+<td>70</td>
+<td>0.037</td>
+</tr>
+<tr class="even">
+<td>0.50</td>
+<td>0.032</td>
+<td>931</td>
+<td>30</td>
+<td>0.016</td>
+</tr>
+</tbody>
+</table>
+<p>To interpret the posterior probabilities, remember that initially we believed that the proportion of math anxiety students was about 0.20, although we were unsure about its true value and the prior was relatively diffuse about <span class="math inline">\(p = 0.20\)</span>. The most likely value of <span class="math inline">\(p\)</span> from the posterior distribution is <span class="math inline">\(p = 0.25\)</span>. The observed proportion of math anxiety values from the sample is <span class="math inline">\(y/n = 10/30 = 0.33\)</span> and the posterior estimate is a compromise between the sample proportion and the prior mode. We can use the posterior distribution to find an interval estimate for the proportion. Note from the table that the most likely values of <span class="math inline">\(p\)</span> are <span class="math display">\[
+p = 0.20, 0.25, 0.30, 0.35
+\]</span> with total probability <span class="math display">\[
+0.200 + 0.255 + 0.239 + 0.170 = 0.864.
+\]</span> So the interval (0.20, 0.35) is a 86.4% interval estimate for <span class="math inline">\(p\)</span> – the posterior probability <span class="math display">\[
+P(0.20 \le p \le 0.35| {\rm data}) = 0.864.
+\]</span></p>
+</section>
+<section id="using-a-noninformative-prior" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="using-a-noninformative-prior"><span class="header-section-number">4.4</span> Using a Noninformative Prior</h2>
+<p>There are some advantages to using a discrete prior for a proportion. It provides a starting point for finding a prior distribution that reflects one’s knowledge, before sampling, about the location of the proportion. Also it is easy to summarize a discrete posterior distribution. But since the proportion <span class="math inline">\(p\)</span> is a continuous parameter, one’s prior should be a continuous distribution on the interval from 0 to 1.</p>
+<p>First, suppose one has little knowledge about the location of the proportion. In our example, suppose that one has little information about the proportion of students in the class who have math anxiety. How can one construct a prior distribution that reflects little or imprecise knowledge about the location of the parameter? This type of distribution is called a <em>noninformative prior</em> or <em>ignorance</em> prior. Using this type of prior, the posterior distribution will typically be more influenced by the data than the prior information.</p>
+<p>One possible choice for a noninformative prior assumes that <span class="math inline">\(p\)</span> has a uniform distribution <span class="math display">\[
+g(p) = 1, 0 &lt; p &lt; 1.
+\]</span> This distribution implies that every subset of <span class="math inline">\(p\)</span> of a given length has the same probability.</p>
+<p>If we observe <span class="math inline">\(y\)</span> successes in <span class="math inline">\(n\)</span> trials, we wish to find the posterior density of <span class="math inline">\(p\)</span>, the density of the proportion conditional on <span class="math inline">\(y\)</span>. By Bayes’ rule, this density is given by <span class="math display">\[
+g(p | y) = \frac{f(y | p) g(p)}{\int_0^1 f(y | p) g(p) dp} \propto f(y|p) g(p),
+\]</span> which gives the familiar POSTERIOR <span class="math inline">\(\propto\)</span> LIKELIHOOD <span class="math inline">\(\times\)</span> PRIOR recipe.</p>
+<p>If we use a uniform prior for <span class="math inline">\(p\)</span>, then the posterior density is given by <span class="math display">\[
+g(p | y) \propto p^y (1-p)^{n-y}, \, 0 &lt; p &lt; 1.
+\]</span> If we view this function as a function of the proportion <span class="math inline">\(p\)</span> where <span class="math inline">\(y\)</span> and <span class="math inline">\(n\)</span> are fixed, then we recognize this density as a beta density of the form <span class="math display">\[
+g(p | y) = \frac{1}{B(a^*, b^*)} p^{a^* - 1} (1-p)^{b^*-1}, \, 0 &lt; p &lt; 1,
+\]</span> where <span class="math inline">\(a = y+1\)</span> and <span class="math inline">\(b = n - y + 1\)</span></p>
+</section>
+<section id="using-a-conjugate-prior" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="using-a-conjugate-prior"><span class="header-section-number">4.5</span> Using a Conjugate Prior</h2>
+<p>In many situations, the use of noninformative priors is appropriate since the user does not have any knowledge about the parameter from previous experience. But in other situations such as the math anxiety example, the user does have knowledge about the unknown proportion before sampling and one wishes to construct a continuous prior on the unit interval that represents this prior knowledge.</p>
+<p>One convenient family of prior distributions is the beta family with shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>: <span class="math display">\[
+g(p) = \frac{1}{B(a, b)} p^{a - 1} (1-p)^{b-1}, \, 0 &lt; p &lt; 1.
+\]</span> As demonstrated by the graphs in Figure ???, the beta family can have many shapes and can reflect a variety of information about the proportion <span class="math inline">\(p\)</span>. In practice, one chooses the parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> that matches one’s beliefs about the proportion.</p>
+<p>One way of assessing values of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> is to guess at the values of the prior mean and variance of <span class="math inline">\(p\)</span>. Suppose these guesses are <span class="math inline">\(M\)</span> and <span class="math inline">\(V\)</span>, respectively. The prior mean and standard deviation of a beta(<span class="math inline">\(a, b\)</span>) distribution are <span class="math inline">\(a/(a+b)\)</span> and <span class="math inline">\(ab/(a+b)^2/(a+b+1)\)</span>. Then by solving the equations</p>
+<p><span class="math display">\[
+M  = \frac{a}{a+b},  \, \,     
+   V  =  \frac{a b}{(a+b)^2 (a+b+1)}
+\]</span></p>
+<p>for <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, one obtains the beta prior distribution. The problem with this method is that it may be difficult for a user to specify the prior moments of the distribution since moments can be affected by the shape or tail behavior of the distribution which may be unknown.</p>
+<p>An alternative approach is to assess the parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> indirectly through the specification of prior quantiles. In our example, suppose that the user believes that the median of the prior for the proportion of students is <span class="math inline">\(q_0.5 = 0.23\)</span>. This means that he/she believes that the proportion is equally likely to be smaller or larger than 0.23. Then the user makes a statement about the sureness of this guess at the median by the statement about a second quantile. Suppose the user says that he/she is 90% confident that the proportion <span class="math inline">\(p\)</span> is less than 0.38. So the prior information is given by <span class="math display">\[
+P(p &lt; 0.23) = 0.50, \, \, P(p &lt; 0.38) = 0.90.
+\]</span> By use of a program such as the function <code>beta.select()</code> in the <code>LearnBayes</code> package, one matches these prior quantiles with the beta parameters <span class="math inline">\(a = 4.0, b = 12.5\)</span>.</p>
+<p>Once one assesses the values of the beta parameters, it is easy to compute the posterior distribution. By multiplying the prior and the likelihood, one obtains that the posterior density of <span class="math inline">\(p\)</span> is proportional to <span class="math display">\[
+g(p | y)  \propto  L(p) g(p)  
+\]</span> <span class="math display">\[
+       =  p^y (1-p)^{n-y} \times p^{a-1} (1-p)^{b-1}
+\]</span> <span class="math display">\[
+       =  p^{a + y -1} (1-p)^{b + n - y -1},
+\]</span></p>
+<p>which we recognize as a beta density with updated parameters <span class="math inline">\(a^* = a + y\)</span> and <span class="math inline">\(b^* = b + n - y\)</span>. We say that the beta density is a <em>conjugate</em> prior density since the prior and posterior have the same functional form.</p>
+<p>In our example, if our prior is beta(4.0, 12.5) and we have <span class="math inline">\(y = 10\)</span> math anxious students in a sample of <span class="math inline">\(n = 30\)</span>, then the posterior distribution is beta(4.0 + 10, 12.5 + 20) or beta( 14.0, 32.5).</p>
+</section>
+<section id="inference" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="inference"><span class="header-section-number">4.6</span> Inference</h2>
+<p>After one observes data, then all knowledge about the parameter is contained in the posterior distribution. It is common to simply display the posterior density and the reader can learn about the location and spread by simply looking at this curve. To obtain different types of statistical inferences, one summarizes the posterior distribution in various ways. We illustrate using the posterior distribution to obtain point and interval estimates of the parameter.</p>
+<section id="point-inference" class="level3" data-number="4.6.1">
+<h3 data-number="4.6.1" class="anchored" data-anchor-id="point-inference"><span class="header-section-number">4.6.1</span> Point Inference</h3>
+<p>A suitable point estimate of a parameter is a single-number summary of the posterior density. The <em>posterior mean</em> is the mean of the posterior distribution given by the integral <span class="math display">\[
+E(p | y) = \int p \, g(p | y) dp.
+\]</span> The <em>posterior median</em> is the median of the posterior distribution, the value <span class="math inline">\(p_{0.5}\)</span> such that the proportion is equally likely to be smaller or larger than <span class="math inline">\(p\)</span>. <span class="math display">\[
+P(p &lt; p_{0.5}) = 0.5.
+\]</span> The <em>posterior mode</em> is the value <span class="math inline">\(\hat p\)</span> where the posterior density is maximized: <span class="math display">\[
+g(\hat p | y) = \max_p g(p | y).
+\]</span></p>
+<p>In the case where a beta(<span class="math inline">\(a, b\)</span>) prior is assigned to a proportion <span class="math inline">\(p\)</span>, the posterior distribution is also in the beta family with updated parameters <span class="math inline">\(a^* = a + y\)</span> and <span class="math inline">\(b^* = b + n - y\)</span>. The posterior mean of <span class="math inline">\(p\)</span> is the mean of the beta density <span class="math display">\[
+E(p | y) = \frac{a^*}{a^*+b^*} = \frac{y + a}{n + a + b}.
+\]</span> The posterior median <span class="math inline">\(p_M\)</span> is the 0.5 fractile of the beta curve. It is not expressible in closed form, but is easily available by use of software. The posterior mode is found by finding the value of <span class="math inline">\(p\)</span> that maximizes the density <span class="math inline">\(p^{a^*-1} (1-p)^{b^*-1}\)</span>. A straightforward calculation shows the posterior mode is <span class="math display">\[
+\hat p = \frac{a^*-1}{a^*+b^*-2}.
+\]</span> For our example, our posterior density is beta(14.0, 32.5). The posterior mean is given by <span class="math inline">\(E(p | y) = 14.0/(14.0 + 32.5) = 0.301\)</span>. By use of the R command <code>qbeta</code>, the posterior median is found to be <span class="math inline">\(p_M = 0.298\)</span>, and the posterior mode is <span class="math inline">\(\hat p = (14.0 -1 )/(14.0 + 32.5 - 2) = 0.292\)</span>.</p>
+<p>In the case where the posterior density is approximately symmetric, as in this example, the posterior mean, posterior median, and posterior mode will be approximately equal. In other situations where the posterior density is right or left skewed, these summary values can be different. One nice feature of the posterior median is its clear interpretation as the value that divides the posterior probability in half.</p>
+</section>
+<section id="interval-estimation" class="level3" data-number="4.6.2">
+<h3 data-number="4.6.2" class="anchored" data-anchor-id="interval-estimation"><span class="header-section-number">4.6.2</span> Interval Estimation</h3>
+<p>Typically, a point estimate such as a posterior median is insufficient for understanding the location of a parameter. A <em>Bayesian interval estimate</em> or <em>credible interval</em> is an interval that contains the parameter with a given probability. Specifically, a <span class="math inline">\(100 (1-\gamma)\)</span> percent credible interval is any interval <span class="math inline">\((a, b)\)</span> such that <span class="math display">\[
+P( a &lt; p &lt; b) = \gamma.
+\]</span> There are many intervals that contain <span class="math inline">\(100 (1-\gamma)\)</span> percent of the posterior probability. A convenient estimate is an <em>equal-tail interval</em> estimate whose endpoints are the <span class="math inline">\(\gamma/2\)</span> and <span class="math inline">\(1-\gamma/2\)</span> quantiles of the posterior distribution. <span class="math display">\[
+(p_{\gamma/2}, p_{1-\gamma/2}).
+\]</span> An alternative is the <em>highest posterior density</em> interval or HPD interval which is the shortest interval that contains this probability content.</p>
+<p>In our example, the posterior for <span class="math inline">\(p\)</span> was beta(14.0, 32.5). If we wish to construct a 90% interval estimate, then one possible interval would be (0, <span class="math inline">\(p_{.90}\)</span>) = (0, 0.389) and another would be <span class="math inline">\((p_{.10}, 1) = (0.217, 1)\)</span>. These would be undesirable intervals since they both would have long widths. The equal-tail interval would be formed from the 5th and 95th percentiles that is equal to (0.197, 0.415). Using the function <code>hpd</code> in the <code>TeachingDemos</code> package, one computes the HPD interval (0.191, 0.409). Since the posterior density is approximately symmetric, the equal-tail and HPD intervals are approximately equal.</p>
+</section>
+<section id="estimation-of-probabilities" class="level3" data-number="4.6.3">
+<h3 data-number="4.6.3" class="anchored" data-anchor-id="estimation-of-probabilities"><span class="header-section-number">4.6.3</span> Estimation of Probabilities</h3>
+<p>One attractive feature of the Bayesian approach is that one can see if the parameter falls in different regions by simply computing the posterior probabilities of these regions. In the math anxiety example, suppose we are interested in the plausibility that the proportion falls in the intervals (0, 0.2), (0.2, 0.4), (0.4, 0.6), (0.6, 0.8), (0.8, 1). The posterior distribution for the proportion of math anxious students is beta(14.0, 32.5) and by use of the R <code>pbeta</code> command, we can compute the probabilities of these regions and these probabilities are displayed in Table <span class="math inline">\(\ref{table:postprobs}\)</span>. Is it likely that the proportion of math anxious students is larger than 0.4? The answer would be no, since the posterior probability that <span class="math inline">\(p &gt; 0.4\)</span> is only 0.08. We see from this table that it is very likely that the proportion falls between 0.4 and 0.6.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Interval</th>
+<th>Posterior Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>(0, 0.2)</td>
+<td>0.06</td>
+</tr>
+<tr class="even">
+<td>(0.2, 0.4)</td>
+<td>0.87</td>
+</tr>
+<tr class="odd">
+<td>(0.4, 0.6)</td>
+<td>0.08</td>
+</tr>
+<tr class="even">
+<td>(0.6, 0.8)</td>
+<td>0.00</td>
+</tr>
+<tr class="odd">
+<td>(0.8, 1.0)</td>
+<td>0.00</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="using-alternative-priors" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="using-alternative-priors"><span class="header-section-number">4.7</span> Using Alternative Priors</h2>
+<p>The choice of a beta prior is made by convenience. By use of a beta prior, the posterior has the same functional (beta) form and it is easy to summarize the posterior distribution. But Bayes’ rule can be applied for any continuous prior density of <span class="math inline">\(p\)</span> on the unit interval. We illustrate this point by using an alternative density for the proportion based on prior beliefs about the logit proportion.</p>
+<p>In some situations, one may have prior beliefs about the logit of <span class="math inline">\(p\)</span> defined by <span class="math display">\[
+\theta = \log \frac{p}{1-p}.
+\]</span> Suppose that one believes, before sampling, that <span class="math inline">\(\theta\)</span> is normally distributed with mean <span class="math inline">\(\mu = -1.21\)</span> and standard deviation <span class="math inline">\(\tau = 0.55\)</span>. By transforming the logit <span class="math inline">\(\theta\)</span> to <span class="math inline">\(p\)</span> by <span class="math display">\[
+p = \frac{\exp(\theta)}{1+\exp(\theta)},
+\]</span> one can show that the induced prior on <span class="math inline">\(p\)</span> is given by <span class="math display">\[
+g(p) = \phi(\log \frac{p}{1-p}; \mu, \tau) \frac{1}{p(1-p)}, \, \, 0 &lt; p &lt; 1,
+\]</span> where <span class="math inline">\(\phi(x; \mu, \tau)\)</span> is the normal density with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\tau\)</span>.</p>
+<p>As before, the likelihood function is <span class="math inline">\(L(p) = p^y (1-p)^{n-y}\)</span>, where <span class="math inline">\(n = 30\)</span> and <span class="math inline">\(y = 10\)</span>. By using the “prior times likelihood” recipe, the posterior density of <span class="math inline">\(p\)</span> is given by <span class="math display">\[
+g(p | y) \propto L(p) g(p) = \left(p^y (1-p)^{n-y}\right) \times \left( \phi(\log \frac{p}{1-p}; \mu, \tau) \frac{1}{p(1-p)} \right).
+\]</span></p>
+<p>In this situation, we no longer have a conjugate analysis, since the prior and posterior densities have different functional forms. Moreover, the posterior has a functional form that we do not recognize as a member of a familiar family such as the beta. However, this just means that we will need alternative tools to summarize the posterior distribution to perform inferences.</p>
+</section>
+<section id="prediction" class="level2" data-number="4.8">
+<h2 data-number="4.8" class="anchored" data-anchor-id="prediction"><span class="header-section-number">4.8</span> Prediction</h2>
+<p>In this chapter, we have focused on the use of the posterior distribution to make inferences about the proportion <span class="math inline">\(p\)</span>. It is also possible to learn about the plausibility of future outcomes by inspection of the predictive distribution. In our math anxiety example, suppose we administer the exam to a new sample of 30 students. How many students in the new sample will be math anxious?</p>
+<p>Let <span class="math inline">\(y^*\)</span> denote the number of math anxious students in a future sample of size <span class="math inline">\(n^*\)</span>. Conditional on <span class="math inline">\(p\)</span>, the distribution of <span class="math inline">\(y^*\)</span> will be binomial(<span class="math inline">\(n^*, p\)</span>). If our current beliefs about the proportion are represented by the density <span class="math inline">\(g(p)\)</span>, then the predictive density of <span class="math inline">\(y^*\)</span> will be given by the integral</p>
+<p><span class="math display">\[\begin{eqnarray*}
+f(y^*)  =  \int_0^1 f(y^*|p) g(p) dp \nonumber \\
+       =  \int_0^1 {n^* \choose y^*} p^{y^*} (1-p)^{n^*-y^*} g(p) dp.  \nonumber \\
+\end{eqnarray*}\]</span></p>
+<p>Suppose we assign <span class="math inline">\(p\)</span> a uniform prior; that is, <span class="math inline">\(g(p) = 1\)</span>. If we substitute this prior for <span class="math inline">\(g(p)\)</span>, then the predictive density is given by <span class="math display">\[\begin{eqnarray*}
+f(y^*)  =  \int_0^1 {n^* \choose y^*} p^{y^*} (1-p)^{n^*-y^*} dp. \nonumber \\
+       =  {n^* \choose y^*} B(y^*+1, B(n^* - y^*+1)  \nonumber \\
+       =  \frac{1}{n^*+1}. \nonumber \\
+\end{eqnarray*}\]</span> If we use a uniform prior, then each of the <span class="math inline">\(n^*+1\)</span> possible values of <span class="math inline">\(y^*\)</span> are equally likely.</p>
+<p>Suppose our current knowledge about the proportion is contained in a beta(<span class="math inline">\(a, b\)</span>) density. Then the predictive density is given by <span class="math display">\[\begin{eqnarray*}
+f(y^*)  =  \int_0^1 {n^* \choose y^*} p^{y^*} (1-p)^{n^*-y^*} \frac{1}{B(a, b)} p^{a-1}(1-p)^{b-1} dp  \nonumber \\
+       =  {n^* \choose y^*}  \frac{B(a + y^*, b + n^* - y^*)}{B(a, b)}, y^* = 0, ..., n^*. \nonumber \\
+\end{eqnarray*}\]</span> This is called a <em>beta-binomial</em> density since it is a mixture of binomial densities, where the proportion <span class="math inline">\(p\)</span> follows a beta density.</p>
+<p>In our example, after observing the sample, the beliefs about the proportion of math anxious students is represented by a beta(14.0, 32.5) distribution. By use of the R function <code>pbetap()</code>, one can compute the predictive density for the number of math anxious students in a future sample of <span class="math inline">\(n^* = 30\)</span>. The figure shows that there is a sizable variation in <span class="math inline">\(y^*\)</span>; a 90% prediction interval for <span class="math inline">\(y^*\)</span> is given by {4, 5, …, 13, 15}. Why is the prediction interval so wide? There are two sources of variability in prediction. First, there is uncertainty about the proportion of math anxious students <span class="math inline">\(p\)</span> as reflected in the posterior density <span class="math inline">\(g\)</span>, and there is uncertainty in the number of anxious students <span class="math inline">\(y^*\)</span> for a fixed value of <span class="math inline">\(p\)</span> as reflected in the sampling density <span class="math inline">\(f\)</span>. The prediction distribution incorporates both types of uncertainty and therefore results in a relatively wide prediction interval estimate.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./bayes_rule.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Bayes Rule</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

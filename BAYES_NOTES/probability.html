@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.309">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Bayesian Inference - 2&nbsp; Probability</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<link href="./bayes_rule.html" rel="next">
+<link href="./index.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Probability</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Bayesian Inference</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./probability.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Probability</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayes_rule.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Bayes Rule</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./proportion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning About a Proportion</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">2.1</span> Introduction</a></li>
+  <li><a href="#measuring-uncertainty" id="toc-measuring-uncertainty" class="nav-link" data-scroll-target="#measuring-uncertainty"> <span class="header-section-number">2.2</span> Measuring Uncertainty</a></li>
+  <li><a href="#the-subjective-viewpoint" id="toc-the-subjective-viewpoint" class="nav-link" data-scroll-target="#the-subjective-viewpoint"> <span class="header-section-number">2.3</span> The Subjective Viewpoint</a></li>
+  <li><a href="#measuring-subjective-probabilities" id="toc-measuring-subjective-probabilities" class="nav-link" data-scroll-target="#measuring-subjective-probabilities"> <span class="header-section-number">2.4</span> Measuring Subjective Probabilities</a></li>
+  <li><a href="#true-and-measured-probabilities" id="toc-true-and-measured-probabilities" class="nav-link" data-scroll-target="#true-and-measured-probabilities"> <span class="header-section-number">2.5</span> True and Measured Probabilities</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Probability</span></h1>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="2.1">
+<h2 data-number="2.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">2.1</span> Introduction</h2>
+<p>Bayesian thinking is based on the subjective viewpoint of probability. In this chapter, we will talk about the different ways of thinking about probability.</p>
+</section>
+<section id="measuring-uncertainty" class="level2" data-number="2.2">
+<h2 data-number="2.2" class="anchored" data-anchor-id="measuring-uncertainty"><span class="header-section-number">2.2</span> Measuring Uncertainty</h2>
+<p>We live in a world of uncertain events and some events are more likely to occur than other events. Words such as “likely”, “probable”, “possible”, “rare”, and “maybe” are used to describe this uncertainty. It is natural to use numbers that we call probabilities to quantify this uncertainty. The probability of an event <span class="math inline">\(A\)</span>, denoted <span class="math inline">\(P(A)\)</span>, is a number between 0 and 1 assigned to the event <span class="math inline">\(A\)</span> where a larger number indicates that the event is more likely to occur.</p>
+<p>Some uncertain events already have numbers assigned to them. In games of chance where dice are rolled or cards are dealt from a well-shuffled deck, outcomes have particular probabilities. For example, the chance of rolling two dice equal to double-sixes is 1/36 and the chance of dealing a four of diamonds in a regular deck is 1/52. In actuarial tables, there are assigned probabilities that a person’s life span will be a particular length based on one’s gender and age. These actuarial tables are used by insurance companies to write up a life insurance policy and decide on the cost of the policy to the customer.</p>
+<p>There are two ways of viewing probabilities that allow us to assign probabilities in games of chance and actuarial tables. The classical or “equally-likely” view assumes that one can represent the outcomes of a random experiment in such a way such that the outcomes are equally likely. Then each outcome is assigned a probability equal to one divided by the total number of outcomes. In the dice example, there are 36 equally likely ways of representing the possible rolls of the dice, and the probability of one outcome (two sixes) is equal 1/36. In the card example, there are 52 possible draws in a deck of cards, and if the deck is well-shuffled, each outcome such as “four of diamonds” is assigned the probability of 1/52.</p>
+<p>A second way of thinking about probabilities is based on long-run relative frequencies. Suppose you are able to repeat a random experiment many times under similar conditions. Then the probability of an event is approximated by its relative frequency in the large number of trials. This viewpoint can be applied in games of chance. For example, the probability that the sum of two dice is equal to 7 can be approximated by the relative frequency of 7 in many rolls of the two dice. This definition can also be used for actuarial tables. The chance that a male of age 70 will survive ten years can be approximated by the relative frequency of 70-year old males who survive ten years.</p>
+<p>Is it possible use the relative frequency viewpoint to measure uncertainty for all random events? Lindley makes a distinction between two types of events. <em>Statistical events</em> are the events that can be repeated under similar conditions and <em>non-statistical events</em> are events that are essentially unique and can not be repeated. Games of chance are statistical events, while one-time events such as “Jones committed the murder” or “a Republican will be the next American president” are non-statistical events. One can use the relative frequency perspective to measure the probability of statistical events, but this viewpoint is clearly inappropriate in measuring the chance of non-statistical events. Also there are issues in applying the relative frequency viewpoint. Sometimes it is not clear how to repeat a random experiment under similar circumstances. For example, suppose one observes three flips of a coin with the first head on the third flip. How does one repeat this experiment. Does one consider sets of three flips, or instead consider flips that end with the first head?</p>
+</section>
+<section id="the-subjective-viewpoint" class="level2" data-number="2.3">
+<h2 data-number="2.3" class="anchored" data-anchor-id="the-subjective-viewpoint"><span class="header-section-number">2.3</span> The Subjective Viewpoint</h2>
+<p>There is a third viewpoint of probability, the subjective viewpoint, that is the basis for Bayesian thinking. We start with a proposition which is any statement that can be true or false. For example, consider the proposition “it will rain tomorrow.” A person’s belief in the truth in this proposition can vary; the person may believe it is certainly false or she may believe it is certainly true. A probability represents a number attached to the proposition “it will rain tomorrow” that reflects this belief. A probability of 1 means that the person believes the proposition is true, and a probability of 0 means that the person believes with certainty that the proposition is false. A probability of 0.5 means that the person believes that the propositions “rain tomorrow” and “no rain tomorrow” are equally likely.</p>
+<p>In the above definition, it should be noted that we are assigning numerical measures to propositions, which are more general than events. A proposition is any statement that is either true or false. Both statistical events and non-statistical events are examples of propositions. Second, an assigned probability is personal in that it reflects one person’s belief about the truth of the proposition. Different people may assign different probabilities to a given proposition. Certainly if we consider the proposition “Susie is receiving a final grade of A in her statistics class”, Susie and her instructor may have different beliefs about the truth in this proposition. Also a person’s probabilities about a proposition may change over time. As she obtains more information, her belief and therefore her probabilities can change. In our example, as Suzie receives exam grades, she will have different information and therefore possibly different beliefs in the proposition that she will get a final grade of A.</p>
+<p>To summarize, from the subjective viewpoint, a probability is a numerical measure of the degree of belief by a person in a proposition based on the person’s current information. If <span class="math inline">\(E\)</span> is a proposition and <span class="math inline">\(H\)</span> is the current information or history of the individual, then we represent a probability by the notation <span class="math inline">\(P(E | H)\)</span>.</p>
+</section>
+<section id="measuring-subjective-probabilities" class="level2" data-number="2.4">
+<h2 data-number="2.4" class="anchored" data-anchor-id="measuring-subjective-probabilities"><span class="header-section-number">2.4</span> Measuring Subjective Probabilities</h2>
+<p>At this point, all we know about a subjective probability <span class="math inline">\(P(E|H)\)</span> is that it falls between the values of 0 and 1 and larger values correspond to stronger beliefs in the truth in the proposition. Since subjective probabilities are generally difficult to assess, it is appropriate to describe some measurement methods.</p>
+<p>The <em>direct measurement</em> approach takes a measurement of an object by comparing it with a collection of reference objects. To learn about the length of a piece of string, a direct measurement method uses a ruler, and a direct measurement way of learning about the weight of an object places it on a scale. To directly measure probabilities, we need to consider a set of propositions where the probabilities are known.</p>
+<p>Consider the following “balls in bag” experiment. We have a bag with <span class="math inline">\(r\)</span> red and <span class="math inline">\(w\)</span> white balls and one ball is chosen from the bag. Let <span class="math inline">\(R(r, w)\)</span> denote the proposition that the chosen ball is red. We assume that the balls are all identical in appearance except color, the bag is mixed well, and one makes the draw blindfold. Then we would agree that the probability of <span class="math inline">\(R(r, w)\)</span> is equal to the fraction <span class="math inline">\(r/(r+w)\)</span>. Consider the set of <em>reference propositions</em> <span class="math inline">\(R(0, 1), R(1, 0), R(1, 1), ..."\)</span>. The reference probabilities <span class="math inline">\(r/(r+w)\)</span> cover all rational values between 0 and 1.</p>
+<p>To use these reference propositions to measure your probability <span class="math inline">\(P(E | H)\)</span>, you compare the proposition <span class="math inline">\(E\)</span> with the reference propositions {<span class="math inline">\(R(r, w)\)</span>}. Suppose you have a stronger belief in the truth of <span class="math inline">\(E\)</span> than <span class="math inline">\(R(r, w)\)</span>. This implies that your probability <span class="math inline">\(P(E | H)\)</span> exceeds the fraction <span class="math inline">\(r/(r+w)\)</span>. By making a sequence of comparisons of <span class="math inline">\(E\)</span> with <span class="math inline">\(R(r, w)\)</span> for different choices of <span class="math inline">\((r, w)\)</span>, one can in theory get an accurate assessment of your probability <span class="math inline">\(P(E | H)\)</span>.</p>
+<p>I am a Phillies fan and I wish to assess my probability of the event <span class="math inline">\(A =\)</span>“the Phillies will be in the World Series” this season. To using this direct approach of assessment, I make the following comparisons.</p>
+<ol type="1">
+<li><p>I first compare “Phillies in the World Series” with the event <span class="math inline">\(R(1, 1)\)</span>, choosing a red out of a bowl with one red ball and one white ball. I believe <span class="math inline">\(R(1, 1)\)</span> is more likely, so my probability of <span class="math inline">\(A\)</span>, <span class="math inline">\(P(A) &lt; 1/2\)</span>.</p></li>
+<li><p>Next, I compare the event <span class="math inline">\(A\)</span> with the event <span class="math inline">\(R(1, 3)\)</span>, choosing a red out of a bowl with one red and three white balls. I believe that <span class="math inline">\(R(1, 3)\)</span> is more likely, so <span class="math inline">\(P(A) &lt; 1/4\)</span>.</p></li>
+<li><p>I continue with comparing <span class="math inline">\(A\)</span> with <span class="math inline">\(R(1, 7)\)</span>, choosing a red out of a bowl with one red and seven white balls. I believe that the Phillies in the World Series is more likely. So <span class="math inline">\(P(A) &gt; 1/8\)</span> and combining my comparisons, I now know that <span class="math inline">\(P(A)\)</span> is in the interval <span class="math inline">\((1/8, 1/4)\)</span>.</p></li>
+<li><p>I continue with these assessments until it is difficult to make further comparisons. I will have a small interval that I believes contains my probability of the event.</p></li>
+</ol>
+<p>Other measurements are taken in an indirect manner. For example, one older style of thermometer is constructed by the use of mercury in a glass tube. Heat applied to the glass causes the mercury to expand and one measures the temperature by reading the location of the mercury on a printed numerical scale. For this type of thermometer, one indirectly measures temperature by use of the expansion and contraction of mercury. In a similar fashion, one can measure probabilities by means of bets that are indirectly related to probabilities.</p>
+<p>A bet consists of a proposition that determines the outcome of the bet, odds that are offered by the bookmaker, and the amount of money that you are willing to stake. If you decide to stake $<span class="math inline">\(s\)</span> on the proposition <span class="math inline">\(E\)</span> at odds <span class="math inline">\(z\)</span>, this means that</p>
+<ul>
+<li>if <span class="math inline">\(E\)</span> is false, you will give the bookmaker $<span class="math inline">\(s\)</span></li>
+<li>if <span class="math inline">\(E\)</span> is true, the bookmaker gives you $ <span class="math inline">\(z s\)</span></li>
+</ul>
+<p>The stake is the amount that you can lose if the proposition <span class="math inline">\(E\)</span> is false and the odds is the ratio of the amount you can win if <span class="math inline">\(E\)</span> is true to the amount you lose if <span class="math inline">\(E\)</span> is false.</p>
+<p>Using this indirect method, one measures your probability <span class="math inline">\(P(E | H)\)</span> by means of bets on <span class="math inline">\(E\)</span> between you and a hypothetical bookmaker. One can fix a value of the stake, say <span class="math inline">\(s = \$5\)</span> and bet on <span class="math inline">\(E\)</span> using different values of the odds <span class="math inline">\(z\)</span>. You decide which bets to accept and reject.</p>
+<p>How can one obtain one’s probability on the basis of these bets? First, note that you will accept any bet if the odds <span class="math inline">\(z\)</span> is sufficiently large. But as the odds <span class="math inline">\(z\)</span> is decreased, one will be less inclined to accept the bet, and for small values of odds, you will reject the bet. There will be one odds value <span class="math inline">\(z_0\)</span> where you will accept bets for odds <span class="math inline">\(z &gt; z_0\)</span>, and reject bets for <span class="math inline">\(z , z_0\)</span>. The value <span class="math inline">\(z_0\)</span> is often called the {} of the proposition <span class="math inline">\(E\)</span> based on your current information, denoted by <span class="math inline">\(O(E | H)\)</span>. We transform odds to a probability by the expression <span class="math display">\[
+P(E | H) = \frac{1}{1+O(E|H)}.
+\]</span></p>
+<p>Let us illustrate this indirect method of measuring probability for assessing my probability of the event <span class="math inline">\(A\)</span> that the Phillies are in the World Series. I decide on using the stake $5 and consider the following bets:</p>
+<ol type="1">
+<li>BET 1: At odds <span class="math inline">\(z = 1\)</span>, I will either lose $5 if <span class="math inline">\(A\)</span> is false or win $5 if <span class="math inline">\(A\)</span> is true.</li>
+<li>BET 2: At odds <span class="math inline">\(z = 2\)</span>, I will either lose $5 if <span class="math inline">\(A\)</span> is false or win $10 if <span class="math inline">\(A\)</span> is true.</li>
+<li>BET 3: At odds <span class="math inline">\(z = 4\)</span>, I will either lose $5 if <span class="math inline">\(A\)</span> is false or win $20 if <span class="math inline">\(A\)</span> is true.</li>
+<li>BET 4: At odds <span class="math inline">\(z = 10\)</span>, I will either lose $5 if <span class="math inline">\(A\)</span> is false or win $50 if <span class="math inline">\(A\)</span> is true.</li>
+</ol>
+<p>I will definitely not accept Bets 1 or 2 (the winning amounts are too small), and would accept Bet 4 which seems to have a generous odds. After some thought, suppose I am satisfied with a bet between Bet 3 and Bet 4 where the odds are <span class="math inline">\(z = 7\)</span>. Then my fair odds would be <span class="math inline">\(O(A | H) = 7\)</span> and my probability of “Phillies in the World Series” would be <span class="math display">\[
+P(A | H) = \frac{1}{1+7} = 0.125.
+\]</span></p>
+</section>
+<section id="true-and-measured-probabilities" class="level2" data-number="2.5">
+<h2 data-number="2.5" class="anchored" data-anchor-id="true-and-measured-probabilities"><span class="header-section-number">2.5</span> True and Measured Probabilities</h2>
+<p>We have discussed two methods, a direct method and an indirect method, for measuring the subjective probability of a proposition. Generally people will have trouble applying these methods since they have little experience in specifying probabilities. So in a typical application, one will not be able to specify his/her probability with high accuracy. Here it is helpful to distinguish a person’s <em>true probability</em> and her <em>measured probability</em>. A person’s true probability is the value she would obtain if she were able to make very fine comparisons in the likelihoods of events and had an infinite amount of time to make the assessment. But in real life, the person is unable to make fine comparisons and will spend only a finite amount of time on this task. So the specified probability <span class="math inline">\(P(E | H)\)</span> is simply a measured estimate at the true probability. Since our measuring methods, such as the balls in bag experiment, are relatively crude, there can be significant measurement error in the specification of this probability.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./index.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./bayes_rule.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Bayes Rule</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
