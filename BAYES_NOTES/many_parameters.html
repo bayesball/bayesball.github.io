@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.309">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Bayesian Inference - 7&nbsp; Many Parameter Inference</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<link href="./prior.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Many Parameter Inference</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Bayesian Inference</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./probability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Probability</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayes_rule.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Bayes Rule</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./proportion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning About a Proportion</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./single_parameter.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Single Parameter Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./prior.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Prior Distributions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./many_parameters.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Many Parameter Inference</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">7.1</span> Introduction</a></li>
+  <li><a href="#normal-sampling-with-both-parameters-unknown" id="toc-normal-sampling-with-both-parameters-unknown" class="nav-link" data-scroll-target="#normal-sampling-with-both-parameters-unknown"> <span class="header-section-number">7.2</span> Normal Sampling with Both Parameters Unknown</a>
+  <ul class="collapse">
+  <li><a href="#noninformative-prior" id="toc-noninformative-prior" class="nav-link" data-scroll-target="#noninformative-prior"> <span class="header-section-number">7.2.1</span> Noninformative Prior</a></li>
+  <li><a href="#using-a-informative-prior" id="toc-using-a-informative-prior" class="nav-link" data-scroll-target="#using-a-informative-prior"> <span class="header-section-number">7.2.2</span> Using a Informative Prior</a></li>
+  </ul></li>
+  <li><a href="#comparing-two-poisson-means" id="toc-comparing-two-poisson-means" class="nav-link" data-scroll-target="#comparing-two-poisson-means"> <span class="header-section-number">7.3</span> Comparing Two Poisson Means</a></li>
+  <li><a href="#learning-about-a-sample-size-and-a-probability" id="toc-learning-about-a-sample-size-and-a-probability" class="nav-link" data-scroll-target="#learning-about-a-sample-size-and-a-probability"> <span class="header-section-number">7.4</span> Learning about a Sample Size and a Probability</a>
+  <ul class="collapse">
+  <li><a href="#construction-of-a-prior" id="toc-construction-of-a-prior" class="nav-link" data-scroll-target="#construction-of-a-prior"> <span class="header-section-number">7.4.1</span> Construction of a prior</a></li>
+  <li><a href="#computation-of-the-posterior-and-inference" id="toc-computation-of-the-posterior-and-inference" class="nav-link" data-scroll-target="#computation-of-the-posterior-and-inference"> <span class="header-section-number">7.4.2</span> Computation of the posterior and inference</a></li>
+  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction"> <span class="header-section-number">7.4.3</span> Prediction</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Many Parameter Inference</span></h1>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">7.1</span> Introduction</h2>
+<p>In this chapter, we illustrate Bayesian learning from several two parameter problems. Building on the one-parameter posteriors of Chapter 4, we first illustrate learning about both parameters of the normal density with noninformative and informative priors. To compare two independent Poisson samples, we illustrate computing the marginal posterior density of the ratio of Poisson means. Last, we illustrate learning about both the sample size and the probability of success for binomial data where only the number of successes is observed. In the last example, we illustrate constructing a dependent prior for the two parameters in a baseball setting where historical data is available.</p>
+</section>
+<section id="normal-sampling-with-both-parameters-unknown" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="normal-sampling-with-both-parameters-unknown"><span class="header-section-number">7.2</span> Normal Sampling with Both Parameters Unknown</h2>
+<section id="noninformative-prior" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="noninformative-prior"><span class="header-section-number">7.2.1</span> Noninformative Prior</h3>
+<p>Suppose we observe <span class="math inline">\(y_1, ..., y_n\)</span> from a normal distribution with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>, where both parameters are unknown. We assume that we have little prior knowledge about the location of either the mean or the variance, and so we assign <span class="math inline">\((\mu, \sigma^2)\)</span> the usual noninformative prior <span class="math display">\[
+g(\mu, \sigma^2) = \frac{1}{\sigma^2}.
+\]</span></p>
+<p>Before we consider this situation, let’s review some results from the previous chapter.</p>
+<ol type="1">
+<li>Suppose we wish to learn about the normal mean <span class="math inline">\(\mu\)</span> when the variance <span class="math inline">\(\sigma^2\)</span> is assumed known. If we assign <span class="math inline">\(\mu\)</span> the noninformative uniform prior, then the posterior distribution for <span class="math inline">\(\mu\)</span> is normal with mean <span class="math inline">\(\bar y\)</span> and variance <span class="math inline">\(\sigma^2/n\)</span>.</li>
+<li>Suppose instead that we are interested in the variance <span class="math inline">\(\sigma^2\)</span> when the mean <span class="math inline">\(\mu\)</span> is known and the typical noninformative prior of the form <span class="math inline">\(1/\sigma^2\)</span> is assigned to the variance. Then <span class="math inline">\(\sigma^2\)</span> is distributed <span class="math inline">\(S \chi^{-2}_v\)</span> where <span class="math inline">\(v=n\)</span> and <span class="math inline">\(S = \sum_{i=1}^n (y_i-\mu)^2\)</span>. \end{enumerate}</li>
+</ol>
+<p>In the general case where both parameters are unknown, the likelihood function is given by <span class="math display">\[\begin{eqnarray*}
+L(\mu, \sigma^2)  =  \prod_{i=1}^n \frac{1}{\sqrt{2 \pi \sigma^2}} \exp\left(-\frac{1}{2 \sigma^2} (y_i - \mu)^2\right) \nonumber \\
+                  \propto  \frac{1}{(\sigma^2)^{n/2}} \exp\left(-\frac{1}{2 \sigma^2} \sum_{i=1}^n (y_i - \mu)^2\right) \nonumber \\
+\end{eqnarray*}\]</span> If the likelihood is combined with the noninformative prior, we obtain the joint posterior density <span class="math display">\[\begin{eqnarray*}
+g(\mu, \sigma^2 | y) \propto  \frac{1}{(\sigma^2)^{n/2+1}} \exp\left(-\frac{1}{2 \sigma^2} \sum_{i=1}^n (y_i - \mu)^2\right) \nonumber \\
+\end{eqnarray*}\]</span> Suppose one subtracts and adds the sample mean <span class="math inline">\(\bar y = \frac{1}{n} \sum_{i=1}^n y_i\)</span> in the expression <span class="math inline">\(\sum_{i=1}^n (y_i - \mu)^2\)</span>. Then one obtains the identity <span class="math display">\[
+\sum_{i=1}^n (y_i - \mu)^2 = \sum_{i=1}^n (y_i - \bar y)^2 + n (\mu - \bar y)^2 .
+\]</span> Using this identity and rearranging some terms, one obtains the following representation of the joint posterior density: <span class="math display">\[\begin{eqnarray*}
+g(\mu, \sigma^2 | y) \propto  \frac{1}{(\sigma^2)^{1/2}} \exp\left(-\frac{n}{2 \sigma^2} (\mu - \bar y)^2 \right)
+                     \times  \frac{1}{(\sigma^2)^{n/2}} \exp\left(-\frac{1}{2 \sigma^2} \sum_{i=1}^n (y_i - \bar y)^2\right). \nonumber \\
+\end{eqnarray*}\]</span></p>
+<p>What we have done is represent the joint posterior density as the product of terms <span class="math display">\[
+g(\mu, \sigma^2 | y) = g(\mu | \sigma^2, y) \times g(\sigma^2 | y) .
+\]</span> The first term in the product represents the posterior density of the mean <span class="math inline">\(\mu\)</span> conditional on the variance <span class="math inline">\(\sigma^2\)</span> – we recognize this as a normal density with mean <span class="math inline">\(\bar y\)</span> and variance <span class="math inline">\(\sigma^2/n\)</span>. The second term in the product is proportional to the marginal posterior density of <span class="math inline">\(\sigma^2\)</span>. From our earlier work, we recognize this marginal density as the ``scale times inverse chi-square” form <span class="math display">\[
+\sigma^2 \sim S \chi^{-2}_v,
+\]</span> where the degrees of freedom is <span class="math inline">\(v=n-1\)</span> and the sum of squares <span class="math inline">\(S = \sum_{i=1}^n (y_i-\bar y)^2\)</span>. This posterior density is commonly called the {} distribution.</p>
+<p>In this setting, typically one is interested in inferences about the normal mean <span class="math inline">\(\mu\)</span> and we base this inference on its marginal posterior density. This is obtained by integrating out <span class="math inline">\(\sigma^2\)</span> from the joint density. Using our earlier expressions, we write this integral as <span class="math display">\[
+g(\mu | y) \propto \int_0^\infty \frac{1}{(\sigma^2)^{n/2+1}}
+                      \exp\left(-\frac{1}{2 \sigma^2}\left[ S + (\mu - \bar y)^2 \right] \right) d\sigma^2.
+\]</span> At this point, it is helpful to recall the following integral identity for an inverse gamma integral <span class="math display">\[
+\int_0^\infty \frac{1}{y^{a+1}} \exp(-b y) dy = \frac{\Gamma(a)}{b^a} .
+\]</span> Since the above integral has this form with <span class="math display">\[
+a = n/2, \, \, b = S + (\mu - \bar y)^2,
+\]</span> we see the marginal posterior density for <span class="math inline">\(\mu\)</span> is given by <span class="math display">\[
+g(\mu | y) \propto \frac{1}{(S + (\mu - \bar y)^2)^{n/2}},
+\]</span> which has the t functional form. After some manipulation, one can show that the standardized random variable <span class="math display">\[
+\frac{\sqrt{n}(\mu - \bar y)}{\sqrt{S/(n-1)}} = \frac{\sqrt{n}(\mu - \bar y)}{s},
+\]</span> where <span class="math inline">\(s\)</span> is the sample standard deviation, has a standardized t distribution with <span class="math inline">\(n-1\)</span> degrees of freedom.</p>
+<p>This is a familiar result from sampling theory. If one samples from a normal population, then it is well-known that the ``t-statistic” <span class="math display">\[
+T = \frac{\sqrt{n}(\bar y - \mu)}{s}
+\]</span> has a t distribution with <span class="math inline">\(n-1\)</span> degrees of freedom. Our result switches the role of the data <span class="math inline">\(y\)</span> and the parameter <span class="math inline">\(\mu\)</span>. Assuming the noninformative prior on <span class="math inline">\(\mu, \sigma^2\)</span>, the standardized marginal posterior of <span class="math inline">\(\mu\)</span> (with <span class="math inline">\(y\)</span> fixed) has the same t distribution.</p>
+<p>What is the implication of this similarity of frequentist and Bayesian distribution results? It means that classical and Bayesian inferential procedures will agree in this setting. For example, suppose one is interested in a 95% interval estimate for the mean <span class="math inline">\(\mu\)</span>. Then standard frequentist interval has the form <span class="math display">\[
+\left(\bar y - t_{n-1, .025}\frac{s}{\sqrt{n}}, \bar y + t_{n-1, .025}\frac{s}{\sqrt{n}}\right),
+\]</span> where <span class="math inline">\(t_{n-1, .025}\)</span> is the upper .025 quantile of a t distribution with <span class="math inline">\(n-1\)</span> degrees of freedom. In repeated sampling from a normal distribution, this interval will have 95% frequentist coverage. This is equivalant to saying that <span class="math display">\[
+P^{Data}\left(\bar y - t_{n-1, .025}\frac{s}{\sqrt{n}} &lt; \mu &lt; \bar y + t_{n-1, .025}\frac{s}{\sqrt{n}}\right) = 0.95,
+\]</span> where the probability is taken over the {} observations <span class="math inline">\(y_1, ..., y_n\)</span>. From a Bayesian viewpoint, one can say that <span class="math display">\[
+P^\mu\left(\bar y - t_{n-1, .025}\frac{s}{\sqrt{n}} &lt; \mu &lt; \bar y + t_{n-1, .025}\frac{s}{\sqrt{n}} | y \right) = 0.95,
+\]</span> This means that the posterior probability that <span class="math inline">\(\mu\)</span> is contained in this fixed interval is 95%. The actual computed intervals of the standard frequentist and Bayesian procedures are identical. But the frequentist and Bayesian interpretations are very different. The frequentist statement refers to the characteristics of this interval in repeated sampling and the Bayesian statement refers to the property of this interval conditional on a particular set of observations <span class="math inline">\(y_1, ..., y_n\)</span>.</p>
+<p>A similar correspondence is true for inferences about the normal variance <span class="math inline">\(\sigma^2\)</span>. We earlier noted that the marginal posterior density for the variance has the form <span class="math inline">\(\sigma^2 \sim S \chi^{-2}_{n-1}\)</span>. Equivalently, one can say that the posterior of the function <span class="math display">\[
+\frac{S}{\sigma^2} = \frac{\sum_{i=1}^n (y_i - \bar y)^2}{\sigma^2}
+\]</span> is chi-squared with <span class="math inline">\(n-1\)</span> degrees of freedom. From a frequentist perspective, if <span class="math inline">\(\sigma^2\)</span> is fixed, then the statistic <span class="math display">\[
+Y = \frac{\sum_{i=1}^n (y_i - \bar y)^2}{\sigma^2}
+\]</span> has a chi-square (<span class="math inline">\(n-1\)</span>) sampling distribution. Again this correspondence means that Bayesian inferential statements about a variance (assuming a noninformative prior) will be numerically equivalent to the corresponding frequentist inferential statements. But the interpretation of these statements will be different. For an interval estimate, the posterior probability that a particular interval contains <span class="math inline">\(\sigma^2\)</span> is the given level. In contrast, the ``confidence” of the frequentist interval refers to the probability of containing the parameter in repeated sampling.</p>
+</section>
+<section id="using-a-informative-prior" class="level3" data-number="7.2.2">
+<h3 data-number="7.2.2" class="anchored" data-anchor-id="using-a-informative-prior"><span class="header-section-number">7.2.2</span> Using a Informative Prior</h3>
+<p>The form for the posterior distribution for <span class="math inline">\((\mu, \sigma^2)\)</span> in the noninformative case suggests the form for an informative conjugate prior. We assume that the prior for the mean <span class="math inline">\(\mu\)</span> conditional on the variance <span class="math inline">\(\sigma^2\)</span> has a normal distribution with mean <span class="math inline">\(\mu_0\)</span> and variance <span class="math inline">\(\sigma^2/n_0\)</span>. Then we assume the marginal prior on <span class="math inline">\(\sigma^2\)</span> is distributed <span class="math inline">\(S_0 \chi^{-2}_{v_0}\)</span>.</p>
+<p>How do we interpret these parameters?</p>
+<ol type="1">
+<li>The prior mean <span class="math inline">\(\mu_0\)</span> is a guess at the normal mean and <span class="math inline">\(n_0\)</span> is a number of ``prior observations” representing the sureness of this guess.</li>
+<li>A prior guess at the variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(S_0/v_0\)</span> and <span class="math inline">\(v_0\)</span> represents the precision of this guess expressed again in term of prior observations.</li>
+</ol>
+<p>If we apply this prior density, then it can be shown that the posterior density for <span class="math inline">\((\mu, \sigma^2)\)</span> has the same normal-inverse-chisquare form. First, if we condition on <span class="math inline">\(\sigma^2\)</span>, and combine the normal prior on <span class="math inline">\(\mu\)</span> with the normal likelihood, then the posterior density of <span class="math inline">\(\mu\)</span> is normal(<span class="math inline">\(\mu_1, \sigma^2/n_1\)</span>), where <span class="math display">\[
+\mu_1 = \frac{n_0}{n_0 + n} \mu_0 + \frac{n}{n_0 + n} \bar y,
+\]</span> and <span class="math inline">\(n_1 = n_0 + n\)</span>. Second, one can show that <span class="math display">\[
+\sigma^2 \sim S_1 \chi^{-2}_{v_1},
+\]</span> where <span class="math inline">\(v_1 = v_0 + n\)</span> and <span class="math display">\[
+S_1 = S_0 + S + \frac{n_0 n}{n_1} (\bar y - \mu_0)^2 .
+\]</span></p>
+</section>
+</section>
+<section id="comparing-two-poisson-means" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="comparing-two-poisson-means"><span class="header-section-number">7.3</span> Comparing Two Poisson Means</h2>
+<p>In Chapter 4, we considered the problem of learning about the mean number of visits to a particular website during weekdays in Summer 2009. We only included the visit counts during the weekdays, since we suspected that there was a different pattern of visits between weekdays and weekends (Saturday and Sunday). We suspect that there are fewer visits on weekends, but would be interested in estimating the magnitude of the ``weekend effect.”</p>
+<p>Suppose we observe two independent Poisson samples. Counts {<span class="math inline">\(y_{Ai}\)</span>} from the weekend days are assumed Poisson with mean <span class="math inline">\(\lambda_A\)</span> and counts {<span class="math inline">\(y_{Bj}\)</span>} from the weekday days are assumed Poisson with mean <span class="math inline">\(\lambda_B\)</span>. We are interested in learning about the ratio of means <span class="math display">\[
+\gamma=\frac{\lambda_B}{\lambda_A}.
+\]</span></p>
+<p>The first step is to find the likelihood of the parameters. Using the assumption of independence, the joint density of the counts {<span class="math inline">\(y_{Ai}\)</span>} and {<span class="math inline">\(y_{Bj}\)</span>} is given by <span class="math display">\[
+f(\{y_{Ai}\}, \{y_{Bj}\}|\lambda_A, \lambda_B) = \left(\prod_i\frac{ \lambda_A^{y_{Ai}}\exp(-\lambda_A)}{y_{Ai}!}\right)
+                            \left(\prod_j\frac{ \lambda_B^{y_{Bi}}\exp(-\lambda_B)}{y_{Bj}!}\right).
+\]</span> Following the work in Chapter 4, the likelihood can be expressed as <span class="math display">\[
+L(\lambda_A, \lambda_B) = \exp(-n_A \lambda_A) \lambda_A^{s_A} \exp(-n_B \lambda_B) \lambda_B^{s_B},
+\]</span> where <span class="math inline">\(n_A\)</span> and <span class="math inline">\(s_A\)</span> are respectively the sample size and the sum of observations from the first sample, and <span class="math inline">\(n_B\)</span> and <span class="math inline">\(s_B\)</span> are the analogous quantities from the second sample.</p>
+<p>Suppose we reparametrize the likelihood in terms of the first Poisson mean <span class="math inline">\(\theta = \lambda_A\)</span> and the ratio of means <span class="math inline">\(\gamma=\frac{\lambda_B}{\lambda_A}\)</span>. Since <span class="math inline">\(\lambda_B = \theta \gamma\)</span>, the likelihood function in terms of the new parameters is given by <span class="math display">\[
+L(\theta, \gamma) = \exp(-n_A \theta) \theta^{s_A} \exp(-n_B (\theta\gamma)) (\theta\gamma)^{s_B}.
+\]</span></p>
+<p>Suppose prior information about the means is expressed through the parameters <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\gamma\)</span>. We assume that <span class="math inline">\(\theta\)</span> and <span class="math inline">\(\gamma\)</span> are independent with <span class="math display">\[
+\theta \sim Gamma(a_0, b_0), \, \, \gamma \sim Gamma(a_g, b_g).
+\]</span> Then the posterior density of <span class="math inline">\((\theta, \gamma)\)</span> is given, up to a proportionality constant, by <span class="math display">\[\begin{eqnarray*}
+g(\theta, \gamma | {\rm data})  \propto  \exp(-n_A \theta) \theta^{s_A} \exp(-n_B (\theta\gamma)) (\theta\gamma)^{s_B} \nonumber \\
+                  \times  \theta^{a_0-1} \exp(-b_0 \theta) \gamma^{a_g-1} \exp(-b_g \gamma) .\nonumber \\
+\end{eqnarray*}\]</span> Our interest is in the ratio of means <span class="math inline">\(\gamma\)</span> and <span class="math inline">\(\theta\)</span> is a nuisance parameter. We learn about <span class="math inline">\(\gamma\)</span> by its marginal posterior density obtained from integrating out <span class="math inline">\(\theta\)</span> from the joint posterior density. <span class="math display">\[
+g(\gamma | {\rm data}) = \int_0^\infty  g(\theta, \gamma | {\rm data}) d\theta .
+\]</span> When one combines terms, one sees that, for a fixed value of <span class="math inline">\(\gamma\)</span>, the integral has a gamma form in <span class="math inline">\(\theta\)</span>. So one is able to analytically integrate out <span class="math inline">\(\theta\)</span>, resulting in the marginal posterior density <span class="math display">\[
+g(\gamma | {\rm data}) \propto \frac{\gamma^{s_B+a_g-1} \exp(-b_g \gamma)}{(n_A+n_B \gamma + b_0)^{s_A + s_B + a_0}}.
+\]</span></p>
+<p>In our example, we first construct priors for <span class="math inline">\(\theta\)</span>, the mean number of website visits during weekend days, and <span class="math inline">\(\gamma\)</span>, the ratio of the mean weekday visits and the mean weekday visits. We choose the independent priors <span class="math display">\[
+\theta \sim Gamma(2, 1), \, \, \gamma \sim Gamma(8, 8).
+\]</span> The prior for <span class="math inline">\(\theta\)</span> reflects vague information about the mean number of visits during weekends, and the prior for <span class="math inline">\(\gamma\)</span> reflects the belief that website visits for weekends and weekdays are similar in size.</p>
+<p>Next, we observe the following individual counts of visits for <span class="math inline">\(n_A = 10\)</span> weekend days and <span class="math inline">\(n_B = 21\)</span> weekdays.</p>
+<pre><code>weekend counts
+ 7 12 11 12 12 17 17 18 20 17
+
+weekday counts
+20 30 22 20 20 17 21 26 22 30 36 15 30 27 22 23 18 24 28 23 12</code></pre>
+<p>From these data, we compute <span class="math inline">\(s_A = 143\)</span> and <span class="math inline">\(s_B = 486\)</span>. With the appropriate substitutions, the marginal posterior density of <span class="math inline">\(\gamma\)</span> is given by <span class="math display">\[
+g(\gamma | {\rm data}) \propto \frac{\gamma^{486+8-1} \exp(-8 \gamma)}{(10 + 21 \gamma + 1)^{143 + 486 + 2}}.
+\]</span></p>
+<p>In summarizing this marginal posterior for <span class="math inline">\(\gamma\)</span>, we learn that the posterior mode is 1.66. So the website visits tend to be 66% higher on weekdays than on the weekends. In addition, a 90% interval estimate for <span class="math inline">\(\gamma\)</span> is given by (1.44, 1.92). Since both values are larger than 1, one is pretty confident that there are more visits on weekdays than weekends.</p>
+</section>
+<section id="learning-about-a-sample-size-and-a-probability" class="level2" data-number="7.4">
+<h2 data-number="7.4" class="anchored" data-anchor-id="learning-about-a-sample-size-and-a-probability"><span class="header-section-number">7.4</span> Learning about a Sample Size and a Probability</h2>
+<p>In the game of baseball, a batter gets an opportunity at the plate called an {}. He wants to get a base hit and a standard measure of hitting performance is the batting average <span class="math display">\[
+AVG = \frac{H}{AB},
+\]</span> where <span class="math inline">\(H\)</span> is the number of hits and <span class="math inline">\(AB\)</span> the number of at-bats during a baseball season. A standard model for hitting assumes the number of hits <span class="math inline">\(H\)</span> follows a binomial distribution with sample size <span class="math inline">\(AB\)</span> and probability of success <span class="math inline">\(p\)</span>. The hitting ability of the batter can be measured by the probability of a hit <span class="math inline">\(p\)</span>.</p>
+<p>Suppose the player has obtained 200 hits during the season. What have you learned about the number of at-bats and probability of hit for this player? Can you predict the number of hits this player will get for the following season?</p>
+<p>This problem is a bit unusual since one does not know the number of at-bats AB or the probability <span class="math inline">\(p\)</span> for this player. But we have prior knowledge about the number of at-bats and the hitting probability that we can model by a prior distribution <span class="math inline">\(g(AB, p)\)</span>. By combining this prior with the likelihood, we can learn about the at-bats and probability of success by the posterior distribution, and we can use the predictive distribution to learn about the number of hits in the following season.</p>
+<section id="construction-of-a-prior" class="level3" data-number="7.4.1">
+<h3 data-number="7.4.1" class="anchored" data-anchor-id="construction-of-a-prior"><span class="header-section-number">7.4.1</span> Construction of a prior</h3>
+<p>We construct a prior for the pair (<span class="math inline">\(AB, p\)</span>) by decomposing the prior as the product <span class="math display">\[
+g(AB, p) = g(AB) g(p | AB),
+\]</span> and separately construct the marginal prior for the at-bats <span class="math inline">\(AB\)</span> and the prior of the hitting probability <span class="math inline">\(p\)</span> conditional on the at-bats <span class="math inline">\(AB\)</span>.</p>
+<p>The player is known to be a full-time player which means that the player obtains between 400 and 700 at-bats in a season. We can construct a prior for <span class="math inline">\(AB\)</span> by looking at the distribution of at-bats for all players in a particular season. Figure 1 shows a histogram of the at-bats and the smooth curve represents a density estimate. We can use this density estimate as our prior density for <span class="math inline">\(AB\)</span>.</p>
+<p>Next, we construct a prior on the hitting probability <span class="math inline">\(p\)</span> conditional on the number of at-bats <span class="math inline">\(AB\)</span>. We don’t know the player’s hitting probability, but we can collect the batting averages <span class="math inline">\(AVG = H/AB\)</span> for all full-time players. Figure 2 shows a scatterplot of <span class="math inline">\(AVG\)</span> against the at-bats <span class="math inline">\(AB\)</span>. We see from the superimposed least-squares fit that there is a positive relationship between the batting average and at-bats. So our prior mean for <span class="math inline">\(p\)</span> will depend on <span class="math inline">\(AB\)</span>. We will use a beta density for <span class="math inline">\(p\)</span> of the form <span class="math display">\[
+g(p | AB) \propto p^{K \eta - 1} (1 - p)^{K(1-\eta)-1},
+\]</span> where <span class="math inline">\(\eta\)</span> is the mean and <span class="math inline">\(K\)</span> is the precision parameter. We use the least-squares fit to obtain the prior mean <span class="math display">\[
+\eta = E(p | AB) = 0.2208886 +   0.0001148 \times AB .
+\]</span> It is more difficult to assess <span class="math inline">\(K\)</span> since this reflects the variability in the hitting probability and Figure ?? shows the variability in the batting average <span class="math inline">\(AVG = H/AB\)</span>. Using techniques from the hierarchical modeling chapter, we choose the precision value <span class="math inline">\(K = 400\)</span>.</p>
+<p>Figure 3 displays a contour plot of the joint prior on <span class="math inline">\((AB, p)\)</span>. Note that the beliefs about the number of at-bats are pretty vague and <span class="math inline">\(AB\)</span> and the hitting probability <span class="math inline">\(p\)</span> are positively correlated as expected.</p>
+</section>
+<section id="computation-of-the-posterior-and-inference" class="level3" data-number="7.4.2">
+<h3 data-number="7.4.2" class="anchored" data-anchor-id="computation-of-the-posterior-and-inference"><span class="header-section-number">7.4.2</span> Computation of the posterior and inference</h3>
+<p>The construction of the prior distribution was the biggest task in this problem. It is straightforward to compute and summarize the posterior distribution.</p>
+<p>We observe the number of hits <span class="math inline">\(H\)</span> for our player. The likelihood is simply the probability of obtaining <span class="math inline">\(H\)</span> hits given values of the parameters <span class="math inline">\(AB\)</span> and <span class="math inline">\(p\)</span> which is given by the binomial form <span class="math display">\[
+L(AB, p) = {AB \choose H} p^H (1- p)^{AB - H}.
+\]</span> Once <span class="math inline">\(H\)</span> is observed, the posterior density of <span class="math inline">\((AB, p)\)</span> is equal to the product of the prior and the likelihood: <span class="math display">\[
+g(AB, p | H) \propto g(AB, p) L(AB, p)
+\]</span> In the following we will pretend that the number of at-bats <span class="math inline">\(AB\)</span> is continuous. This will simplify the computational strategy in summarizing the posterior distribution.</p>
+<p>Our player is observed to get <span class="math inline">\(H = 200\)</span> hits during the season. Figure 4 displays the joint posterior of <span class="math inline">\((AB, p)\)</span>. Comparing Figure 3 and Figure 4, it appears that 200 hits indicates that the player had a large number of at-bats and is a good hitter and the posterior is concentrated on large values of <span class="math inline">\(AB\)</span> and <span class="math inline">\(p\)</span>. By computing the joint posterior density on a fine grid, and then simulating from the grid, one can obtain simulated draws from the marginal posterior densities of <span class="math inline">\(AB\)</span> and <span class="math inline">\(p\)</span>. Figure 5 presents density estimates of these marginal posterior densities. The simulated samples can easily be used to construct interval estimates for each parameter.</p>
+</section>
+<section id="prediction" class="level3" data-number="7.4.3">
+<h3 data-number="7.4.3" class="anchored" data-anchor-id="prediction"><span class="header-section-number">7.4.3</span> Prediction</h3>
+<p>Recall that we were interested in predicting the number of hits our player would get in the following season. If we denote this future hit value by <span class="math inline">\(\tilde H\)</span>, then we learn about <span class="math inline">\(\tilde H\)</span> by its posterior predictive density <span class="math inline">\(f(\tilde H | H)\)</span>. One can express this by the integral <span class="math display">\[
+f(\tilde H | H) \int f(\tilde H | AB, p, H) g(AB, p | H) dAB dp,
+\]</span> where <span class="math inline">\(f(\tilde H | AB, p, H)\)</span> is the binomial probability <span class="math display">\[
+f(\tilde H | AB, p, H) = {AB \choose \tilde H} p^{\tilde H} (1-p)^{AB - \tilde H},
+\]</span> and <span class="math inline">\(g(AB, p | H)\)</span> is the joint posterior density of at-bats and probability of a hit. It is not possible to compute this integral analytically, but it is straightforward to simulate from this distribution by first simulating a pair (<span class="math inline">\(AB, p)\)</span> from the joint posterior distribution, and th</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./prior.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Prior Distributions</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
