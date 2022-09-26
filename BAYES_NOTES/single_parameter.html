@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.309">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Bayesian Inference - 5&nbsp; Single Parameter Inference</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<link href="./proportion.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Single Parameter Inference</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Bayesian Inference</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./probability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Probability</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayes_rule.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Bayes Rule</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./proportion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning About a Proportion</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./single_parameter.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Single Parameter Inference</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">5.1</span> Introduction</a></li>
+  <li><a href="#learning-about-a-normal-mean-with-known-variance" id="toc-learning-about-a-normal-mean-with-known-variance" class="nav-link" data-scroll-target="#learning-about-a-normal-mean-with-known-variance"> <span class="header-section-number">5.2</span> Learning about a Normal Mean with Known Variance</a>
+  <ul class="collapse">
+  <li><a href="#a-single-observation" id="toc-a-single-observation" class="nav-link" data-scroll-target="#a-single-observation"> <span class="header-section-number">5.2.1</span> A single observation</a></li>
+  <li><a href="#multiple-observations" id="toc-multiple-observations" class="nav-link" data-scroll-target="#multiple-observations"> <span class="header-section-number">5.2.2</span> Multiple observations</a></li>
+  <li><a href="#inference-with-a-noninformative-prior" id="toc-inference-with-a-noninformative-prior" class="nav-link" data-scroll-target="#inference-with-a-noninformative-prior"> <span class="header-section-number">5.2.3</span> Inference with a noninformative prior</a></li>
+  <li><a href="#inference-with-large-samples" id="toc-inference-with-large-samples" class="nav-link" data-scroll-target="#inference-with-large-samples"> <span class="header-section-number">5.2.4</span> Inference with large samples</a></li>
+  </ul></li>
+  <li><a href="#learning-about-a-normal-variance-with-known-mean" id="toc-learning-about-a-normal-variance-with-known-mean" class="nav-link" data-scroll-target="#learning-about-a-normal-variance-with-known-mean"> <span class="header-section-number">5.3</span> Learning About a Normal Variance with Known Mean</a>
+  <ul class="collapse">
+  <li><a href="#inference-using-an-informative-prior" id="toc-inference-using-an-informative-prior" class="nav-link" data-scroll-target="#inference-using-an-informative-prior"> <span class="header-section-number">5.3.1</span> Inference using an informative prior</a></li>
+  <li><a href="#inference-using-a-noninformative-prior" id="toc-inference-using-a-noninformative-prior" class="nav-link" data-scroll-target="#inference-using-a-noninformative-prior"> <span class="header-section-number">5.3.2</span> Inference using a noninformative prior</a></li>
+  <li><a href="#an-example" id="toc-an-example" class="nav-link" data-scroll-target="#an-example"> <span class="header-section-number">5.3.3</span> An example</a></li>
+  </ul></li>
+  <li><a href="#learning-about-a-poisson-mean" id="toc-learning-about-a-poisson-mean" class="nav-link" data-scroll-target="#learning-about-a-poisson-mean"> <span class="header-section-number">5.4</span> Learning About a Poisson Mean</a>
+  <ul class="collapse">
+  <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1"> <span class="header-section-number">5.4.1</span> Introduction</a></li>
+  <li><a href="#learning-about-the-mean" id="toc-learning-about-the-mean" class="nav-link" data-scroll-target="#learning-about-the-mean"> <span class="header-section-number">5.4.2</span> Learning about the Mean</a></li>
+  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction"> <span class="header-section-number">5.4.3</span> Prediction</a></li>
+  </ul></li>
+  <li><a href="#learning-about-an-exponential-threshold-parameter" id="toc-learning-about-an-exponential-threshold-parameter" class="nav-link" data-scroll-target="#learning-about-an-exponential-threshold-parameter"> <span class="header-section-number">5.5</span> Learning About an Exponential Threshold Parameter</a></li>
+  <li><a href="#using-mixtures-of-conjugate-priors" id="toc-using-mixtures-of-conjugate-priors" class="nav-link" data-scroll-target="#using-mixtures-of-conjugate-priors"> <span class="header-section-number">5.6</span> Using Mixtures of Conjugate Priors</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Single Parameter Inference</span></h1>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">5.1</span> Introduction</h2>
+<p>In this chapter, we introduce Bayesian thinking for several one-parameter problems. We first consider normally distributed data and discuss learning about the normal mean given a known value of the variance and learning about the normal variance given a known mean. These situations are artificial, but we will learn particular forms of posterior distributions that will be used in the case where both parameters of the normal population are unknown. We continue by illustrating Bayesian inference for a Poisson mean and an exponential location parameter. In all examples, the parameter is assigned a conjugate prior and the posterior density has a convenient functional form and easy to summarize. One way of generalizing the class of conjugate priors is by use of mixtures and we illustrate the use of a simple mixture in estimating a Poisson mean.</p>
+</section>
+<section id="learning-about-a-normal-mean-with-known-variance" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="learning-about-a-normal-mean-with-known-variance"><span class="header-section-number">5.2</span> Learning about a Normal Mean with Known Variance</h2>
+<section id="a-single-observation" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="a-single-observation"><span class="header-section-number">5.2.1</span> A single observation</h3>
+<p>A basic problem in statistics is to learn about the mean of a normal population. Suppose we observe a single observation <span class="math inline">\(y\)</span> from a normal population with mean <span class="math inline">\(\theta\)</span> and known variance <span class="math inline">\(\sigma^2\)</span>. Here the likelihood function is the sampling density of <span class="math inline">\(y\)</span> viewed as a function of the parameter <span class="math inline">\(\theta\)</span>. <span class="math display">\[
+L(\theta) = \frac{1}{\sqrt{2 \pi \sigma^2}} \exp\left(-\frac{(y-\theta)^2}{2 \sigma^2}\right).
+\]</span> As an example, suppose Joe takes an IQ test and his score is <span class="math inline">\(y\)</span>. Joe’s ``true IQ” is <span class="math inline">\(\theta\)</span> – this would represent Joe’s average IQ test score if he were able to take the test an infinite number of times. We assume that his test score <span class="math inline">\(y\)</span> is normally distributed with mean equal to his true IQ and standard deviation <span class="math inline">\(\sigma\)</span>. Here <span class="math inline">\(\sigma\)</span> represents the measurement error of the IQ test and we know from published reports that the standard deviation <span class="math inline">\(\sigma = 10\)</span>.</p>
+<p>Suppose one has some prior beliefs about the location of the mean and one represents these beliefs by a normal curve with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\tau\)</span>. That is, <span class="math display">\[
+g(\mu) = \frac{1}{\sqrt{2 \pi \tau^2}} \exp\left(-\frac{(\theta-\mu)^2}{2 \tau^2}\right).
+\]</span> Here <span class="math inline">\(\mu\)</span> represents the person’s best guess at the value of the normal mean, and <span class="math inline">\(\tau\)</span> reflects the sureness of this guess. In our IQ example, suppose one believes that Joe has average intelligence so one sets the prior mean <span class="math inline">\(\mu = 100\)</span>. Moreover, one is pretty confident (with probability 0.90) that <span class="math inline">\(\mu\)</span> falls in the interval (81, 119). This information can be matched with the standard deviation <span class="math inline">\(\tau = 15\)</span>.</p>
+<p>After we observe the observation <span class="math inline">\(y\)</span>, we wish to find the posterior density of the mean <span class="math inline">\(\theta\)</span>. By Bayes’ rule, the posterior density is proportional to the product of the prior of the likelihood. <span class="math display">\[
+g(\theta | y) \propto g(\theta) L(\theta).
+\]</span> To find the functional form of this posterior, we combine the terms in the exponent. <span class="math display">\[\begin{eqnarray*}
+g(\theta | y)  \propto  \exp\left(-\frac{(\theta-\mu)^2}{2 \tau^2}\right) \times \exp\left(-\frac{(y-\theta)^2}{2 \sigma^2}\right) \\
+       =  \exp\left(-\frac{(\theta-\mu)^2}{2 \tau^2}-\frac{(y-\theta)^2}{2 \sigma^2}\right).  \nonumber \\
+\end{eqnarray*}\]</span> By completing the square, one can show that the exponent is equal to <span class="math display">\[
+-\frac{1}{2}\left(\frac{1}{\tau^2}+\frac{1}{\sigma^2}\right)
+\left[\theta^2 - 2 \left(\frac{\mu/\tau^2 + y/\sigma^2}{1/\tau^2+1/\sigma^2}\right) +
+\left(\frac{\mu/\tau^2 + y/\sigma^2}{1/\tau^2+1/\sigma^2}\right)^2 \right]
+\]</span> <span class="math display">\[
+= -\frac{1}{2}\left(\frac{1}{\tau^2}+\frac{1}{\sigma^2}\right)
+\left(\theta -  \frac{\mu/\tau^2 + y/\sigma^2}{1/\tau^2+1/\sigma^2} \right)^2 .
+\]</span> We see then that, up to a proportionality constant, the posterior density has the normal functional form <span class="math display">\[
+g(\theta | y) \propto \exp\left(-\frac{1}{2 \tau_1^2} (\theta - \mu_1)^2 \right),
+\]</span> where the posterior mean and posterior variance have the form <span class="math display">\[
+\mu_1 = \frac{\mu/\tau^2 + y/\sigma^2}{1/\tau^2+1/\sigma^2}, \,\, \tau_1^2 = \frac{1}{1/\tau^2+1/\sigma^2}.
+\]</span></p>
+<p>One can see how the posterior combines the information in the prior and the data by using the notion of {}. The precision is defined to be the reciprocal of the variance. The prior precision, denoted <span class="math inline">\(P_0\)</span>, is the reciprocal of the prior variance <span class="math display">\[
+P_0 = 1/\tau^2.
+\]</span> In a similar fashion, the data precision, denoted by <span class="math inline">\(P_D\)</span>, is the reciprocal of the data variance <span class="math display">\[
+P_D = 1/\sigma^2.
+\]</span> The posterior precision, denoted by <span class="math inline">\(P_1 = 1/\tau_1^2\)</span>, is found simply by adding the prior precision and the data precision: <span class="math display">\[
+P_1 = P_0 + P_D.
+\]</span> The posterior mean <span class="math inline">\(\mu_1\)</span> is the weighted average of the prior mean <span class="math inline">\(\mu\)</span> and the observation <span class="math inline">\(y\)</span>, where the weights are proportional to the precisions: <span class="math display">\[
+\mu_1 = \frac{P_0}{P_0 + P_D} \mu + \frac{P_D}{P_0 + P_D} y .
+\]</span></p>
+<p>Returning to our example, suppose Joe’s score on the IQ test is <span class="math inline">\(y = 120\)</span>. What have we learned about his true IQ <span class="math inline">\(\theta\)</span>? Table 4.1 illustrates the calculations of the posterior distribution.</p>
+<ol type="1">
+<li>We first compute the precision <span class="math inline">\(P_0 = 1/\tau^2\)</span> of the prior and the precision <span class="math inline">\(P_D = 1/\sigma^2\)</span> of the data.</li>
+<li>The posterior precision <span class="math inline">\(P_1\)</span> is the sum of the prior precision and the data precision. <span class="math display">\[
+P_1 = P_0 + P_D = 0.0044 + 0.0100 = 0.0144 .
+\]</span></li>
+<li>The variance of the posterior <span class="math inline">\(\tau_1^2\)</span> is the reciprocal of the posterior precision.</li>
+<li>We compute the posterior mean <span class="math inline">\(\mu_1\)</span> that is a weighted average of the prior mean and the observation: <span class="math display">\[
+\mu_1 = \frac{0.0100}{0.0144} \times 100 + \frac{0.0044}{0.0144} \times 113.8
+\]</span></li>
+</ol>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Estimate</th>
+<th>Variance</th>
+<th>Precision</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Prior</td>
+<td>100</td>
+<td>225</td>
+</tr>
+<tr class="even">
+<td>Data</td>
+<td>120</td>
+<td>100</td>
+</tr>
+<tr class="odd">
+<td>Posterior</td>
+<td>113.8</td>
+<td>69.23</td>
+</tr>
+</tbody>
+</table>
+<p>Before sampling, one believed that Joe was of average intelligence and the prior mean was <span class="math inline">\(\mu = 100\)</span>. After the IQ test <span class="math inline">\(y = 120\)</span> is observed, one’s opinion about Joe’s intelligence has changed and the posterior mean is now at <span class="math inline">\(\mu_1 = 113.8\)</span>. The posterior mean, as expected, falls between the prior mean and the observed test score. The posterior mean is closer to the test score than the prior mean – this is due to the fact that there is more information (measured by the precision) in the data value than the prior mean. Also note that the posterior variance is smaller than either the prior variance and the data variance. Since the posterior precision is the sum of the prior precision and data precision, one gains information by adding the information from the two sources, and this will result in a smaller posterior variance.</p>
+<p>Although we have focused on learning about Joe’s true IQ <span class="math inline">\(\theta\)</span>, one may be interested in predicting Joe’s test score on a future test. Denote a future test score by <span class="math inline">\(\tilde y\)</span>. We are interested in obtaining the predictive density of <span class="math inline">\(\tilde y\)</span> denoted by <span class="math inline">\(f(\tilde y)\)</span>. To obtain this density, we apply some results from normal sampling theory. By adding and subtracting <span class="math inline">\(\theta\)</span> we write the random variable <span class="math inline">\(\tilde y\)</span> as <span class="math display">\[
+\tilde y = W + \theta,
+\]</span> where <span class="math inline">\(W = \tilde y - \theta\)</span>. Suppose the current beliefs about <span class="math inline">\(\theta\)</span> are represented by a normal density with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\tau^2\)</span>. For a given value of <span class="math inline">\(\theta\)</span>, the future observation <span class="math inline">\(\tilde y\)</span> is normal with mean <span class="math inline">\(\theta\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. Equivalently, the distribution of <span class="math inline">\(W = \tilde y - \theta\)</span> is normal with mean 0 and variance <span class="math inline">\(\sigma^2\)</span>. Since this distribution of W doesn’t depend on <span class="math inline">\(\theta\)</span>, this also represents the unconditional distribution of W. It can be shown that the random variables <span class="math inline">\(W\)</span> and <span class="math inline">\(\theta\)</span> are independent. Since <span class="math inline">\(\tilde y\)</span> is the sum of two independent normal variates, it follows that the distribution for <span class="math inline">\(\tilde y\)</span> will also be normal with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2 + \tau^2\)</span>.</p>
+<p>We have already observed Joe’s test score of 120 and the posterior distribution of his true IQ <span class="math inline">\(\theta\)</span> is <span class="math inline">\(N(113.8, \sqrt{69.23})\)</span>. We wish to construct a 90% prediction interval for the score of a future test <span class="math inline">\(\tilde y\)</span>. Applying the above result, the future test score will be normal with mean <span class="math inline">\(\mu_1 = 113.8\)</span> and variance <span class="math inline">\(\sigma^2 + \tau_1^2 = 100 + 69.23 = 169.23\)</span>. So the interval <span class="math display">\[
+(113.8 - 1.645 \sqrt{169.23}, 113.8 + 1.645 \sqrt{169.23})
+\]</span> will cover 90% of the predictive distribution of the future test score.</p>
+</section>
+<section id="multiple-observations" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="multiple-observations"><span class="header-section-number">5.2.2</span> Multiple observations</h3>
+<p>In our discussion, we observed only a single observation. Suppose now that we observe a random sample <span class="math inline">\(y_1, ..., y_n\)</span> from a normal distribution with mean <span class="math inline">\(\theta\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. In this case, the likelihood function for <span class="math inline">\(\theta\)</span> is the product of the sampling densities <span class="math display">\[
+L(\theta) = \prod_{i=1}^n \exp\left(-\frac{(y_i-\theta)^2}{2 \sigma^2}\right).
+\]</span> Suppose we subtract and add the sample mean <span class="math inline">\(\bar y = \frac{1}{n}\sum_{i=1}^n y_i\)</span> to the term in parentheses in the exponent: <span class="math display">\[
+L(\theta) = \prod_{i=1}^n \exp\left(-\frac{(y_i - \bar y + \bar y -\theta)^2}{2 \sigma^2}\right).
+\]</span> If we expand the quadratic term and simplify, ignoring multiplicative constants not depending on <span class="math inline">\(\theta\)</span>, one can show that <span class="math display">\[
+L(\theta) = \exp\left(-\frac{n (\bar y - \theta)^2}{2 \sigma^2}\right).
+\]</span> What we have shown is that <span class="math inline">\(\bar y\)</span> is a sufficient statistic for <span class="math inline">\(\theta\)</span>. Also it shows that the multiple observation situation is really equivalent to observing the {} data value <span class="math inline">\(\bar y\)</span> that is normally distributed with mean <span class="math inline">\(\theta\)</span> and variance <span class="math inline">\(\sigma^2/n\)</span>.</p>
+<p>Suppose a normal(<span class="math inline">\(\mu, \tau^2\)</span>) prior is chosen for <span class="math inline">\(\theta\)</span>. Then, by applying the results of the previous section, the posterior distribution will be normal(<span class="math inline">\(\mu_1, \tau_1^2)\)</span> where the mean and variance are given by <span class="math display">\[
+\mu_1 = \frac{\mu/\tau^2 + \bar y n/\sigma^2}{1/\tau^2+n/\sigma^2}, \,\, \tau_1^2 = \frac{1}{1/\tau^2+n/\sigma^2}.
+\]</span></p>
+</section>
+<section id="inference-with-a-noninformative-prior" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="inference-with-a-noninformative-prior"><span class="header-section-number">5.2.3</span> Inference with a noninformative prior</h3>
+<p>Suppose that one has little prior information about the location of the normal mean. This means one believes that every possible IQ value (within reasonable limits) is equally likely. This lack of knowledge can be represented by a uniform curve <span class="math display">\[
+g(\theta) = c, \, \, \infty &lt; \theta &lt; \infty .
+\]</span> One might object to this choice of prior since <span class="math inline">\(g\)</span> is not a proper probability density. However this choice results in a posterior density for <span class="math inline">\(\theta\)</span> that is indeed proper. In the case where a random sample of <span class="math inline">\(n\)</span> is taken, then the posterior density will be given by <span class="math display">\[\begin{eqnarray*}
+g(\theta | y)  \propto  L(\theta) g(\theta)  \nonumber \\
+  =  \exp\left(-\frac{n (\bar y - \theta)^2}{2 \sigma^2}\right)
+\end{eqnarray*}\]</span> We recognize this posterior as a normal density with mean <span class="math inline">\(\bar y\)</span> and variance <span class="math inline">\(\sigma^2/n\)</span>.</p>
+<p>If we use this uniform prior, then Bayesian inference will mimic the usual frequentist inference about a mean with known variance. For example, suppose we want to construct a 95% Bayesian interval estimate. The ``equal-tails” interval <span class="math display">\[
+(\bar y - 1.96 \frac{\sigma}{\sqrt{n}}, \bar y + 1.96 \frac{\sigma}{\sqrt{n}})
+\]</span> covers the central 95% of the posterior distribution of <span class="math inline">\(\theta\)</span>. This interval also has a frequentist 95% probability of coverage in repeated sampling</p>
+</section>
+<section id="inference-with-large-samples" class="level3" data-number="5.2.4">
+<h3 data-number="5.2.4" class="anchored" data-anchor-id="inference-with-large-samples"><span class="header-section-number">5.2.4</span> Inference with large samples</h3>
+<p>Suppose one’s prior beliefs about a mean are modeled by a normal distribution and one observes a very large sample. What is the impact of this large sample size on the posterior distribution? As an example, suppose I’m interested in learning about the mean height <span class="math inline">\(\theta\)</span> of undergraduate female students at my university. Based on my knowledge, my ``best guess” at <span class="math inline">\(\theta\)</span> is 65.5 inches and I am 90% confident that the mean is within 2 inches of my best guess. I can represent this information by a normal curve with mean <span class="math inline">\(\mu = 65.5\)</span> and standard deviation <span class="math inline">\(\tau = 1.2\)</span>. A large sample of <span class="math inline">\(n = 427\)</span> female students are asked about their height and we observe a sample mean of <span class="math inline">\(\bar y = 64.71\)</span> inches. What have we learned about the population mean height <span class="math inline">\(\theta\)</span>? For this example, we will assume that we know the the standard deviation of the population of female heights is <span class="math inline">\(\sigma = 3\)</span> inches.</p>
+<p>Table 4.2 shows the posterior calculations for this example. The first row contains the mean, standard deviation, variance and precision for our prior, and the second row contains the same quantities for the data. Here the standard error of the mean is <span class="math inline">\(\sigma/\sqrt{n} = 3/\sqrt{427} = 0.145\)</span>, the data variance is <span class="math inline">\(\sigma^2/n = 0.021\)</span> and the data precision is <span class="math inline">\(n/\sigma^2 = 47.56\)</span>. The posterior mean is given by <span class="math display">\[
+E(\theta | y) = \frac{0.69}{0.69 + 47.56} \times 65.5 + \frac{47.56}{0.69 + 47.56} \times 64.71 = 64.72.
+\]</span></p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th>Estimate</th>
+<th>Standard Deviation</th>
+<th>Variance</th>
+<th>Precision</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Prior</td>
+<td>65.5</td>
+<td>1.2</td>
+<td>1.44</td>
+<td>0.69</td>
+</tr>
+<tr class="even">
+<td>Data</td>
+<td>64.71</td>
+<td>0.145</td>
+<td>0.021</td>
+<td>47.56</td>
+</tr>
+<tr class="odd">
+<td>Posterior</td>
+<td>64.72</td>
+<td>0.144</td>
+<td>0.0207</td>
+<td>48.25</td>
+</tr>
+</tbody>
+</table>
+<p>Recall the precision is a measure of the amount of information and it is clear in this example that there is much more information about <span class="math inline">\(\theta\)</span> contained in the sample of <span class="math inline">\(427\)</span> students than the prior. As a result, the likelihood function is much more precise than the prior and the posterior is essentially controlled by the data. In other words, since the data is so precise relative to the prior, the prior acts like a constant noninformative prior. The posterior mean and posterior standard deviation are approximately equal to the sample mean and classical standard error, respectively.</p>
+<p>In this particular example, there was some conflict between the information in the prior and the data. My prior beliefs about the average female height was approximately one inch too high. But since a large sample was collected, my ``wrong” prior information has little impact on the posterior inference. In other words, the posterior inference in this case is robust or insensitive to the choice of prior distribution.</p>
+</section>
+</section>
+<section id="learning-about-a-normal-variance-with-known-mean" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="learning-about-a-normal-variance-with-known-mean"><span class="header-section-number">5.3</span> Learning About a Normal Variance with Known Mean</h2>
+<section id="inference-using-an-informative-prior" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="inference-using-an-informative-prior"><span class="header-section-number">5.3.1</span> Inference using an informative prior</h3>
+<p>Suppose we observe <span class="math inline">\(y_1, ..., y_n\)</span> from a normal population with known mean <span class="math inline">\(\theta\)</span> and unknown variance <span class="math inline">\(\sigma^2\)</span>. The likelihood function for <span class="math inline">\(\sigma^2\)</span> is given by <span class="math display">\[\begin{eqnarray*}
+L(\sigma^2)  =  \prod_{i=1}^n \frac{1}{\sqrt{2 \pi \sigma^2}} \exp\left( -\frac{1}{2 \sigma^2}(y_i - \theta)^2\right)  \nonumber \\
+       \propto  \frac{1}{(\sigma^2)^{n/2}} \exp\left(-\frac{1}{2 \sigma^2} \sum_{i=1}^n (y_i - \theta)^2\right). \nonumber \\
+\end{eqnarray*}\]</span></p>
+<p>A conjugate prior for a variance is the <em>inverse gamma</em> distribution. Suppose <span class="math inline">\(X\)</span> has a gamma distribution with shape <span class="math inline">\(\alpha\)</span> and rate <span class="math inline">\(\beta\)</span> with density <span class="math display">\[
+f(x) = \frac{ x^{\alpha-1} \exp(-\beta x) \beta^\alpha}{\Gamma(\alpha)}, \, \, x &gt; 0.
+\]</span> If we let <span class="math inline">\(W = 1/X\)</span>, then <span class="math inline">\(W\)</span> has an inverse gamma distribution with parameters <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\beta\)</span> with density <span class="math display">\[
+f(w) = \frac{\exp(-\beta/w) \beta^\alpha}{w^{\alpha+1} \Gamma(\alpha)}, \, \, w &gt; 0.
+\]</span></p>
+<p>Now we assume that one’s prior beliefs about <span class="math inline">\(\sigma^2\)</span> can be represented by an inverse gamma(<span class="math inline">\(\alpha, \beta)\)</span> density <span class="math display">\[
+g(\sigma^2) = \frac{\exp(-\beta/\sigma^2) \beta^\alpha}{(\sigma^2)^{\alpha+1} \Gamma(\alpha)}.
+\]</span> Then by combining prior and likelihood, the posterior of <span class="math inline">\(\sigma^2\)</span> is equal to <span class="math display">\[\begin{eqnarray*}
+g(\sigma^2 | y)  \propto  L(\sigma^2) \times g(\sigma^2) \\
+       \propto  \frac{1}{(\sigma^2)^{n/2}} \exp\left(-\frac{1}{2 \sigma^2} \sum_{i=1}^n (y_i - \theta)^2\right)
+          \times \frac{\exp(-\beta/\sigma^2) }{(\sigma^2)^{\alpha+1} }  \nonumber \\
+       =  \frac{1}{(\sigma^2)^{\alpha+n/2+1}} \exp\left(-\frac{1}{ \sigma^2}\left[\beta+ \frac{1}{2}\sum_{i=1}^n (y_i - \theta)^2\right]\right),\nonumber \\
+\end{eqnarray*}\]</span> which we recognize as a inverse gamma density with updated parameters <span class="math inline">\(\alpha_1 = \alpha + n/2\)</span> and <span class="math inline">\(\beta_1 = \beta+ \frac{1}{2} \sum_{i=1}^n (y_i - \theta)^2\)</span>.</p>
+<p>It is common to represent the inverse gamma prior and posterior densities in terms of the ``scale times inverse chi-square” density. A chi-square random variable with <span class="math inline">\(\nu\)</span> degrees of freedom has density <span class="math display">\[
+f(w) \propto w^{\nu/2-1} \exp(-w/2), \, w &gt; 0.
+\]</span> The random variable <span class="math inline">\(V = c / W\)</span> has the density <span class="math display">\[
+f(v) \propto \frac{1}{v^{\nu/2+1}} \exp\left(-\frac{c}{2 v}\right), \, v &gt; 0.
+\]</span> Since the density of <span class="math inline">\(V\)</span> is derived as a constant divided by a chi-squared variable, we write <span class="math display">\[
+V \sim c \chi^{-2}_\nu .
+\]</span> Using this notation, our inverse gamma prior can represented as $ 2 ^{-2}_{2 }$ and likewise the posterior is represented as $ 2 <em>1 ^{-2}</em>{2 _1}$.</p>
+</section>
+<section id="inference-using-a-noninformative-prior" class="level3" data-number="5.3.2">
+<h3 data-number="5.3.2" class="anchored" data-anchor-id="inference-using-a-noninformative-prior"><span class="header-section-number">5.3.2</span> Inference using a noninformative prior</h3>
+<p>In the case where one has little prior information about a variance, the standard noninformative prior is given by the improper density <span class="math display">\[
+g(\sigma^2) = \frac{1}{\sigma^2}, \, \, \sigma^2 &gt; 0.
+\]</span> This can viewed as a limiting case of the inverse gamma density as the shape parameter <span class="math inline">\(\alpha\)</span> and the rate parameter <span class="math inline">\(\beta\)</span> both approach zero. If this prior is combined with the likelihood, one obtains the posterior density <span class="math display">\[\begin{eqnarray*}
+g(\sigma^2 | y)
+       =  \frac{1}{(\sigma^2)^{n/2+1}} \exp\left(-\frac{1}{ \sigma^2}\left[\frac{1}{2}\sum_{i=1}^n (y_i - \theta)^2\right]\right),\nonumber \\
+\end{eqnarray*}\]</span> which is inverse gamma with parameters <span class="math inline">\(\alpha_1 = n/2\)</span> and <span class="math inline">\(\beta_1 = \frac{1}{2} \sum_{i=1}^n (y_i - \theta)^2\)</span>. Relating the posterior to the inverse chi-squared distribution, we can say that <span class="math display">\[
+\sigma^2 \sim (\sum_{i=1}^n (y_i - \theta)^2) \chi^{-2}_{n}.
+\]</span></p>
+</section>
+<section id="an-example" class="level3" data-number="5.3.3">
+<h3 data-number="5.3.3" class="anchored" data-anchor-id="an-example"><span class="header-section-number">5.3.3</span> An example</h3>
+<p>To illustrate learning about a variance, consider the following winning percentages for all Major League Baseball teams in the 1964 season. These can be considered a random sample of percentages from a normal distribution with mean <span class="math inline">\(\mu = 50\)</span> and unknown variance <span class="math inline">\(\sigma^2\)</span>. The value of the variance is a measure of the level of competition in the baseball league where small values of <span class="math inline">\(\sigma^2\)</span> correspond to teams that are relatively equal in ability.</p>
+<pre><code>57.4 56.8 56.8 55.6 54.3 49.4 49.4 46.9 40.7 32.7 
+61.1 60.5 59.9 52.5 50.6 48.8 48.8 44.4 38.3 35.2</code></pre>
+<p>Suppose one has some prior knowledge about the value of <span class="math inline">\(\sigma^2\)</span>. The value of the sample variance of the team winning percentages during the previous season is equal to 69.2 and you are pretty confident (with probability 0.90) that the variance <span class="math inline">\(\sigma^2\)</span> is within 20% of 69.2. With some trial and error, one finds that the inverse gamma density with <span class="math inline">\(\alpha = 70\)</span> and <span class="math inline">\(\beta = 4500\)</span> approximately matches this prior information.</p>
+<p>From the observed data, we compute <span class="math display">\[
+n = 20, \, \, \sum_{i=1}^n (y_i - 50)^2 = 1321.45.
+\]</span> So the posterior density will be inverse gamma(<span class="math inline">\(\alpha_1, \beta_1)\)</span> with <span class="math display">\[
+\alpha_1 = 70 + 20/2 = 80, \, \, \beta_1 = 4500 + 1321.45/2 = 5160.725
+\]</span></p>
+<p>One can summarize the posterior by computing suitable percentiles. Statistics packages like R typically have functions for computing percentiles of a gamma distribution and these functions can be used to find percentiles of the inverse gamma distribution. For example, suppose one wishes to find the pth percentile <span class="math inline">\(x_p\)</span> of a inverse gamma(<span class="math inline">\(\alpha, \beta\)</span>) density – the median satisfies the relationship <span class="math display">\[
+P( X &lt; x_p) = p,
+\]</span> where <span class="math inline">\(X\)</span> is inverse gamma(<span class="math inline">\(\alpha, \beta\)</span>). One can rewrite this statement as <span class="math display">\[
+P(1/X &gt; 1/x_p) = p,
+\]</span> where <span class="math inline">\(Y = 1/X\)</span> has a gamma(<span class="math inline">\(\alpha, \beta\)</span>) density. Using this relationship, it is straightforward to show that the inverse gamma percentile satifies <span class="math display">\[
+x_p = \frac{1}{y_{1-p}},
+\]</span> where <span class="math inline">\(y_{1-p}\)</span> is the <span class="math inline">\((1-p)\)</span> percentile of a gamma(<span class="math inline">\(\alpha, \beta\)</span>) density.</p>
+<p>The 5th, 50th, and 95th percentiles of the inverse gamma posterior distribution are displayed in Table 3.3. The median (50th percentile) of 64.78 is a reasonable point estimate at <span class="math inline">\(\sigma^2\)</span> and the 5th and 95th percentiles, 54.17 and 78.34, form a ``equal-tails” interval estimate. In the case where prior information is not available for the variance, one can place a noninformative prior with <span class="math inline">\(\alpha = 0, \beta = 0\)</span> on <span class="math inline">\(\sigma^2\)</span> and the table also shows the posterior percentiles for this choice of prior. In this situation, the informative prior information has a substantial impact on the posterior inference and the posterior interval estimate with the informative prior is significantly shorter than the interval estimate with the vague prior.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Prior</th>
+<th>5th Percentile</th>
+<th>Median</th>
+<th>95th Percentile</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Inverse Gamma(70, 4500)</td>
+<td>54.17</td>
+<td>64.78</td>
+<td>78.34</td>
+</tr>
+<tr class="even">
+<td>Noninformative</td>
+<td>42.07</td>
+<td>68.34</td>
+<td>121.78</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="learning-about-a-poisson-mean" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="learning-about-a-poisson-mean"><span class="header-section-number">5.4</span> Learning About a Poisson Mean</h2>
+<section id="introduction-1" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">5.4.1</span> Introduction</h3>
+<p>The author has a website for one of his books and Google Analytics ({}) records the number of visits to this particular website every day.<br>
+The author records the following counts of weekday visits for a 21-day period during May and June of 2009.</p>
+<pre><code> 20 30 22 20 20 17 21 26 22 30 36
+ 15 30 27 22 23 18 24 28 23 12</code></pre>
+<p>A common model for count data such as these is the Poisson. Suppose the counts <span class="math inline">\(y_1, ..., y_n\)</span> represent a random sample from a Poisson distribution with parameter <span class="math inline">\(\lambda\)</span> with probability mass function <span class="math display">\[
+p(y | \lambda) = \frac{\exp(-\lambda) \lambda^y}{y!}, \, \, y = 0, 1, 2, ...
+\]</span> One objective is to learn about the mean parameter <span class="math inline">\(\lambda\)</span>. In the example, <span class="math inline">\(\lambda\)</span> would represent the average number of hits to this website over a long period of days. Also we are interested in predicting the number of website counts in future days.</p>
+<p>Suppose that the author has been observing the counts for daily visits to this website and so he has some beliefs about the location of <span class="math inline">\(\lambda\)</span> before sampling. In particular, he believes that the quartiles of <span class="math inline">\(\lambda\)</span> are 21.3 and 26.4. Equivalently, one believes <span class="math display">\[
+P(\lambda &lt; 21.3) = 0.25, \, \, P(\lambda &lt; 26.4) = 0.75.
+\]</span> Any prior density <span class="math inline">\(g(\lambda)\)</span> that matches this prior information would suitable for use in this example. But we’ll shortly see that it is convenient to choose a gamma density. After some trial and error, the author finds that the gamma prior density <span class="math display">\[
+g(\lambda) = \frac{\exp(-\beta \lambda) \lambda^{\alpha-1} \beta^\alpha}{\Gamma(\alpha)}, \lambda &gt; 0,
+\]</span> where the shape parameter <span class="math inline">\(\alpha = 40\)</span> and the rate parameter <span class="math inline">\(\beta = 1.67\)</span> approximately matches these prior quartiles.</p>
+</section>
+<section id="learning-about-the-mean" class="level3" data-number="5.4.2">
+<h3 data-number="5.4.2" class="anchored" data-anchor-id="learning-about-the-mean"><span class="header-section-number">5.4.2</span> Learning about the Mean</h3>
+<p>After counts have been observed, one’s opinion about <span class="math inline">\(\lambda\)</span> is based on the posterior distribution. First, one finds the likelihood <span class="math inline">\(L(\lambda)\)</span>. By the independence assumption, the joint mass function of the counts <span class="math inline">\(y_1, ..., y_n\)</span> is given by the product <span class="math display">\[
+p(y_1, ..., y_n | \lambda) = \prod_{i=1}^n \frac{\exp(-\lambda) \lambda^y_i}{y_i!}.
+\]</span> Once the counts are observed, then the likelihood function is this joint mass function, viewed as a function of <span class="math inline">\(\lambda\)</span>. <span class="math display">\[\begin{eqnarray*}
+L(\lambda)  =  \prod_{i=1}^n \frac{\exp(-\lambda) \lambda^y_i}{y_i!} \nonumber \\
+            =  C \exp(-n \lambda) \lambda ^s,  \nonumber \\
+\end{eqnarray*}\]</span> where <span class="math inline">\(n\)</span> is the sample size, $s = _{i=1}^n y_i $ is the sum of observations, and <span class="math inline">\(C\)</span> is a constant not depending on the parameter <span class="math inline">\(\lambda\)</span>.</p>
+<p>The posterior of <span class="math inline">\(\lambda\)</span> is found by multiplying the prior and the likelihood: <span class="math display">\[\begin{eqnarray*}
+g(\lambda| y)  \propto  g(\lambda) \times L(\lambda) \nonumber \\
+          =  \exp(-\beta \lambda) \lambda^{\alpha-1} \times \exp(-n \lambda) \lambda ^s \nonumber \\
+            =  \exp(-(\beta + n) \lambda) \lambda^{\alpha + s -1}.
+\end{eqnarray*}\]</span> One sees that the posterior density of <span class="math inline">\(\lambda\)</span> is also of the gamma functional form with updated parameters <span class="math display">\[
+\alpha_1 = \alpha + s, \, \, \beta_1 = \beta + n .
+\]</span> For our example, a Gamma(<span class="math inline">\(\alpha, \beta\)</span>) prior was assigned with <span class="math inline">\(\alpha = 40\)</span> and <span class="math inline">\(\beta = 1.67\)</span>. From the observed data, there are <span class="math inline">\(n = 21\)</span> observations and the sum of the counts is <span class="math inline">\(s = \sum_{i=1}^n y_i = 486\)</span>. So the posterior density for <span class="math inline">\(\lambda\)</span> will be gamma(<span class="math inline">\(\alpha_1, \beta_1)\)</span> where <span class="math display">\[
+\alpha_1 = 40 + 486 = 526, \, \, \beta_1 = \beta + n = 1.67 + 21 = 22.67.
+\]</span></p>
+<p>One can estimate <span class="math inline">\(\lambda\)</span> by the posterior median that is 23.19. A 90% interval estimate for <span class="math inline">\(\lambda\)</span> is formed from the 0.05 and 0.95 quantiles of the gamma(526, 22.67) density given by 21.56 and 24.89. So the mean number of website visits falls in the interval (21.56, 24.89) with probability 0.90.</p>
+</section>
+<section id="prediction" class="level3" data-number="5.4.3">
+<h3 data-number="5.4.3" class="anchored" data-anchor-id="prediction"><span class="header-section-number">5.4.3</span> Prediction</h3>
+<p>Next, suppose we are interested in predicting the number of websites <span class="math inline">\(\tilde y\)</span> on a future weekday. If our current beliefs about the mean <span class="math inline">\(\lambda\)</span> are given by a Gamma(<span class="math inline">\(\alpha, \beta\)</span>) distribution, then the predictive density of <span class="math inline">\(\tilde y\)</span> is given by <span class="math display">\[\begin{eqnarray*}
+f(\tilde y)  =  \int_0^\infty f(\tilde y | \lambda) g(\lambda) d\lambda\nonumber \\
+            =  \int_0^\infty \frac{\lambda^{\tilde y} \exp(-\lambda)}{\tilde y!} \times
+                               \frac{\lambda^{\alpha-1} \exp(-\beta \lambda) \beta^\alpha}{\Gamma(\alpha)}  d\lambda \nonumber \\
+\end{eqnarray*}\]</span> One can analytically integrate out <span class="math inline">\(\lambda\)</span>, obtaining the predictive density <span class="math display">\[
+f(\tilde y) = \frac{\beta^\alpha \Gamma(\alpha + \tilde y)}{(\beta + 1)^{\alpha + \tilde y} \Gamma(\alpha) y!}, \, y = 0, 1, 2, ...
+\]</span></p>
+<p>In our example, after observing the data, the current beliefs about <span class="math inline">\(\lambda\)</span> are contained in the Gamma(526, 22.67) posterior density. The corresponding {} density is the distribution of a future number of website visits for a future weekday. Using R, we compute values of <span class="math inline">\(f(\tilde y)\)</span> for values of <span class="math inline">\(\tilde y\)</span> from 0 to 200. We find that the most likely value of <span class="math inline">\(\tilde y\)</span>, the value with the largest predictive probability, is equal to 23. But there is much uncertainty about this prediction since (1) we are uncertain about the mean number of hits <span class="math inline">\(\lambda\)</span> and (2) there is Poisson variability about the number of hits <span class="math inline">\(\tilde y\)</span> given a value of <span class="math inline">\(\lambda\)</span>.<br>
+Using the R function {}, we find that <span class="math display">\[
+P( 15 \le \tilde y \le 31) = 0.917,
+\]</span> so (15, 31) is a 91.7% prediction interval for this future count.</p>
+<p>The predictive density is useful for making predictions about future data. It is also helpful in judging the suitability of our Poisson/gamma model. The basic idea is that our model is reasonable if the actual observed data is consistent with predictions made from the model. We just saw that approximately 90% of the predictions fall between 15 and 31 visits. Looking at our data, we see that only 2 of the 21 observations (namely 12 and 36) fall outside of the interval (15, 31). Since the observed data appears consistent with the posterior predictive distribution, the model with Poisson sampling and a gamma(40, 1.67) prior seems to be a reasonable description of the observed counts.</p>
+</section>
+</section>
+<section id="learning-about-an-exponential-threshold-parameter" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="learning-about-an-exponential-threshold-parameter"><span class="header-section-number">5.5</span> Learning About an Exponential Threshold Parameter</h2>
+<p>In a reliability application, suppose that one observes the times to failure for a sample of washing machines. We assume that the failure times <span class="math inline">\(y_1, ..., y_n\)</span> represent a random sample from an exponential distribution with threshold <span class="math inline">\(\theta\)</span> and known rate <span class="math inline">\(\beta\)</span>. The sampling density is given by <span class="math display">\[
+f(y | \theta) = \beta \exp(-\beta (y - \theta)), \, \, y \ge \theta.
+\]</span> In this application, the parameter <span class="math inline">\(\theta\)</span> can represent the length of a warranty period where no failures can occur.<br>
+To simplify the problem, we are assuming that one does not know the warranty period but knows the parameter <span class="math inline">\(\beta\)</span> that describes the pattern of failures after the warranty period.</p>
+<p>First, suppose that little information exists about the value of the positive parameter <span class="math inline">\(\theta\)</span>, and so we assign this parameter a uniform prior on positive values: <span class="math display">\[
+g(\theta) = 1, \, \, \theta &gt; 0.
+\]</span> The likelihood function is given by <span class="math display">\[\begin{eqnarray*}
+L(\theta)  =  \prod_{i=1}^n f(y_i | \theta) \nonumber \\
+            =  \prod_{i=1}^n \left( \beta \exp(-\beta (y_i - \theta)) I(y_i \ge \theta) \right) \nonumber \\
+            \propto  \exp(n \beta \theta) I(\theta \le \min y_i)  \nonumber \\
+\end{eqnarray*}\]</span> Combining the likelihood and prior, we see that the posterior density is defined, up to a proportional constant, by <span class="math display">\[\begin{eqnarray*}
+g(\theta | y)  \propto  L(\theta) g(\theta) \nonumber \\
+            \propto  \exp(n \beta \theta) I(0 &lt; \theta \le \min y_i). \nonumber \\
+\end{eqnarray*}\]</span> We see that the posterior density is an exponential density with rate <span class="math inline">\(n \beta\)</span> that is truncated to the right by <span class="math inline">\(\min y_i\)</span>.</p>
+<p>As an example, suppose that one observes the following failure times (in months) for 15 refrigerators:</p>
+<pre><code> 51.8  50.8  20.6  42.4  20.5  18.7  27.9  18.7  
+ 42.9 123.7  62.7  22.8  89.6  21.4  49.4</code></pre>
+<p>From past experience, one knows that <span class="math inline">\(\beta = 1/24\)</span> – this indicates the belief that the average failure time for a refrigerator will be 24 months after the warranty time. If one assigns a uniform prior, then the posterior density for the warranty time <span class="math inline">\(\theta\)</span> is given by <span class="math display">\[\begin{eqnarray*}
+g(\theta | y)  \propto  \exp(n \beta \theta) I(0 &lt; \theta \le \min y_i) \nonumber \\
+            \propto  \exp(15/24 \theta) I(0 &lt; \theta \le 18.7). \nonumber \\
+\end{eqnarray*}\]</span> When one normalizes the density, one finds the posterior density is equal to <span class="math display">\[
+g(\theta | y) = \frac{\exp(15/24 \theta)}{1- \exp(15/24 \times 18.7)}, \, \, 0 &lt; \theta &lt; 18.7.
+\]</span></p>
+<p>If one graphs this density, one sees that the posterior density for <span class="math inline">\(\theta\)</span> is strongly left skewed with a mode at 18.7 months.<br>
+A HPD interval for the threshold clearly will have the form <span class="math inline">\((\theta_0, 18.7)\)</span> where <span class="math inline">\(\theta_0\)</span> is chosen so that the probability content has the given level of <span class="math inline">\(\gamma\)</span>. If one desires a 90% interval estimate where <span class="math inline">\(\gamma = 0.90\)</span>, then a straightforward calculation shows that the HPD interval for <span class="math inline">\(\theta\)</span> is given by (16.0, 18.7).</p>
+<p> <strong>Exercise:</strong> Assume <span class="math inline">\(\theta\)</span> has the prior <span class="math display">\[
+g(\theta) \propto \exp(a \theta), \, \, \theta &lt; b .
+\]</span></p>
+<ol type="1">
+<li><p>Find the posterior density for <span class="math inline">\(\theta\)</span>.</p></li>
+<li><p>Show that the posterior has the same functional form as the prior with updated parameters <span class="math display">\[
+a_1 = n \beta + a, \, \, b_1 = \min(\min y_i, b)).
+\]</span></p></li>
+<li><p>Suppose one believes that the threshold <span class="math inline">\(\theta\)</span> is definitely smaller than 24 months and you are 90% sure the threshold is larger than 15 months. Find values of the parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> that match these prior beliefs.</p></li>
+<li><p>Using the prior constructed in part (c) and the refrigerator failure data, find a 90% interval estimate for the threshold parameter <span class="math inline">\(\theta\)</span>. Compare this interval estimate with the interval estimate using a noninformative prior.</p></li>
+</ol>
+</section>
+<section id="using-mixtures-of-conjugate-priors" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="using-mixtures-of-conjugate-priors"><span class="header-section-number">5.6</span> Using Mixtures of Conjugate Priors</h2>
+<p>One way of extending the class of conjugate priors is by the use of discrete mixtures. We illustrate the use of mixtures for the Poisson scenario, although this approach can be applied to any sampling model where there is a conjugate prior.</p>
+<p>Suppose we assign the Poisson parameter <span class="math inline">\(\lambda\)</span> the discrete mixture prior <span class="math display">\[
+g(\lambda) = p g_1(\lambda) + (1 - p) g_2(\lambda)
+\]</span> where <span class="math inline">\(g_1\)</span> is gamma(<span class="math inline">\(\alpha_1, \beta_1\)</span>), <span class="math inline">\(g_2\)</span> is gamma(<span class="math inline">\(\alpha_2, \beta_2)\)</span>, and <span class="math inline">\(p\)</span> is a known mixing probability between 0 and 1.</p>
+<p>Suppose we observe (<span class="math inline">\(y, t\)</span>), where <span class="math inline">\(y\)</span> is the count in the time interval <span class="math inline">\(t\)</span>. We assume that <span class="math inline">\(y\)</span> is Poisson(<span class="math inline">\(t \lambda\)</span>) with density <span class="math display">\[
+f(y | \lambda) = \frac{(t \lambda)^y \exp(-t \lambda)}{y!}, \, \, y = 0, 1, 2, ...
+\]</span></p>
+<p>In the following computation, we include all of the terms to motivate a special expression for the posterior density. The posterior density for <span class="math inline">\(\lambda\)</span> is given by <span class="math display">\[\begin{eqnarray*}
+g(\lambda| y)  =  \frac{g(\lambda) \times f(y | \lambda)}{f(y)} \nonumber \\
+          =  \frac{\left(p g_1(\lambda) + (1-p) g_2(\lambda)\right)\times f(y | \lambda)}{f(y)} \nonumber \\
+          =  \frac{p g_1(\lambda)f(y | \lambda) + (1-p) g_2(\lambda)f(y | \lambda)}{f(y)}. \nonumber \\
+\end{eqnarray*}\]</span> The predictive density <span class="math inline">\(f(y)\)</span> can be written as <span class="math display">\[\begin{eqnarray*}
+f(y)  =  \int_0^\infty g(\lambda) f(y|\lambda) d\lambda \nonumber \\
+          =  \int_0^\infty \left( p g_1(\lambda)f(y | \lambda) + (1-p) g_2(\lambda)f(y | \lambda)\right) d\lambda \nonumber \\
+          =  p f_1(y) + (1-p) f_2(y) \nonumber ,\\
+\end{eqnarray*}\]</span> where <span class="math inline">\(f_1\)</span> and <span class="math inline">\(f_2\)</span> are respectively the predictive densities for <span class="math inline">\(y\)</span> when <span class="math inline">\(\lambda\)</span> is assigned the priors <span class="math inline">\(g_1\)</span> and <span class="math inline">\(g_2\)</span>, respectively. If we substitute this expression into the posterior density expression and rearrange terms, one can see that the posterior density has the representation <span class="math display">\[
+g(\lambda | y) = p(y) g_1(\lambda | y) + (1- p(y)) g_2 (\lambda | y),
+\]</span> where <span class="math inline">\(g_1(\lambda | y)\)</span> and <span class="math inline">\(g_2(\lambda | y)\)</span> are the posterior densities assuming the priors <span class="math inline">\(g_1\)</span> and <span class="math inline">\(g_2\)</span> and <span class="math display">\[
+p(y) = \frac{ p f_1(y)}{p f_1(y) + (1-p) f_2(y)}.
+\]</span> When <span class="math inline">\(g_1\)</span> and <span class="math inline">\(g_2\)</span> are gamma (conjugate) priors, then the posterior density will also be a mixture of gamma distributions, where the mixing weights <span class="math inline">\(p(y)\)</span> and <span class="math inline">\(1 - p(y)\)</span> depend on the mixing probability <span class="math inline">\(p\)</span> and the predictive densities <span class="math inline">\(f_1(y)\)</span> and <span class="math inline">\(f_2(y)\)</span> using the two priors.</p>
+<p>To illustrate the use of mixtures, suppose I am interested in learning about the home run rate <span class="math inline">\(\lambda\)</span> for the baseball player Derek Jeter before the start of the 2004 season. (A home run rate is the proportion of official at-bats that are home runs.) Suppose my prior beliefs are that the median of <span class="math inline">\(\lambda\)</span> is equal to 0.05 and the 90th percentile is equal to 0.081. Here are two priors that match this information. The first is a conjugate Gamma prior and the second is a mixture of two conjugate Gamma priors with mixing probabilities 0.88 and 0.12.</p>
+<ul>
+<li>Prior 1: Gamma(shape = 6, rate = 113.5)</li>
+<li>Prior 2: 0.88 x Gamma(shape = 10, rate = 193.5) + 0.12 x Gamma(shape = 0.2, rate = 0.415)</li>
+</ul>
+<p>One can check that these two priors match the prior beliefs. If one graphs the two priors, they are similar in location and spread but the mixture prior (Prior 2) has flatter tails.</p>
+<p>Now we observe some data – Jeter hit <span class="math inline">\(y = 23\)</span> homeruns in <span class="math inline">\(t = 643\)</span> at-bats. If one assumes Prior 1, then one can show that the posterior density for <span class="math inline">\(\lambda\)</span> will be Gamma with shape <span class="math inline">\(29\)</span> and rate <span class="math inline">\(756.5\)</span>. If one uses the mixture Prior 2, then the posterior density can be shown to be <span class="math display">\[
+g(\lambda|y) = 0.98 \times Gamma(33.0, 836.5) + 0.02 \times Gamma(23.3, 643.4).
+\]</span> Does the choice of prior make a difference in this situation? If one plots the two posterior densities on the same scale, they look barely distinguishable, indicating that inference about <span class="math inline">\(\lambda\)</span> is robust or insensitive to the choice of prior.</p>
+<p>But this robustness of the inference with respect to the prior depends on the observed data. Suppose that Jeter is a ``steriod slugger” during the 2004 season and hits 70 home runs in 500 at-bats. If we again use the same two priors, the posterior density for <span class="math inline">\(\lambda\)</span> using Prior 1 will be Gamma(76, 693.5). The posterior using Prior 2 is given by the mixture <span class="math display">\[
+g(\lambda | y) = 0.23 \times Gamma(80, 693.5) + 0.77 \times Gamma(70.2, 500.4).
+\]</span> If one draws the two posteriors on the same scale, one sees that the two posterior densities are significantly different, indicating that the inference depends on the choice of prior.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./proportion.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning About a Proportion</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
