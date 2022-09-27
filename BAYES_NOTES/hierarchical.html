@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.309">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Bayesian Inference - 10&nbsp; Hierarchical Modeling</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<link href="./mcmc.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Hierarchical Modeling</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Bayesian Inference</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./probability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Probability</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayes_rule.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Bayes Rule</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./proportion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning About a Proportion</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./single_parameter.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Single Parameter Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./prior.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Prior Distributions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./many_parameters.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Many Parameter Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayes_computation.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Bayesian Computation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mcmc.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Markov Chain Monte Carlo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hierarchical.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Hierarchical Modeling</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#a-beta-binomial-hierarchical-model" id="toc-a-beta-binomial-hierarchical-model" class="nav-link active" data-scroll-target="#a-beta-binomial-hierarchical-model"> <span class="header-section-number">10.1</span> A Beta-Binomial Hierarchical Model</a>
+  <ul class="collapse">
+  <li><a href="#introduction-learning-about-ogt-success-rates" id="toc-introduction-learning-about-ogt-success-rates" class="nav-link" data-scroll-target="#introduction-learning-about-ogt-success-rates"> <span class="header-section-number">10.1.1</span> Introduction: Learning About OGT Success Rates</a></li>
+  <li><a href="#to-pool-or-not-to-pool" id="toc-to-pool-or-not-to-pool" class="nav-link" data-scroll-target="#to-pool-or-not-to-pool"> <span class="header-section-number">10.1.2</span> To Pool or Not to Pool?</a></li>
+  <li><a href="#an-exchangeable-model-for-proportions" id="toc-an-exchangeable-model-for-proportions" class="nav-link" data-scroll-target="#an-exchangeable-model-for-proportions"> <span class="header-section-number">10.1.3</span> An Exchangeable Model for Proportions</a></li>
+  <li><a href="#computation-of-the-posterior-distribution" id="toc-computation-of-the-posterior-distribution" class="nav-link" data-scroll-target="#computation-of-the-posterior-distribution"> <span class="header-section-number">10.1.4</span> Computation of the Posterior Distribution}</a></li>
+  <li><a href="#estimating-ogt-success-rates" id="toc-estimating-ogt-success-rates" class="nav-link" data-scroll-target="#estimating-ogt-success-rates"> <span class="header-section-number">10.1.5</span> Estimating OGT Success Rates</a></li>
+  </ul></li>
+  <li><a href="#a-normalnormal-exchangeable-model" id="toc-a-normalnormal-exchangeable-model" class="nav-link" data-scroll-target="#a-normalnormal-exchangeable-model"> <span class="header-section-number">10.2</span> A Normal/Normal Exchangeable Model</a>
+  <ul class="collapse">
+  <li><a href="#conditional-posterior-distribution-of-the-normal-means" id="toc-conditional-posterior-distribution-of-the-normal-means" class="nav-link" data-scroll-target="#conditional-posterior-distribution-of-the-normal-means"> <span class="header-section-number">10.2.1</span> Conditional posterior distribution of the normal means</a></li>
+  <li><a href="#posterior-distribution-of-the-second-stage-parameters" id="toc-posterior-distribution-of-the-second-stage-parameters" class="nav-link" data-scroll-target="#posterior-distribution-of-the-second-stage-parameters"> <span class="header-section-number">10.2.2</span> Posterior distribution of the second-stage parameters</a></li>
+  <li><a href="#posterior-means" id="toc-posterior-means" class="nav-link" data-scroll-target="#posterior-means"> <span class="header-section-number">10.2.3</span> Posterior means</a></li>
+  <li><a href="#priors" id="toc-priors" class="nav-link" data-scroll-target="#priors"> <span class="header-section-number">10.2.4</span> Priors</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Hierarchical Modeling</span></h1>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="a-beta-binomial-hierarchical-model" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="a-beta-binomial-hierarchical-model"><span class="header-section-number">10.1</span> A Beta-Binomial Hierarchical Model</h2>
+<section id="introduction-learning-about-ogt-success-rates" class="level3" data-number="10.1.1">
+<h3 data-number="10.1.1" class="anchored" data-anchor-id="introduction-learning-about-ogt-success-rates"><span class="header-section-number">10.1.1</span> Introduction: Learning About OGT Success Rates</h3>
+<p>The Ohio Graduation Test (OGT) is a test administered to all high school students in the state of Ohio. To graduate from high school, a student must develop a proficiency in reading, science, mathematics, social studies and writing as measured by his/her performance on the OGT. This test is used to assess the quality of schools in the state and the State of Ohio releases summary OGT scores for all public and private schools in the state.</p>
+<p>A student will receive a grade on each of the five sections of the OGT. The raw score for each section is categorized as Advanced, Accelerated, Proficient, Basic, or Limited. A student needs to have a grade of Proficient, Accelerated, or Advanced on all sections to pass the OGT.</p>
+<p>We focus on the performance of the students from the nine public school districts in Wood County. For each school district, we collect the number of students taking the exam, and the number who received an Advanced score (the highest category) on the Writing section of the OGT.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>School.District</th>
+<th>N</th>
+<th>ADVANCED</th>
+<th>Proportion</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bowling Green City Sd</td>
+<td>259</td>
+<td>5</td>
+<td>0.019</td>
+</tr>
+<tr class="even">
+<td>Eastwood Local Sd</td>
+<td>145</td>
+<td>10</td>
+<td>0.069</td>
+</tr>
+<tr class="odd">
+<td>Elmwood Local Sd</td>
+<td>95</td>
+<td>3</td>
+<td>0.032</td>
+</tr>
+<tr class="even">
+<td>Lake Local Sd</td>
+<td>138</td>
+<td>2</td>
+<td>0.014</td>
+</tr>
+<tr class="odd">
+<td>North Baltimore Local Sd</td>
+<td>53</td>
+<td>0</td>
+<td>0.000</td>
+</tr>
+<tr class="even">
+<td>Northwood Local Sd</td>
+<td>82</td>
+<td>4</td>
+<td>0.049</td>
+</tr>
+<tr class="odd">
+<td>Otsego Local Sd</td>
+<td>140</td>
+<td>2</td>
+<td>0.014</td>
+</tr>
+<tr class="even">
+<td>Perrysburg Ex Vill Sd</td>
+<td>355</td>
+<td>16</td>
+<td>0.045</td>
+</tr>
+<tr class="odd">
+<td>Rossford Ex Vill Sd</td>
+<td>139</td>
+<td>4</td>
+<td>0.029</td>
+</tr>
+</tbody>
+</table>
+<p>Overall, only 3% of the students received an Advanced score on the Writing test for this county, so clearly this was a challenging test. One can compare schools by computing the proportion of Advanced that are given in the last column of the table. Several questions arise when one tries to make sense of these proportions. First, we note that none of the North Baltimore Local students received an Advanced score. Does this mean that the population proportion of students from North Baltimore Local who received this score is equal to zero? Although it is unlikely for these students to receive this grade, one would expect at least a few students to get “Advanced” in future years. Second, we note that Eastwood’s proportion of Advanced (0.069) is higher than Perrysburg (0.045). Does this mean that Eastwood’s Advanced population proportion is higher than Perrysburg? Since the actual success counts are small, it is possible that there is no difference in the quality of the Eastwood and Perrysburg schools and we are simply observing sampling variability.</p>
+</section>
+<section id="to-pool-or-not-to-pool" class="level3" data-number="10.1.2">
+<h3 data-number="10.1.2" class="anchored" data-anchor-id="to-pool-or-not-to-pool"><span class="header-section-number">10.1.2</span> To Pool or Not to Pool?</h3>
+<p>In the OGT testing example, the general problem is to estimate the proportions <span class="math inline">\(p_1, ..., p_9\)</span>, where <span class="math inline">\(p_j\)</span> represents the proportion of students from the <span class="math inline">\(j\)</span>th school district who score at an Advanced level on the writing section of the OGT. We observe <span class="math inline">\((y_j, n_j)\)</span>, where <span class="math inline">\(y_j\)</span> is the number of Advanced students in a sample of size <span class="math inline">\(n_j\)</span> from the <span class="math inline">\(j\)</span>th district. The typical estimate of the proportion <span class="math inline">\(p_j\)</span> is the sample proportion <span class="math display">\[
+\hat{p_j} = \frac{y_j}{n_j}
+\]</span> and the sample proportions are displayed in Table ???. As discussed in the introduction, there are some problems with these estimates. Due to the relatively small sample sizes, it is possible to get a sample proportion <span class="math inline">\(\hat{p_j}\)</span> equal to zero, although we believe that the corresponding population proportion <span class="math inline">\(p_j\)</span> is positive. Generally, the variability of the sample proportions can be high, and so it may be problematic to make decisions solely on the sample proportions. For example, it may be difficult to say that Elmwood truly has a higher Advanced rate than Rossford since the corresponding sample proportions (0.32 and 0.29) have high sample variability.</p>
+<p>How can we improve the individual sample proportion estimates? If we believe that the proportions are equal, that is, <span class="math display">\[
+p_1 = ... = p_9,
+\]</span> then we can pool the data to get “improved” estimates. The pooled estimate of the common proportion value is given by <span class="math display">\[
+\tilde{p} = \frac{\sum_{i-1}^9 y_j}{\sum_{i-1}^9 n_j}.
+\]</span> Here this estimate is <span class="math inline">\(\tilde p = 46/1406 = 0.0327\)</span>. Certainly this estimate improves the “zero estimate problem”. But this estimate is based on the strong assumption that the schools have equal ability to get an Advanced score on the writing component of the OGT.</p>
+<p>From a frequentist perspective, the usual procedure is to (1) fit a model that describes the relationship between the parameters, (2) decide whether or not to accept the model by means of a statistical test, and then (3) estimate the parameters on the basis of the best fitting model. Here one would be interested in testing the hypothesis <span class="math inline">\(H\)</span> that the proportions are equal: <span class="math display">\[
+H:  p_1 = ... = p_9.
+\]</span> A standard test of this hypothesis is the chi-square procedure that tests whether the school district is independent of the score (Advanced or not Advanced) on the OCT writing test. On the basis of the procedure, we will decide either to accept or reject the hypothesis. If we accept the hypothesis <span class="math inline">\(H\)</span>, then we would use the pooled estimate $ = . $ Instead if we decide to reject <span class="math inline">\(H\)</span>, then we would use the sample proportion estimates <span class="math inline">\(\hat{p_j} = \frac{y_j}{n_j}\)</span>. This procedure is sometimes called a <em>testimator</em>, since we are deciding on the appropriate estimate by using a statistical test.</p>
+<p>If one applies this test to these data, one obtains a Person chi-squared test statistic of 14.69. The p-value is the probability a chi-square variate with 8 degrees of freedom exceeds 14.69 – the p-value for these data is 0.065. If one uses the typical 0.05 cutoff to decide on the significance of this test, then one would decide that there is insufficient evidence to conclude that the proportions are different and would use the pooled estimate. But this p-value is close to 0.05; if a p-value of 10% or smaller was deemed “significant”, then we would conclude the proportions are different and use the sample proportion estimates.</p>
+<p>Is there anything else that could be done? It appears that both the sample proportions and the pooled estimate are undesirable, and so it may be more appropriate to use a compromise estimate. One possibility is to estimate <span class="math inline">\(p_j\)</span> by a weighted average of the two extreme estimates: <span class="math display">\[
+w \hat{p_j} + ( 1- w) \tilde{p},
+\]</span> where <span class="math inline">\(w\)</span> is a weight between 0 and 1 that determines the relative importance of the two extreme estimates. The value of the weight intuitively should be a function of the test statistic of the hypothesis <span class="math inline">\(H\)</span>. If the p-value for the test is large, then one would like the value of <span class="math inline">\(w\)</span> to be small, indicating a greater weight on the pooled estimate. Alternately, if the p-value is very small, then the constant <span class="math inline">\(p\)</span> model would seem to be inappropriate, and the value of <span class="math inline">\(w\)</span> would be close to 1, reflecting more support on the sample proportion. It will be seen that this compromise estimate will be a by-product of the use of a hierarchical prior distribution placed on the proportions.</p>
+</section>
+<section id="an-exchangeable-model-for-proportions" class="level3" data-number="10.1.3">
+<h3 data-number="10.1.3" class="anchored" data-anchor-id="an-exchangeable-model-for-proportions"><span class="header-section-number">10.1.3</span> An Exchangeable Model for Proportions</h3>
+<p>What prior beliefs are available when one is estimating a set of proportions? In Chapter ???, we considered prior beliefs about a single proportion <span class="math inline">\(p\)</span>. In the case when one has prior information about the location and spread, we discussed the use of a beta(<span class="math inline">\(a, b\)</span>) to approximate these beliefs. But when one is estimating many proportions, it may be difficult to think about locations and spreads for all of the parameters.</p>
+<p>Suppose one believes that the proportions <span class="math inline">\(p_1, ..., p_9\)</span> represent a random sample from a single beta(<span class="math inline">\(a, b\)</span>) distribution where the parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are unknown. Then if historical data is available, then one could use the data to estimate the parameters of the beta density. In our example, suppose one had the school district sizes and number of students receiving Advanced on the writing component for a previous years’ administration of the OGT. Then one could use this previous year’s data to estimate <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. For example, one could estimate the prior mean <span class="math inline">\(a/(a+b)\)</span> by using the mean success rate for the schools in the previous year. Also one could use the variability of the success rates to estimate the variance of the beta density.</p>
+<p>Is it appropriate to use historical data in this case? It would be appropriate if one had some prior beliefs about the similarity of the success proportions for the past year and the success proportions for the current year. For example, if {<span class="math inline">\(q_j\)</span>} represent the proportions of students receiving the Advanced grade for schools in a previous year, then one may believe that the sizes of the {<span class="math inline">\(q_j\)</span>} were similar to the sizes of the proportions {<span class="math inline">\(p_j\)</span>} of the nine schools in the current year.</p>
+<p>One way of constructing a prior distribution that reflects a belief in similarity is based on the notion of {}. We say that a set of random variables <span class="math inline">\(X = X_1, ..., X_n\)</span> is exchangeable if the distribution of <span class="math inline">\(X\)</span> does not change if we change the order of the subscripts. That is, if <span class="math inline">\(s(1), ..., s(n)\)</span> represent a permutation of the components of <span class="math inline">\(X\)</span>, then <span class="math inline">\((X_1, ..., X_n)\)</span> has the same distribution of <span class="math inline">\(X_{s(1)}, ..., X_{s(n)}\)</span>.</p>
+<p>In our example, suppose we believe that the proportions <span class="math inline">\(p_1, ..., p_9\)</span> are exchangeable. If <span class="math inline">\(p\)</span> is the vector of proportions, a belief of exchangeability means that our belief in <span class="math inline">\(p\)</span> is the same if we change the order of the subscripts of the components of <span class="math inline">\(p\)</span>. Also a belief in exchangeability implies that our beliefs about any two different proportions is the same – that is, the prior for <span class="math inline">\(p_i\)</span> will be the same as the prior for <span class="math inline">\(p_j\)</span> for <span class="math inline">\(i \neq j\)</span>. This belief also implies that the joint prior for any two proportions, say <span class="math inline">\((p_i, p_j)\)</span> for <span class="math inline">\(i \neq j\)</span>, does not change if we replace <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span> by two other subscripts.</p>
+<p>The famous probabilist deFinetti showed that if one believes that a set of random variables is exchangeable, then the corresponding distribution is constructed by means of a hierarchical structure. In our situation, this means that if <span class="math inline">\(p_1, ..., p_9\)</span> is exchangeable, then one can construct the prior in a two-stage process as follows.</p>
+<ul>
+<li><strong>STAGE I:</strong> The proportions <span class="math inline">\(p_1, ..., p_9\)</span> are independently distributed from a prior <span class="math inline">\(g_1(p | \phi)\)</span> depending on an unknown parameter vector <span class="math inline">\(\phi\)</span>.</li>
+<li><strong>STAGE II:</strong> The unknown parameter vector <span class="math inline">\(\phi\)</span> has a completely specified distribution <span class="math inline">\(g_2(\phi)\)</span></li>
+</ul>
+<p>This two-stage structure implies that the proportion vector has the mixture prior <span class="math display">\[
+g(p_1, ..., p_9) = \int \left(\prod_{j=1}^9 g_1(p_j | \phi)\right) g_2(\phi) d\phi.
+\]</span></p>
+<p>Many possible distributions can be chosen for <span class="math inline">\(g_1\)</span> and <span class="math inline">\(g_2\)</span>. For computational convenience, we will let <span class="math inline">\(g_1\)</span> be a beta density with parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. Then the unknown parameter vector <span class="math inline">\(\phi = (a, b)\)</span> and <span class="math inline">\(g_2\)</span> will be a completely specified distribution on the beta parameters. In this case, the proportions will have the prior <span class="math display">\[
+g(p_1, ..., p_9) = \int\int \left(\prod_{j=1}^9 \frac{1}{B(a, b)} p_j^{a-1} (1-p_j)^{b-1}\right) g_2(a, b) da \, db.
+\]</span></p>
+<p>How should we choose the second-stage prior <span class="math inline">\(g_2\)</span>? First, it is useful to reparameterize the beta parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> to the prior mean <span class="math inline">\(\eta\)</span> and the precision parameter <span class="math inline">\(K\)</span> where <span class="math display">\[
+\eta = \frac{a}{a+b}, \, \, K = a + b .
+\]</span> Then we assume <span class="math inline">\(\eta\)</span> and <span class="math inline">\(K\)</span> are independent, so <span class="math display">\[
+g_2(\eta, K) = g_2(\eta) g_2(K).
+\]</span> We will assign <span class="math inline">\(\eta\)</span> the noninformative prior proportional to <span class="math inline">\(\eta^{-1}(1-\eta)^{-1}\)</span> and <span class="math inline">\(K\)</span> the proper, but vague prior density <span class="math inline">\((1+K)^{-1}\)</span>. So the joint prior at the second-stage is given by <span class="math display">\[
+g_2(\eta, K) = \frac{1}{\eta(1-\eta)} \frac{1}{(1+K)^2}, \, \, 0 &lt; \eta &lt; 1, K &gt; 0.
+\]</span> Later we will discuss alternative “noninformative” choices for these parameters. The joint prior of the proportions and the hyperparameters is given by <span class="math display">\[\begin{eqnarray*}
+g(p_1, ..., p_k,\eta, K)  =  \left(\prod_{j=1}^9 \frac{1}{B(K \eta, K (1-\eta))} p_j^{K \eta -1} (1-p_j)^{K(1-\eta)-1}\right)
+                \nonumber \\
+            \times  \frac{1}{\eta(1-\eta)} \frac{1}{(1+K)^2} \nonumber \\
+\end{eqnarray*}\]</span> where the beta parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are written in terms of the new <span class="math inline">\((\eta, K)\)</span> parameterization.</p>
+</section>
+<section id="computation-of-the-posterior-distribution" class="level3" data-number="10.1.4">
+<h3 data-number="10.1.4" class="anchored" data-anchor-id="computation-of-the-posterior-distribution"><span class="header-section-number">10.1.4</span> Computation of the Posterior Distribution}</h3>
+<p>In the exchangeable model, the unknown parameters are the <span class="math inline">\(k\)</span> proportions <span class="math inline">\(p_1, ..., p_k\)</span> and the unknown second-stage hyperparameters <span class="math inline">\(\eta\)</span> and <span class="math inline">\(K\)</span>. For the <span class="math inline">\(j\)</span>th sample, we observe <span class="math inline">\(y_j\)</span> successes in <span class="math inline">\(n_j\)</span> trials. The likelihood of the proportions is given by <span class="math display">\[
+L(p_1, ..., p_k) = \prod_{j=1}^k  p_j^{y_j} (1-p_j)^{n_j-y_j}.
+\]</span> By multiplying the joint prior of <span class="math inline">\((p_1, ..., p_k, \eta, K)\)</span> by the likelihood, we obtain that the joint posterior is given by</p>
+<p><span class="math display">\[\begin{eqnarray*}
+g(p_1, ..., p_k,\eta, K  {\rm data})  \propto  \left(\prod_{j=1}^9 \frac{1}{B(K \eta, K (1-\eta))} p_j^{K \eta -1} (1-p_j)^{K(1-\eta)-1}\right)
+                \nonumber \\
+            \times  \frac{1}{\eta(1-\eta)} \frac{1}{(1+K)^2}\prod_{j=1}^k  p_j^{y_j} (1-p_j)^{n_j-y_j} \nonumber \\
+\end{eqnarray*}\]</span></p>
+<p>To simplify the posterior computation, we decompose this joint posterior into the product <span class="math display">\[
+g(p_1, ..., p_k,\eta, K | {\rm data}) = g(p_1, ..., p_k|\eta, K,  {\rm data}) g(\eta, K | {\rm data}).
+\]</span></p>
+<p>First consider the first term, the joint posterior of the proportions given the hyperparameters <span class="math inline">\(\eta\)</span> and <span class="math inline">\(K\)</span>. If we fix values of the hyperparameters, then the proportions have the joint density <span class="math display">\[\begin{eqnarray*}
+g(p_1, ..., p_k,  \eta, K,{\rm data})  \propto  \left(\prod_{j=1}^9 p_j^{K \eta -1} (1-p_j)^{K(1-\eta)-1}\right)
+                \nonumber \\
+            \times  \prod_{j=1}^k  p_j^{y_j} (1-p_j)^{n_j-y_j} \nonumber \\
+\end{eqnarray*}\]</span> We regrouping terms, we see that the proportions <span class="math inline">\(p_1, .., p_k\)</span>, conditional on the hyperparameters, are independent with <span class="math inline">\(p_j\)</span> distributed beta with parameters <span class="math inline">\(a_1 = K\eta + y_j\)</span> and <span class="math inline">\(b_1 = K(1-\eta) + n_j - y_j\)</span>.</p>
+<p>Next consider the marginal posterior density of <span class="math inline">\((\eta, K)\)</span>. We obtain this distribution by integrating out the proportions from the joint posterior density. Recall the identity <span class="math display">\[
+\int_0^1 p^{a-1} (1- p)^{b-1} dp = B(a, b).
+\]</span> If we integrate each proportion out using this identity, we obtain the marginal posterior density <span class="math display">\[\begin{eqnarray*}
+g(\eta, K | {\rm data})  \propto  \left(\prod_{j=1}^9 \frac{B(K \eta + y_j, K(1-\eta) + n_j - y_j)}{B(K \eta, K (1-\eta))} \right)
+    \frac{1}{\eta(1-\eta)} \frac{1}{(1+K)^2} .\nonumber \\
+\end{eqnarray*}\]</span></p>
+<p>Suppose we are interested in learning about the <span class="math inline">\(j\)</span>th proportion <span class="math inline">\(p_j\)</span> that we can summarize by a posterior mean and posterior variance. We can use the posterior representation to obtain simple expressions for these moments. We compute the posterior mean of <span class="math inline">\(p_j\)</span> by using the conditional expectation formula: <span class="math display">\[
+E(p_j | {\rm data}) = E \left[ E(p_j | \eta, K, {\rm data})\right],
+\]</span> where the outer expectation is taken with respect to the posterior distribution of <span class="math inline">\((\eta, K)\)</span>. Since the posterior density of <span class="math inline">\(p_j\)</span>, conditional on <span class="math inline">\((\eta, K)\)</span> is beta(<span class="math inline">\(K\eta + y_j, K(1-\eta) + n_j-y_j\)</span>), we have <span class="math display">\[\begin{eqnarray*}
+E(p_j | \eta, K, {\rm data})  =  \frac{y_j + K\eta}{n_j+K}  \nonumber \\
+                              =  \frac{n_j}{n_j + K} \hat{p_j} + \frac{K}{n_j+K} \eta . \nonumber \\
+\end{eqnarray*}\]</span> So the posterior mean of <span class="math inline">\(p_j\)</span> can be expressed as <span class="math display">\[
+E(p_j | {\rm data}) = E\left(\frac{n_j}{n_j + K}\right) \hat{p_j} + E\left(\frac{K}{n_j+K} \eta\right),
+\]</span> where the expectations on the right hand side are taken with respect to the posterior density of <span class="math inline">\((\eta, K)\)</span>. In a similar fashion, by using the conditioning rule for variances, the posterior variance of <span class="math inline">\(p_j\)</span> can be expressed as <span class="math display">\[
+Var(p_j | {\rm data}) = Var \left[ E(p_j | \eta, K, {\rm data})\right] + E \left[ Var(p_j | \eta, K, {\rm data})\right].
+\]</span> Conditional on <span class="math inline">\((\eta, K)\)</span>, we know the variance of <span class="math inline">\(p_j\)</span> is given by <span class="math display">\[
+Var(p_j | \eta, K, {\rm data}) = \frac{a_1 b_1}{(a_1 + b_1)^2 (a_1 +b_1 + 1)},
+\]</span> where <span class="math inline">\(a_1 = K\eta + y_j\)</span> and <span class="math inline">\(b_1 = K(1-\eta) + n_j - y_j\)</span>. Substituting in the conditional posterior moments, we obtain <span class="math display">\[
+Var(p_j | {\rm data}) = Var \left[ \frac{a_1}{a_1+b_1} \right] + E \left[ \frac{a_1 b_1}{(a_1 + b_1)^2 (a_1 +b_1 + 1)}\right],
+\]</span> where again the variance and expectation on the right hand side are taken with respect to the posterior distribution of <span class="math inline">\((\eta, K)\)</span>.</p>
+</section>
+<section id="estimating-ogt-success-rates" class="level3" data-number="10.1.5">
+<h3 data-number="10.1.5" class="anchored" data-anchor-id="estimating-ogt-success-rates"><span class="header-section-number">10.1.5</span> Estimating OGT Success Rates</h3>
+<p>Recall that the exchangeable model is a compromise between two models, the “separate proportions” model and the “one proportion” model where one assumes the proportions are equal. Table 6.1 displays summaries of the posterior distributions of logit<span class="math inline">\((\eta)\)</span> and <span class="math inline">\(\log K\)</span>. The hyperparameter <span class="math inline">\(\eta\)</span> represents the common proportion value. In the table, the posterior median of logit(<span class="math inline">\(\eta\)</span>) is <span class="math inline">\(-3.35\)</span>, so the posterior median of <span class="math inline">\(\eta\)</span> is <span class="math inline">\(\exp(-3.35)/(1+\exp(-3.35)) = 0.0339.\)</span> So generally 3.4% of the students received an Advanced score on the writing section of the OGT.<br>
+The hyperparameter <span class="math inline">\(K\)</span> is informative about the degree of shrinkage of the separate proportions model towards the one proportion model. From the table, we see that the posterior median of <span class="math inline">\(\log K\)</span> is 4.36 which translates to a posterior median of <span class="math inline">\(K\)</span> of <span class="math inline">\(\exp(4.36) = 78.3\)</span>. If we substitute these estimates for <span class="math inline">\(\eta\)</span> and <span class="math inline">\(K\)</span> in the expression for the posterior mean for <span class="math inline">\(p_j\)</span>, we get the approximation <span class="math display">\[
+E(p_j | {\rm data}) \approx \frac{n_j}{n_j + 78.3} \hat{p_j} + \frac{78.3}{n_j+78.3} (0.0339).
+\]</span> One can measure the shrinkage of the estimate <span class="math inline">\(\hat{p_j}\)</span> towards the pooled estimate by the fraction <span class="math display">\[
+\frac{78.3}{n_j+78.3}.
+\]</span> For the nine schools, the shrinkage values range between 18% and 60%, reflecting substantial movement towards the pooled estimate. The size of the shrinkage depends on the sample size – the largest shrinkage is for North Baltimore School District where only 53 students took the test.</p>
+<p>Table 6.2 gives summaries of the posteriors for the proportions of success for the nine schools. To better understand the values, consider the proportion of students from the Bowling City School District who were successful. The 90% naive Wald confidence interval for <span class="math inline">\(p_1\)</span> based on the data <span class="math inline">\((y_1, n_1) = (5, 259)\)</span> is given by <span class="math display">\[
+(0.019 - 1.645 \sqrt{\frac{0.019 (1-0.019)}{259}}, 0.019 + 1.645 \sqrt{\frac{0.019 (1-0.019)}{259}})
+\]</span> <span class="math display">\[
+= (0.0051, 0.0329)
+\]</span> If we assumed the proportions for the nine schools were equal, then the estimate for <span class="math inline">\(p_1\)</span> would be the combined estimate 0.0327 with a sample size of 1406 and the 90% Wald interval would have the form <span class="math display">\[
+(0.0327 - 1.645 \sqrt{\frac{0.0327 (1-0.0327)}{1406}}, 0.0327 + 1.645 \sqrt{\frac{0.0327 (1-0.0327)}{1406}})
+\]</span> <span class="math display">\[
+= (0.0199, 0.0456)
+\]</span> From the table, the 90% interval estimate of <span class="math inline">\(p_1\)</span> (from the 5th and 95th percentiles of the marginal posterior) is given by (0.011, 0.038).<br>
+The lengths of the separate proportion, one proportion, and Bayesian intervals are respectively 0.0278, 0.0257, and 0.027. By “borrowing strength”, the exchangeable model gives more precise estimates than the separate proportion estimates, although not as precise as the one proportion estimate.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>School District</th>
+<th><span class="math inline">\(E(p)\)</span></th>
+<th><span class="math inline">\(SD(p)\)</span></th>
+<th><span class="math inline">\(p_{.05}\)</span></th>
+<th><span class="math inline">\(p_{.95}\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bowling Green City Sd</td>
+<td>0.023</td>
+<td>0.008</td>
+<td>0.011</td>
+<td>0.038</td>
+</tr>
+<tr class="even">
+<td>Eastwood Local Sd</td>
+<td>0.055</td>
+<td>0.017</td>
+<td>0.031</td>
+<td>0.088</td>
+</tr>
+<tr class="odd">
+<td>Elmwood Local Sd</td>
+<td>0.033</td>
+<td>0.014</td>
+<td>0.013</td>
+<td>0.058</td>
+</tr>
+<tr class="even">
+<td>Lake Local Sd</td>
+<td>0.022</td>
+<td>0.010</td>
+<td>0.007</td>
+<td>0.040</td>
+</tr>
+<tr class="odd">
+<td>North Baltimore Local Sd</td>
+<td>0.020</td>
+<td>0.013</td>
+<td>0.002</td>
+<td>0.043</td>
+</tr>
+<tr class="even">
+<td>Northwood Local Sd</td>
+<td>0.041</td>
+<td>0.017</td>
+<td>0.019</td>
+<td>0.073</td>
+</tr>
+<tr class="odd">
+<td>Otsego Local Sd</td>
+<td>0.022</td>
+<td>0.010</td>
+<td>0.007</td>
+<td>0.040</td>
+</tr>
+<tr class="even">
+<td>Perrysburg Ex Vill Sd</td>
+<td>0.042</td>
+<td>0.010</td>
+<td>0.028</td>
+<td>0.060</td>
+</tr>
+<tr class="odd">
+<td>Rossford Ex Vill Sd</td>
+<td>0.031</td>
+<td>0.012</td>
+<td>0.014</td>
+<td>0.052</td>
+</tr>
+</tbody>
+</table>
+<p>Figure 6.1 graphically illustrates the shrinkage behavior of the Bayesian estimates using the exchangeable model. The open circles represent the individual proportion estimates {<span class="math inline">\(\hat {p_j}\)</span>} and the solid circles represent the Bayesian posterior means. The horizontal line represents the pooled estimate assuming the proportions are equal. The arrows show the shrinkage of the individual estimates towards the pooled estimate. Note from the figure that the shrinkage sizes are largest for the smaller schools with a small <span class="math inline">\(n_j\)</span>.</p>
+</section>
+</section>
+<section id="a-normalnormal-exchangeable-model" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="a-normalnormal-exchangeable-model"><span class="header-section-number">10.2</span> A Normal/Normal Exchangeable Model</h2>
+<p>In many situations, one is interested in combining normally distributed data from a group of related experiments. Suppose one observes independent random variables <span class="math inline">\(y_1, ..., y_k\)</span>, where <span class="math inline">\(y_i\)</span> is distributed from a normal population with mean <span class="math inline">\(\theta_i\)</span> and known variance <span class="math inline">\(\sigma^2\)</span>. (Note that we are assuming the variabilities for the <span class="math inline">\(k\)</span> experiments are equal.) The prior belief is that <span class="math inline">\(\theta_1, .., \theta_k\)</span> are exchangeable. We model this belief by a hierarchical model where at stage I, we assume that the {<span class="math inline">\(\theta_i\)</span>} are a random sample from a normal density with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\tau^2\)</span>, and at stage II, we assign the prior parameters <span class="math inline">\((\mu, \tau^2)\)</span> a distribution <span class="math inline">\(g(\mu, \tau^2)\)</span>.</p>
+<p>In a famous example described by Efron and Morris, one is interested in simultaneously estimating the batting abilities for 18 baseball players shown in Table 1. For the <span class="math inline">\(i\)</span>th player, one observes <span class="math inline">\(x_i\)</span>, the number of hits in 45 at-bats (opportunities), and one assumes <span class="math inline">\(x_i\)</span> is binomial(45, <span class="math inline">\(p_i\)</span>), where <span class="math inline">\(p_i\)</span> is the hitting probability. We are interested in estimating the 18 hitting probabilities <span class="math inline">\(p_1, ..., p_{18}\)</span>. To make the data approximately normal, we transform <span class="math inline">\(x_i\)</span> by the logit transformation <span class="math inline">\(y_i = \log(x_i/(45-x_i))\)</span>. The reexpressed random variable <span class="math inline">\(x_i\)</span> is approximately N(<span class="math inline">\(\theta_i, \sigma^2\)</span>), where <span class="math inline">\(\theta_i = \log(p_i/(1-p_i))\)</span> and <span class="math inline">\(\sigma^2 = 0.11\)</span>.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th>Name</th>
+<th><span class="math inline">\(x_i\)</span></th>
+<th><span class="math inline">\(AB\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Alvardo</td>
+<td>12</td>
+<td>45</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Alvis</td>
+<td>7</td>
+<td>45</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Berry</td>
+<td>14</td>
+<td>45</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Campaneris</td>
+<td>9</td>
+<td>45</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Clemente</td>
+<td>18</td>
+<td>45</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Howard</td>
+<td>16</td>
+<td>45</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Johnstone</td>
+<td>15</td>
+<td>45</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Kessinger</td>
+<td>13</td>
+<td>45</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>Munson</td>
+<td>8</td>
+<td>45</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>Petrocelli</td>
+<td>10</td>
+<td>45</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>Robinson</td>
+<td>17</td>
+<td>45</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>Rodriguez</td>
+<td>10</td>
+<td>45</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>Santo</td>
+<td>11</td>
+<td>45</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td>Scott</td>
+<td>10</td>
+<td>45</td>
+</tr>
+<tr class="odd">
+<td>15</td>
+<td>Spencer</td>
+<td>14</td>
+<td>45</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>Swoboda</td>
+<td>11</td>
+<td>45</td>
+</tr>
+<tr class="odd">
+<td>17</td>
+<td>Unser</td>
+<td>10</td>
+<td>45</td>
+</tr>
+<tr class="even">
+<td>18</td>
+<td>Williams</td>
+<td>10</td>
+<td>45</td>
+</tr>
+</tbody>
+</table>
+<p>In this problem, there are <span class="math inline">\(k+2\)</span> unknowns, the <span class="math inline">\(k\)</span> normal means and the second-stage prior parameters <span class="math inline">\((\mu, \tau^2)\)</span>. The joint posterior density of these unknowns is given by <span class="math display">\[
+g(\{\theta_i\}, \mu, \tau^2 | y) \propto \prod_{i=1}^k \left[ \phi(y_i; \theta_i, \sigma^2) \phi(\theta_i;  \mu, \tau^2)\right] g(\mu, \tau^2),
+\]</span> where <span class="math inline">\(\phi(y; \mu, \sigma^2)\)</span> denotes a normal density with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>We summarize this joint posterior by considering two distributions, the posterior distribution of the normal means conditional on the parameters <span class="math inline">\((\mu, \tau^2)\)</span>, and the marginal distribution of the second-stage parameters.</p>
+<section id="conditional-posterior-distribution-of-the-normal-means" class="level3" data-number="10.2.1">
+<h3 data-number="10.2.1" class="anchored" data-anchor-id="conditional-posterior-distribution-of-the-normal-means"><span class="header-section-number">10.2.1</span> Conditional posterior distribution of the normal means</h3>
+<p>If we condition on the parameters <span class="math inline">\((\mu, \tau^2)\)</span>, then the posterior density of the means <span class="math inline">\(\{\theta_i\}\)</span> has the form <span class="math display">\[
+g(\{\theta_i\} | \mu, \tau^2, y) \propto \prod_{i=1}^k \left[ \phi(y_i; \theta_i, \sigma^2) \phi(\theta_i;  \mu, \tau^2)\right].
+\]</span> We see that <span class="math inline">\(\theta_1, ..., \theta_k\)</span> are independent and the marginal density of <span class="math inline">\(\theta_i\)</span> has a normal density with parameters given by the familiar normal/normal updating formula: <span class="math display">\[
+E(\theta_i | \mu, \tau^2, y) = \frac{y_i/\sigma^2 + \mu/\tau^2}{1/\sigma^2 + 1/\tau^2},
+\]</span> and <span class="math display">\[
+Var(\theta_i | \mu, \tau^2, y) = \frac{1}{1/\sigma^2 + 1/\tau^2}.
+\]</span></p>
+</section>
+<section id="posterior-distribution-of-the-second-stage-parameters" class="level3" data-number="10.2.2">
+<h3 data-number="10.2.2" class="anchored" data-anchor-id="posterior-distribution-of-the-second-stage-parameters"><span class="header-section-number">10.2.2</span> Posterior distribution of the second-stage parameters</h3>
+<p>To obtain the marginal posterior distribution of <span class="math inline">\((\{\mu, \tau^2\}\)</span>, we need to integrate out the means <span class="math inline">\(\{\theta_i\}\)</span> from the joint posterior. From our work with the normal sampling/normal prior model, we know that <span class="math display">\[
+\int \phi(y_i; \theta_i, \sigma^2) \phi(\theta_i;  \mu, \tau^2) \theta_i = \phi(y_i; \mu, \sigma^2 + \tau^2).
+\]</span> This is just the statement that for a normal/normal model, the predictive density of <span class="math inline">\(y_i\)</span> is normal with mean equal to the prior mean and a variance given by the sum of the sampling variance and the prior variance. When we integrate out all <span class="math inline">\(k\)</span> means from the joint posterior, we obtain an expression for the posterior of the second-stage parameters: <span class="math display">\[
+g(\mu, \tau^2 | y) \propto \left(\prod_{i=1}^k \phi(y_i; \mu, \sigma^2 + \tau^2)\right) g(\mu, \tau^2).
+\]</span></p>
+<p>Suppose we assume <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau^2\)</span> are independent, with <span class="math inline">\(\mu\)</span> assigned a uniform prior and <span class="math inline">\(\tau^2\)</span> assigned the proper density <span class="math display">\[
+g(\tau^2) = \frac{1}{1+\tau^2}, \, \, \tau^2 &gt; 0.
+\]</span> Then the posterior density of <span class="math inline">\((\{\mu, \tau^2\}\)</span> simplifies as the product <span class="math display">\[
+g(\mu, \tau^2 | y) = g(\mu | \tau^2, y) g(\tau^2 | y),
+\]</span> where <span class="math inline">\(g(\mu | \tau^2, y)\)</span> is normal with mean <span class="math inline">\(\bar y\)</span> and variance <span class="math inline">\((\sigma^2 + \tau^2)/k\)</span>, and <span class="math inline">\(g(\tau^2 | y)\)</span> has the form <span class="math display">\[
+g(\tau^2 | y) \propto \frac{1}{(\sigma^2 + \tau^2)^{(k-1)/2}}
+\exp\left(-\frac{1}{2(\sigma^2 + \tau^2)} \sum_{i=1}^k (y_i - \bar y)^2 \right)\frac{1}{1+\tau^2}.
+\]</span></p>
+</section>
+<section id="posterior-means" class="level3" data-number="10.2.3">
+<h3 data-number="10.2.3" class="anchored" data-anchor-id="posterior-means"><span class="header-section-number">10.2.3</span> Posterior means</h3>
+<p>Let’s focus on the posterior mean of the <span class="math inline">\(i\)</span>th normal mean <span class="math inline">\(\theta_i\)</span>. By the conditional expectation formula, one has <span class="math display">\[
+E(\theta_i | y) = E^{\mu, \tau^2} \left[ E(\theta_i | y, \mu, \tau^2) \right],
+\]</span> where the outer expectation is taken over the posterior distribution of <span class="math inline">\(\{\mu, \tau^2\}\)</span>. Since the posterior distribution of <span class="math inline">\(\theta_i\)</span> conditional on the second-stage parameters is normal, we have <span class="math display">\[
+E(\theta_i | y) = E^{\mu, \tau^2} \left[  \frac{y_i/\sigma^2 + \mu/\tau^2}{1/\sigma^2 + 1/\tau^2} \right].
+\]</span> Using a similar conditional expectation formula, we can write <span class="math display">\[\begin{eqnarray*}
+E(\theta_i | y)  =  E^{\tau^2} E^{\mu|\tau^2} \left[  \frac{y_i/\sigma^2 + \mu/\tau^2}{1/\sigma^2 + 1/\tau^2} \right] \nonumber \\
+                 =  E^{\tau^2} \left[  \frac{y_i/\sigma^2 + \bar y/\tau^2}{1/\sigma^2 + 1/\tau^2} \right]\nonumber \\
+                 =  (1 - F)y_i  +   F \bar y,  \nonumber \\
+\end{eqnarray*}\]</span> where <span class="math inline">\(F\)</span> is the shrinkage <span class="math display">\[
+F = E^{\tau^2}\left(\frac{1/\tau^2}{1/\tau^2 + 1/\sigma^2} \right) = \int_0^\infty \frac{1/\tau^2}{1/\tau^2 + 1/\sigma^2} g(\tau^2 | y) d\tau^2.
+\]</span></p>
+<p>To illustrate the posterior calculations, we consider the problem of estimating the collection of hitting probabilities. In Table 2, the column <span class="math inline">\(x/45\)</span> contains the batting averages, the proportions of hits in the 45 at-bats. The column <span class="math inline">\(y\)</span> contains the transformed proportions <span class="math inline">\(y = \log(x/(45-x))\)</span>.</p>
+<p>We focus on the computation of the posterior means of the normal means <span class="math inline">\(\{\theta_j\}\)</span>. The shrinkage of the posterior mean estimate is controlled by the variance parameter <span class="math inline">\(\tau^2\)</span> and Figure 1 displays its posterior density. Since the parameter <span class="math inline">\(\tau^2\)</span> affects the posterior mean through the shrinkage function <span class="math display">\[
+F(\tau^2) = \frac{1/\tau^2}{1/\tau^2 + 1/\sigma^2},
+\]</span> one is interested in the posterior density of <span class="math inline">\(F(\tau^2)\)</span> and Figure 2 displays its posterior density. Note that the posterior density of the shrinkage function is concentrated on the interval (0.6, 0.8), indicating substantial shrinkage of the individual estimates towards the combined estimate <span class="math inline">\(\bar y\)</span>. One can compute <span class="math display">\[
+F = E^{\tau^2} (F(\tau)) = 0.68.
+\]</span> This means that the individual estimate <span class="math inline">\(y_i\)</span> is shrunk 68% towards the pooled estimate <span class="math inline">\(\bar y\)</span>. Table 2 displays the posterior means <span class="math display">\[
+E(\theta_i | y) = (1 - 0.68) y_i + 0.68 \bar y.
+\]</span> By transforming these logit estimates back to the proportion scale <span class="math display">\[
+p = \exp(\theta)/(1+\exp(\theta)),
+\]</span> one obtains the Bayesian proportion estimates {<span class="math inline">\(\hat p_i\)</span>}.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th>Player</th>
+<th><span class="math inline">\(x/45\)</span></th>
+<th><span class="math inline">\(y\)</span></th>
+<th><span class="math inline">\(E(\theta|y)\)</span></th>
+<th><span class="math inline">\(\hat p\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Alvardo</td>
+<td>0.267</td>
+<td>-1.012</td>
+<td>-1.035</td>
+<td>0.262</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Alvis</td>
+<td>0.156</td>
+<td>-1.692</td>
+<td>-1.251</td>
+<td>0.222</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Berry</td>
+<td>0.311</td>
+<td>-0.795</td>
+<td>-0.966</td>
+<td>0.276</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Campaneris</td>
+<td>0.200</td>
+<td>-1.386</td>
+<td>-1.154</td>
+<td>0.240</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Clemente</td>
+<td>0.400</td>
+<td>-0.405</td>
+<td>-0.842</td>
+<td>0.301</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Howard</td>
+<td>0.356</td>
+<td>-0.595</td>
+<td>-0.902</td>
+<td>0.289</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Johnstone</td>
+<td>0.333</td>
+<td>-0.693</td>
+<td>-0.934</td>
+<td>0.282</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Kessinger</td>
+<td>0.289</td>
+<td>-0.901</td>
+<td>-1.000</td>
+<td>0.269</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>Munson</td>
+<td>0.178</td>
+<td>-1.531</td>
+<td>-1.200</td>
+<td>0.231</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>Petrocelli</td>
+<td>0.222</td>
+<td>-1.253</td>
+<td>-1.112</td>
+<td>0.248</td>
+</tr>
+<tr class="odd">
+<td>11</td>
+<td>Robinson</td>
+<td>0.378</td>
+<td>-0.499</td>
+<td>-0.872</td>
+<td>0.295</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>Rodriguez</td>
+<td>0.222</td>
+<td>-1.253</td>
+<td>-1.112</td>
+<td>0.248</td>
+</tr>
+<tr class="odd">
+<td>13</td>
+<td>Santo</td>
+<td>0.244</td>
+<td>-1.128</td>
+<td>-1.072</td>
+<td>0.255</td>
+</tr>
+<tr class="even">
+<td>14</td>
+<td>Scott</td>
+<td>0.222</td>
+<td>-1.253</td>
+<td>-1.112</td>
+<td>0.248</td>
+</tr>
+<tr class="odd">
+<td>15</td>
+<td>Spencer</td>
+<td>0.311</td>
+<td>-0.795</td>
+<td>-0.966</td>
+<td>0.276</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>Swoboda</td>
+<td>0.244</td>
+<td>-1.128</td>
+<td>-1.072</td>
+<td>0.255</td>
+</tr>
+<tr class="odd">
+<td>17</td>
+<td>Unser</td>
+<td>0.222</td>
+<td>-1.253</td>
+<td>-1.112</td>
+<td>0.248</td>
+</tr>
+<tr class="even">
+<td>18</td>
+<td>Williams</td>
+<td>0.222</td>
+<td>-1.253</td>
+<td>-1.112</td>
+<td>0.248</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="priors" class="level3" data-number="10.2.4">
+<h3 data-number="10.2.4" class="anchored" data-anchor-id="priors"><span class="header-section-number">10.2.4</span> Priors</h3>
+<p>In the specification of priors, we did not say much about the choice of priors on the hyperparameters <span class="math inline">\((\mu, \tau^2)\)</span>. That raises some obvious questions. Can we place any vague prior on these parameters? Does the choice of prior matter?</p>
+<p>A traditional choice of prior on a variance parameter is the improper form <span class="math display">\[
+g(\tau^2) = \frac{1}{\tau^2}, \, \, \tau^2 &gt; 0.
+\]</span> Unfortunately, this choice may result in an improper posterior distribution for <span class="math inline">\(\tau^2\)</span>. We used a random walk Metropolis algorithm to simulate 10,000 variates and Figure 4 shows trace and density plots for the parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\log \tau^2\)</span>. The trace plot for <span class="math inline">\(\log \tau^2\)</span> shows much instability in the simulated draws and this reflects the fact that the posterior density is not well-behaved.</p>
+<p>By the above investigation, it is clear that a proper prior needs to be chosen for the variance parameter <span class="math inline">\(\tau^2\)</span>. But how does the choice of prior matter? Suppose we slightly generalize the prior of <span class="math inline">\(\tau^2\)</span> to the log logistic form <span class="math display">\[
+g(\tau^2) = \frac{M}{(M + \tau^2)^2}, \, \, \tau^2 &gt; 0.
+\]</span> The parameter <span class="math inline">\(M\)</span> is the prior median of <span class="math inline">\(\tau^2\)</span>. In the above analysis we chose <span class="math inline">\(M = 1\)</span> and it natural to ask about the sensitivity of the posterior analysis to the choice of different values for <span class="math inline">\(M\)</span>.</p>
+<p>Suppose we are interested in the sensitivity of the shrinkage parameter <span class="math inline">\(F\)</span> with respect to the prior median <span class="math inline">\(M\)</span>. In our earlier analysis, we found that the posterior mode of <span class="math inline">\(F\)</span> was 0.686 when <span class="math inline">\(M = 1\)</span> or when <span class="math inline">\(\log M = 0\)</span>. In Figure 5, we plot the posterior mode of <span class="math inline">\(F\)</span> as a function of <span class="math inline">\(\log M\)</span>. We see that the posterior shrinkage is relatively insensitive to the prior parameter for “large” values of <span class="math inline">\(\log M\)</span> between 0 and 2. Indeed, if we choose the very large value <span class="math inline">\(\log M = 10\)</span>, the posterior mode of the shrinkage changes only slightly to 0.655. However, the posterior shrinkage is sensitive to the choice of small values of <span class="math inline">\(\log M\)</span>.</p>
+<p>Since the posterior shrinkage is sensitive to the choice of small <span class="math inline">\(M\)</span>, that raises a new question. If we had knowledge about batting averages, what would be a reasonable prior for the variance parameter <span class="math inline">\(\tau^2\)</span>? The author is a baseball fan and he believes that most of the hitting probabilities for players fall in the interval (0.240, 0.320). If we equate the range of this interval with <span class="math inline">\(4 \tau\)</span> (corresponding to 95% confidence), we obtain the estimate <span class="math inline">\(0.02\)</span> for <span class="math inline">\(\tau\)</span> which would correspond to a prior median of <span class="math inline">\(M = 0.02^2 = 0.0004\)</span> for <span class="math inline">\(\tau^2\)</span>. With this choice of <span class="math inline">\(M\)</span>, the posterior mode of the shrinkage <span class="math inline">\(F\)</span> is essentially 1, which means that the observed batting averages are shrunk completely towards the pooled estimate. This is not a surprising result, since the observed batting averages are only based on a few weeks of baseball (45 at-bats), and it makes sense that the prior information about the hitting probabilities will swamp the data information in this case.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./mcmc.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Markov Chain Monte Carlo</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
