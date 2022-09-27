@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.309">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Bayesian Inference - 11&nbsp; Bayesian Testing and Model Selection</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<link href="./hierarchical.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Bayesian Testing and Model Selection</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Bayesian Inference</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./probability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Probability</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayes_rule.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Bayes Rule</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./proportion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning About a Proportion</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./single_parameter.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Single Parameter Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./prior.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Prior Distributions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./many_parameters.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Many Parameter Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayes_computation.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Bayesian Computation</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./mcmc.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Markov Chain Monte Carlo</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./hierarchical.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Hierarchical Modeling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./model_selection.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Bayesian Testing and Model Selection</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#review-of-frequentist-testing" id="toc-review-of-frequentist-testing" class="nav-link active" data-scroll-target="#review-of-frequentist-testing"> <span class="header-section-number">11.1</span> Review of Frequentist Testing</a></li>
+  <li><a href="#introduction-to-bayesian-testing" id="toc-introduction-to-bayesian-testing" class="nav-link" data-scroll-target="#introduction-to-bayesian-testing"> <span class="header-section-number">11.2</span> Introduction to Bayesian Testing</a></li>
+  <li><a href="#testing-about-a-normal-mean" id="toc-testing-about-a-normal-mean" class="nav-link" data-scroll-target="#testing-about-a-normal-mean"> <span class="header-section-number">11.3</span> Testing about a Normal Mean</a>
+  <ul class="collapse">
+  <li><a href="#the-one-sided-hypothesis" id="toc-the-one-sided-hypothesis" class="nav-link" data-scroll-target="#the-one-sided-hypothesis"> <span class="header-section-number">11.3.1</span> The one-sided hypothesis</a></li>
+  <li><a href="#the-two-sided-hypothesis" id="toc-the-two-sided-hypothesis" class="nav-link" data-scroll-target="#the-two-sided-hypothesis"> <span class="header-section-number">11.3.2</span> The two-sided hypothesis</a></li>
+  </ul></li>
+  <li><a href="#comparing-models-by-bayes-factors" id="toc-comparing-models-by-bayes-factors" class="nav-link" data-scroll-target="#comparing-models-by-bayes-factors"> <span class="header-section-number">11.4</span> Comparing Models by Bayes Factors</a>
+  <ul class="collapse">
+  <li><a href="#comparing-geometric-and-poisson-distributions" id="toc-comparing-geometric-and-poisson-distributions" class="nav-link" data-scroll-target="#comparing-geometric-and-poisson-distributions"> <span class="header-section-number">11.4.1</span> Comparing Geometric and Poisson Distributions</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Bayesian Testing and Model Selection</span></h1>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="review-of-frequentist-testing" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="review-of-frequentist-testing"><span class="header-section-number">11.1</span> Review of Frequentist Testing</h2>
+<p>We begin by reviewing some basic notations of frequentist testing. As a simple example, suppose we observe a random sample <span class="math inline">\(y_1, ..., y_n\)</span> from a normal population with mean <span class="math inline">\(\theta\)</span> and known variance <span class="math inline">\(\sigma^2\)</span>. Suppose we wish to test the simple hypothesis <span class="math inline">\(H: \theta = \theta_0\)</span> against the simple alternative <span class="math inline">\(A: \theta = \theta_1\)</span> where <span class="math inline">\(\theta_0 &lt; \theta_1\)</span>.</p>
+<p>Since the sample mean <span class="math inline">\(\bar y\)</span> is sufficient, we can consider the single observation <span class="math inline">\(\bar y\)</span> that is normal with mean <span class="math inline">\(\theta\)</span> and variance <span class="math inline">\(\sigma^2/n\)</span>. The likelihood function is <span class="math display">\[
+L(\theta) = \phi(\bar y; \theta, \sigma^2/n),
+\]</span> where <span class="math inline">\(\phi(y; \theta, \sigma^2)\)</span> is the normal density with mean <span class="math inline">\(\theta\)</span> and variance <span class="math inline">\(\sigma^2\)</span>. The most-powerful test of <span class="math inline">\(H\)</span> against <span class="math inline">\(A\)</span> is based on the likelihood ratio <span class="math display">\[
+\Lambda = \frac{L(\theta_1)}{L(\theta_0)}.
+\]</span> This test rejects <span class="math inline">\(H\)</span> when <span class="math inline">\(\Lambda \ge k\)</span> which is equivalent to rejecting when <span class="math inline">\(\bar y \ge c\)</span>. We set a Type I error probability of <span class="math inline">\(\alpha\)</span> and choose the constant <span class="math inline">\(c\)</span> so that <span class="math inline">\(P(\bar y \ge c | \theta = \theta_0) = \alpha\)</span>. The most-powerful test of size <span class="math inline">\(\alpha\)</span> rejects <span class="math inline">\(H\)</span> when <span class="math display">\[
+\bar y \ge \theta_0 + z_{1-\alpha} \frac{\sigma}{\sqrt{n}},
+\]</span> where <span class="math inline">\(z_\alpha\)</span> is the <span class="math inline">\(\alpha\)</span> percentile of a standard normal random variable.</p>
+<p>Here are some comments about this testing procedure.</p>
+<ol type="1">
+<li><strong>Two types of error?</strong> There are two mistakes one can make with a test – one can incorrectly reject <span class="math inline">\(H\)</span> when <span class="math inline">\(H\)</span> is true (<span class="math inline">\(\theta = \theta_0\)</span>) or one can incorrectly accept <span class="math inline">\(H\)</span> when <span class="math inline">\(A\)</span> is true (<span class="math inline">\(\theta = \theta_1\)</span>). In a frequentist test, one is controlling only the probability of the first error.</li>
+<li><strong>Confidence?</strong> This test has a repeated sampling validity. If one performs many tests when <span class="math inline">\(H\)</span> is true, that is, <span class="math inline">\(\theta = \theta_0\)</span>, then the proportion of times one will incorrectly reject is <span class="math inline">\(\alpha\)</span>.</li>
+<li><strong>Measure of evidence?</strong> Suppose one observes an extreme value of <span class="math inline">\(\bar y\)</span>, a value that is unusual if the hypothesis <span class="math inline">\(H\)</span> is true. The frequentist test, as constructed, does not provide a measure of evidence given this extreme value of <span class="math inline">\(\bar y\)</span>. (All one has is the repeated sampling interpretation.) R. A. Fisher proposed the p-value that is the probability of obtaining the observed value <span class="math inline">\(\bar y\)</span> or more extreme if indeed <span class="math inline">\(H\)</span> was true. <span class="math display">\[
+{\rm p-value} = P(\bar Y \ge \bar y | \theta = \theta_0).
+\]</span> In practice, one typically computes a p-value. This computation allows one to accept or reject the hypothesis <span class="math inline">\(H\)</span> for any value of <span class="math inline">\(\alpha\)</span> and provides a measure of the strength of evidence against the null hypothesis <span class="math inline">\(H\)</span>.</li>
+</ol>
+</section>
+<section id="introduction-to-bayesian-testing" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="introduction-to-bayesian-testing"><span class="header-section-number">11.2</span> Introduction to Bayesian Testing</h2>
+<p>Let’s consider the problem of testing a simple null hypothesis <span class="math inline">\(H: \theta=\theta_0\)</span> against the simple alternative hypothesis <span class="math inline">\(A: \theta = \theta_1\)</span> for normal data, known variance, from a Bayesian perspective. Here there are two possible values of the mean, <span class="math inline">\(\theta_0\)</span> and <span class="math inline">\(\theta_1\)</span>. Suppose we assign the prior probabilities <span class="math display">\[
+g(\theta_0), \, \, g(\theta_1) = 1 - g(\theta_0).
+\]</span> The prior odds of <span class="math inline">\(H\)</span> is the ratio of the prior probabilities of the two hypotheses <span class="math display">\[
+O(H) = \frac{g(H)}{g(A)}.
+\]</span> Suppose we observe the sample mean <span class="math inline">\(\bar y\)</span>. The posterior probability of the mean <span class="math inline">\(\theta\)</span> is given, by Bayes’ rule, by <span class="math display">\[
+g(\theta | y) \propto L(\theta) P(\theta) = \phi(\bar y; \theta, \sigma^2/n).
+\]</span> The posterior odds of <span class="math inline">\(H\)</span> is the ratio of the posterior probabilities of <span class="math inline">\(H\)</span> and <span class="math inline">\(A\)</span> <span class="math display">\[
+O(H | y) = \frac{g(H| y)}{g(A | y)} = \frac{g(\theta_0) L(\theta_0)}{g(\theta_1) L(\theta_1)}.
+\]</span> Note that we can write the posterior odds of <span class="math inline">\(H\)</span> as <span class="math display">\[
+O(H | y) = O(H) \times BF_{HA},
+\]</span> where <span class="math inline">\(O(H)\)</span> is the prior odds of <span class="math inline">\(H\)</span> and <span class="math inline">\(BF_{HA}\)</span> is the {} <span class="math display">\[
+BF_{HA} = \frac{L(\theta_0)}{L(\theta_1)},
+\]</span> the ratio of the likelihoods of the two hypotheses.</p>
+<p>As a simple example, let’s return to the example of determining the true IQ for our friend Joe. Our friend is taking a IQ test and his score <span class="math inline">\(y\)</span> is normally distributed with mean <span class="math inline">\(\theta\)</span> and variance <span class="math inline">\(\sigma^2 = 100\)</span>. We wish to test the hypothesis <span class="math inline">\(H: \theta = 100\)</span> (Joe has average intelligence against the alternative hypothesis <span class="math inline">\(A: \theta = 130\)</span> (Joe is a genius). Before the IQ test is given, we strongly believe Joe has average intelligence and assign <span class="math inline">\(g(100) = 0.95, g(130) = 0.05\)</span>. The prior odds that Joe has average intelligence is given by <span class="math display">\[
+O(H) = \frac{0.95}{0.05} = 19.
+\]</span> Joe scores 120 on the IQ test. We compute the Bayes factor, the ratio of the likelihoods under the average and genius hypotheses <span class="math display">\[
+BF_{HA} = \frac{\phi(120; 100, 100)}{\phi(120; 130, 100)} = \frac{ 0.00540}{0.02420} = 0.223.
+\]</span> The posterior odds of “average” is given by the product of the prior odds and the Bayes factor <span class="math display">\[
+O(H | 120) = 19 \times 0.223 = 4.24.
+\]</span> It might be helpful to convert the odds of “average” to a probability: <span class="math display">\[
+P(H | 120) = \frac{O(H|120)}{O(H|120) + 1} = \frac{4.24}{4.24+1} = 0.809.
+\]</span> Although the data provided some evidence that Joe is a genius, we still strongly believe Joe has average intelligence.</p>
+</section>
+<section id="testing-about-a-normal-mean" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="testing-about-a-normal-mean"><span class="header-section-number">11.3</span> Testing about a Normal Mean</h2>
+<section id="the-one-sided-hypothesis" class="level3" data-number="11.3.1">
+<h3 data-number="11.3.1" class="anchored" data-anchor-id="the-one-sided-hypothesis"><span class="header-section-number">11.3.1</span> The one-sided hypothesis</h3>
+<p>As a slight generalization, suppose we again have normal sampling <span class="math inline">\(y_1, ..., y_n\)</span> with unknown mean <span class="math inline">\(\theta\)</span> and known variance <span class="math inline">\(\sigma^2\)</span> and we are interested in testing the one-sided hypothesis <span class="math inline">\(H: \theta \le \theta_0\)</span> against the alternative hypothesis <span class="math inline">\(A: \theta &gt; \theta_0\)</span>.</p>
+<p>Suppose one assigns a normal(<span class="math inline">\(\mu, \tau^2\)</span>) prior. Then the prior odds is the ratio of the prior probabilities of <span class="math inline">\(H\)</span> and <span class="math inline">\(A\)</span>: <span class="math display">\[
+O(H) = \frac{P(H)}{P(A)} = \frac{P(\theta \le \theta_0)}{P(\theta &gt; \theta_0)}.
+\]</span> After one observes the data <span class="math inline">\(\bar y\)</span>, the new opinions about the mean <span class="math inline">\(\theta\)</span> are reflected in the posterior density N(<span class="math inline">\(\mu_1, \tau_1^2\)</span>), where <span class="math display">\[
+\mu_1 = \frac{\mu/\tau^2 + n \bar y/\sigma^2}{1/\tau^2+n/\sigma^2}, \,\, \tau_1^2 = \frac{1}{1/\tau^2+n/\sigma^2}.
+\]</span> The posterior odds is the ratio of the posterior probabilities of the two hypotheses <span class="math display">\[
+O(H|y) = \frac{P(H|y)}{P(A|y)} = \frac{P(\theta \le \theta_0|y)}{P(\theta &gt; \theta_0|y)},
+\]</span> and the Bayes factor is the ratio of the posterior odds to the prior odds <span class="math display">\[
+BF_{HA} = \frac{O(H|y)}{O(H)}.
+\]</span></p>
+<p>Let’s return to the Joe IQ example. If <span class="math inline">\(\theta\)</span> represents Joe’s true IQ, suppose we are interested in testing the hypotheses <span class="math inline">\(H: \theta \le 100\)</span>, Joe has at most average intelligence, against the alternative hypothesis <span class="math inline">\(A: \theta &gt; 100\)</span>, Joe has above-average intelligence. If our prior beliefs are normal with mean <span class="math inline">\(\mu = 100\)</span> and <span class="math inline">\(\tau^2 = 225\)</span>, then the prior probability of <span class="math inline">\(H\)</span> is equal to <span class="math display">\[
+P(H) = P(\theta \le 100) =  1/2,
+\]</span> and so the prior odds is <span class="math display">\[
+O(H) = 1\]</span>. If Joe’s observed IQ test score is <span class="math inline">\(y = 120\)</span>, we showed in Chapter ??? that the posterior density for <span class="math inline">\(\theta\)</span> is normal with mean <span class="math inline">\(\mu_1 = 113.8\)</span> and variance <span class="math inline">\(\tau_1^2 = 69.23.\)</span> The posterior probability of <span class="math inline">\(H\)</span> is equal to <span class="math display">\[
+P(H | y=120) = P(\theta \le 100 | y=120) = \Phi\left(\frac{100-120}{69.23}\right) = \Phi(-0.29) = 0.386,
+\]</span> and the posterior odds of <span class="math inline">\(H\)</span> is <span class="math display">\[
+O(H | y=120) = \frac{0.386}{1-0.386} = 0.639.
+\]</span> In this example, since the prior odds is 1, the Bayes factor <span class="math inline">\(BF_{HA}\)</span> is also equal to 0.639, indicating that the data supports the alternative hypothesis that Joe has above-average intelligence. Since the posterior probability of <span class="math inline">\(A\)</span> is relatively small (0.386), this single test result has not provided decisive evidence that Joe has an above-average true IQ.</p>
+<section id="p-values-and-posterior-probabilities-of-hypotheses" class="level4" data-number="11.3.1.1">
+<h4 data-number="11.3.1.1" class="anchored" data-anchor-id="p-values-and-posterior-probabilities-of-hypotheses"><span class="header-section-number">11.3.1.1</span> P-values and posterior probabilities of hypotheses}</h4>
+<p>In this setting, suppose we place a uniform, noninformative prior on <span class="math inline">\(\theta\)</span>. Then the posterior density of <span class="math inline">\(\theta\)</span> is N(<span class="math inline">\(\bar y, \sigma^2/n\)</span>) and the posterior probability of the null hypothesis is given by</p>
+<p><span class="math display">\[\begin{eqnarray*}
+P(H|y)  = P(\theta \le \theta_0 | y)  \nonumber \\
+                 =  P\left( Z &lt; \frac{\sqrt{n} (\theta_0 - \bar y)} {\sigma} | y \right) \nonumber \\
+                 =  \Phi \left(\frac{\sqrt{n} (\theta_0 - \bar y)} {\sigma}\right), \nonumber \\
+\end{eqnarray*}\]</span> where <span class="math inline">\(Z\)</span> is a standard normal random variable and <span class="math inline">\(\Phi()\)</span> is a standard normal cdf. This expression should look slightly familiar. If we observe <span class="math inline">\(\bar y\)</span>, the p-value is the probability, under the hypothesis <span class="math inline">\(\theta = \theta_0\)</span>, of observing a result at least as extreme as <span class="math inline">\(\bar y\)</span>: <span class="math display">\[\begin{eqnarray*}
+{\rm p-value}  =  P(\bar Y \ge \bar y | \theta = \theta_0)\nonumber \\
+  =  P\left( Z &gt; \frac{\sqrt{n}(\bar y - \theta_0)}{\sigma} \right) \nonumber \\
+                =  1 - \Phi \left(\frac{\sqrt{n} (\bar y-\theta_0)} {\sigma}\right), \nonumber \\
+              =  \Phi \left(\frac{\sqrt{n} (\theta_0 - \bar y)} {\sigma}\right). \nonumber \\
+\end{eqnarray*}\]</span> We obtain an interesting result. When we place a uniform prior on the parameter, the posterior probability of the null hypothesis is equal to the p-value. This means that it actually makes sense to think about the p-value as a posterior probability in the one-sided testing situation. We will shortly see that this computational equivalence between a p-value and a posterior probability isn’t always true.</p>
+</section>
+</section>
+<section id="the-two-sided-hypothesis" class="level3" data-number="11.3.2">
+<h3 data-number="11.3.2" class="anchored" data-anchor-id="the-two-sided-hypothesis"><span class="header-section-number">11.3.2</span> The two-sided hypothesis</h3>
+<p>We next consider the common situation where one is interested in testing the “point” null hypothesis <span class="math inline">\(H: \theta = \theta_0\)</span> against the two-sided alternative <span class="math inline">\(A: \theta \neq \theta_0\)</span>. In the example of coin flipping, we may wish to test the common hypothesis of fairness that is equivalent to testing the null hypothesis that the probability of flipping heads <span class="math inline">\(p\)</span> is exactly equal to 0.5.</p>
+<p>We focus on normal sampling and think about an appropriate prior on the normal mean <span class="math inline">\(\theta\)</span>. Here we can’t simply place a continuous prior on <span class="math inline">\(\theta\)</span> since the prior probability of the point null hypothesis would be equal to zero. Instead we place a mixed distribution, that is, a combination of a discrete and a continuous distribution, to reflect the belief in these two hypotheses.</p>
+<p>Suppose we assign a probability <span class="math inline">\(\gamma\)</span> to the hypothesis <span class="math inline">\(\theta = \theta_0\)</span>, and so the alternative hypothesis has a prior probability of <span class="math inline">\(1 - \gamma\)</span>. We then assign a continuous prior <span class="math inline">\(g_1(\theta)\)</span> to the values of <span class="math inline">\(\theta\)</span> under the hypothesis <span class="math inline">\(A\)</span>. With this “mixed” prior, we wish to compute the posterior probability of the hypotheses.</p>
+<p>Let <span class="math display">\[
+L(\theta) = \exp\left(   -\frac{n}{2 \sigma^2}(\bar y - \theta)^2 \right)
+\]</span> denote the likelihood of <span class="math inline">\(\theta\)</span>. The posterior probability that <span class="math inline">\(\theta = \theta_0\)</span> is proportional to <span class="math display">\[
+P(H | y) \propto \gamma L(\theta_0),
+\]</span> and the posterior probability that <span class="math inline">\(\theta \neq \theta_0\)</span> is proportional to <span class="math display">\[
+P(A | y) \propto (1 - \gamma) \int L(\theta) g_1(\theta) d\theta.
+\]</span> So the posterior probability of <span class="math inline">\(H\)</span> has the expression <span class="math display">\[
+P(H| y) = \frac{\gamma L(\theta_0)}{\gamma L(\theta_0) + (1 - \gamma) \int L(\theta) g_1(\theta) d\theta}.
+\]</span></p>
+<p>In practice, one has to specify two quantities, <span class="math inline">\(\gamma\)</span>, the prior probability that <span class="math inline">\(\theta = \theta_0\)</span>, and <span class="math inline">\(g_1(\theta)\)</span>, the prior density of the normal mean under the alternative hypothesis that <span class="math inline">\(\theta \neq \theta_0\)</span>. It is reasonable to set <span class="math inline">\(\gamma = 0.5\)</span>, indicating that one believes that the hypotheses <span class="math inline">\(H\)</span> and <span class="math inline">\(A\)</span> are equally likely. To specify <span class="math inline">\(g_1(\theta)\)</span>, suppose that when <span class="math inline">\(\theta \neq \theta_0\)</span> is true, values of <span class="math inline">\(\theta\)</span> close to <span class="math inline">\(\theta_0\)</span> are more likely than values of <span class="math inline">\(\theta\)</span> far from <span class="math inline">\(\theta_0\)</span>. Under this assumption, then one could let <span class="math inline">\(g_1\)</span> be normal with mean <span class="math inline">\(\theta_0\)</span> and standard deviation <span class="math inline">\(\tau\)</span>. With this choice, a straightforward calculation shows that <span class="math display">\[
+P(H|y) = \frac{ \phi(\bar y; \theta_0, \sigma^2/n)}{\phi(\bar y; \theta_0, \sigma^2/n) + \phi(\bar y; \theta_0, \sigma^2/n+\tau^2)},
+\]</span> where <span class="math inline">\(\phi(y; \theta, \sigma^2)\)</span> is the normal density with mean <span class="math inline">\(\theta\)</span> and variance <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>In our IQ example, suppose we wish to test the hypothesis <span class="math inline">\(H: \theta = 100\)</span> that Joe has “average” intelligence, against the hypothesis <span class="math inline">\(A: \theta \neq 100\)</span> that Joe’s intelligence is not average. One observes the IQ test score <span class="math inline">\(y\)</span> that is normally distributed with mean <span class="math inline">\(\theta\)</span> and variance <span class="math inline">\(\sigma^2 = 100\)</span>. Suppose <span class="math inline">\(\gamma = 0.5\)</span> and <span class="math inline">\(\theta\)</span> has a N(100, 225) distribution when <span class="math inline">\(\theta \neq 100\)</span>. One observes the test score <span class="math inline">\(y = 120\)</span> and the posterior probability that Joe is average is given by <span class="math display">\[\begin{eqnarray*}
+P(H|120)  =  \frac{ \phi(120; 100, 100)}{\phi(120; 100, 100) + \phi(120; 100, 100 + 225)} \nonumber \\
+  = 0.311. \nonumber \\
+\end{eqnarray*}\]</span> Since the posterior probability of <span class="math inline">\(H\)</span> is pretty close to 0.5, there is little evidence from this single test score that Joe does not have average intelligence.</p>
+<p>To use this procedure, one needs to specify <span class="math inline">\(\tau\)</span>, the standard deviation of the prior when the alternative hypothesis <span class="math inline">\(\theta \neq \theta_0\)</span> is true. Since it seems that the value <span class="math inline">\(\tau = 15\)</span> was made arbitrarily, we should investigate the sensitivity of the posterior probability with respect to this standard deviation. Table ?? displays values of the posterior probability <span class="math inline">\(P(H| 120)\)</span> for a range of values of <span class="math inline">\(\tau\)</span>. Note that the minimum value of this posterior probability in the table is equal to <span class="math inline">\(0.311\)</span> which implies that <span class="math inline">\(P(H | 120) \ge 0.311\)</span> for all <span class="math inline">\(\tau\)</span>. This calculation shows that Joe’s score of 120 only provides a small amount of evidence against the hypothesis that Joe’s true IQ is 100.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th></th>
+<th><span class="math inline">\(\tau\)</span></th>
+<th><span class="math inline">\(P(H)\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1.000</td>
+<td>0.496</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>2.000</td>
+<td>0.486</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>4.000</td>
+<td>0.450</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>8.000</td>
+<td>0.370</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>15.000</td>
+<td>0.311</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>30.000</td>
+<td>0.343</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>60.000</td>
+<td>0.465</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>600.000</td>
+<td>0.890</td>
+</tr>
+</tbody>
+</table>
+<p>How does this Bayesian calculation compare with a p-value? For a two-sided test, the p-value is equal to two times the tail probability of <span class="math inline">\(\bar y\)</span> when <span class="math inline">\(\theta = \theta_0\)</span>. Here the p-value is twice the probability of observing an IQ score at least as extreme as 120 when <span class="math inline">\(y\)</span> is distributed as N(100, 100): <span class="math display">\[
+{\rm p-value} = 2 \times P(\bar Y \ge 120 | \theta = 100) = 2 \times (1 - \Phi(2)) = 0.0455  
+\]</span> The Bayesian posterior probability of <span class="math inline">\(\theta = 100\)</span> is significantly larger than the p-value. This suggests that the p-value overstates the evidence against the point null hypothesis.</p>
+</section>
+</section>
+<section id="comparing-models-by-bayes-factors" class="level2" data-number="11.4">
+<h2 data-number="11.4" class="anchored" data-anchor-id="comparing-models-by-bayes-factors"><span class="header-section-number">11.4</span> Comparing Models by Bayes Factors</h2>
+<p>Bayes factors provide a general way of comparing two Bayesian models. Let <span class="math inline">\(y\)</span> denote the vector of observations whose distribution depends on a (possibly) vector-valued parameter <span class="math inline">\(\theta\)</span>. A Bayesian model is a specification for the sampling density <span class="math inline">\(f(y | \theta)\)</span> and the prior density <span class="math inline">\(g(\theta)\)</span>. Suppose we wish to compare models <span class="math inline">\(M_1\)</span> and <span class="math inline">\(M_2\)</span> where <span class="math display">\[
+M_i:  y \sim f_i(y | \theta), \, \, \theta \sim g_i(\theta).
+\]</span> For each model, we define the predictive or marginal density of <span class="math inline">\(y\)</span>, <span class="math inline">\(f_i (y)\)</span> defined by <span class="math display">\[
+f_i(y) = \int f_i(y | \theta) g_i(\theta) d\theta.
+\]</span> The the Bayes factor in support of model <span class="math inline">\(M_1\)</span> over model <span class="math inline">\(M_2\)</span> is the ratio of the corresponding predictive densities of the two models: <span class="math display">\[
+B_{12} = \frac{f_1(y)}{f_2(y)} = \frac {\int f_1(y | \theta) g_1(\theta) d\theta}{\int f_2(y | \theta) g_2(\theta) d\theta}.
+\]</span></p>
+<p>To illustrate Bayes factors, we return to the problem of estimating the mean number of hits per weekday on a particular website. The daily counts of website hits <span class="math inline">\(y_1, ..., y_n\)</span> are assumed to follow a Poisson distribution with mean <span class="math inline">\(\lambda\)</span>. We describe two models that differ with respect to the prior placed on the mean parameter <span class="math inline">\(\lambda\)</span>.</p>
+<p><strong>Model <span class="math inline">\(M_1\)</span>:</strong> <span class="math inline">\(y_1, ..., y_n \sim P(\lambda), \lambda \sim {\rm Gamma}(40, 2)\)</span>.</p>
+<p><strong>Model <span class="math inline">\(M_2\)</span>:</strong> <span class="math inline">\(y_1, ..., y_n \sim P(\lambda), \lambda \sim {\rm Gamma}(20, 2)\)</span>.</p>
+<p>The prior for model <span class="math inline">\(M_1\)</span> says that the mean website hit count <span class="math inline">\(\lambda\)</span> is likely to fall between 15 and 25, and the prior for <span class="math inline">\(M_2\)</span> says that <span class="math inline">\(\lambda\)</span> is likely a smaller value between 8 and 12. If we observe the website counts</p>
+<pre><code>20 30 22 20 20 17 21 26 22 30 36 15 30 27 22 23 18 24 28 23 12,</code></pre>
+<p>we are interested in comparing the models by means of a Bayes factor.</p>
+<p>In this example of Poisson sampling,we are using a conjugate gamma prior and we can compute the predictive density analytically. If <span class="math inline">\(\lambda\)</span> has a Gamma(<span class="math inline">\(a, b\)</span>) prior, then the predictive density of <span class="math inline">\(y_1, ..., y_n\)</span> is given by <span class="math display">\[\begin{eqnarray*}
+f(y)  =  \int \prod_{i=1}^n \left(\frac{\lambda^{y_i} \exp(-\lambda)}{y_i!}\right) \frac{b^a \lambda^{a-1} \exp(-b \lambda)}{\Gamma(a)} d\lambda \nonumber \\
+  =  \frac{\Gamma(a + s) b^a}{\Gamma(a) \left(\prod_{i=1}^n y_i\right) (b+n)^{a+s}},  \nonumber \\
+\end{eqnarray*}\]</span> where <span class="math inline">\(s = \sum y_i\)</span> and <span class="math inline">\(n\)</span> is the sample size. It is convenient to express marginal densities and Bayes factors on the log scale. The logarithm of the marginal density is given by <span class="math display">\[
+\log f(y) = \log\Gamma(a+s)-\log\Gamma(a)-\sum_{i=1}^n \log (y_i!)+a \log(b) - (a+s)\log(b+n).
+\]</span></p>
+<p>Using this expression, we compute the log marginal density for each of the two priors in models <span class="math inline">\(M_1\)</span> and <span class="math inline">\(M_2\)</span>. Here <span class="math inline">\(s = 486\)</span>, <span class="math inline">\(n = 21\)</span>, and <span class="math display">\[
+\log f_1(y) = -67.83, \, \, \log f_2(y) = -76.59.
+\]</span> On the log scale, the Bayes factor in favor of model <span class="math inline">\(M_1\)</span> over <span class="math inline">\(M_2\)</span> is equal to <span class="math display">\[
+\log B_{12} = -67.83 - (- 76.59) = 8.76,
+\]</span> and the Bayes factor in support of model <span class="math inline">\(M_1\)</span> is equal to <span class="math inline">\(BF_{12} = \exp(8.76) = 6574\)</span>.</p>
+<p>The value of the Bayes factor can be understand by looking at Figure 1. This figure displays the likelihood and the two priors. Note that the first prior that reflects the belief that <span class="math inline">\(\lambda\)</span> is between 15 and 25 is consistent with the likelihood. In contrast, there is substantial conflict of the likelihood function with the second prior that says that <span class="math inline">\(\lambda\)</span> is around 10. The Bayes factor of 6574 indicates that the observed values of <span class="math inline">\(y\)</span> are much more likely with the first prior than the second prior.</p>
+<p>In many situations, it will not be possible to integrate out the parameter analytically to compute the predictive density. Fortunately, there are several good approximations available for computing <span class="math inline">\(f(y)\)</span>.<br>
+One approximation method is based on the Laplace method illustrated in Chapter 5. As in that chapter, let <span class="math inline">\(h(\theta)\)</span> denote the logarithm of the joint density of <span class="math inline">\((y, \theta)\)</span>, that is, <span class="math inline">\(h(\theta) = \log \left( f(y|\theta) g(\theta) \right)\)</span>. We approximate <span class="math inline">\(h(\theta)\)</span> by a Taylor series about the posterior mode <span class="math inline">\(\hat \theta\)</span>: <span class="math display">\[
+h(\theta) \approx h(\hat \theta) + (\theta - \hat \theta)' h''(\hat \theta)(\theta - \hat \theta)/2.
+\]</span> Using this approximation, one can integrate out <span class="math inline">\(\theta\)</span> to get the following approximation to the predictive density: <span class="math display">\[
+f(y) = \int \exp(h(y, \theta)) d\theta \approx (2\pi)^{d/2} g(\hat \theta) f(y | \hat \theta) |-h''(\hat \theta)|^{-1/2},
+\]</span> where <span class="math inline">\(d\)</span> is the number of parameters and <span class="math inline">\(h''(\hat \theta)\)</span> is the Hessian matrix evaluated at the mode.</p>
+<p>Continuing with our web site hit example, consider the comparison of several models for the web site counts collected on weekdays and weekends.<br>
+Recall that the counts {<span class="math inline">\(y_{Ai}\)</span>} from the weekend days are assumed Poisson with mean <span class="math inline">\(\lambda_A\)</span> and counts {<span class="math inline">\(y_{Bj}\)</span>} from the weekday days are assumed Poisson with mean <span class="math inline">\(\lambda_B\)</span>. Since we are interested primarily in comparing the two means, consider the reparameterization <span class="math display">\[
+\theta_1 = \log \lambda_A - \log \lambda_B, \, \, \theta_2 = \log \lambda_A + \log \lambda_B.
+\]</span> The parameter <span class="math inline">\(\theta_1\)</span> measures the difference between the Poisson means on the log scale and <span class="math inline">\(\theta_2\)</span> represents the overall size of the means.</p>
+<p>Consider the following two prior distributions for <span class="math inline">\((\theta_1, \theta_2)\)</span>:</p>
+<p><strong>Model <span class="math inline">\(M_1\)</span>:</strong> <span class="math inline">\(\theta_1, \theta_2\)</span> independent, <span class="math inline">\(\theta_1 \sim N(0, 0.5)\)</span>, <span class="math inline">\(\theta_2 \sim N(5, 5)\)</span>.</p>
+<p><strong>Model <span class="math inline">\(M_2\)</span>:</strong> <span class="math inline">\(\theta_1, \theta_2\)</span> independent, <span class="math inline">\(\theta_1 \sim N(0, 0.05)\)</span>, <span class="math inline">\(\theta_2 \sim N(5, 5)\)</span>.</p>
+<p>Figure 2 displays contour plots of the two prior models. Both priors state that the overall size of the means (as measured by the parameter <span class="math inline">\(\theta_2\)</span>) is in the neighborhood of 5. The priors differ by the distribution placed on the difference in means <span class="math inline">\(\theta_1\)</span>. Model 1 places a relatively diffuse prior on <span class="math inline">\(\theta_1\)</span> centered at zero, and Model 2 assigns a prior on <span class="math inline">\(\theta_1\)</span> concentrated about zero. The prior for Model 2 is concentrated about the hypothesis <span class="math inline">\(H\)</span> that <span class="math inline">\(\lambda_1 = \lambda_2\)</span> and the prior for Model 1 places more of its mass on the alternative hypothesis <span class="math inline">\(A\)</span> that <span class="math inline">\(\lambda_1 \neq \lambda_2\)</span>.</p>
+<p>By using the function <code>laplace()</code> in the <code>LearnBayes</code> package, one can compute the log predictive density for each of the two models. We find <span class="math display">\[
+\log f(y | M_1) =  -100.23, \, \, \log f(y | M_2) = -108.79,
+\]</span> and the log Bayes factor in support of Model <span class="math inline">\(M_1\)</span> over Model <span class="math inline">\(M_2\)</span> is <span class="math display">\[
+\log BF_{12} = \log f(y | M_1) - \log f(y | M_2) = -100.23 - (-108.79) = 8.56.
+\]</span> Since the Bayes factor in support of <span class="math inline">\(M_1\)</span> is <span class="math inline">\(\exp(8.56) = 5218\)</span>, there is strong evidence against the hypothesis <span class="math inline">\(H\)</span> that the Poisson means for the weekend and weekday web counts are equal.</p>
+<section id="comparing-geometric-and-poisson-distributions" class="level3" data-number="11.4.1">
+<h3 data-number="11.4.1" class="anchored" data-anchor-id="comparing-geometric-and-poisson-distributions"><span class="header-section-number">11.4.1</span> Comparing Geometric and Poisson Distributions</h3>
+<p>(From Link and Barker (2010))</p>
+<p>Suppose we observe a random sample <span class="math inline">\(y_1, ..., y_n\)</span> that is either distributed from the geometric density <span class="math display">\[
+f_G(y) = p (1-p)^y, y = 0, 1, 2, ...
+\]</span> or the Poisson density <span class="math display">\[
+f_P(y) = \frac{e^{\lambda} \lambda^y}{y!}, y = 0, 1, 2, ...
+\]</span> We observe the sample of values <span class="math display">\[
+0, 1, 2, 3, 8
+\]</span> What is the evidence in support of the geometric density over the Poisson density?</p>
+<p>First, to complete define the two models, a prior needs to be assigned to the parameters <span class="math inline">\(p\)</span> and <span class="math inline">\(\lambda\)</span>. To make the priors comparable, assume the mean <span class="math inline">\(\mu = E(Y)\)</span> has a uniform distribution on the interval from 0 to a large value <span class="math inline">\(T\)</span>. For the Poisson sampling model, the mean is given by <span class="math inline">\(\mu = \lambda\)</span>, so this results in the prior <span class="math display">\[
+g(\lambda) = \frac{1}{T}, 0 &lt; \lambda &lt; T.
+\]</span> For the geometric model, the mean of <span class="math inline">\(Y\)</span> is given by <span class="math inline">\(\mu = (1-p)/p\)</span>. If we assign <span class="math inline">\(\mu\)</span> a uniform(0, <span class="math inline">\(T\)</span>), then by a transformation argument, one can show the prior is given by <span class="math display">\[
+g(p) = \frac{1}{T p^2}, \, \, \frac{1}{T+1} &lt; p &lt; 1.
+\]</span></p>
+<section id="direct-calculation" class="level4" data-number="11.4.1.1">
+<h4 data-number="11.4.1.1" class="anchored" data-anchor-id="direct-calculation"><span class="header-section-number">11.4.1.1</span> Direct calculation</h4>
+<p>Now that the priors are defined, we can compute the marginal densities. Generally, if the sampling density is defined in terms of the parameter <span class="math inline">\(\theta\)</span> and a prior <span class="math inline">\(g(\theta)\)</span> is defined, the marginal density is given by <span class="math display">\[
+f(y) = \int g(\theta) \prod_{i=1}^n f(y_i | \theta) d\theta .
+\]</span></p>
+<p>In the following, it is convenient to let <span class="math inline">\(s = \sum_{i=1}^n y_i\)</span> be the sum of the observations. For the Poisson model, we obtain <span class="math display">\[\begin{eqnarray*}
+f_P(y) | = | \int_0^T \frac{e^{-ny} \lambda^s}{\prod y_i!} \frac{1}{T} d\lambda.
+                \nonumber \\
+\end{eqnarray*}\]</span> We recognize the kernel of the integrand as a gamma density with shape parameter <span class="math inline">\(s+1\)</span> and rate parameter <span class="math inline">\(n\)</span>, so the integral can be evaluated in terms of a gamma cdf. We obtain <span class="math display">\[\begin{eqnarray*}
+f_P(y)  =  \frac{ F_G(T; s+1, n) \Gamma(s+1)}{T n^{s+1}\prod y_i! },
+                \nonumber \\
+\end{eqnarray*}\]</span> where <span class="math inline">\(F_G(x; a, b)\)</span> is the cdf of a Gamma(<span class="math inline">\(a, b\)</span>) density evaluated at <span class="math inline">\(x\)</span>.</p>
+<p>The marginal density for the geometric model is given by <span class="math display">\[\begin{eqnarray*}
+f_G(y)  =  \int_{1/(T+1)}^1 p^n (1-p)^s \frac{1}{T p^2} dp
+                \nonumber \\
+        =  \frac{1}{T} \int_{1/(T+1)}^1 p^{n-2} (1-p)^s dp.
+\end{eqnarray*}\]</span> We recognize the integrand as the kernel of a beta(<span class="math inline">\(n-1, s+1)\)</span> density and we obtain <span class="math display">\[\begin{eqnarray*}
+f_G(y)  =  \frac{(1-F_B(1/(T+1), n-1, s+1)) B(n-1, s+1)}{T},
+                \nonumber \\
+\end{eqnarray*}\]</span> where <span class="math inline">\(F_B(x; a, b)\)</span> is the cdf of a Beta(<span class="math inline">\(a, b\)</span>) density.</p>
+<p>The Bayes factor in support of the geometric model over the Poisson is given by <span class="math display">\[
+BF_{GP} = \frac{f_G(y)}{f_B(y)}.
+\]</span></p>
+<p>A short function <code>compute.bf()</code> is used to compute the Bayes factor. We assume the data is stored in the vector <code>y</code> and the single argument of the function is the value of <span class="math inline">\(T\)</span>.</p>
+<pre><code>compute.bf=function(T)
+{
+n=length(y); s=sum(y)
+f1=(1/T)*(1-pbeta(1/(T+1),n-1,s+1))*beta(n-1,s+1)
+f2=(1/T)/prod(gamma(y+1))*pgamma(T,shape=s+1,rate=n)*gamma(s+1)/n^(s+1)
+f1/f2
+}</code></pre>
+<p>By use of the function</p>
+<pre><code>curve(compute.bf(x),from=2,to=40)</code></pre>
+<p>we plot the Bayes factor as a function of <span class="math inline">\(T\)</span> for values from 2 to 40 (see Figure 1).<br>
+Note that as <span class="math inline">\(T\)</span> approaches infinity, the Bayes factor approaches the limiting value of 13.84. There is some support for the geometric model on the basis of this small dataset.</p>
+</section>
+<section id="simulation-estimate" class="level4" data-number="11.4.1.2">
+<h4 data-number="11.4.1.2" class="anchored" data-anchor-id="simulation-estimate"><span class="header-section-number">11.4.1.2</span> Simulation estimate</h4>
+There is an attractive Gibbs sampling approach for computing the Bayes factor. Define a model variable <span class="math inline">\(M\)</span> that is equal to 1 for the geometric model and 2 for the Poisson model. One places the prior probabilities <span class="math inline">\(P(M = 1) = \pi, P(M = 2) = (1-\pi)\)</span>. Let <span class="math inline">\(\mu\)</span> denote the mean parameter <span class="math inline">\(E(Y)\)</span>. The joint posterior density of (<span class="math inline">\(M, \mu)\)</span> is given by <span class="math display">\[
+g(M, \mu | y) \propto I(M = 1) \pi \prod_{i=1}^n f_G(y_i | \mu) g_G(\mu) + I(M = 2)(1-\pi) \prod_{i=1}^n f_P(y_i | \mu) g_P(\mu).
+\]</span> Both of the conditional distributions <span class="math inline">\(g(M | \mu, y)\)</span> and <span class="math inline">\(g(\mu | M, y)\)</span> have simple forms.
+<p>Here is an outline of the Gibbs sampler. We begin with a starting estimate at <span class="math inline">\(\mu\)</span> – a reasonable estimate is the sample mean <span class="math inline">\(\mu^{(0)} = \bar y\)</span>. If the initial model probability vector is stored in the vector {}, then we simulate a value of the model <span class="math inline">\(M\)</span> by the following R code.</p>
+<pre><code>log.M1=sum(dgeom(y,1/(1+theta),log=TRUE))+log(prior[1])
+log.M2=sum(dpois(y,theta,log=TRUE))+log(prior[2])
+prob=exp(log.M1)/(exp(log.M1)+exp(log.M2))
+M=ifelse(runif(1)&lt;prob,1,2)</code></pre>
+<p>Next, we simulate a value of <span class="math inline">\(\mu\)</span> from either a beta posterior or a gamma posterior depending on the value of <span class="math inline">\(M\)</span>:</p>
+<pre><code>if(M==2) theta=rgamma(1,shape=s+1,rate=n) else {
+     p=rbeta(1,n-1,s+1); theta=(1-p)/p}</code></pre>
+<p>These two steps are cycled <span class="math inline">\(m\)</span> times and one obtains a simulated sample denoted by <span class="math inline">\((M^{(j)}, \mu^{(j)}), j = 1, ..., m\)</span>.</p>
+<p>Suppose that the simulated sample of the model indicator <span class="math inline">\(M\)</span> is taken as a sample from its posterior density. The posterior odds of <span class="math inline">\(M = 1\)</span> is estimated by the ratio <span class="math display">\[
+\frac{\sum_{j=1}^m I(M^{(j)} = 1)}{\sum_{j=1}^m I(M^{(j)} = 2)}.
+\]</span> The estimate at the Bayes factor in support of the geometric model is estimated by the ratio of the estimate of the posterior odds to the prior odds: <span class="math display">\[
+\hat{BF} = \frac{\sum_{j=1}^m I(M^{(j)} = 1)}{\sum_{j=1}^m I(M^{(j)} = 2)} \div \frac{\pi}{1-\pi}.
+\]</span></p>
+<p>A function <code>gibbs.MS</code> was written to implement the Gibbs sampler. The inputs are prior model vector <code>pi</code>, the data vector <code>y</code>, and the number of iterations of the sampler <code>iter</code>. The output is a list consisting of <code>model</code>, a vector of the simuated values of <span class="math inline">\(M\)</span>, and <code>theta</code>, a vector of the simulated draws of <span class="math inline">\(\mu\)</span>. In the following output, we run the sampler for 100,000 iterations using the prior input values <span class="math inline">\((\pi, 1-\pi) = (0.1, 0.9)\)</span> . We use the <code>table()</code> function to tabulate the model values, and compute the posterior odds from the tabled values.</p>
+<pre><code>prior=c(.1,.9)
+y=c(0,1,2,3,8)
+S=gibbs.MS(prior,y,100000)
+model.freq=table(S$model)
+post.odds=model.freq["1"]/model.freq["2"]
+BF=post.odds/(prior[1]/prior[2])
+BF</code></pre>
+<p>The output is <span class="math inline">\(BF = 13.98322\)</span> which is very close to the exact value of 13.84 in the previous calculation.</p>
+</section>
+<section id="model-averaging" class="level4" data-number="11.4.1.3">
+<h4 data-number="11.4.1.3" class="anchored" data-anchor-id="model-averaging"><span class="header-section-number">11.4.1.3</span> Model averaging</h4>
+<p>We have focused on comparing the geometric and Poisson models by a Bayes factor. What if we are interested in inference about the mean parameter <span class="math inline">\(\mu\)</span>?</p>
+<p>If the data have a Poisson distribution and <span class="math inline">\(\mu\)</span> has a uniform prior, we have already seen that the posterior density for <span class="math inline">\(\mu\)</span> is Gamma with shape <span class="math inline">\(s = \sum y_i+1\)</span> and rate <span class="math inline">\(n\)</span>. If instead the data have a geometric distribution and a uniform prior is place on the mean, then the posterior distribution of the proportion <span class="math inline">\(p\)</span> is beta with parameters <span class="math inline">\(a = n-1\)</span> and <span class="math inline">\(b = s+1\)</span>. The corresponding posterior density for the mean <span class="math inline">\(\mu = (1-p)/p\)</span> is given by <span class="math display">\[
+g(\mu | y, M=1) = f_B\left(\frac{1}{1+\theta}\right) \frac{1}{(1+\theta)^2}.
+\]</span></p>
+<p>What if one is unsure about the correct sampling density? If one places prior probabilities <span class="math inline">\(\pi\)</span> and <span class="math inline">\(1-\pi\)</span> on the geometric (Model 1) and Poisson (Model 2) models, respectively, then the posterior density for the mean <span class="math inline">\(\mu\)</span> has the form <span class="math display">\[
+g(\mu|y) = \pi(y) g(\mu | M = 1) + (1- \pi(y)) g(\mu | M = 2),
+\]</span> where <span class="math inline">\(g(\mu | M = m)\)</span> is the posterior of <span class="math inline">\(\mu\)</span> conditional on model <span class="math inline">\(m\)</span>, and <span class="math inline">\(\pi(y)\)</span> is the posterior probability of Model 1. This posterior model probability is given by <span class="math display">\[
+\pi(y) = \frac{\pi BF_{12}}{\pi BF_{12}+1-\pi},
+\]</span> where <span class="math inline">\(BF_{12}\)</span> is the Bayes factor in support of Model 1.</p>
+<p>Figure 2 illustrates inference about the mean <span class="math inline">\(\mu\)</span> for the same data set and uniform prior where the prior probability of Model 1 (geometric) is <span class="math inline">\(\pi = 0.1\)</span>. Two of the curves represent posterior densities conditional on the geometric and Poisson sampling models. The third curve is a “modeled averaged” posterior density, where the two conditional posterior densities are averaged by the model posterior probabilities.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./hierarchical.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Hierarchical Modeling</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
