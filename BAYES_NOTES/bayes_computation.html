@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.309">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to Bayesian Inference - 8&nbsp; Bayesian Computation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<link href="./many_parameters.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Bayesian Computation</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Introduction to Bayesian Inference</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./probability.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Probability</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayes_rule.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Bayes Rule</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./proportion.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Learning About a Proportion</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./single_parameter.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Single Parameter Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./prior.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Prior Distributions</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./many_parameters.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Many Parameter Inference</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./bayes_computation.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Bayesian Computation</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">8.1</span> Introduction</a></li>
+  <li><a href="#normal-approximation" id="toc-normal-approximation" class="nav-link" data-scroll-target="#normal-approximation"> <span class="header-section-number">8.2</span> Normal Approximation</a>
+  <ul class="collapse">
+  <li><a href="#one-parameter-problem" id="toc-one-parameter-problem" class="nav-link" data-scroll-target="#one-parameter-problem"> <span class="header-section-number">8.2.1</span> One parameter problem</a></li>
+  <li><a href="#a-proportion-problem" id="toc-a-proportion-problem" class="nav-link" data-scroll-target="#a-proportion-problem"> <span class="header-section-number">8.2.2</span> A proportion problem</a></li>
+  <li><a href="#improving-the-accuracy-of-the-approximation" id="toc-improving-the-accuracy-of-the-approximation" class="nav-link" data-scroll-target="#improving-the-accuracy-of-the-approximation"> <span class="header-section-number">8.2.3</span> Improving the accuracy of the approximation</a></li>
+  </ul></li>
+  <li><a href="#normal-approximation-for-multivariate-posterior-distributions" id="toc-normal-approximation-for-multivariate-posterior-distributions" class="nav-link" data-scroll-target="#normal-approximation-for-multivariate-posterior-distributions"> <span class="header-section-number">8.3</span> Normal Approximation for Multivariate Posterior Distributions</a></li>
+  <li><a href="#modeling-with-cauchy-errors" id="toc-modeling-with-cauchy-errors" class="nav-link" data-scroll-target="#modeling-with-cauchy-errors"> <span class="header-section-number">8.4</span> Modeling with Cauchy errors</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Bayesian Computation</span></h1>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">8.1</span> Introduction</h2>
+<p>In this chapter, we discuss several strategies for computing and summarizing posterior distributions. One basic strategy is to find the posterior mode and then approximate the density with a “matching” normal density. A second strategy is to devise an algorithm for simulating directing from the posterior distribution. We describe the use of a popular simulation algorithm, rejection sampling, to implement this sampling.</p>
+</section>
+<section id="normal-approximation" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="normal-approximation"><span class="header-section-number">8.2</span> Normal Approximation</h2>
+<section id="one-parameter-problem" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="one-parameter-problem"><span class="header-section-number">8.2.1</span> One parameter problem</h3>
+<p>We derive a basic normal approximation to a posterior density in the single parameter case. Suppose we observe data <span class="math inline">\(y\)</span> from a sampling density <span class="math inline">\(f(y | \theta)\)</span> and the parameter <span class="math inline">\(\theta\)</span> is assigned a prior density <span class="math inline">\(g(\theta)\)</span>. We are interested in developing an approximation to the posterior density <span class="math display">\[
+g(\theta | y) \propto g(\theta) f(y | \theta).
+\]</span> For simplicity of notation, let <span class="math inline">\(h(\theta)\)</span> denote the logarithm of the posterior density, that is, <span class="math inline">\(h(\theta) = \log g(\theta | y)\)</span>. If <span class="math inline">\(\hat \theta\)</span> denotes the posterior mode of <span class="math inline">\(\theta\)</span>, suppose we expand <span class="math inline">\(h(\theta)\)</span> in a second-order Taylor’s series about the mode. We obtain the approximation <span class="math display">\[
+\log g(\theta | y) = h(\theta) \approx h(\hat \theta) + \frac{1}{2} h''(\hat \theta) (\theta - \hat \theta)^2 ,
+\]</span> where <span class="math inline">\(h''(\hat \theta)\)</span> is the second derivative of the function <span class="math inline">\(h(\theta)\)</span> evaluated at the posterior mode. This gives the following approximation to the posterior density: <span class="math display">\[
+g(\theta | y) \approx \exp\left(\frac{1}{2} h''(\hat \theta) (\theta - \hat \theta)^2\right),
+\]</span> which we recognize as a normal density with mean <span class="math inline">\(\mu = \hat \theta\)</span> and variance <span class="math inline">\(\sigma^2 = \left(-h''(\hat \theta)\right)^{-1}\)</span>.</p>
+</section>
+<section id="a-proportion-problem" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="a-proportion-problem"><span class="header-section-number">8.2.2</span> A proportion problem</h3>
+<p>Let’s illustrate this normal approximation for a proportion problem. Suppose we observe <span class="math inline">\(y\)</span> from a binomial(<span class="math inline">\(n, p\)</span>) distribution and a uniform prior is chosen for <span class="math inline">\(p\)</span>. Then <span class="math inline">\(p\)</span> will have a beta(<span class="math inline">\(y+1, n-y+1\)</span>) of the form <span class="math display">\[
+g(p|y) \propto p^y (1-p)^{n-y}, \, \, 0 &lt; p &lt; 1.
+\]</span> First we compute the log posterior density <span class="math inline">\(h(p) = \log g(p|y)\)</span> to be <span class="math display">\[
+h(p) = y log(p) + (n - y) log(1-p).
+\]</span> Taking a derivative, we find that <span class="math display">\[
+h'(p) = \frac{y}{p} - \frac{n-y}{1-p}.
+\]</span> The posterior mode is found by setting <span class="math inline">\(h'(p) = 0\)</span> and, solving this equation, we find that <span class="math inline">\(\hat p = y/n\)</span>. Next, we find the second derivative of <span class="math inline">\(h\)</span> to be <span class="math display">\[
+h''(p) = \frac{y}{p^2}-\frac{n-y}{(1-p)^2} .
+\]</span> Evaluating <span class="math inline">\(h''(p)\)</span> at the posterior mode, we obtain <span class="math display">\[
+h''(\hat p) = \frac{y}{\hat p^2}-\frac{n-y}{(1-\hat p)^2} = -\frac{n}{\hat p(1-\hat p)}.
+\]</span> So the approximation is the posterior for <span class="math inline">\(p\)</span> is normal(<span class="math inline">\(\mu, \sigma^2\)</span>), where <span class="math inline">\(\mu = \hat p\)</span> and <span class="math display">\[
+\sigma^2 = \left(-h''(\hat p)\right)^{-1} = \frac{\hat p(1-\hat p)}{n}.
+\]</span></p>
+<p>Figure 1 displays the exact beta posterior density and the normal approximation. Clearly, the normal approximation does not reflect the substantial skewed shape in the beta density.</p>
+</section>
+<section id="improving-the-accuracy-of-the-approximation" class="level3" data-number="8.2.3">
+<h3 data-number="8.2.3" class="anchored" data-anchor-id="improving-the-accuracy-of-the-approximation"><span class="header-section-number">8.2.3</span> Improving the accuracy of the approximation</h3>
+<p>One reason why the normal approximation is not suitable is that the support of a proportion is (0, 1) and we are approximating the posterior by a real-valued normal distribution. One way of improving the accuracy of the approximation is to transform the proportion to a real-valued parameter, and then apply the normal approximation to the posterior of the transformed parameter.</p>
+<p>In this example, suppose we transform the proportion <span class="math inline">\(p\)</span> to the logit <span class="math display">\[
+\theta = \log \frac{p}{1-p}.
+\]</span> The inverse of this transformation is <span class="math inline">\(p = \exp(\theta)/(1+\exp(\theta))\)</span> and the Jacobian of this transformation is <span class="math inline">\(J = \exp(\theta)/(1+\exp(\theta))^2\)</span>. The posterior of <span class="math inline">\(\theta\)</span> is given by <span class="math display">\[
+g(\theta | y) \propto \left(\frac{\exp(\theta)}{1+\exp(\theta)}\right)^{y+1}
+                      \left(1 - \frac{\exp(\theta)}{1+\exp(\theta)}\right)^{n-y+1}.
+\]</span></p>
+<p>Suppose we apply our normal approximation to the posterior of the reexpressed parameter <span class="math inline">\(\theta\)</span>. One can show that the posterior density is approximately <span class="math inline">\(N(\mu, \sigma^2)\)</span> where <span class="math display">\[
+\mu = \log\left(\frac{\tilde p}{ 1-\tilde p}\right), \, \sigma^2 = \frac{1}{(n+2)\tilde p (1-\tilde p)}, \, \, \tilde p = \frac{y+1}{n+2}.
+\]</span></p>
+<p>Figure 2 displays the exact posterior density of <span class="math inline">\(\theta\)</span> together with the normal approximation. This illustrates that the accuracy of the normal approximation is better for the real-valued parameter <span class="math inline">\(\theta\)</span> than for the proportion <span class="math inline">\(p\)</span>.</p>
+</section>
+</section>
+<section id="normal-approximation-for-multivariate-posterior-distributions" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="normal-approximation-for-multivariate-posterior-distributions"><span class="header-section-number">8.3</span> Normal Approximation for Multivariate Posterior Distributions</h2>
+<p>The normal approximation developed in Section 7.1 can be generalized for a multivariate posterior density. If <span class="math inline">\(h(\theta)\)</span> is the logarithm of the joint posterior density of a vector-valued parameter <span class="math inline">\(\theta\)</span>, then we have the approximation <span class="math display">\[
+h(\theta) \approx h(\hat \theta) + (\theta - \hat \theta)' h''(\hat \theta)(\theta - \hat \theta)/2,
+\]</span> where <span class="math inline">\(\hat \theta\)</span> is the mode of the joint density and <span class="math inline">\(h''(\hat \theta)\)</span> is the Hessian of the log density evaluated at the mode. Using this expansion, the posterior density is approximated by a multivariate normal density with mean <span class="math inline">\(\hat \theta\)</span> and variance-covariance matrix <span class="math display">\[
+\Sigma = (-h''(\hat \theta))^{-1}.
+\]</span></p>
+<p>To illustrate this approximation in the multivariate case, consider the familiar problem of estimating the parameters of a normal density. We observe <span class="math inline">\(y_1, ..., y_n\)</span> from a normal distribution with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>. For ease of exposition, denote the sampling variance as <span class="math inline">\(V = \sigma^2\)</span> and we focus on the estimation of <span class="math inline">\((\mu, V)\)</span>. Assuming the usual noninformative prior <span class="math inline">\(g(\mu, V) = 1/V\)</span>, the posterior density has the form <span class="math display">\[
+g(\mu, V) \propto \frac{1}{V^{n/2+1}} \exp\left(-\frac{\sum_{i=1}^n (y_i - \mu)^2}{2V}\right).
+\]</span> To develop the approximation, we need to find partial derivatives of the log posterior density <span class="math inline">\(h(\mu, V) = \log g(\mu, V)\)</span> given by <span class="math display">\[
+h(\mu, V) = -(n/2 + 1) \log V - \frac{\sum_{i=1}^n (y_i - \mu)^2}{2 V}.
+\]</span> The first partial derivatives are given by <span class="math display">\[
+h^{10} = \frac{\partial h}{d \mu} = \frac{\sum_{i=1}^n (y_i - \mu)}{V}, \, \,
+h^{01} = \frac{\partial h}{d V} = -\frac{n/2+1}{V} + \frac{\sum_{i=1}^n (y_i - \mu)^2}{2 V^2}.
+\]</span> When we solve the equations <span class="math inline">\(h^{10} = 0, h^{01} = 0,\)</span> we find the mode of the posterior to be <span class="math display">\[
+\hat \mu = \bar y, \, \hat V = \frac{\sum_{i=1}^n (y_i - \hat \mu)^2}{n+2}.
+\]</span> To get the approximation to the variance-covariance matrix, we need to compute the second partial derivatives and evaluate them at the posterior mode. The second partial derivatives are given by <span class="math display">\[
+h^{20} = -\frac{n}{V}, \, h^{11} = -\frac{\sum_{i=1}^n (y_i - \mu)}{V^2}, \, h^{02} = \frac{n+2}{2V^2} -
+\frac{\sum_{i=1}^n (y_i - \mu)^2}{V^3}.
+\]</span> When we evaluate these partial derivatives at the posterior mode <span class="math inline">\((\mu, V) = (\hat \mu, \hat V)\)</span>, we obtain <span class="math display">\[
+h^{20} = -\frac{n}{\hat V}, \, h^{11} = 0, \, h^{02} = -\frac{n+2}{2\hat V^2}.
+\]</span> The Hessian matrix is given by [ h’’() = ] and the approximate variance-covariance matrix is found by inverting <span class="math inline">\(-h''(\theta)\)</span>: [ = ] We have that the posterior density of <span class="math inline">\((\mu, V)\)</span> is approximately normal with mean vector <span class="math inline">\((\hat y, \hat V)\)</span> and variance-covariance matrix <span class="math inline">\(\Sigma\)</span>.</p>
+<p>We illustrate this approximation using a sample of completion times for 20 male participants at the New York Marathon. The logarithm of the exact posterior density of <span class="math inline">\((\mu, V)\)</span> is contained in the function {} and we define a new function {} that computes the logarithm of a multivariate normal density. Figure 3 displays two contour plots – the solid line corresponds to the exact posterior and the dashed line corresponds to the normal approximation. Clearly, the accuracy of the normal approximation is relatively poor in this case, since it does not account for the right skewness in the variance <span class="math inline">\(V\)</span>. One could improve the accuracy of the normal approximation by reexpressing <span class="math inline">\((\mu, V)\)</span> to <span class="math inline">\((\mu, \log V)\)</span></p>
+<pre><code>data(marathontimes)
+attach(marathontimes)
+mycontour(normchi2post,c(225,330,10,9000),time,col="red",xlab="MU",ylab="V")
+n=length(time)
+mu.est=mean(time)
+var.est=sum((time-mu.est)^2)/(n+2)
+Sigma=diag(c(var.est/n,2*var.est^2/(n+2)))
+log.dmnorm=function(x, pars) 
+  dmnorm(x, pars$mean, pars$varcov, log = TRUE)
+pars=list(mean=c(mu.est,var.est),varcov=Sigma)
+mycontour(log.dmnorm,c(225,330,10,9000),pars,add=TRUE,lty=2)</code></pre>
+</section>
+<section id="modeling-with-cauchy-errors" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="modeling-with-cauchy-errors"><span class="header-section-number">8.4</span> Modeling with Cauchy errors</h2>
+<p>One advantage of the normal approximation is that it gives quick, often accurate, summaries of posterior distributions. As we have seen, the accuracy of the approximation is improved by transforming parameters to the real line.</p>
+<p>Although we have discussed the common situation of sampling from a normal population, it is relatively common to observe outliers and statistical procedures based on the normal distribution assumption can be sensitive to outliers. An alternative error sampling distribution for symmetric data is the Cauchy family. This family has much flatter tails than the normal family and statistical procedures based on Cauchy error distributions will be relatively insensitive to the presence of outliers.</p>
+<p>Suppose we observe <span class="math inline">\(y_1, ..., y_n\)</span> from a Cauchy density with location <span class="math inline">\(\mu\)</span> and scale <span class="math inline">\(\sigma\)</span>. The likelihood function of <span class="math inline">\((\mu, \sigma)\)</span> is given by <span class="math display">\[
+L(\mu, \sigma) = \prod_{i=1}^n \frac{1}{\pi \sigma} \frac{1}{1 + (y_i - \mu)^2/\sigma^2}.
+\]</span> If we assign the noninformative prior of the form <span class="math inline">\(1/\sigma\)</span> to <span class="math inline">\((\mu, \sigma\)</span>), then the posterior density is given, up to a proportionality constant, by <span class="math display">\[
+g(\mu, \sigma | y) = \frac{1}{\sigma} L(\mu, \sigma).
+\]</span> To improve the accuracy of a normal approximation, we transform <span class="math inline">\((\mu, \sigma)\)</span> to <span class="math inline">\((\mu, \log \sigma)\)</span>, obtaining the posterior density <span class="math display">\[
+g(\mu, \log \sigma | y) = L(\mu, \sigma).
+\]</span></p>
+<p>Let’s return to the problem of learning about the population of completion times for male runners in the New York Marathon. Suppose we add the completion time of 600 minutes for an unusually slow runner to the dataset. What impact does this outlier have on our inference about the population location parameter <span class="math inline">\(\mu\)</span>?</p>
+<pre><code>fit=normpostsim(time2,10000)
+cfit=laplace(cauchyerrorpost,c(0,0),time2)
+plot(density(fit$mu),xlim=c(200,610),ylim=c(0,.04),xlab="MU",main="",lwd=3)
+curve(dnorm(x,cfit$mode[1],sqrt(cfit$var[1,1])),add=TRUE,lwd=3)
+text(locator(1),"Normal")
+text(locator(1),"Cauchy")
+points(time2,0*time2,pch=19,cex=1.5)</code></pre>
+The R function <code>cauchyerrorpost()</code> in the <code>LearnBayes</code> package contains the definition of the logarithm of the posterior density of <span class="math inline">\((\mu, \log \sigma)\)</span>. One can numerically obtain the normal approximation to the posterior function by the use of the <code>laplace()</code> function. The inputs to <code>laplace()</code> are the function defining the log posterior, a starting guess at the posterior mode, and the data that is used in the log posterior function. When one runs this function, one obtains the approximation that [ = (
+<span class="math display">\[\begin{array}{c}\mu \\ \log \theta\end{array}\]</span>
+) N( (
+<span class="math display">\[\begin{array}{c}  278.77 \\  3.38 \end{array}\]</span>
+), (
+<span class="math display">\[\begin{array}{cc}  94.49 &amp; -0.254 \\  -0.254 &amp; 0.0859 \end{array}\]</span>
+<p>) ) ] As a byproduct of this approximation, one obtains that the marginal posterior density of <span class="math inline">\(\mu\)</span> is approximately normal with mean 278.77 and standard deviation <span class="math inline">\(\sqrt{94.49}\)</span>.</p>
+<p>Figure 4 displays two densities, the leftmost density is the posterior density of <span class="math inline">\(\mu\)</span> with Cauchy sampling, and the rightmost density is the posterior density of <span class="math inline">\(\mu\)</span> with the usual normal sampling assumption. The observed completion times are displayed as dots along the horizontal axis. Note that the inferences about the population location are significantly different with Normal and Cauchy errors. With the normal assumption, the point estimate at <span class="math inline">\(\mu\)</span> is the sample mean <span class="math inline">\(\bar y\)</span> and the posterior density is shifted to the right, trying to accommodate the large outlier. In contrast, with Cauchy sampling errors, the posterior density essentially ignores the outlier and the density better reflects the center of the remaining observations.</p>
+<p>In this “single outlier” example, the normal approximation to the marginal posterior density of the location parameter <span class="math inline">\(\mu\)</span> is pretty accurate. But for other examples, the normal approximation is clearly unsuitable. To illustrate a nonnormal posterior, suppose that one observes the following data:</p>
+<pre><code> 0.1 -0.9 -0.1 -2.1  1.4 -0.2  0.5 -1.7  1.5 -0.6 
+40.5 39.8 40.6 39.5 38.7 39.1 40.9 40.6 39.8 39.8</code></pre>
+<p>Note that ten of the observations are in a neighborhood of zero and ten observations are in a neighborhood of 40. Again we assume the the observations are a random sample from a Cauchy(<span class="math inline">\(\mu, \sigma\)</span>) distribution and the usual noninformative prior is placed on <span class="math inline">\((\mu, \sigma)\)</span>. Figure 5 displays contours of the exact joint posterior density and Figure 6 displays the marginal posterior density of <span class="math inline">\(\mu\)</span>. Clearly, the joint posterior density does not display the elliptical shaped contours of a bivariate normal density and the marginal posterior density of <span class="math inline">\(\mu\)</span> is clearly bimodal. In future chapters, we will discuss the use of general-purpose simulation algorithms that are suitable when the posterior distribution has unusual shapes.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./many_parameters.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Many Parameter Inference</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
