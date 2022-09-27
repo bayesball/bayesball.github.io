@@ -15,6 +15,69 @@ span.underline{text-decoration: underline;}
 div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -218,7 +281,7 @@ g(\mu, \sigma^2 | y) \propto  \frac{1}{(\sigma^2)^{1/2}} \exp\left(-\frac{n}{2 \
 \end{eqnarray*}\]</span></p>
 <p>What we have done is represent the joint posterior density as the product of terms <span class="math display">\[
 g(\mu, \sigma^2 | y) = g(\mu | \sigma^2, y) \times g(\sigma^2 | y) .
-\]</span> The first term in the product represents the posterior density of the mean <span class="math inline">\(\mu\)</span> conditional on the variance <span class="math inline">\(\sigma^2\)</span> – we recognize this as a normal density with mean <span class="math inline">\(\bar y\)</span> and variance <span class="math inline">\(\sigma^2/n\)</span>. The second term in the product is proportional to the marginal posterior density of <span class="math inline">\(\sigma^2\)</span>. From our earlier work, we recognize this marginal density as the ``scale times inverse chi-square” form <span class="math display">\[
+\]</span> The first term in the product represents the posterior density of the mean <span class="math inline">\(\mu\)</span> conditional on the variance <span class="math inline">\(\sigma^2\)</span> – we recognize this as a normal density with mean <span class="math inline">\(\bar y\)</span> and variance <span class="math inline">\(\sigma^2/n\)</span>. The second term in the product is proportional to the marginal posterior density of <span class="math inline">\(\sigma^2\)</span>. From our earlier work, we recognize this marginal density as the “scale times inverse chi-square” form <span class="math display">\[
 \sigma^2 \sim S \chi^{-2}_v,
 \]</span> where the degrees of freedom is <span class="math inline">\(v=n-1\)</span> and the sum of squares <span class="math inline">\(S = \sum_{i=1}^n (y_i-\bar y)^2\)</span>. This posterior density is commonly called the {} distribution.</p>
 <p>In this setting, typically one is interested in inferences about the normal mean <span class="math inline">\(\mu\)</span> and we base this inference on its marginal posterior density. This is obtained by integrating out <span class="math inline">\(\sigma^2\)</span> from the joint density. Using our earlier expressions, we write this integral as <span class="math display">\[
@@ -233,7 +296,7 @@ g(\mu | y) \propto \frac{1}{(S + (\mu - \bar y)^2)^{n/2}},
 \]</span> which has the t functional form. After some manipulation, one can show that the standardized random variable <span class="math display">\[
 \frac{\sqrt{n}(\mu - \bar y)}{\sqrt{S/(n-1)}} = \frac{\sqrt{n}(\mu - \bar y)}{s},
 \]</span> where <span class="math inline">\(s\)</span> is the sample standard deviation, has a standardized t distribution with <span class="math inline">\(n-1\)</span> degrees of freedom.</p>
-<p>This is a familiar result from sampling theory. If one samples from a normal population, then it is well-known that the ``t-statistic” <span class="math display">\[
+<p>This is a familiar result from sampling theory. If one samples from a normal population, then it is well-known that the “t-statistic” <span class="math display">\[
 T = \frac{\sqrt{n}(\bar y - \mu)}{s}
 \]</span> has a t distribution with <span class="math inline">\(n-1\)</span> degrees of freedom. Our result switches the role of the data <span class="math inline">\(y\)</span> and the parameter <span class="math inline">\(\mu\)</span>. Assuming the noninformative prior on <span class="math inline">\(\mu, \sigma^2\)</span>, the standardized marginal posterior of <span class="math inline">\(\mu\)</span> (with <span class="math inline">\(y\)</span> fixed) has the same t distribution.</p>
 <p>What is the implication of this similarity of frequentist and Bayesian distribution results? It means that classical and Bayesian inferential procedures will agree in this setting. For example, suppose one is interested in a 95% interval estimate for the mean <span class="math inline">\(\mu\)</span>. Then standard frequentist interval has the form <span class="math display">\[
@@ -247,14 +310,14 @@ P^\mu\left(\bar y - t_{n-1, .025}\frac{s}{\sqrt{n}} &lt; \mu &lt; \bar y + t_{n-
 \frac{S}{\sigma^2} = \frac{\sum_{i=1}^n (y_i - \bar y)^2}{\sigma^2}
 \]</span> is chi-squared with <span class="math inline">\(n-1\)</span> degrees of freedom. From a frequentist perspective, if <span class="math inline">\(\sigma^2\)</span> is fixed, then the statistic <span class="math display">\[
 Y = \frac{\sum_{i=1}^n (y_i - \bar y)^2}{\sigma^2}
-\]</span> has a chi-square (<span class="math inline">\(n-1\)</span>) sampling distribution. Again this correspondence means that Bayesian inferential statements about a variance (assuming a noninformative prior) will be numerically equivalent to the corresponding frequentist inferential statements. But the interpretation of these statements will be different. For an interval estimate, the posterior probability that a particular interval contains <span class="math inline">\(\sigma^2\)</span> is the given level. In contrast, the ``confidence” of the frequentist interval refers to the probability of containing the parameter in repeated sampling.</p>
+\]</span> has a chi-square (<span class="math inline">\(n-1\)</span>) sampling distribution. Again this correspondence means that Bayesian inferential statements about a variance (assuming a noninformative prior) will be numerically equivalent to the corresponding frequentist inferential statements. But the interpretation of these statements will be different. For an interval estimate, the posterior probability that a particular interval contains <span class="math inline">\(\sigma^2\)</span> is the given level. In contrast, the “confidence” of the frequentist interval refers to the probability of containing the parameter in repeated sampling.</p>
 </section>
 <section id="using-a-informative-prior" class="level3" data-number="7.2.2">
 <h3 data-number="7.2.2" class="anchored" data-anchor-id="using-a-informative-prior"><span class="header-section-number">7.2.2</span> Using a Informative Prior</h3>
 <p>The form for the posterior distribution for <span class="math inline">\((\mu, \sigma^2)\)</span> in the noninformative case suggests the form for an informative conjugate prior. We assume that the prior for the mean <span class="math inline">\(\mu\)</span> conditional on the variance <span class="math inline">\(\sigma^2\)</span> has a normal distribution with mean <span class="math inline">\(\mu_0\)</span> and variance <span class="math inline">\(\sigma^2/n_0\)</span>. Then we assume the marginal prior on <span class="math inline">\(\sigma^2\)</span> is distributed <span class="math inline">\(S_0 \chi^{-2}_{v_0}\)</span>.</p>
 <p>How do we interpret these parameters?</p>
 <ol type="1">
-<li>The prior mean <span class="math inline">\(\mu_0\)</span> is a guess at the normal mean and <span class="math inline">\(n_0\)</span> is a number of ``prior observations” representing the sureness of this guess.</li>
+<li>The prior mean <span class="math inline">\(\mu_0\)</span> is a guess at the normal mean and <span class="math inline">\(n_0\)</span> is a number of “prior observations” representing the sureness of this guess.</li>
 <li>A prior guess at the variance <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(S_0/v_0\)</span> and <span class="math inline">\(v_0\)</span> represents the precision of this guess expressed again in term of prior observations.</li>
 </ol>
 <p>If we apply this prior density, then it can be shown that the posterior density for <span class="math inline">\((\mu, \sigma^2)\)</span> has the same normal-inverse-chisquare form. First, if we condition on <span class="math inline">\(\sigma^2\)</span>, and combine the normal prior on <span class="math inline">\(\mu\)</span> with the normal likelihood, then the posterior density of <span class="math inline">\(\mu\)</span> is normal(<span class="math inline">\(\mu_1, \sigma^2/n_1\)</span>), where <span class="math display">\[
@@ -268,7 +331,7 @@ S_1 = S_0 + S + \frac{n_0 n}{n_1} (\bar y - \mu_0)^2 .
 </section>
 <section id="comparing-two-poisson-means" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="comparing-two-poisson-means"><span class="header-section-number">7.3</span> Comparing Two Poisson Means</h2>
-<p>In Chapter 4, we considered the problem of learning about the mean number of visits to a particular website during weekdays in Summer 2009. We only included the visit counts during the weekdays, since we suspected that there was a different pattern of visits between weekdays and weekends (Saturday and Sunday). We suspect that there are fewer visits on weekends, but would be interested in estimating the magnitude of the ``weekend effect.”</p>
+<p>In Chapter 4, we considered the problem of learning about the mean number of visits to a particular website during weekdays in Summer 2009. We only included the visit counts during the weekdays, since we suspected that there was a different pattern of visits between weekdays and weekends (Saturday and Sunday). We suspect that there are fewer visits on weekends, but would be interested in estimating the magnitude of the “weekend effect.”</p>
 <p>Suppose we observe two independent Poisson samples. Counts {<span class="math inline">\(y_{Ai}\)</span>} from the weekend days are assumed Poisson with mean <span class="math inline">\(\lambda_A\)</span> and counts {<span class="math inline">\(y_{Bj}\)</span>} from the weekday days are assumed Poisson with mean <span class="math inline">\(\lambda_B\)</span>. We are interested in learning about the ratio of means <span class="math display">\[
 \gamma=\frac{\lambda_B}{\lambda_A}.
 \]</span></p>
@@ -318,12 +381,98 @@ AVG = \frac{H}{AB},
 g(AB, p) = g(AB) g(p | AB),
 \]</span> and separately construct the marginal prior for the at-bats <span class="math inline">\(AB\)</span> and the prior of the hitting probability <span class="math inline">\(p\)</span> conditional on the at-bats <span class="math inline">\(AB\)</span>.</p>
 <p>The player is known to be a full-time player which means that the player obtains between 400 and 700 at-bats in a season. We can construct a prior for <span class="math inline">\(AB\)</span> by looking at the distribution of at-bats for all players in a particular season. Figure 1 shows a histogram of the at-bats and the smooth curve represents a density estimate. We can use this density estimate as our prior density for <span class="math inline">\(AB\)</span>.</p>
-<p>Next, we construct a prior on the hitting probability <span class="math inline">\(p\)</span> conditional on the number of at-bats <span class="math inline">\(AB\)</span>. We don’t know the player’s hitting probability, but we can collect the batting averages <span class="math inline">\(AVG = H/AB\)</span> for all full-time players. Figure 2 shows a scatterplot of <span class="math inline">\(AVG\)</span> against the at-bats <span class="math inline">\(AB\)</span>. We see from the superimposed least-squares fit that there is a positive relationship between the batting average and at-bats. So our prior mean for <span class="math inline">\(p\)</span> will depend on <span class="math inline">\(AB\)</span>. We will use a beta density for <span class="math inline">\(p\)</span> of the form <span class="math display">\[
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+Attaching package: 'dplyr'</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:stats':
+
+    filter, lag</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>The following objects are masked from 'package:base':
+
+    intersect, setdiff, setequal, union</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Lahman)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Batting <span class="sc">%&gt;%</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(yearID <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(playerID) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">AB =</span> <span class="fu">sum</span>(AB)) <span class="sc">%&gt;%</span> </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(AB <span class="sc">&gt;=</span> <span class="dv">400</span>, AB <span class="sc">&lt;=</span> <span class="dv">700</span>) <span class="ot">-&gt;</span> S</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>trun_normal <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dnorm</span>(x, <span class="dv">505</span>, <span class="dv">90</span>) <span class="sc">/</span> (<span class="fu">pnorm</span>(<span class="dv">700</span>, <span class="dv">505</span>, <span class="dv">90</span>) <span class="sc">-</span> </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pnorm</span>(<span class="dv">400</span>, <span class="dv">505</span>, <span class="dv">90</span>))</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(S<span class="sc">$</span>AB),</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Density Estimate of AB with Normal Approximation"</span>, </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"K"</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">trun_normal</span>(x), <span class="dv">400</span>, <span class="dv">700</span>,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Next, we construct a prior on the hitting probability <span class="math inline">\(p\)</span> conditional on the number of at-bats <span class="math inline">\(AB\)</span>. We don’t know the player’s hitting probability, but we can collect the batting averages <span class="math inline">\(AVG = H/AB\)</span> for all full-time players. Figure 2 shows a scatterplot of <span class="math inline">\(AVG\)</span> against the at-bats <span class="math inline">\(AB\)</span>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Batting <span class="sc">%&gt;%</span> </span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(yearID <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(playerID) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">H =</span> <span class="fu">sum</span>(H), <span class="at">AB =</span> <span class="fu">sum</span>(AB)) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(AB <span class="sc">&gt;=</span> <span class="dv">400</span>, AB <span class="sc">&lt;=</span> <span class="dv">700</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">AVG =</span> H <span class="sc">/</span> AB) <span class="ot">-&gt;</span> S1</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(S1<span class="sc">$</span>AB, S1<span class="sc">$</span>AVG)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(AVG <span class="sc">~</span> AB, <span class="at">data =</span> S1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>We see from the superimposed least-squares fit that there is a positive relationship between the batting average and at-bats. So our prior mean for <span class="math inline">\(p\)</span> will depend on <span class="math inline">\(AB\)</span>. We will use a beta density for <span class="math inline">\(p\)</span> of the form <span class="math display">\[
 g(p | AB) \propto p^{K \eta - 1} (1 - p)^{K(1-\eta)-1},
-\]</span> where <span class="math inline">\(\eta\)</span> is the mean and <span class="math inline">\(K\)</span> is the precision parameter. We use the least-squares fit to obtain the prior mean <span class="math display">\[
-\eta = E(p | AB) = 0.2208886 +   0.0001148 \times AB .
-\]</span> It is more difficult to assess <span class="math inline">\(K\)</span> since this reflects the variability in the hitting probability and Figure ?? shows the variability in the batting average <span class="math inline">\(AVG = H/AB\)</span>. Using techniques from the hierarchical modeling chapter, we choose the precision value <span class="math inline">\(K = 400\)</span>.</p>
+\]</span> where <span class="math inline">\(\eta\)</span> is the mean and <span class="math inline">\(K\)</span> is the precision parameter. We use the least-squares fit to obtain the prior mean:</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(AVG <span class="sc">~</span> AB, <span class="at">data =</span> S1)<span class="sc">$</span>coef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code> (Intercept)           AB 
+0.1999521180 0.0001346106 </code></pre>
+</div>
+</div>
+<p>It is more difficult to assess <span class="math inline">\(K\)</span> since this reflects the variability in the hitting probability and Figure ?? shows the variability in the batting average <span class="math inline">\(AVG = H/AB\)</span>. Using techniques from the hierarchical modeling chapter, we choose the precision value <span class="math inline">\(K = 400\)</span>.</p>
 <p>Figure 3 displays a contour plot of the joint prior on <span class="math inline">\((AB, p)\)</span>. Note that the beliefs about the number of at-bats are pretty vague and <span class="math inline">\(AB\)</span> and the hitting probability <span class="math inline">\(p\)</span> are positively correlated as expected.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(LearnBayes)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>log_prior <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, <span class="at">d =</span> <span class="dv">0</span>){</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  AB <span class="ot">&lt;-</span> theta[<span class="dv">1</span>]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> theta[<span class="dv">2</span>]</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> <span class="fl">0.199952</span> <span class="sc">+</span> <span class="fl">0.000135</span> <span class="sc">*</span> AB</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">log</span>(<span class="fu">trun_normal</span>(AB)) <span class="sc">+</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dbeta</span>(p, <span class="dv">400</span> <span class="sc">*</span> eta, <span class="dv">400</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> eta), <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(log_prior, <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">700</span>, .<span class="dv">18</span>, .<span class="dv">42</span>), <span class="dv">0</span>,</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">xlab =</span> <span class="st">"K"</span>, <span class="at">ylab =</span> <span class="st">"p"</span>,</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">main =</span> <span class="st">"Contour Plot of Prior"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section>
 <section id="computation-of-the-posterior-and-inference" class="level3" data-number="7.4.2">
 <h3 data-number="7.4.2" class="anchored" data-anchor-id="computation-of-the-posterior-and-inference"><span class="header-section-number">7.4.2</span> Computation of the posterior and inference</h3>
@@ -333,7 +482,56 @@ L(AB, p) = {AB \choose H} p^H (1- p)^{AB - H}.
 \]</span> Once <span class="math inline">\(H\)</span> is observed, the posterior density of <span class="math inline">\((AB, p)\)</span> is equal to the product of the prior and the likelihood: <span class="math display">\[
 g(AB, p | H) \propto g(AB, p) L(AB, p)
 \]</span> In the following we will pretend that the number of at-bats <span class="math inline">\(AB\)</span> is continuous. This will simplify the computational strategy in summarizing the posterior distribution.</p>
-<p>Our player is observed to get <span class="math inline">\(H = 200\)</span> hits during the season. Figure 4 displays the joint posterior of <span class="math inline">\((AB, p)\)</span>. Comparing Figure 3 and Figure 4, it appears that 200 hits indicates that the player had a large number of at-bats and is a good hitter and the posterior is concentrated on large values of <span class="math inline">\(AB\)</span> and <span class="math inline">\(p\)</span>. By computing the joint posterior density on a fine grid, and then simulating from the grid, one can obtain simulated draws from the marginal posterior densities of <span class="math inline">\(AB\)</span> and <span class="math inline">\(p\)</span>. Figure 5 presents density estimates of these marginal posterior densities. The simulated samples can easily be used to construct interval estimates for each parameter.</p>
+<p>Our player is observed to get <span class="math inline">\(H = 200\)</span> hits during the season. Figure 4 displays the joint posterior of <span class="math inline">\((AB, p)\)</span>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>log_posterior <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, H){</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  AB <span class="ot">&lt;-</span> theta[<span class="dv">1</span>]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> theta[<span class="dv">2</span>]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> <span class="fl">0.199952</span> <span class="sc">+</span> <span class="fl">0.000135</span> <span class="sc">*</span> AB</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  log_prior <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">trun_normal</span>(AB)) <span class="sc">+</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dbeta</span>(p, <span class="dv">400</span> <span class="sc">*</span> eta, <span class="dv">400</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> eta), <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  log_likelihood <span class="ot">&lt;-</span> <span class="fu">lgamma</span>(AB <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">lgamma</span>(H <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">-</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lgamma</span>(AB <span class="sc">-</span> H <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">+</span> H <span class="sc">*</span> <span class="fu">log</span>(p) <span class="sc">+</span> </span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    (AB <span class="sc">-</span> H) <span class="sc">*</span> <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> p)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  log_prior <span class="sc">+</span> log_likelihood</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(log_posterior, <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">700</span>, .<span class="dv">18</span>, .<span class="dv">42</span>), <span class="dv">200</span>,</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">xlab =</span> <span class="st">"K"</span>, <span class="at">ylab =</span> <span class="st">"p"</span>,</span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">main =</span> <span class="st">"Contour Plot of Posterior"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>Comparing Figure 3 and Figure 4, it appears that 200 hits indicates that the player had a large number of at-bats and is a good hitter and the posterior is concentrated on large values of <span class="math inline">\(AB\)</span> and <span class="math inline">\(p\)</span>. By computing the joint posterior density on a fine grid, and then simulating from the grid, one can obtain simulated draws from the marginal posterior densities of <span class="math inline">\(AB\)</span> and <span class="math inline">\(p\)</span>. Figure 5 presents density estimates of these marginal posterior densities.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sim_draws <span class="ot">&lt;-</span> <span class="fu">simcontour</span>(log_posterior, </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">700</span>, .<span class="dv">18</span>, .<span class="dv">42</span>), </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">200</span>, <span class="dv">10000</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(sim_draws<span class="sc">$</span>x),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Posterior Density of K"</span>,</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Density"</span>,</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"K"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(sim_draws<span class="sc">$</span>y),</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Posterior Density of p"</span>,</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Density"</span>,</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"p"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p>The simulated samples can easily be used to construct interval estimates for each parameter.</p>
 </section>
 <section id="prediction" class="level3" data-number="7.4.3">
 <h3 data-number="7.4.3" class="anchored" data-anchor-id="prediction"><span class="header-section-number">7.4.3</span> Prediction</h3>
