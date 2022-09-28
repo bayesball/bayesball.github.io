@@ -15,6 +15,69 @@ span.underline{text-decoration: underline;}
 div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -216,7 +279,27 @@ h''(\hat p) = \frac{y}{\hat p^2}-\frac{n-y}{(1-\hat p)^2} = -\frac{n}{\hat p(1-\
 \]</span> So the approximation is the posterior for <span class="math inline">\(p\)</span> is normal(<span class="math inline">\(\mu, \sigma^2\)</span>), where <span class="math inline">\(\mu = \hat p\)</span> and <span class="math display">\[
 \sigma^2 = \left(-h''(\hat p)\right)^{-1} = \frac{\hat p(1-\hat p)}{n}.
 \]</span></p>
-<p>Figure 1 displays the exact beta posterior density and the normal approximation. Clearly, the normal approximation does not reflect the substantial skewed shape in the beta density.</p>
+<p>Suppose a sample of <span class="math inline">\(n = 15\)</span> is taken with <span class="math inline">\(y = 3\)</span> successes. Figure 1 displays the exact beta posterior density (red line) and the normal approximation (black line). Clearly, the normal approximation does not reflect the substantial skewed shape in the beta density.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(LearnBayes)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(p, y, n){</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  y <span class="sc">*</span> <span class="fu">log</span>(p) <span class="sc">+</span> (n <span class="sc">-</span> y) <span class="sc">*</span> <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> p)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">laplace</span>(logpost, y <span class="sc">/</span> n, y, n)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">dbeta</span>(x, y <span class="sc">+</span> <span class="dv">1</span>, n <span class="sc">-</span> y <span class="sc">+</span> <span class="dv">1</span>), <span class="dv">0</span>, <span class="dv">1</span>,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">ylab =</span> <span class="st">"Density"</span>,</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">"p"</span>)</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">dnorm</span>(x, fit<span class="sc">$</span>mode, <span class="fu">sqrt</span>(fit<span class="sc">$</span>var)), </span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="bayes_computation_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section>
 <section id="improving-the-accuracy-of-the-approximation" class="level3" data-number="8.2.3">
 <h3 data-number="8.2.3" class="anchored" data-anchor-id="improving-the-accuracy-of-the-approximation"><span class="header-section-number">8.2.3</span> Improving the accuracy of the approximation</h3>
@@ -230,7 +313,30 @@ g(\theta | y) \propto \left(\frac{\exp(\theta)}{1+\exp(\theta)}\right)^{y+1}
 <p>Suppose we apply our normal approximation to the posterior of the reexpressed parameter <span class="math inline">\(\theta\)</span>. One can show that the posterior density is approximately <span class="math inline">\(N(\mu, \sigma^2)\)</span> where <span class="math display">\[
 \mu = \log\left(\frac{\tilde p}{ 1-\tilde p}\right), \, \sigma^2 = \frac{1}{(n+2)\tilde p (1-\tilde p)}, \, \, \tilde p = \frac{y+1}{n+2}.
 \]</span></p>
-<p>Figure 2 displays the exact posterior density of <span class="math inline">\(\theta\)</span> together with the normal approximation. This illustrates that the accuracy of the normal approximation is better for the real-valued parameter <span class="math inline">\(\theta\)</span> than for the proportion <span class="math inline">\(p\)</span>.</p>
+<p>For the example of <span class="math inline">\(n = 15\)</span>, <span class="math inline">\(y = 3\)</span>, Figure 2 displays the exact posterior density of <span class="math inline">\(\theta\)</span> (red line) together with the normal approximation (black line). This illustrates that the accuracy of the normal approximation is better for the real-valued parameter <span class="math inline">\(\theta\)</span> than for the proportion <span class="math inline">\(p\)</span>.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">15</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>logpost2 <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, y, n){</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fu">exp</span>(theta) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(theta))</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  (y <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">log</span>(p) <span class="sc">+</span> (n <span class="sc">-</span> y <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> p)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>fit2 <span class="ot">&lt;-</span> <span class="fu">laplace</span>(logpost2, <span class="sc">-</span><span class="dv">2</span>, y, n)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>((<span class="fu">exp</span>(x) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(x))) <span class="sc">^</span> (y <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">*</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">exp</span>(x) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> <span class="fu">exp</span>(x))) <span class="sc">^</span> (n <span class="sc">-</span> y <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">beta</span>(y <span class="sc">+</span> <span class="dv">1</span>, n <span class="sc">-</span> y <span class="sc">+</span> <span class="dv">1</span>), </span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>        <span class="sc">-</span><span class="dv">6</span>, <span class="dv">1</span>,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>      <span class="at">col =</span> <span class="st">"red"</span>, <span class="at">ylab =</span> <span class="st">"Density"</span>,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">"logit p"</span>)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">dnorm</span>(x, fit2<span class="sc">$</span>mode, <span class="fu">sqrt</span>(fit2<span class="sc">$</span>var)), </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">add =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="bayes_computation_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section>
 </section>
 <section id="normal-approximation-for-multivariate-posterior-distributions" class="level2" data-number="8.3">
@@ -255,18 +361,30 @@ h^{20} = -\frac{n}{V}, \, h^{11} = -\frac{\sum_{i=1}^n (y_i - \mu)}{V^2}, \, h^{
 \]</span> When we evaluate these partial derivatives at the posterior mode <span class="math inline">\((\mu, V) = (\hat \mu, \hat V)\)</span>, we obtain <span class="math display">\[
 h^{20} = -\frac{n}{\hat V}, \, h^{11} = 0, \, h^{02} = -\frac{n+2}{2\hat V^2}.
 \]</span> The Hessian matrix is given by [ h’’() = ] and the approximate variance-covariance matrix is found by inverting <span class="math inline">\(-h''(\theta)\)</span>: [ = ] We have that the posterior density of <span class="math inline">\((\mu, V)\)</span> is approximately normal with mean vector <span class="math inline">\((\hat y, \hat V)\)</span> and variance-covariance matrix <span class="math inline">\(\Sigma\)</span>.</p>
-<p>We illustrate this approximation using a sample of completion times for 20 male participants at the New York Marathon. The logarithm of the exact posterior density of <span class="math inline">\((\mu, V)\)</span> is contained in the function {} and we define a new function {} that computes the logarithm of a multivariate normal density. Figure 3 displays two contour plots – the solid line corresponds to the exact posterior and the dashed line corresponds to the normal approximation. Clearly, the accuracy of the normal approximation is relatively poor in this case, since it does not account for the right skewness in the variance <span class="math inline">\(V\)</span>. One could improve the accuracy of the normal approximation by reexpressing <span class="math inline">\((\mu, V)\)</span> to <span class="math inline">\((\mu, \log V)\)</span></p>
-<pre><code>data(marathontimes)
-attach(marathontimes)
-mycontour(normchi2post,c(225,330,10,9000),time,col="red",xlab="MU",ylab="V")
-n=length(time)
-mu.est=mean(time)
-var.est=sum((time-mu.est)^2)/(n+2)
-Sigma=diag(c(var.est/n,2*var.est^2/(n+2)))
-log.dmnorm=function(x, pars) 
-  dmnorm(x, pars$mean, pars$varcov, log = TRUE)
-pars=list(mean=c(mu.est,var.est),varcov=Sigma)
-mycontour(log.dmnorm,c(225,330,10,9000),pars,add=TRUE,lty=2)</code></pre>
+<p>We illustrate this approximation using a sample of completion times for 20 male participants at the New York Marathon. The logarithm of the exact posterior density of <span class="math inline">\((\mu, V)\)</span> is contained in the function <code>normchi2post()</code> and we define a new function <code>log.dmnorm()</code> that computes the logarithm of a multivariate normal density. Figure 3 displays two contour plots – the solid line corresponds to the exact posterior and the dashed line corresponds to the normal approximation. Clearly, the accuracy of the normal approximation is relatively poor in this case, since it does not account for the right skewness in the variance <span class="math inline">\(V\)</span>. One could improve the accuracy of the normal approximation by reexpressing <span class="math inline">\((\mu, V)\)</span> to <span class="math inline">\((\mu, \log V)\)</span></p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(normchi2post,  <span class="fu">c</span>(<span class="dv">225</span>, <span class="dv">330</span>, <span class="dv">10</span>, <span class="dv">9000</span>),</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>          marathontimes<span class="sc">$</span>time, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">col=</span><span class="st">"red"</span>, <span class="at">xlab=</span><span class="st">"MU"</span>, <span class="at">ylab=</span><span class="st">"V"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(marathontimes<span class="sc">$</span>time)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>mu.est <span class="ot">&lt;-</span> <span class="fu">mean</span>(marathontimes<span class="sc">$</span>time)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>var.est <span class="ot">&lt;-</span> <span class="fu">sum</span>((marathontimes<span class="sc">$</span>time <span class="sc">-</span> mu.est) <span class="sc">^</span> <span class="dv">2</span>) <span class="sc">/</span> </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  (n <span class="sc">+</span> <span class="dv">2</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>Sigma <span class="ot">&lt;-</span> <span class="fu">diag</span>(<span class="fu">c</span>(var.est <span class="sc">/</span> n, <span class="dv">2</span> <span class="sc">*</span> var.est <span class="sc">^</span> <span class="dv">2</span> <span class="sc">/</span> (n <span class="sc">+</span> <span class="dv">2</span>)))</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>log.dmnorm <span class="ot">&lt;-</span> <span class="cf">function</span>(x, pars){</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dmnorm</span>(x, pars<span class="sc">$</span>mean, pars<span class="sc">$</span>varcov, <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>pars <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mean =</span> <span class="fu">c</span>(mu.est, var.est), <span class="at">varcov=</span>Sigma)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(log.dmnorm,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>          <span class="fu">c</span>(<span class="dv">225</span>, <span class="dv">330</span>, <span class="dv">10</span>, <span class="dv">9000</span>),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>          pars, <span class="at">add=</span><span class="cn">TRUE</span>, <span class="at">lty=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="bayes_computation_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section>
 <section id="modeling-with-cauchy-errors" class="level2" data-number="8.4">
 <h2 data-number="8.4" class="anchored" data-anchor-id="modeling-with-cauchy-errors"><span class="header-section-number">8.4</span> Modeling with Cauchy errors</h2>
@@ -279,26 +397,87 @@ g(\mu, \sigma | y) = \frac{1}{\sigma} L(\mu, \sigma).
 \]</span> To improve the accuracy of a normal approximation, we transform <span class="math inline">\((\mu, \sigma)\)</span> to <span class="math inline">\((\mu, \log \sigma)\)</span>, obtaining the posterior density <span class="math display">\[
 g(\mu, \log \sigma | y) = L(\mu, \sigma).
 \]</span></p>
-<p>Let’s return to the problem of learning about the population of completion times for male runners in the New York Marathon. Suppose we add the completion time of 600 minutes for an unusually slow runner to the dataset. What impact does this outlier have on our inference about the population location parameter <span class="math inline">\(\mu\)</span>?</p>
-<pre><code>fit=normpostsim(time2,10000)
-cfit=laplace(cauchyerrorpost,c(0,0),time2)
-plot(density(fit$mu),xlim=c(200,610),ylim=c(0,.04),xlab="MU",main="",lwd=3)
-curve(dnorm(x,cfit$mode[1],sqrt(cfit$var[1,1])),add=TRUE,lwd=3)
-text(locator(1),"Normal")
-text(locator(1),"Cauchy")
-points(time2,0*time2,pch=19,cex=1.5)</code></pre>
-The R function <code>cauchyerrorpost()</code> in the <code>LearnBayes</code> package contains the definition of the logarithm of the posterior density of <span class="math inline">\((\mu, \log \sigma)\)</span>. One can numerically obtain the normal approximation to the posterior function by the use of the <code>laplace()</code> function. The inputs to <code>laplace()</code> are the function defining the log posterior, a starting guess at the posterior mode, and the data that is used in the log posterior function. When one runs this function, one obtains the approximation that [ = (
-<span class="math display">\[\begin{array}{c}\mu \\ \log \theta\end{array}\]</span>
-) N( (
-<span class="math display">\[\begin{array}{c}  278.77 \\  3.38 \end{array}\]</span>
-), (
-<span class="math display">\[\begin{array}{cc}  94.49 &amp; -0.254 \\  -0.254 &amp; 0.0859 \end{array}\]</span>
-<p>) ) ] As a byproduct of this approximation, one obtains that the marginal posterior density of <span class="math inline">\(\mu\)</span> is approximately normal with mean 278.77 and standard deviation <span class="math inline">\(\sqrt{94.49}\)</span>.</p>
+<p>Let’s return to the problem of learning about the population of completion times for male runners in the New York Marathon. The sample of completion times is contained in the dataset <code>marathontimes</code> in the `LearnBayes’ package. Suppose we add the completion time of 600 minutes for an unusually slow runner to the dataset. What impact does this outlier have on our inference about the population location parameter <span class="math inline">\(\mu\)</span>?</p>
+<p>The R function <code>cauchyerrorpost()</code> in the <code>LearnBayes</code> package contains the definition of the logarithm of the posterior density of <span class="math inline">\((\mu, \log \sigma)\)</span>. One can numerically obtain the normal approximation to the posterior function by the use of the <code>laplace()</code> function. The inputs to <code>laplace()</code> are the function defining the log posterior, a starting guess at the posterior mode, and the data that is used in the log posterior function. When one runs this function, one approximates the posterior of <span class="math inline">\((\mu, \log \sigma)\)</span> by a bivariate normal with the following mean vector and variance-covariance matrix.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>time2 <span class="ot">&lt;-</span> <span class="fu">c</span>(marathontimes<span class="sc">$</span>time, <span class="dv">600</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>cfit <span class="ot">&lt;-</span> <span class="fu">laplace</span>(cauchyerrorpost, <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">0</span>), time2)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>cfit<span class="sc">$</span>mode</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 278.769672   3.383559</code></pre>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>cfit<span class="sc">$</span>var</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>           [,1]       [,2]
+[1,] 94.4904186 -0.2535984
+[2,] -0.2535984  0.0859342</code></pre>
+</div>
+</div>
+<p>As a byproduct of this approximation, one obtains that the marginal posterior density of <span class="math inline">\(\mu\)</span> is approximately normal with mean 278.77 and standard deviation <span class="math inline">\(\sqrt{94.49}\)</span>.</p>
 <p>Figure 4 displays two densities, the leftmost density is the posterior density of <span class="math inline">\(\mu\)</span> with Cauchy sampling, and the rightmost density is the posterior density of <span class="math inline">\(\mu\)</span> with the usual normal sampling assumption. The observed completion times are displayed as dots along the horizontal axis. Note that the inferences about the population location are significantly different with Normal and Cauchy errors. With the normal assumption, the point estimate at <span class="math inline">\(\mu\)</span> is the sample mean <span class="math inline">\(\bar y\)</span> and the posterior density is shifted to the right, trying to accommodate the large outlier. In contrast, with Cauchy sampling errors, the posterior density essentially ignores the outlier and the density better reflects the center of the remaining observations.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>normsim_MU <span class="ot">&lt;-</span> <span class="cf">function</span>(d, m){</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  S <span class="ot">&lt;-</span>  <span class="fu">sum</span>((d <span class="sc">-</span> <span class="fu">mean</span>(d)) <span class="sc">^</span> <span class="dv">2</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  xbar <span class="ot">&lt;-</span>  <span class="fu">mean</span>(d)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(d)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  SIGMA2 <span class="ot">&lt;-</span> S <span class="sc">/</span> <span class="fu">rchisq</span>(m, n <span class="sc">-</span> <span class="dv">1</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rnorm</span>(m, <span class="at">mean =</span> xbar, </span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>                 <span class="at">sd =</span> <span class="fu">sqrt</span>(SIGMA2) <span class="sc">/</span> <span class="fu">sqrt</span>(n))</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>sim_MU <span class="ot">&lt;-</span> <span class="fu">normsim_MU</span>(time2, <span class="dv">10000</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(sim_MU),</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">200</span>,<span class="dv">610</span>),</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>,.<span class="dv">04</span>),</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab=</span><span class="st">"MU"</span>, <span class="at">main=</span><span class="st">""</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">dnorm</span>(x, cfit<span class="sc">$</span>mode[<span class="dv">1</span>], <span class="fu">sqrt</span>(cfit<span class="sc">$</span>var[<span class="dv">1</span>,<span class="dv">1</span>])),</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">add=</span><span class="cn">TRUE</span>, <span class="at">lwd=</span><span class="dv">3</span>)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="dv">350</span>, <span class="fl">0.015</span>,<span class="st">"Normal"</span>)</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="fu">text</span>(<span class="dv">320</span>, <span class="fl">0.03</span>, <span class="st">"Cauchy"</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">points</span>(time2, <span class="dv">0</span> <span class="sc">*</span> time2, <span class="at">pch=</span><span class="dv">19</span>, <span class="at">cex=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="bayes_computation_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 <p>In this “single outlier” example, the normal approximation to the marginal posterior density of the location parameter <span class="math inline">\(\mu\)</span> is pretty accurate. But for other examples, the normal approximation is clearly unsuitable. To illustrate a nonnormal posterior, suppose that one observes the following data:</p>
 <pre><code> 0.1 -0.9 -0.1 -2.1  1.4 -0.2  0.5 -1.7  1.5 -0.6 
 40.5 39.8 40.6 39.5 38.7 39.1 40.9 40.6 39.8 39.8</code></pre>
 <p>Note that ten of the observations are in a neighborhood of zero and ten observations are in a neighborhood of 40. Again we assume the the observations are a random sample from a Cauchy(<span class="math inline">\(\mu, \sigma\)</span>) distribution and the usual noninformative prior is placed on <span class="math inline">\((\mu, \sigma)\)</span>. Figure 5 displays contours of the exact joint posterior density and Figure 6 displays the marginal posterior density of <span class="math inline">\(\mu\)</span>. Clearly, the joint posterior density does not display the elliptical shaped contours of a bivariate normal density and the marginal posterior density of <span class="math inline">\(\mu\)</span> is clearly bimodal. In future chapters, we will discuss the use of general-purpose simulation algorithms that are suitable when the posterior distribution has unusual shapes.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>ndata <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.1</span>, <span class="sc">-</span><span class="fl">0.9</span>, <span class="sc">-</span><span class="fl">0.1</span>, <span class="sc">-</span><span class="fl">2.1</span>,  <span class="fl">1.4</span>, <span class="sc">-</span><span class="fl">0.2</span>,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>           <span class="fl">0.5</span>, <span class="sc">-</span><span class="fl">1.7</span>,  <span class="fl">1.5</span>, <span class="sc">-</span><span class="fl">0.6</span>, <span class="fl">40.5</span>, <span class="fl">39.8</span>,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>           <span class="fl">40.6</span>, <span class="fl">39.5</span>, <span class="fl">38.7</span>, <span class="fl">39.1</span>, <span class="fl">40.9</span>, <span class="fl">40.6</span>,</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>           <span class="fl">39.8</span>, <span class="fl">39.8</span>)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(cauchyerrorpost, <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">50</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">4</span>),</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>          ndata,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>          <span class="at">xlab =</span> <span class="st">"MU"</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>          <span class="at">ylab =</span> <span class="st">"LOG SIGMA"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="bayes_computation_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+</div>
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>out <span class="ot">&lt;-</span> <span class="fu">simcontour</span>(cauchyerrorpost, </span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>                  <span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">50</span>, <span class="sc">-</span><span class="dv">1</span>, <span class="dv">4</span>),</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>          ndata, <span class="dv">10000</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(out<span class="sc">$</span>x),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"MU"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="bayes_computation_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 
 
 </section>
