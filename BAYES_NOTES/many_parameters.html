@@ -366,6 +366,33 @@ weekday counts
 <p>From these data, we compute <span class="math inline">\(s_A = 143\)</span> and <span class="math inline">\(s_B = 486\)</span>. With the appropriate substitutions, the marginal posterior density of <span class="math inline">\(\gamma\)</span> is given by <span class="math display">\[
 g(\gamma | {\rm data}) \propto \frac{\gamma^{486+8-1} \exp(-8 \gamma)}{(10 + 21 \gamma + 1)^{143 + 486 + 2}}.
 \]</span></p>
+<p>displayed in the following figure.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>weekend <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">7</span>, <span class="dv">12</span>, <span class="dv">11</span>, <span class="dv">12</span>, <span class="dv">12</span>, <span class="dv">17</span>, <span class="dv">17</span>, <span class="dv">18</span>, <span class="dv">20</span>, <span class="dv">17</span>)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>weekday <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">22</span>, <span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">17</span>, <span class="dv">21</span>, <span class="dv">26</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>             <span class="dv">22</span>, <span class="dv">30</span>, <span class="dv">36</span>, <span class="dv">15</span>, <span class="dv">30</span>, <span class="dv">27</span>, <span class="dv">22</span>, <span class="dv">23</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>             <span class="dv">18</span>, <span class="dv">24</span>, <span class="dv">28</span>, <span class="dv">23</span>, <span class="dv">12</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>na <span class="ot">&lt;-</span> <span class="fu">length</span>(weekend)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>nb <span class="ot">&lt;-</span> <span class="fu">length</span>(weekday)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>sa <span class="ot">&lt;-</span> <span class="fu">sum</span>(weekend)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>sb <span class="ot">&lt;-</span> <span class="fu">sum</span>(weekday)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>a0 <span class="ot">&lt;-</span> <span class="dv">2</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>b0 <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>ag <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>bg <span class="ot">&lt;-</span> <span class="dv">8</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>logpost <span class="ot">&lt;-</span> <span class="cf">function</span>(g){</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  (sb <span class="sc">+</span> ag <span class="sc">-</span> <span class="dv">1</span>) <span class="sc">*</span> <span class="fu">log</span>(g) <span class="sc">-</span> bg <span class="sc">*</span> g <span class="sc">-</span> </span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>    (sa <span class="sc">+</span> sb <span class="sc">+</span> a0) <span class="sc">*</span> <span class="fu">log</span> (na <span class="sc">+</span> nb <span class="sc">*</span> g <span class="sc">+</span> b0)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">exp</span>(<span class="fu">logpost</span>(x) <span class="sc">-</span> <span class="fu">logpost</span>(<span class="fl">1.66</span>)), <span class="fl">1.2</span>, <span class="fl">2.2</span>,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">ylab =</span> <span class="st">"Density"</span>, <span class="at">xlab =</span> <span class="st">"gamma"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 <p>In summarizing this marginal posterior for <span class="math inline">\(\gamma\)</span>, we learn that the posterior mode is 1.66. So the website visits tend to be 66% higher on weekdays than on the weekends. In addition, a 90% interval estimate for <span class="math inline">\(\gamma\)</span> is given by (1.44, 1.92). Since both values are larger than 1, one is pretty confident that there are more visits on weekdays than weekends.</p>
 </section>
 <section id="learning-about-a-sample-size-and-a-probability" class="level2" data-number="7.4">
@@ -384,7 +411,7 @@ g(AB, p) = g(AB) g(p | AB),
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stderr">
 <pre><code>
@@ -402,41 +429,41 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Lahman)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>Batting <span class="sc">%&gt;%</span> </span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(yearID <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(playerID) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">AB =</span> <span class="fu">sum</span>(AB)) <span class="sc">%&gt;%</span> </span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(AB <span class="sc">&gt;=</span> <span class="dv">400</span>, AB <span class="sc">&lt;=</span> <span class="dv">700</span>) <span class="ot">-&gt;</span> S</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>trun_normal <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dnorm</span>(x, <span class="dv">505</span>, <span class="dv">90</span>) <span class="sc">/</span> (<span class="fu">pnorm</span>(<span class="dv">700</span>, <span class="dv">505</span>, <span class="dv">90</span>) <span class="sc">-</span> </span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pnorm</span>(<span class="dv">400</span>, <span class="dv">505</span>, <span class="dv">90</span>))</span>
-<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(S<span class="sc">$</span>AB),</span>
-<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Density Estimate of AB with Normal Approximation"</span>, </span>
-<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"K"</span>)</span>
-<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">trun_normal</span>(x), <span class="dv">400</span>, <span class="dv">700</span>,</span>
-<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Lahman)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>Batting <span class="sc">%&gt;%</span> </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(yearID <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(playerID) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">AB =</span> <span class="fu">sum</span>(AB)) <span class="sc">%&gt;%</span> </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(AB <span class="sc">&gt;=</span> <span class="dv">400</span>, AB <span class="sc">&lt;=</span> <span class="dv">700</span>) <span class="ot">-&gt;</span> S</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>trun_normal <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">dnorm</span>(x, <span class="dv">505</span>, <span class="dv">90</span>) <span class="sc">/</span> (<span class="fu">pnorm</span>(<span class="dv">700</span>, <span class="dv">505</span>, <span class="dv">90</span>) <span class="sc">-</span> </span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>                         <span class="fu">pnorm</span>(<span class="dv">400</span>, <span class="dv">505</span>, <span class="dv">90</span>))</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(S<span class="sc">$</span>AB),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Density Estimate of AB with Normal Approximation"</span>, </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"K"</span>)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">trun_normal</span>(x), <span class="dv">400</span>, <span class="dv">700</span>,</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="many_parameters_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Next, we construct a prior on the hitting probability <span class="math inline">\(p\)</span> conditional on the number of at-bats <span class="math inline">\(AB\)</span>. We don’t know the player’s hitting probability, but we can collect the batting averages <span class="math inline">\(AVG = H/AB\)</span> for all full-time players. Figure 2 shows a scatterplot of <span class="math inline">\(AVG\)</span> against the at-bats <span class="math inline">\(AB\)</span>.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>Batting <span class="sc">%&gt;%</span> </span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(yearID <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(playerID) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">H =</span> <span class="fu">sum</span>(H), <span class="at">AB =</span> <span class="fu">sum</span>(AB)) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(AB <span class="sc">&gt;=</span> <span class="dv">400</span>, AB <span class="sc">&lt;=</span> <span class="dv">700</span>) <span class="sc">%&gt;%</span> </span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">AVG =</span> H <span class="sc">/</span> AB) <span class="ot">-&gt;</span> S1</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(S1<span class="sc">$</span>AB, S1<span class="sc">$</span>AVG)</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(AVG <span class="sc">~</span> AB, <span class="at">data =</span> S1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>Batting <span class="sc">%&gt;%</span> </span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(yearID <span class="sc">==</span> <span class="dv">2019</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(playerID) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">H =</span> <span class="fu">sum</span>(H), <span class="at">AB =</span> <span class="fu">sum</span>(AB)) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(AB <span class="sc">&gt;=</span> <span class="dv">400</span>, AB <span class="sc">&lt;=</span> <span class="dv">700</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">AVG =</span> H <span class="sc">/</span> AB) <span class="ot">-&gt;</span> S1</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(S1<span class="sc">$</span>AB, S1<span class="sc">$</span>AVG)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="fu">lm</span>(AVG <span class="sc">~</span> AB, <span class="at">data =</span> S1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="many_parameters_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="672"></p>
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>We see from the superimposed least-squares fit that there is a positive relationship between the batting average and at-bats. So our prior mean for <span class="math inline">\(p\)</span> will depend on <span class="math inline">\(AB\)</span>. We will use a beta density for <span class="math inline">\(p\)</span> of the form <span class="math display">\[
@@ -445,7 +472,7 @@ g(p | AB) \propto p^{K \eta - 1} (1 - p)^{K(1-\eta)-1},
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(AVG <span class="sc">~</span> AB, <span class="at">data =</span> S1)<span class="sc">$</span>coef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">lm</span>(AVG <span class="sc">~</span> AB, <span class="at">data =</span> S1)<span class="sc">$</span>coef</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-stdout">
 <pre><code> (Intercept)           AB 
@@ -457,20 +484,20 @@ g(p | AB) \propto p^{K \eta - 1} (1 - p)^{K(1-\eta)-1},
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(LearnBayes)</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>log_prior <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, <span class="at">d =</span> <span class="dv">0</span>){</span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  AB <span class="ot">&lt;-</span> theta[<span class="dv">1</span>]</span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> theta[<span class="dv">2</span>]</span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> <span class="fl">0.199952</span> <span class="sc">+</span> <span class="fl">0.000135</span> <span class="sc">*</span> AB</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">log</span>(<span class="fu">trun_normal</span>(AB)) <span class="sc">+</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dbeta</span>(p, <span class="dv">400</span> <span class="sc">*</span> eta, <span class="dv">400</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> eta), <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(log_prior, <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">700</span>, .<span class="dv">18</span>, .<span class="dv">42</span>), <span class="dv">0</span>,</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">xlab =</span> <span class="st">"K"</span>, <span class="at">ylab =</span> <span class="st">"p"</span>,</span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">main =</span> <span class="st">"Contour Plot of Prior"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(LearnBayes)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>log_prior <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, <span class="at">d =</span> <span class="dv">0</span>){</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  AB <span class="ot">&lt;-</span> theta[<span class="dv">1</span>]</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> theta[<span class="dv">2</span>]</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> <span class="fl">0.199952</span> <span class="sc">+</span> <span class="fl">0.000135</span> <span class="sc">*</span> AB</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">log</span>(<span class="fu">trun_normal</span>(AB)) <span class="sc">+</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dbeta</span>(p, <span class="dv">400</span> <span class="sc">*</span> eta, <span class="dv">400</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> eta), <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(log_prior, <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">700</span>, .<span class="dv">18</span>, .<span class="dv">42</span>), <span class="dv">0</span>,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>          <span class="at">xlab =</span> <span class="st">"K"</span>, <span class="at">ylab =</span> <span class="st">"p"</span>,</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>          <span class="at">main =</span> <span class="st">"Contour Plot of Prior"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="many_parameters_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="672"></p>
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -486,49 +513,49 @@ g(AB, p | H) \propto g(AB, p) L(AB, p)
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>log_posterior <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, H){</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  AB <span class="ot">&lt;-</span> theta[<span class="dv">1</span>]</span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> theta[<span class="dv">2</span>]</span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> <span class="fl">0.199952</span> <span class="sc">+</span> <span class="fl">0.000135</span> <span class="sc">*</span> AB</span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  log_prior <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">trun_normal</span>(AB)) <span class="sc">+</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dbeta</span>(p, <span class="dv">400</span> <span class="sc">*</span> eta, <span class="dv">400</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> eta), <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  log_likelihood <span class="ot">&lt;-</span> <span class="fu">lgamma</span>(AB <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">lgamma</span>(H <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">-</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lgamma</span>(AB <span class="sc">-</span> H <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">+</span> H <span class="sc">*</span> <span class="fu">log</span>(p) <span class="sc">+</span> </span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    (AB <span class="sc">-</span> H) <span class="sc">*</span> <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> p)</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>  log_prior <span class="sc">+</span> log_likelihood</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(log_posterior, <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">700</span>, .<span class="dv">18</span>, .<span class="dv">42</span>), <span class="dv">200</span>,</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">xlab =</span> <span class="st">"K"</span>, <span class="at">ylab =</span> <span class="st">"p"</span>,</span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">main =</span> <span class="st">"Contour Plot of Posterior"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>log_posterior <span class="ot">&lt;-</span> <span class="cf">function</span>(theta, H){</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  AB <span class="ot">&lt;-</span> theta[<span class="dv">1</span>]</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> theta[<span class="dv">2</span>]</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  eta <span class="ot">&lt;-</span> <span class="fl">0.199952</span> <span class="sc">+</span> <span class="fl">0.000135</span> <span class="sc">*</span> AB</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  log_prior <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">trun_normal</span>(AB)) <span class="sc">+</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dbeta</span>(p, <span class="dv">400</span> <span class="sc">*</span> eta, <span class="dv">400</span> <span class="sc">*</span> (<span class="dv">1</span> <span class="sc">-</span> eta), <span class="at">log =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  log_likelihood <span class="ot">&lt;-</span> <span class="fu">lgamma</span>(AB <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">-</span> <span class="fu">lgamma</span>(H <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">-</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">lgamma</span>(AB <span class="sc">-</span> H <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">+</span> H <span class="sc">*</span> <span class="fu">log</span>(p) <span class="sc">+</span> </span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>    (AB <span class="sc">-</span> H) <span class="sc">*</span> <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">-</span> p)</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>  log_prior <span class="sc">+</span> log_likelihood</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="fu">mycontour</span>(log_posterior, <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">700</span>, .<span class="dv">18</span>, .<span class="dv">42</span>), <span class="dv">200</span>,</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>          <span class="at">xlab =</span> <span class="st">"K"</span>, <span class="at">ylab =</span> <span class="st">"p"</span>,</span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>          <span class="at">main =</span> <span class="st">"Contour Plot of Posterior"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="many_parameters_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="672"></p>
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>Comparing Figure 3 and Figure 4, it appears that 200 hits indicates that the player had a large number of at-bats and is a good hitter and the posterior is concentrated on large values of <span class="math inline">\(AB\)</span> and <span class="math inline">\(p\)</span>. By computing the joint posterior density on a fine grid, and then simulating from the grid, one can obtain simulated draws from the marginal posterior densities of <span class="math inline">\(AB\)</span> and <span class="math inline">\(p\)</span>. Figure 5 presents density estimates of these marginal posterior densities.</p>
 <div class="cell">
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>sim_draws <span class="ot">&lt;-</span> <span class="fu">simcontour</span>(log_posterior, </span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">700</span>, .<span class="dv">18</span>, .<span class="dv">42</span>), </span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">200</span>, <span class="dv">10000</span>)</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(sim_draws<span class="sc">$</span>x),</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Posterior Density of K"</span>,</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Density"</span>,</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"K"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>sim_draws <span class="ot">&lt;-</span> <span class="fu">simcontour</span>(log_posterior, </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">c</span>(<span class="dv">400</span>, <span class="dv">700</span>, .<span class="dv">18</span>, .<span class="dv">42</span>), </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                        <span class="dv">200</span>, <span class="dv">10000</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(sim_draws<span class="sc">$</span>x),</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Posterior Density of K"</span>,</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Density"</span>,</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"K"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="many_parameters_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="672"></p>
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="672"></p>
 </div>
 <details>
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(sim_draws<span class="sc">$</span>y),</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Posterior Density of p"</span>,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Density"</span>,</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"p"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(<span class="fu">density</span>(sim_draws<span class="sc">$</span>y),</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"Posterior Density of p"</span>,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylab =</span> <span class="st">"Density"</span>,</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="st">"p"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output-display">
-<p><img src="many_parameters_files/figure-html/unnamed-chunk-6-2.png" class="img-fluid" width="672"></p>
+<p><img src="many_parameters_files/figure-html/unnamed-chunk-7-2.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p>The simulated samples can easily be used to construct interval estimates for each parameter.</p>
