@@ -15,6 +15,69 @@ span.underline{text-decoration: underline;}
 div.column{display: inline-block; vertical-align: top; width: 50%;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
 </style>
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -158,10 +221,8 @@ ul.task-list{list-style: none;}
   <li><a href="#the-one-sided-hypothesis" id="toc-the-one-sided-hypothesis" class="nav-link" data-scroll-target="#the-one-sided-hypothesis"> <span class="header-section-number">11.3.1</span> The one-sided hypothesis</a></li>
   <li><a href="#the-two-sided-hypothesis" id="toc-the-two-sided-hypothesis" class="nav-link" data-scroll-target="#the-two-sided-hypothesis"> <span class="header-section-number">11.3.2</span> The two-sided hypothesis</a></li>
   </ul></li>
-  <li><a href="#comparing-models-by-bayes-factors" id="toc-comparing-models-by-bayes-factors" class="nav-link" data-scroll-target="#comparing-models-by-bayes-factors"> <span class="header-section-number">11.4</span> Comparing Models by Bayes Factors</a>
-  <ul class="collapse">
-  <li><a href="#comparing-geometric-and-poisson-distributions" id="toc-comparing-geometric-and-poisson-distributions" class="nav-link" data-scroll-target="#comparing-geometric-and-poisson-distributions"> <span class="header-section-number">11.4.1</span> Comparing Geometric and Poisson Distributions</a></li>
-  </ul></li>
+  <li><a href="#comparing-models-by-bayes-factors" id="toc-comparing-models-by-bayes-factors" class="nav-link" data-scroll-target="#comparing-models-by-bayes-factors"> <span class="header-section-number">11.4</span> Comparing Models by Bayes Factors</a></li>
+  <li><a href="#comparing-geometric-and-poisson-distributions" id="toc-comparing-geometric-and-poisson-distributions" class="nav-link" data-scroll-target="#comparing-geometric-and-poisson-distributions"> <span class="header-section-number">11.5</span> Comparing Geometric and Poisson Distributions</a></li>
   </ul>
 </nav>
     </div>
@@ -391,8 +452,9 @@ Recall that the counts {<span class="math inline">\(y_{Ai}\)</span>} from the we
 \]</span> and the log Bayes factor in support of Model <span class="math inline">\(M_1\)</span> over Model <span class="math inline">\(M_2\)</span> is <span class="math display">\[
 \log BF_{12} = \log f(y | M_1) - \log f(y | M_2) = -100.23 - (-108.79) = 8.56.
 \]</span> Since the Bayes factor in support of <span class="math inline">\(M_1\)</span> is <span class="math inline">\(\exp(8.56) = 5218\)</span>, there is strong evidence against the hypothesis <span class="math inline">\(H\)</span> that the Poisson means for the weekend and weekday web counts are equal.</p>
-<section id="comparing-geometric-and-poisson-distributions" class="level3" data-number="11.4.1">
-<h3 data-number="11.4.1" class="anchored" data-anchor-id="comparing-geometric-and-poisson-distributions"><span class="header-section-number">11.4.1</span> Comparing Geometric and Poisson Distributions</h3>
+</section>
+<section id="comparing-geometric-and-poisson-distributions" class="level2" data-number="11.5">
+<h2 data-number="11.5" class="anchored" data-anchor-id="comparing-geometric-and-poisson-distributions"><span class="header-section-number">11.5</span> Comparing Geometric and Poisson Distributions</h2>
 <p>(From Link and Barker (2010))</p>
 <p>Suppose we observe a random sample <span class="math inline">\(y_1, ..., y_n\)</span> that is either distributed from the geometric density <span class="math display">\[
 f_G(y) = p (1-p)^y, y = 0, 1, 2, ...
@@ -406,8 +468,8 @@ g(\lambda) = \frac{1}{T}, 0 &lt; \lambda &lt; T.
 \]</span> For the geometric model, the mean of <span class="math inline">\(Y\)</span> is given by <span class="math inline">\(\mu = (1-p)/p\)</span>. If we assign <span class="math inline">\(\mu\)</span> a uniform(0, <span class="math inline">\(T\)</span>), then by a transformation argument, one can show the prior is given by <span class="math display">\[
 g(p) = \frac{1}{T p^2}, \, \, \frac{1}{T+1} &lt; p &lt; 1.
 \]</span></p>
-<section id="direct-calculation" class="level4" data-number="11.4.1.1">
-<h4 data-number="11.4.1.1" class="anchored" data-anchor-id="direct-calculation"><span class="header-section-number">11.4.1.1</span> Direct calculation</h4>
+<section id="direct-calculation" class="level4" data-number="11.5.0.1">
+<h4 data-number="11.5.0.1" class="anchored" data-anchor-id="direct-calculation"><span class="header-section-number">11.5.0.1</span> Direct calculation</h4>
 <p>Now that the priors are defined, we can compute the marginal densities. Generally, if the sampling density is defined in terms of the parameter <span class="math inline">\(\theta\)</span> and a prior <span class="math inline">\(g(\theta)\)</span> is defined, the marginal density is given by <span class="math display">\[
 f(y) = \int g(\theta) \prod_{i=1}^n f(y_i | \theta) d\theta .
 \]</span></p>
@@ -441,9 +503,31 @@ f1/f2
 <pre><code>curve(compute.bf(x),from=2,to=40)</code></pre>
 <p>we plot the Bayes factor as a function of <span class="math inline">\(T\)</span> for values from 2 to 40 (see Figure 1).<br>
 Note that as <span class="math inline">\(T\)</span> approaches infinity, the Bayes factor approaches the limiting value of 13.84. There is some support for the geometric model on the basis of this small dataset.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">8</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>compute.bf <span class="ot">&lt;-</span> <span class="cf">function</span>(T, y){</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">sum</span>(y)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  f1 <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">/</span> T) <span class="sc">*</span> </span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    (<span class="dv">1</span> <span class="sc">-</span> <span class="fu">pbeta</span>(<span class="dv">1</span> <span class="sc">/</span> (T <span class="sc">+</span> <span class="dv">1</span>), n <span class="sc">-</span> <span class="dv">1</span>,s <span class="sc">+</span> <span class="dv">1</span>)) <span class="sc">*</span> </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">beta</span>(n <span class="sc">-</span> <span class="dv">1</span>, s <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  f2 <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">/</span> T) <span class="sc">/</span> <span class="fu">prod</span>(<span class="fu">gamma</span>(y <span class="sc">+</span> <span class="dv">1</span>)) <span class="sc">*</span> </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">pgamma</span>(T, <span class="at">shape =</span> s <span class="sc">+</span> <span class="dv">1</span>, <span class="at">rate =</span> n) <span class="sc">*</span> </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">gamma</span>(s <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> n <span class="sc">^</span> (s <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  f1 <span class="sc">/</span> f2</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">compute.bf</span>(x, y), <span class="at">from =</span> <span class="dv">2</span>, <span class="at">to =</span> <span class="dv">40</span>,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">"T"</span>, <span class="at">ylab =</span> <span class="st">"Bayes Factor"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="model_selection_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 </section>
-<section id="simulation-estimate" class="level4" data-number="11.4.1.2">
-<h4 data-number="11.4.1.2" class="anchored" data-anchor-id="simulation-estimate"><span class="header-section-number">11.4.1.2</span> Simulation estimate</h4>
+<section id="simulation-estimate" class="level4" data-number="11.5.0.2">
+<h4 data-number="11.5.0.2" class="anchored" data-anchor-id="simulation-estimate"><span class="header-section-number">11.5.0.2</span> Simulation estimate</h4>
 There is an attractive Gibbs sampling approach for computing the Bayes factor. Define a model variable <span class="math inline">\(M\)</span> that is equal to 1 for the geometric model and 2 for the Poisson model. One places the prior probabilities <span class="math inline">\(P(M = 1) = \pi, P(M = 2) = (1-\pi)\)</span>. Let <span class="math inline">\(\mu\)</span> denote the mean parameter <span class="math inline">\(E(Y)\)</span>. The joint posterior density of (<span class="math inline">\(M, \mu)\)</span> is given by <span class="math display">\[
 g(M, \mu | y) \propto I(M = 1) \pi \prod_{i=1}^n f_G(y_i | \mu) g_G(\mu) + I(M = 2)(1-\pi) \prod_{i=1}^n f_P(y_i | \mu) g_P(\mu).
 \]</span> Both of the conditional distributions <span class="math inline">\(g(M | \mu, y)\)</span> and <span class="math inline">\(g(\mu | M, y)\)</span> have simple forms.
@@ -462,30 +546,78 @@ M=ifelse(runif(1)&lt;prob,1,2)</code></pre>
 \hat{BF} = \frac{\sum_{j=1}^m I(M^{(j)} = 1)}{\sum_{j=1}^m I(M^{(j)} = 2)} \div \frac{\pi}{1-\pi}.
 \]</span></p>
 <p>A function <code>gibbs.MS</code> was written to implement the Gibbs sampler. The inputs are prior model vector <code>pi</code>, the data vector <code>y</code>, and the number of iterations of the sampler <code>iter</code>. The output is a list consisting of <code>model</code>, a vector of the simuated values of <span class="math inline">\(M\)</span>, and <code>theta</code>, a vector of the simulated draws of <span class="math inline">\(\mu\)</span>. In the following output, we run the sampler for 100,000 iterations using the prior input values <span class="math inline">\((\pi, 1-\pi) = (0.1, 0.9)\)</span> . We use the <code>table()</code> function to tabulate the model values, and compute the posterior odds from the tabled values.</p>
-<pre><code>prior=c(.1,.9)
-y=c(0,1,2,3,8)
-S=gibbs.MS(prior,y,100000)
-model.freq=table(S$model)
-post.odds=model.freq["1"]/model.freq["2"]
-BF=post.odds/(prior[1]/prior[2])
-BF</code></pre>
-<p>The output is <span class="math inline">\(BF = 13.98322\)</span> which is very close to the exact value of 13.84 in the previous calculation.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>gibbs_MS <span class="ot">&lt;-</span> <span class="cf">function</span>(prior, y, m){</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  s <span class="ot">&lt;-</span> <span class="fu">sum</span>(y)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  n <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="co"># initial estimate</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  mu <span class="ot">&lt;-</span> <span class="fu">mean</span>(y)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="co"># storage for Gibbs variates</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  sim_pars <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="dv">0</span>, m, <span class="dv">2</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(j <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>m){</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    log.M1 <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">dgeom</span>(y, <span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> mu), <span class="at">log=</span><span class="cn">TRUE</span>)) <span class="sc">+</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>      <span class="fu">log</span>(prior[<span class="dv">1</span>])</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    log.M2  <span class="ot">&lt;-</span> <span class="fu">sum</span>(<span class="fu">dpois</span>(y, mu, <span class="at">log=</span><span class="cn">TRUE</span>)) <span class="sc">+</span> </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>      <span class="fu">log</span>(prior[<span class="dv">2</span>])</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>    prob <span class="ot">&lt;-</span> <span class="fu">exp</span>(log.M1) <span class="sc">/</span> (<span class="fu">exp</span>(log.M1) <span class="sc">+</span> <span class="fu">exp</span>(log.M2))</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    M <span class="ot">&lt;-</span> <span class="fu">ifelse</span>(<span class="fu">runif</span>(<span class="dv">1</span>) <span class="sc">&lt;</span> prob, <span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(M <span class="sc">==</span> <span class="dv">2</span>){</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>      mu <span class="ot">&lt;-</span> <span class="fu">rgamma</span>(<span class="dv">1</span>, <span class="at">shape =</span> s <span class="sc">+</span> <span class="dv">1</span>, <span class="at">rate =</span> n) </span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>      p <span class="ot">&lt;-</span> <span class="fu">rbeta</span>(<span class="dv">1</span>, n <span class="sc">-</span> <span class="dv">1</span>, s <span class="sc">+</span> <span class="dv">1</span>)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>      mu <span class="ot">&lt;-</span> (<span class="dv">1</span> <span class="sc">-</span> p) <span class="sc">/</span> p</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>    sim_pars[j, ] <span class="ot">&lt;-</span> <span class="fu">c</span>(M, mu)</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  sim_pars</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>prior <span class="ot">&lt;-</span> <span class="fu">c</span>(.<span class="dv">1</span>,.<span class="dv">9</span>)</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">8</span>)</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>S <span class="ot">&lt;-</span> <span class="fu">gibbs_MS</span>(prior, y, <span class="dv">100000</span>)</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>model.freq <span class="ot">&lt;-</span> <span class="fu">table</span>(S[, <span class="dv">1</span>])</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>post.odds <span class="ot">&lt;-</span> model.freq[<span class="st">"1"</span>] <span class="sc">/</span> model.freq[<span class="st">"2"</span>]</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>BF <span class="ot">&lt;-</span> post.odds <span class="sc">/</span> (prior[<span class="dv">1</span>] <span class="sc">/</span> prior[<span class="dv">2</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<p>The output is <span class="math inline">\(BF\)</span> = 13.9281838 which is very close to the exact value of 13.84 in the previous calculation.</p>
 </section>
-<section id="model-averaging" class="level4" data-number="11.4.1.3">
-<h4 data-number="11.4.1.3" class="anchored" data-anchor-id="model-averaging"><span class="header-section-number">11.4.1.3</span> Model averaging</h4>
+<section id="model-averaging" class="level4" data-number="11.5.0.3">
+<h4 data-number="11.5.0.3" class="anchored" data-anchor-id="model-averaging"><span class="header-section-number">11.5.0.3</span> Model averaging</h4>
 <p>We have focused on comparing the geometric and Poisson models by a Bayes factor. What if we are interested in inference about the mean parameter <span class="math inline">\(\mu\)</span>?</p>
-<p>If the data have a Poisson distribution and <span class="math inline">\(\mu\)</span> has a uniform prior, we have already seen that the posterior density for <span class="math inline">\(\mu\)</span> is Gamma with shape <span class="math inline">\(s = \sum y_i+1\)</span> and rate <span class="math inline">\(n\)</span>. If instead the data have a geometric distribution and a uniform prior is place on the mean, then the posterior distribution of the proportion <span class="math inline">\(p\)</span> is beta with parameters <span class="math inline">\(a = n-1\)</span> and <span class="math inline">\(b = s+1\)</span>. The corresponding posterior density for the mean <span class="math inline">\(\mu = (1-p)/p\)</span> is given by <span class="math display">\[
-g(\mu | y, M=1) = f_B\left(\frac{1}{1+\theta}\right) \frac{1}{(1+\theta)^2}.
+<p>If the data have a Poisson distribution and <span class="math inline">\(\mu\)</span> has a uniform prior, we have already seen that the posterior density for <span class="math inline">\(\mu\)</span> is Gamma with shape <span class="math inline">\(s = \sum y_i+1\)</span> and rate <span class="math inline">\(n\)</span>. If instead the data have a geometric distribution and a uniform prior is place on the mean, then the posterior distribution of the proportion <span class="math inline">\(p\)</span> is beta with parameters <span class="math inline">\(a = n-1\)</span> and <span class="math inline">\(b = \sum y_i +1\)</span>. The corresponding posterior density for the mean <span class="math inline">\(\mu = (1-p)/p\)</span> is given by <span class="math display">\[
+g(\mu | y, M=1) = f_B\left(\frac{1}{1+\mu}\right) \frac{1}{(1+\mu)^2},
 \]</span></p>
-<p>What if one is unsure about the correct sampling density? If one places prior probabilities <span class="math inline">\(\pi\)</span> and <span class="math inline">\(1-\pi\)</span> on the geometric (Model 1) and Poisson (Model 2) models, respectively, then the posterior density for the mean <span class="math inline">\(\mu\)</span> has the form <span class="math display">\[
+<p>where <span class="math inline">\(f_B()\)</span> is the beta density. What if one is unsure about the correct sampling density? If one places prior probabilities <span class="math inline">\(\pi\)</span> and <span class="math inline">\(1-\pi\)</span> on the geometric (Model 1) and Poisson (Model 2) models, respectively, then the posterior density for the mean <span class="math inline">\(\mu\)</span> has the form <span class="math display">\[
 g(\mu|y) = \pi(y) g(\mu | M = 1) + (1- \pi(y)) g(\mu | M = 2),
 \]</span> where <span class="math inline">\(g(\mu | M = m)\)</span> is the posterior of <span class="math inline">\(\mu\)</span> conditional on model <span class="math inline">\(m\)</span>, and <span class="math inline">\(\pi(y)\)</span> is the posterior probability of Model 1. This posterior model probability is given by <span class="math display">\[
 \pi(y) = \frac{\pi BF_{12}}{\pi BF_{12}+1-\pi},
 \]</span> where <span class="math inline">\(BF_{12}\)</span> is the Bayes factor in support of Model 1.</p>
-<p>Figure 2 illustrates inference about the mean <span class="math inline">\(\mu\)</span> for the same data set and uniform prior where the prior probability of Model 1 (geometric) is <span class="math inline">\(\pi = 0.1\)</span>. Two of the curves represent posterior densities conditional on the geometric and Poisson sampling models. The third curve is a “modeled averaged” posterior density, where the two conditional posterior densities are averaged by the model posterior probabilities.</p>
+<p>Figure 2 illustrates inference about the mean <span class="math inline">\(\mu\)</span> for the same data set and uniform prior where the prior probability of Model 1 (geometric) is <span class="math inline">\(\pi = 0.1\)</span>. Two of the curves represent posterior densities conditional on the geometric (red line) and Poisson sampling (black line) models. The third curve (blue line) is a “modeled averaged” posterior density, where the two conditional posterior densities are averaged by the model posterior probabilities.</p>
+<div class="cell">
+<details>
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">8</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>s <span class="ot">&lt;-</span> <span class="fu">sum</span>(y)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">length</span>(y)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">dgamma</span>(x, s <span class="sc">+</span> <span class="dv">1</span>, n), <span class="dv">0</span>, <span class="dv">8</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">xlab =</span> <span class="st">"mu"</span>, <span class="at">ylab =</span> <span class="st">"Density"</span>)</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">dbeta</span>(<span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> x), n <span class="sc">-</span> <span class="dv">1</span>, s <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> x) <span class="sc">^</span> <span class="dv">2</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"red"</span>)</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>mix_post <span class="ot">&lt;-</span> <span class="cf">function</span>(x){</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  p <span class="ot">&lt;-</span> <span class="fl">0.1</span> <span class="sc">*</span> BF <span class="sc">/</span> (<span class="fl">0.1</span> <span class="sc">*</span> BF <span class="sc">+</span> <span class="fl">0.9</span>)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  p <span class="sc">*</span> <span class="fu">dgamma</span>(x, s <span class="sc">+</span> <span class="dv">1</span>, n) <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">-</span> p) <span class="sc">*</span> </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">dbeta</span>(<span class="dv">1</span> <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> x), n <span class="sc">-</span> <span class="dv">1</span>, s <span class="sc">+</span> <span class="dv">1</span>) <span class="sc">/</span> (<span class="dv">1</span> <span class="sc">+</span> x) <span class="sc">^</span> <span class="dv">2</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a><span class="fu">curve</span>(<span class="fu">mix_post</span>(x), <span class="at">add =</span> <span class="cn">TRUE</span>, <span class="at">col =</span> <span class="st">"blue"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output-display">
+<p><img src="model_selection_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
 
 
-</section>
 </section>
 </section>
 
