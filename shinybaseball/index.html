@@ -2,20 +2,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-0.9.309">
+<meta name="generator" content="quarto-1.2.269">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Jim Albert">
+<meta name="dcterms.date" content="2022-12-20">
 
 <title>Shiny Baseball</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 </style>
+
 
 <script src="index_files/libs/clipboard/clipboard.min.js"></script>
 <script src="index_files/libs/quarto-html/quarto.js"></script>
@@ -23,13 +31,13 @@ ul.task-list{list-style: none;}
 <script src="index_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="index_files/libs/quarto-html/anchor.min.js"></script>
 <link href="index_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link id="quarto-text-highlighting-styles" href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<link href="index_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link href="index_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 <link href="index_files/libs/vembedr-0.1.5/css/vembedr.css" rel="stylesheet">
 
-  <script defer="" src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
+  <script>window.backupDefine = window.define; window.define = undefined;</script><script src="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.js"></script>
   <script>document.addEventListener("DOMContentLoaded", function () {
  var mathElements = document.getElementsByClassName("math");
  var macros = [];
@@ -44,7 +52,7 @@ ul.task-list{list-style: none;}
    });
 }}});
   </script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
+  <script>window.define = window.backupDefine; window.backupDefine = undefined;</script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.1/dist/katex.min.css">
 
 <link rel="stylesheet" href="styles.css">
 </head>
@@ -53,7 +61,7 @@ ul.task-list{list-style: none;}
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc">
+  <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
@@ -64,58 +72,68 @@ ul.task-list{list-style: none;}
   <li><a href="#learning-shiny" id="toc-learning-shiny" class="nav-link" data-scroll-target="#learning-shiny">Learning Shiny</a></li>
   <li><a href="#live-versions-of-the-apps" id="toc-live-versions-of-the-apps" class="nav-link" data-scroll-target="#live-versions-of-the-apps">Live Versions of the Apps</a></li>
   </ul></li>
-  <li><a href="#berksonba" id="toc-berksonba" class="nav-link" data-scroll-target="#berksonba">BerksonBA</a>
+  <li><a href="#ballsstrikeseffects" id="toc-ballsstrikeseffects" class="nav-link" data-scroll-target="#ballsstrikeseffects">BallsStrikesEffects</a>
   <ul class="collapse">
   <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1">Introduction</a></li>
+  <li><a href="#using-the-ballstrikeseffects-app" id="toc-using-the-ballstrikeseffects-app" class="nav-link" data-scroll-target="#using-the-ballstrikeseffects-app">Using the BallStrikesEffects App</a></li>
+  </ul></li>
+  <li><a href="#berksonba" id="toc-berksonba" class="nav-link" data-scroll-target="#berksonba">BerksonBA</a>
+  <ul class="collapse">
+  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2">Introduction</a></li>
   <li><a href="#using-the-berksonba-app" id="toc-using-the-berksonba-app" class="nav-link" data-scroll-target="#using-the-berksonba-app">Using the BerksonBA App</a></li>
   <li><a href="#things-to-try" id="toc-things-to-try" class="nav-link" data-scroll-target="#things-to-try">Things to Try</a></li>
   <li><a href="#blog-post" id="toc-blog-post" class="nav-link" data-scroll-target="#blog-post">Blog Post</a></li>
   </ul></li>
   <li><a href="#br_batting_history" id="toc-br_batting_history" class="nav-link" data-scroll-target="#br_batting_history">BR_Batting_History</a>
   <ul class="collapse">
-  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2">Introduction</a></li>
+  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3">Introduction</a></li>
   <li><a href="#using-the-br_batting_history-app" id="toc-using-the-br_batting_history-app" class="nav-link" data-scroll-target="#using-the-br_batting_history-app">Using the BR_Batting_History App</a></li>
   <li><a href="#similar-apps" id="toc-similar-apps" class="nav-link" data-scroll-target="#similar-apps">Similar Apps</a></li>
   </ul></li>
   <li><a href="#brushingbattinglocations" id="toc-brushingbattinglocations" class="nav-link" data-scroll-target="#brushingbattinglocations">BrushingBattingLocations</a>
   <ul class="collapse">
-  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3">Introduction</a></li>
+  <li><a href="#introduction-4" id="toc-introduction-4" class="nav-link" data-scroll-target="#introduction-4">Introduction</a></li>
   <li><a href="#using-the-brushingbattinglocations-app" id="toc-using-the-brushingbattinglocations-app" class="nav-link" data-scroll-target="#using-the-brushingbattinglocations-app">Using the BrushingBattingLocations App</a></li>
+  </ul></li>
+  <li><a href="#brushingcalledpitches" id="toc-brushingcalledpitches" class="nav-link" data-scroll-target="#brushingcalledpitches">BrushingCalledPitches</a>
+  <ul class="collapse">
+  <li><a href="#introduction-5" id="toc-introduction-5" class="nav-link" data-scroll-target="#introduction-5">Introduction</a></li>
+  <li><a href="#using-the-brushingcalledpitches-app" id="toc-using-the-brushingcalledpitches-app" class="nav-link" data-scroll-target="#using-the-brushingcalledpitches-app">Using the BrushingCalledPitches App</a></li>
   </ul></li>
   <li><a href="#brushinginplay3" id="toc-brushinginplay3" class="nav-link" data-scroll-target="#brushinginplay3">BrushingInPlay3</a>
   <ul class="collapse">
-  <li><a href="#introduction-4" id="toc-introduction-4" class="nav-link" data-scroll-target="#introduction-4">Introduction</a></li>
+  <li><a href="#introduction-6" id="toc-introduction-6" class="nav-link" data-scroll-target="#introduction-6">Introduction</a></li>
   <li><a href="#using-the-brushinginplay3-app" id="toc-using-the-brushinginplay3-app" class="nav-link" data-scroll-target="#using-the-brushinginplay3-app">Using the BrushingInPlay3 App</a></li>
   <li><a href="#blog-post-1" id="toc-blog-post-1" class="nav-link" data-scroll-target="#blog-post-1">Blog Post</a></li>
   </ul></li>
   <li><a href="#brushinginplay3a" id="toc-brushinginplay3a" class="nav-link" data-scroll-target="#brushinginplay3a">BrushingInPlay3a</a>
   <ul class="collapse">
-  <li><a href="#introduction-5" id="toc-introduction-5" class="nav-link" data-scroll-target="#introduction-5">Introduction</a></li>
+  <li><a href="#introduction-7" id="toc-introduction-7" class="nav-link" data-scroll-target="#introduction-7">Introduction</a></li>
   <li><a href="#using-the-brushinginplay3a-app" id="toc-using-the-brushinginplay3a-app" class="nav-link" data-scroll-target="#using-the-brushinginplay3a-app">Using the BrushingInPlay3a App</a></li>
   </ul></li>
   <li><a href="#brushingzone" id="toc-brushingzone" class="nav-link" data-scroll-target="#brushingzone">BrushingZone</a>
   <ul class="collapse">
-  <li><a href="#introduction-6" id="toc-introduction-6" class="nav-link" data-scroll-target="#introduction-6">Introduction</a></li>
+  <li><a href="#introduction-8" id="toc-introduction-8" class="nav-link" data-scroll-target="#introduction-8">Introduction</a></li>
   <li><a href="#using-the-brushingzone-app" id="toc-using-the-brushingzone-app" class="nav-link" data-scroll-target="#using-the-brushingzone-app">Using the BrushingZone App</a></li>
   <li><a href="#things-to-try-1" id="toc-things-to-try-1" class="nav-link" data-scroll-target="#things-to-try-1">Things to Try</a></li>
   <li><a href="#blog-post-2" id="toc-blog-post-2" class="nav-link" data-scroll-target="#blog-post-2">Blog Post</a></li>
   </ul></li>
   <li><a href="#careertrajectorybatting" id="toc-careertrajectorybatting" class="nav-link" data-scroll-target="#careertrajectorybatting">CareerTrajectoryBatting</a>
   <ul class="collapse">
-  <li><a href="#introduction-7" id="toc-introduction-7" class="nav-link" data-scroll-target="#introduction-7">Introduction</a></li>
+  <li><a href="#introduction-9" id="toc-introduction-9" class="nav-link" data-scroll-target="#introduction-9">Introduction</a></li>
   <li><a href="#using-the-careertrajectorybatting-app" id="toc-using-the-careertrajectorybatting-app" class="nav-link" data-scroll-target="#using-the-careertrajectorybatting-app">Using the CareerTrajectoryBatting App</a></li>
   <li><a href="#blog-post-3" id="toc-blog-post-3" class="nav-link" data-scroll-target="#blog-post-3">Blog Post</a></li>
   <li><a href="#related-apps" id="toc-related-apps" class="nav-link" data-scroll-target="#related-apps">Related Apps</a></li>
   </ul></li>
   <li><a href="#careertrajectorybattingmany" id="toc-careertrajectorybattingmany" class="nav-link" data-scroll-target="#careertrajectorybattingmany">CareerTrajectoryBattingMany</a>
   <ul class="collapse">
-  <li><a href="#introduction-8" id="toc-introduction-8" class="nav-link" data-scroll-target="#introduction-8">Introduction</a></li>
+  <li><a href="#introduction-10" id="toc-introduction-10" class="nav-link" data-scroll-target="#introduction-10">Introduction</a></li>
   <li><a href="#using-the-careertrajectorybattingmany-app" id="toc-using-the-careertrajectorybattingmany-app" class="nav-link" data-scroll-target="#using-the-careertrajectorybattingmany-app">Using the CareerTrajectoryBattingMany App</a></li>
   <li><a href="#related-apps-1" id="toc-related-apps-1" class="nav-link" data-scroll-target="#related-apps-1">Related Apps</a></li>
   </ul></li>
   <li><a href="#expectedba" id="toc-expectedba" class="nav-link" data-scroll-target="#expectedba">ExpectedBA</a>
   <ul class="collapse">
-  <li><a href="#introduction-9" id="toc-introduction-9" class="nav-link" data-scroll-target="#introduction-9">Introduction</a></li>
+  <li><a href="#introduction-11" id="toc-introduction-11" class="nav-link" data-scroll-target="#introduction-11">Introduction</a></li>
   <li><a href="#using-the-expectedba-app" id="toc-using-the-expectedba-app" class="nav-link" data-scroll-target="#using-the-expectedba-app">Using the ExpectedBA App</a></li>
   <li><a href="#displaying-hits" id="toc-displaying-hits" class="nav-link" data-scroll-target="#displaying-hits">Displaying Hits</a></li>
   <li><a href="#displaying-batting-averages" id="toc-displaying-batting-averages" class="nav-link" data-scroll-target="#displaying-batting-averages">Displaying Batting Averages</a></li>
@@ -123,47 +141,47 @@ ul.task-list{list-style: none;}
   </ul></li>
   <li><a href="#fangraphsbatting" id="toc-fangraphsbatting" class="nav-link" data-scroll-target="#fangraphsbatting">FanGraphsBatting</a>
   <ul class="collapse">
-  <li><a href="#introduction-10" id="toc-introduction-10" class="nav-link" data-scroll-target="#introduction-10">Introduction</a></li>
+  <li><a href="#introduction-12" id="toc-introduction-12" class="nav-link" data-scroll-target="#introduction-12">Introduction</a></li>
   <li><a href="#using-the-fangraphsbatting-app" id="toc-using-the-fangraphsbatting-app" class="nav-link" data-scroll-target="#using-the-fangraphsbatting-app">Using the FanGraphsBatting App</a></li>
   <li><a href="#blog-posts-1" id="toc-blog-posts-1" class="nav-link" data-scroll-target="#blog-posts-1">Blog Posts</a></li>
   <li><a href="#similar-apps-2" id="toc-similar-apps-2" class="nav-link" data-scroll-target="#similar-apps-2">Similar Apps</a></li>
   </ul></li>
   <li><a href="#homerunpaths" id="toc-homerunpaths" class="nav-link" data-scroll-target="#homerunpaths">HomeRunPaths</a>
   <ul class="collapse">
-  <li><a href="#introduction-11" id="toc-introduction-11" class="nav-link" data-scroll-target="#introduction-11">Introduction</a></li>
+  <li><a href="#introduction-13" id="toc-introduction-13" class="nav-link" data-scroll-target="#introduction-13">Introduction</a></li>
   <li><a href="#using-the-homerunpaths-app" id="toc-using-the-homerunpaths-app" class="nav-link" data-scroll-target="#using-the-homerunpaths-app">Using the HomeRunPaths App</a></li>
   <li><a href="#things-to-try-2" id="toc-things-to-try-2" class="nav-link" data-scroll-target="#things-to-try-2">Things to Try</a></li>
   <li><a href="#blog-post-4" id="toc-blog-post-4" class="nav-link" data-scroll-target="#blog-post-4">Blog Post</a></li>
   </ul></li>
   <li><a href="#inplayrates" id="toc-inplayrates" class="nav-link" data-scroll-target="#inplayrates">InPlayRates</a>
   <ul class="collapse">
-  <li><a href="#introduction-12" id="toc-introduction-12" class="nav-link" data-scroll-target="#introduction-12">Introduction</a></li>
+  <li><a href="#introduction-14" id="toc-introduction-14" class="nav-link" data-scroll-target="#introduction-14">Introduction</a></li>
   <li><a href="#using-the-inplayrates-app" id="toc-using-the-inplayrates-app" class="nav-link" data-scroll-target="#using-the-inplayrates-app">Using the InPlayRates App</a></li>
   </ul></li>
   <li><a href="#inplayratesspray" id="toc-inplayratesspray" class="nav-link" data-scroll-target="#inplayratesspray">InPlayRatesSpray</a>
   <ul class="collapse">
-  <li><a href="#introduction-13" id="toc-introduction-13" class="nav-link" data-scroll-target="#introduction-13">Introduction</a></li>
+  <li><a href="#introduction-15" id="toc-introduction-15" class="nav-link" data-scroll-target="#introduction-15">Introduction</a></li>
   <li><a href="#using-the-inplayratesspray-app" id="toc-using-the-inplayratesspray-app" class="nav-link" data-scroll-target="#using-the-inplayratesspray-app">Using the InPlayRatesSpray App</a></li>
   </ul></li>
   <li><a href="#inplayratesspray2" id="toc-inplayratesspray2" class="nav-link" data-scroll-target="#inplayratesspray2">InPlayRatesSpray2</a>
   <ul class="collapse">
-  <li><a href="#introduction-14" id="toc-introduction-14" class="nav-link" data-scroll-target="#introduction-14">Introduction</a></li>
+  <li><a href="#introduction-16" id="toc-introduction-16" class="nav-link" data-scroll-target="#introduction-16">Introduction</a></li>
   <li><a href="#using-the-inplayratesspray2-app" id="toc-using-the-inplayratesspray2-app" class="nav-link" data-scroll-target="#using-the-inplayratesspray2-app">Using the InPlayRatesSpray2 App</a></li>
   <li><a href="#blog-post-5" id="toc-blog-post-5" class="nav-link" data-scroll-target="#blog-post-5">Blog Post</a></li>
   </ul></li>
   <li><a href="#locationvalue" id="toc-locationvalue" class="nav-link" data-scroll-target="#locationvalue">LocationValue</a>
   <ul class="collapse">
-  <li><a href="#introduction-15" id="toc-introduction-15" class="nav-link" data-scroll-target="#introduction-15">Introduction</a></li>
+  <li><a href="#introduction-17" id="toc-introduction-17" class="nav-link" data-scroll-target="#introduction-17">Introduction</a></li>
   <li><a href="#using-the-locationvalue-app" id="toc-using-the-locationvalue-app" class="nav-link" data-scroll-target="#using-the-locationvalue-app">Using the LocationValue App</a></li>
   </ul></li>
   <li><a href="#logithitrates" id="toc-logithitrates" class="nav-link" data-scroll-target="#logithitrates">LogitHitRates</a>
   <ul class="collapse">
-  <li><a href="#introduction-16" id="toc-introduction-16" class="nav-link" data-scroll-target="#introduction-16">Introduction</a></li>
+  <li><a href="#introduction-18" id="toc-introduction-18" class="nav-link" data-scroll-target="#introduction-18">Introduction</a></li>
   <li><a href="#using-the-logithitrates-app" id="toc-using-the-logithitrates-app" class="nav-link" data-scroll-target="#using-the-logithitrates-app">Using the LogitHitRates App</a></li>
   </ul></li>
   <li><a href="#logithomerunrates" id="toc-logithomerunrates" class="nav-link" data-scroll-target="#logithomerunrates">LogitHomeRunRates</a>
   <ul class="collapse">
-  <li><a href="#introduction-17" id="toc-introduction-17" class="nav-link" data-scroll-target="#introduction-17">Introduction</a></li>
+  <li><a href="#introduction-19" id="toc-introduction-19" class="nav-link" data-scroll-target="#introduction-19">Introduction</a></li>
   <li><a href="#using-the-logithomerunrates-app" id="toc-using-the-logithomerunrates-app" class="nav-link" data-scroll-target="#using-the-logithomerunrates-app">Using the LogitHomeRunRates App</a></li>
   <li><a href="#blog-post-6" id="toc-blog-post-6" class="nav-link" data-scroll-target="#blog-post-6">Blog Post</a></li>
   <li><a href="#things-to-try-3" id="toc-things-to-try-3" class="nav-link" data-scroll-target="#things-to-try-3">Things to Try</a></li>
@@ -171,41 +189,41 @@ ul.task-list{list-style: none;}
   </ul></li>
   <li><a href="#pitcherfourseam" id="toc-pitcherfourseam" class="nav-link" data-scroll-target="#pitcherfourseam">PitcherFourSeam</a>
   <ul class="collapse">
-  <li><a href="#introduction-18" id="toc-introduction-18" class="nav-link" data-scroll-target="#introduction-18">Introduction</a></li>
+  <li><a href="#introduction-20" id="toc-introduction-20" class="nav-link" data-scroll-target="#introduction-20">Introduction</a></li>
   <li><a href="#using-the-pitcherfourseam-app" id="toc-using-the-pitcherfourseam-app" class="nav-link" data-scroll-target="#using-the-pitcherfourseam-app">Using the PitcherFourSeam App</a></li>
   <li><a href="#things-to-try-4" id="toc-things-to-try-4" class="nav-link" data-scroll-target="#things-to-try-4">Things to Try</a></li>
   <li><a href="#blog-post-7" id="toc-blog-post-7" class="nav-link" data-scroll-target="#blog-post-7">Blog Post</a></li>
   </ul></li>
   <li><a href="#pitchlocation" id="toc-pitchlocation" class="nav-link" data-scroll-target="#pitchlocation">PitchLocation</a>
   <ul class="collapse">
-  <li><a href="#introduction-19" id="toc-introduction-19" class="nav-link" data-scroll-target="#introduction-19">Introduction</a></li>
+  <li><a href="#introduction-21" id="toc-introduction-21" class="nav-link" data-scroll-target="#introduction-21">Introduction</a></li>
   <li><a href="#using-the-pitchlocation-app" id="toc-using-the-pitchlocation-app" class="nav-link" data-scroll-target="#using-the-pitchlocation-app">Using the PitchLocation App</a></li>
   </ul></li>
   <li><a href="#pitchoutcome" id="toc-pitchoutcome" class="nav-link" data-scroll-target="#pitchoutcome">PitchOutcome</a>
   <ul class="collapse">
-  <li><a href="#introduction-20" id="toc-introduction-20" class="nav-link" data-scroll-target="#introduction-20">Introduction</a></li>
+  <li><a href="#introduction-22" id="toc-introduction-22" class="nav-link" data-scroll-target="#introduction-22">Introduction</a></li>
   <li><a href="#using-the-pitchoutcome-app" id="toc-using-the-pitchoutcome-app" class="nav-link" data-scroll-target="#using-the-pitchoutcome-app">Using the PitchOutcome App</a></li>
   </ul></li>
   <li><a href="#pitchtypecount" id="toc-pitchtypecount" class="nav-link" data-scroll-target="#pitchtypecount">PitchTypeCount</a>
   <ul class="collapse">
-  <li><a href="#introduction-21" id="toc-introduction-21" class="nav-link" data-scroll-target="#introduction-21">Introduction</a></li>
+  <li><a href="#introduction-23" id="toc-introduction-23" class="nav-link" data-scroll-target="#introduction-23">Introduction</a></li>
   <li><a href="#using-the-pitchtypecount-app" id="toc-using-the-pitchtypecount-app" class="nav-link" data-scroll-target="#using-the-pitchtypecount-app">Using the PitchTypeCount App</a></li>
   </ul></li>
   <li><a href="#pitchvalue" id="toc-pitchvalue" class="nav-link" data-scroll-target="#pitchvalue">PitchValue</a>
   <ul class="collapse">
-  <li><a href="#introduction-22" id="toc-introduction-22" class="nav-link" data-scroll-target="#introduction-22">Introduction</a></li>
+  <li><a href="#introduction-24" id="toc-introduction-24" class="nav-link" data-scroll-target="#introduction-24">Introduction</a></li>
   <li><a href="#using-the-pitchvalue-app" id="toc-using-the-pitchvalue-app" class="nav-link" data-scroll-target="#using-the-pitchvalue-app">Using the PitchValue App</a></li>
   <li><a href="#blog-posts-2" id="toc-blog-posts-2" class="nav-link" data-scroll-target="#blog-posts-2">Blog Posts</a></li>
   </ul></li>
   <li><a href="#predicthomeruns" id="toc-predicthomeruns" class="nav-link" data-scroll-target="#predicthomeruns">PredictHomeRuns</a>
   <ul class="collapse">
-  <li><a href="#introduction-23" id="toc-introduction-23" class="nav-link" data-scroll-target="#introduction-23">Introduction</a></li>
+  <li><a href="#introduction-25" id="toc-introduction-25" class="nav-link" data-scroll-target="#introduction-25">Introduction</a></li>
   <li><a href="#using-the-predicthomeruns-app" id="toc-using-the-predicthomeruns-app" class="nav-link" data-scroll-target="#using-the-predicthomeruns-app">Using the PredictHomeRuns App</a></li>
   <li><a href="#article" id="toc-article" class="nav-link" data-scroll-target="#article">Article</a></li>
   </ul></li>
   <li><a href="#predictingbattingrates" id="toc-predictingbattingrates" class="nav-link" data-scroll-target="#predictingbattingrates">PredictingBattingRates</a>
   <ul class="collapse">
-  <li><a href="#introduction-24" id="toc-introduction-24" class="nav-link" data-scroll-target="#introduction-24">Introduction</a></li>
+  <li><a href="#introduction-26" id="toc-introduction-26" class="nav-link" data-scroll-target="#introduction-26">Introduction</a></li>
   <li><a href="#using-the-predictingbattingrates-app" id="toc-using-the-predictingbattingrates-app" class="nav-link" data-scroll-target="#using-the-predictingbattingrates-app">Using the PredictingBattingRates App</a></li>
   <li><a href="#things-to-try-5" id="toc-things-to-try-5" class="nav-link" data-scroll-target="#things-to-try-5">Things to Try</a></li>
   <li><a href="#blog-post-8" id="toc-blog-post-8" class="nav-link" data-scroll-target="#blog-post-8">Blog Post</a></li>
@@ -213,52 +231,57 @@ ul.task-list{list-style: none;}
   </ul></li>
   <li><a href="#predictivehothand" id="toc-predictivehothand" class="nav-link" data-scroll-target="#predictivehothand">PredictiveHotHand</a>
   <ul class="collapse">
-  <li><a href="#introduction-25" id="toc-introduction-25" class="nav-link" data-scroll-target="#introduction-25">Introduction</a></li>
+  <li><a href="#introduction-27" id="toc-introduction-27" class="nav-link" data-scroll-target="#introduction-27">Introduction</a></li>
   <li><a href="#using-the-predictivehothand-app" id="toc-using-the-predictivehothand-app" class="nav-link" data-scroll-target="#using-the-predictivehothand-app">Using the PredictiveHotHand App</a></li>
   <li><a href="#things-to-try-6" id="toc-things-to-try-6" class="nav-link" data-scroll-target="#things-to-try-6">Things to Try</a></li>
   <li><a href="#blog-post-9" id="toc-blog-post-9" class="nav-link" data-scroll-target="#blog-post-9">Blog Post</a></li>
   </ul></li>
   <li><a href="#predictivemaxofer" id="toc-predictivemaxofer" class="nav-link" data-scroll-target="#predictivemaxofer">PredictiveMaxOfer</a>
   <ul class="collapse">
-  <li><a href="#introduction-26" id="toc-introduction-26" class="nav-link" data-scroll-target="#introduction-26">Introduction</a></li>
+  <li><a href="#introduction-28" id="toc-introduction-28" class="nav-link" data-scroll-target="#introduction-28">Introduction</a></li>
   <li><a href="#using-the-predictivehothand-app-1" id="toc-using-the-predictivehothand-app-1" class="nav-link" data-scroll-target="#using-the-predictivehothand-app-1">Using the PredictiveHotHand App</a></li>
   <li><a href="#things-to-try-7" id="toc-things-to-try-7" class="nav-link" data-scroll-target="#things-to-try-7">Things to Try</a></li>
   <li><a href="#blog-post-10" id="toc-blog-post-10" class="nav-link" data-scroll-target="#blog-post-10">Blog Post</a></li>
   </ul></li>
   <li><a href="#radialchart" id="toc-radialchart" class="nav-link" data-scroll-target="#radialchart">RadialChart</a>
   <ul class="collapse">
-  <li><a href="#introduction-27" id="toc-introduction-27" class="nav-link" data-scroll-target="#introduction-27">Introduction</a></li>
+  <li><a href="#introduction-29" id="toc-introduction-29" class="nav-link" data-scroll-target="#introduction-29">Introduction</a></li>
   <li><a href="#using-the-radialchart-app" id="toc-using-the-radialchart-app" class="nav-link" data-scroll-target="#using-the-radialchart-app">Using the RadialChart App</a></li>
   <li><a href="#blog-post-11" id="toc-blog-post-11" class="nav-link" data-scroll-target="#blog-post-11">Blog Post</a></li>
   </ul></li>
   <li><a href="#runsexpectancy" id="toc-runsexpectancy" class="nav-link" data-scroll-target="#runsexpectancy">RunsExpectancy</a>
   <ul class="collapse">
-  <li><a href="#introduction-28" id="toc-introduction-28" class="nav-link" data-scroll-target="#introduction-28">Introduction</a></li>
+  <li><a href="#introduction-30" id="toc-introduction-30" class="nav-link" data-scroll-target="#introduction-30">Introduction</a></li>
   <li><a href="#using-the-runsexpectancy-app" id="toc-using-the-runsexpectancy-app" class="nav-link" data-scroll-target="#using-the-runsexpectancy-app">Using the RunsExpectancy App</a></li>
   <li><a href="#blog-post-12" id="toc-blog-post-12" class="nav-link" data-scroll-target="#blog-post-12">Blog Post</a></li>
   </ul></li>
   <li><a href="#spraychart" id="toc-spraychart" class="nav-link" data-scroll-target="#spraychart">SprayChart</a>
   <ul class="collapse">
-  <li><a href="#introduction-29" id="toc-introduction-29" class="nav-link" data-scroll-target="#introduction-29">Introduction</a></li>
+  <li><a href="#introduction-31" id="toc-introduction-31" class="nav-link" data-scroll-target="#introduction-31">Introduction</a></li>
   <li><a href="#using-the-spraychart-app" id="toc-using-the-spraychart-app" class="nav-link" data-scroll-target="#using-the-spraychart-app">Using the SprayChart App</a></li>
   <li><a href="#blog-post-13" id="toc-blog-post-13" class="nav-link" data-scroll-target="#blog-post-13">Blog Post</a></li>
   </ul></li>
   <li><a href="#spraycompare" id="toc-spraycompare" class="nav-link" data-scroll-target="#spraycompare">SprayCompare</a>
   <ul class="collapse">
-  <li><a href="#introduction-30" id="toc-introduction-30" class="nav-link" data-scroll-target="#introduction-30">Introduction</a></li>
+  <li><a href="#introduction-32" id="toc-introduction-32" class="nav-link" data-scroll-target="#introduction-32">Introduction</a></li>
   <li><a href="#using-the-spraycompare-app" id="toc-using-the-spraycompare-app" class="nav-link" data-scroll-target="#using-the-spraycompare-app">Using the SprayCompare App</a></li>
   <li><a href="#blog-post-14" id="toc-blog-post-14" class="nav-link" data-scroll-target="#blog-post-14">Blog Post</a></li>
   </ul></li>
+  <li><a href="#streakyatbat" id="toc-streakyatbat" class="nav-link" data-scroll-target="#streakyatbat">StreakyAtBat</a>
+  <ul class="collapse">
+  <li><a href="#introduction-33" id="toc-introduction-33" class="nav-link" data-scroll-target="#introduction-33">Introduction</a></li>
+  <li><a href="#using-the-streakyatbat-app" id="toc-using-the-streakyatbat-app" class="nav-link" data-scroll-target="#using-the-streakyatbat-app">Using the StreakyAtBat App</a></li>
+  </ul></li>
   <li><a href="#streakyinplay" id="toc-streakyinplay" class="nav-link" data-scroll-target="#streakyinplay">StreakyInPlay</a>
   <ul class="collapse">
-  <li><a href="#introduction-31" id="toc-introduction-31" class="nav-link" data-scroll-target="#introduction-31">Introduction</a></li>
+  <li><a href="#introduction-34" id="toc-introduction-34" class="nav-link" data-scroll-target="#introduction-34">Introduction</a></li>
   <li><a href="#using-the-streakyinplay-app" id="toc-using-the-streakyinplay-app" class="nav-link" data-scroll-target="#using-the-streakyinplay-app">Using the StreakyInPlay App</a></li>
   <li><a href="#things-to-try-8" id="toc-things-to-try-8" class="nav-link" data-scroll-target="#things-to-try-8">Things to Try</a></li>
   <li><a href="#blog-post-15" id="toc-blog-post-15" class="nav-link" data-scroll-target="#blog-post-15">Blog Post</a></li>
   </ul></li>
   <li><a href="#woba_matchups" id="toc-woba_matchups" class="nav-link" data-scroll-target="#woba_matchups">wOBA_Matchups</a>
   <ul class="collapse">
-  <li><a href="#introduction-32" id="toc-introduction-32" class="nav-link" data-scroll-target="#introduction-32">Introduction</a></li>
+  <li><a href="#introduction-35" id="toc-introduction-35" class="nav-link" data-scroll-target="#introduction-35">Introduction</a></li>
   <li><a href="#using-the-woba_matchups-app" id="toc-using-the-woba_matchups-app" class="nav-link" data-scroll-target="#using-the-woba_matchups-app">Using the wOBA_Matchups App</a></li>
   <li><a href="#blog-posts-3" id="toc-blog-posts-3" class="nav-link" data-scroll-target="#blog-posts-3">Blog Posts</a></li>
   </ul></li>
@@ -274,11 +297,22 @@ ul.task-list{list-style: none;}
 
 
 
-
-
 <div class="quarto-title-meta">
 
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jim Albert </p>
+          </div>
+  </div>
     
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 20, 2022</p>
+    </div>
+  </div>
+  
     
   </div>
   
@@ -326,73 +360,83 @@ ul.task-list{list-style: none;}
 <tbody>
 <tr class="odd">
 <td>Zone</td>
+<td>BrushingCalledPitches</td>
+<td>Illustrating the home bias Effect in called Pitches</td>
+</tr>
+<tr class="even">
+<td>Zone</td>
 <td>BrushingZone</td>
 <td>Hitting measures over brushed regions of zone</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Zone</td>
 <td>PitcherFourSeam</td>
 <td>Pitch measures of four-seamers for a pitcher across the zone</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Zone</td>
 <td>PitchOutcome</td>
 <td>Pitch locations for a pitcher filtered by pitch type and pitch outcome</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Zone</td>
 <td>PitchTypeCount</td>
 <td>Pitch locations for a pitcher over pitch types and different counts</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Zone</td>
 <td>PitchValue</td>
 <td>Pitch values for all pitchers over pitch type, side of pitcher and batter, and different counts</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Zone</td>
 <td>LocationValue</td>
 <td>Locations and pitch values for both batter sides for a selected pitcher for a selected pitch type</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Zone</td>
 <td>PitchLocation</td>
 <td>Locations for a specific batter side for a selected pitcher for a selected pitch type and counts</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Field Location</td>
 <td>SprayChart</td>
 <td>Locations of in-play balls hit by a specific hitter</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td>Field Location</td>
 <td>SprayCompare</td>
 <td>Locations of in-play balls hit by two hitters</td>
 </tr>
-<tr class="even">
-<td>Field Location</td>
-<td>BrushingBattingLocations</td>
-<td>Hit locations over launch variables</td>
-</tr>
 <tr class="odd">
 <td>Special</td>
-<td>RadialChart</td>
-<td>Illustration of a radial chart</td>
-</tr>
-<tr class="even">
-<td>Special</td>
-<td>RunsExpectancy</td>
-<td>Illustration of runs expectancy calculations</td>
-</tr>
-<tr class="odd">
-<td>Special</td>
-<td>HomeRunPaths</td>
-<td>Comparing career home run paths of selected hitters</td>
+<td>BallsStrikesEffects</td>
+<td>Displays value of events that pass through or end on different counts</td>
 </tr>
 <tr class="even">
 <td>Special</td>
 <td>BR_Batting_History</td>
 <td>Offense measures over seasons</td>
+</tr>
+<tr class="odd">
+<td>Field Location</td>
+<td>BrushingBattingLocations</td>
+<td>Hit locations over launch variables</td>
+</tr>
+<tr class="even">
+<td>Special</td>
+<td>RadialChart</td>
+<td>Illustration of a radial chart</td>
+</tr>
+<tr class="odd">
+<td>Special</td>
+<td>RunsExpectancy</td>
+<td>Illustration of runs expectancy calculations</td>
+</tr>
+<tr class="even">
+<td>Special</td>
+<td>HomeRunPaths</td>
+<td>Comparing career home run paths of selected hitters</td>
 </tr>
 <tr class="odd">
 <td>Trajectory</td>
@@ -476,10 +520,15 @@ ul.task-list{list-style: none;}
 </tr>
 <tr class="odd">
 <td>Statistical</td>
+<td>StreakyAtBat.</td>
+<td>Streaky binary outcomes of a player during a season</td>
+</tr>
+<tr class="even">
+<td>Statistical</td>
 <td>StreakyInPlay</td>
 <td>Moving averages of in-play hitting data for one player</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td>Statistical</td>
 <td>wOBA_Matchups</td>
 <td>Smoothed wOBA measures of pitcher-batter matchups</td>
@@ -519,10 +568,33 @@ ul.task-list{list-style: none;}
 </div>
 </section>
 </section>
-<section id="berksonba" class="level1">
-<h1>BerksonBA</h1>
+<section id="ballsstrikeseffects" class="level1">
+<h1>BallsStrikesEffects</h1>
 <section id="introduction-1" class="level2">
 <h2 class="anchored" data-anchor-id="introduction-1">Introduction</h2>
+<p>This app graphically displays the runs value of different PA events that pass through or end on particular counts.</p>
+</section>
+<section id="using-the-ballstrikeseffects-app" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-ballstrikeseffects-app">Using the BallStrikesEffects App</h2>
+<p>One selects the type of count effect (either passing-through or final) and the measure of interest. Here we select passing-through counts and home run as the measure.</p>
+<p>The Tabular Display shows the home run rate for plate appearances that pass through each of the 12 possible counts. The HR rate is highest for PAs that pass through 1-0 and 2-0 counts.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="figures/ballstrike1.png" class="img-fluid" width="789"></p>
+</div>
+</div>
+<p>The Points Display displays these home run rates using a graphical format where the rate is graphed as a function of the pitch number and labeled with the count.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="figures/ballstrike2.png" class="img-fluid" width="794"></p>
+</div>
+</div>
+</section>
+</section>
+<section id="berksonba" class="level1">
+<h1>BerksonBA</h1>
+<section id="introduction-2" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-2">Introduction</h2>
 <p>This app illustrates Berkson’s Paradox which might be better called the Selection-Distortion Effect. Two variables may appear to have some type of association. But when we select a portion of the data, the selected data may have a different association pattern. In other words, the pattern of association is distorted by the selection mechanism.</p>
 </section>
 <section id="using-the-berksonba-app" class="level2">
@@ -555,8 +627,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="br_batting_history" class="level1">
 <h1>BR_Batting_History</h1>
-<section id="introduction-2" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-2">Introduction</h2>
+<section id="introduction-3" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-3">Introduction</h2>
 <p>This app displays a measure of batting performance over seasons. The data are season averages as reported on the Baseball-Reference website.</p>
 </section>
 <section id="using-the-br_batting_history-app" class="level2">
@@ -575,8 +647,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="brushingbattinglocations" class="level1">
 <h1>BrushingBattingLocations</h1>
-<section id="introduction-3" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-3">Introduction</h2>
+<section id="introduction-4" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-4">Introduction</h2>
 <p>This app illustrates displaying batted ball locations for a hitter when one can filter by launch angle and exit velocity.</p>
 </section>
 <section id="using-the-brushingbattinglocations-app" class="level2">
@@ -595,10 +667,28 @@ ul.task-list{list-style: none;}
 </div>
 </section>
 </section>
+<section id="brushingcalledpitches" class="level1">
+<h1>BrushingCalledPitches</h1>
+<section id="introduction-5" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-5">Introduction</h2>
+<p>Umpires who call balls and strikes tend to favor the home team. This app allows one to measure the home team bias using called pitch data from the 2022 season.</p>
+</section>
+<section id="using-the-brushingcalledpitches-app" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-brushingcalledpitches-app">Using the BrushingCalledPitches App</h2>
+<p>In this app, you choose the arm of the pitcher (R or L) and the batting side (R or L). In this example, we are considering called pitches by right-arm pitchers to right-handed batters.</p>
+<p>The display shows the location of a sample of called pitches where the color of the point corresponds to the called outcome (ball or strike).</p>
+<p>Use the mouse to select a region of points – here I select a region at the bottom of the zone. The table below the figure gives the pitch count and number of balls and strikes for the top of the inning (when the visiting team is batting) and the bottom of the inning (when the home team is batting). The home team bias is the difference in visiting team and home team strike percentages. The coordinates of the selected rectangle and the home bias value are displayed on the left. Here the bias is positive which is an advantage for the home team.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="figures/brushcalledpitches.png" class="img-fluid" width="721"></p>
+</div>
+</div>
+</section>
+</section>
 <section id="brushinginplay3" class="level1">
 <h1>BrushingInPlay3</h1>
-<section id="introduction-4" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-4">Introduction</h2>
+<section id="introduction-6" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-6">Introduction</h2>
 <p>This app displays linked scatter plots of launch variables, zone locations, and batted-ball locations for balls put into play for a specific 2021 hitter.</p>
 </section>
 <section id="using-the-brushinginplay3-app" class="level2">
@@ -629,8 +719,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="brushinginplay3a" class="level1">
 <h1>BrushingInPlay3a</h1>
-<section id="introduction-5" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-5">Introduction</h2>
+<section id="introduction-7" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-7">Introduction</h2>
 <p>This app displays linked scatter plots of launch variables, zone locations, and batted-ball locations for balls put into play for a specific 2021 hitter.</p>
 </section>
 <section id="using-the-brushinginplay3a-app" class="level2">
@@ -656,8 +746,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="brushingzone" class="level1">
 <h1>BrushingZone</h1>
-<section id="introduction-6" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-6">Introduction</h2>
+<section id="introduction-8" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-8">Introduction</h2>
 <p>This app illustrates the use of brushing to display hitting measures for a specific 2019 batter over selected regions of the zone.</p>
 </section>
 <section id="using-the-brushingzone-app" class="level2">
@@ -692,8 +782,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="careertrajectorybatting" class="level1">
 <h1>CareerTrajectoryBatting</h1>
-<section id="introduction-7" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-7">Introduction</h2>
+<section id="introduction-9" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-9">Introduction</h2>
 <p>This app allows one to compare the career trajectories of two contemporary hitters of interest.</p>
 </section>
 <section id="using-the-careertrajectorybatting-app" class="level2">
@@ -720,8 +810,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="careertrajectorybattingmany" class="level1">
 <h1>CareerTrajectoryBattingMany</h1>
-<section id="introduction-8" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-8">Introduction</h2>
+<section id="introduction-10" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-10">Introduction</h2>
 <p>This app allows for the comparison of many batting career trajectories of hitters who satisfy particular criteria.</p>
 </section>
 <section id="using-the-careertrajectorybattingmany-app" class="level2">
@@ -742,8 +832,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="expectedba" class="level1">
 <h1>ExpectedBA</h1>
-<section id="introduction-9" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-9">Introduction</h2>
+<section id="introduction-11" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-11">Introduction</h2>
 <p>This app displays the counts of balls in play, hits, and batting average over regions of the (launch angle, launch speed) space.</p>
 </section>
 <section id="using-the-expectedba-app" class="level2">
@@ -783,8 +873,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="fangraphsbatting" class="level1">
 <h1>FanGraphsBatting</h1>
-<section id="introduction-10" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-10">Introduction</h2>
+<section id="introduction-12" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-12">Introduction</h2>
 <p>This app allows for the comparison of many batting career trajectories of hitters who satisfy particular criteria. The data and measures are taken from the FanGraphs website.</p>
 </section>
 <section id="using-the-fangraphsbatting-app" class="level2">
@@ -812,8 +902,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="homerunpaths" class="level1">
 <h1>HomeRunPaths</h1>
-<section id="introduction-11" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-11">Introduction</h2>
+<section id="introduction-13" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-13">Introduction</h2>
 <p>This app displays the career home run path for a selected group of home run hitters. It displays the cumulative home run count as a function of each player’s age. In addition, it summarizes the home run paths with lines and shows residuals (deviations) from these lines.</p>
 </section>
 <section id="using-the-homerunpaths-app" class="level2">
@@ -860,8 +950,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="inplayrates" class="level1">
 <h1>InPlayRates</h1>
-<section id="introduction-12" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-12">Introduction</h2>
+<section id="introduction-14" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-14">Introduction</h2>
 <p>This app is designed to compare in-play hit rates for two seasons across values of launch angle and exit velocity.</p>
 </section>
 <section id="using-the-inplayrates-app" class="level2">
@@ -894,8 +984,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="inplayratesspray" class="level1">
 <h1>InPlayRatesSpray</h1>
-<section id="introduction-13" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-13">Introduction</h2>
+<section id="introduction-15" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-15">Introduction</h2>
 <p>This app explores in-play hit rates as a function of three launch condition variables – exit velocity, launch angle and spray angle.</p>
 </section>
 <section id="using-the-inplayratesspray-app" class="level2">
@@ -919,8 +1009,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="inplayratesspray2" class="level1">
 <h1>InPlayRatesSpray2</h1>
-<section id="introduction-14" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-14">Introduction</h2>
+<section id="introduction-16" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-16">Introduction</h2>
 <p>This app explores in-play hit rates as a function of three launch condition variables (exit velocity, launch angle and spray angle) for the 2019 and 2021 seasons.</p>
 </section>
 <section id="using-the-inplayratesspray2-app" class="level2">
@@ -953,8 +1043,8 @@ ul.task-list{list-style: none;}
 </section>
 <section id="locationvalue" class="level1">
 <h1>LocationValue</h1>
-<section id="introduction-15" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-15">Introduction</h2>
+<section id="introduction-17" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-17">Introduction</h2>
 <p>This app displays pitch locations and pitch values over the zone for a selected pitch types for a single pitcher from the 2021 season.</p>
 </section>
 <section id="using-the-locationvalue-app" class="level2">
@@ -979,8 +1069,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="logithitrates" class="level1">
 <h1>LogitHitRates</h1>
-<section id="introduction-16" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-16">Introduction</h2>
+<section id="introduction-18" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-18">Introduction</h2>
 <p>This app focuses on understanding how an hit on a ball put in play depends on the launch conditions and comparing in-play hit rates between two Statcast seasons of interest.</p>
 </section>
 <section id="using-the-logithitrates-app" class="level2">
@@ -1020,8 +1110,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="logithomerunrates" class="level1">
 <h1>LogitHomeRunRates</h1>
-<section id="introduction-17" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-17">Introduction</h2>
+<section id="introduction-19" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-19">Introduction</h2>
 <p>There have been remarkable changes in home run hitting over the Statcast era from 2015 through 2021. To hit a home run, a player needs to hit the ball hard (high launch velocity) with the right launch angle (typically between 20 and 40 degrees). This app is helpful for comparing launch conditions of batted balls and for comparing home run rates between two Statcast seasons of interest.</p>
 </section>
 <section id="using-the-logithomerunrates-app" class="level2">
@@ -1086,8 +1176,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="pitcherfourseam" class="level1">
 <h1>PitcherFourSeam</h1>
-<section id="introduction-18" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-18">Introduction</h2>
+<section id="introduction-20" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-20">Introduction</h2>
 <p>This app illustrates how pitch measures for a particular pitcher vary across the strike zone. One selects a pitcher from the Statcast era (seasons 2015 through 2021) and a particular rate of interest. A graph shows how the rates of four-seam fastballs vary across subregions about the zone for right-handed and left-handed hitters.</p>
 </section>
 <section id="using-the-pitcherfourseam-app" class="level2">
@@ -1133,8 +1223,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="pitchlocation" class="level1">
 <h1>PitchLocation</h1>
-<section id="introduction-19" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-19">Introduction</h2>
+<section id="introduction-21" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-21">Introduction</h2>
 <p>This app displays pitch locations over the zone for a group of 2019 pitchers for a selected pitch type, batter side, and counts.</p>
 </section>
 <section id="using-the-pitchlocation-app" class="level2">
@@ -1159,8 +1249,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="pitchoutcome" class="level1">
 <h1>PitchOutcome</h1>
-<section id="introduction-20" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-20">Introduction</h2>
+<section id="introduction-22" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-22">Introduction</h2>
 <p>This app displays the pitch locations for a specific pitcher where the pitches are filtered by pitch type and pitch outcome.</p>
 </section>
 <section id="using-the-pitchoutcome-app" class="level2">
@@ -1194,8 +1284,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="pitchtypecount" class="level1">
 <h1>PitchTypeCount</h1>
-<section id="introduction-21" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-21">Introduction</h2>
+<section id="introduction-23" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-23">Introduction</h2>
 <p>This app displays pitch locations for a specific pitcher where one can compare locations of different pitch types and different counts.</p>
 </section>
 <section id="using-the-pitchtypecount-app" class="level2">
@@ -1217,8 +1307,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="pitchvalue" class="level1">
 <h1>PitchValue</h1>
-<section id="introduction-22" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-22">Introduction</h2>
+<section id="introduction-24" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-24">Introduction</h2>
 <p>This app displays pitch values over the zone for all 2019 pitchers for a selected pitch type, pitcher side and batter side, and counts.</p>
 </section>
 <section id="using-the-pitchvalue-app" class="level2">
@@ -1243,8 +1333,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="predicthomeruns" class="level1">
 <h1>PredictHomeRuns</h1>
-<section id="introduction-23" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-23">Introduction</h2>
+<section id="introduction-25" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-25">Introduction</h2>
 <p>This Shiny app illustrates prediction of home run rates. One uses a generalized additive model to predict the chance of a in-play home run as a smooth function of the launch variables. Then this model is used to predict the home run rates for future seasons of interest.</p>
 </section>
 <section id="using-the-predicthomeruns-app" class="level2">
@@ -1269,8 +1359,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="predictingbattingrates" class="level1">
 <h1>PredictingBattingRates</h1>
-<section id="introduction-24" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-24">Introduction</h2>
+<section id="introduction-26" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-26">Introduction</h2>
 <p>This app illustrates a prediction problem. One collects the batting rates for all players in the first part of the season, and one wishes to predict the players’ batting rates for the second part of the season. This app shows that multilevel model (so-called shrinkage) estimates are superior to the naive rate estimates in this prediction problem.</p>
 </section>
 <section id="using-the-predictingbattingrates-app" class="level2">
@@ -1316,8 +1406,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="predictivehothand" class="level1">
 <h1>PredictiveHotHand</h1>
-<section id="introduction-25" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-25">Introduction</h2>
+<section id="introduction-27" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-27">Introduction</h2>
 <p>This app illustrates predictive checking of a streaky measure for a Markov Switching model.</p>
 <p>Assume <span class="math inline">y_1, ..., y_N</span> are independent Bernoulli outcomes. For each game, the batter is either in a hot state with hitting probability <span class="math inline">p_H</span> or a cold state with hitting probability <span class="math inline">p_C</span>. The batter moves between the hot and cold states across games by a Markov Chain with staying probability 0.9. The probabilities <span class="math inline">p_C</span> and <span class="math inline">p_H</span> have independent beta priors.</p>
 <p>The ofers are the at-bats between successes in the binary sequence.</p>
@@ -1346,8 +1436,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="predictivemaxofer" class="level1">
 <h1>PredictiveMaxOfer</h1>
-<section id="introduction-26" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-26">Introduction</h2>
+<section id="introduction-28" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-28">Introduction</h2>
 <p>This app illustrates predictive checking of a streaky measure for a Beta/Bernoulli model.</p>
 <p>Assume <span class="math inline">y_1, ..., y_N</span> are independent Bernoulli outcomes with probability of success <span class="math inline">p</span>. Assume <span class="math inline">p</span> has a Beta distribution with shape parameters <span class="math inline">a</span> and <span class="math inline">b</span>.</p>
 <p>The ofers are the at-bats between successes in the binary sequence.</p>
@@ -1376,8 +1466,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="radialchart" class="level1">
 <h1>RadialChart</h1>
-<section id="introduction-27" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-27">Introduction</h2>
+<section id="introduction-29" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-29">Introduction</h2>
 <p>This app illustrates the use of a Radial Chart to display the characteristics of balls in play for a specific pitcher.</p>
 </section>
 <section id="using-the-radialchart-app" class="level2">
@@ -1398,8 +1488,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="runsexpectancy" class="level1">
 <h1>RunsExpectancy</h1>
-<section id="introduction-28" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-28">Introduction</h2>
+<section id="introduction-30" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-30">Introduction</h2>
 <p>This app illustrates calculations associated with Runs Expectancy.</p>
 </section>
 <section id="using-the-runsexpectancy-app" class="level2">
@@ -1431,8 +1521,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="spraychart" class="level1">
 <h1>SprayChart</h1>
-<section id="introduction-29" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-29">Introduction</h2>
+<section id="introduction-31" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-31">Introduction</h2>
 <p>This app will plot the locations of in-play balls hit by a specific hitter.</p>
 </section>
 <section id="using-the-spraychart-app" class="level2">
@@ -1453,8 +1543,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="spraycompare" class="level1">
 <h1>SprayCompare</h1>
-<section id="introduction-30" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-30">Introduction</h2>
+<section id="introduction-32" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-32">Introduction</h2>
 <p>This app will plot the locations of in-play balls hit by two hitters.</p>
 </section>
 <section id="using-the-spraycompare-app" class="level2">
@@ -1473,10 +1563,45 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 <p>https://baseballwithr.wordpress.com/2021/04/26/spray-charts-using-the-sportyr-package/</p>
 </section>
 </section>
+<section id="streakyatbat" class="level1">
+<h1>StreakyAtBat</h1>
+<section id="introduction-33" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-33">Introduction</h2>
+<p>This app provides different graphs to see the streaky behavior of a particular batter during a baseball season.</p>
+</section>
+<section id="using-the-streakyatbat-app" class="level2">
+<h2 class="anchored" data-anchor-id="using-the-streakyatbat-app">Using the StreakyAtBat App</h2>
+<p>To use this app, you first select a batter of interest from the 2021 season and the definition of a “success” (either Hit, Home Run, SO, or not SO).</p>
+<p>The Moving Averages tab displays a moving average plot of the success rate where the slider can be used to choose the width of the moving averages.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="figures/streakyab1.png" class="img-fluid" width="909"></p>
+</div>
+</div>
+<p>The Geometric Plot tab displays a graph of the spacings, the number of failures between repeated successes. If the points follow a line, then the spacings follow a geometric distribution. Here there is substansive curvature indicating that Corey Seager is displaying some streaky batting behavior.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="figures/streakyab2.png" class="img-fluid" width="906"></p>
+</div>
+</div>
+<p>The Simulation tab implements a permutation test of the binary outcomes. One randomly mixes the 0 and 1 outcomes and computes the sum of squared spacings. One repeats this process many times and the histogram is a graph of the sum of squared spacings for these simulations. The observed sum of squared spacings is shown as a vertical line. The p-value is the probability of observing this statistic value or more extreme in the simulation. Since the p-value is small, this indicates that the player is truly streaky.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="figures/streakyab3.png" class="img-fluid" width="905"></p>
+</div>
+</div>
+<p>The Bayes Factor tab implements a Bayesian test of consistency. One has two models – the consistent model says that the outcomes come from a Bernoulli distribution with fixed probability <span class="math inline">p</span>. The streaky model says that the probabilities are different and distributed according to a distribution parameterized by a hyperparameter <span class="math inline">K</span>. The graph shows the log Bayes factor in support of the streaky model. Here the log Bayes factor is maxed at 1.07 which again indicates that the player is streaky.</p>
+<div class="cell">
+<div class="cell-output-display">
+<p><img src="figures/streakyab4.png" class="img-fluid" width="903"></p>
+</div>
+</div>
+</section>
+</section>
 <section id="streakyinplay" class="level1">
 <h1>StreakyInPlay</h1>
-<section id="introduction-31" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-31">Introduction</h2>
+<section id="introduction-34" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-34">Introduction</h2>
 <p>This app displays moving averages of in-play batting data for any 2021 batter of interest. By use of a simulation, the app shows if the observed streakiness is greater than one may observe from a “chance” model.</p>
 </section>
 <section id="using-the-streakyinplay-app" class="level2">
@@ -1508,8 +1633,8 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 </section>
 <section id="woba_matchups" class="level1">
 <h1>wOBA_Matchups</h1>
-<section id="introduction-32" class="level2">
-<h2 class="anchored" data-anchor-id="introduction-32">Introduction</h2>
+<section id="introduction-35" class="level2">
+<h2 class="anchored" data-anchor-id="introduction-35">Introduction</h2>
 <p>This app graphs smoothed wOBA values of all batters that face a particular pitcher, or all pitchers that face a particular batter using Retrosheet play-by-play data from the 1960 through 2021 seasons.</p>
 </section>
 <section id="using-the-woba_matchups-app" class="level2">
@@ -1552,8 +1677,26 @@ When one selects the pitcher, one will see a table of frequencies of the given p
 
 </main>
 <!-- /main column -->
-<script type="application/javascript">
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -1575,7 +1718,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -1603,31 +1763,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>
