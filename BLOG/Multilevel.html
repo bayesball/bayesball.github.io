@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.309">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jim Albert">
+<meta name="dcterms.date" content="2022-11-28">
+
+<title>Multilevel Modeling in Baseball</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="Multilevel_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Multilevel_files/libs/quarto-html/quarto.js"></script>
+<script src="Multilevel_files/libs/quarto-html/popper.min.js"></script>
+<script src="Multilevel_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Multilevel_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Multilevel_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="Multilevel_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="Multilevel_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Multilevel_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Multilevel_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#exchangeable-modeling" id="toc-exchangeable-modeling" class="nav-link" data-scroll-target="#exchangeable-modeling"> <span class="header-section-number">2</span> Exchangeable Modeling</a>
+  <ul class="collapse">
+  <li><a href="#efron-and-morris-baseball-study" id="toc-efron-and-morris-baseball-study" class="nav-link" data-scroll-target="#efron-and-morris-baseball-study"> <span class="header-section-number">2.1</span> Efron and Morris’ Baseball Study</a></li>
+  <li><a href="#a-shiny-app-to-predict-batting-rates" id="toc-a-shiny-app-to-predict-batting-rates" class="nav-link" data-scroll-target="#a-shiny-app-to-predict-batting-rates"> <span class="header-section-number">2.2</span> A Shiny App to Predict Batting Rates</a></li>
+  </ul></li>
+  <li><a href="#nonnested-multilevel-models" id="toc-nonnested-multilevel-models" class="nav-link" data-scroll-target="#nonnested-multilevel-models"> <span class="header-section-number">3</span> Nonnested Multilevel Models</a>
+  <ul class="collapse">
+  <li><a href="#is-pitching-75-of-baseball" id="toc-is-pitching-75-of-baseball" class="nav-link" data-scroll-target="#is-pitching-75-of-baseball"> <span class="header-section-number">3.1</span> Is Pitching 75% of Baseball?</a></li>
+  <li><a href="#run-scoring-offensive-and-defensive-effects" id="toc-run-scoring-offensive-and-defensive-effects" class="nav-link" data-scroll-target="#run-scoring-offensive-and-defensive-effects"> <span class="header-section-number">3.2</span> Run Scoring – Offensive and Defensive Effects</a></li>
+  </ul></li>
+  <li><a href="#situation-splits-changing-intercepts-changing-slopes-model" id="toc-situation-splits-changing-intercepts-changing-slopes-model" class="nav-link" data-scroll-target="#situation-splits-changing-intercepts-changing-slopes-model"> <span class="header-section-number">4</span> Situation Splits (Changing Intercepts, Changing Slopes Model)</a>
+  <ul class="collapse">
+  <li><a href="#count-effects" id="toc-count-effects" class="nav-link" data-scroll-target="#count-effects"> <span class="header-section-number">4.1</span> Count Effects</a></li>
+  <li><a href="#platoon-effects" id="toc-platoon-effects" class="nav-link" data-scroll-target="#platoon-effects"> <span class="header-section-number">4.2</span> Platoon Effects</a></li>
+  </ul></li>
+  <li><a href="#multilevel-modeling-of-career-trajectories" id="toc-multilevel-modeling-of-career-trajectories" class="nav-link" data-scroll-target="#multilevel-modeling-of-career-trajectories"> <span class="header-section-number">5</span> Multilevel Modeling of Career Trajectories</a>
+  <ul class="collapse">
+  <li><a href="#introduction-7" id="toc-introduction-7" class="nav-link" data-scroll-target="#introduction-7"> <span class="header-section-number">5.1</span> Introduction</a></li>
+  <li><a href="#the-wrong-way-to-look-at-aging-data" id="toc-the-wrong-way-to-look-at-aging-data" class="nav-link" data-scroll-target="#the-wrong-way-to-look-at-aging-data"> <span class="header-section-number">5.2</span> The Wrong Way to Look at Aging Data</a></li>
+  <li><a href="#derek-jeters-obp-trajectory" id="toc-derek-jeters-obp-trajectory" class="nav-link" data-scroll-target="#derek-jeters-obp-trajectory"> <span class="header-section-number">5.3</span> Derek Jeter’s OBP Trajectory</a></li>
+  <li><a href="#the-problem-individual-fits-can-be-crummy" id="toc-the-problem-individual-fits-can-be-crummy" class="nav-link" data-scroll-target="#the-problem-individual-fits-can-be-crummy"> <span class="header-section-number">5.4</span> The Problem: Individual Fits Can be Crummy</a></li>
+  <li><a href="#what-can-we-do" id="toc-what-can-we-do" class="nav-link" data-scroll-target="#what-can-we-do"> <span class="header-section-number">5.5</span> What Can We Do?</a></li>
+  <li><a href="#multilevel-modeling-to-the-rescue" id="toc-multilevel-modeling-to-the-rescue" class="nav-link" data-scroll-target="#multilevel-modeling-to-the-rescue"> <span class="header-section-number">5.6</span> Multilevel Modeling to the Rescue</a></li>
+  <li><a href="#multilevel-modelling-gives-reasonable-fits" id="toc-multilevel-modelling-gives-reasonable-fits" class="nav-link" data-scroll-target="#multilevel-modelling-gives-reasonable-fits"> <span class="header-section-number">5.7</span> Multilevel Modelling Gives Reasonable Fits</a></li>
+  <li><a href="#when-do-players-peak" id="toc-when-do-players-peak" class="nav-link" data-scroll-target="#when-do-players-peak"> <span class="header-section-number">5.8</span> When Do Players Peak?</a></li>
+  <li><a href="#some-closing-comments" id="toc-some-closing-comments" class="nav-link" data-scroll-target="#some-closing-comments"> <span class="header-section-number">5.9</span> Some Closing Comments</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">6</span> References</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Multilevel Modeling in Baseball</h1>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jim Albert </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 28, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>This article illustrates the application of various Bayesian multilevel models to address questions in baseball from blog posts from <em>Exploring Baseball Data Using R</em> (https://baseballwithr.wordpress.com/) First we list a few interesting baseball problems and use these questions to preview the types of multilevel models illustrated in the remainder of the article.</p>
+<p><strong>How does one make sense of MLB statistics after one month? (Section 2)</strong></p>
+<p>Baseball fans are fascinated with leaderboards that list the top hitters with respect to various measures such as batting average, on-base percentage, wOBA, etc. But these leaderboards are not that meaningful early in the season when the hitters have a small number of plate appearances. For example, here are the top 5 hitters in the 2021 season through the games of April 25.</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Player</th>
+<th>AB</th>
+<th>H</th>
+<th>AVG</th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Yermin Mercedes</td>
+<td>70</td>
+<td>30</td>
+<td>0.429</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Mike Trout</td>
+<td>56</td>
+<td>22</td>
+<td>0.393</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Brandon Nimmo</td>
+<td>59</td>
+<td>23</td>
+<td>0.390</td>
+<td></td>
+</tr>
+<tr class="even">
+<td>Omar Narvaez</td>
+<td>54</td>
+<td>21</td>
+<td>0.389</td>
+<td></td>
+</tr>
+<tr class="odd">
+<td>Byron Buxton</td>
+<td>55</td>
+<td>21</td>
+<td>0.382</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>We see that Yermin Mercedes has a current .429 AVG which is impressive. But this is based on only 70 at-bats – what would we predict Mercedes’ batting average to be at the end of the season? Will these five hitters be the best hitters at the end of the season? Section 2 describes the use of an exchangeable model to simultaneously estimate the batting abilities of all hitters in a season. This fitted model also provides predictions of the hitters’ performance in the remainder of the season.</p>
+<p><strong>Is baseball more about hitting or more about pitching? (Section 3)</strong></p>
+<p>Baseball is a competition between the offense who is trying to score runs and the defense who is trying to prevent runs. Sometimes it seems that the pitchers are controlling the outcomes of games. Baseball people such as a great Connie Mack have said that baseball is dominated by pitching.</p>
+<p>When there are different sources of variation of some variable such as runs scored, one can get a handle on the sizes of the sources of variation by the use of a non-nested multlevel model. In Section 3, we illustrate two different applications of this modeling, one focusing on outcomes of plate appearances and another on the runs scored in a game. We will see that some PA outcomes are more about the batteer than the pitcher, and other outcomes are more influenced by the pitcher.</p>
+<p><strong>How does one interpret situational statistics? (Section 4)</strong></p>
+<p>In the media, one reads that one player is a clutch hitter in that he performs unusually well in clutch or important situations during a game. Another hitter might be said to be unsually good against pitchers from the same side, and a pitcher may be said to be good early in the season. Baseball sites such as Baseball Reference and FanGraphs will tabulate many of these breakdown measures where performances of hitters and pitchers are given for different situations.</p>
+<p>When one discusses situational statistics, one needs to distinguish between a “bias” and an “ability split”. A bias is a type of situational effect that affects all players in the same way. For example, an umpire may favor the home team by his calling of balls and strikes. This behavior would likely affect all hitters in the same way – this type of affect is called a bias. In contrast, an ability split is the case where particular players will take advantage of a particular situation, such as ahead in the count, more than other players.</p>
+<p>One can learn about the significance of a particular situation by use of a so-called “changing intercepts, changing slopes” multilevel model described in Section 4. One uses a regression model to describe how a particular measure of performance depends on the situation. Actually, when you have multiple players, there will be many regression models where the intercept and sope of the regression depend on the player. By simultaneously estimating all of these player regression coefficents one learns about the size of the situational effect and how this effect differs between players.</p>
+<p><strong>What age do baseball hitters achieve maximum performance? (Section 5)</strong></p>
+<p>There is a lot of activity during the “hot stove” MLB offseason where a number of players are free agents and teams are trying to sign these players to fill weaknesses in their rosters. In the 2022-23 offseason, the most discussed free agent is Aaron Judge who hit 63 home runs during the 2022 season. Judge would like a long-term contract but he will be 31 years old in the first month of the 2023 season. That raises the question – how many more years will Judge excel as a hitter? There are some recent examples of free agents such as Albert Pujols who was signed to a long-term contract by the Angels starting at age 32 and he had a relatively mediocre career for the Angel.</p>
+<p>This question relates to the general issue of aging among baseball players. In particular, at what age does a hitter or pitcher achieve peak performance? Section 5 uses a multilevel level to address this issue. One represents the pattern of career performance of a player by a quadratic regression model. One can simultaneously estimate the regression parameters for the players by the multilevel model. This provides improved fits of the players trajectories and one can obtain estimates of the ages where they achieve peak performance.</p>
+</section>
+<section id="exchangeable-modeling" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="exchangeable-modeling"><span class="header-section-number">2</span> Exchangeable Modeling</h2>
+<section id="efron-and-morris-baseball-study" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="efron-and-morris-baseball-study"><span class="header-section-number">2.1</span> Efron and Morris’ Baseball Study</h3>
+<section id="introduction-1" class="level4" data-number="2.1.1">
+<h4 data-number="2.1.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">2.1.1</span> Introduction</h4>
+<p>One of the famous small datasets in statistics is one contained in a paper in the Journal of the American Statistical Association by Brad Efron and Carl Morris where they use baseball data to illustrate the benefits of shrinkage estimation. In April of 1970, Brad and Carl looked at the Sunday paper where tables of baseball statistics were published and chose 18 players who had exactly 45 at-bats. The goal was to predict the batting average of these 18 players in the remainder of the 1970 season. I got introduced to this study by my adviser at Purdue and Efron and Morris’s research had a significant impact on my early research in statistics. Anyway, I thought it would be interesting to revisit this example by downloading Retrosheet data. This is a nice toy example to illustrate Bayesian random effects modeling and Bayesian prediction. Recently I interviewed Carl Morris in a Chance article where he gives some insight on the collection of this baseball dataset.</p>
+<p>By the way, this dataset still is used in a number of Bayesian books to demonstrate exchangeable modeling. Specifically, Parent and Rivot’s book has an appendix on “The baseball players historical example” that discusses hierarchical analyses for this particular 1970 dataset.</p>
+</section>
+<section id="getting-the-data" class="level4" data-number="2.1.2">
+<h4 data-number="2.1.2" class="anchored" data-anchor-id="getting-the-data"><span class="header-section-number">2.1.2</span> Getting the Data</h4>
+<p>In a previous post, I presented a function for downloading Retrosheet play-by-play for a particular season. I read in this <code>parse.retrosheet2.pbp*()</code> function from my Github Gist site and use it to download the data for the 1970 season.</p>
+<p>To find the players from Efron and Morris’s study, I collect the number of <code>AB</code> and <code>H</code> for all players through April 24 (I had found that Roberto Clemente had exactly 45 AB through April 24) and then collected all hitters who had between 44 and 46 AB. This gave me 17 hitters – they substantially overlap with the list of players used in Efron and Morris’s paper. (I was happy to see that Johnny Callison, a popular Phillies hitter, was included in my list.)</p>
+</section>
+<section id="fitting-a-random-effects-model" class="level4" data-number="2.1.3">
+<h4 data-number="2.1.3" class="anchored" data-anchor-id="fitting-a-random-effects-model"><span class="header-section-number">2.1.3</span> Fitting a Random Effects Model</h4>
+<p>Here is a relatively simple random effects model to learn about the batting abilities for these 17 players. The number of hits <span class="math inline">\(y_i\)</span> for the <span class="math inline">\(i\)</span>th batter is binomial with hit probability <span class="math inline">\(p_i\)</span> (<span class="math inline">\(i\)</span> goes from 1 to 17) and then the collection of hit probabilities <span class="math inline">\(p_1, ..., p_{17}\)</span> come from a beta “talent” curve with shape parameters <span class="math inline">\(K \eta\)</span> and <span class="math inline">\(K ( 1 - \eta)\)</span>. (I place weakly informative priors on the unknown parameters <span class="math inline">\(K\)</span> and <span class="math inline">\(\eta\)</span>.) Here’s a picture of this model (the notation is a bit off, but it demonstrates the basic idea.)</p>
+<p><img src="figures/multilevel/multilevel1.png" class="img-fluid" style="width:60.0%"></p>
+<p>Anyway, I have a function fit.model that will estimate <span class="math inline">\(K\)</span> and <span class="math inline">\(\eta\)</span> from this data. The estimates are <span class="math inline">\(K\)</span> = 68 and <span class="math inline">\(\eta\)</span> = .290. We use these to estimate the hitting probability for any player. For example, Max Alvis had 7 hits in 44 AB for a batting average of 0.159. To estimate Alvis’ hitting probability we essentially combine Alvis’ hitting data with an “average” player with 68 AB and batting average of .290.</p>
+<p>Here’s a graph showing the observed batting averages and the estimates of the hitting probabilities that shrink or move these batting averages towards the overall average.</p>
+<p><img src="figures/multilevel/shrinkage.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="prediction" class="level4" data-number="2.1.4">
+<h4 data-number="2.1.4" class="anchored" data-anchor-id="prediction"><span class="header-section-number">2.1.4</span> Prediction</h4>
+<p>The objective of this modeling is to predict the batting averages of these 17 players for the remainder of the season. I use the Retrosheet data to collect the number of <code>AB</code> for all players in the remainder of the season. There are two types of uncertainty in this prediction exercise. There is uncertainty in the true hitting probabilities for the players, and once we have values of the hitting probabilities, there is additional (binomial) uncertainty in the future number of hits for these players. For a specific player, we simulate values of his hitting probability (based on the posterior distribution of <span class="math inline">\(p_i\)</span>) and then using these simulated values of the probability, we simulate the number of hits by binomial distributions. When we are done, we have 1000 values of the number of hits from the predictive distribution. I use density curves to display these predictive distribution of the players’ batting averages in the remainder of the 1970 season. These intervals might seem pretty wide, but then again we don’t have much data (only 45 <code>AB</code>) to learn about the batting abilities and there is a large chunk of the season remaining to be played.</p>
+<p><img src="figures/multilevel/prediction.png" class="img-fluid" style="width:60.0%"></p>
+<p>This general approach can be used to predict the batting averages of a group of hitters at any point during the season. One nice feature of the Bayesian approach is that the posteriors for the hitting probabilities can be conveniently updated during the season with new data.</p>
+<p>If you want to play with this method for other players and other seasons, all of the R code can be found on my Github Gist site.</p>
+</section>
+</section>
+<section id="a-shiny-app-to-predict-batting-rates" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="a-shiny-app-to-predict-batting-rates"><span class="header-section-number">2.2</span> A Shiny App to Predict Batting Rates</h3>
+<section id="introduction-2" class="level4" data-number="2.2.1">
+<h4 data-number="2.2.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">2.2.1</span> Introduction</h4>
+<p>Over many years, I’ve played with various Bayesian models to predict future performance of baseball players. In the Efron and Morris example, I have explained multilevel modeling in the context of predicting the final season batting averages of a group of hitters where we observe the performance of the hitters in 45 AB.</p>
+<p>I wrote a Shiny app to illustrate Bayesian multilevel prediction using some interesting data, specifically Retrosheet play-by-play data for the 2019 season. I’ll focus on explaining the app. By playing with the app, this will provide some insight into the behavior of these predictions.</p>
+</section>
+<section id="scenario" class="level4" data-number="2.2.2">
+<h4 data-number="2.2.2" class="anchored" data-anchor-id="scenario"><span class="header-section-number">2.2.2</span> Scenario</h4>
+<p>Here’s the situation. I collect all of the individual at-bat outcomes for the 2019 season from Retrosheet. I choose a particular date in the middle of the season, breaking the data into “Train” (before the date) and “Test” (after the date) portions. I collect the batting averages of all players in the Train dataset who have at least a particular number of AB. The problem is to predict the batting averages for these players in the remainder of the 2019 season. Here are two plausible prediction rules</p>
+<ul>
+<li><p><strong>Observed</strong>. I just use the observed batting averages in the Train dataset to predict the batting average in the Test dataset. So for example, if a player has 30 hits in 100 AB in the first dataset, I will predict his batting average in the remainder of the season to be 30 / 100 = 0.300.</p></li>
+<li><p><strong>Multilevel</strong>. The multilevel prediction method partially pools the observed rates. The prediction shrinks or adjusts the player’s observed BA towards the average. This prediction estimate can be written as</p></li>
+</ul>
+<p><span class="math display">\[ Prediction = \frac{AB}{AB + K} (Observed \, BA) + \frac{K}{AB + K} \eta\]</span></p>
+<p>where <span class="math inline">\(\eta\)</span> is an estimate at the average BA across all players and the estimate <span class="math inline">\(K\)</span> tells me how much the player’s BA will be shrunk towards the average. I use a Bayesian multilevel model to estimate the values of <span class="math inline">\(\eta\)</span> and <span class="math inline">\(K\)</span>.</p>
+<p>I claim that the Multilevel method will do better than the Observed method in prediction. Specifically, if one measures the goodness of the prediction by the sum of squared prediction errors, one obtains a smaller value of this sum of squared errors using the Multilevel method.</p>
+</section>
+<section id="the-app---inputs" class="level4" data-number="2.2.3">
+<h4 data-number="2.2.3" class="anchored" data-anchor-id="the-app---inputs"><span class="header-section-number">2.2.3</span> The App - Inputs</h4>
+<p>This Shiny app illustrates this exercise with the 2019 Retrosheet data.</p>
+<p>This app is currently live at https://bayesball.shinyapps.io/PredictingBattingRates</p>
+<p>Here’s a snapshot of the Intro page.</p>
+<p><img src="figures/multilevel/shiny_prediction1.png" class="img-fluid" style="width:60.0%"></p>
+<p>There are three inputs to this app:</p>
+<ul>
+<li><p><strong>Choose the Outcome.</strong> By choosing H, one is predicting hit rates or batting averages. By choosing SO, you are predicting strikeout rates and by choosing HR, you are predicting home run rates.</p></li>
+<li><p><strong>Choose Date Breakpoint.</strong> One can decide where to break the Train and Test datasets. Here I have chosen July 1. If instead you want to work with a small amount of observed data, choose an earlier date, say, May 1.</p></li>
+<li><p><strong>Choose a Minimum At-Bats.</strong> You can require that you only consider players with at least 100 AB in the Train dataset. If you choose 0, then you are using all players with at least 1 AB. (You might want to choose a larger value of minimum AB so that pitchers are excluded.)</p></li>
+</ul>
+</section>
+<section id="the-app---outputs" class="level4" data-number="2.2.4">
+<h4 data-number="2.2.4" class="anchored" data-anchor-id="the-app---outputs"><span class="header-section-number">2.2.4</span> The App - Outputs</h4>
+<p>After you choose these inputs, the model will be fit and you will see the estimated values of <span class="math inline">\(K\)</span> and <span class="math inline">\(\eta\)</span> in the left panel. In this snapshot, <span class="math inline">\(\eta\)</span> = 0.258, which means the Bayesian estimate shrinks the observed BA towards 0.258. Here <span class="math inline">\(K\)</span> = 344.550 – since this is a relatively large value in comparison with the AB values, the observed BA is shrunk strongly towards the average.</p>
+<p><img src="figures/multilevel/shiny_prediction2.png" class="img-fluid" style="width:60.0%"></p>
+<p>The <strong>Rates</strong> tab shows the observed and predicted rates. Note the high variability of the observed rates – in the first part of the season (before July 1), we see a number of batting averages under the Mendoza line (under 0.200) and BA values over 0.350. In contrast the predicted BA’s all fall between 0.225 and 0.300.</p>
+<p>At the bottom of the Shiny display, you see the sum of squares of prediction errors for both the Observed and Multilevel Estimates. As one would anticipate, the Multilevel Estimates does better than the Observed Estimates with a smaller prediction error – 0.856 is smaller than 0.982.</p>
+<p><img src="figures/multilevel/shiny_prediction4.png" class="img-fluid" style="width:60.0%"></p>
+<p>The <strong>Talents</strong> tab shows the estimated talent curve – this is a density estimate of the batting probabilities for these players. It is relatively common for a player to have a sub-0.200 average in the first few months of the season, but we see from this curve that it is unusual to have a batting probability (talent) below the Mendoza line. By the way, the shape parameters of this Beta talent curve are just <span class="math inline">\(K \eta\)</span> and <span class="math inline">\(K (1 - \eta)\)</span>. If you plug in the estimates of <span class="math inline">\(K\)</span> and <span class="math inline">\(\eta\)</span>, you’ll get the values 88.7 and 255.8 that you see in the title of the figure.</p>
+<p><img src="figures/multilevel/shiny_prediction3.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="playing-with-the-app" class="level4" data-number="2.2.5">
+<h4 data-number="2.2.5" class="anchored" data-anchor-id="playing-with-the-app"><span class="header-section-number">2.2.5</span> Playing with the App</h4>
+<p>What I like about this app is that it allows the user to play with the inputs and quickly see the outputs. The app gives insight on the performance of these multilevel shrinkage estimates in different situations. Here are some things for the interested reader to try.</p>
+<p><strong>Change the outcome from <code>H</code> to <code>SO</code></strong>. You’ll see that one gets a different estimate at the parameter <span class="math inline">\(K\)</span> that controls the shrinkage. A strikeout rate is much more ability-driven than a batting average. If you display the talent curve for the SO rate, you will see that there is a wider distribution of strikeout probabilities than we saw for hitting probabilities.</p>
+<p><strong>Change the outcome from <code>H</code> to <code>HR</code>.</strong> Now you are predicting home run rates in the remainder of the season. How does the shrinkage size compare to what you saw for H and SO?</p>
+<p><strong>Change the date.</strong> Try using a date breakpoint earlier in the season, say May 1, and see what impact this dataset with smaller AB values has on the predictions for the remainder of the season.</p>
+<p><strong>Change the minimum number of AB.</strong> Does the shrinkage change if you do the prediction for all batters (change the minimum AB to 0)?</p>
+</section>
+<section id="see-the-data-and-the-predictions" class="level4" data-number="2.2.6">
+<h4 data-number="2.2.6" class="anchored" data-anchor-id="see-the-data-and-the-predictions"><span class="header-section-number">2.2.6</span> See the Data and the Predictions</h4>
+<p>One might be interested in seeing the actual observed and predicted rates for all of the 2019 hitters. If you press the Download Rates button in the left panel, you can save all of the results (observed data and predictions for that particular choice of rate) as a cvs file that you can later import into R. Each of the rows in the dataset corresponds to a specific player identified by his Retrosheet id.</p>
+</section>
+<section id="closing-comments" class="level4" data-number="2.2.7">
+<h4 data-number="2.2.7" class="anchored" data-anchor-id="closing-comments"><span class="header-section-number">2.2.7</span> Closing Comments</h4>
+<p>If you wish to see a detailed description of the Bayesian multilevel model, see Chapter 10 of our Probability and Bayesian Modeling text . We explain the whole model and illustrate the use of JAGS in applying Markov chain Monte Carlo to simulate from the posterior of all unknown parameters.</p>
+<p>In the Shiny app, I am using a “quick fit” of this model using a Laplace approximation function laplace.R from the <code>LearnBayes</code> package. It allows one to quickly see the impact of changing the inputs on the posterior estimates.</p>
+<p>This Shiny app is currently the function <code>PredictingBattingRates()</code> in my <code>ShinyBaseball</code> package. The code for the app is contained in a single file <code>app.R</code> that can be found here.</p>
+</section>
+</section>
+</section>
+<section id="nonnested-multilevel-models" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="nonnested-multilevel-models"><span class="header-section-number">3</span> Nonnested Multilevel Models</h2>
+<section id="is-pitching-75-of-baseball" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="is-pitching-75-of-baseball"><span class="header-section-number">3.1</span> Is Pitching 75% of Baseball?</h3>
+<section id="introduction-3" class="level4" data-number="3.1.1">
+<h4 data-number="3.1.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">3.1.1</span> Introduction</h4>
+<p>Baseball legend Connie Mack supposedly said that pitching was 75% of baseball. I’m not sure how Mack arrived at the number 75%, but a general problem of interest is to understand the batter/pitcher dynamics. When one looks at a plate appearance, how much of the outcome is determined by the hitter and how much is determined by the pitcher?</p>
+<p>Noah Thurm recently wrote an interesting article on FanGraphs on understanding the attributes of successful pitchers from Statcast data. Here’s the opening three sentences of this article:</p>
+<p>“Successful pitchers limit damage by minimizing the quality of contact they allow. How they can best do that remains up for debate, as pitchers tend to focus on some combination of deception, movement, and location to try and miss barrels. I propose that the most important pitcher-influenced variable to quality of contact is Launch Angle, and understanding and influencing it ought to be a priority for all pitchers.”</p>
+<p>He provides evidence in this article that pitchers have relative little control over the exit velocity of batted balls – exit velocity is controlled by the hitter. But the pitcher has more control than the hitter on the launch angle and the better pitchers are the ones that can successfully influence this measurement.</p>
+<p>Thurm’s use of the phrase “most important pitcher-influenced variable” raises a general question. Given a particular outcome of a plate appearance or a batted ball or a pitch, how much of the variability of that outcome is due to the batter and how much to the pitcher? Here I will describe how to answer this question using a basic statistical model for separating out variation of a particular response. This will allow us to compare the sizes of two sources of variability– one due to the pitcher and one due to the batter. Using this method, we will compare sources of variability across many outcomes of a plate appearance or a batted ball or a pitch.</p>
+</section>
+<section id="a-non-nested-random-effects-model" class="level4" data-number="3.1.2">
+<h4 data-number="3.1.2" class="anchored" data-anchor-id="a-non-nested-random-effects-model"><span class="header-section-number">3.1.2</span> A Non-Nested Random Effects Model</h4>
+<p>Let <span class="math inline">\(y\)</span> denote some outcome of a plate appearance. If <span class="math inline">\(y\)</span> is binary (0 or 1) with probability of success <span class="math inline">\(p\)</span> then a “non-nested” random effects model has the form</p>
+<p><span class="math inline">\(\log \frac{p_i}{1-p_i} = \mu + \beta_i + \gamma_i\)</span></p>
+<p>where <span class="math inline">\(\beta_i\)</span> is the effect of the batter and <span class="math inline">\(\gamma_i\)</span> is the effect of the pitcher. We assume that the batter effects <span class="math inline">\(\beta_1, ..., \beta_I\)</span> come from a normal distribution with mean 0 and standard deviation <span class="math inline">\(\sigma_B\)</span>, and the pitcher effects <span class="math inline">\(\gamma_1, ..., \gamma_J\)</span> are a sample from a normal distribution with mean 0 and standard deviation <span class="math inline">\(\sigma_P\)</span>.</p>
+<p>When we fit this model to data, we focus on the estimates of <span class="math inline">\(\sigma_B\)</span> and <span class="math inline">\(\sigma_P\)</span> which tells us how much variability of the outcomes is due respectively to the batters and to the pitchers. We can compare these two standard deviation estimates by computing the ratio <span class="math inline">\(R = \sigma_B / \sigma_P\)</span>. If <span class="math inline">\(R &gt; 1\)</span>, this tells us that the batters have more control over the different outcomes – if instead <span class="math inline">\(R &lt; 1\)</span>, then the pitchers have more control over the outcome variation.</p>
+<p>Here’s an example of quick fitting this model on R using the <code>glmer()</code> function in the <code>lme4</code> package. We have the Retrosheet play-by-play files for the 2019 season, <code>SO</code> is an indicator of a strikeout and <code>BAT_ID</code> and <code>PIT_ID</code> are respectively codes for the batter and pitcher. I use the <code>VarCorr()</code> function to extract the standard deviation estimates and compute the ratio of standard deviations <span class="math inline">\(R\)</span>.</p>
+<pre><code>fit &lt;- glmer(SO ~ (1 | PIT_ID) + (1 | BAT_ID),
+                 data = d,
+                 family = binomial)
+
+(sds &lt;- VarCorr(fit))
+Groups Name        Std.Dev.
+ BAT_ID (Intercept) 0.5016  
+ PIT_ID (Intercept) 0.3118
+
+(R &lt;- 0.5016 / 0.3118)
+[1] 1.608724</code></pre>
+<p>In the old days of baseball, the pitchers were supposed to throw underhand – essentially they were just putting the ball in play. In this scenario, one would think that the batters controlled the variability in the outcomes of plate appearances. If we fit this model to batting outcomes from this old-time era, we should find that <span class="math inline">\(R &gt; 1\)</span>. Of course, baseball has changed since those early years and pitchers are now trying to get the batters out, so it is less clear if the batters or the pitchers are currently contributing more to the variability of the PA outcome.</p>
+</section>
+<section id="outcomes-of-a-plate-appearance" class="level4" data-number="3.1.3">
+<h4 data-number="3.1.3" class="anchored" data-anchor-id="outcomes-of-a-plate-appearance"><span class="header-section-number">3.1.3</span> Outcomes of a Plate Appearance</h4>
+<p>Using Retrosheet play-by-play from the 2019 season, I considered the following outcomes of a plate appearance:</p>
+<ul>
+<li><p>Strikeout (SO)</p></li>
+<li><p>Walk (non-intentional) (BB)</p></li>
+<li><p>Hit by pitch (HBP)</p></li>
+<li><p>Home run (HR)</p></li>
+<li><p>Hit on ball in-play (HIP)</p></li>
+<li><p>Error (E)</p></li>
+</ul>
+<p>For each model, I used the <code>glmer()</code> function from the <code>lme4</code> package to fit this random effects model. From the standard deviation estimates, I computed the ratio of estimated standard deviations <span class="math inline">\(R\)</span>.</p>
+<p>Let’s think aloud what we might expect to find from these different PA outcomes. Hitting home runs would seem to depend more on the hitter than the pitcher, so I would expect <span class="math inline">\(R &gt; 1\)</span>. It is less clear for the other outcomes. Thinking about HBP, does a pitcher hit a batter with an errant pitch or does the batter position himself about the plate so he is more likely to get hit? Certain players like Ron Hunt and Chase Utley were noted for high HBP rates. What about an error? Here a fielding error would seem to depend on the defense and the batter and the pitcher would have little control over the likelihood of an error. So for the error outcome, I would anticipate that <span class="math inline">\(R = 1\)</span>.</p>
+</section>
+<section id="outcomes-of-a-pitch-or-batted-ball" class="level4" data-number="3.1.4">
+<h4 data-number="3.1.4" class="anchored" data-anchor-id="outcomes-of-a-pitch-or-batted-ball"><span class="header-section-number">3.1.4</span> Outcomes of a Pitch or Batted Ball</h4>
+<p>A similar type of analysis can be done for outcomes of a pitch or a batted ball. We’ll consider three outcomes:</p>
+<ul>
+<li><p>Miss on a swing (Miss)</p></li>
+<li><p>Exit velocity of a batted ball</p></li>
+<li><p>Launch angle of a batted ball</p></li>
+</ul>
+<p>(By the way, since both exit velocity and launch angle are continuous measurements, I will use a different random effects model where the response is normally distributed, but I’ll still be able to get standard deviation estimates and a value of <span class="math inline">\(R\)</span>.)</p>
+<p>Remember Thurm in his FanGraphs article stated that a pitcher has much more control over launch angle than the exit velocity. So I would anticipate the value of <span class="math inline">\(R\)</span> to be greater for exit velocity than for launch angle.</p>
+</section>
+<section id="results" class="level4" data-number="3.1.5">
+<h4 data-number="3.1.5" class="anchored" data-anchor-id="results"><span class="header-section-number">3.1.5</span> Results</h4>
+<p>I fit these models for the six PA outcomes and the three pitch outcomes described above. The figure below graphs and labels the values of the ratio <span class="math inline">\(R\)</span>. Remember small values of <span class="math inline">\(R\)</span> are where more variability of the outcome is contributed by pitchers and large values <span class="math inline">\(R\)</span> correspond to situations where more variability is due to batters.</p>
+<p><img src="figures/multilevel/nonnested.png" class="img-fluid" style="width:90.0%"></p>
+<p>We see that …</p>
+<ul>
+<li><p>As expected, the ratio is close to 1 for errors.</p></li>
+<li><p>Of all outcomes, the value of <span class="math inline">\(R\)</span> is smallest for launch angle which means that pitcher variability contributes most to the variability of launch angles.</p></li>
+<li><p>Batters contribute more of the variability for launch speeds and home run rates. Since high launch speeds contribute to home runs, this is not surprising.</p></li>
+<li><p>It is interesting that walks have a <span class="math inline">\(R\)</span> value close to one which means that pitchers and batters contribute equal components of variability of walks. Walking rates depends on both batter plate discipline and inaccurate pitches thrown by the pitcher.</p></li>
+</ul>
+</section>
+<section id="takeaways" class="level4" data-number="3.1.6">
+<h4 data-number="3.1.6" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">3.1.6</span> Takeaways</h4>
+<p>This statistical approach clearly distinguishes exit velocity from launch angle – the variability in exit velocity is pretty much about the batter, but the pitcher has a lot of impact on the variability in launch angle. This supports the main point of the FanGraphs article.</p>
+<p>This analysis impacts how one constructs a leader board. If the variability in a particular outcome is primarily due to variation in the hitters, then one would make a top-10 list for the hitters, not the pitchers. Based on this analysis, perhaps we should make up a top-10 list for pitchers who have the smallest percentage of optimal launch speeds on balls put into play. (Maybe that is something I can talk about in a future post.)</p>
+<p>I’ve blogged about these type of models before in the context of home run hitting. In this particular post, I illustrate several types of random effect models. Not only does this model provide estimates of the variability in pitchers and hitters, it provides random effects estimates for the player abilities that are useful in predicting future performance.</p>
+</section>
+</section>
+<section id="run-scoring-offensive-and-defensive-effects" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="run-scoring-offensive-and-defensive-effects"><span class="header-section-number">3.2</span> Run Scoring – Offensive and Defensive Effects</h3>
+<section id="introduction-4" class="level4" data-number="3.2.1">
+<h4 data-number="3.2.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">3.2.1</span> Introduction</h4>
+<p>Watching the 2022 World Series, it seemed that the Astros and the Phillies had similar offensives, but the Astros had a deeper and more talented pitching staff, leading to their victory in 6 games in the Series. That makes one reflect about the relative importance of the offense and the defense (pitching and fielding) in baseball. Let’s focus on run scoring in a game.</p>
+<p>How much of run scoring in a game is due to the offense and how much is attributed to the defense?</p>
+<p>Tom Tango recently posted on this topic titled “Revenge of the Defense”. He focused on average numbers of runs scored and runs allowed for teams across seasons. One takeaway from Tom’s exploration is that the variation in run scoring, in recent seasons, is more about differences in team defenses than it is about difference in team offensives.</p>
+<p>Thinking about this issue, I thought this run scoring issue would be a nice application of multilevel modeling. One looks at the runs scored in all games in a particular season. There are different sources of the variation in runs scored:</p>
+<ul>
+<li><p>team to team variation in scoring runs</p></li>
+<li><p>team to team variation in preventing runs by pitching and fielding</p></li>
+<li><p>the home advantage</p></li>
+</ul>
+<p>other factors such as the particular starting pitchers, effectiveness of relievers, etc.</p>
+<p>In this post, I illustrate the use of the <code>lme4</code> package to fit a non-nested multilevel model to run scoring. We illustrate this multilevel fit for all seasons from 1970 through 2021. By plotting the standard deviations of the offensive and defensive random effects, we can learn about the relative contributions of the offensive and defensive in run scoring over time. By adding a home/away effect to the model, we can explore the home field advantage and see how this has changed over seasons.</p>
+</section>
+<section id="the-data-and-random-effects-model" class="level4" data-number="3.2.2">
+<h4 data-number="3.2.2" class="anchored" data-anchor-id="the-data-and-random-effects-model"><span class="header-section-number">3.2.2</span> The Data and Random Effects Model</h4>
+<p>Using Retrosheet game log files, we collect the runs scored by both teams in all games during a particular season. Let the response <span class="math inline">\(y\)</span> denote the square root of the runs scored by a batting team against a team defense during a game. (By the way, I am defining the response to be the square root of runs scored since that variable is more normally distributed than runs scored and the model assumes the response is normal). The basic model is</p>
+<p><span class="math inline">\(y = \mu + \alpha_{off} + \beta_{def} + \epsilon\)</span></p>
+<p>where <span class="math inline">\(\alpha_{off}\)</span> is the random effect of the batting team, <span class="math inline">\(\beta_{def}\)</span> is the random effect of the defensive team and <span class="math inline">\(\epsilon\)</span> is a random error team. We assume that the batting effects {<span class="math inline">\(\alpha_{off}\)</span>} are normal with mean 0 and standard deviation <span class="math inline">\(\sigma_{off}\)</span>, the defensive effects {<span class="math inline">\(\beta_{def}\)</span>} are N(0, <span class="math inline">\(\sigma_{def}\)</span>) and the errors {<span class="math inline">\(\epsilon\)</span>} are N(0, <span class="math inline">\(\sigma\)</span>). This model can be fit using the <code>lmer()</code> function in the <code>lme4</code> package by the single line of code:</p>
+<pre><code>fit &lt;- lmer(RootRuns ~ (1 | OffensiveTeam) +
+                       (1 | DefensiveTeam),
+                  data = d12)</code></pre>
+<p>I fit this model to the runs scored by both teams for all games in the 2021 season. I obtain the estimates of the standard deviations <span class="math inline">\(\sigma_{off}\)</span> and <span class="math inline">\(\sigma_{def}\)</span>.</p>
+<pre><code>  Season  Offensive   Defense
+1   2021 0.08075034 0.1319501</code></pre>
+<p>If one considers the variation in the square roots of runs scored for all games, we see that the estimates <span class="math inline">\(\sigma_{off} &lt; \sigma_{def}\)</span>. So more of the variation in the root runs is explained by differences in the team defenses than differences in the team offensives.</p>
+</section>
+<section id="standard-deviation-estimates-over-seasons" class="level4" data-number="3.2.3">
+<h4 data-number="3.2.3" class="anchored" data-anchor-id="standard-deviation-estimates-over-seasons"><span class="header-section-number">3.2.3</span> Standard Deviation Estimates Over Seasons</h4>
+<p>I fit this model separately for all seasons between 1970 through 2021 (I omitted the short 2020 season). The following figure plots the season estimates of <span class="math inline">\(\sigma_{off}\)</span> and <span class="math inline">\(\sigma_{def}\)</span> as a function of the season. I have added smoothing curves to see the basic patterns. Around 1980, the sizes of the two sources of variation were about the same, but since the 1980 season, the defense standard deviation estimate <span class="math inline">\(\sigma_{def}\)</span> is generally larger than the offense standard deviation estimate <span class="math inline">\(\sigma_{off}\)</span>.</p>
+<p><img src="figures/multilevel/runs_nonnested1.png" class="img-fluid" style="width:70.0%"></p>
+<p>One way to compare the two sources of variation is to look at the ratio of standard deviation estimates</p>
+<p><span class="math inline">\(Ratio = \frac{\sigma_{def}}{\sigma_{off}}\)</span>.</p>
+<p>Here I have graphed this ratio as a function of the season. It seems clear from this graph that the pitching/defense source of variation is larger than the offensive source of variation in recent seasons.</p>
+<p><img src="figures/multilevel/runs_nonnested2.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="home-field-effect" class="level4" data-number="3.2.4">
+<h4 data-number="3.2.4" class="anchored" data-anchor-id="home-field-effect"><span class="header-section-number">3.2.4</span> Home Field Effect?</h4>
+<p>One way to extend this model is to include a term if the runs scored is by the home or away team.</p>
+<p><span class="math inline">\(y = \mu + \alpha_{off} + \beta_{def} + \gamma home + \epsilon\)</span></p>
+<p>Here “home” is an indicator variable that is “yes” if the runs are scored by the home team, and “no” otherwise. I fit this new model for all seasons from 1970 through 2021. Here is a plot of the home effect estimates (the estimates of <span class="math inline">\(\gamma\)</span>) across season. Although the size of the estimate varies across seasons, the general home effect appears positive (about the value 0.05) with no trend across seasons.</p>
+<p><img src="figures/multilevel/runs_nonnested3.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="comments" class="level4" data-number="3.2.5">
+<h4 data-number="3.2.5" class="anchored" data-anchor-id="comments"><span class="header-section-number">3.2.5</span> Comments</h4>
+<p><strong>Comparing Work</strong> If one compares my plot of standard deviations with Tom Tango’s “Spread of Runs for 27 Outs” graph in his blog post, it seems we see similar patterns. As Tom would say, there is a greater spread in team prevention in run scoring than the spread in team run scoring in recent seasons. One interpretation is that current run scoring is more a function of the defense than of the offense.</p>
+<p><strong>Modeling Benefits</strong> There are some advantages to my modeling approach. One can estimate individual team batting and defensive effects through the random effects estimates. Also it would be possible to predict run scoring of one team against a second team in a future game.</p>
+<p><strong>Home Effect in Run Scoring</strong> We’ve shown that there is a clear home effect in run scoring and the size of the effect has remained constant over the last 50 seasons.</p>
+<p><strong>Defense is Pitching Plus Fielding</strong> We’ve measured how much of the variation in run scoring can be attributed to the defense. But defense is a combination of the team pitching and the fielding and a general problem is how to separate out the pitching and defensive effects.</p>
+</section>
+<section id="related-posts." class="level4" data-number="3.2.6">
+<h4 data-number="3.2.6" class="anchored" data-anchor-id="related-posts."><span class="header-section-number">3.2.6</span> Related Posts.</h4>
+<p>A few years ago, I illustrated using a non-nested multilevel model with batting and defense effects for outcomes of a plate appearance. In this post, I showed variation in home run hitting is more a function of the hitter than the pitcher and walk rates are more a function of the pitcher.</p>
+<p>Got R code? My Github Gist site contains two functions <code>fit_model()</code> and <code>fit_model_home()</code> that fit the two random effects models used here. The site also contains the code to generate these <code>ggplot2</code> figures.</p>
+</section>
+</section>
+</section>
+<section id="situation-splits-changing-intercepts-changing-slopes-model" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="situation-splits-changing-intercepts-changing-slopes-model"><span class="header-section-number">4</span> Situation Splits (Changing Intercepts, Changing Slopes Model)</h2>
+<section id="count-effects" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="count-effects"><span class="header-section-number">4.1</span> Count Effects</h3>
+<section id="introduction-5" class="level4" data-number="4.1.1">
+<h4 data-number="4.1.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">4.1.1</span> Introduction</h4>
+<p>In a previous post I introduced some situational hitting data, setting the stage for this post’s discussion of Bayesian multilevel models. Multilevel modeling is one of the big Bayesian success stories and it is a great way of implementing a regression model when there is a natural grouping of the data. By the way, the Economist currently has forecasts for the US 2020 Presidential election that are based on the use of dynamic Bayesian multilevel models on polling data.</p>
+<p>Let’s review the basic situational data problem introduced in last week’s post. We’re interested in learning about the hitter’s advantage when he has a favorable count. Here we are going to compare “neutral” counts (0-0, 1-0, 1-1, 2-1, 3-2) with “behind” counts (0-1, 0-2, 1-2, 2-2) and see how a batter’s expected wOBA improves as he is in a neutral count as opposed to being behind in the count. (I decided on not using the “ahead” counts due to the small sample sizes.). We’re going to use a simple regression model to make this comparison and we’ll contrast three approaches:</p>
+<ul>
+<li><p><strong>Pool the Data</strong>. We can assume that all batters are the same with respect to their BABIP ability and their ability to take advantage of the favorable count situation. Then we’d fit a single regression model to all of the hitting data for a specific season.</p></li>
+<li><p><strong>Individual Estimates</strong>. On the other extreme, we can assume that batters differ with respect to their hitting ability and also their ability to take advantage of the count situation. Then we would fit separate regression models for all of the “regular” hitters in a season.</p></li>
+<li><p><strong>Multilevel Model Estimates.</strong> Last, we’ll consider a so-called “varying intercepts, varying slopes” multilevel model which states that the individual regression parameters come from a common prior distribution with unknown parameters. We’ll illustrate a “quick fit” to this multilevel model and show that we obtain better estimates at player hitting abilities and their abilities to take advantage of the count. We’ll learn about the variation in the players’ abilities and in the players’ situational abilities.</p></li>
+</ul>
+</section>
+<section id="a-simple-regression-model" class="level4" data-number="4.1.2">
+<h4 data-number="4.1.2" class="anchored" data-anchor-id="a-simple-regression-model"><span class="header-section-number">4.1.2</span> A Simple Regression Model</h4>
+<p>We focus how the expected wOBA depends on the count, focusing on the comparison between the neutral count and behind in the count situations.</p>
+<p>Let <span class="math inline">\(y\)</span> denote the expected wOBA. Define the “effect to be 0.5 if the batter is in a neutral count and <span class="math inline">\(−0.5\)</span> if the batter is behind in the count. We assume that <span class="math inline">\(y\)</span> is normal with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span> where the mean response <span class="math inline">\(\mu\)</span> is written as</p>
+<p><span class="math display">\[
+\mu =   \beta_0 + \beta_1 \, effect
+\]</span></p>
+<p>In the neutral count, the mean is <span class="math inline">\(\mu_1 = \beta_0 + \beta_1 / 2\)</span>, and in the behind in the count situation, the mean is <span class="math inline">\(\mu_2 = \beta_0 - \beta_1 / 2\)</span>. So in this regression model <span class="math inline">\(\beta_0 = (\mu_1 + \mu_2) / 2\)</span> represents the overall expected wOBA and <span class="math inline">\(\beta_1= \mu_1 - \mu_2\)</span> represents the improvement (from behind-in-the-count to neutral-count) in expected wOBA.</p>
+</section>
+<section id="a-pooled-data-estimate" class="level4" data-number="4.1.3">
+<h4 data-number="4.1.3" class="anchored" data-anchor-id="a-pooled-data-estimate"><span class="header-section-number">4.1.3</span> A Pooled Data Estimate</h4>
+<p>Suppose we consider the group of batters in the 2019 season who had at least 200 balls in play, the “regular” players. The pooled estimate would fit a regression model to all of the balls in play for these players. Interpreting the coefficients below for the <code>lm()</code> fit, we see 0.372 is an average expected wOBA and hitters tend to hit 0.046 better when they are in a neutral count as opposed to behind in the count. The line segment in the graph displays the “regression curve” corresponding to this pooled data estimate.</p>
+<pre><code>fit &lt;- lm(estimated_woba_using_speedangle ~ effect,
+          data = sc_regular_2)
+fit$coef
+## (Intercept)      effect 
+##  0.37196099  0.04550857</code></pre>
+<p><img src="figures/multilevel/thecount1.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="individual-estimates" class="level4" data-number="4.1.4">
+<h4 data-number="4.1.4" class="anchored" data-anchor-id="individual-estimates"><span class="header-section-number">4.1.4</span> Individual Estimates</h4>
+<p>There are over 200 regular players in our dataset. We could instead do separate regression fits for all players, obtaining many sets of regression coefficients. I have displayed a random sample of 50 of these individual regression curves below. Looking at this graph, we see that many hitters do perform better in the neutral count state. But the size of improvement varies and actually some hitters hit worse when there is a neutral count. Honestly, I don’t believe that some hitters actually have a lower talent to hit when facing a neutral count compared to behind in the count.</p>
+<p><img src="figures/multilevel/thecount2.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="a-multilevel-model-and-quick-fit" class="level4" data-number="4.1.5">
+<h4 data-number="4.1.5" class="anchored" data-anchor-id="a-multilevel-model-and-quick-fit"><span class="header-section-number">4.1.5</span> A Multilevel Model and Quick Fit</h4>
+<p>I hope I’ve convinced you that both the pooled data fit and the individual regression fits are unsatisfactory. Here’s a multilevel model in this situation. Let <span class="math inline">\(\beta_1, ..., \beta_k\)</span> represent the coefficient vectors for the k regular players. We assume that these (random) parameter vectors come from a common bivariate normal distribution with mean <span class="math inline">\(\beta_0\)</span> and variance-covariance matrix <span class="math inline">\(\Sigma\)</span> where we write this matrix as</p>
+<p><span class="math display">\[
+\Sigma =
+\begin{bmatrix}
+\sigma_0^2 &amp; \rho \sigma_0 \sigma_1  \\
+\rho \sigma_0 \sigma_1 &amp; \sigma_1^2
+\end{bmatrix}
+\]</span></p>
+<p>In this matrix, <span class="math inline">\(\sigma_0\)</span> represents the variation between the player intercepts (overall wOBA abilities), <span class="math inline">\(\sigma_1\)</span> represents the variation between the player effects (their abilities to take advantage of the count situation), and <span class="math inline">\(\rho\)</span> is the correlation between the player abilities and their situational abilities. In a full Bayesian model, we would place a weakly informative prior on all these unknown parameters to complete the multilevel model.</p>
+<p>I could explain how to fit this complicated Bayesian model by using Stan. To save space and time I present a quick fit of this “random effects” model by using the <code>lmer()</code> function in the <code>lme4</code> package. (This essentially fits this model by finding point estimates of the unknown parameters at the 2nd stage of the multilevel prior.). Here is the R syntax for fitting this model. The <code>(1 + effect | player_name)</code> indicates that we are fitting a varying intercept and varying slope model.</p>
+<pre><code>newfit &lt;- lmer(estimated_woba_using_speedangle ~
+            effect + (1 + effect | player_name),
+              data = sc_regular_2)
+summary(newfit)</code></pre>
+<p>I have pasted a summary of the multilevel fit below – let’s focus on the circled parts of the output.</p>
+<p><img src="figures/multilevel/thecount3.png" class="img-fluid" style="width:70.0%"></p>
+<p>The section circled in blue gives overall slope and intercept estimates. Overall, the mean wOBA value is 0.372 and the advantage of being in the neutral count is 0.43. These are approximately the same values as the estimates we found in the pooled model.</p>
+<p>The section circled in red gives estimates at the components of the variance-covariance matrix <span class="math inline">\(\Sigma\)</span>. The estimate at the variation of intercepts is <span class="math inline">\(\sigma_0\)</span> = 0.0495 – this indicates that players do different in overall BABIP talent and the spread of these talents is given by 0.0495. In contrast, the estimate of variation of slopes is given by <span class="math inline">\(\sigma_1\)</span> = 0.0185. This is a relatively small value which means that players have little variation in their ability to take advantage of the count situation. Also the correlation <span class="math inline">\(\rho\)</span> is estimated by 0.38 which indicates some positive association between the varying intercepts and the varying slopes.</p>
+</section>
+<section id="performance" class="level4" data-number="4.1.6">
+<h4 data-number="4.1.6" class="anchored" data-anchor-id="performance"><span class="header-section-number">4.1.6</span> Performance</h4>
+<p>Also the <code>lmer()</code> fitting function provides estimates at the “random effects”, that is, the regression intercepts and slopes for the individual players. (I called these individual regression parameter vectors <span class="math inline">\(\beta_1, ..., \beta_k\)</span>.) I’ve graphed these (multilevel) individual regression curve estimates below. Note that all of these curves are increasing. Although we saw that some players had decreasing individual regression curves, this fitted model corrects this and tells us that actually everyone has increasing curve talents, but the size of the increase can differ between players.</p>
+<p><img src="figures/multilevel/thecount4.png" class="img-fluid" style="width:70.0%"></p>
+<p>The following graph is another way to look at these multilevel model estimates. The scatterplot displays the individual intercept and slope estimates (red) and the multilevel model estimates (blue) are placed on top. Note that many of the individual slope estimates (the <span class="math inline">\(\beta_i\)</span>) are negative but none of the multilevel slope estimates are negative. The individual slope estimates are shrunk or adjusted strongly towards an average slope value. Also note that we see shrinkage both in the slopes and the intercepts, but the degree of shrinkage is smaller for the intercepts (the player wOBA abilities). Another interesting thing to see is that there is a positive correlation between the multilevel intercepts and slopes – this means that better hitters tend to have larger count effects.</p>
+<p><img src="figures/multilevel/thecount5.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="wrapup" class="level4" data-number="4.1.7">
+<h4 data-number="4.1.7" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">4.1.7</span> Wrapup</h4>
+<p>Baseball folks are always fascinated with situational effects. For example, we see situational effects when players are platooned against specific pitchers. The managers are deciding that specific players won’t or will perform well in particular situations. When the managers are doing that, they are deciding that players have platoon talents. That is, the managers believe the observed situational effects correspond to real abilities and the current situational effects are predictive of future situational data.</p>
+<p>Also situational data is hard to understand since there is so much variability in these observed situational effects due to the small sample sizes. We saw this in our exploration of count effects – the count advantage from less favorable to more favorable situations was actually negative for some players in the 2019 season.</p>
+<p>Although people understand the difficulty in making sense of situational data, they aren’t sure what to do – what observed situational effects are real or luck-driven?</p>
+<p>Multilevel modeling is a very attractive way of making sense of situational data. Basically, the multilevel model estimates adjust the individual estimates towards a common value and the degree of adjustment depends on the particular situation. In our situation, the variation in individual count effects appears to be mainly luck-driven and the multilevel estimates shrink them heavily towards a constant value.</p>
+<p>All of the R work for these two posts on situational count data and multilevel modeling is contained in a Markdown file in my Gist Github site. If you have some Statcast data, you should be able to replicate my work.</p>
+</section>
+</section>
+<section id="platoon-effects" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="platoon-effects"><span class="header-section-number">4.2</span> Platoon Effects</h3>
+<section id="introduction-6" class="level4" data-number="4.2.1">
+<h4 data-number="4.2.1" class="anchored" data-anchor-id="introduction-6"><span class="header-section-number">4.2.1</span> Introduction</h4>
+<p>In an earlier post, I examined pitcher and batting side changes in baseball, but I didn’t say anything about platoon advantages. I am working on a survey paper on situational effects in baseball, and I was rereading Chapter 6 of The Book by Tango, Lichtman, and Dolphin. I was focusing on the following table (reproduced from Table 66 on page 156):</p>
+<p><img src="figures/multilevel/platoon1.png" class="img-fluid" style="width:70.0%"></p>
+<p>This particular chapter of The Book considers the meaning of platoon effects. We know that players generally have a higher weighted on-base percentages (wOBA) when facing a pitcher from the opposite side. But these platoon splits are hard to interpret due to the small sample sizes. The authors are primarily interested in the spread not in the observed platoon splits, but rather the spread in the players’ platoon talents. In this post, I will give an overview of how one can measure the size of the platoon skill variation using R and the Retrosheet play-by-play data for the 2014 season.</p>
+</section>
+<section id="collecting-the-data" class="level4" data-number="4.2.2">
+<h4 data-number="4.2.2" class="anchored" data-anchor-id="collecting-the-data"><span class="header-section-number">4.2.2</span> Collecting the Data</h4>
+<p>From Retrosheet, I collect the play-by-play data for the 2014 season – for each plate appearance, we have the batter id, the side of the pitcher, and the play result. The <code>People</code> table in the Lahman database gives the batting side of each hitter. Here I focus on right-handed batters who have at least 150 PA against pitchers of each arm.</p>
+</section>
+<section id="platoon-effects-for-all-players" class="level4" data-number="4.2.3">
+<h4 data-number="4.2.3" class="anchored" data-anchor-id="platoon-effects-for-all-players"><span class="header-section-number">4.2.3</span> Platoon Effects for All Players</h4>
+<p>For each player, I fit a simple regression model (using the lm function) to estimate the platoon effect and get a corresponding standard error. The model has the form</p>
+<p><span class="math display">\[
+y = \alpha + \beta OPP
+\]</span></p>
+<p>where <span class="math inline">\(y\)</span> is the weighted batting measure for a PA, <span class="math inline">\(OPP\)</span> indicates the pitching side (1 if opposite and 0 if the same side), and <span class="math inline">\(\beta\)</span> is the platoon talent of the player. From the output of <code>lm</code> , we get the platoon estimate <span class="math inline">\(\beta\)</span> and a standard error <span class="math inline">\(s\)</span>.</p>
+</section>
+<section id="a-random-effects-model" class="level4" data-number="4.2.4">
+<h4 data-number="4.2.4" class="anchored" data-anchor-id="a-random-effects-model"><span class="header-section-number">4.2.4</span> A Random Effects Model</h4>
+<p>After fitting the regression model for all players, we have regression estimates <span class="math inline">\(\hat \beta_1, ..., \hat \beta_N\)</span> with corresponding standard errors <span class="math inline">\(s_1, ..., s_N\)</span>. We assume <span class="math inline">\(\hat \beta_j\)</span> is distributed normal with mean <span class="math inline">\(\beta_j\)</span> and standard deviation <span class="math inline">\(s_j\)</span>.</p>
+<p>Now we assume that the platoon talents <span class="math inline">\(\beta_1, ..., \beta_N\)</span> come from a normal “talent curve” with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\tau\)</span>. Here <span class="math inline">\(\mu\)</span> represents the average platoon split and <span class="math inline">\(\tau\)</span> measures the platoon skill variation. (For the Bayesian readers, I place a uniform prior on <span class="math inline">\((\mu, \tau)\)</span> to complete the model.) I call this a normal-normal model, since we’re assuming the observed platoon effects are normally distributed, and also the platoon skills come from a normal curve.</p>
+</section>
+<section id="fitting-the-model-for-right-handed-hitters" class="level4" data-number="4.2.5">
+<h4 data-number="4.2.5" class="anchored" data-anchor-id="fitting-the-model-for-right-handed-hitters"><span class="header-section-number">4.2.5</span> Fitting the Model for Right-Handed Hitters</h4>
+<p>This normal-normal random effects model is easily fit using my <code>LearnBayes</code> package using the <code>laplace()</code> and <code>normnormexch()</code> functions. When I fit this model to the 2014 right-handed batters, I get the following estimates: <span class="math inline">\(\hat\mu = 0.032, \hat\tau = 0.015\)</span>. So, on average the wOBA platoon effect for right-handed hitters is 32 points and the spread of the platoon talents is 15 points. (Tango et al call these the “average wOBA platoon split” and the “platoon skill variation”.) Note that my estimates differ from those in the table in The Book, but they are using different data.</p>
+</section>
+<section id="plotting-the-observed-platoon-splits-and-the-estimated-platoon-talents" class="level4" data-number="4.2.6">
+<h4 data-number="4.2.6" class="anchored" data-anchor-id="plotting-the-observed-platoon-splits-and-the-estimated-platoon-talents"><span class="header-section-number">4.2.6</span> Plotting the Observed Platoon Splits and the Estimated Platoon Talents</h4>
+<p>Once we fit this random effects model, we can get improved estimates at each player’s platoon ability. Essentially, this estimate is a weighted average of his actual platoon split and the average split (here 0.032), where the weights are proportional to the inverse of the sampling variance (<span class="math inline">\(1 / s_j^2\)</span>) and the inverse of the talent variance (<span class="math inline">\(1/\tau^2\)</span>). Here the talent spread is much smaller than the sampling standard errors, so the platoon estimates are shrunk strongly towards the average split. (By the way, this formula for the estimate is discussed in the “Regression to the Mean” section of the appendix of The Book.)</p>
+<p>Here is an illustration of some of the results. The table gives the platoon effect, the corresponding standard error, and the improved estimate for the six right-handed hitters with the most extreme positive splits during the 2014 season. We see Rajai Davis hit 130 points better (on the wOBA scale) against lefties, but our estimate of the platoon effect is only about 41 points.</p>
+<pre><code>   nameLast     Effect         SE   Estimate
+1     Davis 0.13034376 0.04822778 0.04064569
+2     Jones 0.12474634 0.05027777 0.03950820
+3 Donaldson 0.10474850 0.04867146 0.03818826
+4    Altuve 0.10042365 0.04519534 0.03868753
+5  Holliday 0.09939045 0.04769119 0.03793527
+6    Butler 0.07688487 0.04569260 0.03617009</code></pre>
+<p>Here is a graph of the platoon effects for all 2014 hitters – the black dots are the observed splits and the red dots are the improved estimates at the platoon talents. Note that some of the observed splits are negative, but all of the platoon talent estimates are positive – we don’t believe that any player really has a negative platoon ability.</p>
+<p><img src="figures/multilevel/platoon2.png" class="img-fluid" style="width:70.0%"></p>
+<p>Page 156 of The Book says that “platoon skills vary from player to player”. Yeah, but the platoon skill variation is very small compared with the variability of the observed platoon splits for a single season. Actually, assuming that the players don’t have any differences in platoon skills would not be a bad model for these data.</p>
+<p>Although I have not discussed the R code, all of my code for this example can be found on my Github Gist site.</p>
+</section>
+</section>
+</section>
+<section id="multilevel-modeling-of-career-trajectories" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="multilevel-modeling-of-career-trajectories"><span class="header-section-number">5</span> Multilevel Modeling of Career Trajectories</h2>
+<section id="introduction-7" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="introduction-7"><span class="header-section-number">5.1</span> Introduction</h3>
+<p>A general problem in sabermetrics is to understand the patterns of career trajectories of baseball players. Specifically, when does a baseball player achieve peak performance? Phil Birbaum recently had a post in his Sabermetric Research blog where he talks about using regression models to understand trajectory patterns. This is a topic that I’ve played around with (probably too much!) for many years. Here’s my latest attempt to describe the use of Bayesian multilevel models to understand these trajectories. Monika Hu and I recently completed an undergraduate text on Bayesian modeling and this application is one of the case studies in our last chapter. I think this Bayesian modeling approach is one of the most attractive ways of learning about trajectories of professional athletes. Also, this will give me an opportunity to show the ease of fitting these multilevel models using Stan, the current “fast” algorithm for simulating Bayesian models by Markov chain Monte Carlo.</p>
+</section>
+<section id="the-wrong-way-to-look-at-aging-data" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="the-wrong-way-to-look-at-aging-data"><span class="header-section-number">5.2</span> The Wrong Way to Look at Aging Data</h3>
+<p>Suppose I am interested in aging patterns of on-base performance. I collect all of the players born in 1974 who had at least 1000 at-bats. So I have a data frame for 30 players with variables Player, OB, PA, and Age – I have the on-base records (that is, the counts of OB events and PA) for each player each season. The wrong way to explore aging is to simply find the cumulative on-base percentage for each age producing the following graph. This seems to indicate that the peak age for on-base performance for this group of players is 26.</p>
+<p><img src="figures/multilevel/trajectory1.png" class="img-fluid" style="width:70.0%"></p>
+<p>But actually the graph below where I distinguish the points by the players is a better representation of this data.</p>
+<p><img src="figures/multilevel/trajectory2.png" class="img-fluid" style="width:70.0%"></p>
+<p>Our simplistic “OBP by Age” graph ignored the fact that players have different career lengths and these OBP averages for each age are taken over different groups of players. Bill James in one of his early Baseball Abstracts cautioned us from performing this naive aging analysis. It results in a biased estimate of peak performance. (Actually, in a quick search, I see that Bill James has a recent article on aging patterns, showing that Bill, like me, remains interested in this aging problem.)</p>
+</section>
+<section id="derek-jeters-obp-trajectory" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="derek-jeters-obp-trajectory"><span class="header-section-number">5.3</span> Derek Jeter’s OBP Trajectory</h3>
+<p>We have to look at the individual career trajectories. Let’s consider Derek Jeter, one of the “born in 1974” players currently being considered for the Hall of Fame. (Will Jeter get a unanimous vote to get in the HOF?) Below I have graphed Derek Jeter’s OBP against age for all of the seasons of his career. I fit the quadratic logistic model</p>
+<p><span class="math inline">\(\log \frac{p}{1-p} = b_0 + b_1 (Age - 30) + b_2 (Age - 30)^2\)</span></p>
+<p>and show the fit as a red line on the scatterplot. Here I think one gets a reasonable view of Jeter’s career trajectory. He started playing at a relatively high level, peaked around age 29 and his on-base percentage performance decreased gradually until his retirement at age 40.</p>
+<p><img src="figures/multilevel/trajectory3.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="the-problem-individual-fits-can-be-crummy" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="the-problem-individual-fits-can-be-crummy"><span class="header-section-number">5.4</span> The Problem: Individual Fits Can be Crummy</h3>
+<p>The problem is that this quadratic regression model doesn’t always work well. To demonstrate this, I collected the career on-base percentage data for all players who were born in 1974 (like Jeter) and had at least 1000 career at-bats. (There were 30 players in this group.) I fit this logistic quadratic model to the (Age, OBP) data for each player. Below I graph the 30 individual logistic fits. Some of these fits like the one for Jeter are reasonable, but other fits are strange. Some of these fits don’t have a clear “down-up-down” pattern that you would expect. Some of these fits have dramatic rises and falls which are questionable. One issue that particular good or poor years can have dramatic effects on the fit for an individual player.</p>
+<p><img src="figures/multilevel/trajectory4.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="what-can-we-do" class="level3" data-number="5.5">
+<h3 data-number="5.5" class="anchored" data-anchor-id="what-can-we-do"><span class="header-section-number">5.5</span> What Can We Do?</h3>
+<p>This is a basic problem. We want to learn about how individual players age, but these individual player fits can be problematic. In order to make sense of this data, we need to combine this data in some way. One thought is to assume that each player has the same peak age, say 29, and then estimate trajectories that are based on this assumption. Or maybe assume that everyone’s trajectory rises and falls in the same way. But this is not realistic – we know that players peak at different ages and have different patterns of growth and decline. The challenge is to “partially pool” the data across players in such a way to still treat the individual trajectories as separate entities to estimate.</p>
+</section>
+<section id="multilevel-modeling-to-the-rescue" class="level3" data-number="5.6">
+<h3 data-number="5.6" class="anchored" data-anchor-id="multilevel-modeling-to-the-rescue"><span class="header-section-number">5.6</span> Multilevel Modeling to the Rescue</h3>
+<p>There is a natural Bayesian way to treat this problem. One assumes that each player has a unique “true” trajectory described by a quadratic curve. One can describe the ith player’s trajectory by the parameters <span class="math inline">\(B_i = (b_{i0}, b_{i1}, b_{i2})\)</span> that govern the quadratic regression curve. The key assumption is that one believes that the trajectories for the 30 players follow a common distribution. Formally, one assumes that the regression vectors <span class="math inline">\(B_1, ..., B_{30}\)</span> follow a common multivariate normal distribution with mean vector <span class="math inline">\(\mu\)</span> and variance-covariance matrix <span class="math inline">\(\Sigma\)</span>. To complete this prior model, one places weakly informative priors on <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\Sigma\)</span>. This says that I don’t know much about the location of the common player trajectory and I don’t know much about the similarity or dissimilarity of the true trajectories of these 30 players.</p>
+</section>
+<section id="multilevel-modelling-gives-reasonable-fits" class="level3" data-number="5.7">
+<h3 data-number="5.7" class="anchored" data-anchor-id="multilevel-modelling-gives-reasonable-fits"><span class="header-section-number">5.7</span> Multilevel Modelling Gives Reasonable Fits</h3>
+<p>We fit this model by simulation. Basically, we use the Stan algorithm that explores the high-dimension posterior probability distribution for all of the unknown parameters. This is a relatively new Markov chain Monte Carlo (MCMC) algorithm and there are nice packages available for using this Stan algorithm for fitting multilevel regression models like this one. Stan was specifically written to facilitate the sampling of multilevel models for many parameters. Here I used the <code>brms</code> package – this single line of code shown below will accomplish this MCMC fitting of these 30 trajectories by this multilevel model. The output of this fit is a large matrix of simulated draws from the posterior probability distribution. (In this code, <code>OB</code> is the number of on-base events, <code>PA</code> is plate appearances, <code>AgeD</code> is the deviation of the player’s age from 30 and <code>Player</code> is the player number.)</p>
+<pre><code>fit &lt;- brm(OB | trials(PA) ~ AgeD + I(AgeD ^ 2) +
+       (AgeD + I(AgeD ^ 2) | Player),
+       data = filter(d78, PA &gt; 0),
+       family = binomial("logit"))</code></pre>
+<p>Below I display the (posterior mean) multilevel trajectory fits for the 30 players using red lines – the blue lines in the background are the individual fits that we saw earlier. What we see is the the multilevel fits shrink the individual fits towards an average fit. For a player like Derek Jeter, the multilevel fit will only adjust the individual fit a small amount – this makes sense since Jeter had a long career and we have a good handle on his trajectory from his data. For another player with a short career, we don’t understand his trajectory very well, and his individual trajectory fit will be strongly adjusted towards the average trajectory.</p>
+<p><img src="figures/multilevel/trajectory5.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="when-do-players-peak" class="level3" data-number="5.8">
+<h3 data-number="5.8" class="anchored" data-anchor-id="when-do-players-peak"><span class="header-section-number">5.8</span> When Do Players Peak?</h3>
+<p>The individual trajectory fits can give relatively poor estimates at player’s peak age – that is the age when he achieves peak OBP performance. When one fits this multilevel model, one partially pools the data for the 30 players and one gets improved estimates at peak age. Below I show the estimates at the peak ages for the 30 players using the individual quadratic fits (bottom) and the multilevel model fits (top). Note that the individual estimates at peak ages are adjusted in the multilevel modeling towards the average. The takeaway message is that most players tend to peak (with respect to on-base performance) between 28 to 30 and a few players had early peak ages.</p>
+<p><img src="figures/multilevel/trajectory6.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="some-closing-comments" class="level3" data-number="5.9">
+<h3 data-number="5.9" class="anchored" data-anchor-id="some-closing-comments"><span class="header-section-number">5.9</span> Some Closing Comments</h3>
+<ul>
+<li><p><strong>How do the multilevel estimates behave?</strong> It is interesting to compare the individual and multilevel trajectory fits in the above graph. Looking at the collection of red lines, they have different levels (high and low), but the shapes of the curvatures of the multilevel trajectories are similar. This tells me that player clearly differ in their on-base abilities, but OBP is a particular baseball talent that shows modest change during a player’s career. If a team signs someone with a good ability to get on base, then I would predict that this player’s OBP performance would not age badly. (Remember Bill Beame in Moneyball wanted to recruit players with good on-base performance – he didn’t appear to worry about the aging effect of these players.)</p></li>
+<li><p><strong>Things to explore.</strong> I did a toy example here to illustrate how the modeling works. But I think this is a powerful method for understanding trajectories of ballplayers. Players have different talents (like slugging, getting on base, fielding) and each of these talents may have unique career trajectories. It would be interesting to focus on players who play a specific position and fit a multilevel model on the trajectories of these players. It is even possible to consider players with a range of fielding positions and use fielding position as a covariate to learn how aging of different types of players differ.</p></li>
+</ul>
+</section>
+</section>
+<section id="references" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="references"><span class="header-section-number">6</span> References</h2>
+<p>I have a number of posts that illustrate Bayesian multilevel modeling in different contexts. Here are some links:</p>
+<ul>
+<li>Here is one of my more popular posts where I use loess smoothing of trajectories to learn about peak age performance:</li>
+</ul>
+<p>https://baseballwithr.wordpress.com/2017/05/08/what-age-do-baseball-players-peak/</p>
+<ul>
+<li>Here is a post on “shrinking batting averages”.</li>
+</ul>
+<p>https://baseballwithr.wordpress.com/2014/01/06/shrinking-batting-averages/</p>
+<ul>
+<li>Here I illustrate multilevel modeling for data similar to Efron and Morris’ famous baseball study:</li>
+</ul>
+<p>https://baseballwithr.wordpress.com/2016/02/15/revisiting-efron-and-morriss-baseball-study/</p>
+<ul>
+<li>Here is one of my old technical reports on career trajectories in baseball:</li>
+</ul>
+<p>http://www-math.bgsu.edu/~albert/papers/career_trajectory.pdf</p>
+<ul>
+<li>Here’s the link to that player trajectory case study in our new Bayesian modeling text:</li>
+</ul>
+<p>https://bayesball.github.io/BOOK/case-studies.html#career-trajectories</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
