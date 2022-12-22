@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.309">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jim Albert">
+<meta name="dcterms.date" content="2022-11-28">
+
+<title>Count Effects</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="Count_Effects_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Count_Effects_files/libs/quarto-html/quarto.js"></script>
+<script src="Count_Effects_files/libs/quarto-html/popper.min.js"></script>
+<script src="Count_Effects_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Count_Effects_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Count_Effects_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="Count_Effects_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="Count_Effects_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Count_Effects_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Count_Effects_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#graphing-pitch-count-effects" id="toc-graphing-pitch-count-effects" class="nav-link" data-scroll-target="#graphing-pitch-count-effects"> <span class="header-section-number">2</span> Graphing Pitch Count Effects</a>
+  <ul class="collapse">
+  <li><a href="#part-i" id="toc-part-i" class="nav-link" data-scroll-target="#part-i"> <span class="header-section-number">2.1</span> Part I</a></li>
+  <li><a href="#part-2" id="toc-part-2" class="nav-link" data-scroll-target="#part-2"> <span class="header-section-number">2.2</span> Part 2</a></li>
+  <li><a href="#part-3" id="toc-part-3" class="nav-link" data-scroll-target="#part-3"> <span class="header-section-number">2.3</span> Part 3</a></li>
+  <li><a href="#a-shiny-app" id="toc-a-shiny-app" class="nav-link" data-scroll-target="#a-shiny-app"> <span class="header-section-number">2.4</span> A Shiny App</a></li>
+  <li><a href="#count-effects-from-statcast-data" id="toc-count-effects-from-statcast-data" class="nav-link" data-scroll-target="#count-effects-from-statcast-data"> <span class="header-section-number">2.5</span> Count Effects from Statcast Data</a></li>
+  </ul></li>
+  <li><a href="#pitch-count-transitions" id="toc-pitch-count-transitions" class="nav-link" data-scroll-target="#pitch-count-transitions"> <span class="header-section-number">3</span> Pitch Count Transitions</a>
+  <ul class="collapse">
+  <li><a href="#graph" id="toc-graph" class="nav-link" data-scroll-target="#graph"> <span class="header-section-number">3.1</span> Graph</a></li>
+  <li><a href="#clayton-kershaw" id="toc-clayton-kershaw" class="nav-link" data-scroll-target="#clayton-kershaw"> <span class="header-section-number">3.2</span> Clayton Kershaw</a></li>
+  <li><a href="#a-historical-look" id="toc-a-historical-look" class="nav-link" data-scroll-target="#a-historical-look"> <span class="header-section-number">3.3</span> A Historical Look</a></li>
+  </ul></li>
+  <li><a href="#in-play-count-effects" id="toc-in-play-count-effects" class="nav-link" data-scroll-target="#in-play-count-effects"> <span class="header-section-number">4</span> In-Play Count Effects</a>
+  <ul class="collapse">
+  <li><a href="#baseball-and-tennis" id="toc-baseball-and-tennis" class="nav-link" data-scroll-target="#baseball-and-tennis"> <span class="header-section-number">4.1</span> Baseball and Tennis</a></li>
+  <li><a href="#exit-velocity-and-launch-angle" id="toc-exit-velocity-and-launch-angle" class="nav-link" data-scroll-target="#exit-velocity-and-launch-angle"> <span class="header-section-number">4.2</span> Exit Velocity and Launch Angle</a></li>
+  </ul></li>
+  <li><a href="#sequences-of-pitch-counts" id="toc-sequences-of-pitch-counts" class="nav-link" data-scroll-target="#sequences-of-pitch-counts"> <span class="header-section-number">5</span> Sequences of Pitch Counts</a></li>
+  <li><a href="#the-first-pitch" id="toc-the-first-pitch" class="nav-link" data-scroll-target="#the-first-pitch"> <span class="header-section-number">6</span> The First Pitch</a>
+  <ul class="collapse">
+  <li><a href="#the-first-pitch-effect" id="toc-the-first-pitch-effect" class="nav-link" data-scroll-target="#the-first-pitch-effect"> <span class="header-section-number">6.1</span> The First Pitch Effect</a></li>
+  <li><a href="#swinging-on-the-first-pitch" id="toc-swinging-on-the-first-pitch" class="nav-link" data-scroll-target="#swinging-on-the-first-pitch"> <span class="header-section-number">6.2</span> Swinging on the First Pitch</a></li>
+  </ul></li>
+  <li><a href="#visual-count-effects" id="toc-visual-count-effects" class="nav-link" data-scroll-target="#visual-count-effects"> <span class="header-section-number">7</span> Visual Count Effects</a>
+  <ul class="collapse">
+  <li><a href="#introduction-7" id="toc-introduction-7" class="nav-link" data-scroll-target="#introduction-7"> <span class="header-section-number">7.1</span> Introduction</a></li>
+  <li><a href="#swing-rates" id="toc-swing-rates" class="nav-link" data-scroll-target="#swing-rates"> <span class="header-section-number">7.2</span> Swing Rates</a></li>
+  <li><a href="#miss-rates" id="toc-miss-rates" class="nav-link" data-scroll-target="#miss-rates"> <span class="header-section-number">7.3</span> Miss Rates</a></li>
+  <li><a href="#launch-speed" id="toc-launch-speed" class="nav-link" data-scroll-target="#launch-speed"> <span class="header-section-number">7.4</span> Launch Speed</a></li>
+  <li><a href="#in-play-hit-and-home-run-rates" id="toc-in-play-hit-and-home-run-rates" class="nav-link" data-scroll-target="#in-play-hit-and-home-run-rates"> <span class="header-section-number">7.5</span> In-Play Hit and Home Run Rates</a></li>
+  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code"> <span class="header-section-number">7.6</span> R code?</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Count Effects</h1>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jim Albert </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 28, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>As most baseball fans know, the “count”, that is, the sequence of balls and strikes in a plate appearance, plays an important role in baseball. This article is a compilation of a number of blog posts from <em>Exploring Baseball Data Using R</em> (https://baseballwithr.wordpress.com/) that have been written about the importance of the count. These posts have been divided into 6 sections.</p>
+<p>Section 2 “Graphing Pitch Count Effects” describes changes in plate appearance outcomes that pass through different counts. A connected line graph shows the effect of an additional ball or strike on the different outcomes a plate appearance. A Shiny app is described that distinguishes “pass through” count effects from “final” count effects for different measures of interest.</p>
+<p>Section 3 “Pitch Count Transitions” discusses the movement between the different counts. A Markov Chain can model these count transitions. Different graphs are used to illustrate the transition probabilities. The “Historical Look” subsection discusses how these transition probabilities have changed in recent years of Major League Baseball.</p>
+<p>Section 4 “In-Play Count Effects” focuses on count effects on the ball that is placed in-play. Graphs demonstrate that batters want to work the count to get a better opportunity for a positive outcome on a ball put into play.</p>
+<p>Section 5 “Sequences of Pitch Counts” takes a more detailed look at the pitch count transitions. Graphs are used to display the probability of an added strike (or an added ball and keeping two strikes) for all current counts.</p>
+<p>Section 6 “The First Pitch” focuses on the impact of the first pitch in a plate appearance. What is the runs value of a first pitch strike and how does that differ from the runs value of a first pitch ball? Is it desirable to swing on a first pitch? How does the fraction of swings on first pitches vary between batters?</p>
+<p>Section 7 “Visual Count Effects” relates the count with the pitch location about the zone. We look at how the locations of swings, misses on swings, exit velocities, in-play hits and home runs depend on the count.</p>
+</section>
+<section id="graphing-pitch-count-effects" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="graphing-pitch-count-effects"><span class="header-section-number">2</span> Graphing Pitch Count Effects</h2>
+<section id="part-i" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="part-i"><span class="header-section-number">2.1</span> Part I</h3>
+<p>In past posts, I have talked about various issues with pitch counts. I’ve posted about the First Pitch Effect, the Chance of a Hit During Different Pitch Counts, Pitch Count Effects in Baseball (comparing with tennis), and Probabilities in the Sequence of Pitch Counts.</p>
+<p>Here I’m interested in revisiting a particular exploration from Chapter 7 of Analyzing Baseball with R. Using Retrosheet play-by-play data from the 2011 season, Max computed the mean run value for all plate appearances through each possible balls/strikes count. Here’s a heat-map graph of these mean run values from the book. &nbsp;(Heat maps are popular for understanding how a batting average of a player changes by the pitch location, or understanding the locations of a pitcher’s fastballs.)</p>
+<p><img src="figures/count_effects/count1.png" class="img-fluid" style="width:70.0%"></p>
+<p>Although this graph is effective in classifying the pitch counts into those favoring the pitcher (dark) and those favoring the batter (light), I don’t think this graph is helpful in seeing how the run values change as one progresses through a count from 0-0 to 3-2. So I am proposing a different display that I think is better for seeing the change in run values.</p>
+<p>I used data from the 2015 season to compute (as Max did) the mean runs values for all PA’s going through all possible counts. &nbsp;Here’s &nbsp;a table of the values I computed which compare closely to Max’s values for the 2011 season.</p>
+<p><img src="figures/count_effects/count2.png" class="img-fluid" style="width:40.0%"></p>
+<p>In the following <code>ggplot2</code> graph, I graph these mean run values as a function of the pitch number. &nbsp;I connect the points by lines to show the change in mean run value as one strike or one ball is added to the count. &nbsp;Positive values are favorable to the hitter, negative values are favorable to the pitcher, and I use different colors to divide pitcher and hitter counts.</p>
+<p><img src="figures/count_effects/count3.png" class="img-fluid" style="width:70.0%"></p>
+<p>Looking at this graph …</p>
+<ul>
+<li>It is&nbsp;clear how one additional ball or one additional strike affects the mean runs value. &nbsp;For example, starting at a 0-0 count with a runs value of zero, the mean runs will increase or decrease by approximately 0.04 depending on the result of the first pitch.</li>
+<li>It is easy to see from the graph that 1-0 and 2-1 are similar from a runs perspective; likewise 0-1 and 2-2 counts are similar.</li>
+<li>The most extreme counts are PA’s that pass through 0-2 (favoring the pitcher) and 3-0, 3-1, and 2-0 (favoring the batter).</li>
+<li>The effect of one additional ball becomes more significant as the pitch count progresses. &nbsp;The change from a 1-0 count to a 2-0 is 0.06, while the change from a 2-0 count to a 3-0 count is 0.10.</li>
+<li>One can define the <strong>leverage</strong> or importance of a specific count as the absolute difference of the runs value with an additional strike and the runs value with an additional ball. &nbsp;The 0-0 count has a small leverage value of 0.07. &nbsp;In contrast, the 2-0 count has a large leverage of 0.16. &nbsp;Generally, &nbsp;later pitch counts have larger leverages. &nbsp;From a fan’s perspective, he or she is most interested in seeing the result of pitches with high leverages. &nbsp;Similarly, one would think that strong pitchers would perform well at counts with high leverage.</li>
+</ul>
+<p>Of course, this graph represents the average run values for all pitch counts. &nbsp;It would be interesting to explore further, seeing, for example, how these pitch count effects vary&nbsp;as a function of the quality of the pitcher and the quality of the hitter.</p>
+</section>
+<section id="part-2" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="part-2"><span class="header-section-number">2.2</span> Part 2</h3>
+<section id="introduction-1" class="level4" data-number="2.2.1">
+<h4 data-number="2.2.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">2.2.1</span> Introduction</h4>
+<p>In the last post, I constructed a graph of the run values associated with plate appearances that pass through particular ball and strike counts. &nbsp;This single graph (based on 2015 Retrosheet play-by-play data) represents the average effects. &nbsp;Obviously it would be interesting to see how these pitch count effects vary by pitcher or batter. &nbsp;One nice aspect of the ggplot2 package is that it is a trivial change to produce these panel displays. &nbsp;Keep in mind that a run value of 0 represents an average outcome over all PA’s in a particular season. &nbsp;Good pitchers will tend to have run values that are negative and good batters will have positive run values. &nbsp;The interesting thing is how these average run values change according to the pitch count.</p>
+</section>
+<section id="pitch-count-effects-for-different-pitchers" class="level4" data-number="2.2.2">
+<h4 data-number="2.2.2" class="anchored" data-anchor-id="pitch-count-effects-for-different-pitchers"><span class="header-section-number">2.2.2</span> Pitch Count Effects for Different Pitchers</h4>
+<p>When one faces a great pitcher, it is pretty difficult for a batter to face a two-strike count – he is likely to strike out or get a weak swing on the ball. &nbsp;On the other hand, maybe the batter has a chance of a favorable outcome when he has a batter count. &nbsp;So these pitch count effects graphs maybe can tell us more than a ERA or a Whip statistic that averages over all of the different counts that the batter sees.</p>
+<p>Let’s first look at the 2015 Cy Young winners Jake Arrieta and Dallas Keuchel.</p>
+<p><img src="figures/count_effects/count4.png" class="img-fluid" style="width:70.0%"></p>
+<p>Arrieta’s graph is pretty remarkable – PA’s that pass through practically all pitch counts have (on average) negative runs value. Keuchel is similar to Arrieta, but batters have more hope for counts that are 3-1 and 3-0. &nbsp;One interesting comment is that Keuchel seems to do better than Arrieta on PA’s that pass through the 0-2 count.</p>
+<p>Since I think Clayton Kershaw is a very special pitcher, let’s compare his 2015 season with Madison Bumgarner.</p>
+<p><img src="figures/count_effects/count5.png" class="img-fluid" style="width:70.0%"></p>
+<p>These are more typical displays where the pitcher has the advantage in pitcher-counts and the batter in batter counts. &nbsp;In all counts, it is clear that Kershaw was more effective than Bumgarner. &nbsp;By the way, if one compares the two pitchers for the 0-0 count, this is a comparison of the average performance of the two pitchers.</p>
+</section>
+<section id="pitch-count-effects-for-different-batters" class="level4" data-number="2.2.3">
+<h4 data-number="2.2.3" class="anchored" data-anchor-id="pitch-count-effects-for-different-batters"><span class="header-section-number">2.2.3</span> Pitch Count Effects for Different Batters</h4>
+<p>One can also produce parallel panels that compare the mean run values of several batters during different pitch counts. &nbsp;We know batters have different batting styles and some hitters (I’m thinking of Joey Votto) do remarkably well in two-strike situations. &nbsp;Let’s look at some comparisons.</p>
+<p>The 2015 Mike Trout and the 2015 Bryce Harper:</p>
+<p><img src="figures/count_effects/count6.png" class="img-fluid" style="width:70.0%"></p>
+<p>Note that Harper had a positive run value for PA’s that pass through all ball-strike counts, even the two-strike variety. &nbsp;Trout did very well in neutral and batter counts, but had a negative run value for 0-2 and 1-2 counts. &nbsp;From this perspective, Harper had the better batting year.</p>
+<p>The 2015 Josh Donaldson and the 2015 Joey Votto:</p>
+<p><img src="figures/count_effects/count7.png" class="img-fluid" style="width:70.0%"></p>
+<p>Remember Donaldson was the 2015 MVP (AL), so his graph is not surprising – it seems similar to the graph for Trout. &nbsp;What is remarkable about Votto is the relatively small spread of mean run values. &nbsp;He might not have the highs of Donaldson and Harper in batter counts, but he is remarkably good in pitcher counts.</p>
+</section>
+</section>
+<section id="part-3" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="part-3"><span class="header-section-number">2.3</span> Part 3</h3>
+<section id="introduction-2" class="level4" data-number="2.3.1">
+<h4 data-number="2.3.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">2.3.1</span> Introduction</h4>
+<p>There seemed to be some interest in the recent graphs I presented that show the run values of PA’s that pass through particular pitch counts. &nbsp;I’ll explain the R work that I did to create these graphs and then present an enhanced version of these plots that shows the percentage of time a PA will be in different pitch counts. (Thanks to Trevor who suggested this enhancement to the graph.)</p>
+</section>
+<section id="r-work" class="level4" data-number="2.3.2">
+<h4 data-number="2.3.2" class="anchored" data-anchor-id="r-work"><span class="header-section-number">2.3.2</span> R work</h4>
+<ul>
+<li><p>I start with the Retrosheet play-by-play dataset for the entire 2015 season and add a RUNS.VALUE that gives the runs value for each PA. &nbsp;(See this post for a description of R code to compute these runs expectancies.) I only consider batting events where BAT_EVENT_FL == TRUE</p></li>
+<li><p>I create a character variable pseq (from the Retrosheet variable PITCH_SEQ_TX that shows the ball-strike sequence of the PA.</p></li>
+<li><p>Similar to what Max illustrated in Chapter 7 in our book, I created variables c01, c10, c02, c11, c20, c12, c21, c22, c31, c32 that indicate (1 or 0) if the PA had that particular pitch count. &nbsp;(I wrote a function that creates these variables for a single string and then used a do.call function with rbind to do this for all rows of the data frame. &nbsp;This is very slow – I’m sure there is a quicker way, such as the clever use of regular expressions.)</p></li>
+<li><p>Now that I have the Retrosheet data frame with these extra variables, I wrote a couple of functions. &nbsp;One function count_plot constructs a basic version of this graph for a specific player. &nbsp;A second function count_plot_e constructs the enhanced graph where the line weights indicate the percentage of PA’s in different counts.</p></li>
+</ul>
+</section>
+<section id="the-two-plotting-functions" class="level4" data-number="2.3.3">
+<h4 data-number="2.3.3" class="anchored" data-anchor-id="the-two-plotting-functions"><span class="header-section-number">2.3.3</span> The Two Plotting Functions</h4>
+<p>The two plotting functions can be found at my gist site. The two arguments of the function are the Retrosheet play by play data frame with the extra variables and the player’s name in quotes. By default, type = “p” indicates that a pitcher is assumed but you can graph a batter by saying type = “b”. The output is a data frame that displays the mean run values for all counts, and also the percentage of PA’s that were in that count.</p>
+<p>Here is the basic plot for Kershaw.</p>
+<pre><code>library(devtools)
+source_gist("d1c3e86ec09eb4895befd814de2699b5")
+(S &lt;- count_plot(d2015, "Clayton Kershaw"))
+
+   Count        Runs N.Pitches          P balls strikes
+   (chr)       (dbl)     (dbl)      (dbl) (dbl)   (dbl)
+1    0-0 -0.05717463         0 100.000000     0       0
+2    0-1 -0.09550390         1  54.382022     0       1
+3    0-2 -0.12880384         2  26.067416     0       2
+4    1-0 -0.03725227         1  32.134831     1       0
+5    1-1 -0.05994306         2  39.550562     1       1
+6    1-2 -0.11271738         3  34.044944     1       2
+7    2-0  0.00222083         2   8.988764     2       0
+8    2-1 -0.02141827         3  16.629213     2       1
+9    2-2 -0.11576039         4  23.707865     2       2
+10   3-0  0.10855735         3   2.471910     3       0
+11   3-1  0.14949875         4   5.955056     3       1
+12   3-2  0.03399738         5   8.988764     3       2</code></pre>
+<p><img src="figures/count_effects/count8.png" class="img-fluid" style="width:70.0%"></p>
+<p>Here is the enhanced plot where the line weight is proportional to the percentage of time that the PA is in that particular count.</p>
+<pre><code>S &lt;- count_plot_e(d2015, "Clayton Kershaw")</code></pre>
+<p><img src="figures/count_effects/count9.png" class="img-fluid" style="width:70.0%"></p>
+<p>This graph shows clearly that Kershaw is generally in a pitcher’s count since the lines to the 3-0 and 3-1 counts are relatively thin. Kershaw’s pitching success is partially due to the fact that he is generally ahead in the count.</p>
+</section>
+</section>
+<section id="a-shiny-app" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="a-shiny-app"><span class="header-section-number">2.4</span> A Shiny App</h3>
+<section id="introduction-3" class="level4" data-number="2.4.1">
+<h4 data-number="2.4.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">2.4.1</span> Introduction</h4>
+<p>Anyone who watches a baseball game knows the importance of the balls and strikes count in the duel between the pitcher and the hitter. The plate appearance begins with a 0-0 count. In the next pitch, an added strike gives an advantage to the pitcher; likewise an added ball gives an advantage to the hitter. A hitter has a big advantage on a 3-0 count – as an example, Rhys Hoskins hit a key home run off of Yu Darvish on a 3-0 count in the final game of the recent NL Championship Series. One can quantify the advantage of a particular balls-strikes count by the use of various measures. Recently Tom Tango on Twitter displayed a graph that shows the advantage of particular balls-strikes counts for different hitting measures. Here is the portion of the display for the wOBA measure.</p>
+<p><img src="figures/count_effects/count43.png" class="img-fluid" style="width:40.0%"></p>
+<p>Tom indicated that this shows, given the count (columns indicate the ball count and rows the strike count), how the plate appearance ends. Each added ball increases the batter’s wOBA and each strike decreases it.</p>
+<p>This figure is a common way to display balls-strikes effects – in fact, we illustrated the construction of this type of table-figure in Chapter 6 in Analyzing Baseball Data with R. But I think it is hard for a reader to quickly decipher the balls-strikes patterns by this tabular display. In this post, I’ll present an alternative graph of these data which perhaps better (or quicker) communicates what is gained or lost in particular balls-strikes counts. People familiar with this blog have seen similar flavors of these graphs to display different ball-strikes effects.</p>
+</section>
+<section id="the-data" class="level4" data-number="2.4.2">
+<h4 data-number="2.4.2" class="anchored" data-anchor-id="the-data"><span class="header-section-number">2.4.2</span> The Data</h4>
+<p>I start with the Retrosheet play-by-play data for the 2021 season. The Retrosheet file contains the variable <code>PITCH_SEQ_TX</code> which gives the sequence of balls and strikes (and other outcomes) during a plate appearance. I am interested in two types of count variables:</p>
+<p>I define indicator (TRUE/FALSE) variables <code>c01</code>, <code>c10</code>, <code>c11</code>, …, <code>c32</code> that indicate if particular counts, like 0-1, 1-0, 1-1, … occur during the plate appearance. There are 12 different indicator variables including the variable c00 at the start of the PA. I call these “passing through” counts – if for example, passing through count 1-2 means that there was at least one 1-2 count in the specific PA.</p>
+<p>I record the final count at the end of the plate appearance. For example, for a strikeout, the final count might be 0-2, 1-2, 2-2, or 3-2. There are 12 possible final counts including 0-0.</p>
+<p>Next, I compute different measures for each of the possible passing through counts and for each of the final counts. Each of the rates are expressed in terms of percentages. Specifically, I compute</p>
+<ul>
+<li><p>(HR) the home run rate 100 x HR / PA</p></li>
+<li><p>(SO) the strikeout rate 100 x SO / PA</p></li>
+<li><p>(BB_HBP) the walk or hit by pitch rate 100 x (BB + HBP) / PA</p></li>
+<li><p>(IP_H) the hit rate on balls in play 100 x H / IP</p></li>
+<li><p>(IP_O) the out rate on balls in play 100 x Outs / IP</p></li>
+<li><p>(wOBA) the wOBA measure using the Fangraphs weights for the 2021 season</p></li>
+<li><p>(1B) the singles rate 100 x IB / PA</p></li>
+<li><p>(XB) the extra-base rate 100 x (2B + 3B + HR) / PA</p></li>
+</ul>
+</section>
+<section id="two-displays" class="level4" data-number="2.4.3">
+<h4 data-number="2.4.3" class="anchored" data-anchor-id="two-displays"><span class="header-section-number">2.4.3</span> Two Displays</h4>
+<p>Using the <code>ggplot2</code> package, here is a tabular display of the SO rates for the different passing through counts similar to Tom’s display. I color the point regions by the rate value – a white color corresponds to an average SO rate value.</p>
+<p><img src="figures/count_effects/count44.png" class="img-fluid" style="width:70.0%"></p>
+<p>As an alternative, here is my “points display” of the same data. I am plotting the strikeout rate as a function of the pitch number where the label of the point is the count value. This graph dramatically shows the increase in rate for each added strike. Also the rate increase is larger for a change from 1 to 2 strikes than it is for a change from 0 to 1 strikes. I connect the points with lines since many of these counts occur during the same plate appearance. I think this is a better display than the tabular one since one does not need to read the actual digits of the rates in the points display.</p>
+<p><img src="figures/count_effects/count45.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="final-count-displays" class="level4" data-number="2.4.4">
+<h4 data-number="2.4.4" class="anchored" data-anchor-id="final-count-displays"><span class="header-section-number">2.4.4</span> Final Count Displays</h4>
+<p>One also might be interested in the final count for particular batting outcomes. Here is a points display of the SO rates for final counts. Obviously the final count for a strikeout must be two strikes, so many of these strikeout rates are zero. It is interesting the strikeout rate drops substantially when the final count moves to 3-2 compared to a count of 2-2. Here I don’t connect points since different final counts correspond to different plate appearances.</p>
+<p><img src="figures/count_effects/count46.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="a-shiny-app-1" class="level4" data-number="2.4.5">
+<h4 data-number="2.4.5" class="anchored" data-anchor-id="a-shiny-app-1"><span class="header-section-number">2.4.5</span> A Shiny App</h4>
+<p>One can easily check out these different displays by a Shiny app. Currently, this app is live at</p>
+<p>https://bayesball.shinyapps.io/MLB_Count_Effects/</p>
+<p><img src="figures/count_effects/count47.png" class="img-fluid" style="width:70.0%"></p>
+<p>One selects the type of count (either passing through or final) and the measure of interest among the eight listed. There are two tabs – the <strong>Tabular Display</strong> tab shows the tabular graph and the <strong>Points Display</strong> tab displays the rates plotted against the pitch number. The <strong>Download</strong> Data button will download a data frame of counts and rates for both count types and all of the measures.</p>
+</section>
+<section id="got-code" class="level4" data-number="2.4.6">
+<h4 data-number="2.4.6" class="anchored" data-anchor-id="got-code"><span class="header-section-number">2.4.6</span> Got Code?</h4>
+<p>This Shiny app is available as the function <code>BallsStrikesEffects()</code> in my <code>ShinyBaseball</code> package. You don’t need to install the package – the single file app.R found here contains the complete code for the app. There are two plotting functions – <code>construct_plot()</code> and <code>construct_plot2()</code> contain the code for constructing the tabular and points displays described in this post. The user interface component of this app is relatively short – one can use this as a template in the development of another Shiny app.</p>
+</section>
+<section id="try-the-app-out" class="level4" data-number="2.4.7">
+<h4 data-number="2.4.7" class="anchored" data-anchor-id="try-the-app-out"><span class="header-section-number">2.4.7</span> Try the App Out</h4>
+<p>Actually, I think both the tabular and points displays are useful. The points display is better for seeing quickly the balls-strikes pattern and the tabular display actually is better for picking up the actual rate values. By playing with the live Shiny app at https://bayesball.shinyapps.io/MLB_Count_Effects/, I think one can learn a lot about the importance of the balls-strikes count in MLB baseball.</p>
+</section>
+</section>
+<section id="count-effects-from-statcast-data" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="count-effects-from-statcast-data"><span class="header-section-number">2.5</span> Count Effects from Statcast Data</h3>
+<section id="introduction-4" class="level4" data-number="2.5.1">
+<h4 data-number="2.5.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">2.5.1</span> Introduction</h4>
+<p>Last week, I received the following comment on my blog:</p>
+<p>In chapter 1, you guys state that “In 2011, hitters compiled a .253 batting average on plate appearances where they fell behind 0-2. Conversely they hit .479 after going ahead 2-0.” I’m trying to replicate those numbers and even using the pbp11rc.csv file, I can’t even come close. Instead of batter average, did you mean OBP?</p>
+<p>First, this must be a typo – I can’t imagine that hitters have a AVG of .479 after going ahead 2-0 (this must have been written by my coauthor Max!).&nbsp; All kidding aside, this made me reflect on how we computed these AVG that pass through different counts.&nbsp; In our book we used Retrosheet play-by-play where the pitch sequence is recorded as a string constant.&nbsp; Given the new Statcast data, these type of count effects are more easily found since each observation in the Statcast data is a pitch rather than a plate appearance.&nbsp; Anyway, I thought it would be worthwhile to explain the nuts and bolts on finding count effects using the 2017 Statcast data.&nbsp; Then I’ll show you some graphs and insight on count effects</p>
+</section>
+<section id="load-some-packages-and-the-statcast-data" class="level4" data-number="2.5.2">
+<h4 data-number="2.5.2" class="anchored" data-anchor-id="load-some-packages-and-the-statcast-data"><span class="header-section-number">2.5.2</span> Load some packages and the Statcast data</h4>
+<p>We begin by loading in the <code>tidyverse</code> and <code>stringr</code> packages and the Statcast data from the 2017 season.</p>
+<pre><code>library(tidyverse)
+library(stringr)
+sc &lt;- read_csv("statcast2017.csv")</code></pre>
+</section>
+<section id="define-some-new-variables" class="level4" data-number="2.5.3">
+<h4 data-number="2.5.3" class="anchored" data-anchor-id="define-some-new-variables"><span class="header-section-number">2.5.3</span> Define some new variables</h4>
+<p>I create a unique identifier <code>pa_id</code> for each plate appearance. I create a variable <code>count</code> that is the balls-strikes count, and create indicator variables <code>H</code> and <code>O</code> that indicate if a hit or out occurred during the PA. I sort the PAs and pitch values and store the new data frame into the variable <code>sc</code>.</p>
+<pre><code>sc %&gt;%
+  mutate(pa_id = paste(game_date, away_team,
+                home_team, at_bat_number),
+         count = paste(balls, strikes,
+                            sep="-"),
+         H = ifelse(events %in%
+                c("single", "double", "triple",
+                  "home_run"), 1, 0),
+         O = ifelse(events %in%
+                c("double_play", "field_error",
+                  "field_out", "fielders_choice_out",
+                  "force_out", "grounded_into_double_play",
+                  "other_out", "strikeout",
+                  "strikeout_double_play", "triple_play"),
+                           1, 0))  %&gt;%
+  arrange(pa_id, pitch_number) -&gt; sc</code></pre>
+</section>
+<section id="create-specific-count-indicators" class="level4" data-number="2.5.4">
+<h4 data-number="2.5.4" class="anchored" data-anchor-id="create-specific-count-indicators"><span class="header-section-number">2.5.4</span> Create specific count indicators</h4>
+<p>Next I use the <code>group_by()</code> function to divide the data into individual PAs and use the variables <code>c02</code>, <code>c20</code>, etc. to indicate if 0-2, 2-0, etc. counts occurred during the plate appearance. Also the variables <code>Hit</code>, <code>Out</code>, <code>HR</code>, <code>SO</code> indicate if a hit, out, home run, or strikeout occurred during the PA.</p>
+<pre><code>sc %&gt;%
+  group_by(pa_id) %&gt;%
+  summarize(c02 = ifelse("0-2" %in% count,
+                         TRUE, FALSE),
+            c20 = ifelse("2-0" %in% count,
+                         TRUE, FALSE),
+            c01 = ifelse("0-1" %in% count,
+                         TRUE, FALSE),
+            c10 = ifelse("1-0" %in% count,
+                         TRUE, FALSE),
+            c21 = ifelse("2-1" %in% count,
+                   TRUE, FALSE),
+            c11 = ifelse("1-1" %in% count,
+                   TRUE, FALSE),
+            c12 = ifelse("1-2" %in% count,
+                   TRUE, FALSE),
+            c22 = ifelse("2-2" %in% count,
+                   TRUE, FALSE),
+            c31 = ifelse("3-1" %in% count,
+                         TRUE, FALSE),
+            c32 = ifelse("3-2" %in% count,
+                         TRUE, FALSE),
+            c30 = ifelse("3-0" %in% count,
+                         TRUE, FALSE),
+            Hit = ifelse(1 %in% H, 1, 0),
+            Out = ifelse(1 %in% O, 1, 0),
+            HR = ifelse("home_run" %in% events,
+               1, 0),
+            SO = ifelse("strikeout" %in% events,
+               1, 0)) -&gt; S</code></pre>
+</section>
+<section id="compute-the-count-effects" class="level4" data-number="2.5.5">
+<h4 data-number="2.5.5" class="anchored" data-anchor-id="compute-the-count-effects"><span class="header-section-number">2.5.5</span> Compute the count effects</h4>
+<p>Next I write a short function <code>count_effect()</code> that takes as input the specific count (like 1-2) and finds the home run rate, AVG, BABIP, home run rate on balls in play, and strikeout rate for all PAs that pass through that specific count.</p>
+<pre><code>count_effect %&gt;%
+    summarize(N = n(),
+           HR_Rate = sum(HR) / (sum(Hit) + sum(Out)),
+           AVG = sum(Hit) / (sum(Hit) + sum(Out)),
+           BABIP = sum(Hit) / (sum(Hit) + sum(Out) -
+                                 sum(SO)),
+           HR_BIP = sum(HR) / (sum(Hit) + sum(Out) -
+                                 sum(SO)),
+           SO_Rate = sum(SO) / (sum(Hit) + sum(Out)))
+}</code></pre>
+</section>
+<section id="map-the-function-over-all-counts" class="level4" data-number="2.5.6">
+<h4 data-number="2.5.6" class="anchored" data-anchor-id="map-the-function-over-all-counts"><span class="header-section-number">2.5.6</span> Map the function over all counts</h4>
+<p>I apply the <code>map_df()</code> function to apply this <code>count_effect()</code> function over all of the possible counts – the output (displayed) is a data frame with all of the count effects.</p>
+<pre><code>all_counts %
+  mutate(Count = all_counts,
+  N.pitches = c(1, 1, 2, 2, 2, 3, 3, 4, 4, 5)) -&gt; df
+df
+       N HR_Rate   AVG BABIP HR_BIP SO_Rate Count N.pitches
+
+ 1 74207  0.0441 0.272 0.345 0.0558   0.210 1-0          1.
+ 2 92998  0.0291 0.224 0.330 0.0427   0.319 0-1          1.
+ 3 26247  0.0517 0.289 0.355 0.0634   0.185 2-0          2.
+ 4 74940  0.0342 0.238 0.337 0.0486   0.295 1-1          2.
+ 5 37921  0.0188 0.166 0.322 0.0364   0.484 0-2          2.
+ 6 39196  0.0410 0.256 0.347 0.0556   0.262 2-1          3.
+ 7 54394  0.0224 0.176 0.324 0.0411   0.457 1-2          3.
+ 8 16533  0.0483 0.277 0.354 0.0617   0.217 3-1          4.
+ 9 44910  0.0270 0.195 0.338 0.0467   0.422 2-2          4.
+10 26081  0.0339 0.219 0.346 0.0535   0.367 3-2          5.</code></pre>
+</section>
+<section id="batting-averages-passing-through-all-counts" class="level4" data-number="2.5.7">
+<h4 data-number="2.5.7" class="anchored" data-anchor-id="batting-averages-passing-through-all-counts"><span class="header-section-number">2.5.7</span> Batting averages passing through all counts</h4>
+<p>Based on this table, I’ll illustrate several plots. Here I plot the mean AVG of PAs that pass through each count with at least one ball or strike recorded.&nbsp; The red line corresponds to the mean AVG for the 2017 season.</p>
+<p><img src="figures/count_effects/count35.png" class="img-fluid" style="width:50.0%"></p>
+<p>If you divide the points in the graph by the number of strikes, I see three lines with about the same slope (see below).&nbsp; Doing some quick calculation, we can conclude that for a fixed number of strikes, adding a ball to the count will increase the AVG by 17-18 points.</p>
+<p><img src="figures/count_effects/count36.png" class="img-fluid" style="width:50.0%"></p>
+</section>
+<section id="in-play-home-run-rates" class="level4" data-number="2.5.8">
+<h4 data-number="2.5.8" class="anchored" data-anchor-id="in-play-home-run-rates"><span class="header-section-number">2.5.8</span> In-play home run rates</h4>
+<p>Here I graph the home run rate on balls in play that pass through the different counts.&nbsp; Again, I see three parallel lines and I find the slope of each line.&nbsp; Here for a fixed number of strikes, adding a ball to the count raises the HR BIP rate by about 0.007.</p>
+<p><img src="figures/count_effects/count37.png" class="img-fluid" style="width:50.0%"></p>
+</section>
+<section id="epilogue" class="level4" data-number="2.5.9">
+<h4 data-number="2.5.9" class="anchored" data-anchor-id="epilogue"><span class="header-section-number">2.5.9</span> Epilogue</h4>
+<p>If the R code on this page gets garbled, then you can find in on my GithubGist page. I include the code I used for constructing the graphs. Also I provide a link where you can download the Statcast data from my website.</p>
+<ul>
+<li><p>Most batting measures are strongly affected by the count – this provides a concrete illustration of what it means to be a pitcher’s count or a batter’s count.</p></li>
+<li><p>Here I am focusing on PA events that pass through every possible count.&nbsp; In other studies, you may be interested in the specific count on the pitch that is put into play.&nbsp; For example, if you were exploring count effects in exit velocities, you would look at the count on the pitches put in play.&nbsp; Batters tend to hit 3-0 pitches much harder than the 0-2 pitches.</p></li>
+<li><p>Next week, I’ll explore simple ways of answering “What is the optimal launch angle to get a base hit?”</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="pitch-count-transitions" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="pitch-count-transitions"><span class="header-section-number">3</span> Pitch Count Transitions</h2>
+<section id="graph" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="graph"><span class="header-section-number">3.1</span> Graph</h3>
+<p>In recent posts, we considered the value of plate appearances that passed through specific counts. For example, PA’s that pass through a 0-2 count are clearly worse (from an average runs perspective) than a 2-0 count. Here we look at the transitions between pitch counts and illustrate the use of a R package to graph the probabilities of different transitions.</p>
+<p>A useful way of modeling these transitions is by a Markov Chain. A plate appearance starts with a 0-0 count and there are 11 possible pitch counts (0-1, 1-0, 0-2, 1-1, 2-0, 1-2, 2-1, 3-0, 2-2, 3-1, 3-2) and we’ll call the end of the plate appearance (a walk, strikeout, or a ball put in play) as the “final state”. We call these possible pitch counts (including the 0-0 count) and the end of the PA the “states” and the Markov Chain describes the probabilities of moving among these states in each pitch. (One basic assumption of a Markov Chain is the probability of moving to a new state just depends on the current state and this history of the movement to the current state is not relevant.) Using the 2015 Retrosheet data, we can estimate these “transition probabilities” pretty accurately.</p>
+<p>Here is the 13 x 13 matrix that gives these transition probabilities. Starting at the 0-0 count, the first row says that the after one pitch, the new state will be either 0-1, 1-0, or X (in play) with respective probabilities .50, .39, and .11. In contrast, if the current state is 3-2, then the new state (after one pitch) will be 3-2 and X (in play, SO, or BB) with probabilities .29 and .71.</p>
+<pre><code>    0-0 0-1  1-0  0-2  1-1  2-0  1-2  2-1  3-0  2-2  3-1  3-2    X
+0-0   0 0.5 0.39 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.11
+0-1   0 0.0 0.00 0.41 0.41 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.18
+1-0   0 0.0 0.00 0.00 0.48 0.34 0.00 0.00 0.00 0.00 0.00 0.00 0.17
+0-2   0 0.0 0.00 0.19 0.00 0.00 0.45 0.00 0.00 0.00 0.00 0.00 0.37
+1-1   0 0.0 0.00 0.00 0.00 0.00 0.44 0.34 0.00 0.00 0.00 0.00 0.22
+2-0   0 0.0 0.00 0.00 0.00 0.00 0.00 0.49 0.33 0.00 0.00 0.00 0.18
+1-2   0 0.0 0.00 0.00 0.00 0.00 0.21 0.00 0.00 0.37 0.00 0.00 0.42
+2-1   0 0.0 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.46 0.28 0.00 0.25
+3-0   0 0.0 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.56 0.00 0.44
+2-2   0 0.0 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.25 0.00 0.29 0.46
+3-1   0 0.0 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.47 0.53
+3-2   0 0.0 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.29 0.71
+X     0 0.0 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 1.00</code></pre>
+<p>I recently discovered a package <code>markovchain</code> that is dedicated to manipulations and plots of discrete Markov chains. I have not looked at this package carefully, but given this transition probability matrix, one can create a Markov Chain object and the plot method constructs an attractive graphical display of these probabilities.</p>
+<p>Here is the graph for our pitch count Markov Chain.</p>
+<p><img src="figures/count_effects/count10.png" class="img-fluid" style="width:70.0%"></p>
+<p>To make sense of this plot …</p>
+<ul>
+<li>A batter starts in the lower left part of the graph (at 0-0) and moves through pitch counts with more balls and strikes.</li>
+<li>At any count, it is possible to move to the X state (end of the PA) which is represented by the circle in the middle of the display.</li>
+<li>For early pitch counts, there are three movements – add another strike, add another ball or in-play – and they have respective probabilities given by the numbers along the paths.</li>
+<li>For counts with two strikes, note that there positive probabilities of remaining at the same count.</li>
+<li>It is interesting to how the probability of adding a strike to the count depends on the current count. &nbsp;Likewise, the probability of adding a ball to the count changes depending on the current count.</li>
+</ul>
+<p>There are likely improvements to this display, but it seems more effective than the table in displaying the transition probabilities.</p>
+<p>The <code>markovchain</code> package simplifies some Markov Chain calculations. For example, to find the probabilities of being in different states after two pitches, one constructs an initial probability vector that says that one begins in a 0-0 count, and then multiplies this initial probability vector (saved in initialState ) by the transition probability matrix (saved in dmc ) twice.</p>
+<pre><code>initialState &lt;- c(1, rep(0, 12))
+round(initialState * dmc ^ 2, 2)
+     0-0 0-1 1-0 0-2  1-1  2-0 1-2 2-1 3-0 2-2 3-1 3-2    X
+[1,]   0   0   0 0.2 0.39 0.13   0   0   0   0   0   0 0.27</code></pre>
+<p>We see that it is most likely (after 2 pitches) to be in a 1-1 count, and there is a 27% chance after two pitches that the PA is over.</p>
+<p>After five pitches, we see below that there is a 81% chance that the PA is over, and a 9% chance there we are in a 3-2 count.</p>
+<pre><code>round(initialState * dmc ^ 5, 2)
+     0-0 0-1 1-0 0-2 1-1 2-0  1-2 2-1 3-0  2-2 3-1  3-2    X
+[1,]   0   0   0   0   0   0 0.02   0   0 0.07   0 0.09 0.81</code></pre>
+<p>I’ll look at this package more and may post more interesting illustrations in future posts.</p>
+</section>
+<section id="clayton-kershaw" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="clayton-kershaw"><span class="header-section-number">3.2</span> Clayton Kershaw</h3>
+<p>There has been a lot of talk (at least on last night’s ESPN broadcast of the Mets/Dodgers game) about Clayton Kershaw’s remarkable ratio of strikeouts to walks. Following up my recent post on modeling pitch-count transitions by a Markov Chain, I thought I’d look more closely at Kershaw’s pitch-count transitions, and specifically the frequency of different pitch counts. This will explain, in part, why he has so many strikeouts and so few walks.</p>
+<p>A useful representation of movement of pitch counts is a Markov Chain. There are 13 possible states (the 12 possible pitch counts and the “end of PA” state) and one moves between the different states according to specify probabilities. We represent the probabilities by a transition matrix. Here is Kershaw’s transition matrix using 2015 season data.</p>
+<pre><code>    0-0  0-1  1-0  0-2  1-1  2-0  1-2  2-1  3-0  2-2  3-1  3-2    X
+0-0   0 0.54 0.32 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.13
+0-1   0 0.00 0.00 0.48 0.39 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.13
+1-0   0 0.00 0.00 0.00 0.57 0.28 0.00 0.00 0.00 0.00 0.00 0.00 0.15
+0-2   0 0.00 0.00 0.17 0.00 0.00 0.45 0.00 0.00 0.00 0.00 0.00 0.38
+1-1   0 0.00 0.00 0.00 0.00 0.00 0.50 0.31 0.00 0.00 0.00 0.00 0.19
+2-0   0 0.00 0.00 0.00 0.00 0.00 0.00 0.50 0.28 0.00 0.00 0.00 0.22
+1-2   0 0.00 0.00 0.00 0.00 0.00 0.20 0.00 0.00 0.34 0.00 0.00 0.46
+2-1   0 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.55 0.26 0.00 0.19
+3-0   0 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.68 0.00 0.32
+2-2   0 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.24 0.00 0.21 0.55
+3-1   0 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.42 0.58
+3-2   0 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.38 0.62
+X     0 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 1.00</code></pre>
+<p>This tells us, for example, that Kershaw moves from a 0-0 count to a 0-1 count with probability 0.54, he moves from a 0-1 count to a 0-2 count with probability 0.48, and so on.</p>
+<p>Once we have represented the pitch count movement this way, there are a number of convenient calculations that one can make. Specifically, suppose one is interested in the average length of a Kershaw plate appearance, and specifically how long (on average) one stays in specific counts.</p>
+<p>Let <span class="math inline">\(Q\)</span> denote the transition probabilities for the non-absorbing states (that is, all pitch counts excluding the end of PA state). Then one can compute the average lengths of stay by the calculation</p>
+<p><span class="math inline">\(E = (I - Q)^{-1}\)</span></p>
+<p>where <span class="math inline">\(I\)</span> is the identity matrix and (-1) is the matrix inverse. If we look at the first row of the matrix <span class="math inline">\(E\)</span>, we’ll see the average number of times that a Kershaw batter is in each pitch count. (By the way, I’ve confirmed that the estimate of the average length of a PA using this Markov Chain model is close to the actual length of PA.)</p>
+<pre><code>   Count   Expected
+1    0-1 0.54382022
+2    1-0 0.32134831
+3    0-2 0.31348315
+4    1-1 0.39550562
+5    2-0 0.08988764
+6    1-2 0.42359551
+7    2-1 0.16629213
+8    3-0 0.02471910
+9    2-2 0.31011236
+10   3-1 0.05955056
+11   3-2 0.14494382</code></pre>
+<p>On average, a Kershaw batter will see a “0-1” count .54 times – .54 is the probability of moving from 0-0 to 0-1 counts. It is interesting that the average number of 0-2 visits is .34 and the average number of visits to 3-0 is only .025.</p>
+<p>To understand if these lengths of stay numbers are distinctive, I repeated the above calculations for all 2015 starters with at last 30 starts. The graph below plots the average number of stays in each possible count and shows Kershaw’s values with red dots.</p>
+<p><img src="figures/count_effects/count11.png" class="img-fluid" style="width:70.0%"></p>
+<p>Looking at this graph, it is pretty clear that Kershaw tends to stay in pitcher counts. Among these 2015 starters,</p>
+<p>He’s above-average in getting a strike on the first pitch. He’s remarkably good in achieving 0-2 and 1-2 counts. He’s below-average in visiting the so-called batter counts of 2-0, 3-0, 2-1, etc.</p>
+<p>A pitcher with these pitch count tendencies will be very successful which is reflected in his current 105 strikeouts and 5 walks.</p>
+<p>Late addition: Daniel was interested in seeing the R code to perform these calculations. You first need to obtain the Retrosheet play-by-play data for the 2015 season. Then you can use the R script on my gist site.</p>
+</section>
+<section id="a-historical-look" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="a-historical-look"><span class="header-section-number">3.3</span> A Historical Look</h3>
+<section id="introduction-5" class="level4" data-number="3.3.1">
+<h4 data-number="3.3.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">3.3.1</span> Introduction</h4>
+<p>MLB baseball games are getting longer and one contributing factor is the increasing length of plate appearances measured by the number of pitches. It seems that “plate discipline” is becoming an important attribute of a hitter – for example it is currently rare for a hitter to swing at the first or second pitch. A plate appearance consists of movements or transitions between the various counts (0-0, 1-0, 0-1, 1-1, 2-0, etc.) and one can understand the dynamics of a plate appearance by the probabilities of these count transitions. In this post, we’ll use Retrosheet play-by-play data to compute these transition probabilities and see how these probabilities have changed in the last 20 seasons of baseball. This work motivates the consideration of two new pitch metrics that we’ll use to compare pitchers for the 2019 season.</p>
+</section>
+<section id="graph-of-the-transition-probabilities" class="level4" data-number="3.3.2">
+<h4 data-number="3.3.2" class="anchored" data-anchor-id="graph-of-the-transition-probabilities"><span class="header-section-number">3.3.2</span> Graph of the Transition Probabilities</h4>
+<p>In a plate appearance, one starts with a 0-0 count and moves through the various counts until there is a strikeout, a walk/hit-by-pitch, or a ball put into play. We’ll lump all of these outcomes into a state called “end of PA”. Including the beginning (0-0) and end states, there are 13 different states of a plate appearance.</p>
+<p>Using data from the 2020 season, here is a graph of these transition probabilities. The 12 possible counts (0-0, 1-0, 0-1, etc) are represented by red solid squares and the connecting lines represent transitions between the counts. We use brown lines to represent transitions where one ball is added to the count, and green lines represent transitions where one strike is added to the count. The red numbers along the lines give the probabilities of these transitions and the bold blue numbers give probabilities of a “end of PA” event. To help understand this graph, look at the 1-1 count. We see there is a 0.36 probability of moving to a 2-1 count, a 0.45 probability of moving to a 1-2 count, and a 0.2 probability of ending the PA with a ball in play. On two-strike counts, the red number above the square represents the probability of a foul and remaining at the same two-strike count.</p>
+<p><img src="figures/count_effects/count30.png" class="img-fluid" style="width:70.0%"></p>
+<p>Here are some interesting comments from examining this graph.</p>
+<ul>
+<li><p>From most counts, it is more likely to have an added strike than an added ball.</p></li>
+<li><p>It is unlikely for the count to end at one pitch, two pitches, and three pitches.</p></li>
+<li><p>Even at a 3-2 count, there is a good chance (probability of 0.27) of remaining at 3-2 and only a 0.73 probability of ending the PA on that pitch.</p></li>
+</ul>
+<p>How have these transition probabilities changed, say in the last 20 years. Here is a graph of the transition probabilities for the 2000 season.</p>
+<p><img src="figures/count_effects/count31.png" class="img-fluid" style="width:70.0%"></p>
+<p>Comparing the 2000 and 2020 season transition probabilities, there are a couple of things to notice. First, the chance of an additional strike for zero and one-strike counts is greater in 2020. For example, on a 1-1 count, the probability of an added strike is 0.45 in 2020 compared with a probability of 0.40 for the 2000 season. Another general observation is that, for the zero and one-strike counts, the probability of a ball in-play has dropped in the 20 seasons. For example, for a 1-1 count, the probability of in-play is 0.2 in 2020 compared to 0.22 in 2000.</p>
+</section>
+<section id="a-historical-look-1" class="level4" data-number="3.3.3">
+<h4 data-number="3.3.3" class="anchored" data-anchor-id="a-historical-look-1"><span class="header-section-number">3.3.3</span> A Historical Look</h4>
+<p>There are two primary takeaways from our comparison of the 2000 and 2020 seasons. First, the probability of an added strike on a 0 or 1 strike count has increased in 2020, and the probability of ending the PA has decreased in 2020 for 0 or 1 strike counts. To see if there is a general pattern, we used the Retrosheet files to find all of the transition probabilities for the seasons from 2001 through 2020. Since we are focusing on changes, we compute for all counts two metrics: (1) the change in the probability of an added strike since the 2001 season and (2) the change in the probability of an “end of PA” since 2001.</p>
+<p>We plot the change in added strike against the season below for all 0 and 1 strike counts and use loess smoothing curves to see the general pattern. We see that the Probability of an Added Strike has steadily increased for all starting 0 and 1 strike counts over this 20 year period. The greatest changes in the probability of an added strike seem to occur for the three-ball counts. For example, on a 3-1 count, the probability of an added strike has increased by 0.06 over this twenty-season period.</p>
+<p><img src="figures/count_effects/count32.png" class="img-fluid" style="width:70.0%"></p>
+<p>Here is a similar graph that plots the change (since 2001) in the Probability of a “End of PA” for all starting counts. For zero or one strike counts, the probability of an end of PA event has been steadily decreasing. For example, the chance of an end of PA event for a starting 3-1 count has decreased by over 0.05. For two-strike counts (0-2, 1-2, 2-2, 3-2), there has been little change in the probability of an ending PA event.</p>
+<p><img src="figures/count_effects/count33.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="pitch-transitions-for-individual-pitchers" class="level4" data-number="3.3.4">
+<h4 data-number="3.3.4" class="anchored" data-anchor-id="pitch-transitions-for-individual-pitchers"><span class="header-section-number">3.3.4</span> Pitch Transitions for Individual Pitchers</h4>
+<p>We are very familiar with the strikeout leaders in baseball. Motivated by the count transition work, it might be interesting to look for pitchers who are extreme with respect to two transition metrics:</p>
+<ul>
+<li><p>Added Strike Rate = the probability of an added strike on a count with 0 or 1 strikes. (Notice by excluding an initial two strike count, this probability does not include the added strike producing a strikeout.)</p></li>
+<li><p>In Play Rate = the probability of a ball in play on a count with 0 or 1 strikes</p></li>
+</ul>
+<p>Below I have constructed a scatterplot of these two metrics for all pitchers who have thrown at least 2000 pitches in the 2019 season. As one might anticipate, the two metrics have a negative association – a high added-strike rate is generally associated with a low in-play rate. I’ve identified pitchers (CP, Jd, GC, JV, MS) who are best in getting an additional strike – I would suspect that the interested reader would be able to identify these pitchers from the initials. I would anticipate that these best added-strike pitchers are also the best in strikeout rates. The pitchers who are low on the added strike rate are less familiar – they are Antonio Senzatela (AS), Dakota Hudson (DH), and Brett Anderson (BA).</p>
+<p><img src="figures/count_effects/count34.png" class="img-fluid" style="width:70.0%"></p>
+<p>(By the way, if you are still wondering about the identities of the high added-strike pitchers, they are Gerrit Cole, Jacob deGrom, Chris Paddack, Max Scherzer and Justin Verlander.)</p>
+</section>
+<section id="related-posts-on-count-patterns" class="level4" data-number="3.3.5">
+<h4 data-number="3.3.5" class="anchored" data-anchor-id="related-posts-on-count-patterns"><span class="header-section-number">3.3.5</span> Related Posts on Count Patterns</h4>
+<p>The count is an important aspect of a modern baseball game. Over the years, I’ve written different posts focusing on various aspects of count patterns within a plate appearance.</p>
+<ul>
+<li><p><strong>Graph of Pitch Count Transitions.</strong> Here I show how one can model these count transitions by use of a Markov Chain.</p></li>
+<li><p><strong>Number of Pitches in a PA.</strong> Here I explore the runs benefit from a batter’s perspective of lengthening the plate appearance.</p></li>
+<li><p><strong>Sequences of Pitch Counts</strong> Here I dive into the R code for computing these count transitions from Retrosheet data.</p></li>
+<li><p><strong>2018 Retrosheet Data and Length of a PA.</strong> Here I explore the hitter advantage when he puts a ball in play for different counts and different lengths of plate appearances.</p></li>
+</ul>
+</section>
+<section id="r-package" class="level4" data-number="3.3.6">
+<h4 data-number="3.3.6" class="anchored" data-anchor-id="r-package"><span class="header-section-number">3.3.6</span> R Package</h4>
+<p>I am working on a R package <code>PitchSequences</code> on my Github site where I have collected my functions for working with pitch sequences. Given a Retrosheet play-by-play data frame, one can compute all of the count transition probabilities and produce the transition graph above by use of the function <code>transition_work()</code>.</p>
+</section>
+</section>
+</section>
+<section id="in-play-count-effects" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="in-play-count-effects"><span class="header-section-number">4</span> In-Play Count Effects</h2>
+<section id="baseball-and-tennis" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="baseball-and-tennis"><span class="header-section-number">4.1</span> Baseball and Tennis</h3>
+<p>Although I do statistical work in baseball, I have been playing tennis for 50+ years, and I believe there are great opportunities for interesting work in tennis. (Compared with baseball, there is remarkably little statistics research in tennis.) Recently I became aware of point-by-point data available for all singles matches in the last 15 Grand Slams on Jeff Sackman’s GitHub site. This is great data which should motivate me to write my first tennis paper.</p>
+<p>It occurred to me that an individual game of tennis has much in common with a plate appearance in baseball. Let me explain the connection, focusing on the effects due to the point score (tennis) and the pitch count (baseball), and then conclude by using R to demonstrate the pitch count effects for balls put in play.</p>
+<ul>
+<li>[TENNIS] A single “game” of tennis consists of a series of points between a server and a receiver, and the server has the advantage – he/she has approximately a 60% chance of winning a point (and a 74% chance of winning the game).</li>
+<li>[BASEBALL] A plate appearance is a series of pitches between a pitcher and a batter, and the pitcher has the upper hand – 68% of the PA’s are “won” by the pitcher since 68% of the run values are negative.</li>
+<li>[TENNIS] A game wins if one player has won four points, provided that the winner has at least a 2-point lead. It is possible (with one or more deuce points) that the game last for many points.</li>
+<li>[BASEBALL] A PA ends with one or more pitches. Like a game of tennis, a PA may last many pitches with repeated foul balls.</li>
+<li>[TENNIS] There is momentum in tennis. Using data from one of the Slams, I find that the probability the server wins the first point (at 0-0) is about 61%. If the server wins two points (new score 30-0), the probability he/she wins the next point increases to 64%; if he wins the first three points (score 40-0), the probability the server wins the point is 67%.</li>
+<li>[BASEBALL] Similarly, in baseball there are pitcher counts and hitter counts, and the outcome of a pitch put in-play depends on the count.</li>
+</ul>
+<p>In Chapter 7 of Analyzing Baseball Data with R, Max discusses the outcomes of PA’s that pass through particular counts. This work was not trivial since it required the use of regular expressions on the pitch sequence variable in the Retrosheet play-by-play dataset. Here I’ll summarize the R work to obtain the pitch-count effects of balls put into play.</p>
+<p>First I download the Retrosheet play-by-play for the 2014 season. See this post for details. For all plays, compute the run values – I have a function <code>compute.runs.expectancy()</code> which does this. I focus on only the batting plays and create a pitch count variable and a variable <code>N.Balls.Strikes</code> that records the sum of balls and strikes in the pitch count.</p>
+<pre><code>pbp.bat &lt;- subset(pbp, BAT_EVENT_FL==TRUE)
+pbp.bat$The.Count &lt;- with(pbp.bat,
+            paste(BALLS_CT, "-", STRIKES_CT, sep=""))
+library(dplyr)
+pbp.bat &lt;- mutate(pbp.bat, N.Balls.Strikes = BALLS_CT + STRIKES_CT)</code></pre>
+<p>Using the <code>summarize()</code> function in the <code>dpylr</code> package, for only the pitches put in play (remove strikeouts and walks), I compute the mean runs value and the proportion of positive run values for each pitch count.</p>
+<pre><code>S.inplay &lt;- summarize(group_by(filter(pbp.bat,
+                !(EVENT_CD %in% c(3, 14, 15))),
+                         The.Count),
+              N.Balls.Strikes = N.Balls.Strikes[1],
+              N=length(RUNS.VALUE),
+              Mean=mean(RUNS.VALUE),
+              P.Positive=mean(RUNS.VALUE &gt; 0))</code></pre>
+<p>Using the <code>ggplot2</code> package, here are plots of the count effects. First, I graph the mean run value of balls placed in play at each count, and next I graph the probability of a positive run value for balls in play for each count. In each case, I have added horizontal lines that give the mean run value and probability of a positive run value for all balls put in play.</p>
+<p><img src="figures/count_effects/count12.png" class="img-fluid" style="width:70.0%"></p>
+<p><img src="figures/count_effects/count13.png" class="img-fluid" style="width:70.0%"></p>
+<p>A couple of remarks about these graphs, connecting this with tennis.</p>
+<ul>
+<li><p>These graphs make it obvious what we mean by pitcher and batter counts. Batters want to work the count (to batter counts) to get a better opportunity to get a good pitch to hit.</p></li>
+<li><p>I’d be interested in learning more about how different pitchers and hitters use the pitch count. For example, I’d be interested in learning about the specific pitchers who take best advantage of pitcher counts.</p></li>
+<li><p>Returning back to tennis, similar graphs can be constructed showing how the probability a server wins a point depends on the game score. Here is one sample graph gathered from Slam data – it shows the probability the server wins a point at different scores during game. (This pattern makes sense since serves play a big role in singles and players go through hot streaks of serving well.)</p></li>
+</ul>
+<p><img src="figures/count_effects/count14.png" class="img-fluid" style="width:70.0%"></p>
+<p>Particular players (I’m thinking of Roger Federer) appear to have large “serving momentums”. One question I plan on exploring in the future is comparing serving momentum between the top singles players.</p>
+</section>
+<section id="exit-velocity-and-launch-angle" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="exit-velocity-and-launch-angle"><span class="header-section-number">4.2</span> Exit Velocity and Launch Angle</h3>
+<section id="introduction-6" class="level4" data-number="4.2.1">
+<h4 data-number="4.2.1" class="anchored" data-anchor-id="introduction-6"><span class="header-section-number">4.2.1</span> Introduction</h4>
+<p>In our current Statcast world, there is a lot of talk about exit velocities and launch angles on balls put in play.&nbsp; Part of the value of these measures is entertainment – one can be impressed with a home run is announced to have a 110 mpg launch speed.&nbsp; &nbsp;From a statistical perspective, these “off-the-bat” measures (maybe we should call them Statcast measures) appear to be better measures of a batter’s ability than outcome measures such as a batting average or a slugging percentage.&nbsp; Here I use some graphs to explore a few situational effects of exit velocity and launch angle – specifically how these Statcast measures vary as a function of the count and zone location.&nbsp; We have a good understanding how common batting measures such as batting average vary in terms of count and pitch location and one would think that similar patterns occur for exit velocity and launch angle.</p>
+</section>
+<section id="relationship-between-count-and-zone-location" class="level4" data-number="4.2.2">
+<h4 data-number="4.2.2" class="anchored" data-anchor-id="relationship-between-count-and-zone-location"><span class="header-section-number">4.2.2</span> Relationship Between Count and Zone Location</h4>
+<p>For all balls in play, we record the current count and pitch location (Statcast variables <code>pitch_x</code> and <code>pitch_z</code>).&nbsp; To adjust for the batting side, I define an adjusted pitch_x variable which is equal to <code>pitch_x</code> for right-handed hitters and equal to minus the <code>pitch_x</code> value for lefties.&nbsp; So a positive adjusted pitch_x value corresponds to a pitch away from the batter and a negative value corresponds to an inside pitch.</p>
+<p>For each of the possible counts (0-0 through 3-2), here are contour plots of the densities of the (adjusted) pitch locations on balls put in play.&nbsp; A couple of interesting takeaways:</p>
+<p><img src="figures/count_effects/count38.png" class="img-fluid" style="width:70.0%"></p>
+<ul>
+<li>These contours generally are concentrated about a location a little away and a little lower than the center point in the zone.</li>
+<li>At a 0-0 count and batter’s counts (1-0, 2-0, 3-1, 3-2), all of the contours lie within the zone – it appears unusual for a batter to hit a pitch outside of the zone.</li>
+<li>For a fixed number of balls, say one ball, and increasing number of strikes (from 0 to 1 to 2 strikes), the contours expand and it is more likely for the in-play event to occur for a pitch outside of the zone.&nbsp; The contours for pitch locations for two strikes are especially wide.</li>
+<li>The 0-2, 1-2, 2-2 contours look pretty similar – it seems that batters will swing at a broad range of pitch locations with two strikes and the number of balls is not relevant.</li>
+</ul>
+</section>
+<section id="count-effects" class="level4" data-number="4.2.3">
+<h4 data-number="4.2.3" class="anchored" data-anchor-id="count-effects"><span class="header-section-number">4.2.3</span> Count Effects</h4>
+<p>Next I explore graphically how the mean exit velocity varies by the count.&nbsp; Here I plot these averages as a function of the total balls and strikes count and the label shows the count.&nbsp; This graph resembles a similar plot for mean batting averages.&nbsp; What is interesting is the large effects for more favorable batter counts.&nbsp; Balls at 1-0 counts are hit with an average exit velocity at 88 mph, at a 2-0 count the average speed increases to 90 mph, and at a 3-0 count, the average speed off the bat increases to 94 mph.</p>
+<p><img src="figures/count_effects/count39.png" class="img-fluid" style="width:70.0%"></p>
+<p>Next I thought it would be interesting to construct a similar graph for mean launch angles.&nbsp; The red line corresponds to an average launch angle for all balls put in play – this average is about 11 degrees.&nbsp; For batter’s counts, the launch angle increases – up to an average of over 18 degrees at a 3-0 count.&nbsp; In contrast, the launch angle decreases (think grounders) for pitcher’s counts.&nbsp; At a 0-2 count, the average launch angle is about 9 degrees.</p>
+<p><img src="figures/count_effects/count40.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="pitch-location-effects" class="level4" data-number="4.2.4">
+<h4 data-number="4.2.4" class="anchored" data-anchor-id="pitch-location-effects"><span class="header-section-number">4.2.4</span> Pitch Location Effects</h4>
+<p>One would think that batters prefer to hit balls in the middle of the zone – batted balls in this area would be hit harder (higher exit velocity) and at “good” launch angles (corresponding to line drives).&nbsp; In contrast, batted balls hit at locations outside of the zone would be hit softer at less-desirable launch angles.&nbsp; I binned the pitch location space into 13 x 13 = 169 regions and computed the mean exit velocity for balls hit from each region.&nbsp; Below I construct a plot of the mean launch speed for all regions where a redder color corresponds to a high mean exit velocity.&nbsp;</p>
+<p><img src="figures/count_effects/count41.png" class="img-fluid" style="width:70.0%"></p>
+<p>We see …</p>
+<ul>
+<li>The “hot zone” for launch speed corresponds to a diagonal region from low-inside to high-outside.</li>
+<li>In contrast, balls hit high-inside or low-outside tend to have lower launch speeds.</li>
+</ul>
+<p>Do we see similar patterns for mean launch angles?&nbsp; Judging by the graph below, yes we do.&nbsp; Balls hit at pitch locations in the middle of the zone tend to be hit (on average) at a launch angle between 15-20 degrees that correspond to line drives.&nbsp; Ball hit at high-inside pitch locations tend to have higher launch angles, and balls hit in the low-outside pitch locations tend to have low average launch angles (think groundballs).</p>
+<p><img src="figures/count_effects/count42.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="moving-forward-and-r-work" class="level4" data-number="4.2.5">
+<h4 data-number="4.2.5" class="anchored" data-anchor-id="moving-forward-and-r-work"><span class="header-section-number">4.2.5</span> Moving Forward and R Work</h4>
+<ul>
+<li><p>From a team perspective, I think analysts would be interested in these count and pitch location Statcast effects, but they would look deeper.&nbsp; Specifically, they would be interested in exploring these effects for individual batters or pitchers.</p></li>
+<li><p>I’ve explored situational effects of measures like batting average over the years.&nbsp; Some situations like the home-away effect tend to be biases – they affect all of the players in the same way.&nbsp; The challenge is to find what I call “ability effects”.&nbsp; For example, look at the count effect.&nbsp; Are there particular batters who react to the count in an unusual (good) way?&nbsp; Can we find ability effects from Statcast data?</p></li>
+<li><p>From a statistical perspective, looking at Statcast effects for a group of players can be challenging since one may not have much data for some players.&nbsp; One needs to develop some method of combining separate Statcast effects, such as the use of a multilevel model.</p></li>
+<li><p>My R work for creating these graphs can be found on my Github Gist site.&nbsp; With the <code>ggplot2</code> package, these graphs are relatively easy to construct given the Statcast data for a single season (these plots are based on 2017 data).&nbsp; Most of my R time was devoted to fine-tuning of the graphs, such as choosing an appropriate color scheme.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="sequences-of-pitch-counts" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="sequences-of-pitch-counts"><span class="header-section-number">5</span> Sequences of Pitch Counts</h2>
+<p>In Chapter 7 of Analyzing Baseball with R, we look at ball and strike effects. Specifically, we look at pitch sequences that pass through different pitch counts and see the effect on expected run values. I’m currently revising my Teaching Statistics Using Baseball book. One of my chapters is on modeling baseball by a Markov Chain and I thought that the pitch count sequence would be a good illustration of a Markov Chain that I could add as an exercise. Here I illustrate how one can compute the pitch count transitions using Retrosheet play-by-play data.</p>
+<p>Here’s an outline of my work with some interesting graphs. I am assuming that one has the Retrosheet play-by-play data for a specific season – here I have the 2014 data stored in the data frame <code>pbp.14</code>.</p>
+<p>The variable <code>PITCH_SEQ_TX</code> has the pitch sequence. I use the <code>gsub()</code> function to remove all non-pitches from the sequence.</p>
+<pre><code>pbp.14$pseq &lt;- gsub("[.&gt;123N+*]", "", pbp.14$PITCH_SEQ_TX)</code></pre>
+<p>I recode to either balls (b) or strikes (s).</p>
+<pre><code>pbp.14$pseq &lt;- gsub("[BIPV]", "b", pbp.14$pseq)
+pbp.14$pseq &lt;- gsub("[CFKLMOQRST]", "s", pbp.14$pseq)</code></pre>
+<p>I wrote a function <code>one.string()</code> to extract all of the pitch counts from a single character string with balls and strikes. It returns the beginning and end count for each pitch – the end of the PA is coded by “X”.</p>
+<pre><code>one.string &lt;- function(ex){
+  # replace s and b with X for strikeouts and walks
+  ex &lt;- gsub("s$", "X", ex)
+  ex &lt;- gsub("b$", "X", ex)
+  # create a vector of individual outcomes
+  ex.v &lt;- unlist(strsplit(ex,""))
+  # remove last X from vector
+  ex.v &lt;- ex.v[-length(ex.v)]
+  # compute cumulative total of balls and strikes
+  n.balls &lt;- cumsum(ex.v == "b")
+  n.strikes &lt;- pmin(cumsum(ex.v == "s"), 2)
+  # create pitch count variable
+  S &lt;- paste(n.balls, n.strikes, sep="-")
+  # add a beginning and end outcome
+  S &lt;- c("0-0", S, "X")
+  # before and after counts
+  b.count &lt;- S[1:(length(S) - 1)]
+  e.count &lt;- S[-1]
+  list(b.count, e.count)
+}</code></pre>
+<p>I use the <code>sapply()</code> function to apply this function to all pitch sequence strings.</p>
+<pre><code>S &lt;- sapply(pbp.14$pseq, one.string)</code></pre>
+<p>Finally, I use the <code>table()</code> function to tabulate the transitions in pitch counts. Using this data, we can represent the pitch sequence sequence as a Markov Chain with absorbing state “end of the PA”. The matrix <code>P</code>, computed below, gives the transition matrix – for example, the matrix value <code>P["0-1", "1-1"]</code> gives the probability of moving from a 0-1 count to a 1-1 count.</p>
+<pre><code>TR &lt;- table(unlist(S[1, ]), unlist(S[2, ]))
+P &lt;- prop.table(TR[1:12, -12], 1)
+P &lt;- rbind(P, c(rep(0, 11), 1))
+P &lt;- cbind(rep(0, 13), P)
+dimnames(P)[[1]][13] &lt;- "X"
+dimnames(P)[[2]][1] &lt;- "0-0"</code></pre>
+<p>Here’s the first row of this transition matrix. From a 0-0, we’ll either move to 0-1, 1-0, or “in-play” with probabilities .49, .39, and .12.</p>
+<pre><code>round(P[1, ], 2)
+ 0-0  0-1  0-2  1-0  1-1  1-2  2-0  2-1  2-2  3-0  3-1  3-2    X
+0.00 0.49 0.00 0.39 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.12</code></pre>
+<p>Here are a few interesting graphs from this transition matrix. The first shows the probability of adding a strike to the count for each of the initial counts. We see the probability of adding a strike is relatively low for 0-1, but relatively high for a 3-0 count.</p>
+<p><img src="figures/count_effects/count15.png" class="img-fluid" style="width:70.0%"></p>
+<p>The second shows the probability of adding a ball to the count. Here we see that it is more likely to add a ball on a 0-2 count, but less likely to add a ball to 2-1 and 2-2 counts.</p>
+<p><img src="figures/count_effects/count16.png" class="img-fluid" style="width:70.0%"></p>
+<p>Last, we show the probability of keeping the two-strike count (with a foul ball). As you might expect, the probability of keeping the count is highest for 3-2, followed by 2-2, 1-2, and 0-2.</p>
+<p><img src="figures/count_effects/count17.png" class="img-fluid" style="width:70.0%"></p>
+<p>This is interesting stuff, especially when one explores how these pitch count transitions depend on other variables such as home/away and umpire. (For example, it is more likely to move from 0-0 to 0-1 when the batter is from the visiting team.) I’ll leave that analysis to the interested reader.</p>
+<p>All of the code for this example can be found on my gist site.</p>
+</section>
+<section id="the-first-pitch" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="the-first-pitch"><span class="header-section-number">6</span> The First Pitch</h2>
+<section id="the-first-pitch-effect" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="the-first-pitch-effect"><span class="header-section-number">6.1</span> The First Pitch Effect</h3>
+<p>In Chapter 7 of Analyzing Baseball With R , we explore balls and strikes effects. Here I provide a preview into this material by focusing on the effect of the first pitch. There are essentially three relevant outcomes of this first pitch – the count goes to 0-1, to 1-0, or the plate appearance is ended either with a hit-by-pitch or a ball put into play. From a runs-value perspective, how do these three outcomes differ?</p>
+<p>In a previous post, I described how to download the Retrosheet play-by-play data for a single season, and I presented a R function that will compute the runs value for all plays. We store this data into the data frame <code>d2013</code>.</p>
+<p>First, we use the subset function to reduce the data frame to events where there was a batting event.</p>
+<pre><code>2013 &lt;- subset(d2013, BAT_EVENT_FL==TRUE)</code></pre>
+<p>The variable <code>PITCH_SEQ_TX</code> gives the pitch sequence for each PA including pickoff throws to bases. The gsub function is used to remove these non-pitch events and create a new variable <code>pseq</code>:</p>
+<pre><code>d2013$pseq &lt;- gsub("[.&gt;123N+*]", "", d2013$PITCH_SEQ_TX)</code></pre>
+<p>We extract the first character of the string which is the outcome of the first pitch.</p>
+<pre><code>d2013$First.Pitch &lt;- substr(d2013$pseq, 1, 1)</code></pre>
+<p>Based on the value of <code>First.Pitch</code> , we classify the new variable Count as either 0-1, 1-0 or <code>End.PA</code> (the plate appearance is over). (The outcome 0-1 means that the PA goes through a 0-1 count.)</p>
+<pre><code>d2013$Count &lt;- ifelse(d2013$First.Pitch %in%
+        c("C", "F", "L", "M", "O", "Q", "S", "T"),
+        "0-1", ifelse(d2013$First.Pitch %in% c("B", "I", "P"),
+        "1-0", "End.PA"))</code></pre>
+<p>We first find the count, mean, and standard deviation of the runs values for all pitches.</p>
+<pre><code>with(d2013, c(N=length(RUNS.VALUE),
+              Mean=mean(RUNS.VALUE),
+              SD=sd(RUNS.VALUE)))
+            N          Mean            SD
+ 1.848710e+05 -6.455815e-04  4.672549e-01</code></pre>
+<p>At the beginning of the PA, the mean runs value is essentially zero. Next we find the same summaries for the three possible outcomes of the first pitch.</p>
+<pre><code>library(dplyr)
+S &lt;- summarize(group_by(d2013, Count),
+          N=length(RUNS.VALUE),
+          Mean=mean(RUNS.VALUE),
+          SD=sd(RUNS.VALUE))
+S
+   Count     N        Mean        SD
+1    0-1 90969 -0.03875386 0.4407245
+2    1-0 73402  0.03405727 0.4746078
+3 End.PA 20500  0.04420387 0.5363598</code></pre>
+<p>From the viewpoint of runs value, there is approximately a 0.034 - (-0.039) = 0.073 benefit (from the hitter’s perspective) of going 1-0 instead of 0-1.</p>
+<p>As you might anticipate, I like to graphically show the first pitch effect. I use the <code>ggplot2</code> package to plot “point-range” graphs of the runs values for the three outcomes where I am graphing the mean plus and minus a standard deviation.</p>
+<pre><code>library(ggplot2)
+limits &lt;- aes(ymin=Mean - SD, ymax=Mean + SD)
+ggplot(S, aes(Count, Mean)) +
+  geom_point(size=6, color="red") +
+  geom_pointrange(limits, color="red", size=1.5) +
+  geom_hline(xintercept=0, color="blue") +
+  labs(title="The First Pitch Effect")+
+  ylab("Run Value") +
+  xlab("Outcome of First Pitch") +
+  theme(axis.text = element_text(size = rel(2))) +
+  theme(axis.title = element_text(size = rel(2))) +
+  theme(plot.title = element_text(size = rel(2)))</code></pre>
+<p><img src="figures/count_effects/count18.png" class="img-fluid" style="width:70.0%"></p>
+<p>There is much uncertainty about the outcome reflected by the large lengths of these bars. It is interesting that the runs values for “end of PA” is similar to the runs values for “1-0”, with more uncertainty for the “end of PA” outcome.</p>
+</section>
+<section id="swinging-on-the-first-pitch" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="swinging-on-the-first-pitch"><span class="header-section-number">6.2</span> Swinging on the First Pitch</h3>
+<p>I just had a student complete a thesis on issues regarding the first pitch in a plate appearance in baseball. &nbsp;One question she didn’t address is: &nbsp; Should a player swing at the first pitch? &nbsp;Here I’ll do a quick exploratory study to partially answer this question.</p>
+<section id="initial-thoughts" class="level4" data-number="6.2.1">
+<h4 data-number="6.2.1" class="anchored" data-anchor-id="initial-thoughts"><span class="header-section-number">6.2.1</span> Initial Thoughts</h4>
+<p>As we will see below, there is a lot of variability in the proportion of first pitch swings among regular players. &nbsp;It would see that a moderate value of this swinging proportion would be optimal. &nbsp;If a batter always will take the first pitch, then the pitch can just throw a fastball down the middle of the plate. &nbsp;On the other hand, if the pitcher knows that the batter will swing at a high proportion of first pitches, then the pitcher likely would throw a pitch outside of the strike zone that the batter would chase. &nbsp;To keep the pitcher guessing, it would seem advantageous (from the batter’s perspective) to swing at a “middle” proportion of first pitches.</p>
+</section>
+<section id="swinging-at-the-first-pitch-is-a-batter-ability" class="level4" data-number="6.2.2">
+<h4 data-number="6.2.2" class="anchored" data-anchor-id="swinging-at-the-first-pitch-is-a-batter-ability"><span class="header-section-number">6.2.2</span> Swinging at the First Pitch is a Batter “Ability”</h4>
+<p>Using Retrosheet play-by-play data for the 2015 and 2016 seasons, I collected the fraction of first pitch swings for all players with at least 400 plate appearances. &nbsp;Here’s a scatterplot of the swing fractions for the two seasons – since there is a high positive association in the graph, this indicates that swinging at the first pitch is really an attribute that differs between players.</p>
+<p><img src="figures/count_effects/count19.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="swinging-at-the-first-pitch-and-runs-value" class="level4" data-number="6.2.3">
+<h4 data-number="6.2.3" class="anchored" data-anchor-id="swinging-at-the-first-pitch-and-runs-value"><span class="header-section-number">6.2.3</span> Swinging at the First Pitch and Runs Value</h4>
+<p>Using 2015 season data, we collected (1) the first swing fraction and (2) the average runs value of the player’s PA’s. &nbsp;We want to see if there is any relationship between the two variables. &nbsp;Is there any evidence to indicate that the best players (from a runs value perspective) are the ones whose swing fraction is moderate? &nbsp;Below I construct a scatterplot using the players with at least 400 PA and add a smoothing curve to find the general pattern.</p>
+<p><img src="figures/count_effects/count20.png" class="img-fluid" style="width:70.0%"></p>
+<p>Looking at the pattern in the blue smooth, this graph supports my hypothesis. &nbsp;It seems that players generally peak in runs value for swing fractions about 0.25, and swing fractions between .3 and .4 have lower runs values. &nbsp;By the way, I notice two runs values outliers who were both free swingers – adding labels to the graph we see these players are &nbsp;Bryce Harper and Mike Zunino (remember I am looking at Harper’s 2015, not 2016 season).</p>
+<p><img src="figures/count_effects/count21.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="advantage-of-swinging-at-first-pitch" class="level4" data-number="6.2.4">
+<h4 data-number="6.2.4" class="anchored" data-anchor-id="advantage-of-swinging-at-first-pitch"><span class="header-section-number">6.2.4</span> Advantage of Swinging at First Pitch?</h4>
+<p>How can we measure the advantage of swinging at the first pitch? &nbsp;One simple way is break the PA’s into the “first pitch swings” and “first pitch non-swings” and look at the difference in average runs value of the two groups.</p>
+<p>Advantage = RUNS_swing - RUNS_no_swing</p>
+<p>Here I graph the Advantage against the fraction of first swings for all players. &nbsp;Several interesting features pop out:</p>
+<p><img src="figures/count_effects/count22.png" class="img-fluid" style="width:70.0%"></p>
+<ul>
+<li>The smoother falls below 0 for all swing types. &nbsp;This indicates for this season (2015) that it was generally advantageous not to swing.</li>
+<li>The Advantage of swinging appears to be maximized (on average), for first pitch swing rates between .25 and .30. &nbsp;In contrast, the Advantage is smallest for swing rates about .40.</li>
+</ul>
+<p>Of course, we like looking at the outliers in this plot. &nbsp;Jimmy Rollins, Khris Davis, and Billy Burns really do better on the PA when they swing at the first pitch, and Omar Infante has the smallest (that is, most negative) value of Advantage.</p>
+<p><img src="figures/count_effects/count23.png" class="img-fluid" style="width:70.0%"></p>
+<p>Summing up …</p>
+<p>This brief analysis confirms a few things:</p>
+<ul>
+<li>There are sizeable differences in the fractions of first pitch swings among modern players – swinging at the first pitch is really an attribute of a batter that defines his batting ability.</li>
+<li>There seems to be some evidence to support the idea that hitters perform best (on average) when the fraction of first pitch swings is a moderate values. For a single season, particular batters seem to be more successful when they swing on the first pitch. - It would be interesting to see if a batter, say Jimmy Rollins, always did between on first pitch swings throughout his career.</li>
+</ul>
+</section>
+</section>
+</section>
+<section id="visual-count-effects" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="visual-count-effects"><span class="header-section-number">7</span> Visual Count Effects</h2>
+<section id="introduction-7" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="introduction-7"><span class="header-section-number">7.1</span> Introduction</h3>
+<p>If you have been following my blog over the years you know that I like to talk about count effects in baseball. For example, Chapter 6 of the 2nd edition of Analyzing Baseball Data with R is devoted to ball and strike effects and this post presents a graph that shows the value of plate appearances passing through different counts. Since I am working on my CalledStrike package, I thought it would be interesting to use functions from this package to see how various Statcast measures depend on the count. All of these graphs are based on 2018 Statcast data. Also, since these pictures depend on the batter side, I will focus on only right-handed batters. (The pictures for left-handed batters generally are a mirror image of the graphs presented below.)</p>
+<p>Before we look at the plots, what is our intuition about count effects?</p>
+<ul>
+<li><p>Batters like to swing at pitches located towards the middle of the zone for any count.</p></li>
+<li><p>Batters tend to be disciplined and want to work the count. That is, they are reluctant to swing at the beginning of the pitch sequence. But they have to swing when there is a two-strike count.</p></li>
+<li><p>Batters like to be ahead in the count since they think they will more likely see a good pitch to hit. The quality of any ball put into play is going to be better on batter counts</p></li>
+</ul>
+<p>Hopefully these graphs will reinforce and perhaps illuminate our beliefs about count effects.</p>
+</section>
+<section id="swing-rates" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="swing-rates"><span class="header-section-number">7.2</span> Swing Rates</h3>
+<p>A batter has to decide whether to swing at a pitch and this decision depends dramatically on two variables – the pitch location and the count. Below I use filled contour graphs to show how the probability of a swing depends on the count. I think it is helpful to use a 4 x 3 grid to show these graphs so the row shows the ball count (0, 1, 2, 3) and the column shows the strike count (0, 1, 20. A few observations: (1) batters are generally reluctant to swing at early counts, (2) they are very likely to swing at 2-strike counts, and (3) they will swing on batters’ counts (like 2-0 or 3-1) for pitches in the middle of the zone.</p>
+<p><img src="figures/count_effects/count24.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="miss-rates" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="miss-rates"><span class="header-section-number">7.3</span> Miss Rates</h3>
+<p>Now that the batter has decided to swing, how does the probability of missing the pitch depend on the count and location? Here I present contours of the smoothed probabilities of missing the pitch. Remember that we are looking at right-handed hitters. The darker blue region corresponds to the area where the probability of miss is smaller than 20% and this region tends to be on inside-middle or lower-zone pitches. There are subtle count effects here. One takeaway is that the “smaller than 20%” region is smallest on a 3-0 count. The batter sees the 3-0 count as a good opportunity to swing, there is little to lose by swing and missing, and so there is a smaller sweet spot in this case.</p>
+<p><img src="figures/count_effects/count25.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="launch-speed" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="launch-speed"><span class="header-section-number">7.4</span> Launch Speed</h3>
+<p>Now the batter has put the ball in play. How does the launch speed off the bat depend on the count? The location of the “hot” launch speed region seems pretty consistent across counts. The one takeaway is that the launch speed is greatest during the batter counts 2-0, 3-0 and 3-1. Focusing on the 3-0 count, batters hit low-inside and high-outside pitches the hardest. (By the way, it is interesting that the “low miss” regions for right-handed batters in the previous graphs have a negative orientation, while the “high launch speed” regions here have a positive orientation.)</p>
+<p><img src="figures/count_effects/count26.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="in-play-hit-and-home-run-rates" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="in-play-hit-and-home-run-rates"><span class="header-section-number">7.5</span> In-Play Hit and Home Run Rates</h3>
+<p>Usually one associates high launch speeds with desirable outcomes like hits and home runs. Below I graph the probability of a hit – again remember that we are focusing on right-handed batters. The hot regions here mimic the hot regions in the launch speeds. This particular graph is a little hard to read due to the especially hot regions in the 3-0 count. Also since there isn’t much data for in-play events at 3-0 counts, it is a little hard to make sense of the hot regions. Batters seem to do well with low pitches on 3-0 counts.</p>
+<p><img src="figures/count_effects/count27.png" class="img-fluid" style="width:70.0%"></p>
+<p>To make it easier to compare some of the counts, I focus on the 0, 1, and 2 ball counts below. I don’t seem to see much of a difference between these 9 counts – right-handed hitters tend to hit for average in a region from the lower-inside to upper-outside region of the zone. The hot zone is largest for the batter’s count of 2-0 in this group.</p>
+<p><img src="figures/count_effects/count28.png" class="img-fluid" style="width:70.0%"></p>
+<p>Here is a similar plot for the in-play home run rates, focusing on the 0, 1, and 2 ball counts. The location of the region again seems consistent across counts. The yellow region corresponds to higher home run rates – note that I see larger yellow regions in the 0-0, 1-0, and 2-0 counts – again we see the advantage of batter counts. The contour graph for the 2-1 count looks a bit bizarre.</p>
+<p><img src="figures/count_effects/count29.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="r-code" class="level3" data-number="7.6">
+<h3 data-number="7.6" class="anchored" data-anchor-id="r-code"><span class="header-section-number">7.6</span> R code?</h3>
+<p>The blog post includes a snapshot of the R code for these graphs I have a csv file on my computer containing all of the 2018 Statcast data (scraped week by week using the <code>baseballr</code> package) and I read that file into the R workspace by the <code>getdata()</code> function. Basically, I am creating a list of data frames corresponding to the 12 count values then using the compare_contour() function using different variables to plot. My <code>CalledStrike</code> package is not yet ready to be submitted to CRAN (maybe it will never be), but I think it is useful for seeing how many of these rates and measures depend on the pitch location.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
