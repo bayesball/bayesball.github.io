@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-0.9.309">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jim Albert">
+<meta name="dcterms.date" content="2022-11-28">
+
+<title>Career Trajectories</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+<script src="Career_Trajectories_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Career_Trajectories_files/libs/quarto-html/quarto.js"></script>
+<script src="Career_Trajectories_files/libs/quarto-html/popper.min.js"></script>
+<script src="Career_Trajectories_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Career_Trajectories_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Career_Trajectories_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link id="quarto-text-highlighting-styles" href="Career_Trajectories_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<script src="Career_Trajectories_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Career_Trajectories_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Career_Trajectories_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#plotting-career-trajectories" id="toc-plotting-career-trajectories" class="nav-link" data-scroll-target="#plotting-career-trajectories"> <span class="header-section-number">2</span> Plotting Career Trajectories</a></li>
+  <li><a href="#comparing-career-trajectories" id="toc-comparing-career-trajectories" class="nav-link" data-scroll-target="#comparing-career-trajectories"> <span class="header-section-number">3</span> Comparing Career Trajectories</a></li>
+  <li><a href="#plotting-career-trajectories-of-component-rates" id="toc-plotting-career-trajectories-of-component-rates" class="nav-link" data-scroll-target="#plotting-career-trajectories-of-component-rates"> <span class="header-section-number">4</span> Plotting Career Trajectories of Component Rates</a></li>
+  <li><a href="#shiny-app-to-compare-hit-trajectories" id="toc-shiny-app-to-compare-hit-trajectories" class="nav-link" data-scroll-target="#shiny-app-to-compare-hit-trajectories"> <span class="header-section-number">5</span> Shiny App to Compare Hit Trajectories</a>
+  <ul class="collapse">
+  <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1"> <span class="header-section-number">5.1</span> Introduction</a></li>
+  <li><a href="#dynamic-ui" id="toc-dynamic-ui" class="nav-link" data-scroll-target="#dynamic-ui"> <span class="header-section-number">5.2</span> Dynamic UI</a></li>
+  <li><a href="#the-shiny-app" id="toc-the-shiny-app" class="nav-link" data-scroll-target="#the-shiny-app"> <span class="header-section-number">5.3</span> The Shiny App</a></li>
+  <li><a href="#try-out-the-shiny-app" id="toc-try-out-the-shiny-app" class="nav-link" data-scroll-target="#try-out-the-shiny-app"> <span class="header-section-number">5.4</span> Try Out the Shiny App</a></li>
+  <li><a href="#comparing-two-hof-nominees---todd-helton-and-scott-rolen" id="toc-comparing-two-hof-nominees---todd-helton-and-scott-rolen" class="nav-link" data-scroll-target="#comparing-two-hof-nominees---todd-helton-and-scott-rolen"> <span class="header-section-number">5.5</span> Comparing Two HOF Nominees - Todd Helton and Scott Rolen</a></li>
+  <li><a href="#closing-comments" id="toc-closing-comments" class="nav-link" data-scroll-target="#closing-comments"> <span class="header-section-number">5.6</span> Closing Comments</a></li>
+  </ul></li>
+  <li><a href="#comparing-david-ortiz-with-six-contemporaries" id="toc-comparing-david-ortiz-with-six-contemporaries" class="nav-link" data-scroll-target="#comparing-david-ortiz-with-six-contemporaries"> <span class="header-section-number">6</span> Comparing David Ortiz with Six Contemporaries</a>
+  <ul class="collapse">
+  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"> <span class="header-section-number">6.1</span> Introduction</a></li>
+  <li><a href="#the-fangraphsbatting-app" id="toc-the-fangraphsbatting-app" class="nav-link" data-scroll-target="#the-fangraphsbatting-app"> <span class="header-section-number">6.2</span> The FanGraphsBatting App</a></li>
+  <li><a href="#war-trajectory" id="toc-war-trajectory" class="nav-link" data-scroll-target="#war-trajectory"> <span class="header-section-number">6.3</span> WAR Trajectory</a></li>
+  <li><a href="#woba-trajectory" id="toc-woba-trajectory" class="nav-link" data-scroll-target="#woba-trajectory"> <span class="header-section-number">6.4</span> wOBA Trajectory</a></li>
+  <li><a href="#wrc-trajectory" id="toc-wrc-trajectory" class="nav-link" data-scroll-target="#wrc-trajectory"> <span class="header-section-number">6.5</span> wRC+ Trajectory</a></li>
+  <li><a href="#obp-trajectory" id="toc-obp-trajectory" class="nav-link" data-scroll-target="#obp-trajectory"> <span class="header-section-number">6.6</span> OBP Trajectory</a></li>
+  <li><a href="#hr-trajectory" id="toc-hr-trajectory" class="nav-link" data-scroll-target="#hr-trajectory"> <span class="header-section-number">6.7</span> HR Trajectory</a></li>
+  <li><a href="#k-rate-trajectory" id="toc-k-rate-trajectory" class="nav-link" data-scroll-target="#k-rate-trajectory"> <span class="header-section-number">6.8</span> K Rate Trajectory</a></li>
+  <li><a href="#def-trajectory" id="toc-def-trajectory" class="nav-link" data-scroll-target="#def-trajectory"> <span class="header-section-number">6.9</span> Def Trajectory</a></li>
+  <li><a href="#who-should-be-in-the-hall-of-fame" id="toc-who-should-be-in-the-hall-of-fame" class="nav-link" data-scroll-target="#who-should-be-in-the-hall-of-fame"> <span class="header-section-number">6.10</span> Who Should be in the Hall of Fame?</a></li>
+  </ul></li>
+  <li><a href="#the-broom-package-and-home-run-trajectories" id="toc-the-broom-package-and-home-run-trajectories" class="nav-link" data-scroll-target="#the-broom-package-and-home-run-trajectories"> <span class="header-section-number">7</span> The broom Package and Home Run Trajectories</a>
+  <ul class="collapse">
+  <li><a href="#the-tidy-function" id="toc-the-tidy-function" class="nav-link" data-scroll-target="#the-tidy-function"> <span class="header-section-number">7.1</span> The tidy function</a></li>
+  <li><a href="#the-augment-function" id="toc-the-augment-function" class="nav-link" data-scroll-target="#the-augment-function"> <span class="header-section-number">7.2</span> The augment function</a></li>
+  <li><a href="#plot-of-home-run-trajectories" id="toc-plot-of-home-run-trajectories" class="nav-link" data-scroll-target="#plot-of-home-run-trajectories"> <span class="header-section-number">7.3</span> Plot of Home Run Trajectories</a></li>
+  </ul></li>
+  <li><a href="#estimates-of-peak-age" id="toc-estimates-of-peak-age" class="nav-link" data-scroll-target="#estimates-of-peak-age"> <span class="header-section-number">8</span> Estimates of Peak Age</a>
+  <ul class="collapse">
+  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3"> <span class="header-section-number">8.1</span> Introduction</a></li>
+  <li><a href="#individual-estimates-of-peak-age-and-standard-errors" id="toc-individual-estimates-of-peak-age-and-standard-errors" class="nav-link" data-scroll-target="#individual-estimates-of-peak-age-and-standard-errors"> <span class="header-section-number">8.2</span> Individual Estimates of Peak Age and Standard Errors</a></li>
+  <li><a href="#multilevel-modeling" id="toc-multilevel-modeling" class="nav-link" data-scroll-target="#multilevel-modeling"> <span class="header-section-number">8.3</span> Multilevel Modeling</a></li>
+  <li><a href="#the-multilevel-estimates" id="toc-the-multilevel-estimates" class="nav-link" data-scroll-target="#the-multilevel-estimates"> <span class="header-section-number">8.4</span> The Multilevel Estimates</a></li>
+  </ul></li>
+  <li><a href="#what-age-do-baseball-players-peak" id="toc-what-age-do-baseball-players-peak" class="nav-link" data-scroll-target="#what-age-do-baseball-players-peak"> <span class="header-section-number">9</span> What Age Do Baseball Players Peak?</a>
+  <ul class="collapse">
+  <li><a href="#introduction-4" id="toc-introduction-4" class="nav-link" data-scroll-target="#introduction-4"> <span class="header-section-number">9.1</span> Introduction</a></li>
+  <li><a href="#my-basic-method" id="toc-my-basic-method" class="nav-link" data-scroll-target="#my-basic-method"> <span class="header-section-number">9.2</span> My Basic Method</a></li>
+  <li><a href="#my-study" id="toc-my-study" class="nav-link" data-scroll-target="#my-study"> <span class="header-section-number">9.3</span> My Study</a></li>
+  <li><a href="#some-graphs" id="toc-some-graphs" class="nav-link" data-scroll-target="#some-graphs"> <span class="header-section-number">9.4</span> Some Graphs</a></li>
+  <li><a href="#comments-on-this-study" id="toc-comments-on-this-study" class="nav-link" data-scroll-target="#comments-on-this-study"> <span class="header-section-number">9.5</span> Comments on this Study</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Career Trajectories</h1>
+</div>
+
+
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jim Albert </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">November 28, 2022</p>
+    </div>
+  </div>
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>This article contains many of the blog posts from <em>Exploring Baseball Data Using R</em> (https://baseballwithr.wordpress.com/) devoted to a player’s career trajectory, a plot of some measure of performance against season or the player’s age.</p>
+<p>Section 2 describes the use of a R function to plot a career trajectory for a particular player of interest. These graphs are helpful in player comparison in Section 3 where one puts several career trajectories on a single frame. A batting average can be decomposed into several components – plots of the career trajectories of these component measures described in Section 4 are helpful for understanding the strengths and weaknesses of players. A special Shiny app has been written to facilitate the construction of these career trajectory graphs. Section 5 describes the Shiny app and Section 6 uses the app to compare a Hall of Fame candidate with several of his contemporaries. A quadratic smoothing curve is helpful in summarizing a player’s career trajectory. The <code>broom</code> package described in Section 7 is useful in summarizing these quadratic fits for many players. One output of these smooths are estimates at the ages where the players achieve peak performance. Sections 8 and 9 focus on learning when baseball players achieve their peaks. One takeaway from Section 9 is that the age of peak performance has been increasing in recent baseball seasons.</p>
+</section>
+<section id="plotting-career-trajectories" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="plotting-career-trajectories"><span class="header-section-number">2</span> Plotting Career Trajectories</h2>
+<p>I have been fascinated by players’ career batting and pitching trajectories over the years and Chapter 8 of our book talks about plotting and modeling these trajectories. This post describes a useful function to plot the career trajectory of a hitting rate for any player in MLB history.</p>
+<p>The data frame <code>Batting</code> in the <code>Lahman</code> package contains the season batting data. There is some setup to get the data in a useful format.</p>
+<p>The <code>Batting</code> data frame has separate hitting statistics for each team for a player in a given season. I use the <code>summarise()</code> function in the new <code>dplyr</code> package to collapse over the <code>stint</code> variable. (By the way, dplyr is much faster than <code>plyr</code> for this type of operation.) Using the <code>merge()</code> function, I add last name, first name, first year, last year, and birthyear variables to the <code>Batting</code> data frame. A new plate appearances variable is defined – before I do this, I convert missing values of <code>SF</code> and <code>SH</code> to zero.</p>
+<p>Now I’m ready to write a <code>plot.trajectory()</code> function. There will be four inputs:</p>
+<ul>
+<li>The name of the batter in quotes. (One can choose any batter in the Lahman database.)</li>
+<li>The numerator of the rate statistic we want to graph – for example, if we want to plot home run rates, then this numerator would be “HR”.</li>
+<li>The denominator of rate stat (typically “AB” or “PA”).</li>
+<li>In cases where there are multiple players with the same name like Ken Griffey or Tony Gwynn, the input num gives the number of the player that you are interested in. (For example, if you want to plot the career trajectory of Junior Griffey, use num = 2.)</li>
+</ul>
+<p>I use the <code>ggplot2</code> package to construct the plot and use a loess smoother to show the general pattern of the career trajectory.</p>
+<p>Here is the code. First install the packages Lahman , dplyr , devtools , and ggplot2 . Then you can read in the setup code and the function by typing:</p>
+<pre><code>library(devtools)
+source_gist(9043429)</code></pre>
+<p>Let illustrate using this function to plot some trajectories. Mike Schmidt is one of my baseball heros – I can graph his home run trajectory by typing:</p>
+<pre><code>plot.trajectory("Mike Schmidt", "HR", "AB")</code></pre>
+<p><img src="figures/trajectories/peak7.png" class="img-fluid" style="width:70.0%"></p>
+<p>Clearly, Schmidt peaked in home run hitting about age 30 (that’s when the Phillies won their first World Series).</p>
+<p>Instead suppose we look at Schmidt’s strikeout trajectory.</p>
+<pre><code>plot.trajectory("Mike Schmidt", "SO", "AB")</code></pre>
+<p><img src="figures/trajectories/peak8.png" class="img-fluid" style="width:70.0%"></p>
+<p>I believe Schmidt shortened his swing later in his career which led to a decrease in strikeout rates.</p>
+<p>Ron Hunt is well-known as the “hit by pitch king”. How does Hunt’s HBP rate change over his career?</p>
+<pre><code>plot.trajectory("Ron Hunt", "HBP", "PA")</code></pre>
+<p><img src="figures/trajectories/peak9.png" class="img-fluid" style="width:70.0%"></p>
+<p>I believe there is some ability aspect of getting hit by a pitch (it isn’t just luck driven), and Hunt seemed to peak in this ability around age 30.</p>
+<p>Anyway, it is fun to explore these trajectories for your favorite players. I also converted this function to a Shiny application that you can see by typing:</p>
+<pre><code>library(shiny)
+shiny::runGist('9053425')</code></pre>
+</section>
+<section id="comparing-career-trajectories" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="comparing-career-trajectories"><span class="header-section-number">3</span> Comparing Career Trajectories</h2>
+<p>In the last post, I illustrated plotting a career trajectory of a batting rate of any player in MLB history. Let’s consider a current problem where looking at trajectories may be helpful. The 2014 Phillies are hopeful that Ryan Howard will overcome his last two seasons with injuries and get back to hitting a lot of home runs. Given that Howard is 34 years old, is it reasonable to believe that he’ll come back?</p>
+<p>After I did some set up work, I illustrated last week using a R function <code>plot.trajectory()</code> that will display the trajectory of a player’s rate statistic. In the R script displayed here, I modify the function so it can (using the plot=FALSE argument) output a data frame with the player’s name, age, and rate for all seasons.</p>
+<p>Let’s compare the trajectory of Ryan Howard’s home run rates with the trajectories of ten similar players. Baseball-reference gives a list of ten players who are most similar (using Bill James’ similarity score) to Howard through age 33. I use the rbind function to merge vertically the data frames of the trajectory data for these 11 players. (I add the 2013 data to Howard since the Lahman package only goes through the 2012 season.)</p>
+<pre><code>d &lt;- NULL
+names &lt;- c("Ryan Howard", "Richie Sexson",
+           "Cecil Fielder", "Mo Vaughn", 
+           "Mark McGwire", "Norm Cash", 
+           "Jay Buhner",  "Willie Stargell",
+           "Jason Giambi", "Frank Howard", 
+           "David Justice")
+for (j in 1:11)
+  d &lt;- rbind(d, plot.trajectory(names[j], 
+          "HR", plot=FALSE))
+  d &lt;- rbind(d,  data.frame(Player="Ryan Howard",
+                      Age=33,
+                      Rate=11/286))</code></pre>
+<p>Using the <code>ggplot2</code> package, it is easy to compare the home run rate trajectories of these 11 players using separate panels on the same scale. Smoothing (loess) curves are added to these plots to see the basic trajectory patterns.</p>
+<pre><code>library(ggplot2)
+ggplot(d, aes(Age, Rate)) +
+  geom_point(size=3, color="red") +
+  geom_smooth(method="loess", size=1.5) +
+  facet_wrap(~ Player, ncol=4) +
+  ylab("HOME RUN RATE") + xlab("AGE") +
+  theme(strip.text  = element_text(size = rel(2)))</code></pre>
+<p><img src="figures/trajectories/peak10.png" class="img-fluid" style="width:70.0%"></p>
+<p>All of the R code for this example can be found here. One can run this example (assuming packages <code>devtools</code>, <code>Lahman</code>, <code>dplyr</code>, and <code>ggplot2</code> are installed) by typing</p>
+<pre><code>library(devtools)
+source_gist(9220828)</code></pre>
+<p>Looking at Ryan Howard’s home run rate trajectory (upper left), clearly his rate has been in free fall since his peak at age 26 – part of this decline is attributed to injuries. How does he compare with other “similar” hitters?</p>
+<p>Ryan’s decline is similar to that of Richie Sexson, Cecil Fielder, and Jay Buhner who all experienced significant declines in their 30’s. Some hitters like Norm Cash and David Justice were relatively stable in their home run rates in their 30’s. Some players like Willie Stargell and Jason Giambi had long careers with gradual declines in their home rate rates near the end of their careers. Only one player, Mark McGwire, shows a boost in home rate in one’s 30’s, but I think we suspect the reason for this boost.</p>
+<p>From looking at these trajectories, I doubt that Ryan Howard will hit home run at a much higher rate than, say 0.05 (five percent). Actually, I think that the Phillies would be thrilled if Ryan could hit 30-35 home runs in 2014.</p>
+</section>
+<section id="plotting-career-trajectories-of-component-rates" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="plotting-career-trajectories-of-component-rates"><span class="header-section-number">4</span> Plotting Career Trajectories of Component Rates</h2>
+<p>Although sabermetricians dismiss the batting average <span class="math inline">\(H / AB\)</span> as a poor measure of batting performance, the media and public still talks about batting average a lot. So I think that instead of dismissing this measure, we should look more carefully what is learned from player’s batting average.</p>
+<p>I have a new paper that focused on a breakdown of a batting average. One can represent the batting average <span class="math inline">\(BA = H / AB\)</span> as the following: <span class="math display">\[
+BA = (1 - SO.Rate) \times (HR.Rate + (1 - HR.Rate) \times BABIP)
+\]</span></p>
+<p>where the <span class="math inline">\(SO.Rate = SO / AB\)</span>, <span class="math inline">\(HR.Rate = HR / (AB - SO)\)</span>, and the batting average on balls in play rate is <span class="math inline">\(BABIP = (H - HR) / (AB - SO - HR)\)</span>. What is interesting is that some of these “component rates” such as <span class="math inline">\(HR.Rate\)</span> and <span class="math inline">\(SO.Rate\)</span> are less affected by chance variation than other rates such as <span class="math inline">\(BABIP\)</span>. Using Bill James’ terminology, a <span class="math inline">\(SO.Rate\)</span> is more persistent than, say a <span class="math inline">\(BABIP\)</span> rate, since the <span class="math inline">\(SO.Rate\)</span> in one season is more predictive of a <span class="math inline">\(SO.Rate\)</span> in the following season.</p>
+<p>This observation suggests that we might learn more about the career performance of a player (or compare career performances for several “similar” players) by looking at the career trajectories of these different rates graphed against age. Based on my work with these different rates, I think one would see stronger patterns in a player’s strikeout rates than in a player’s BABIP rates graphed against age.</p>
+<p>This thinking motivated me to write a R function to compare players who have similar career batting averages during the same era. I won’t go into the details of the R code here, but the gist site contains some preliminary R work and a special function compare_rates does the graphing.</p>
+<p>We are going to compare component rates for all players who are within AVG_eps of a target career batting average in at least Career_target career AB and who had a mid career year (variable target_year ) within an error of Career_eps . In this way, we are comparing players with long careers who had approximately the same career batting average during the same baseball era. By default, I set AVG_eps = .002 , AVG_target = .300 , Career_target = 3000 , and Career_eps = 4 , although one can easily change these inputs to get different groups of similar players.</p>
+<p>Assuming you have the <code>Lahman</code>, <code>dplyr</code>, and <code>ggplot2</code> packages installed, the following code will source in the code from the gist site and read in the function <code>compare_rates()</code>.</p>
+<pre><code>library(devtools)
+source_gist("d051a9b88faaf4bf2e27")</code></pre>
+<p>Okay, we’re ready to try out the function. I’ll start with finding and comparing players with a lifetime batting average of .300 who played in the vicinity of the 2000 season. As the plots show, the four similar players are A-Rod, Frank Thomas, Kenny Lofton, and Roberto Alomar (these were very different types of hitters, but they all had a career AVG close to .300 during the same baseball era.)</p>
+<pre><code>compare_rates(2000)</code></pre>
+<p><img src="figures/trajectories/peak11.png" class="img-fluid" style="width:70.0%"> <img src="figures/trajectories/peak12.png" class="img-fluid" style="width:70.0%"> <img src="figures/trajectories/peak13.png" class="img-fluid" style="width:70.0%"></p>
+<p>What do we learn from these graphs?</p>
+<ul>
+<li><p>Generally, A-Rod and Thomas had higher strikeout rates than Lofton and Alomar, although Thomas had a relatively low strikeout rate in the early part of his career. As one might expect, strikeout rates tend to increase towards the end of a player’s career.</p></li>
+<li><p>Obviously, A-Rod and Thomas had higher home run rates. A-Rod tended to peak at a young age and Thomas had an interesting bimodal pattern to his trajectory with two peaks. Lofton and Alomar actually had larger home run rates in their early 30’s.</p></li>
+<li><p>Looking at the hit-in-play rates, one notices more season to season variation (less persistence using James’ terminology) in these rates. This is especially obvious for Lofton and Thomas, although the smooths indicate some general career patterns in these graphs.</p></li>
+</ul>
+<p>For a second example, I am looking at the list of 2016 Hall of Fame nominees. I notice Alan Trammell who had a .285 career batting average and his mid career year was about 1987. This motivates me to use this function with inputs 1987, a target AVG of .285, and I adjusted the value of AVG_eps to get a small group of similar players. As the graph shows, the similar players to Trammell are Lenny Dykstra, Robin Yount, Ryne Sandberg, and Willie Wilson.</p>
+<pre><code>compare_rates(1987, AVG_target=.285, AVG_eps=.001)</code></pre>
+<p><img src="figures/trajectories/peak14.png" class="img-fluid" style="width:70.0%"> <img src="figures/trajectories/peak15.png" class="img-fluid" style="width:70.0%"> <img src="figures/trajectories/peak16.png" class="img-fluid" style="width:70.0%"></p>
+<ul>
+<li><p>I think the strong persistence of strikeout rates for each player is clear, although each player tends to strikeout more towards the end of his career.</p></li>
+<li><p>Home run rates for three players show peaks in the 25-30 age range. Clearly Wilson did not hit many home runs in his career.</p></li>
+<li><p>Comparing with the strikeout rate trajectories, note that the BABIP trajectories show much more noise or up-and-down variation. For example, although Trammell’s career BABIP was about .300, it varied from .260 to .340 across seasons.</p></li>
+</ul>
+<p>One message from this exploration is that players with similar career batting averages actually can be very different in their strikeout, home run, and hit-in-play tendencies. Also one can learn more about peak batting performance by looking at these component rates rather than looking at career trajectories of batting average. Hitters have many dimensions and a single graph is insufficient for learning about their career performances. Last, these career trajectory graphs illustrate the notable chance variability of BABIP and one learns more about a player’s talent from looking at his home run rate or strikeout rate.</p>
+</section>
+<section id="shiny-app-to-compare-hit-trajectories" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="shiny-app-to-compare-hit-trajectories"><span class="header-section-number">5</span> Shiny App to Compare Hit Trajectories</h2>
+<section id="introduction-1" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">5.1</span> Introduction</h3>
+<p>I recently received The Baseball 100 book by Joe Posnanski as a Christmas gift from my son. It’s a great read with interesting stories about the great players in baseball. Posnanski, like most writers, uses statistics such as total WAR to compare great players. But I believe that career measures such as total WAR, career HR, or career AVG are really insufficient in understanding a player’s career. To gain a better understanding of a player’s career, one needs to look at his season to season statistics. One can get a quick understanding of a player’s career by graphing some measure against the season or player’s age – we call this graph the player’s career trajectory.</p>
+<p>To compare two players, it is helpful to graph the players’ career trajectories on a single graph where the players are distinguished by the plotting color. Also it is helpful to add smoothing curves to the graph to show the basic patterns.</p>
+<p>One important point about comparing players. Generally it doesn’t make sense to compare statistical accomplishments of players from different eras, say Babe Ruth and Barry Bonds, since MLB has gone through so many changes in its history. A .350 batting average has a different meaning in the 1930 season than it would have in the 2020 eason, and home runs were rare during the dead ball era. But I think it is helpful to compare career trajectories of contemporary players that played during the same baseball era. In this post I’ll describe the construction and use of a Shiny app that allows comparison of career batting trajectories for any two contemporary players of interest. One motivation for this work is to illustrate the use of dynamic UI in Shiny that lets one have input values that depend on the values of other inputs. I’ll illustrate the use of this app to compare career trajectories of two of the 2022 Hall of Fame nominees.</p>
+</section>
+<section id="dynamic-ui" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="dynamic-ui"><span class="header-section-number">5.2</span> Dynamic UI</h3>
+<p>A Shiny application consists of two components, a user interface function with all of the input controls and a server function that performs the computation and graphs. In all of the Shiny apps discussed in this blog, there has been a separation between the user interface and server functions in the sense that the user interface (UI) does not react to anything done in the server function. Sometimes this is not desirable – in this career trajectory application I am interested in seeing an player input menu defined by values from other inputs. Fortunately, Chapter 10 of Wickham’s Mastering Shiny text describes how one can have “dynamic UI” in Shiny by the use of special update functions placed in the server function that allow one to modify values of input controls.</p>
+<p>Here is an example of the <code>updateSelectInput()</code> function that modifies the <code>selectPlayers()</code> input with changes to the input$midyear variable.</p>
+<pre><code>observeEvent(input$midyear, {
+    updateSelectInput(inputId = "player_name1",
+                      choices = selectPlayers(input$midyear, 10,
+              input$minpa)$Name)
+  })</code></pre>
+<p>By using several of these <code>updateSelectInput()</code> functions in the <code>server()</code> function, I can get the desired dynamic input menu.</p>
+</section>
+<section id="the-shiny-app" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="the-shiny-app"><span class="header-section-number">5.3</span> The Shiny App</h3>
+<p>Here is a snapshot of the Shiny career trajectory app. First one decides on players from a baseball era to explore by selecting values of the player’s Mid Year and the minimum number of career plate appearances. In this example below, by the inputs, note that I am focusing on the steroids era (Mid Year = 2000) and batters with at least 5000 career PA. The Select First Batter and Select Second Batter inputs display menus including all players whose Mid Year is within 10 years of the target (between 1990 and 2010) and whose career PA exceeds the inputted value of 5000. Here I select two contemporary sluggers, Barry Bonds and Junior Griffey. Finally, I decide on which measure to display (here I select wOBA) and whether to plot the measure against the season or the player age (here I select season). One sees graphs of each player’s wOBA career trajectory together with loess smoothing curves to show the general pattern. Note that Bonds and Griffey display similar career trajectories until the 1999 season. After that season, Griffey displays the familiar decreasing pattern in wOBA in his 30’s. In contrast, Bonds displays a sudden increase in wOBA in his mid-30’s starting with the 2000 season. In this app, I am using loess smoothing with PA as weights – note that the Griffey smoother ignores the small 2010 wOBA value where he had a small number of PA.</p>
+<p><img src="figures/trajectories/peak17.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="try-out-the-shiny-app" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="try-out-the-shiny-app"><span class="header-section-number">5.4</span> Try Out the Shiny App</h3>
+<p>A live version of this Shiny app is available at https://bayesball.shinyapps.io/careertrajectorybatting/. The app uses data from the Lahman database available in the Lahman package and FanGraphs wOBA weights stored on my Github repository. The app is fun to use – one is able to compare the trajectories of any two contemporary batters in MLB history of interest.</p>
+<p>The interested reader is also invited to improve my Shiny code. The app code is available in my ShinyBaseball package here. You can run this app by downloading the single app.R file, placing it in a folder, opening up the file, and typing <code>runApp()</code> in the RStudio Console window. Besides the usual <code>ui()</code> and <code>server()</code> functions, the <code>selectPlayers()</code> function collects the group of players of interest and the <code>compare_plot()</code> function does the computation and graphing. By simple modifications of the app code, you can add additional measures to be graphed.</p>
+</section>
+<section id="comparing-two-hof-nominees---todd-helton-and-scott-rolen" class="level3" data-number="5.5">
+<h3 data-number="5.5" class="anchored" data-anchor-id="comparing-two-hof-nominees---todd-helton-and-scott-rolen"><span class="header-section-number">5.5</span> Comparing Two HOF Nominees - Todd Helton and Scott Rolen</h3>
+<p>Let’s compare the career trajectories of two 2022 HOF nominees, Todd Helton and Scott Rolen. I select minYear = 2000 and minPA = 7200 to locate these players on the input menus.</p>
+<p>First we look at home run rate (rate of home runs per PA expressed as a percentage). Both players peaked in home run rate in their middle 20’s although Helton was a bit better during this period.</p>
+<p><img src="figures/trajectories/peak18.png" class="img-fluid" style="width:70.0%"></p>
+<p>With respect to wOBA, Helton was uniformly better than Rolen from ages 25 through 37. Both players peaked in wOBA in their middle 30’s.</p>
+<p><img src="figures/trajectories/peak19.png" class="img-fluid" style="width:70.0%"></p>
+<p>The players had interesting patterns in strikeout rate. Rolen had strikeout rates in the 20%’s in his early years, improved to values about 12% in his early 30’s, and then increased again towards the end of his career. In contrast, Helton had SO rates in the 8-14 percent range for most of his career and increasing SO rates in his late 30’s.</p>
+<p><img src="figures/trajectories/peak20.png" class="img-fluid" style="width:70.0%"></p>
+<p>Helton was clearly a better hitter than Rolen in his career. But looking at WAR values from Baseball Reference, it should be noted that Rolen’s career defensive WAR was much higher than Helton’s and so Rolen’s total WAR stat of 70.1 is about ten points higher than Helton’s total WAR of 61.8. Also I have ignored ballpark effects – Helton’s offensive stats are likely inflated due to his seasons playing in the high altitude Coors Field.</p>
+</section>
+<section id="closing-comments" class="level3" data-number="5.6">
+<h3 data-number="5.6" class="anchored" data-anchor-id="closing-comments"><span class="header-section-number">5.6</span> Closing Comments</h3>
+<ul>
+<li><p><strong>Other posts on career trajectories.</strong> I’ve been fascinated by career trajectories over the years. This post illustrates the use of a single function to plot a player’s trajectory. Here I illustrate plotting career trajectories of components of a batting average and here I simultaneously fit a number of OBP career trajectories by a multilevel model.</p></li>
+<li><p><strong>Other applications for dynamic UI?</strong> Here we see that dynamic UI is helpful for selecting players who satisfy particular conditions. I am sure there are many other baseball applications where this particular Shiny feature can be helpful.</p></li>
+<li><p><strong>Career trajectories for pitchers?</strong> The best way of learning Shiny is to write your own app for a specific purpose. A next step would be to write a Shiny app to compare the career trajectories of a useful statistic (say, ERA, FIP, WHIP or SO Rate) for two contemporary pitchers of interest. My app serves as a useful template for writing this new app for pitcher trajectories.</p></li>
+</ul>
+</section>
+</section>
+<section id="comparing-david-ortiz-with-six-contemporaries" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="comparing-david-ortiz-with-six-contemporaries"><span class="header-section-number">6</span> Comparing David Ortiz with Six Contemporaries</h2>
+<section id="introduction-2" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">6.1</span> Introduction</h3>
+<p>Tomorrow (January 25) we will learn the results of the 2022 Hall of Fame (HOF) election by the baseball writers. Based on the public ballots, it appears that the one person with the best chance of being selected for the HOF is David Ortiz who is in his first year on the ballot. Since I have been discussing the construction and use of career trajectory graphs (made using the Shiny interface) in recent posts, I thought these graphs would be helpful in comparing the batting performance of Ortiz with a few of his contemporaries.</p>
+</section>
+<section id="the-fangraphsbatting-app" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="the-fangraphsbatting-app"><span class="header-section-number">6.2</span> The FanGraphsBatting App</h3>
+<p>Currently, this Shiny app is live at https://bayesball.shinyapps.io/FanGraphsBatting/. So one replicate any of the career trajectory graphs described in this post.</p>
+<p>For the interested reader who wants see the actual Shiny code, the R code is found here in my CareerTrajectoryGraphs package. The app.R script is self-contained – if you download this single file, it can be run within RStudio.</p>
+<p>Using this app, I chose players whose midyear was contained in the five-year period 2004 through 2008 and who had over 10,000 plate appearances. The seven players selected with these criteria were David Ortiz, Alex Rodriguez, Carlos Beltran, Bobby Abreu, Adrian Beltre, Jimmy Rollins and Derek Jeter. This is an interesting group. Jeter was recently inducted in the HOF and Ortiz, Rodriguez, Abreu and Rollins currently are on the 2022 HOF ballot. Beltran and Beltre will be on the future 2023 and 2024 HOF ballots, respectively.</p>
+</section>
+<section id="war-trajectory" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="war-trajectory"><span class="header-section-number">6.3</span> WAR Trajectory</h3>
+<p>Let’s compare smoothed WAR trajectories of the seven players graphed against age. It is clear that Rodriguez had the dominant WAR trajectory, especially during the ages 20 to 30. The other six players have similar trajectories. Looking at Ortiz’s trajectory (the blue curve), it seems that he peaked in WAR around age 30 and had relatively sharp increases and declines about that peak. In contrast, Bobby Abreu peaked around age 27 and showed a continuous decline in the following 10 seasons.</p>
+<p><img src="figures/trajectories/peak21.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="woba-trajectory" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="woba-trajectory"><span class="header-section-number">6.4</span> wOBA Trajectory</h3>
+<p>One gets a different comparison by considering the weighted on-base percentage wOBA. WAR is a measurement of a player’s total wins contribution – in contrast, wOBA measures the average contribution of a batter on each plate appearance. The smoothed trajectories of these seven players are more separated using the wOBA measure.</p>
+<p><img src="figures/trajectories/peak22.png" class="img-fluid" style="width:70.0%"></p>
+<p>Some interesting takeaways:</p>
+<ul>
+<li><p>Although Rodriguez is clearly the leader for most ages with respect to smoothed wOBA, Ortiz had a similar wOBA from ages 28 through 32.</p></li>
+<li><p>Ortiz declined in wOBA from ages 30 to 33 but his wOBA actually increased after 33 until the end of his career.</p></li>
+<li><p>Abreu had his best wOBA seasons from ages 25 through 28.</p></li>
+<li><p>Beltran and Jeter had similar wOBA trajectories.</p></li>
+<li><p>Beltre had a remarkable rise in his wOBA about age 30 and maintained high wOBA values in his middle 30’s until declining at the end of his career.</p></li>
+<li><p>Rollins was significantly less productive than the other six players with respect to wOBA.</p></li>
+</ul>
+</section>
+<section id="wrc-trajectory" class="level3" data-number="6.5">
+<h3 data-number="6.5" class="anchored" data-anchor-id="wrc-trajectory"><span class="header-section-number">6.5</span> wRC+ Trajectory</h3>
+<p>wRC+ is an improved version of Bill James’ runs created formula comparing to the league average and adjusting for ballpark effects. Comparing these smoothed wRC+ trajectories with the smoothed wOBA trajectories, they appear very similar. So the comments about the players’ wOBA trajectories would carry over to the comments about their wRC+ trajectories.</p>
+<p><img src="figures/trajectories/peak23.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="obp-trajectory" class="level3" data-number="6.6">
+<h3 data-number="6.6" class="anchored" data-anchor-id="obp-trajectory"><span class="header-section-number">6.6</span> OBP Trajectory</h3>
+<p>Let’s try a traditional measure of performance, the on-base percentage OBP. Comparing smoothed OBP trajectories, we see that Abreu had the best OBP for the ages 24 through 33 and Rodriguez had a lower OBP with a similar trajectory shape. Ortiz and Jeter provides an interesting comparison – Jeter had a high OBP in his mid-20’s, while Ortiz excelled around age 30. Ortiz had a good OBP towards the end of his career while Jeter had a steady decline until age 40. Beltran had a clearly lower OBP trajectory than both Ortiz and Jeter, and Rollins and Beltre are at the bottom. We’ve already commented on Beltre’s unusual rise in batting performance in his 30’s.</p>
+<p><img src="figures/trajectories/peak24.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="hr-trajectory" class="level3" data-number="6.7">
+<h3 data-number="6.7" class="anchored" data-anchor-id="hr-trajectory"><span class="header-section-number">6.7</span> HR Trajectory</h3>
+<p>Since baseball loves home run totals, let’s look at players’ HR trajectories. Here is where Rodriguez and Ortiz excel, although Ortiz excelled in the second half of his career. Next we see Beltran showing a standard trajectory shape, peaking about age 27. Beltre had a pretty constant trajectory pattern which contrasts with Abreu who declined in his 30’s. Both Rollins and Jeter had similar trajectory patterns at the lowest level.</p>
+<p><img src="figures/trajectories/peak25.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="k-rate-trajectory" class="level3" data-number="6.8">
+<h3 data-number="6.8" class="anchored" data-anchor-id="k-rate-trajectory"><span class="header-section-number">6.8</span> K Rate Trajectory</h3>
+<p>Since home runs are generally associated with strikeouts, here are trajectories of smoothed K rates. I see three groupings – A-Rod, Abreu, and Ortiz had the highest rates, followed by Beltran, Jeter and Beltre, and then Rollins. Some of the players (A-Rod, Rollins, and Beltre) had significant rises in their K rates towards the ends of their careers. Rollins had a remarkably low K rate in the middle of his career.</p>
+<p><img src="figures/trajectories/peak26.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="def-trajectory" class="level3" data-number="6.9">
+<h3 data-number="6.9" class="anchored" data-anchor-id="def-trajectory"><span class="header-section-number">6.9</span> Def Trajectory</h3>
+<p>Since we have Defensive Runs Saved (Def) available in the FanGraphs leaderboard, let’s look at smoothed Def trajectories.</p>
+<p><img src="figures/trajectories/peak27.png" class="img-fluid" style="width:70.0%"></p>
+<p>Some observations:</p>
+<ul>
+<li><p>Beltre and Rollins stand out with respect to fielding – Beltre in his 20’s and Rollins in his 30’s.</p></li>
+<li><p>After Beltre and Rollins, Beltran and A-Rod are the best fielders, although both players exhibited significant declines towards the end of their careers.</p></li>
+<li><p>Jeter’s Def values are clearly average, as his smooth hugs the Def = 0 horizontal line.</p></li>
+<li><p>Abreu was a good fielder in his early 20’s, but his fielding dramatically declined from 25 to 35.</p></li>
+<li><p>Ortiz had limited fielding as he was a designated hitter (DH) for most of his PAs. So as one might expect, his Def rating was in the -10 to -15 range for his entire career.</p></li>
+</ul>
+</section>
+<section id="who-should-be-in-the-hall-of-fame" class="level3" data-number="6.10">
+<h3 data-number="6.10" class="anchored" data-anchor-id="who-should-be-in-the-hall-of-fame"><span class="header-section-number">6.10</span> Who Should be in the Hall of Fame?</h3>
+<p>This is an interesting group of players to compare since it includes one person already in the HOF (Jeter), four people on the current HOF ballot, and two who will be on future HOF ballots. Here are some takeaways about these player careers from looking at these career trajectory graphs.</p>
+<ul>
+<li><p><strong>Alex Rodriguez</strong>. Clearly A-Rod is the dominant hitter in this group judging by the WAR and wRC+ trajectories. Also he was a great fielder, at least for the first part of his career. On the basis of his hitting and fielding accomplishments, A-Rod should be a slam-dunk for the HOF. But for other reasons, he likely won’t be elected in 2022.</p></li>
+<li><p><strong>David Ortiz</strong> had an interesting career. He was very mediocre in his 20’s and rose quickly to greatness around age 30 and he maintained a strong hitting record in his 30’s. His hitting was comparable to Rodriguez in his 30’s. Ortiz is very popular and is well-known for his hitting accomplishments in the post-season. He is believed to be a clutch hitter who excelled in important situations. He didn’t have great fielding stats since he was primarily used as a DH. It is notable that his WAR trajectory is similar to the other contemporary players in this group.</p></li>
+<li><p><strong>Derek Jeter</strong>. Although Jeter is in the HOF, it is interesting that he his hitting performance is somewhat average in this group of seven (look at the wOBA graph). Part of the rationale for Jeter’s HOF election was on some notable fielding plays (we talk about Jeter’s famous flip play in Chapter 1 of our Analyzing Baseball with R book), but using modern fielding measures, Jeter is generally not thought to be a strong fielder.</p></li>
+<li><p><strong>Bobby Abreu</strong> and <strong>Jimmy Rollins</strong> (both former Phillies) will likely not be elected to the HOF in 2022. Abreu was one of the best hitters in this group, but his fielding was weak towards the end of his career. Rollins, in contrast, was one of the best fielders but the worst hitter in this group.</p></li>
+</ul>
+</section>
+</section>
+<section id="the-broom-package-and-home-run-trajectories" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="the-broom-package-and-home-run-trajectories"><span class="header-section-number">7</span> The broom Package and Home Run Trajectories</h2>
+<p>I recently discovered the relatively new <code>broom</code> package. In my world, one is often fitting a number of models to data, and it can be awkward to collect the model output in a convenient way. The objective of the broom package is to address this issue – it collects model fitting output (say regression coefficients and standard errors from a fitting function such as <code>lm()</code>) into a data frame. Then one can use other packages such as <code>dplyr</code> or <code>ggplot2</code> to summarize or graph this data frame output.</p>
+<p>I’m going to briefly illustrate this package for one of my popular topics – patterns in career trajectories of batters. I am going to focus on the players in the 500 home run club (those who have hit at least 500 career home runs) and see how their home run rates (HR / AB) vary as a function of their age. By the way, one of the chapters in Analyzing Baseball Data with R talks about estimating career trajectories using R. The Baseball-Reference site shows pictures and the leaders in career home runs.</p>
+<p>I first have to create a data frame with the appropriate data – here’s the process.</p>
+<ul>
+<li><p>I start with the <code>Batting</code> and <code>Master</code> data frames from the Lahman database. I collect the names of all of the players with at least 500 career home runs through the 2015 season.</p></li>
+<li><p>I collect all of the player-season data (season, home runs, and at-bats) for all players in the 500 club.</p></li>
+<li><p>The <code>Batting</code> data frame does not contain the age information. I pick up the birthdates of the players from the Master data frame and merge this information with the player season data frame. From the birthdates, I can compute the player ages for all seasons. (There is a quibble about the “official” age which depends on the birth month and day, and I take in account this issue.)</p></li>
+</ul>
+<p>After this work, I have a single data frame <code>S500</code> with variables <code>Name</code>, <code>yearID</code>, <code>HR</code> , and <code>AB</code>. If I wanted to fit a single quadratic curve to the season home run rate data for all players, I would use the code</p>
+<pre><code>lm(I(HR / AB) ~ Age + I(Age ^ 2), data=S500)</code></pre>
+<section id="the-tidy-function" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="the-tidy-function"><span class="header-section-number">7.1</span> The tidy function</h3>
+<p>Since I believe players have different “true” trajectories, I am interested in running this regression separately for each player in the 500 club. Suppose that I’d like to store the estimated regression coefficients for all the player fits. This is accomplished by the function tidy in the broom package:</p>
+<pre><code>library(broom)
+regressions &lt;- S500 %&gt;% group_by(Name) 
+  do(tidy(lm(I(HR / AB) ~ Age + I(Age ^ 2), data=.)))</code></pre>
+<p>The output <code>regressions</code> is a data frame containing the estimates, standard errors, etc. for each of the player fits:</p>
+<pre><code>head(regressions)
+            Name        term      estimate    std.error statistic
+1  Albert Pujols (Intercept) -0.1564145033 1.440626e-01 -1.085740
+2  Albert Pujols         Age  0.0175182704 1.046082e-02  1.674655
+3  Albert Pujols    I(Age^2) -0.0003347728 1.863632e-04 -1.796347
+4 Alex Rodriguez (Intercept) -0.2894062182 7.684082e-02 -3.766308
+5 Alex Rodriguez         Age  0.0255148619 5.624347e-03  4.536502
+6 Alex Rodriguez    I(Age^2) -0.0004430719 9.927357e-05 -4.463140</code></pre>
+<p>Using this data frame, I can estimate, for each model fit, the age at which the player achieves peak performance. I use the <code>summarize()</code> function in the dplyr package to compute these estimates and then use ggplot2 to display these peak ages.</p>
+<pre><code>S &lt;- summarize(group_by(regressions, Name),
+     peak_age=- estimate[2] / 2 / estimate[3])
+ggplot(S, aes(Name, peak_age)) + geom_point() +
+  coord_flip() + ylim(20, 40) +
+  ggtitle("Age of Peak Performance of Home Run Rate")</code></pre>
+<p><img src="figures/trajectories/peak28.png" class="img-fluid" style="width:70.0%"></p>
+<p>Most players peak in home run rate in their late 20’s or early 30’s. Note that Ernie Banks and Albert Pujols was relatively young when he hit his (estimated) home run peak, in contrast to Barry Bonds who peaked (with respect to home run rate) in his late 30’s.</p>
+</section>
+<section id="the-augment-function" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="the-augment-function"><span class="header-section-number">7.2</span> The augment function</h3>
+<p>By use of the <code>augment()</code> function, I can obtain the raw data and the predicted response for all the cases in all of the regressions – this is saved in the data frame individual.</p>
+<pre><code>individual &lt;- S500 %&gt;% group_by(Name) %&gt;%
+  do(augment(lm(I(HR / AB) ~ Age + I(Age ^ 2), data=.)))
+
+head(individual)
+           Name   I.HR.AB.   Age I.Age.2.    .fitted     .se.fit
+1 Albert Pujols 0.06271186    21      441 0.06383435 0.008159784
+2 Albert Pujols 0.05762712    22      484 0.06695739 0.006197427
+3 Albert Pujols 0.07275804    23      529 0.06941088 0.004872128
+4 Albert Pujols 0.07770270    24      576 0.07119483 0.004241007
+5 Albert Pujols 0.06937394    25      625 0.07230923 0.004171649
+6 Albert Pujols 0.09158879    26      676 0.07275408 0.004366893</code></pre>
+</section>
+<section id="plot-of-home-run-trajectories" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="plot-of-home-run-trajectories"><span class="header-section-number">7.3</span> Plot of Home Run Trajectories</h3>
+<p>With the basic data frame <code>S500</code> and the predicted values for all of the regressions stored in the data frame <code>individual</code>, it is straightforward to use the <code>ggplot2</code> package to graph the home run rates and the fitted trajectories.</p>
+<pre><code>ggplot(individual, aes(Age, .fitted)) +
+  geom_line(color="red", size=1.5) +
+  facet_wrap(~ Name) +
+  geom_point(data=S500, aes(Age, HR / AB), color="blue") +
+  ggtitle("Career Trajectories of the 500 Home Run Club") +
+  theme_fivethirtyeight()</code></pre>
+<p><img src="figures/trajectories/peak29.png" class="img-fluid" style="width:70.0%"></p>
+<p>This graph shows clearly that there are different career paths to 500 or more home runs.</p>
+<ul>
+<li><p>A typical trajectory (like A-Rod) is to have a gradual increase in the home run rate, peak in one’s late 20’s or early 30’s, and then decline until retirement. The rate of increase and decline can vary between players.</p></li>
+<li><p>Another path to 500 is to have a long career and consistently hit home runs – players like Eddie Murray or Hank Aaron are of this type. I don’t know if one would call Eddie Murray a great home run hitter, but he hit a reasonable number of home runs each season for many seasons.</p></li>
+<li><p>Another path is the “steriods” path – there is an indication from these home run trajectories that particular players around the 2000 season used some type of enhancement to dramatically increase their home run rate in the late part of their career. Players like Barry Bonds and Mark McGwire displayed unusual trajectories of home run rates.</p></li>
+</ul>
+<p>For more information about the <code>broom</code> package, I’d encourage you to read David Robinson’s paper.</p>
+<p>All of the R code to generate this post and graphs can be found on my gist site.</p>
+</section>
+</section>
+<section id="estimates-of-peak-age" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="estimates-of-peak-age"><span class="header-section-number">8</span> Estimates of Peak Age</h2>
+<section id="introduction-3" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">8.1</span> Introduction</h3>
+<p>In the last post, I showed how to use the <code>broom</code> package to collect results of individual player regressions. Specifically, I collected quadratic fits to home run rates of players who have hit 500 career home runs, and estimated the ages where the players achieved peak performance.</p>
+<p>There was one issue that I ignored – these estimates of peak performance using individual player data can be pretty poor. I hid this problem in the earlier post by presenting only the “reasonable” estimates that fell between 20 and 40 years.</p>
+<p>Here I demonstrate this problem, and show how one can correct this problem by use of a simple multilevel model.</p>
+</section>
+<section id="individual-estimates-of-peak-age-and-standard-errors" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="individual-estimates-of-peak-age-and-standard-errors"><span class="header-section-number">8.2</span> Individual Estimates of Peak Age and Standard Errors</h3>
+<p>When one uses the linear model lm function to fit a quadratic model, one can gets an estimate at the regression coefficients and from this one can get estimate at the peak age. But this function does not automatically give you a standard error of this estimate. One can get this standard deviation by</p>
+<ol type="1">
+<li><p>Simulating from the (posterior) distribution of the regression vector <span class="math inline">\(\beta\)</span>.</p></li>
+<li><p>For each simulated value of <span class="math inline">\(\beta = (\beta_0, \beta_1, \beta_2)\)</span>, compute the peak age <span class="math inline">\(PEAK = - \beta_1 / 2 / \beta_2\)</span>.</p></li>
+<li><p>Compute the mean and standard deviation of the simulated peak ages – the mean of the simulated values is an estimate at PEAK and the standard deviation of the simulated values provides the standard error of the estimate.</p></li>
+</ol>
+<p>When I did this for our 27 sluggers, here are some of the peak age estimates and standard errors:</p>
+<pre><code>            Name        M           S Estimate
+1     Hank Aaron 32.92271  20.2008382 29.27845
+2    Ernie Banks 30.66459 118.1309213 29.26111
+3    Barry Bonds 46.79100 278.8562239 29.26135
+4    Jimmie Foxx 27.14421   0.4030601 27.30595
+5    Ken Griffey 28.73868   0.5773422 28.81446
+6 Reggie Jackson 30.94798  13.2598651 29.27955</code></pre>
+<p>For some players like Foxx and Griffey, we have relatively precise estimates of peak age – the associated standard errors are small. In contrast, the estimates of Banks’ peak age of 30.6 and Bonds’ peak age of 46.8 are poor since the standard errors are so large.</p>
+</section>
+<section id="multilevel-modeling" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="multilevel-modeling"><span class="header-section-number">8.3</span> Multilevel Modeling</h3>
+<p>Here is a basic multilevel model for combining estimates. We have the peak age estimates {<span class="math inline">\(P_j\)</span>} with associated standard errors {<span class="math inline">\(s_j\)</span>}. We assume that <span class="math inline">\(\hat P_j\)</span> is normally distributed with mean <span class="math inline">\(P_j\)</span> (we call this the true peak age) and standard deviation <span class="math inline">\(s_j\)</span>. We assume the true peak ages <span class="math inline">\(P_1, ..., P_{27}\)</span> are normal with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\tau\)</span>, and we assign <span class="math inline">\((\mu, \tau)\)</span> a flat prior. This model can be fit easily using the <code>LearnBayes</code> package. From this model fit, we obtain estimates of the peak ages. These estimates adjust the relatively poor individual estimates by moving them towards an overall estimate.</p>
+</section>
+<section id="the-multilevel-estimates" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="the-multilevel-estimates"><span class="header-section-number">8.4</span> The Multilevel Estimates</h3>
+<p>Using <code>ggplot2</code> graphics , I graphically compare the individual estimates of peak age with the multilevel estimates below.</p>
+<p><img src="figures/trajectories/peak6.png" class="img-fluid" style="width:70.0%"></p>
+<p>A couple of comments from looking at this graph.</p>
+<ul>
+<li><p>The individual estimates are shrunk strongly towards the average value. The individual estimates range between 15 and 63 – the multilevel estimates of peak age are between 27.3 and 31.3. This is reasonable since we were not confident of some of the individual estimates (recall my comment about the high standard errors).</p></li>
+<li><p>The degree of shrinkage for a particular player depends on the associated standard error. The individual estimate of 63 is shrunk almost all the way towards the average of 29.3 since we had little confidence of the individual estimate.</p></li>
+<li><p>My conclusion is that peak ages of players vary, but generally they fall in a narrow band from 27 to 31.</p></li>
+</ul>
+<p>If you want to read more about this type of multilevel modeling, look at my shrinking batting averages post.</p>
+</section>
+</section>
+<section id="what-age-do-baseball-players-peak" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="what-age-do-baseball-players-peak"><span class="header-section-number">9</span> What Age Do Baseball Players Peak?</h2>
+<section id="introduction-4" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">9.1</span> Introduction</h3>
+<p>An interesting question&nbsp;that has been explored over the years is learning when players peak. &nbsp;That is, at what age does a baseball player achieve peak performance? &nbsp;By googling this question,&nbsp;I found an interesting Boston Globe article.</p>
+<p>Here is a brief study into this question, using the wOBA measure as a summary of offensive performance. &nbsp;This is a nice “teaching example” using R and the Lahman database.</p>
+</section>
+<section id="my-basic-method" class="level3" data-number="9.2">
+<h3 data-number="9.2" class="anchored" data-anchor-id="my-basic-method"><span class="header-section-number">9.2</span> My Basic Method</h3>
+<p>I am going to apply a relatively simple empirical method for detecting a player’s peak age. &nbsp;Plot a player’s season wOBA value against age, fit a loess smoothing curve (using the default smoothing parameter), and estimate the player’s peak age as the age&nbsp;where the smoother is at a maximum. &nbsp;By using the smoother rather than the actual wOBA, one is focusing on the general pattern in the trajectory and ignoring outliers.</p>
+<p>Here are several examples of this approach.</p>
+<p>Mickey Mantle peaked early in his career.</p>
+<p><img src="figures/trajectories/peak1.png" class="img-fluid" style="width:70.0%"></p>
+<p>Similarly, Albert Pujols peaked early – &nbsp;here the actual wOBA peak was at age 28, but the estimate based on the smooth is 27.</p>
+<p><img src="figures/trajectories/peak2.png" class="img-fluid" style="width:70.0%"></p>
+<p>Mike Schmidt peaked in wOBA later in his career.</p>
+<p><img src="figures/trajectories/peak3.png" class="img-fluid" style="width:70.0%"></p>
+<p>Anyway, I think this loess estimate gives a reasonable estimate at a player’s peak age.</p>
+</section>
+<section id="my-study" class="level3" data-number="9.3">
+<h3 data-number="9.3" class="anchored" data-anchor-id="my-study"><span class="header-section-number">9.3</span> My Study</h3>
+<p>Using this method, I perform a more comprehensive look at peak ages for players who had long careers.</p>
+<ol type="1">
+<li><p>Using the Lahman database, I collected the basic stats (AB, H, 2B, etc) for all players and seasons. &nbsp;I added an age variable and computed wOBA for all seasons using the Fangraphs weights for wOBA. &nbsp;I added several variables – the number of career PA and the mid career defined as the average of the debut and final years for a player.</p></li>
+<li><p>I collected career data for all players with at least 5000 PA and who had completed their career before the 2016 season. &nbsp;There were 886 players in this group.</p></li>
+<li><p>For each of the 886 players, I used the loess smoother to smooth the pattern of wOBA values and estimated the peak age as the age where the smoothed wOBA was the highest.</p></li>
+<li><p>When I am done, I have a data frame containing the midcareer and peak age of wOBA. &nbsp;I am looking for general patterns of peak age and seeing if these peak ages have changed over the seasons of baseball.</p></li>
+</ol>
+</section>
+<section id="some-graphs" class="level3" data-number="9.4">
+<h3 data-number="9.4" class="anchored" data-anchor-id="some-graphs"><span class="header-section-number">9.4</span> Some Graphs</h3>
+<p>Here is a graph of the distribution of peak ages. &nbsp;The most common ages (frequencies of players) are 29 (99 players), 26 (95 players), 28 (86 players), and 27 (81 players). &nbsp;Generally, 41 percent of all players peaked between ages between 26 and 29. &nbsp;But as the graph indicates, some players peak at young and old ages. &nbsp;(By the way, the conclusions are similar to those of the Boston Globe article where they used other summary measures of performance such as WAR.)</p>
+<p><img src="figures/trajectories/peak4.png" class="img-fluid" style="width:70.0%"></p>
+<p>Does the peak age distribution change across era? &nbsp;Here I have divided the midcareer variable into four intervals – the message is that the peak age distribution hasn’t changed over years – the mean peak age was 28.5 (years 1870-1930), 27.7 (years 1930-1970), 27.9 (years 1970-1990), and 28.9 (1990-2010). &nbsp;There is evidence to indicate that the peak age is slightly increasing in recent years.</p>
+<p><img src="figures/trajectories/peak5.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="comments-on-this-study" class="level3" data-number="9.5">
+<h3 data-number="9.5" class="anchored" data-anchor-id="comments-on-this-study"><span class="header-section-number">9.5</span> Comments on this Study</h3>
+<ul>
+<li><p>This analysis is a bit simplistic since I am basing these peak age estimates on the smooths of the individual trajectories. &nbsp;There is no effort to combine data across players. &nbsp;Since the individual wOBA players are generally noisy, there is a need for some pooling of the data.</p></li>
+<li><p>But one should pool the data in a reasonable way. &nbsp;For example, one can use multilevel models where each player has unique parameters describing the career trajectories and then a distribution is used to model the distribution of these individual trajectory parameters. &nbsp;I’ve done this using quadratic fitting functions.</p></li>
+<li><p>Some people have made some (in my view) unreasonable assumptions to learn about aging. &nbsp;For example, it doesn’t make sense to assume that each player peaks at age 28. &nbsp;People have different aging patterns – this means that players have different peak ages and also that players have different paths in maturing and in declining towards retirement. &nbsp;So one need flexibility in any model to allow for these differences. &nbsp;If one makes restrictive assumptions, then you’ll get answers which are inconsistent with the data.</p></li>
+<li><p>One obvious bias in this study is that I only considered players with long careers and I’d suspect that players with long careers tend to peak later than players with shorter careers.</p></li>
+<li><p>Also it would be interesting to focus on players at different positions and to use a variety of metrics in this exploration. &nbsp;For example, people generally get slower with age – what measures of performance are useful in detecting slowness in baseball? &nbsp;Anyway, there is definitely more to say on this general problem.</p></li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
