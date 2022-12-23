@@ -179,7 +179,7 @@ sim.R
 0.762 0.123 0.060 0.033 0.014 0.005 0.002 0.001 0.000 0.000 0.000</code></pre>
 <p>In these simulations, there were 0 runs scored in 76.2% of the half-innings, 1 run scored in 12.3% of the half-innings, and so on.</p>
 <p>I’m interested in how the simulated results compare to the real run production during the 2015 season. I’ve graphed the proportions of 0, 1, 2, … runs scored (in a half-inning) using the simulated and actual data. Actually, I have plotted the logit probability which is log (prob / (1 - prob)) – this makes it easier to visualize small probabilities.</p>
-<p><img src="figures/simulation/simulation1.png" class="img-fluid" style="width:50.0%"></p>
+<p><img src="figures/simulation/simulation1.png" class="img-fluid" style="width:70.0%"></p>
 <p>Looking at the graph, it seems that the simple model predicted a higher proportion of 0-run innings and predicted a lower proportion of 1-run innings. That makes sense, since the model is ignoring events like stolen bases and sacrifice runs that produce a single run. It is interesting that the model seems good in predicting the proportion of runs scored for 2 runs and higher.</p>
 <p>In my work, one common theme is that simple models tend to be remarkably accurate in predicting the variability in baseball data. This simulation model is certainly wrong (for example, I was ignoring the variability in run scoring between teams), but the model seems useful in understanding the variation in run scoring.</p>
 </section>
@@ -217,7 +217,7 @@ sim.R
 </ul>
 <p>(There is a quibble here. Since my run scoring model ignores run-contributing events such as steals, sacrifices, and wild pitches, then it is seems only fair in my comparison to also apply the same run-scoring algorithm to the actual sequence of PA events. So in the graph below, the “simulated” histogram refers to the simulation assuming the “all possible arrangements are equally likely” model, and the “observed” histogram refers to model simulations based on the observed PA sequence.)</p>
 <p>I show two histograms below for this particular Red Sox pattern of PA’s. The top one represents the runs scored using the actual sequence of PA outcomes, and the bottom histogram represents what one would predict using random arrangements of the PA symbols.</p>
-<p><img src="figures/simulation/simulation2.png" class="img-fluid" style="width:50.0%"></p>
+<p><img src="figures/simulation/simulation2.png" class="img-fluid" style="width:70.0%"></p>
 <p>In this case, the results are a bit surprising. Using the actual PA sequence, the Red Sox would score 9-10 runs in this game – the number tends to understate the actual runs scored (10) a little since my run-scoring model ignores stealing, sacrifices, etc. In the random arrangement model, the Red Sox would also score, on average 9 runs, although the simulated runs scored between 5 and 13. For this particular game I would say that the cluster luck effect in run scoring is pretty small.</p>
 <p>Although this work represents a first look at this run clustering issue, it looks promising. One should be able to use this method to compare teams in their abilities to cluster on-base events to score runs. Obviously this is an important issue for a baseball manager. For example, the Phillies manager currently plays with the batting order of his hitters. Using this method, can one offer some guidance on an optimal batting order to make most efficient use of the run clustering effect?</p>
 </section>
@@ -231,7 +231,7 @@ sim.R
 <section id="a-model-for-baseball-competition" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="a-model-for-baseball-competition"><span class="header-section-number">4.2</span> A Model for Baseball Competition</h3>
 <p>The Bradley-Terry model provides a popular and helpful way of modeling team competition. Suppose the thirty MLB teams have unknown ability values, call them <span class="math inline">\(A_1, ..., A_{30}\)</span>, that are distributed according to a normal curve with mean 0 and standard deviation <span class="math inline">\(S\)</span>. If team C plays team D, then the probability that C defeats D is given by the probability</p>
-<p><span class="math display">\[latex p_{CD} = \frac{\exp(A_C - A_D)}{1 + \exp(A_C - A_D)}\]</span></p>
+<p><span class="math display">\[p_{CD} = \frac{\exp(A_C - A_D)}{1 + \exp(A_C - A_D)}\]</span></p>
 <p>The only parameter unknown in this model is <span class="math inline">\(S\)</span> which reflects the level of competition of the MLB teams. If the teams all have the same ability, then <span class="math inline">\(S\)</span> would be equal to 0. We can actually fit this model and estimate the parameter <span class="math inline">\(S\)</span> using game results data from a previous season. For the work here, I am going to assume that <span class="math inline">\(S\)</span> = 0.3 which seems to reflect the level of MLB competition in recent seasons.</p>
 </section>
 <section id="simulating-a-season" class="level3" data-number="4.3">
@@ -323,7 +323,7 @@ source_gist("2a78aaf69a0e54fe1a35fbedeb662e62",
 </section>
 <section id="example-1-statistic-is-the-sum" class="level3" data-number="5.3">
 <h3 data-number="5.3" class="anchored" data-anchor-id="example-1-statistic-is-the-sum"><span class="header-section-number">5.3</span> Example 1: Statistic is the Sum</h3>
-<p>Suppose we wish to learn about <span class="math inline">\(P\)</span> based on the sum of the binary outcomes, that is, the number of hits. In the R script, we first define a vector <code>P_vector</code> containing the possible values of <span class="math inline">\(P\)</span> between 0.15 and 0.40. Then we use the model_data_simulation function with arguments <code>P_vector</code> , <code>N</code> (the number of at-bats), and <code>mystat</code> , the choice of statistic (here sum ). The output is a plot of the simulated draws of <span class="math inline">\(P\)</span> and <span class="math inline">\(S\)</span>. As one might anticipate, there is a positive association between the value of <span class="math inline">\(P\)</span> and the number of hits in 500 at-bats</p>
+<p>Suppose we wish to learn about <span class="math inline">\(P\)</span> based on the sum of the binary outcomes, that is, the number of hits. In the R script, we first define a vector <code>P_vector</code> containing the possible values of <span class="math inline">\(P\)</span> between 0.15 and 0.40. Then we use the <code>model_data_simulation()</code> function with arguments <code>P_vector</code> , <code>N</code> (the number of at-bats), and <code>mystat</code> , the choice of statistic (here <code>sum()</code> ). The output is a plot of the simulated draws of <span class="math inline">\(P\)</span> and <span class="math inline">\(S\)</span>. As one might anticipate, there is a positive association between the value of <span class="math inline">\(P\)</span> and the number of hits in 500 at-bats</p>
 <pre><code>P_vector &lt;- seq(.15, .40, by=.01)
 S1 &lt;- model_data_simulation(P_vector,
                             N=500,
@@ -352,8 +352,8 @@ S2 &lt;- model_data_simulation(P_vector,
 <h3 data-number="5.5" class="anchored" data-anchor-id="using-this-method-in-teaching"><span class="header-section-number">5.5</span> Using this Method in Teaching</h3>
 <p>I like this method of introducing inference for several reasons:</p>
 <ul>
-<li>It helps the student understand the distinction between the parameter and the statistic. It is flexible – one can play with different choices of statistic <span class="math inline">\(S\)</span>. I</li>
-<li>Inference is easy to implement – one performs inference by data analysis on a simulated sample, and one can make straight-forward interpretations of interval estimates. (One does not have to consider samples that you did not observe.)</li>
+<li><p>It helps the student understand the distinction between the parameter and the statistic. It is flexible – one can play with different choices of statistic <span class="math inline">\(S\)</span>.</p></li>
+<li><p>Inference is easy to implement – one performs inference by data analysis on a simulated sample, and one can make straight-forward interpretations of interval estimates. (One does not have to consider samples that you did not observe.)</p></li>
 </ul>
 </section>
 </section>
