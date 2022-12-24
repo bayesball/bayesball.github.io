@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jim Albert">
+<meta name="dcterms.date" content="2022-12-22">
+
+<title>Predicting Baseball Outcomes</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Prediction_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Prediction_files/libs/quarto-html/quarto.js"></script>
+<script src="Prediction_files/libs/quarto-html/popper.min.js"></script>
+<script src="Prediction_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Prediction_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Prediction_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Prediction_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Prediction_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Prediction_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Prediction_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a></li>
+  <li><a href="#predicting-daniel-murphys-home-runs---part-i" id="toc-predicting-daniel-murphys-home-runs---part-i" class="nav-link" data-scroll-target="#predicting-daniel-murphys-home-runs---part-i"><span class="toc-section-number">2</span>  Predicting Daniel Murphy’s Home Runs - Part I</a>
+  <ul class="collapse">
+  <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1"><span class="toc-section-number">2.1</span>  Introduction</a></li>
+  <li><a href="#murphys-home-run-talent" id="toc-murphys-home-run-talent" class="nav-link" data-scroll-target="#murphys-home-run-talent"><span class="toc-section-number">2.2</span>  Murphy’s Home Run Talent</a></li>
+  <li><a href="#a-prior-for-p" id="toc-a-prior-for-p" class="nav-link" data-scroll-target="#a-prior-for-p"><span class="toc-section-number">2.3</span>  A Prior for P</a></li>
+  <li><a href="#predicting-the-nlds" id="toc-predicting-the-nlds" class="nav-link" data-scroll-target="#predicting-the-nlds"><span class="toc-section-number">2.4</span>  Predicting the NLDS</a></li>
+  <li><a href="#updating-my-prior" id="toc-updating-my-prior" class="nav-link" data-scroll-target="#updating-my-prior"><span class="toc-section-number">2.5</span>  Updating My Prior</a></li>
+  <li><a href="#predicting-the-nlcs" id="toc-predicting-the-nlcs" class="nav-link" data-scroll-target="#predicting-the-nlcs"><span class="toc-section-number">2.6</span>  Predicting the NLCS</a></li>
+  <li><a href="#predicting-the-world-series" id="toc-predicting-the-world-series" class="nav-link" data-scroll-target="#predicting-the-world-series"><span class="toc-section-number">2.7</span>  Predicting the World Series</a></li>
+  <li><a href="#what-have-we-learned" id="toc-what-have-we-learned" class="nav-link" data-scroll-target="#what-have-we-learned"><span class="toc-section-number">2.8</span>  What Have We Learned?</a></li>
+  </ul></li>
+  <li><a href="#predicting-daniel-murphys-home-runs---part-ii" id="toc-predicting-daniel-murphys-home-runs---part-ii" class="nav-link" data-scroll-target="#predicting-daniel-murphys-home-runs---part-ii"><span class="toc-section-number">3</span>  Predicting Daniel Murphy’s Home Runs - Part II</a>
+  <ul class="collapse">
+  <li><a href="#my-prior" id="toc-my-prior" class="nav-link" data-scroll-target="#my-prior"><span class="toc-section-number">3.1</span>  My Prior</a></li>
+  <li><a href="#what-else-is-unknown" id="toc-what-else-is-unknown" class="nav-link" data-scroll-target="#what-else-is-unknown"><span class="toc-section-number">3.2</span>  What Else is Unknown?</a></li>
+  <li><a href="#one-predictive-simulation" id="toc-one-predictive-simulation" class="nav-link" data-scroll-target="#one-predictive-simulation"><span class="toc-section-number">3.3</span>  One Predictive Simulation</a></li>
+  <li><a href="#shiny-app-to-experiment-with-different-priors" id="toc-shiny-app-to-experiment-with-different-priors" class="nav-link" data-scroll-target="#shiny-app-to-experiment-with-different-priors"><span class="toc-section-number">3.4</span>  Shiny App to Experiment with Different Priors</a></li>
+  </ul></li>
+  <li><a href="#making-sense-of-a-300-midseason-batting-average" id="toc-making-sense-of-a-300-midseason-batting-average" class="nav-link" data-scroll-target="#making-sense-of-a-300-midseason-batting-average"><span class="toc-section-number">4</span>  Making Sense of a 300 Midseason Batting Average</a></li>
+  <li><a href="#how-many-home-runs-will-be-hit-in-2016" id="toc-how-many-home-runs-will-be-hit-in-2016" class="nav-link" data-scroll-target="#how-many-home-runs-will-be-hit-in-2016"><span class="toc-section-number">5</span>  How Many Home Runs Will be Hit in 2016?</a>
+  <ul class="collapse">
+  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"><span class="toc-section-number">5.1</span>  Introduction</a></li>
+  <li><a href="#a-model-for-home-runs" id="toc-a-model-for-home-runs" class="nav-link" data-scroll-target="#a-model-for-home-runs"><span class="toc-section-number">5.2</span>  A model for home runs</a></li>
+  <li><a href="#fit-the-model" id="toc-fit-the-model" class="nav-link" data-scroll-target="#fit-the-model"><span class="toc-section-number">5.3</span>  Fit the model</a></li>
+  <li><a href="#make-predictions" id="toc-make-predictions" class="nav-link" data-scroll-target="#make-predictions"><span class="toc-section-number">5.4</span>  Make predictions</a></li>
+  <li><a href="#how-many-home-runs-will-be-hit" id="toc-how-many-home-runs-will-be-hit" class="nav-link" data-scroll-target="#how-many-home-runs-will-be-hit"><span class="toc-section-number">5.5</span>  How many home runs will be hit?</a></li>
+  <li><a href="#what-have-we-learned-1" id="toc-what-have-we-learned-1" class="nav-link" data-scroll-target="#what-have-we-learned-1"><span class="toc-section-number">5.6</span>  What have we learned?</a></li>
+  <li><a href="#but" id="toc-but" class="nav-link" data-scroll-target="#but"><span class="toc-section-number">5.7</span>  But …</a></li>
+  <li><a href="#update-october-3." id="toc-update-october-3." class="nav-link" data-scroll-target="#update-october-3."><span class="toc-section-number">5.8</span>  Update (October 3).</a></li>
+  </ul></li>
+  <li><a href="#predicting-second-half-team-results---part-i" id="toc-predicting-second-half-team-results---part-i" class="nav-link" data-scroll-target="#predicting-second-half-team-results---part-i"><span class="toc-section-number">6</span>  Predicting Second Half Team Results - Part I</a>
+  <ul class="collapse">
+  <li><a href="#the-prediction-problem" id="toc-the-prediction-problem" class="nav-link" data-scroll-target="#the-prediction-problem"><span class="toc-section-number">6.1</span>  The Prediction Problem</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="toc-section-number">6.2</span>  The Data</a></li>
+  <li><a href="#the-r-work-for-one-season" id="toc-the-r-work-for-one-season" class="nav-link" data-scroll-target="#the-r-work-for-one-season"><span class="toc-section-number">6.3</span>  The R Work for One Season</a></li>
+  <li><a href="#a-50-season-study" id="toc-a-50-season-study" class="nav-link" data-scroll-target="#a-50-season-study"><span class="toc-section-number">6.4</span>  A 50 Season Study</a></li>
+  <li><a href="#application" id="toc-application" class="nav-link" data-scroll-target="#application"><span class="toc-section-number">6.5</span>  Application</a></li>
+  <li><a href="#r-function" id="toc-r-function" class="nav-link" data-scroll-target="#r-function"><span class="toc-section-number">6.6</span>  R Function</a></li>
+  </ul></li>
+  <li><a href="#predicting-second-half-team-results---part-ii" id="toc-predicting-second-half-team-results---part-ii" class="nav-link" data-scroll-target="#predicting-second-half-team-results---part-ii"><span class="toc-section-number">7</span>  Predicting Second Half Team Results - Part II</a>
+  <ul class="collapse">
+  <li><a href="#last-weeks-post" id="toc-last-weeks-post" class="nav-link" data-scroll-target="#last-weeks-post"><span class="toc-section-number">7.1</span>  Last Week’s Post</a></li>
+  <li><a href="#it-is-misleading-to-look-at-the-change-values" id="toc-it-is-misleading-to-look-at-the-change-values" class="nav-link" data-scroll-target="#it-is-misleading-to-look-at-the-change-values"><span class="toc-section-number">7.2</span>  It is Misleading to Look at the Change Values</a></li>
+  <li><a href="#back-to-the-prediction-problem" id="toc-back-to-the-prediction-problem" class="nav-link" data-scroll-target="#back-to-the-prediction-problem"><span class="toc-section-number">7.3</span>  Back to the Prediction Problem</a></li>
+  <li><a href="#closing-comments" id="toc-closing-comments" class="nav-link" data-scroll-target="#closing-comments"><span class="toc-section-number">7.4</span>  Closing Comments</a></li>
+  </ul></li>
+  <li><a href="#hit-predictions-from-statcast-data" id="toc-hit-predictions-from-statcast-data" class="nav-link" data-scroll-target="#hit-predictions-from-statcast-data"><span class="toc-section-number">8</span>  Hit Predictions from Statcast Data</a>
+  <ul class="collapse">
+  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3"><span class="toc-section-number">8.1</span>  Introduction</a></li>
+  <li><a href="#different-predictions" id="toc-different-predictions" class="nav-link" data-scroll-target="#different-predictions"><span class="toc-section-number">8.2</span>  Different Predictions</a></li>
+  <li><a href="#evaluating-a-prediction-rule-by-error-rates" id="toc-evaluating-a-prediction-rule-by-error-rates" class="nav-link" data-scroll-target="#evaluating-a-prediction-rule-by-error-rates"><span class="toc-section-number">8.3</span>  Evaluating a Prediction Rule by Error Rates</a></li>
+  <li><a href="#comparing-models" id="toc-comparing-models" class="nav-link" data-scroll-target="#comparing-models"><span class="toc-section-number">8.4</span>  Comparing Models</a></li>
+  <li><a href="#correct-predictions-at-the-player-level" id="toc-correct-predictions-at-the-player-level" class="nav-link" data-scroll-target="#correct-predictions-at-the-player-level"><span class="toc-section-number">8.5</span>  Correct Predictions at the Player Level</a></li>
+  <li><a href="#final-comments" id="toc-final-comments" class="nav-link" data-scroll-target="#final-comments"><span class="toc-section-number">8.6</span>  Final Comments</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Predicting Baseball Outcomes</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jim Albert </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 22, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>This contains several blog posts from “Exploring Baseball Data Using R” on the general topic of prediction.</p>
+<p>Sections 2 and 3 focus on predicting outcomes of a specific player – how many home runs will Daniel Murphy hit in the 2015 World Series? These plots illustrate the use of Bayesian modeling in this prediction procedure.</p>
+<p>Section 4 addresses a general prediction problem. Suppose a player has a .300 or higher batting average midway through a season. What is the chance he finishes the season with a .300+ AVG?</p>
+<p>Section 5 considers the problem of predicting the final count of home runs in the 2016 baseball season. We see that although we are predicting the count for only 98 remaining games, there is still substantial uncertainty about the number of home runs hit.</p>
+<p>Sections 6 and 7 considers prediction of team results – given a team’s performance in the first-half, what is a reasonable prediction of the team’s W/L record in the second half?</p>
+<p>Section 8 describes the use of the newer Statcast data to predict hits and outs based on the launch angle and exit velocity measurements.</p>
+</section>
+<section id="predicting-daniel-murphys-home-runs---part-i" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="predicting-daniel-murphys-home-runs---part-i"><span class="header-section-number">2</span> Predicting Daniel Murphy’s Home Runs - Part I</h2>
+<section id="introduction-1" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">2.1</span> Introduction</h3>
+<p>The baseball world is still in shock after watching Daniel Murphy’s home run prowess in the MLB playoffs. One natural question to ask is “how surprising is this result based on what we knew about Murphy before the 2015 playoffs?” As a Bayesian, let me describe an exercise that illustrates “learning from data” and might provide some insight into this question.</p>
+</section>
+<section id="murphys-home-run-talent" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="murphys-home-run-talent"><span class="header-section-number">2.2</span> Murphy’s Home Run Talent</h3>
+<p>We don’t know Murphy’s talent or ability to hit a home run during the 2015 playoffs. Let’s represent this talent by a number <span class="math inline">\(P\)</span> which is the probability Murphy hits a home run in a single AB.</p>
+</section>
+<section id="a-prior-for-p" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="a-prior-for-p"><span class="header-section-number">2.3</span> A Prior for P</h3>
+<p>I’d like to construct a prior for <span class="math inline">\(P\)</span> based on my beliefs about Murphy’s home run ability before the playoffs. We have some data, namely the number of HR and AB for the seven seasons that Murphy has been in professional baseball. I assume that Murphy has a unique probability, say <span class="math inline">\(P_j\)</span>, of hitting a home run for the <span class="math inline">\(j\)</span>th season, and I assume that <span class="math inline">\(P_1, ..., P_7\)</span> come from a common talent distribution. (This is often called a random-effects model.) Fitting the model to the home run data for the seven seasons, I get the following curve for the talent distribution. I think this is a reasonable approximation to my beliefs about Murphy’s home run ability before the 2015 playoffs.</p>
+<p><img src="figures/prediction/prediction1.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="predicting-the-nlds" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="predicting-the-nlds"><span class="header-section-number">2.4</span> Predicting the NLDS</h3>
+<p>Based on my prior, I can make a prediction about the number of home runs that Murphy will hit in the NLDS against the Dodgers. I can simulate the predictive distribution by first simulating a home run ability from my prior and then simulating a number of home runs <span class="math inline">\(X\)</span> from a binomial distribution with sample size 21 (the number of at-bats in the NLDS) and probability of success <span class="math inline">\(P\)</span>. I get the following predictions (in 10,000 simulations) for the number of home runs – note that the actual number of home runs Murphy hit during the NLDS (3) is unusual, but clearly possible in my 10,000 simulations.</p>
+<p><img src="figures/prediction/prediction2.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="updating-my-prior" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="updating-my-prior"><span class="header-section-number">2.5</span> Updating My Prior</h3>
+<p>Now we have observed Murphy hit 3 home runs in 21 AB, my beliefs about Murphy’s home run hitting will change. There is an easy way to update my prior with this new information. I have graphed below my new prior and compared it with the original prior.</p>
+<p><img src="figures/prediction/prediction3.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="predicting-the-nlcs" class="level3" data-number="2.6">
+<h3 data-number="2.6" class="anchored" data-anchor-id="predicting-the-nlcs"><span class="header-section-number">2.6</span> Predicting the NLCS</h3>
+<p>Based on my new prior, I can make predictions on Murphy’s home run output during the NLCS against the Cubs. I perform the same type of simulation exercise – simulate from my new prior, and then simulate from a binomial distribution with 17 AB. The graph shows the prediction for the number of NLCS home runs based on 10,000 simulations. Murphy actually hit 4 more home runs in the NLCS. It is interesting to note that this performance against the Cubs was more surprising given the current beliefs about Murphy’s talent than the three-home run performance against the Dodgers.</p>
+<p><img src="figures/prediction/prediction4.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="predicting-the-world-series" class="level3" data-number="2.7">
+<h3 data-number="2.7" class="anchored" data-anchor-id="predicting-the-world-series"><span class="header-section-number">2.7</span> Predicting the World Series</h3>
+<p>Now this is the million-dollar question. How many home runs will Murphy hit in the 2015 World Series? We can take the same general approach. First, I revise my beliefs about Murphy’s home run talent <span class="math inline">\(P\)</span>. After seeing Murphy hit four homers in four games in the NLCS, my (new) prior will be adjusted so that his mean rate is about 0.032. If I know the number of ABs that Murphy will have in the World Series, I could predict the number of home runs he will hit. There are two uncertainties here – we don’t know the length of the World Series and we don’t know if the AL pitchers will even pitch to Murphy (remember all of the intentional walks given to Barry Bonds?). But I could make reasonable guesses (that is, priors) at the number of games and on the likelihood that Murphy would have an official at-bat, and then make predictions based on my prior on <span class="math inline">\(P\)</span> and my other information.</p>
+</section>
+<section id="what-have-we-learned" class="level3" data-number="2.8">
+<h3 data-number="2.8" class="anchored" data-anchor-id="what-have-we-learned"><span class="header-section-number">2.8</span> What Have We Learned?</h3>
+<p>I think many of the naive calculations about the “degree of surprise” of Murphy’s post-season home run hitting overstate the rareness of this event. One type of calculation will compute the probability of a home run in six consecutive games by taking an estimated probability of hitting a home run in a single game and taking this to the 6th power. But this calculation ignores the idea that we chose this “6 home run” event since it was interesting, and this results in a probability calculation that is too small.</p>
+<p>I think my Bayesian exercise is closer to the beliefs of a manager. Initially he did not think that Murphy’s home run ability was unusual, but his opinions were modified after seeing his three home runs in the NLDS. Watching Murphy hit HR in four consecutive games against the Cubs was surprising, but not so surprising given what he accomplished in the NLDS. These Bayesian calculations can be modified with different assumptions. Nice features of this approach is that it allows one to easily modify one’s beliefs about players’ abilities given new information, and allows you to easily make predictions for future game.</p>
+<p>Of course, all of the calculations are done using R. The fitting of the random effects model is done using the <code>LearnBayes</code> package, the simulations use the <code>rbeta()</code> and <code>rbinom()</code> functions, and graphing using the <code>ggplot2</code> package.</p>
+</section>
+</section>
+<section id="predicting-daniel-murphys-home-runs---part-ii" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="predicting-daniel-murphys-home-runs---part-ii"><span class="header-section-number">3</span> Predicting Daniel Murphy’s Home Runs - Part II</h2>
+<p>In the last post, I described a general Bayesian methodology for learning about Daniel Murphy’s “true” home run rate and making predictions about his future home run performance. In one sense those predictions were not real in that I knew how many opportunities (AB) Murphy would have in each series.</p>
+<section id="my-prior" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="my-prior"><span class="header-section-number">3.1</span> My Prior</h3>
+<p>Let’s focus here on predicting the number of home runs hit by Murphy in the World Series that starts shortly. Following my work in the last blog post, I think a reasonable prior for Murphy’s home run probability <span class="math inline">\(P\)</span> is a beta density with shape parameters 15.3 and 459.8. The prior mean is about 0.032 – this is higher than his rate of hitting home runs in the 2015 regular season, but not that much higher. (The reader is encouraged to try other priors for <span class="math inline">\(P\)</span>, especially if you believe Murphy will be HOT this week.)</p>
+<p>Here’s a picture of my prior:</p>
+<p><img src="figures/prediction/prediction5.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="what-else-is-unknown" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="what-else-is-unknown"><span class="header-section-number">3.2</span> What Else is Unknown?</h3>
+<p>What makes this prediction more interesting is that we don’t know the length (number of games) of the 2105 World Series, and we also don’t know how many at-bats Murphy will get in the individual games.</p>
+<p>But we have some knowledge about lengths of World Series’ and also some information about typical number of at-bats for Murphy in a game, and we can use this knowledge to formulate priors for the number of games and the number of AB for Murphy in this series.</p>
+<section id="number-of-games" class="level4" data-number="3.2.1">
+<h4 data-number="3.2.1" class="anchored" data-anchor-id="number-of-games"><span class="header-section-number">3.2.1</span> Number of Games</h4>
+<p>My opinion is that the Royals and the Mets are pretty evenly matched, so it is reasonable that the winner of each game is equally likely to be either team. With this assumption and assuming independence of game outcomes, we can get a probability distribution for the length of the series. (I don’t believe this distribution will be much different with other assumptions about the teams’ relative strengths.)</p>
+</section>
+<section id="number-of-at-bats" class="level4" data-number="3.2.2">
+<h4 data-number="3.2.2" class="anchored" data-anchor-id="number-of-at-bats"><span class="header-section-number">3.2.2</span> Number of At-Bats</h4>
+<p>To learn about the number of AB of Murphy for a single game, we look at the number of at-bats for Murphy during the 2015 season when he was a regular. Using this data, I estimate that, in a single game, Murphy will get 3, 4, or 5 at-bats with respective probabilities .14, .69, .17.</p>
+</section>
+</section>
+<section id="one-predictive-simulation" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="one-predictive-simulation"><span class="header-section-number">3.3</span> One Predictive Simulation</h3>
+<p>To predict the number of Murphy home runs for a single World Series by simulation, we</p>
+<ul>
+<li>Simulate a number of games <span class="math inline">\(N\)</span></li>
+<li>Simulate the number of at-bats for each of the <span class="math inline">\(N\)</span> games – let the total number of at-bats be <span class="math inline">\(X\)</span></li>
+<li>Choose a true home run rate <span class="math inline">\(P\)</span> at random from my beta(15.3, 459.8) prior</li>
+<li>Finally, simulate the number of home runs <span class="math inline">\(Y\)</span> from a binomial distribution with size <span class="math inline">\(X\)</span> and probability of success <span class="math inline">\(P\)</span></li>
+</ul>
+<p>We repeat this process 10,000 times, obtaining a predictive distribution for the total number of Murphy home runs <span class="math inline">\(Y\)</span> get during the series.</p>
+<pre><code>Number of Home Runs    0     1     2     3     4     5 
+Probability        0.473 0.343 0.137 0.038 0.008 0.001 </code></pre>
+<p><img src="figures/prediction/prediction6.png" class="img-fluid" style="width:70.0%"></p>
+<p>So I’m 95 percent confident that Daniel Murphy will hit 2 or fewer home runs during the 2015 World Series. Of course, this statement is based on my priors on Murphy’s true home run ability, the length of the series, and the number of AB in each game.</p>
+</section>
+<section id="shiny-app-to-experiment-with-different-priors" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="shiny-app-to-experiment-with-different-priors"><span class="header-section-number">3.4</span> Shiny App to Experiment with Different Priors</h3>
+<p>If you have a different opinion about Murphy’s home run talent during the 2015 World Series, I’ve built a Shiny app where you can play with different beta(a, b) priors for <span class="math inline">\(P\)</span> and see the impact of these priors on the predictive distribution of home runs for Murphy. Just click here to see my Shiny app.</p>
+<p>Also all of the R work for parts I and II of this Murphy study can be found at my gist site.</p>
+</section>
+</section>
+<section id="making-sense-of-a-300-midseason-batting-average" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="making-sense-of-a-300-midseason-batting-average"><span class="header-section-number">4</span> Making Sense of a 300 Midseason Batting Average</h2>
+<p>Suppose a player has a 300 (or higher) batting average midway through a season – what is the chance that he finishes the season with a 300+ batting average?</p>
+<p>We’ll answer this question empirically and use the answer to motivate a decomposition of a batting average.</p>
+<p>I collect all Retrosheet play-by-play data for each of the 1960-2015 seasons. &nbsp;I focused on the players who had at least 100 AB and batting average .300 (or higher) on July 1– there were 2619 players in this group (about 47 players each season).</p>
+<p>Of these 2619 players, 1401 of them&nbsp;(53%) finished with a .300+ batting average. &nbsp;So one could say that the probability a 300+ midseason batter finishes with a 300+ average is .53. &nbsp;Given what we know at midseason, we would predict that it is slightly more probable than not that he finishes 300 or higher.</p>
+<p>But one can make a more accurate prediction by looking at two components of a batting average. &nbsp;One can write</p>
+<p><span class="math display">\[
+AVG = \frac{H}{AB} = \frac{AB - SO}{AB} \times \frac{H}{AB - SO}
+\]</span></p>
+<p>or</p>
+<p><span class="math display">\[
+AVG =  (1 - SO.Rate) \times BABIP
+\]</span></p>
+<p>where <span class="math inline">\(SO.RATE\)</span> is the strikeout rate and <span class="math inline">\(BABIP\)</span> is the proportion of hits (including HR) in balls put in play. &nbsp;For each of these players who achieved a 300+ midseason average, I construct a scatterplot of “One Minus the SO.RATE” against the BABIP. &nbsp;The contour lines correspond to constant values of AVG. &nbsp;Of course, all of the points for our selected players fall on or above the contour line corresponding to .300. &nbsp;Note that there is a lot of variability in the strikeout rates, although they all hit well “for average”.</p>
+<p><img src="figures/prediction/prediction7.png" class="img-fluid" style="width:70.0%"></p>
+<p>The following graph compares the midseason and final averages of these players. &nbsp;As expected the cloud of points above .300 at midseason moves&nbsp;download to a cloud of points at the end of season where the points straddle the .300 line.</p>
+<p><img src="figures/prediction/prediction8.png" class="img-fluid" style="width:70.0%"></p>
+<p>Look carefully at the bottom graph. &nbsp;Look at the points corresponding to players with a low value of “One Minus Strikeout Rate” (high strikeout rate) on the left side of the graph. &nbsp;Most of these players had a final season batting average under .300. &nbsp;In contrast, if you look at the points on the right (low strikeout rate), they appear to be more likely to have a final AVG over .300.</p>
+<p>We can make this clearer by the use of a graph. &nbsp;For many values of One Minus Strikeout Rate (plus and minus a small neighborhood), I compute the proportion of hitters with a final batting average exceeding .300. &nbsp;(Remember overall that 53% of these hitters finish with a 300+ AVG.)</p>
+<p><img src="figures/prediction/prediction9.png" class="img-fluid" style="width:70.0%"></p>
+<p>We see a strong relationship between One Minus Strikeout Rate and the chance he has a final season AVG over .300. If a player has, say a 25% strikeout rate (One Minus SO.RATE = .75), then his chance of a final season 300+ AVG is about .43. &nbsp;If instead, his strikeout rate is 10%, his chance of a final 300+ average is .575. &nbsp;Another &nbsp;way of saying this is that the high BABIP guys tend not to get a final 300+ AVG.</p>
+<p>The message&nbsp;here is that all 300 batting averages are not the same. &nbsp;From a skill / luck perspective, there is more skill in a strikeout rate than in a BABIP rate and that translates into different future batting averages for players with different SO.RATE / BABIP characteristics. &nbsp;One can also reach this same conclusion from a modeling perspective and I’ll give a talk on this issue at the SABR Analytics meeting.</p>
+</section>
+<section id="how-many-home-runs-will-be-hit-in-2016" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="how-many-home-runs-will-be-hit-in-2016"><span class="header-section-number">5</span> How Many Home Runs Will be Hit in 2016?</h2>
+<section id="introduction-2" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">5.1</span> Introduction</h3>
+<p>As many of you know, the number of home runs hit in 2016 has increased dramatically from recent seasons. &nbsp;In fact, the current total is 5420 which is getting close to the record number of 5693 from the 2000 season. &nbsp;That raises the obvious question – with 7 days of baseball remaining, how like is it to tie or break the 2000 record? &nbsp;This is a good opportunity to illustrate Bayesian thinking. &nbsp;I’ll propose a simple model for the number of home runs hit by a team in a game, fit this model to the team/game data for the 2016 season, and then use this to predict the number of home runs hit in this last week of the baseball season.</p>
+</section>
+<section id="a-model-for-home-runs" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="a-model-for-home-runs"><span class="header-section-number">5.2</span> A model for home runs</h3>
+<p>Let <span class="math inline">\(y\)</span>&nbsp;denote the number of home runs hit by a team in an individual game – this is typically a small number like 0, 1, 2, 3, etc. &nbsp;I will assume that home run numbers for all of the 2016 games follow a negative binomial distribution with parameters <code>size</code> and <code>mu</code> (I am using the R syntax for the <code>dnbinom()</code> function). &nbsp;The parameter <code>mu</code> &nbsp;is the mean number of home runs and <code>size</code> is a dispersion parameter. &nbsp;(By the way, this is a better fitting model than the Poisson distribution which has only one free parameter.) &nbsp;To complete this model, I assign a vague, noninformative distribution to the parameters <code>mu</code> and <code>size</code>.</p>
+</section>
+<section id="fit-the-model" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="fit-the-model"><span class="header-section-number">5.3</span> Fit the model</h3>
+<p>From Baseball Reference I am able to collect the number of home runs hit by team per game – there were over 4500 sampled values of <span class="math inline">\(y\)</span>. &nbsp;I fit the Bayesian model –&nbsp;I got estimates of 1.17 and 9.95 for mu and size , respectively. &nbsp;I can approximate the posterior distribution of (<code>mu, size</code>) by a bivariate normal distribution with mean vector (1.17, 9.95) and an associated variance-covariance matrix.</p>
+</section>
+<section id="make-predictions" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="make-predictions"><span class="header-section-number">5.4</span> Make predictions</h3>
+<p>Looking at the 2016 baseball schedule, it appears that we have 98 games remaining (including the rescheduling of the Miami/Atlanta game), so we have 98 x 2 = 196 team/games remaining. &nbsp;To simulate the number of home runs hit in these 196 opportunities, we first simulate&nbsp;<code>(mu, size)</code>&nbsp;from the posterior distribution, and then simulate values of&nbsp;<code>(y1, ..., y196)</code>&nbsp;from the negative binomial distribution and compute the total number of home runs hit. &nbsp;If I repeat this process 1000 times, I get 1000 draws from the predictive distribution for the number of home runs hit in the remainder of the season.</p>
+</section>
+<section id="how-many-home-runs-will-be-hit" class="level3" data-number="5.5">
+<h3 data-number="5.5" class="anchored" data-anchor-id="how-many-home-runs-will-be-hit"><span class="header-section-number">5.5</span> How many home runs will be hit?</h3>
+<p>I have graphed the predictive distribution of the number of home runs hit in the remainder of this season below and overlaid the target of 273 to reach the 2000 season total.</p>
+<p><img src="figures/prediction/prediction10.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="what-have-we-learned-1" class="level3" data-number="5.6">
+<h3 data-number="5.6" class="anchored" data-anchor-id="what-have-we-learned-1"><span class="header-section-number">5.6</span> What have we learned?</h3>
+<ul>
+<li>There is a good amount of uncertainty about the actual number of home runs hit in the remaining 98 games. &nbsp;My best prediction is about 225, but it could easily be any value between 200 and 260.</li>
+<li>It is very unlikely that we will meet or exceed the 2000 season total. &nbsp;My calculations (based on my model) is that the predictive probability of meeting or exceeding the target is only about .002 or .2 %.</li>
+</ul>
+</section>
+<section id="but" class="level3" data-number="5.7">
+<h3 data-number="5.7" class="anchored" data-anchor-id="but"><span class="header-section-number">5.7</span> But …</h3>
+<p>Although this has been an interesting exercise, maybe we asked the wrong question. &nbsp;What is more important is maybe not the number of home runs hit, but rather the rate of home runs hit. &nbsp;Looking quickly at Baseball Reference, we see</p>
+<ul>
+<li><p>In the 2016 season (with 7 days remaining in the season), we have 5420 home runs in 159,144 AB In contrast, in 2000, there were 5693 home runs in 167,290</p></li>
+<li><p>Computing rates, we see that the 2016 home run rate is 3.406 percent which actually exceeds the 2000 rate of 3.403. So really 2016 might be the greatest home run hitting season of all time.</p></li>
+</ul>
+<p>Another question is why – what is causing the increase in home run hitting in 2016? &nbsp;I have not done a careful investigation, but I think part of the answer is the players’ approach to hitting – a large fraction of the scoring in baseball is due to home runs.</p>
+</section>
+<section id="update-october-3." class="level3" data-number="5.8">
+<h3 data-number="5.8" class="anchored" data-anchor-id="update-october-3."><span class="header-section-number">5.8</span> Update (October 3).</h3>
+<p>The 2016 season just concluded and the total number of home runs hit is 5610, which means that 5610 -&nbsp;5420 = 190 home runs were hit in the final week. &nbsp;Interesting, 190 falls in the left tail of my predictive distribution. &nbsp;This might suggest that my assumption that the mean number of home runs hit per game did not change across the season is incorrect. &nbsp;I suspect that some of the teams making the playoffs were playing their subs, but it is unclear what impact this would have on home run hitting. &nbsp;It is notable that the 2016 home run rate was 5610 /&nbsp;165561 = &nbsp;3.388 which did not exceed the 2000 home run rate of 3.403%..</p>
+</section>
+</section>
+<section id="predicting-second-half-team-results---part-i" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="predicting-second-half-team-results---part-i"><span class="header-section-number">6</span> Predicting Second Half Team Results - Part I</h2>
+<section id="the-prediction-problem" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="the-prediction-problem"><span class="header-section-number">6.1</span> The Prediction Problem</h3>
+<p>Currently it is half way through the 2017 season and we’re observing some interesting team records:</p>
+<ul>
+<li>The 2016 World Series Winner, the Chicago Cubs, is currently 41-42.</li>
+<li>The Atlanta Braves are currently 40-41 in a rebuilding year.</li>
+<li>The LA Dodgers have a 55-29 record with a 22 1/2 game lead over the SF Giants who have a 33-52 record.</li>
+<li>The Phillies are 28-54 (it is interesting since it is extreme but perhaps not that surprising).</li>
+</ul>
+<p>That raises the obvious question: &nbsp;Given a team’s first-half record, what is a reasonable prediction at a team’s W/L record in the second half?</p>
+<p>One way of describing a team’s record is the difference between the number of wins (W) and losses (L):</p>
+<p>Difference = <span class="math inline">\(W - L\)</span></p>
+<p>So currently, the Dodgers’ Win/Loss difference is 55 - 29 = 26 and the Phillies currently have a Win/Loss difference of 28 - 54 = -26. &nbsp;(By the way, it may have made more sense to talk about “games over .500”, but one would get similar 2nd-half predictions.)</p>
+<p>So I’ll rephrase my question this way: &nbsp;If you know a team’s W/L difference in the 1st half, what is a good prediction at the team’s W/L difference in the 2nd half of the season?</p>
+</section>
+<section id="the-data" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="the-data"><span class="header-section-number">6.2</span> The Data</h3>
+<p>Retrosheet has single files for the game results for each season. &nbsp;I find it convenient to download all of the game log files and store them in a single folder on my computer, so it is easy to collect them for specific studies of interest.</p>
+</section>
+<section id="the-r-work-for-one-season" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="the-r-work-for-one-season"><span class="header-section-number">6.3</span> The R Work for One Season</h3>
+<p>I have a single R function <code>all_work()</code>&nbsp;that does all of the work for a particular season of interest.</p>
+<ul>
+<li>For each team, I find the W/L record for all games through July 1 (the first half record) and also the W/L record for all games played from July 2 to the end of the season (the second half record).</li>
+<li>I graph the first half W/L difference against the CHANGE = 2nd half W/L difference MINUS 1st half W/L difference</li>
+</ul>
+<p>Here is a illustration of this graph for the 2016 season where I label the plotting point with the team abbreviation.</p>
+<p><img src="figures/prediction/prediction11.png" class="img-fluid" style="width:70.0%"></p>
+<p>Note that we see a negative relationship – teams that do well in the 1st half (like Texas and Cleveland) don’t do as well in the 2nd half. &nbsp;Similarly, teams that have bad 1st halves (like Minnesota and Cincinnati) tend to do better in the 2nd half. &nbsp;(This gives some hope for Phillies fans in the 2nd half of the 2017 season.)</p>
+<p>To understand this negative relationship, we fit a line – the slope here is -0.51. &nbsp;This means that if a team has a W/L difference of 12 for the first half, we would predict the team to have a 6 W/L drop (to a W/L difference of 12 - 6 = 6) in the second half.</p>
+<p>When I try this analysis for other seasons, we see a similar pattern, but the slope estimate can change. &nbsp; Here is the graph for the 2015 season.</p>
+<p><img src="figures/prediction/prediction12.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="a-50-season-study" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="a-50-season-study"><span class="header-section-number">6.4</span> A 50 Season Study</h3>
+<p>To see if this pattern holds across seasons, I repeat this analysis for all seasons from 1967 through 2016 and collect all of the slopes. &nbsp;Here is a dotplot of the 50 slopes – we see that the average slope is -0.44 and the single season slope can vary between -0.8 and -0.1.</p>
+<p><img src="figures/prediction/prediction13.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="application" class="level3" data-number="6.5">
+<h3 data-number="6.5" class="anchored" data-anchor-id="application"><span class="header-section-number">6.5</span> Application</h3>
+<p>Let’s use the average slope -0.44 as our estimate of the relationship between a team’s first half W/L difference and the change in W/L difference. &nbsp;So my prediction is</p>
+<p>2nd Half W/L Difference = 1st Half W/L Difference - 0.44 x&nbsp;1st Half W/L Difference</p>
+<p>Let’s apply this:</p>
+<ul>
+<li>The Phillies currently have a W/L difference of -26. &nbsp;I compute -26 * (-0.44) = 11.24. &nbsp;So I predict that the Phillies will improve in the 2nd half – their W/L difference will be -26 + 11 = -15.</li>
+<li>The Dodgers currently have a W/L difference of 26 – I predict their W/L difference will drop by 26 * (-0.44) = 11 which corresponds to a W/L difference of 26 - 11 = 15.</li>
+</ul>
+<p>Now with additional information, one can get better estimates of a team’s W/L record in the second half. &nbsp;For example, I know the Cubs have a strong team, so it is reasonable to predict that their W/L record will improve in the 2nd half. &nbsp;But I’d need to look more carefully at the individual players and predict the 2nd half performance of each player, and collect these predicted performances to get a prediction at the team’s performance in the second half. &nbsp;But this “-0.44” method provides a quick method of predicting team performances by just using the team records.</p>
+</section>
+<section id="r-function" class="level3" data-number="6.6">
+<h3 data-number="6.6" class="anchored" data-anchor-id="r-function"><span class="header-section-number">6.6</span> R Function</h3>
+<p>To see the R function all_work.R that produces the above graph, see my gist site. &nbsp;I am assuming that one has collected the Retrosheet game log files and put them in a single folder on your computer. &nbsp;You might be interested in seeing how I find a team’s W/L record based on the single game results. &nbsp;Or you might be interested in seeing the <code>ggplot2</code> code to produce the graph. The <code>ggrepel</code> package is useful in plotting point labels so they don’t overlap.</p>
+</section>
+</section>
+<section id="predicting-second-half-team-results---part-ii" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="predicting-second-half-team-results---part-ii"><span class="header-section-number">7</span> Predicting Second Half Team Results - Part II</h2>
+<section id="last-weeks-post" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="last-weeks-post"><span class="header-section-number">7.1</span> Last Week’s Post</h3>
+<p>In the last post, I considered the problem of predicting a team’s second half W/L record based on its W/L record in the first half. I was using the win/loss difference W - L as my measure of success.</p>
+<p>Based on reader comments, there were two issues on my post.</p>
+<p>Some readers were confused when I looked at the change in win loss difference from the 1st to 2nd half (difference of differences?) Actually, as Andrew Wheeler has commented, it is misleading to make an inference based on the negative pattern in the (W/L record, Change in W/L record) scatterplot.</p>
+</section>
+<section id="it-is-misleading-to-look-at-the-change-values" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="it-is-misleading-to-look-at-the-change-values"><span class="header-section-number">7.2</span> It is Misleading to Look at the Change Values</h3>
+<p>Let me first address the misleading issue by use of a R simulation. &nbsp;Suppose we take a measurement of a team’s performance for the 1st half and the 2nd half when the true correlation between the 1st and 2nd half values is equal to rho. &nbsp;I simulate 30 values of the (first half, 2nd half) values for the 30 teams from a bivariate normal distribution with zero means, unit standard deviations and correlation rho. &nbsp;Then I look at the observed correlation between the first half value and the Change = 2nd half value minus 1st half value. &nbsp;I repeat this simulation 1000 times and collect the 1000 observed correlations that I compute.</p>
+<p>I did this simulation experiment four times for true correlation values of rho = 0, rho = 0.3, rho = 0.6, and rho = 0.9. &nbsp;Below I construct density graphs of the observed correlations for each of the four cases.</p>
+<p><img src="figures/prediction/prediction14.png" class="img-fluid" style="width:70.0%"></p>
+<p>Several interesting things to see here:</p>
+<ul>
+<li>The relationship between the first half measure and the change score (difference between 1st and 2nd half scores)&nbsp;is negative even when the first and second half measures are uncorrelated (rho = 0). &nbsp;This is not intuitive – one would think that the first half and change measurements would have little relationship in this case.</li>
+<li>As the relationship between the 1st and 2nd half measures gets stronger (moving from Rho = 0 to Rho = 0.9), the relationship of the 1st half measure and the change score gets weaker (moves towards zero). &nbsp;Again, this is nonintuitive to me but perhaps there is a good explanation.</li>
+</ul>
+</section>
+<section id="back-to-the-prediction-problem" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="back-to-the-prediction-problem"><span class="header-section-number">7.3</span> Back to the Prediction Problem</h3>
+<p>Okay, here’s a better way to look at the prediction problem. &nbsp;We are interested in predicting a team’s 2nd half performance (defined by W - L) using the 1st half W - L performance. &nbsp;Here I graph the first and 2nd half performances for the 2016 season.</p>
+<p><img src="figures/prediction/prediction15.png" class="img-fluid" style="width:70.0%"></p>
+<p>If we thought the 1st half record is the best prediction of a team’s 2nd half record, we would be wrong. &nbsp;This graph demonstrates regression to the mean since the fitted slope is 0.45 which is smaller than 1. &nbsp;If we repeat this analysis for the past 50 seasons, we’d find that a typical slope is 0.53. &nbsp;So if a team like the Phillies has a W - L difference of -30, we’d predict its W - L difference in the 2nd half to be 0.53 times (-30) which is approximately -16.</p>
+</section>
+<section id="closing-comments" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="closing-comments"><span class="header-section-number">7.4</span> Closing Comments</h3>
+<p>Thanks to Andy Wheeler who commented on the misleading issue on my graph. &nbsp;Actually, Andy has posted on this issue here.</p>
+<p>On next week’s post, I plan to look at some hitters who have unusually high or low batting averages on balls in play and I’ll use some Statcast data to help understand what variables influence the BABIP values.</p>
+</section>
+</section>
+<section id="hit-predictions-from-statcast-data" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="hit-predictions-from-statcast-data"><span class="header-section-number">8</span> Hit Predictions from Statcast Data</h2>
+<section id="introduction-3" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">8.1</span> Introduction</h3>
+<p>In last week’s post, I was interested in measuring a hitter’s ability to produce a hit from a batted ball.&nbsp; Specifically, I constructed a Z score that measures one’s ability to hit beyond what would be predicted based on knowing the launch angle and exit velocity.&nbsp; One issue that I didn’t discuss much was the basic prediction problem – what is a reasonable prediction of hit or out based on knowing the launch angle and exit velocity?&nbsp;&nbsp;Here I will talk about different types of predictions, measuring rates of correct predictions, and looking at the correct prediction rate at a player level.</p>
+</section>
+<section id="different-predictions" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="different-predictions"><span class="header-section-number">8.2</span> Different Predictions</h3>
+<p>When one uses the generalized additive model, one can use the launch angle and exit velocity to obtain a predicted probability that the batted ball is a base hit.&nbsp; If the probability is high enough, we predict a hit – in the previous post I suggested (with no justification) using a .5 cutoff, so if the probability exceeds .5, we predict “hit”.&nbsp; But other cutoff values are possible, say .331, .2, or any value between 0 and 1.&nbsp; &nbsp;As an extreme case, consider a rule that ignores exit velocity and launch angle.&nbsp; If we simply predict “out” for any batted ball (ignoring launch angle and exit velocity), then we we would always be right if the batted ball was out.&nbsp; On the other hand, if the batted ball was a hit, then we’d be always wrong.&nbsp; Since 33.1 percent of all batted balls are hits and 66.9 % are out, the overall rate of correct predictions using this silly rule would be</p>
+<p>P(silly rule is correct) = P(out) P(correct | out) + P(hit) P(correct | hit) = 0.669 x 1 + 0.331 x 0&nbsp; = 0.669</p>
+<p>So any reasonable prediction rule should be correct more than 66.9% of the time.</p>
+</section>
+<section id="evaluating-a-prediction-rule-by-error-rates" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="evaluating-a-prediction-rule-by-error-rates"><span class="header-section-number">8.3</span> Evaluating a Prediction Rule by Error Rates</h3>
+<p>Let y denote the outcome (0 or 1) and yhat the prediction (0 or 1).&nbsp; In general, we can predict “hit” (or yhat = 1) if the predicted probability of hit exceeds some constant k, and predict “out” (or yhat = 0) if the probability of hit is smaller than k.&nbsp; We can evaluate this rule by the error rates</p>
+<ul>
+<li>P(yhat = 1 | y = 0) (predicting a hit when really it is an out)</li>
+<li>P(yhat = 0 | y = 1) (predicting an out when really it is a hit)</li>
+</ul>
+<p>One way to assess the goodness of a prediction model is to compute these error rates for all possible cutoff values k.&nbsp; A common way to do this is to graph P(yhat = 1 | y = 0) against the P(yhat = 1 | yhat = 1) (one minus the prediction error) for all cutoffs k – the resulting graph is called the ROC Curve.</p>
+<p>Here is a graph of the ROC curve for the gam model using exit velocity and launch angle to predict hits.&nbsp; Each point on the curve represents the use of this model for a specific cutoff value k.&nbsp; The area under this ROC Curve can be used to measure the goodness of this prediction model.</p>
+<p><img src="figures/prediction/prediction16.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="comparing-models" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="comparing-models"><span class="header-section-number">8.4</span> Comparing Models</h3>
+<p>To show that both exit velocity and launch angle are useful for predicting hits, we consider two simpler models – one gam model that only uses exit velocity to predict hits, and another gam model that only uses launch angle.&nbsp; Below I show the ROC curves for all three models.&nbsp; Also I label the points corresponding to two common prediction rules – one that predicts hit if the fitted probability exceeds .331 and another if the probability of hit exceeds .5.&nbsp; A couple of things are clear from the graph:</p>
+<p><img src="figures/prediction/prediction17.png" class="img-fluid" style="width:70.0%"></p>
+<ul>
+<li>If we were to use only one variable, launch angle is most important for predicting hits (larger area under the ROC curve).</li>
+<li>It is better to use both variables launch angle and exit velocity than one alone.</li>
+</ul>
+<p>By the way, the overall rate of correct predictions using the .331 rule would be</p>
+<p>P(out) P(correct | out) + P(hit) P(correct | hit) =&nbsp;0.669 x 0.764 + 0.331 x 0.791&nbsp; = 0.773</p>
+<p>This correct prediction rate of 77.3% is about 10% higher than what we found using the silly prediction rule.</p>
+</section>
+<section id="correct-predictions-at-the-player-level" class="level3" data-number="8.5">
+<h3 data-number="8.5" class="anchored" data-anchor-id="correct-predictions-at-the-player-level"><span class="header-section-number">8.5</span> Correct Predictions at the Player Level</h3>
+<p>Suppose we predict hit if the fitted probability of hit exceeds .331.&nbsp; The bottom graph gives the proportion of correct predictions for each player in the 2017 season.&nbsp; Generally, for players with a reasonable number of batted balls, the proportion of correct predictions falls between 0.70 and 0.85 for most players.&nbsp; I’ve labeled a few interesting players – Reynolds and Stanton have correct prediction rates close to 0.85 (perhaps due to the large number of home runs), and Freese and Hernandez have correct prediction rates closer to 0.70.&nbsp; Hernandez is pretty fast and perhaps this reflects infield hits, but I am a little puzzled about the poor prediction rate for Freese.</p>
+<p><img src="figures/prediction/prediction18.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="final-comments" class="level3" data-number="8.6">
+<h3 data-number="8.6" class="anchored" data-anchor-id="final-comments"><span class="header-section-number">8.6</span> Final Comments</h3>
+<ul>
+<li>This post was motivated partly by my generalized linear models course that I’m teaching this semester.&nbsp; One learns best about statistical methods by trying them out on datasets of interest.</li>
+<li>Any model should be evaluated by its ability to make successful predictions.&nbsp; It is interesting that the rate of correct predictions using the Statcast variables is only 77.3%, although I suspect one could improve this rate by including other variables such as the spray angle.&nbsp; Since this correct prediction rate is low, this indicates that luck or other sources of variability are a bit part of hitting.</li>
+<li>Whenever one gets interested in individual differences such as the high and low prediction rates for Stanton, Reynolds, Hernandez, and Freese, the natural follow-up questions are:&nbsp; “Why?&nbsp; Do these hitters have special talents that cause these differences?”&nbsp; So as usual there is more to explore to address these questions.</li>
+<li>I have ignored the third key variable – spray angle – in this work.&nbsp; We’ll explore the influence of spray angle on the chance of a hit in next week’s post.</li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
