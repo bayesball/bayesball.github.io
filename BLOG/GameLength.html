@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jim Albert">
+<meta name="dcterms.date" content="2022-12-22">
+
+<title>Length of Baseball Games</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="GameLength_files/libs/clipboard/clipboard.min.js"></script>
+<script src="GameLength_files/libs/quarto-html/quarto.js"></script>
+<script src="GameLength_files/libs/quarto-html/popper.min.js"></script>
+<script src="GameLength_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="GameLength_files/libs/quarto-html/anchor.min.js"></script>
+<link href="GameLength_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="GameLength_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="GameLength_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="GameLength_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="GameLength_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a></li>
+  <li><a href="#length-of-baseball-games" id="toc-length-of-baseball-games" class="nav-link" data-scroll-target="#length-of-baseball-games"><span class="toc-section-number">2</span>  Length of Baseball Games</a></li>
+  <li><a href="#dissection-of-the-time-of-a-baseball-game" id="toc-dissection-of-the-time-of-a-baseball-game" class="nav-link" data-scroll-target="#dissection-of-the-time-of-a-baseball-game"><span class="toc-section-number">3</span>  Dissection of the Time of a Baseball Game</a></li>
+  <li><a href="#pace-stats-in-baseball-and-tennis" id="toc-pace-stats-in-baseball-and-tennis" class="nav-link" data-scroll-target="#pace-stats-in-baseball-and-tennis"><span class="toc-section-number">4</span>  Pace Stats in Baseball and Tennis</a>
+  <ul class="collapse">
+  <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1"><span class="toc-section-number">4.1</span>  Introduction</a></li>
+  <li><a href="#tennis-serena-williams-and-maria-sharapova" id="toc-tennis-serena-williams-and-maria-sharapova" class="nav-link" data-scroll-target="#tennis-serena-williams-and-maria-sharapova"><span class="toc-section-number">4.2</span>  Tennis – Serena Williams and Maria Sharapova</a></li>
+  <li><a href="#baseball-pitcher-pace-stats-from-a-week-in-the-2015-season" id="toc-baseball-pitcher-pace-stats-from-a-week-in-the-2015-season" class="nav-link" data-scroll-target="#baseball-pitcher-pace-stats-from-a-week-in-the-2015-season"><span class="toc-section-number">4.3</span>  Baseball – Pitcher Pace Stats from a Week in the 2015 Season</a></li>
+  <li><a href="#wrapup" id="toc-wrapup" class="nav-link" data-scroll-target="#wrapup"><span class="toc-section-number">4.4</span>  Wrapup</a></li>
+  </ul></li>
+  <li><a href="#game-duration-study-with-retrosheet-gamelog-data" id="toc-game-duration-study-with-retrosheet-gamelog-data" class="nav-link" data-scroll-target="#game-duration-study-with-retrosheet-gamelog-data"><span class="toc-section-number">5</span>  Game Duration Study with Retrosheet Gamelog Data</a>
+  <ul class="collapse">
+  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"><span class="toc-section-number">5.1</span>  Introduction</a></li>
+  <li><a href="#useful-predictors" id="toc-useful-predictors" class="nav-link" data-scroll-target="#useful-predictors"><span class="toc-section-number">5.2</span>  Useful Predictors?</a></li>
+  <li><a href="#lets-get-serious" id="toc-lets-get-serious" class="nav-link" data-scroll-target="#lets-get-serious"><span class="toc-section-number">5.3</span>  Let’s Get Serious</a></li>
+  <li><a href="#a-simple-regression-model" id="toc-a-simple-regression-model" class="nav-link" data-scroll-target="#a-simple-regression-model"><span class="toc-section-number">5.4</span>  A Simple Regression Model</a></li>
+  <li><a href="#whats-left" id="toc-whats-left" class="nav-link" data-scroll-target="#whats-left"><span class="toc-section-number">5.5</span>  What’s Left?</a></li>
+  <li><a href="#looking-further" id="toc-looking-further" class="nav-link" data-scroll-target="#looking-further"><span class="toc-section-number">5.6</span>  Looking Further</a></li>
+  <li><a href="#r-script" id="toc-r-script" class="nav-link" data-scroll-target="#r-script"><span class="toc-section-number">5.7</span>  R Script</a></li>
+  </ul></li>
+  <li><a href="#length-of-world-series-games" id="toc-length-of-world-series-games" class="nav-link" data-scroll-target="#length-of-world-series-games"><span class="toc-section-number">6</span>  Length of World Series Games</a>
+  <ul class="collapse">
+  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3"><span class="toc-section-number">6.1</span>  Introduction</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="toc-section-number">6.2</span>  The Data</a></li>
+  <li><a href="#number-of-pitches-and-game-length" id="toc-number-of-pitches-and-game-length" class="nav-link" data-scroll-target="#number-of-pitches-and-game-length"><span class="toc-section-number">6.3</span>  Number of Pitches and Game Length</a></li>
+  <li><a href="#time-between-pitches" id="toc-time-between-pitches" class="nav-link" data-scroll-target="#time-between-pitches"><span class="toc-section-number">6.4</span>  Time between Pitches</a></li>
+  <li><a href="#comparing-two-games" id="toc-comparing-two-games" class="nav-link" data-scroll-target="#comparing-two-games"><span class="toc-section-number">6.5</span>  Comparing Two Games</a></li>
+  <li><a href="#times-between-pitches-within-and-between-batters" id="toc-times-between-pitches-within-and-between-batters" class="nav-link" data-scroll-target="#times-between-pitches-within-and-between-batters"><span class="toc-section-number">6.6</span>  Times between Pitches – Within and Between Batters</a></li>
+  <li><a href="#differences-between-pitchers" id="toc-differences-between-pitchers" class="nav-link" data-scroll-target="#differences-between-pitchers"><span class="toc-section-number">6.7</span>  Differences between Pitchers</a></li>
+  <li><a href="#advice-to-major-league-baseball" id="toc-advice-to-major-league-baseball" class="nav-link" data-scroll-target="#advice-to-major-league-baseball"><span class="toc-section-number">6.8</span>  Advice to Major League Baseball</a></li>
+  </ul></li>
+  <li><a href="#why-are-baseball-games-so-long" id="toc-why-are-baseball-games-so-long" class="nav-link" data-scroll-target="#why-are-baseball-games-so-long"><span class="toc-section-number">7</span>  Why Are Baseball Games So Long?</a>
+  <ul class="collapse">
+  <li><a href="#introduction-4" id="toc-introduction-4" class="nav-link" data-scroll-target="#introduction-4"><span class="toc-section-number">7.1</span>  Introduction</a></li>
+  <li><a href="#three-possible-explanations" id="toc-three-possible-explanations" class="nav-link" data-scroll-target="#three-possible-explanations"><span class="toc-section-number">7.2</span>  Three Possible Explanations</a></li>
+  <li><a href="#more-plate-appearances" id="toc-more-plate-appearances" class="nav-link" data-scroll-target="#more-plate-appearances"><span class="toc-section-number">7.3</span>  More Plate Appearances?</a></li>
+  <li><a href="#longer-plate-appearances" id="toc-longer-plate-appearances" class="nav-link" data-scroll-target="#longer-plate-appearances"><span class="toc-section-number">7.4</span>  Longer Plate Appearances?</a></li>
+  <li><a href="#longer-time-to-pitch" id="toc-longer-time-to-pitch" class="nav-link" data-scroll-target="#longer-time-to-pitch"><span class="toc-section-number">7.5</span>  Longer Time to Pitch?</a></li>
+  <li><a href="#what-have-we-learned" id="toc-what-have-we-learned" class="nav-link" data-scroll-target="#what-have-we-learned"><span class="toc-section-number">7.6</span>  What Have We Learned?</a></li>
+  <li><a href="#r-work" id="toc-r-work" class="nav-link" data-scroll-target="#r-work"><span class="toc-section-number">7.7</span>  R Work</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Length of Baseball Games</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jim Albert </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 22, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>We are all aware that baseball games tend to be long, especially those during the playoffs. This article contains posts written on the general subject of game length from the “Exploring Baseball Using R” blog.</p>
+<p>Section 2 uses Retrosheet play-by-play data to explore how the game length depends on the number of pitches. Section 3 looks at all times between pitches for games played during the 2013 season.</p>
+<p>Section 4 focuses on so-called “pace stats”, the time between between pitches for individual pitchers. We find a large variation between pitchers in a particular group.</p>
+<p>Section 5 illustrates the use of Retrosheet game log data to explore the variation in game duration. One interesting takeaway is the game duration tends to increase by 27 minutes for each 10 additional non-outs in a game.</p>
+<p>Section 6 explores the length of the 2017 World Series games and Section 7 explores three possible explanations for the increasing lengths of games.</p>
+</section>
+<section id="length-of-baseball-games" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="length-of-baseball-games"><span class="header-section-number">2</span> Length of Baseball Games</h2>
+<p>As we know, baseball is no longer America’s game – I believe baseball has been surpassed in popularity by American football. One problem is that MLB games are long – games in the 2012 season were significantly longer than the games twenty years ago. In this post, we’re going to try to learn more about the variables that control the length of a baseball game. In doing so, we’ll illustrate merging Retrosheet play-by-play data with Retrosheet game logs.</p>
+<p>A baseball game is essentially a sequence of pitches, so I would think the time of a game would be strongly related to the number of pitches.</p>
+<p>The number of pitches in each game during the 2012 season can be obtained using the Retrosheet play-by-play files. I assume that a single text file <code>all2012.csv</code> has been saved in a <code>data</code> folder and a <code>fields.csv</code> file in this same folder contains the names of all of the variables. (We explain this downloading process in Appendix A of our book.) We read these files into R and save the play-by-plays in a data frame called plays.</p>
+<pre><code>season &lt;- 2012
+file.name &lt;- paste("data/all", season, ".csv", sep="")
+plays &lt;- read.csv(file.name, header=FALSE)
+fields &lt;- read.csv("data/fields.csv")
+names(plays) &lt;- fields[, "Header"]</code></pre>
+<p>The variable <code>PITCH_SEQ_TX</code> gives the pitch-by-pitch sequence and other events like pickoff attempts and steals for each play. We remove all non-pitches from this variable using the function <code>gsub()</code>, creating a new variable <code>pseq</code>. The string function <code>nchar()</code> computes the length of each string (the number of pitches in each plate appearance) and this is stored in the variable <code>n.pitches</code>.</p>
+<pre><code>plays$pseq &lt;- gsub("[.&gt;123N+*]", "", plays$PITCH_SEQ_TX)
+plays$n.pitches &lt;- nchar(plays$pseq)</code></pre>
+<p>The Retrosheet game logs for the 2012 season are stored in the file <code>gl2012.txt</code> and the corresponding header file is stored in <code>game_log_header.csv</code>. We read both data files into R, creating the data frame games.</p>
+<pre><code>file.name &lt;- paste("data/gl", season, ".txt", sep="")
+games &lt;- read.csv(file.name, header=FALSE)
+headers &lt;- read.csv("data/game_log_header.csv")
+names(games) &lt;- names(headers)</code></pre>
+<p>Going back to the play-by-play data frame, we create a new variable GAME_ID (this facilitates the merging with the game log data frame). Then we use the function <code>ddply()</code> (in the <code>plyr</code> package) to count the number of pitches in each game, creating the new variable <code>Pitches</code>.</p>
+<pre><code>games$GAME_ID &lt;- with(games, paste(HomeTeam, Date, "0", sep=""))
+library(plyr)
+game.pitches &lt;- ddply(plays, .(GAME_ID), summarize,
+                      Pitches = sum(n.pitches))</code></pre>
+<p>Now we use the <code>merge()</code> function to merge the game.pitches and games data frames, using the matching variable <code>GAME_ID</code>. The merged data frame is called <code>DATA</code>. We use the <code>head()</code> function to display a few rows of this data frame.</p>
+<pre><code>DATA &lt;- merge(game.pitches,
+              games[, c("GAME_ID", "Duration")],
+              by="GAME_ID")
+head(DATA)
+       GAME_ID Pitches Duration
+1 ANA201204060     242      142
+2 ANA201204070     271      166
+3 ANA201204080     331      195
+4 ANA201204160     282      168
+5 ANA201204170     275      166
+6 ANA201204180     289      164</code></pre>
+<p>Now is the fun stuff. To see the relationship between the number of game pitches and time (in minutes), we construct a smoothed scatterplot (this is nice for displaying a large number of point) and overlay a best fitting line.</p>
+<pre><code>with(DATA, smoothScatter(Pitches, Duration))
+fit &lt;- lm(Duration ~ Pitches, data=DATA)
+abline(fit, lwd=3, col="red")</code></pre>
+<p><img src="figures/gamelength/length1.png" class="img-fluid" style="width:70.0%"></p>
+<p>By displaying the variable fit, we see the best line is</p>
+<pre><code>DURATION = 0.2725 + 0.6069 PITCHES</code></pre>
+<p>So each pitch in a baseball game adds (on average) .6 of a minute (or 36 seconds) to the length of a game. But we see significant spread in the times for a given number of pitches, so obviously there are other important factors that affect the length of a game. In a future post, we’ll discuss these other factors.</p>
+</section>
+<section id="dissection-of-the-time-of-a-baseball-game" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="dissection-of-the-time-of-a-baseball-game"><span class="header-section-number">3</span> Dissection of the Time of a Baseball Game</h2>
+<p>In my last post, we found that the time of a baseball game is strongly related to the number of pitches, and each pitch adds, on average, 36 seconds to the length of a baseball game. Here we use PitchFX data to get a better understanding about the times between pitches in a single game. There is a nice package pitchRx , authored by Carson Sievert, that allows one to easily download PitchFX data and explore data from all pitches.</p>
+<p>Here we load the package and use the scrapeFX function to download the pitches for all games played on September 5, 2013. The <code>plyr::join()</code> function puts all of the pitch data in a single data frame pitches .</p>
+<pre><code>library(pitchRx)
+dat &lt;- scrapeFX(start = "2013-09-05", end = "2013-09-05")
+pitches &lt;- plyr::join(dat$pitch, dat$atbat,
+                      by = c("num", "url"), type = "inner")</code></pre>
+<p>The pitchFX system records the time of each pitch which is stored in the variable <code>sv_id</code> . Using the <code>substr()</code> function, we create a new variable <code>time</code> equal to the number of seconds past midnight.</p>
+<pre><code>pitches$hours &lt;- as.numeric(substr(pitches$sv_id, 8, 9))
+pitches$minutes &lt;- as.numeric(substr(pitches$sv_id, 10, 11))
+pitches$seconds &lt;- as.numeric(substr(pitches$sv_id, 12, 13))
+pitches$time &lt;- with(pitches, 3600 * hours +
+                     60 * minutes + seconds)</code></pre>
+<p>Let’s look at the pitch times of the game played between Arizona and San Francisco on September 5, 2013. (See the box score for this game on Baseball-Reference.) By extracting a portion of the url variable, we create a new variable <code>game.id</code> and use the <code>subset()</code> function to extract the pitches for this particular game.</p>
+<pre><code>pitches$game.id &lt;- substr(pitches$url, 66, 95)
+pitches1 &lt;- subset(pitches,
+                   game.id=="gid_2013_09_05_arimlb_sfnmlb_1")
+pitches1 &lt;- pitches1[order(pitches1$time), ]</code></pre>
+<p>Since we are interested in the times between pitches, a new data frame <code>time.data</code> is created containing three variables: <code>Time</code>, the time between consecutive pitches, <code>Index</code>, the number of the pitch, and the <code>Inning</code> when the pitch occurred.</p>
+<pre><code>time.data &lt;- data.frame(Time=diff(pitches1$time),
+                        Index=1:(length(pitches1$time) - 1),
+                        Inning=pitches1$inning[-1])</code></pre>
+<p>&nbsp; The <code>ggplot2</code> package is used to graph the time between pitch against the pitch number. (We give many illustrations of the <code>ggplot2</code> package in our book.) In the graph, the plotting symbol is the inning number, and we add horizontal lines at 1, 2, and 3 minutes to make it easier to read the vertical scale.</p>
+<pre><code>library(ggplot2)
+ggplot(time.data, aes(Index, Time, label=Inning)) +
+  geom_text(size=6, color="blue") +
+  geom_hline(yintercept=60) +
+  geom_hline(yintercept=120) +
+  geom_hline(yintercept=180) +
+  geom_text(data = NULL, x = 25, y = 65,
+            label = "1 MINUTE", size=8) +
+  geom_text(data = NULL, x = 25, y = 125,
+            label = "2 MINUTES", size=8) +
+  geom_text(data = NULL, x = 25, y = 185,
+            label = "3 MINUTES", size=8) +
+  labs(title = "Times Between Pitches in a Baseball Game") +
+  theme(plot.title = element_text(size = rel(2))) +
+  theme(axis.title = element_text(size = rel(2))) +
+  theme(axis.text = element_text(size = rel(2))) +
+  ylab("Time (Seconds)")</code></pre>
+<p><img src="figures/gamelength/length2.png" class="img-fluid" style="width:70.0%"></p>
+<p>What do we learn from this graph?</p>
+<ul>
+<li>In a typical inning, the time between pitches is between 15 to 30 seconds.</li>
+<li>It is pretty common for the time between pitches to fall between 30 and 60 seconds. This could be due to balls in play, a pickoff move, time outs, and other factors. It would be interesting to relate the times with the actual plays as recorded in Baseball-Reference.</li>
+<li>There are a number of significant breaks, between 2 1/2 and 3 1/2 minutes. Many of these are simply the breaks between half-innings – for example, the one 1 symbol, the two 2’s, and the two 3’s are just the inning breaks. Some of the long breaks that one sees towards the end of the game likely correspond to pitching changes.</li>
+<li>It is pretty clear that the game slows down towards the end, judging by the large number of long breaks in the 8th and 9th innings.</li>
+</ul>
+<p>This is an illustration of the time breakdown for a typical MLB in 2013 which lasted 3 hours and 11 minutes. By looking at this time data over many games, I think one would get a better understanding about the time patterns of long games and that might help MLB devise ways to make the games shorter.</p>
+</section>
+<section id="pace-stats-in-baseball-and-tennis" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="pace-stats-in-baseball-and-tennis"><span class="header-section-number">4</span> Pace Stats in Baseball and Tennis</h2>
+<section id="introduction-1" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">4.1</span> Introduction</h3>
+<p>We have heard a lot recently about the growing length of a baseball game and there has been some discussion in MLB about possibly moving towards a time clock where a pitcher has to pitch within a specific number of seconds. Pace is also an issue in tennis – in women’s tennis, a server is supposed to serve within 20 seconds of the end of the previous point. In this post, I’ll summarize some data I collected about server pace from the recent Australian Open and then explore pitcher pace data using the Pitch F/X data. (A couple of years ago I dissected the total length of a baseball game using similar data.)</p>
+</section>
+<section id="tennis-serena-williams-and-maria-sharapova" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="tennis-serena-williams-and-maria-sharapova"><span class="header-section-number">4.2</span> Tennis – Serena Williams and Maria Sharapova</h3>
+<p>I watch a lot of tennis and it seems that Maria Sharapova has a very deliberate style of serving. I would think that this style might translate into a longer time to serve. To check, I used a timer to measure the time-to-serve for all points played during the first set of the recent match between Serena and Maria at the Australian Open. In the graph below, I plot the pace data against the game number for both players and add a horizontal line corresponding to the 20 second rule. From this graph, we see that although there is some variation in pace, Serena tends to average 20 seconds after the end of the previous point. In contrast, Maria seems to average more like 25 seconds. It is notable that Maria was especially slow in Game 10 which was tense and determined the outcome of the first set.</p>
+<p><img src="figures/gamelength/length3.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="baseball-pitcher-pace-stats-from-a-week-in-the-2015-season" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="baseball-pitcher-pace-stats-from-a-week-in-the-2015-season"><span class="header-section-number">4.3</span> Baseball – Pitcher Pace Stats from a Week in the 2015 Season</h3>
+<p>It is interesting that MLB experimented with a 20 second rule in baseball in the Arizona Fall League in 2014. That raises the question – what are typical times between pitches in 2015 baseball?</p>
+<p>In the pitchFX data, there is a time stamp that records the time of every pitch and one can use this data to record the times between pitches. One has to be careful in working with this time data. First, we don’t care about the time between pitches of different plate appearances and there are other reasons for a “slow” time to pitch – perhaps there is a pitcher-catcher dialog or something else happens that delays the time until the next pitch.</p>
+<p>Anyway, here is what I did (all of the R code can be found at my gist site if you want to see the details):</p>
+<ul>
+<li>I used the scrape function from the PitchRX package to download all of the PitchFX data for the week September 5 through the 11th.</li>
+<li>From the time stamp variable, I computed a new variable that was the number of seconds past midnight.</li>
+<li>For a specific pitcher, I wrote a function that computed the difference in the time between pitches in the same plate appearances. If there was only one pitch in the PA, then I would not be able to measure the pace variable.</li>
+</ul>
+<p>Here are histograms of the time between pitches for eight pitchers. Just like the tennis pace data, these times tend to be right skewed with occasional large values. So I think a median instead of a mean is a good measure of “average” – I have graphed the pitcher medians using green lines and the 20 second value with red lines. We see Justin Verlander and Joe Kelly are relatively slow in delivering pitches and Wade Miley seems to be relatively fast.</p>
+<p><img src="figures/gamelength/length4.png" class="img-fluid" style="width:70.0%"></p>
+<p>I collected all of the pitchers with at least 100 time measurements during this week in September. The following graph shows the median pace of all pitchers, arranged from fastest to slowest. We see a majority of these pitchers have an average pace exceeding 20 seconds. Also I think it is interesting to see the large variation in average pace in the pitchers in this group.</p>
+<p><img src="figures/gamelength/length5.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="wrapup" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="wrapup"><span class="header-section-number">4.4</span> Wrapup</h3>
+<p>I think MLB needs to explore the time of game issue and think of possible rules that might help to decrease the game times and make the game more enjoyable for its fans. A first step in this exploration has to be a careful examination of how the current game progresses in time and a good exploration of the data will be helpful towards that goal.</p>
+</section>
+</section>
+<section id="game-duration-study-with-retrosheet-gamelog-data" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="game-duration-study-with-retrosheet-gamelog-data"><span class="header-section-number">5</span> Game Duration Study with Retrosheet Gamelog Data</h2>
+<section id="introduction-2" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">5.1</span> Introduction</h3>
+<p>In the last post, I did a brief stolen base study using 2016 Retrosheet play-by-play data. This week I &nbsp;downloaded the Retrosheet game logs for the 2016 season. &nbsp;Here I&nbsp;will use this game log data to see what variables are helpful for explaining the variation in game duration.</p>
+<p>Can we make a reasonable prediction of the time of the game based on data from a box score?</p>
+</section>
+<section id="useful-predictors" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="useful-predictors"><span class="header-section-number">5.2</span> Useful Predictors?</h3>
+<p>Looking at the variables in a box score, what variables are predictive of game length? &nbsp;I first looked at a few potential predictors, primarily for curiosity.</p>
+<p>Do baseball games get longer as the season progresses? &nbsp;I computed a variable <code>day</code> defined to be the number of days past April 1. &nbsp;Here is a scatterplot of game duration against <code>day</code> with a smoother added.</p>
+<p><img src="figures/gamelength/length6.png" class="img-fluid" style="width:70.0%"></p>
+<p>Not much interesting here. &nbsp;We see the All-Star break (the gap from days 100 to 110), but the time of game, on average, is approximately 3 hours (180 minutes) from the beginning to the end of the season. &nbsp;I also noticed a bunch of outliers at the high end – maybe these are extra-inning games?</p>
+<p>Does the length of game vary by the day of the week? &nbsp;Here are some parallel boxplots where I’ve ordered the boxplots by the medians.</p>
+<p><img src="figures/gamelength/length7.png" class="img-fluid" style="width:70.0%"></p>
+<p>This is a little interesting – Saturday games tend to be longest, on average, and Wednesday games tend to be shortest. &nbsp;The size of the effects are small, so it is not that exciting a find.</p>
+</section>
+<section id="lets-get-serious" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="lets-get-serious"><span class="header-section-number">5.3</span> Let’s Get Serious</h3>
+<p>Okay, most games have around 54 outs, so the number of outs likely is not a useful predictor of game length. &nbsp;But the number of non-outs (hits&nbsp;plus walks plushbp) would seem to be a useful predictor. &nbsp;Below I confirm this by plotting the non-outs &nbsp;and the game duration. &nbsp;(I thought that many of the high outliers were due to extra-inning games. &nbsp;I was right – when I filtered the data to only 9-inning games, theses outliers disappeared in this graph.)</p>
+<p><img src="figures/gamelength/length8.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="a-simple-regression-model" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="a-simple-regression-model"><span class="header-section-number">5.4</span> A Simple Regression Model</h3>
+<p>Clearly <code>NonOuts</code> is a useful predictor of game length. &nbsp;After some exploration, I found that another boxscore variable was helpful in this prediction – the fraction of runners left on base (LOB) divided by the NonOuts, that is &nbsp;<code>LOB / NonOuts</code>. &nbsp;We’ll call this variable <code>LOB_Frac</code> – this is approximately&nbsp;the fraction of runners who remain on base (don’t score). &nbsp;(I say approximately since <code>NonOuts</code> include home runs that won’t have runners.)</p>
+<p>When I fit a regression&nbsp;model using <code>NonOuts</code> and <code>LOB_Frac</code>, I get the fit</p>
+<pre><code>Game_Duration =&nbsp;95.77 + 2.71 * NonOuts + 35.32 * LOB_Frac</code></pre>
+<p>To understand this fit, I let the <code>LOB_Frac</code> be equal to 0.2, 0.5, 0.8 and plot the predicted <code>Game_Duration</code> as a function of <code>NonOuts</code>.</p>
+<p><img src="figures/gamelength/length9.png" class="img-fluid" style="width:70.0%"></p>
+<p>If the <code>LOB_Frac</code> value is held constant, then for every 10 additional <code>NonOuts</code>, the Game Duration will increase by 27 minutes. On the other hand, if we fix <code>NonOuts</code>, then as <code>LOB_Frac</code> goes from 0.2 to 0.8, the Game Duration will increase by 20 minutes. The bottom line is that the number of <code>NonOuts</code> and the fraction of NonOuts &nbsp;left on base are both relevant for predicting the time of the game.</p>
+</section>
+<section id="whats-left" class="level3" data-number="5.5">
+<h3 data-number="5.5" class="anchored" data-anchor-id="whats-left"><span class="header-section-number">5.5</span> What’s Left?</h3>
+<p>Of course, the fit is only part of the story – I should gain some understanding of the size of&nbsp;the residuals, that is <code>Residual = Duration - Fit</code>. &nbsp;I plot the residuals against the <code>NonOuts</code> below.</p>
+<p><img src="figures/gamelength/length10.png" class="img-fluid" style="width:70.0%"></p>
+<p>Looking at <code>summary(fit)</code>, I see the residual standard error &nbsp;is about 13 minutes. &nbsp;This means that about 2/3 of the residuals will be between -13 and +13 minutes, 95% of the residuals between -26 and 26 minutes, etc. &nbsp;There are variables such as the number of pitches, the number of pitchers, the number of challenges, etc. which would explain some of remaining variation in the game duration.</p>
+</section>
+<section id="looking-further" class="level3" data-number="5.6">
+<h3 data-number="5.6" class="anchored" data-anchor-id="looking-further"><span class="header-section-number">5.6</span> Looking Further</h3>
+<p>There is much more that could be discovered about Game Duration, but the purpose of this post was to see what I could learn from the Retrosheet game logs. &nbsp;Several years ago, I wrote a post where I collected&nbsp;PitchFX data to explore&nbsp;the time between pitches. Since the time of game is an important issue (maybe the popularity of baseball is waning due to the longer games?), I would think that MLB would want to do an extensive study to learn what variables are relevant for understanding game length.</p>
+</section>
+<section id="r-script" class="level3" data-number="5.7">
+<h3 data-number="5.7" class="anchored" data-anchor-id="r-script"><span class="header-section-number">5.7</span> R Script</h3>
+<p>As usual, I show all of my R work in the script <code>game_duration_study.R</code> on my Github Gist site. &nbsp;This script gives information on getting the Retrosheet game log data and obtaining a file with the variable name header.</p>
+</section>
+</section>
+<section id="length-of-world-series-games" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="length-of-world-series-games"><span class="header-section-number">6</span> Length of World Series Games</h2>
+<section id="introduction-3" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">6.1</span> Introduction</h3>
+<p>The 2017 World Series was certainly exciting and it was notable being the first championship for the Houston Astros.&nbsp; But the games tended to be long – especially Game 5 that lasted five hours and 15 minutes.&nbsp; That raises several questions:</p>
+<ul>
+<li>What factors impact the length of a baseball game?</li>
+<li>What are typical times between pitches?</li>
+<li>How do all those extra events such as conferences at the mound, batter asking for time, affect the length of the game?</li>
+</ul>
+<p>Here is a recent article describing this game length problem.&nbsp; One interesting statement in this article is that the author believes that “inaction pitches” (pitches not resulting in ball, called or swinging strike that does not end the PA) are the principle villain.</p>
+<p>Anyway, here I will explore the 2017 WS game lengths.&nbsp; (I did a previous study on a baseball game times a few years back.) .&nbsp; I won’t completely answer these questions, but hopefully provide some insight.&nbsp; I think Major League Baseball should seriously look at ways of shortening games, since these long games probably have a negative impact on fan interest.&nbsp; (Two-hour MLB games used to be pretty common.)</p>
+</section>
+<section id="the-data" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="the-data"><span class="header-section-number">6.2</span> The Data</h3>
+<p>Using Carson Sievert’s PitchRx package, I downloaded the pitch-by-pitch data for the seven WS games.&nbsp; The pitches component of the download contains the variable&nbsp;<code>sv_id</code> which is a time stamp when each pitch is thrown.&nbsp; We can extract the time in seconds from this variable and by taking differences, we have the time between pitches.</p>
+</section>
+<section id="number-of-pitches-and-game-length" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="number-of-pitches-and-game-length"><span class="header-section-number">6.3</span> Number of Pitches and Game Length</h3>
+<p>From previous work, I found that the number of pitches was a good predictor of a game’s length.&nbsp; Here I have plotted the number of pitches (horizontal) against the length of the game (minutes).&nbsp; We note a large variation in game lengths – Game 1 was only 148 minutes contrasted with the 315-minute Game 5.</p>
+<p><img src="figures/gamelength/length11.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="time-between-pitches" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="time-between-pitches"><span class="header-section-number">6.4</span> Time between Pitches</h3>
+<p>When one looks at time between pitches, there are three different time periods to consider:&nbsp; the time between pitches for a single batter, the time between the last pitch of a batter and the first pitch for the next batter (same inning), and the time between half-innings.&nbsp; Below I am graphing the time between pitches in the same inning as a function of the pitch number – this is Game 1 so Dodgers pitchers correspond to the values in the top of the inning and the Astro pitchers in the bottom of the inning.&nbsp; Note that many of the times are short (between 10 and 20 seconds), but there are a number of values between 30 and 80 seconds.&nbsp; For this particular game, the Dodgers were quicker than the Astros in pitching.</p>
+<p><img src="figures/gamelength/length12.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="comparing-two-games" class="level3" data-number="6.5">
+<h3 data-number="6.5" class="anchored" data-anchor-id="comparing-two-games"><span class="header-section-number">6.5</span> Comparing Two Games</h3>
+<p>This is a similar graph, but I’m comparing the time between pitch for Games 1 and 3. (Actually Dodgers are blue points in the top graph and red in the bottom graph.)&nbsp; I see a general tendency for the time between pitches to increase towards the end of each game.</p>
+<p><img src="figures/gamelength/length13.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="times-between-pitches-within-and-between-batters" class="level3" data-number="6.6">
+<h3 data-number="6.6" class="anchored" data-anchor-id="times-between-pitches-within-and-between-batters"><span class="header-section-number">6.6</span> Times between Pitches – Within and Between Batters</h3>
+<p>Next I focus on comparing the time between pitchers for the same batter and the time between pitches on different batters.&nbsp; There is quite a difference – pitches are only (on the average) 20-25 seconds apart for the same batter, but pitches between batters can average 40-50 seconds part.&nbsp; There are differences between games – there seem to be larger delays between batters for the 10/27 game.</p>
+<p><img src="figures/gamelength/length14.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="differences-between-pitchers" class="level3" data-number="6.7">
+<h3 data-number="6.7" class="anchored" data-anchor-id="differences-between-pitchers"><span class="header-section-number">6.7</span> Differences between Pitchers</h3>
+<p>Of course, it is interesting to compare the time between pitches for different pitchers.&nbsp; Here is a parallel boxplot display where I have ordered the pitchers by median of time between pitches for the same batter.&nbsp; It is interesting that three of the Dodger starters (Kershaw, Hill, and Wood) are the fastest to deliver, while some of the closers such as Jansen and Giles are among the slowest.</p>
+<p><img src="figures/gamelength/length15.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="advice-to-major-league-baseball" class="level3" data-number="6.8">
+<h3 data-number="6.8" class="anchored" data-anchor-id="advice-to-major-league-baseball"><span class="header-section-number">6.8</span> Advice to Major League Baseball</h3>
+<p>I didn’t work on this study for that long, but I think MLB could commission a larger study to better understand the factors that influence the lengths of current baseball games.&nbsp; In other words, what is driving the increased games of games?&nbsp; I don’t think MLB wants to change the basic rules (nine innings, three outs an inning), but there are other types of events (such as catcher/pitcher meetings, timeouts during a PA, challenges) that could be modified through rules.&nbsp; For example, could the number of catcher-pitcher conferences be reduced?&nbsp; &nbsp;All of the relevant variables are not available in the pitchFX file, but I suppose additional variables could be added to the data by watching the video of the game.&nbsp; I think MLB has to seriously consider changes such as game length that would make the game more enjoyable to watch.</p>
+</section>
+</section>
+<section id="why-are-baseball-games-so-long" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="why-are-baseball-games-so-long"><span class="header-section-number">7</span> Why Are Baseball Games So Long?</h2>
+<section id="introduction-4" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">7.1</span> Introduction</h3>
+<p>Baseball has been declining in popularity (at least as measured by game attendance figures) and one possible reason for this decline is the increasing length of games. Below I have graphed the mean length of a 9-inning game for the past 20 seasons. Interestingly, the mean length of a baseball game dropped from 2000 to 2005, but it has shown a steady increase from 2005 to the recent 2019 season. The mean length of a 9-inning game in 2005 was 166 minutes (about 2 3/4 hours) and the mean length in 2019 has risen to 185 minutes (over 3 hours). Games in the post season seem to be especially long and the patient baseball fan sometimes has to wait after midnight to watch the final pitch and see the outcome of a playoff game.</p>
+<p><img src="figures/gamelength/length16.png" class="img-fluid" style="width:70.0%"></p>
+<p>Although it is obvious that baseball games are getting longer, the reasons for the increase in game length are not as clear. In this blog we’ll propose several explanations for the increasing game length and use several graphs to provide some insight into these possible explanations. From this exploration, we’ll see that there is one issue that may be the main contributor to this problem and we’ll discuss what steps Major League Baseball can take to address this issue.</p>
+</section>
+<section id="three-possible-explanations" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="three-possible-explanations"><span class="header-section-number">7.2</span> Three Possible Explanations</h3>
+<ul>
+<li><p>Possible Explanation 1. Although a baseball game is divided into innings, a game essentially is a sequence of plate appearances. When there are many runs scored in a game, there will tend to be more runners, more hits, and more non-out plate appearances and longer games. That motivates the first possible explanation. Perhaps the increase in baseball length over seasons is due to an increasing amount of hits, scoring and plate appearances in recent seasons.</p></li>
+<li><p>Possible Explanation 2. Each plate appearance is a sequence of pitches which ends with a strikeout, a walk, or a ball put into play. (I’m ignoring some other outcomes which happen rarely.) It takes time to throw each pitch. So perhaps batters are having longer plate appearances, that is seeing more pitches, and that is the reason for the longer games.</p></li>
+<li><p>Possible Explanation 3. Maybe batters aren’t facing more pitches in a plate appearances from season to season, but the pitchers are taking longer to throw these pitches. Although MLB has talked about creating a 20-second rule, pitchers currently are not forced to pitch within a particular time frame. Maybe slower pitching is the cause of the increasing game lengths?</p></li>
+</ul>
+<p>Let’s look at each of the possible explanations for the increasing game lengths in the past 20 seasons.</p>
+</section>
+<section id="more-plate-appearances" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="more-plate-appearances"><span class="header-section-number">7.3</span> More Plate Appearances?</h3>
+<p>Let’s first look at the number of PAs (plate appearances) in a game. I’ve graphed the mean number of PAs in a game against season. Actually the average number of PAs has dropped from 2000 to 2015 and is showing a slight increase in recent seasons. No, there aren’t (on average) more PAs in a game. The change in PAs does not appear to be causing the increase in game length.</p>
+<p><img src="figures/gamelength/length17.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="longer-plate-appearances" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="longer-plate-appearances"><span class="header-section-number">7.4</span> Longer Plate Appearances?</h3>
+<p>Next let’s look at the length of a PA and see how it has changed over seasons. Graphing the mean number of pitches per PA, we see a steady increase in the last 20 seasons – batters were taking 3.7 pitches per PA in 2000 and now they are taking 3.9 pitches per PA. Generally it seems that batters are becoming more patient and taking more pitches. (The free swinger is becoming rare.)</p>
+<p><img src="figures/gamelength/length18.png" class="img-fluid" style="width:70.0%"></p>
+<p>Since we’ve shown that the number of PAs has shown some decrease, one might wonder how the number of pitches per game has changed. So I have graphed the average number of pitches in a nine-inning game below. Although this mean number of pitches was pretty level between the 2000 and 2015 seasons, it has grown steadily in the last four seasons.</p>
+<p><img src="figures/gamelength/length19.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="longer-time-to-pitch" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="longer-time-to-pitch"><span class="header-section-number">7.5</span> Longer Time to Pitch?</h3>
+<p>Not only are we seeing more pitches per game, the time to throw these pitches is changing. Here’s how I measured the time to pitch. For a particular season, I fit a simple linear regression to the (Number of Pitches, Duration) data and the slope of this line is the estimate of the time to take an additional pitch. I plot these season regression slopes in the plot below. We see a increasing trend of this “mean time per pitch”, although this time measurement has appeared to stabilize in recent seasons.</p>
+<p><img src="figures/gamelength/length20.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="what-have-we-learned" class="level3" data-number="7.6">
+<h3 data-number="7.6" class="anchored" data-anchor-id="what-have-we-learned"><span class="header-section-number">7.6</span> What Have We Learned?</h3>
+<p>We suggested three reasons for the increasing game lengths – more plate appearances, longer plate appearances, and longer times to pitch. Our analysis is somewhat superficial since we are focusing only on changes in the mean values over seasons, but we can draw some conclusions. We don’t see an increase in the mean number of PAs. But plate appearances are clearly getting longer (more pitches per PA) and I wouldn’t be surprised if PAs continued to lengthen. Also, pitchers are taking longer, on average, to pitch, although the mean time to pitch appears to have stabilized in recent seasons.</p>
+<p>Time to pitch actually is more complicated than my analysis suggests. When one dissects the time of a baseball game, we collect the time between pitches to the same batter, the time between pitches to successive batters, the time between innings, the time to make a pitching change, the time for a conference on the mound, the time for a challenge, etc. David Smith did an extensive analysis of the time between pitches for the 2018 season in the recent Baseball Research Journal. For example, he finds that the mean time to pitch is 23.8 seconds for pitches to the same batter and the average time for the 7th inning stretch was 3 minutes and six seconds. (Breaking this down further, 7th inning stretches with “Take Me Out to the Ballgame’ and”God Bless America” take, on average, 2:53 and 4:04.)</p>
+<p>What can Major League Baseball do about this? Well, some factors such as the number of pitches per PA are outside of MLB’s control – the number of pitches relates to the batter’s plate discipline. MLB can regulate the time between pitches, but I don’t know if, say a 20-second rule, will impact the total length of the game very much. Baseball has made some recent changes such as the the intentional walk rule and the “must pitch to three batters” rule, but I am guessing that these particular rules will have minimal impact on the game length.</p>
+</section>
+<section id="r-work" class="level3" data-number="7.7">
+<h3 data-number="7.7" class="anchored" data-anchor-id="r-work"><span class="header-section-number">7.7</span> R Work</h3>
+<ul>
+<li><p>Data. All of this work was done using Retrosheet data. The Retrosheet game logs datasets were used to extract the time of game variable for all games in these 20 seasons. This information was merged with the number of pitches and number of plate appearances variables from the Retrosheet play-by-play datasets. You can use Statcast data if you are interested in exploring the times between pitches for individual games.</p></li>
+<li><p>Code. My Github gist site provides all of the R code for this particular analysis.</p></li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
