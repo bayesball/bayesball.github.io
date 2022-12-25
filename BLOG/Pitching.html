@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jim Albert">
+<meta name="dcterms.date" content="2022-12-22">
+
+<title>Pitching</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Pitching_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Pitching_files/libs/quarto-html/quarto.js"></script>
+<script src="Pitching_files/libs/quarto-html/popper.min.js"></script>
+<script src="Pitching_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Pitching_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Pitching_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Pitching_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Pitching_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Pitching_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Pitching_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a></li>
+  <li><a href="#visualizing-cliff-lees-pitches-in-the-2013-season" id="toc-visualizing-cliff-lees-pitches-in-the-2013-season" class="nav-link" data-scroll-target="#visualizing-cliff-lees-pitches-in-the-2013-season"><span class="toc-section-number">2</span>  Visualizing Cliff Lee’s Pitches in the 2013 Season</a></li>
+  <li><a href="#exploring-pitches-in-cole-hamels-no-hitter" id="toc-exploring-pitches-in-cole-hamels-no-hitter" class="nav-link" data-scroll-target="#exploring-pitches-in-cole-hamels-no-hitter"><span class="toc-section-number">3</span>  Exploring Pitches in Cole Hamel’s No-Hitter</a></li>
+  <li><a href="#discrimination-of-pitching-measures" id="toc-discrimination-of-pitching-measures" class="nav-link" data-scroll-target="#discrimination-of-pitching-measures"><span class="toc-section-number">4</span>  Discrimination of Pitching Measures</a></li>
+  <li><a href="#pitch-selection-entropy-and-establishing-the-fastball" id="toc-pitch-selection-entropy-and-establishing-the-fastball" class="nav-link" data-scroll-target="#pitch-selection-entropy-and-establishing-the-fastball"><span class="toc-section-number">5</span>  Pitch Selection, Entropy, and Establishing the Fastball</a>
+  <ul class="collapse">
+  <li><a href="#entropy" id="toc-entropy" class="nav-link" data-scroll-target="#entropy"><span class="toc-section-number">5.1</span>  Entropy</a></li>
+  <li><a href="#entropy-for-pitch-selection" id="toc-entropy-for-pitch-selection" class="nav-link" data-scroll-target="#entropy-for-pitch-selection"><span class="toc-section-number">5.2</span>  Entropy for Pitch Selection</a></li>
+  <li><a href="#establishing-the-fastball" id="toc-establishing-the-fastball" class="nav-link" data-scroll-target="#establishing-the-fastball"><span class="toc-section-number">5.3</span>  Establishing the Fastball</a></li>
+  <li><a href="#closing-comments" id="toc-closing-comments" class="nav-link" data-scroll-target="#closing-comments"><span class="toc-section-number">5.4</span>  Closing Comments</a></li>
+  </ul></li>
+  <li><a href="#tribute-to-roy-halladay---master-of-short-games" id="toc-tribute-to-roy-halladay---master-of-short-games" class="nav-link" data-scroll-target="#tribute-to-roy-halladay---master-of-short-games"><span class="toc-section-number">6</span>  Tribute to Roy Halladay - Master of Short Games</a>
+  <ul class="collapse">
+  <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1"><span class="toc-section-number">6.1</span>  Introduction</a></li>
+  <li><a href="#exploring-game-durations" id="toc-exploring-game-durations" class="nav-link" data-scroll-target="#exploring-game-durations"><span class="toc-section-number">6.2</span>  Exploring Game Durations</a></li>
+  <li><a href="#an-aside-the-increase-in-game-durations" id="toc-an-aside-the-increase-in-game-durations" class="nav-link" data-scroll-target="#an-aside-the-increase-in-game-durations"><span class="toc-section-number">6.3</span>  An Aside: The Increase in Game Durations</a></li>
+  <li><a href="#games-started-and-not-started-by-halladay" id="toc-games-started-and-not-started-by-halladay" class="nav-link" data-scroll-target="#games-started-and-not-started-by-halladay"><span class="toc-section-number">6.4</span>  Games Started and Not Started by Halladay</a></li>
+  <li><a href="#quickest-starters" id="toc-quickest-starters" class="nav-link" data-scroll-target="#quickest-starters"><span class="toc-section-number">6.5</span>  Quickest Starters</a></li>
+  <li><a href="#maddux-versus-halladay" id="toc-maddux-versus-halladay" class="nav-link" data-scroll-target="#maddux-versus-halladay"><span class="toc-section-number">6.6</span>  Maddux versus Halladay</a></li>
+  <li><a href="#takeaways-and-r-work" id="toc-takeaways-and-r-work" class="nav-link" data-scroll-target="#takeaways-and-r-work"><span class="toc-section-number">6.7</span>  Takeaways and R Work</a></li>
+  </ul></li>
+  <li><a href="#historical-look-at-pitcher-usage" id="toc-historical-look-at-pitcher-usage" class="nav-link" data-scroll-target="#historical-look-at-pitcher-usage"><span class="toc-section-number">7</span>  Historical Look at Pitcher Usage</a>
+  <ul class="collapse">
+  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"><span class="toc-section-number">7.1</span>  Introduction</a></li>
+  <li><a href="#how-many-pitchers-are-used-in-a-game" id="toc-how-many-pitchers-are-used-in-a-game" class="nav-link" data-scroll-target="#how-many-pitchers-are-used-in-a-game"><span class="toc-section-number">7.2</span>  How Many Pitchers are Used in a Game?</a></li>
+  <li><a href="#how-many-batters-does-a-pitcher-face" id="toc-how-many-batters-does-a-pitcher-face" class="nav-link" data-scroll-target="#how-many-batters-does-a-pitcher-face"><span class="toc-section-number">7.3</span>  How Many Batters Does a Pitcher Face?</a></li>
+  <li><a href="#differences-between-teams" id="toc-differences-between-teams" class="nav-link" data-scroll-target="#differences-between-teams"><span class="toc-section-number">7.4</span>  Differences Between Teams</a></li>
+  <li><a href="#what-to-do-about-this" id="toc-what-to-do-about-this" class="nav-link" data-scroll-target="#what-to-do-about-this"><span class="toc-section-number">7.5</span>  What to Do About This?</a></li>
+  </ul></li>
+  <li><a href="#the-100-pitch-limit-and-pitcher-efficiency" id="toc-the-100-pitch-limit-and-pitcher-efficiency" class="nav-link" data-scroll-target="#the-100-pitch-limit-and-pitcher-efficiency"><span class="toc-section-number">8</span>  The 100 Pitch Limit and Pitcher Efficiency</a>
+  <ul class="collapse">
+  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3"><span class="toc-section-number">8.1</span>  Introduction</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="toc-section-number">8.2</span>  The Data</a></li>
+  <li><a href="#starter-pitch-counts-in-2010" id="toc-starter-pitch-counts-in-2010" class="nav-link" data-scroll-target="#starter-pitch-counts-in-2010"><span class="toc-section-number">8.3</span>  Starter Pitch Counts in 2010</a></li>
+  <li><a href="#starter-pitch-counts-in-2019" id="toc-starter-pitch-counts-in-2019" class="nav-link" data-scroll-target="#starter-pitch-counts-in-2019"><span class="toc-section-number">8.4</span>  Starter Pitch Counts in 2019</a></li>
+  <li><a href="#focus-on-the-starters-who-make-it-to-the-5th-inning" id="toc-focus-on-the-starters-who-make-it-to-the-5th-inning" class="nav-link" data-scroll-target="#focus-on-the-starters-who-make-it-to-the-5th-inning"><span class="toc-section-number">8.5</span>  Focus on the Starters Who Make it to the 5th Inning</a></li>
+  <li><a href="#pitcher-efficiency" id="toc-pitcher-efficiency" class="nav-link" data-scroll-target="#pitcher-efficiency"><span class="toc-section-number">8.6</span>  Pitcher Efficiency</a></li>
+  <li><a href="#takeways-and-future-explorations" id="toc-takeways-and-future-explorations" class="nav-link" data-scroll-target="#takeways-and-future-explorations"><span class="toc-section-number">8.7</span>  Takeways and Future Explorations</a></li>
+  </ul></li>
+  <li><a href="#perfect-k-games" id="toc-perfect-k-games" class="nav-link" data-scroll-target="#perfect-k-games"><span class="toc-section-number">9</span>  Perfect-k Games</a>
+  <ul class="collapse">
+  <li><a href="#introduction-4" id="toc-introduction-4" class="nav-link" data-scroll-target="#introduction-4"><span class="toc-section-number">9.1</span>  Introduction</a></li>
+  <li><a href="#using-retrosheet-data" id="toc-using-retrosheet-data" class="nav-link" data-scroll-target="#using-retrosheet-data"><span class="toc-section-number">9.2</span>  Using Retrosheet Data</a></li>
+  <li><a href="#counts-of-perfect-k-games" id="toc-counts-of-perfect-k-games" class="nav-link" data-scroll-target="#counts-of-perfect-k-games"><span class="toc-section-number">9.3</span>  Counts of Perfect-k Games</a></li>
+  <li><a href="#some-comments" id="toc-some-comments" class="nav-link" data-scroll-target="#some-comments"><span class="toc-section-number">9.4</span>  Some comments:</a></li>
+  <li><a href="#great-perfect-k-pitchers" id="toc-great-perfect-k-pitchers" class="nav-link" data-scroll-target="#great-perfect-k-pitchers"><span class="toc-section-number">9.5</span>  Great Perfect-k Pitchers</a></li>
+  <li><a href="#closing-remarks" id="toc-closing-remarks" class="nav-link" data-scroll-target="#closing-remarks"><span class="toc-section-number">9.6</span>  Closing Remarks</a></li>
+  </ul></li>
+  <li><a href="#optimal-pitching-locations" id="toc-optimal-pitching-locations" class="nav-link" data-scroll-target="#optimal-pitching-locations"><span class="toc-section-number">10</span>  Optimal Pitching Locations</a>
+  <ul class="collapse">
+  <li><a href="#introduction-5" id="toc-introduction-5" class="nav-link" data-scroll-target="#introduction-5"><span class="toc-section-number">10.1</span>  Introduction</a></li>
+  <li><a href="#pitch-value" id="toc-pitch-value" class="nav-link" data-scroll-target="#pitch-value"><span class="toc-section-number">10.2</span>  Pitch Value</a></li>
+  <li><a href="#throwing-to-a-target" id="toc-throwing-to-a-target" class="nav-link" data-scroll-target="#throwing-to-a-target"><span class="toc-section-number">10.3</span>  Throwing to a Target</a></li>
+  <li><a href="#throwing-a-four-seamer-on-the-first-pitch" id="toc-throwing-a-four-seamer-on-the-first-pitch" class="nav-link" data-scroll-target="#throwing-a-four-seamer-on-the-first-pitch"><span class="toc-section-number">10.4</span>  Throwing a Four-Seamer on the First Pitch</a></li>
+  <li><a href="#measuring-value" id="toc-measuring-value" class="nav-link" data-scroll-target="#measuring-value"><span class="toc-section-number">10.5</span>  Measuring Value</a></li>
+  <li><a href="#more-examples" id="toc-more-examples" class="nav-link" data-scroll-target="#more-examples"><span class="toc-section-number">10.6</span>  More Examples</a></li>
+  <li><a href="#optimal-pitch-location" id="toc-optimal-pitch-location" class="nav-link" data-scroll-target="#optimal-pitch-location"><span class="toc-section-number">10.7</span>  Optimal Pitch Location</a></li>
+  <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments"><span class="toc-section-number">10.8</span>  Comments</a></li>
+  </ul></li>
+  <li><a href="#studying-pitcher-fatigue-using-a-multinomial-regression-model" id="toc-studying-pitcher-fatigue-using-a-multinomial-regression-model" class="nav-link" data-scroll-target="#studying-pitcher-fatigue-using-a-multinomial-regression-model"><span class="toc-section-number">11</span>  Studying Pitcher Fatigue Using a Multinomial Regression Model</a>
+  <ul class="collapse">
+  <li><a href="#introduction-6" id="toc-introduction-6" class="nav-link" data-scroll-target="#introduction-6"><span class="toc-section-number">11.1</span>  Introduction</a></li>
+  <li><a href="#the-data-1" id="toc-the-data-1" class="nav-link" data-scroll-target="#the-data-1"><span class="toc-section-number">11.2</span>  The Data</a></li>
+  <li><a href="#the-model" id="toc-the-model" class="nav-link" data-scroll-target="#the-model"><span class="toc-section-number">11.3</span>  The Model</a></li>
+  <li><a href="#measure-of-performance" id="toc-measure-of-performance" class="nav-link" data-scroll-target="#measure-of-performance"><span class="toc-section-number">11.4</span>  Measure of Performance</a></li>
+  <li><a href="#fitting-the-model-to-individual-pitchers" id="toc-fitting-the-model-to-individual-pitchers" class="nav-link" data-scroll-target="#fitting-the-model-to-individual-pitchers"><span class="toc-section-number">11.5</span>  Fitting the Model to Individual Pitchers</a></li>
+  <li><a href="#expected-woba-graphs-for-individual-pitchers" id="toc-expected-woba-graphs-for-individual-pitchers" class="nav-link" data-scroll-target="#expected-woba-graphs-for-individual-pitchers"><span class="toc-section-number">11.6</span>  Expected wOBA Graphs for Individual Pitchers</a></li>
+  <li><a href="#whats-in-the-paper" id="toc-whats-in-the-paper" class="nav-link" data-scroll-target="#whats-in-the-paper"><span class="toc-section-number">11.7</span>  What’s In the Paper?</a></li>
+  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code"><span class="toc-section-number">11.8</span>  R Code?</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Pitching</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jim Albert </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 22, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+</section>
+<section id="visualizing-cliff-lees-pitches-in-the-2013-season" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="visualizing-cliff-lees-pitches-in-the-2013-season"><span class="header-section-number">2</span> Visualizing Cliff Lee’s Pitches in the 2013 Season</h2>
+<p>Following up Carson’s post, it seems appropriate to give some simple illustrations of using the pitchRx package to visualize the locations of pitches. Since I’m a Phillies fan, I follow Cliff Lee and I’ll focus on looking at Cliff’s pitches in the 2013 season.</p>
+<p>As explained by Carson, it saves a lot of time to initially download a large chunk of Gameday into a database, and then extract portions of the data from the database into R. Using the <code>src_sqlite()</code> function in the <code>dplyr</code> package and the <code>scrape()</code> function in the <code>pitchRx</code> package, I set up a database and download Gameday data for all games played in 2013. (This process takes 1-2 hours and the database takes about 600 MB in storage.)</p>
+<pre><code>library(dplyr)
+my_db &lt;- src_sqlite("pitchRx.2013", create = TRUE)
+library(pitchRx)
+scrape(start = "2013-01-01", end = "2013-12-01",
+      connect = my_db$con)</code></pre>
+<p>Now that the database has all of the 2013 Gameday data, I use functions in the <code>dplyr</code> package to extract variables from the <code>pitch</code> and <code>atbat</code> tables in the database. The <code>inner_join()</code> function merges the <code>pitch</code> and <code>atbat</code> data, and the <code>collect()</code> function brings the data into R. Note that the <code>filter</code> argument in <code>inner_join()</code> limits the collection to Cliff Lee pitches.</p>
+<pre><code>library(dplyr)
+my_db &lt;- src_sqlite("pitchRx.2013")
+locations &lt;- select(tbl(my_db, "pitch"),
+                pitch_type, px, pz, des, num, gameday_link)
+names &lt;- select(tbl(my_db, "atbat"), pitcher_name, batter_name,
+                num, gameday_link, event, stand)
+que &lt;- inner_join(locations, filter(names,
+                  pitcher_name == "Cliff Lee"),
+                  by = c("num", "gameday_link"))
+pitchfx &lt;- collect(que)  #submit query and bring data into R</code></pre>
+<p>I only want pitch data for Lee in the 2013 regular season, so I create a <code>gamedate</code> variable and use the <code>subset()</code> function to focus on games of month numbered 4 or later.</p>
+<pre><code>pitchfx$gamedate &lt;- substr(pitchfx$gameday_link, 5, 14 )
+pitchfx &lt;- subset(pitchfx,
+                  as.numeric(substr(gamedate, 6, 7)) &gt; 3)</code></pre>
+<p>What types of pitches did Lee throw? We see below that Lee likes to throw a two-seam fastball (FT), but he also throws a good number of four-seam fastballs (FF), cutters (FC), change-ups (CH), and curve balls (CU).</p>
+<pre><code>table(pitchfx$pitch_type)
+
+  CH   CU   FC   FF   FT   SL
+ 523  256  666  671 1131   25</code></pre>
+<p>To show the location of the pitches, it is helpful to overlay the strike zone in our graphs. Here are the locations of an average zone that Max used in our book and the locations are placed in a data frame called <code>kZone</code></p>
+<pre><code>topKzone &lt;- 3.5
+botKzone &lt;- 1.6
+inKzone &lt;- -0.95
+outKzone &lt;- 0.95
+kZone &lt;- data.frame(
+  x=c(inKzone, inKzone, outKzone, outKzone, inKzone),
+  y=c(botKzone, topKzone, topKzone, botKzone, botKzone)
+)</code></pre>
+<p>Here are several interesting graphs using <code>ggplot2</code> . The first graph shows the horizontal (variable <code>px</code> ) and vertical (variable <code>pz</code>) locations by batter side.</p>
+<pre><code>library(ggplot2)
+print(ggplot(pitchfx, aes(px, pz, color=stand)) + geom_point() +
+  geom_path(aes(x, y), data=kZone, lwd=2, col="red") +
+  ylim(0, 5) + facet_wrap(~ stand, ncol=1))</code></pre>
+<p><img src="figures/pitching/pitching1.png" class="img-fluid" style="width:70.0%"></p>
+<p>Another graph shows the locations of all pitches where each panel corresponds to a different pitch type. We see that Lee tends to throw his off-speed pitches in the lower portion of the strike zone.</p>
+<pre><code>print(ggplot(pitchfx, aes(px, pz, color=pitch_type)) + geom_point() +
+  geom_path(aes(x, y), data=kZone, lwd=2, col="red") +
+  ylim(0, 5) + facet_wrap(~ pitch_type))</code></pre>
+<p><img src="figures/pitching/pitching2.png" class="img-fluid" style="width:70.0%"></p>
+<p>This is only the beginning of our exploratory analysis of Lee’s pitches. Given the large number of pitches, scatterplots aren’t that informative. The <code>strikeFX()</code> function in the <code>pitchRx</code> package gives a variety of alternative graphical tools for visualizing this pitch location data.</p>
+<p>All of the R code for this post can be found at this gist site.</p>
+</section>
+<section id="exploring-pitches-in-cole-hamels-no-hitter" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="exploring-pitches-in-cole-hamels-no-hitter"><span class="header-section-number">3</span> Exploring Pitches in Cole Hamel’s No-Hitter</h2>
+<p>As I’m a Phillies fan, I was pretty excited about Cole Hamels’ no-hitter against the Cubs on Saturday. This provides a good excuse to demonstrate the ease of using Carson’s pitchRx package to explore the 129 pitches that Cole threw during this game.</p>
+<p>Given that Cole had several rough outings in his recent starts, it is somewhat remarkable that he pitched so well on Saturday. What happened in this particular game? It seems that there are two important factors in a pitching performance – the choice of pitches and the locations where these pitches are thrown. So we’ll focus our exploration on the types of pitches and the locations.</p>
+<p>We first scrape the data using the <code>pitchRx</code> package. The list dat contains all of the pitch data for the games played that day. I combine pitch data (including type and location) from the component pitch and bat data from the component atbat . The data frame <code>data</code> contains information for all 129 pitches Hamels threw in this game.</p>
+<pre><code>library(pitchRx)
+library(dplyr)
+dat &lt;- scrape("2015-07-25", "2015-07-25")
+locations &lt;- select(dat$pitch,
+                    pitch_type, px, pz, des, num, gameday_link)
+names &lt;- select(dat$atbat, pitcher_name, batter_name,
+                num, gameday_link, event, stand)
+data &lt;- inner_join(locations, filter(names,
+                    pitcher_name == "Cole Hamels"),
+                   by = c("num", "gameday_link"))</code></pre>
+<section id="what-types-of-pitches-did-cole-throw-in-this-game" class="level4" data-number="3.0.1">
+<h4 data-number="3.0.1" class="anchored" data-anchor-id="what-types-of-pitches-did-cole-throw-in-this-game"><span class="header-section-number">3.0.1</span> What types of pitches did Cole throw in this game?</h4>
+<pre><code>with(data, table(pitch_type))
+
+### pitch_type
+### CH CU FC FF FT
+### 29 26  9 39 26</code></pre>
+<p>We see that Cole threw 39 four-seam fastballs (FF), but he also threw 29 changeups (CH), 26 curveballs (CU), 26 two-seam fastballs (FT), and a few cutters (FC). It seems that Cole may have thrown a greater variation of pitch types than usual.</p>
+</section>
+<section id="what-were-the-outcomes-of-these-pitches" class="level4" data-number="3.0.2">
+<h4 data-number="3.0.2" class="anchored" data-anchor-id="what-were-the-outcomes-of-these-pitches"><span class="header-section-number">3.0.2</span> What were the outcomes of these pitches?</h4>
+<pre><code>with(data, table(des, pitch_type))
+
+###                            pitch_type
+### des                         CH CU FC FF FT
+###   Ball                       8  8  1 17 11
+###   Ball In Dirt               1  0  0  0  0
+###   Called Strike              5  7  1  5  6
+###   Foul                       2  1  2  8  5
+###   Foul Tip                   0  1  0  0  0
+###   In play, out(s)            1  5  2  3  3
+###   Swinging Strike           10  4  3  6  1
+###   Swinging Strike (Blocked)  2  0  0  0  0</code></pre>
+<p>We see some interesting things from this table:</p>
+<p>A good proportion of the swinging strikes were from changeups. Half of the called strikes were from changeups and curveballs.</p>
+</section>
+<section id="what-were-the-locations-of-these-pitches" class="level4" data-number="3.0.3">
+<h4 data-number="3.0.3" class="anchored" data-anchor-id="what-were-the-locations-of-these-pitches"><span class="header-section-number">3.0.3</span> What were the locations of these pitches?</h4>
+<p>Here is easy to use the <code>strikeFX()</code> function in the pitchRx package. We add the <code>facet_wrap</code> option so we get a different view of the pitch locations for each pitch type.</p>
+<pre><code>strikeFX(data, point.alpha=1, layer=facet_wrap(~pitch_type, ncol=3)) +
+  ggtitle("Locations of All Pitches")</code></pre>
+<p><img src="figures/pitching/pitching3.png" class="img-fluid" style="width:70.0%"></p>
+<p>We see that most of Cole’s changeups were low and out of the zone and many of his four-seamers were high. Note that his curve balls were all around the strike zone – I’m surprised that Cole threw a no-hitter with so much high breaking pitches.</p>
+</section>
+<section id="what-were-the-locations-of-these-pitches-where-there-was-a-swinging-strike" class="level4" data-number="3.0.4">
+<h4 data-number="3.0.4" class="anchored" data-anchor-id="what-were-the-locations-of-these-pitches-where-there-was-a-swinging-strike"><span class="header-section-number">3.0.4</span> What were the locations of these pitches where there was a swinging strike?</h4>
+<p>Using the <code>filter()</code> function (from the <code>dplyr</code> package), we limit our exploration to pitches where the outcome (variable <code>des</code> ) included the text “Swing”.</p>
+<pre><code>strikeFX(filter(data, substr(des, 1, 5)=="Swing"), point.alpha=1,
+         layer=facet_wrap(~pitch_type, ncol=3))+
+         ggtitle("Locations of Swinging Strikes")</code></pre>
+<p><img src="figures/pitching/pitching4.png" class="img-fluid" style="width:70.0%"></p>
+<p>It seemed that most of these swinging strikes were either low changeups or curveballs or high fastballs.</p>
+</section>
+<section id="coles-strike-zone" class="level4" data-number="3.0.5">
+<h4 data-number="3.0.5" class="anchored" data-anchor-id="coles-strike-zone"><span class="header-section-number">3.0.5</span> Cole’s strike zone?</h4>
+<p>Did Cole benefit with good umpire calls for strikes? We focus on the pitches which were a ball or a called strike. One attractive way of summarizing the locations of these pitches is to fit a generalized additive model to this data where the response is binary (either the pitch is called strike or ball) and the explanatory variables are the horizontal and vertical locations. Using the <code>strikeFX()</code> function again, we display the fit from this model – the smoothed values (that is the predicted probabilities of a strike) are displayed using a heat map where a lighter color corresponds to a higher probability of a strike.</p>
+<pre><code>library(mgcv)
+noswing &lt;- subset(data, des %in% c("Ball", "Called Strike"))
+noswing$strike &lt;- as.numeric(noswing$des %in% "Called Strike")
+m2 &lt;- bam(strike ~ s(px, pz),
+        data=noswing, family = binomial(link='logit'))
+strikeFX(noswing, model=m2) +
+  ggtitle("Cole's Strike Zone")</code></pre>
+<p><img src="figures/pitching/pitching5.png" class="img-fluid" style="width:70.0%"></p>
+<p>The light blue region where the probability of a strike is high closely matches the strike zone indicating that the umpires are making reasonable calls on Cole’s pitches. The only exception is Cole is getting some benefit in balls located low in the strike zone.</p>
+<p>It would be interesting to use pitchFX data to explore how Hamels has changed as a pitcher over his MLB career. My understanding is that Cole relied primarily on a fastball and changeup in his early years, and now he is understanding the benefits of using a wider variety of pitches.</p>
+</section>
+</section>
+<section id="discrimination-of-pitching-measures" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="discrimination-of-pitching-measures"><span class="header-section-number">4</span> Discrimination of Pitching Measures</h2>
+<p>There is an interesting new paper by Franks et al on devising useful sports metrics. &nbsp;One good property of a sports metric mentioned in the paper is the notion of discrimination – does the metric reliably differentiate between players of different abilities?</p>
+<p>As in Franks et al, one can define discrimination by means of a random effects model. &nbsp;We’ll describe this model in terms of pitching, although the concept can be generalized to other baseball measures and to sports besides baseball.</p>
+<p>Suppose we look at all pitchers in the 2016 season who have pitched at 100 innings. &nbsp;For each pitcher and each inning, we record the number of walks and hits allowed. &nbsp;(The mean number of walks and hits allowed is the popular WHIP measure.)</p>
+<p>Let <span class="math inline">\(y_{ij}\)</span>&nbsp;denote the number of walks and hits allowed by the ith pitcher in the jth inning. &nbsp;We assume that <span class="math inline">\(y_{ij}\)</span> is normally distributed with mean <span class="math inline">\(M_i\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>. &nbsp;(We can view <span class="math inline">\(M_i\)</span> as the talent of the <span class="math inline">\(i\)</span>th pitcher). &nbsp;If we have <span class="math inline">\(N\)</span> pitchers, we assume that the talents <span class="math inline">\(M_1, ..., M_N\)</span> come from a normal talent distribution with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\tau\)</span>.</p>
+<p>We estimate this random effects model from the data – we get estimates at <span class="math inline">\(\sigma\)</span> and <span class="math inline">\(\tau\)</span>. &nbsp;If we have a pitcher with <span class="math inline">\(n\)</span>&nbsp;innings, then the discrimination <span class="math inline">\(D\)</span> is defined to be</p>
+<p><span class="math display">\[
+D = \tau ^ 2 / (\tau ^ 2 + \sigma ^2 / n)
+\]</span> where we plug in estimates for <span class="math inline">\(\tau\)</span> and <span class="math inline">\(\sigma\)</span>. &nbsp;<span class="math inline">\(D\)</span> represents the proportion of variance of the number of hits and walks per inning for these <span class="math inline">\(N\)</span> pitchers that is explained by the variation between the talents of the pitchers.</p>
+<p>A couple of comments about this measure of discrimination.</p>
+<ul>
+<li>As we let <span class="math inline">\(n\)</span>, the number of observed innings for pitcher, get really large, then <span class="math inline">\(D\)</span> will approach 1 which means that the observed variability in WHIP between the pitchers is entirely explained by the differences in the pitchers’ talents.</li>
+<li>But in a season, <span class="math inline">\(n\)</span> won’t be that large, and <span class="math inline">\(D\)</span> will typically take on values between .3 and&nbsp;.8</li>
+<li>We described this measure for hits and walks in an inning, but we can count other events, and each event will have an associated measure of <span class="math inline">\(D\)</span>. &nbsp;Values of <span class="math inline">\(D\)</span> close to 1 correspond to measures that really distinguish pitcher abilities. &nbsp;In contrast, values of <span class="math inline">\(D\)</span> close to 0 provide little information about pitcher abilities.</li>
+</ul>
+<p>I assumed that <span class="math inline">\(n\)</span> = 150 (we have pitchers with 150 innings pitched), and counted different things: &nbsp;(1) the number of hits and walks, (2) the the number of strikeouts, (3) the number of hits, (4) the number of walks, (5) the number of groundouts, (6) the number of flyouts, (7) the number of forceouts, (8) the number of extra-base hits, (9) the number of sac flies, and (10) the number of double players. &nbsp;For each measure, I computed the value of <span class="math inline">\(D\)</span>, and the values are displayed below.</p>
+<p><img src="figures/pitching/pitching6.png" class="img-fluid" style="width:70.0%"></p>
+<p>Some comments on this graph.</p>
+<ul>
+<li>Some of these high discrimination values make sense since well-know FIP (fielding independent pitching) measures like strikeouts and walks have known to have high discriminations. - Also one would expect measures like sac flies and double plays to have low discriminations since these events are really functions of the runners-on-base rather than the quality of the pitcher.</li>
+<li>WHIP (walks and hits) has a moderate value of discrimination among all of these outcomes.</li>
+<li>I am a bit surprised that the number of groundouts and the number of flyouts have high values of D. &nbsp;Also I am surprised that the number of home runs per inning has a low discrimination value – this means that much of the variability in home runs per inning is not attributed to differences in pitchers’ abilities to allow home runs.</li>
+</ul>
+<p>Anyway, these calculations are based on a convenient normal-normal random effects model which could be improved. &nbsp;But I think the notion of discrimination is helpful – especially when one is trying to sort out a variety of measures that can be useful predictions of future performance. &nbsp;Certainly, a front-office person would be more confident in the talent of a pitcher with a high strikeout rate than with a pitcher with&nbsp;a high double-play rate.</p>
+</section>
+<section id="pitch-selection-entropy-and-establishing-the-fastball" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="pitch-selection-entropy-and-establishing-the-fastball"><span class="header-section-number">5</span> Pitch Selection, Entropy, and Establishing the Fastball</h2>
+<p>There is an interesting article in Sports Illustrated this week on the increasing use of the curve ball in baseball. &nbsp;Of course, many pitchers throw high-speed fastballs in the mid-90’s, but this article emphasized the use of off-speed pitches. &nbsp; I thought it would be interesting to look generally&nbsp;at the variety of pitch selection – which pitchers are especially good or poor in mixing up their pitches?</p>
+<section id="entropy" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="entropy"><span class="header-section-number">5.1</span> Entropy</h3>
+<p>There is a useful concept from probability for understanding uncertainty in pitch outcomes. &nbsp;Suppose there are three possible outcomes in tomorrow’s weather – rain, sunny, or cloudy and we represent the chances of the three outcomes by the vector <span class="math inline">\((p_R, p_S, p_C)\)</span>. &nbsp;If any one of the probabilities is close to 1, say the vector is (0.9, 0.05, 0.05), we are pretty certain of the weather outcome. &nbsp;In contrast, if the vector is (1/3, 1/3, 1/3), tomorrow’s weather is very uncertain. &nbsp;A measure of uncertainty is the entropy <span class="math inline">\(E\)</span> defined as the negative of the sum of probabilities and corresponding log probabilities:</p>
+<p><span class="math display">\[
+E = - p_R \, \log(p_R) - p_S \, log(p_S) - p_C \, log(p_C)
+\]</span></p>
+<p>In our weather example, the entropy <span class="math inline">\(E\)</span> for (0.9, 0.05, 0.05) is equal to E = 0.39, and the entropy for (1/3, 1/3, 1/3) is <span class="math inline">\(E\)</span> =1.099. &nbsp;Larger uncertainty will result in larger values of the entropy <span class="math inline">\(E\)</span>.</p>
+</section>
+<section id="entropy-for-pitch-selection" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="entropy-for-pitch-selection"><span class="header-section-number">5.2</span> Entropy for Pitch Selection</h3>
+<p>Each pitcher throws a variety of different pitch types and one can summarize his pitch selection by a vector <span class="math inline">\((p_1, p_2, p_3, ...)\)</span> which gives the proportion of fastballs, sliders, cut fastballs, curveballs, changeups, etc. &nbsp; This data is tabulated in FanGraphs in the Pitch Type category for pitchers. &nbsp;I collected this data from FanGraphs for the ten seasons 2007-2016 for both qualifying starters and relievers. &nbsp;I used entropy to measure the uncertainty in a pitcher’s pitch selection. &nbsp;A pitcher who primarily throws one pitch would have low entropy and a pitcher who throws a lot of different types of pitches would have high entropy. &nbsp;I wanted to address several questions.</p>
+<ul>
+<li>Does the variety in pitch selection vary among starters and relievers, and how has the typical entropy among pitchers changed over the seasons?</li>
+<li>What pitchers currently have low and high values of entropy and is this related to the speed of his fastball? &nbsp;(One might think that a pitcher might compensate for a slow fastball speed by throwing a greater variety of pitches.)</li>
+</ul>
+<p>To address the first question, I graphed the average entropy against season for both starters and relievers. &nbsp;I guess it is not surprising that starters tend to have more variety in pitch selection than relievers. &nbsp;I don’t see much trend across seasons. &nbsp;Perhaps relievers are showing less variety in pitch selection (on average) in recent seasons.</p>
+<p><img src="figures/pitching/pitching7.png" class="img-fluid" style="width:70.0%"></p>
+<p>Here is a graph of the entropy against the fastball velocity for all the qualifying starters in 2016. &nbsp; I’ve labeled some interesting points that deviate from the general pattern (there is a negative association between entropy and fastball velocity).</p>
+<p><img src="figures/pitching/pitching8.png" class="img-fluid" style="width:70.0%"></p>
+<p>We see …</p>
+<ul>
+<li>Dickey and Colon are interesting in that they both have slow fastball speed and low entropy (low variety in pitch selection). &nbsp;Dickey is not surprising (he throws primarily knuckleballs), but I am a bit surprised by Colon.</li>
+<li>Jared Weaver does appear to compensate for a slow fastball with a high variety of pitch selection.</li>
+<li>Fiers, Tanaka, Iwakuma, Shields, Samardzija all are high entropy pitchers; in contrast, Hendricks, Quintana, Happ, Nelson, and Sanchez are low entropy pitchers who likely rely on a small number of pitch types.</li>
+</ul>
+</section>
+<section id="establishing-the-fastball" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="establishing-the-fastball"><span class="header-section-number">5.3</span> Establishing the Fastball</h3>
+<p>I am currently reading an interesting book <em>Off Speed</em> by Terry McDermott and he talks about the importance that the pitcher&nbsp;establish the fastball early in the game. &nbsp;That suggests that a pitcher’s pitch selection is a bit different in early innings – he tends to throw a higher percentage of fastballs.</p>
+<p>This is easy to confirm using PitchFX data. &nbsp;For all the 2016 starters, I found the percentage of fastballs (I included four-seam, two-seam and cutters) for each pitcher for each inning. &nbsp;For each inning I computed the ratio</p>
+<p>RATIO = (percentage of fastballs in the inning) / (overall percentage of fastballs)</p>
+<p>In the following graph, I plot the ratio for all pitchers against the inning. &nbsp;This basically confirms the general belief of establishing the fastball early. &nbsp;Although the pattern varies among pitchers, on average it seems that pitchers throw 10% more fastballs in the first inning than average. &nbsp;The pitchers tend also to throw a higher fraction of fastballs in the 2nd inning. &nbsp;The variation between pitchers is interesting – Fernandez and Hendricks really like to establish the fastball in the 1st inning – Dickey (not unexpected) and Volquez actually use the fastball less than average in the 1st inning.</p>
+<p><img src="figures/pitching/pitching9.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="closing-comments" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="closing-comments"><span class="header-section-number">5.4</span> Closing Comments</h3>
+<p>Interestingly, this is not the first post about entropy and pitch selection – for example, I found an interesting post&nbsp;in Baseball Prospectus where entropy is explored by a regression analysis. &nbsp;I think that the issue of pitch selection is very interesting and other explorations are possible. &nbsp;For example, I am sure pitchers tend to use particular pitches in different count situations. &nbsp;For example, one pitcher might tend to throw a fastball on the first pitch and use his off-speed stuff when he is ahead in the count. &nbsp;This information would be very helpful for a hitter in guessing the type of the next pitch. &nbsp;So you may be seeing further explorations on the timing of pitch selection in future posts.</p>
+</section>
+</section>
+<section id="tribute-to-roy-halladay---master-of-short-games" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="tribute-to-roy-halladay---master-of-short-games"><span class="header-section-number">6</span> Tribute to Roy Halladay - Master of Short Games</h2>
+<section id="introduction-1" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">6.1</span> Introduction</h3>
+<p>The baseball world was stunned last week with the news of Roy Halladay’s death at age 40.&nbsp; Being a Phillies fan, I was a quick admirer of Halladay’s work ethic and his great pitching skills when he joined the Phillies, as illustrated by his two no-hitters in the 2010 season.&nbsp; The first no-hitter was a perfect game against the Marlins and the second was in his first post-season start against the Reds.&nbsp; In&nbsp;Ian Hunter’s recent tribute to Halladay, he describes six “Halladays” – complete games that finished in under two hours.</p>
+<p>Last week, I described the duration of the 2017 World Series games, getting some insight how games can be so long.&nbsp; Since Roy Halladay appeared to be a quick worker on the pitching mound, I was inspired by Hunter’s article to explore the durations of the games when Halladay was a starter.</p>
+</section>
+<section id="exploring-game-durations" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="exploring-game-durations"><span class="header-section-number">6.2</span> Exploring Game Durations</h3>
+<p>Since Halladay started all but two games during the seasons 1999-2013, I looked first at the game durations (in minutes) for all games in these 15 seasons.&nbsp; On average, we see that the median game duration has slowly increased from 1999 to 2013.&nbsp; For a given season, the game durations are symmetric in the middle, but there are number of outliers at the high end (due to high scoring and extra-inning games).</p>
+<p><img src="figures/pitching/pitching10.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="an-aside-the-increase-in-game-durations" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="an-aside-the-increase-in-game-durations"><span class="header-section-number">6.3</span> An Aside: The Increase in Game Durations</h3>
+<p>Making this plot made me wonder how the median game duration has changed over, say, the last 50 seasons.&nbsp; I have shown the pattern below.&nbsp; There was a steady increase from the middle 70’s to 2000, then there was a drop until 2005, and there has been a steady increase until the current season.&nbsp; The average game duration in the 2015 season is about 30 minutes longer than the average duration in the last 1970’s.</p>
+<p><img src="figures/pitching/pitching11.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="games-started-and-not-started-by-halladay" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="games-started-and-not-started-by-halladay"><span class="header-section-number">6.4</span> Games Started and Not Started by Halladay</h3>
+<p>Getting back to the main issue, were games started by Halladay unusually short?&nbsp; To answer this, we draw boxplots of the game durations for games started and not-started by Halladay.&nbsp; We see several interesting things:</p>
+<p><img src="figures/pitching/pitching12.png" class="img-fluid" style="width:70.0%"></p>
+<ul>
+<li>In Roy’s early seasons (1999 to 2001), his game duration was about average.</li>
+<li>Starting with 2002, his games were getting shorter.&nbsp; The most interesting season was 2005 when the average in games he started was about 30-40 minutes shorter than games when he didn’t start.</li>
+<li>In later seasons (2006 and on), Roy was consistently shorter than average, but the advantage seemed to be smaller in his final seasons.</li>
+</ul>
+</section>
+<section id="quickest-starters" class="level3" data-number="6.5">
+<h3 data-number="6.5" class="anchored" data-anchor-id="quickest-starters"><span class="header-section-number">6.5</span> Quickest Starters</h3>
+<p>Did Halladay rank among the quickest pitchers in baseball?&nbsp; To answer this, for each season, I ranked the top-ten pitchers (the ones that started at least 19 games) with respect to the median duration of the games that they started.&nbsp; For the seasons 1999 through 2013, I constructed this top-ten list, and then I counted the number of occurrences on this top-10 list.&nbsp; The below graph shows the seven pitchers who appeared at least three times on the top-10 list.&nbsp; The king of short games during this period was Mark Buehrle (10 occurrences), followed by Greg Maddux (6 occurrences).&nbsp; Halladay is one of the five pitchers who appeared in the top-10 list three times.</p>
+<p><img src="figures/pitching/pitching13.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="maddux-versus-halladay" class="level3" data-number="6.6">
+<h3 data-number="6.6" class="anchored" data-anchor-id="maddux-versus-halladay"><span class="header-section-number">6.6</span> Maddux versus Halladay</h3>
+<p>Since I also was a great admirer of Greg Maddux who was noted as a quick worker, I thought it would be interesting to compare the game durations of the two pitchers.&nbsp; Below I construct parallel boxplots of the durations during the seasons 1999 through 2008 when the two pitchers overlapped.&nbsp; &nbsp;Generally, they seemed to be similar with respect to game duration, but again we note that Halladay was remarkably quick during the 2005 seasons.&nbsp; (Things changed during 2006 and Maddux was the quicker worker on average.)</p>
+<p><img src="figures/pitching/pitching14.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="takeaways-and-r-work" class="level3" data-number="6.7">
+<h3 data-number="6.7" class="anchored" data-anchor-id="takeaways-and-r-work"><span class="header-section-number">6.7</span> Takeaways and R Work</h3>
+<p>Okay, Roy Halladay appears to be a quick pitcher, although the game duration is not a precise way of measuring speed.&nbsp; Since Halladay often pitched deep into a game, I imagine that game duration is a reasonable proxy for the more accurate measurement.&nbsp; I think it is interesting that Halladay’s speed was not always fast – as he matured into one of the best pitchers in baseball, he tended to speed up.&nbsp; This suggests that pitching speed might be related to confidence or experience.</p>
+<p>All of the R code for this study can be found on my gist github site.&nbsp; I have previously downloaded all of the Retrosheet game l data for all seasons and the game logs contain the starting pitchers and the game duration for all games.&nbsp; The <code>dplyr</code> package is used for all of the data manipulations.</p>
+</section>
+</section>
+<section id="historical-look-at-pitcher-usage" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="historical-look-at-pitcher-usage"><span class="header-section-number">7</span> Historical Look at Pitcher Usage</h2>
+<section id="introduction-2" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">7.1</span> Introduction</h3>
+<p>In a recent post I compared two seasons, 1968 and 2018 with respect to a number of different variables such as the game length, runs scored, and margin of victory. I also briefly looked at the number of pitchers used in a game. I thought it would be interesting to explore pitcher usage more carefully, looking at the dramatic changes in this variable and also exploring how current pitcher usage varies between teams.</p>
+<p>To illustrate how things have dramatically changed, I have copied the pitching component of the boxscore for the first game in the Phillies 1968 season. For this game, the Phillies used a single pitcher, Chris Short, who threw a complete game four-hit shutout.</p>
+<p><img src="figures/pitching/pitching15.png" class="img-fluid" style="width:70.0%"></p>
+<p>Let’s contrast this with the pitching score for the first game in the Phillies 2018 season. Aaron Nola pitched pretty well in this game, but he was taken out in the 6th inning and he was followed by five relievers who got the remaining 10 outs of the game.</p>
+<p><img src="figures/pitching/pitching16.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="how-many-pitchers-are-used-in-a-game" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="how-many-pitchers-are-used-in-a-game"><span class="header-section-number">7.2</span> How Many Pitchers are Used in a Game?</h3>
+<p>Using Retrosheet play-by-play datafiles, I collected the number of pitchers used by each team for each of the seasons 1960 through 2018. Below I graph the mean number of pitchers used per team per game against season. From 1960 through 1980, teams tended to use 2-3 pitchers per game (average close to 2.5). But starting with the 1980 season, things changed – the average number of pitchers per game per team increased up to the current average around 4.5.</p>
+<p><img src="figures/pitching/pitching17.png" class="img-fluid" style="width:70.0%"></p>
+<p>To get a better understanding of this phenomenon, I graphed the number of pitchers used for all games for all teams in the 1968 season. I have shaded the bars corresponding to 3 or fewer pitchers used. For all teams, it appears it was uncommon to use more than 3 pitchers for the 1968 teams.</p>
+<p><img src="figures/pitching/pitching18.png" class="img-fluid" style="width:70.0%"></p>
+<p>Compare this with the number of pitchers used per game for teams in the 2018 season. The pitcher use is dramatically different. Now it is rare to use three or fewer pitchers. We know there are few complete games in modern baseball so the bar heights for one pitcher are very low. Also looking at the table, we also see considerable variation between the teams. For example, Detroit appears to have a relatively large number of games where they used 3 or fewer pitchers. The Phillies rarely used one or two pitchers in a game.</p>
+<p><img src="figures/pitching/pitching19.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="how-many-batters-does-a-pitcher-face" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="how-many-batters-does-a-pitcher-face"><span class="header-section-number">7.3</span> How Many Batters Does a Pitcher Face?</h3>
+<p>Another way to look at pitcher usage is to examine the number of batters faced (BFP). For example, if a pitcher faces 27 batters, he is going through the batting order three times. I think a team is conscious of this number – they might be reluctant to have a pitcher face more than 18 batters since then he will be facing a batter for the third time. (It is commonly believed that a batter’s success will improve against a specific pitcher for more plate appearances.)</p>
+<p>For all pitcher appearances in the 1968 season, I collected the number of batters faced. Note that a relatively high proportion of these appearances corresponding to starters who faced between 20 to 40 batters. Over half of the appearances corresponding to relievers who faced between 1 to 15 batters.</p>
+<p><img src="figures/pitching/pitching20.png" class="img-fluid" style="width:70.0%"></p>
+<p>Let’s compare this distribution of BFP with the distribution for the 2018 season. This is very different. Relatively few of the pitcher appearances correspond to starters. Pitching currently is dominated by relievers and over half of these appearances correspond to relievers who face 3, 4, or 5 batters.</p>
+<p><img src="figures/pitching/pitching21.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="differences-between-teams" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="differences-between-teams"><span class="header-section-number">7.4</span> Differences Between Teams</h3>
+<p>Okay, pitching usage has changed in modern baseball. But the manner of using pitchers varies across teams. For example, one strategy is to bring in a relief pitcher to face a single batter – a left-handed specialist is a type of pitcher who is supposedly effective in retiring a left-handed hitter. Below I graph the number of pitchers facing exactly one batter for all teams in the 2018 season. Teams like Cleveland and both Chicago teams commonly used the pitcher against a single batter strategy. In contrast, this was very rare for the Pirates or Yankees to do this.</p>
+<p><img src="figures/pitching/pitching22.png" class="img-fluid" style="width:70.0%"></p>
+<p>Also we are starting to see different strategies in the use of starting pitchers. Below I have displayed histograms of the number of batters faced by the starters for all teams. If you look at these 30 histograms, one outlier should be obvious. The Rays had an unusual strategy of starting the game with a relief pitcher and they had a high number of starters who faced 9 or fewer hitters (which means that they would face each batter in the lineup a single time.) Maybe other teams will adopt the Rays’ strategy in the 2019 season.</p>
+<p><img src="figures/pitching/pitching23.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="what-to-do-about-this" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="what-to-do-about-this"><span class="header-section-number">7.5</span> What to Do About This?</h3>
+<p>Personally, I think the pitcher usage in modern baseball is out of control. Why?</p>
+<ul>
+<li><p>Short stints for starters: Fans come to games partly to appreciate watching the starting pitchers, some of whom are among the best pitchers in baseball. If the manager gives the starter a short hook even on a good pitching appearance, the fans are cheated out of watching their favorite pitchers.</p></li>
+<li><p>No complete games: To follow up the last comment, one thing missing from modern baseball is the complete game. It is fun to watch a pitcher complete a game, especially when the game is close.</p></li>
+<li><p>Long games: The large number of pitchers used takes a toll on the length of the game. A pitching change means that there is a conference at the mound, a walk of the reliever from the bullpen and time to practice. Basically the fans are asked to watch several commercials for each pitching change. Have you ever heard a fan talk about how much they like to see a pitching change?</p></li>
+<li><p>Do these changes matter? Is there really an advantage to making all of these pitching changes? I suppose they are made for some situational advantage, but I wonder if the perceived situational advantages are really true.</p></li>
+<li><p>Toll on bullpen: All of the pitching changes takes a toll on the bullpen and can impact the use of relievers in the following games.</p></li>
+</ul>
+<p>Can MLB change how teams use pitchers? Certainly. It’s possible to change the rules in a number of ways. They could limit the number of pitchers used in an inning. Or they could require each pitcher to face a minimum of batters or face batters until they get a particular number of outs. Any MLB rule change to impact the large number of pitchers used in a game would, in my opinion, make the game more fun for the fans.</p>
+</section>
+</section>
+<section id="the-100-pitch-limit-and-pitcher-efficiency" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="the-100-pitch-limit-and-pitcher-efficiency"><span class="header-section-number">8</span> The 100 Pitch Limit and Pitcher Efficiency</h2>
+<section id="introduction-3" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">8.1</span> Introduction</h3>
+<p>I just finished reading <em>The Arm</em> by Jeff Passan – it is an interesting description of the billion-dollar industry of pitching arms in baseball. It is remarkable that teams pay millions of dollars for pitchers on the free-agent market, but we don’t seem to have a good handle on what is causing the high number of elbow injures and Tommy John surgeries.</p>
+<p>One specific thing discussed in the book is about limits on pitch counts. There is a general feeling that all pitchers (young and old) should limit the number of pitches they throw. At the major league level, one is familiar with the 100-pitch limit for starters. I don’t know why 100 pitches is the magic pitch limit (why not 95 or 105?), but this suggests several explorations.</p>
+<ul>
+<li><p>Do MLB teams generally stay within this 100-pitch limit for starters? Has there been any change in pitch counts for starters in, say, the last 20 seasons?</p></li>
+<li><p>Is there much variability in the pitch counts for starters between teams?</p></li>
+<li><p>One thing we noticed in an earlier post was that plate appearances are getting longer – that is, the average number of pitches per plate appearance has been increasing over recent seasons. Pitchers want to be efficient – that is, throw only a few pitches per batter. Can we identify some of the most efficient pitchers in the last 20 seasons?</p></li>
+</ul>
+</section>
+<section id="the-data" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="the-data"><span class="header-section-number">8.2</span> The Data</h3>
+<p>Using Retrosheet play-by-play files, I collected the number of pitches thrown for each starter in each game for all games played in the seasons 2000 through 2019. In addition, I collected the player’s team, the number of batters faced, and the final inning for each of these starts.</p>
+</section>
+<section id="starter-pitch-counts-in-2010" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="starter-pitch-counts-in-2010"><span class="header-section-number">8.3</span> Starter Pitch Counts in 2010</h3>
+<p>Let’s look at the number of pitches thrown by starters in 2010. I construct bar graphs of the individual pitch counts below broken down by team. I have added a blue vertical line reference value of 100 pitches to each graph. Obviously, some of the pitch counts are small due to poor starter outings. But the general impression is that the starters for the 2010 teams appear to average about 100 pitches with some variability. For most teams, the percentage of pitch counts between 90 and 110 is 50 - 70 %.</p>
+<p><img src="figures/pitching/pitching24.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="starter-pitch-counts-in-2019" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="starter-pitch-counts-in-2019"><span class="header-section-number">8.4</span> Starter Pitch Counts in 2019</h3>
+<p>Let’s fast forward to the recent 2019 season – I have constructed a similar display of starter pitch counts in this season. There are several changes that I see:</p>
+<p><img src="figures/pitching/pitching25.png" class="img-fluid" style="width:70.0%"></p>
+<p>Some teams (such as TBA and TOR) seem to have a large number of small pitch counts. This reflects the new strategy of opening the game with a reliever.</p>
+<p>Although some teams seem to still average 100 pitches, I see a general tendency for teams to have smaller than 100 pitches for their starters.</p>
+</section>
+<section id="focus-on-the-starters-who-make-it-to-the-5th-inning" class="level3" data-number="8.5">
+<h3 data-number="8.5" class="anchored" data-anchor-id="focus-on-the-starters-who-make-it-to-the-5th-inning"><span class="header-section-number">8.5</span> Focus on the Starters Who Make it to the 5th Inning</h3>
+<p>There are several types of starts including “rough starts” that last only a couple of innings and starts by relievers that we see in current seasons. During a game, a manager has to decide when to take out a starter – that appears to be when the magical 100 pitches comes into play. To get a handle of this decision making, I decided to focus only on the games where the starter makes it into the 5th inning. For this subset of starting pitchers, what are their pitch counts? I collect the mean number of pitches for these starters (the ones who made it into the 5th inning) for each team for each of the past twenty seasons. I plot these values below – I add a smoothing curve and a red horizontal line at 100 pitches.</p>
+<p>We see some interesting things.</p>
+<ul>
+<li><p>First, the “average” team seemed to average 100 pitches for the seasons 2000 through 2014, but this “average” team is averaging fewer than 100 pitches in the last five seasons.</p></li>
+<li><p>There is remarkable variability between teams which seems to reflect different opinions about the 100-pitch limit. For example, the 2012 Colorado team only averaged 87.2 pitches per start and the 2012 Tampa team averaged 105 pitches per start.</p></li>
+</ul>
+<p><img src="figures/pitching/pitching26.png" class="img-fluid" style="width:70.0%"></p>
+<p>Another way to look at this is to focus on the mean number of batters faced by a starter that makes it into the 5th inning. How has that varied across teams and seasons? Since you hear a lot about “3 times through the batting lineup”, I have added a red horizontal line at 3 x 9 = 27 batters. We’re seeing a similar pattern across seasons – the number of batters faced for this starter has dropped from 27 in 2010 to about 24.5 in 2019. Again, we see sizeable variation between teams.</p>
+<p><img src="figures/pitching/pitching27.png" class="img-fluid" style="width:70.0%"></p>
+<p>Suppose we consider the starters who make it to the 5th inning – what fraction of these starters make it to the 7th inning? We show the graph with a red line at 50%. In 2012, roughly half of these starters made it to the 7th inning, but things are different now. This fraction tends to be only 30% (on average) in 2019, although teams again vary a lot on this measure.</p>
+<p><img src="figures/pitching/pitching28.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="pitcher-efficiency" class="level3" data-number="8.6">
+<h3 data-number="8.6" class="anchored" data-anchor-id="pitcher-efficiency"><span class="header-section-number">8.6</span> Pitcher Efficiency</h3>
+<p>Since there are more pitches in a game in current baseball, one should value the pitcher who can are efficient – throwing a small number of pitches per batter. One can measure a pitcher’s efficiency by the number of pitches divided by the number of batters faced. Suppose I consider only the pitchers who have 20 or more starts in a season. Below I construct parallel boxplots of the pitcher efficiencies for all players and seasons from 2000 through 2019. Of course we see a general trend of increase of these efficiencies in this 20-year period. I’m interested in identifying the outliers on the low end – these are the most efficient pitchers in these 20 seasons. I’ve identified eight unusual pitchers whose points are labelled with a unique color. Who are these pitchers?</p>
+<p>Greg Maddux (red dot) is clearly the efficiency star – he was the most efficient pitcher for eight of the nine seasons pictured here.</p>
+<p>Bartolo Colon (green dot) had some of the smallest values in the seasons 2012 through 2018. What is interesting is that Colon wasn’t always efficient. His values in the 2000 through 2005 seasons were average.</p>
+<p>Ivan Nova (orange dot) is one of the current efficiency starts in the last few seasons.</p>
+<p><img src="figures/pitching/pitching29.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="takeways-and-future-explorations" class="level3" data-number="8.7">
+<h3 data-number="8.7" class="anchored" data-anchor-id="takeways-and-future-explorations"><span class="header-section-number">8.7</span> Takeways and Future Explorations</h3>
+<p>Here are some takeaways from this brief exploration.</p>
+<ul>
+<li><p>In a game, each manager has to make a decision about the number of pitches for the starter. What we see is that 100 used to be an average number of pitches, but starting with 2015, this average has been falling. Also there is a tendency for the starter to face fewer batters, on average, and the proportion of starters going deep in games is falling.</p></li>
+<li><p>The mean number of pitches for starters seems to vary substantially across teams.</p></li>
+<li><p>Teams should value the starting pitchers who are efficient – they are the ones who have the potential to throw complete games.</p></li>
+</ul>
+<p>A followup exploration would explore the factors that affect pitch counts. Here are some factors that might weigh into a manager’s decision when to relieve the starter.</p>
+<ul>
+<li><p>Injury? The possibility of a pitcher injury is definitely a factor, but it is unclear how the pitch count or frequencies of starts affects the likelihood of, say, an elbow injury.</p></li>
+<li><p>Effectiveness? There is a general feeling that the effectiveness of a starter deteriorates as the pitch count increases. For example, I think one could demonstrate that that a starter tends to get less effective as he faces a batter for the 2nd time and the 3rd time. I probably have done this type of exploration in the past.</p></li>
+<li><p>Individual effects? Although there are some general “times through the order” effects, there are pitchers who seem to get more effective late in a game. Also there are pitchers who tend to weaken early in the game. So any managerial strategy about pitch-counts would likely depend on the specific starter involved.</p></li>
+</ul>
+</section>
+</section>
+<section id="perfect-k-games" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="perfect-k-games"><span class="header-section-number">9</span> Perfect-k Games</h2>
+<section id="introduction-4" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">9.1</span> Introduction</h3>
+<p>Recently Gino Renzulli sent me an email suggesting a new pitching stat:</p>
+<p>“The statistic is simple in nature. I am seeking to find a”perfect through 6 innings” statistic for pitchers. That is to say we would discover what pitchers have continued a perfect game through 6 innings the largest number of times. I chose 6 as the number of innings because it would indicate dominance twice through the order, but of course the data would be most interesting with a sliding scale of perfect through any ‘x’ number of innings.”</p>
+<p>We are very familiar with a Perfect Game where a starter pitches 9 innings with no batter reaching base. There have been only 23 perfect games in MLB history, the most recent being Felix Hernandez on August 15, 2012. Since perfect games are pretty rare, it seems interesting to generalize the notion of a Perfect Game to a similar event that is more likely to happen. In particular, let’s consider games where a starter throws k consecutive “no batters reach base” innings from the 1st inning – we’ll call this a “Perfect-k Game”. (Using this terminology a Perfect Game would be equivalent to a Perfect-9 Game.). In this post, we’ll provide a historical perspective on Perfect-k Games and find the pitchers who have done well using this statistic during the 2000-2019 period.</p>
+</section>
+<section id="using-retrosheet-data" class="level3" data-number="9.2">
+<h3 data-number="9.2" class="anchored" data-anchor-id="using-retrosheet-data"><span class="header-section-number">9.2</span> Using Retrosheet Data</h3>
+<p>Perfect-k Games can be found using Retrosheet data. For each game, one checks if no batter reaches base in a half-inning by seeing if the number of batters is equal to the number of outs (strikeouts or other outs). For each game, a pitcher has, say, a Perfect-5 game if the number of batters for the complete innings 1 through 5 (15 batters) is equal to the number of outs. I repeat this exercise using the Retrosheet play-by-play files for the 2000 through 2019 seasons.</p>
+</section>
+<section id="counts-of-perfect-k-games" class="level3" data-number="9.3">
+<h3 data-number="9.3" class="anchored" data-anchor-id="counts-of-perfect-k-games"><span class="header-section-number">9.3</span> Counts of Perfect-k Games</h3>
+<p>We have already recorded, say on this Wikipedia page, the Perfect-9 games which are the Perfect Games in baseball history. We are interested in counting the Perfect-1, Perfect-2, …, Perfect-8 games in each of the 20 seasons 2000 through 2019.</p>
+<p>Here are graphs of the counts of Perfect-1 through Perfect-6 games for these 20 seasons.</p>
+<p><img src="figures/pitching/pitching30.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="some-comments" class="level3" data-number="9.4">
+<h3 data-number="9.4" class="anchored" data-anchor-id="some-comments"><span class="header-section-number">9.4</span> Some comments:</h3>
+<ul>
+<li><p>There are 2430 games during a complete baseball season. Since there are two starting pitchers, there are 2 x 2430 = 4860 opportunities to throw Perfect-k games. We see, for example, there tend to be about 1400 Perfect-1 games in a season which represents about 29% of all opportunities. This is surprising – I thought there would be a greater percentage of 1-2-3 first innings.</p></li>
+<li><p>Following is a table showing the total count of Perfect-k games (over the 20 seasons) and the corresponding percentage for values of k equal to 1 through 8. Reading the third row, we see for only 3.33% of the game opportunities, there is a Perfect-3 game where the entire lineup 1-9 does not reach base in the first three innings. There have been 17 Perfect-8 games in this period which represents only 0.02% of the game opportunities. There has been a total of 7 Perfect Games in this twenty season period which (by subtraction) means that there were 10 games where the pitcher had a Perfect-8 game and either the starting pitcher was replaced or a batter reached base in the ninth inning.</p></li>
+</ul>
+<pre><code>    N_Innings Total Percentage
+      &lt;int&gt; &lt;int&gt;      &lt;dbl&gt;
+1         1 28288      29.1 
+2         2  8661       8.91
+3         3  3237       3.33
+4         4   951       0.98
+5         5   313       0.32
+6         6   110       0.11
+7         7    39       0.04
+8         8    17       0.02</code></pre>
+<ul>
+<li><p>Looking at the six graphs, I see a general increase in the number of Perfect-k games starting with the 2010 season. Maybe this indicates that pitchers tend to be more dominant after 2010?</p></li>
+<li><p>There are interesting outliers in these graph. For example, the number of Perfect-k games seems unusually low in the 2000 season and the counts of Perfect-3, Perfect-4 and Perfect-5 games seem high in the 2014 and 2015 seasons. Some more exploration is needed to understand what is happening for these particular outlier seasons.</p></li>
+</ul>
+</section>
+<section id="great-perfect-k-pitchers" class="level3" data-number="9.5">
+<h3 data-number="9.5" class="anchored" data-anchor-id="great-perfect-k-pitchers"><span class="header-section-number">9.5</span> Great Perfect-k Pitchers</h3>
+<p>Gino was particularly interested in pitchers who threw Perfect-6 games – these are games where the starter went through the lineup twice without anyone getting on base. Are there pitchers who excel in Perfect-6 games?</p>
+<p>Here is a leaderboard of Perfect-6 games during the period 2000-2019. We see Mark Buehrle stands out with 3 Perfect-6 games and 11 other pitchers had 2 Perfect-6 games.</p>
+<pre><code>   Name              Perfect_6
+ 1 Mark Buehrle              3
+ 2 Jake Arrieta              2
+ 3 Madison Bumgarner         2
+ 4 Bartolo Colon             2
+ 5 Yu Darvish                2
+ 6 Armando Galarraga         2
+ 7 Rich Hill                 2
+ 8 Clayton Kershaw           2
+ 9 Colby Lewis               2
+10 Odalis Perez              2
+11 Max Scherzer              2
+12 Ben Sheets                2</code></pre>
+<p>Let’s try counts of Perfect-5 games. Here is a listing of the pitchers who had at least four Perfect-5 games – Mark Buehrle and Jon Lester are on top and I am happy that two former Phillies, Roy Halladay and Curt Schilling, are on this leaderboard.</p>
+<pre><code>  Name           Perfect_5
+  &lt;chr&gt;              &lt;int&gt;
+1 Mark Buehrle           6
+2 Jon Lester             6
+3 Yu Darvish             5
+4 Max Scherzer           5
+5 Roy Halladay           4
+6 German Marquez         4
+7 Curt Schilling         4</code></pre>
+<p>Since you might be wondering, here is the leaderboard for the number of Perfect-3 games, which includes some of the best starting pitchers during this twenty season period.</p>
+<pre><code>Name             Perfect_3
+  &lt;chr&gt;                &lt;int&gt;
+1 Justin Verlander        28
+2 CC Sabathia             26
+3 Max Scherzer            26
+4 Clayton Kershaw         24
+5 Tim Hudson              23
+6 Bronson Arroyo          21</code></pre>
+</section>
+<section id="closing-remarks" class="level3" data-number="9.6">
+<h3 data-number="9.6" class="anchored" data-anchor-id="closing-remarks"><span class="header-section-number">9.6</span> Closing Remarks</h3>
+<ul>
+<li><p>Do We Need Another Pitching Measure? We are interested in no-hitters and starters need to pass through these Perfect-1, Perfect-2, Perfect-3, … milestones on the way to a no-hitter. So I think these Perfect-k measures are useful for understanding a pitcher’s dominance.</p></li>
+<li><p>Randy Johnson? Gino thought that Randy Johnson would do well with respect to the Perfect-k measure. I checked. We do know that Johnson threw a perfect game against the Braves on May 18, 2004. Using my function, I find that Johnson had only two Perfect-6 games (May 18, 2004 and May 16, 1993), but he did have six Perfect-5 games in his career.</p></li>
+<li><p>Career Leaderboard? That raises the question – which pitcher had the greatest number of Perfect-6 games in MLB history? It would not be difficult to use Retrosheet data to find a career leaderboard for counts of any Perfect-k of interest.</p></li>
+<li><p>R Code? I wrote a short R function <code>perfect()</code> that finds all of the games where pitchers attain a Perfect-k distinction. You can see the function on my Github Gist site. One inputs the Retrosheet data frame for a particular season and the value of k. The output is a data frame containing the game id and the retro id of the starting pitcher for all Perfect-k games that season By repeated use of the function <code>perfect()</code> for different Retrosheet season datasets and values of k, one obtains the results that are illustrated here.</p></li>
+</ul>
+</section>
+</section>
+<section id="optimal-pitching-locations" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="optimal-pitching-locations"><span class="header-section-number">10</span> Optimal Pitching Locations</h2>
+<section id="introduction-5" class="level3" data-number="10.1">
+<h3 data-number="10.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">10.1</span> Introduction</h3>
+<p>Sitting in a recent sports analytics session at a Bayesian meeting, I heard an interesting talk by Nate Sandholtz describing a paper on optimal serving strategies in tennis. This paper was inspired by research on optimal dart throwing strategy by Rob Tibshirani, Andrew Price, and Jonathan Taylor. (See https://www.stat.cmu.edu/~ryantibs/darts/ for some articles on this research.)</p>
+<p>Here’s the basic idea of the authors’ approach in the dart-throwing game. One is throwing a dart at the standard dartboard pictured below.</p>
+<p><img src="figures/pitching/pitching31.png" class="img-fluid" style="width:70.0%"></p>
+<p>Suppose you aim your dart throw at a particular location of the dartboard. What target location will maximize your expected payoff in the dart game? In the figure, the dotted region is worth 20 points, the shaded region is worth 40 points and the striped region is worth 60 points. Assuming that your throw is inaccurate with some variance, it turns out that the optimal strategy is NOT to throw at the region with the highest point value.</p>
+<p>This research seems to have an immediate application to pitching in baseball. Given knowledge about the pitch type, count and batter side, a pitcher is throwing to a particular target about the zone and one is interested in learning about the optimal target location that maximizes the “value” of the pitch. After reviewing the concept of pitch value, we illustrate how this framework can provide information on the best target location.</p>
+</section>
+<section id="pitch-value" class="level3" data-number="10.2">
+<h3 data-number="10.2" class="anchored" data-anchor-id="pitch-value"><span class="header-section-number">10.2</span> Pitch Value</h3>
+<p>In a previous post, I review the idea of value of a specific pitch. Value is defined to be the change in runs value, where runs value is the average runs scored for all pitches that pass through a particular count. To illustrate, suppose a pitch changes the count from 1-1 to 2-1. The value of this pitch is the difference in the associated runs value of those two counts. In this case, the pitch value is computed to be 0.050 which (as one would expect) favors the hitter. Pitch values can be assigned to all pitches in a given season including the ones that end the plate appearance with a ball in play. All of the work here using pitch values from the 2019 season.</p>
+</section>
+<section id="throwing-to-a-target" class="level3" data-number="10.3">
+<h3 data-number="10.3" class="anchored" data-anchor-id="throwing-to-a-target"><span class="header-section-number">10.3</span> Throwing to a Target</h3>
+<p>A pitcher makes a choice on the type of pitch to throw. He is aware of the side of the batter (right or left) and the current count. Based on this information, the pitcher decides on throwing the pitch to a particular location about the strike zone and the catcher often positions his glove to indicate this target location.</p>
+<p>Although there is a target location in the zone in mind, there will be some error in throwing to this target. If the target is given by the ordered pair <span class="math inline">\((x0, z0)\)</span>, we assume that the actual pitch location&nbsp;<span class="math inline">\((x, z)\)</span>&nbsp;is bivariate normal with mean&nbsp;<span class="math inline">\((x0, z0)\)</span>&nbsp;and variance-covariance matrix <span class="math inline">\(\Sigma\)</span>. We let <span class="math inline">\(\Sigma\)</span> be a diagonal matrix with entries&nbsp;<span class="math inline">\(\sigma^2\)</span> and&nbsp;<span class="math inline">\(\sigma^2\)</span>. The key parameter is the standard deviation <span class="math inline">\(\sigma\)</span> that reflects the accuracy of the pitcher in throwing to the target.</p>
+</section>
+<section id="throwing-a-four-seamer-on-the-first-pitch" class="level3" data-number="10.4">
+<h3 data-number="10.4" class="anchored" data-anchor-id="throwing-a-four-seamer-on-the-first-pitch"><span class="header-section-number">10.4</span> Throwing a Four-Seamer on the First Pitch</h3>
+<p>To illustrate this setup, suppose a right-handed pitcher decides to throw a four-seamer to a right-handed batter on a 0-0 count. He decides to throw this fastball to the lower-right section of the zone away from the batter. Assume the target location is (0.61, 1.79) and the actual pitch location is bivariate normal with mean (0.61, 1.79) with a standard deviation <span class="math inline">\(\sigma\)</span> = 0.2. In the following figure, the orange points represent the locations of a sample of 200 pitches thrown towards this specific target – approximately 95% of the pitches are located within the blue circle.</p>
+<p><img src="figures/pitching/pitching32.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="measuring-value" class="level3" data-number="10.5">
+<h3 data-number="10.5" class="anchored" data-anchor-id="measuring-value"><span class="header-section-number">10.5</span> Measuring Value</h3>
+<p>From the 2019 Statcast dataset, we have measurements of pitch value for all pitches thrown in this season. Since a particular pitch type is chosen on a particular count by a pitcher of a particular side to a batter of a particular side, we focus on the pitch values of the pitches of the selected pitch type, count, pitcher and batter sides. In this example, we consider the values of the four-seam fastball pitches thrown by right-handed pitchers to right-handed batters on the 0-0 count. We measure the value of this target location by computing a weighted mean of the selected 2019 pitch values where the weights are proportional to values of the bivariate normal distribution with target <span class="math inline">\((x0, y0)\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>. That is, the pitch value <span class="math inline">\(V\)</span> is given by the formula</p>
+<p><span class="math display">\[ V = \frac{\Sigma pv(x, y) f(x, y)}{\Sigma f(x, y)}\]</span></p>
+<p>where&nbsp;<span class="math inline">\(pv(x, y)\)</span>&nbsp;is the pitch value of the&nbsp; <span class="math inline">\((x, y)\)</span> &nbsp;location and&nbsp;<span class="math inline">\(f(x, y)\)</span>&nbsp;is the bivariate normal density at this location.</p>
+<p>In this first example, the pitch value is found to be&nbsp;<span class="math inline">\(V = −0.021\)</span>. This is negative, indicating that this particular target location is advantageous to the pitcher.</p>
+</section>
+<section id="more-examples" class="level3" data-number="10.6">
+<h3 data-number="10.6" class="anchored" data-anchor-id="more-examples"><span class="header-section-number">10.6</span> More Examples</h3>
+<p>Suppose a second pitcher throws a four-seamer on a 0-0 count to the same target location but with less accuracy with σ = 0.35. Here’s a picture of this situation – note the greater spread of pitches about the target. Here the pitch value is -0.014 which is smaller than the pitch value with <span class="math inline">\(\sigma\)</span> = 0.20. Although both pitchers are throwing to the same target, the less accurate pitcher is more likely to locate his pitch outside of the zone which raises the pitch value.</p>
+<p><img src="figures/pitching/pitching33.png" class="img-fluid" style="width:70.0%"></p>
+<p>The value of a pitch depends on the count. In the next example, the situation is a four-seamer thrown by a right-handed pitcher to a right-handed hitter on a 0-2 count. The target location is in the middle of the zone with a standard deviation of <span class="math inline">\(\sigma\)</span> = 0.2. Here the pitch value is computed to be 0.024 which favors the hitter. It is not desirable (from the pitcher’s perspective) to throw a fastball down the middle of the zone on a pitcher’s count like 0-2.</p>
+<p><img src="figures/pitching/pitching34.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="optimal-pitch-location" class="level3" data-number="10.7">
+<h3 data-number="10.7" class="anchored" data-anchor-id="optimal-pitch-location"><span class="header-section-number">10.7</span> Optimal Pitch Location</h3>
+<p>The Shiny app&nbsp;<code>PitchAccuracy</code>&nbsp;can be used to explore the pitch values of different target locations. One inputs the pitch type, counts of interest, sides of the pitcher and batter, and the error standard deviation&nbsp; <span class="math inline">\(\sigma\)</span>. Then by changing values of the target location (values of&nbsp;<span class="math inline">\(x0\)</span>&nbsp;and&nbsp;<span class="math inline">\(z0\)</span>) one can see how the pitch value changes. We illustrated the use of&nbsp;<code>PitchAccuracy</code>&nbsp;in the three above examples.</p>
+<p>A second Shiny app&nbsp;<code>OptimalPitchLocation</code>&nbsp;can be used to determine an optimal target location. As in the previous app, one inputs the pitch type, count, pitcher and batter sides, and error standard deviation&nbsp;<span class="math inline">\(\sigma\)</span>.</p>
+<p>This Shiny app sets up a 10 by 10 grid of target locations. For each target location in the grid, the pitch value is computed assuming a normal error distribution with standard deviation σ about the target.</p>
+<p>Here is an example, where one is throwing a four-seam fastball by a right-handed pitcher to a right-handed batter on a 0-0 count. Again we are letting the standard deviation of the locations be&nbsp; <span class="math inline">\(\sigma\)</span> = 0.2. The pitch values are coded by color where a orange color indicates a target location that favors the pitcher and a blue color indicates a location that favors the batter. The optimal pitch target (from a pitcher’s perspective) is the location with the minimum pitch value – this location is drawn with a red triangle. Here we learn that any four-seamer thrown at a target inside the zone (with one exception) favors the pitcher and all balls thrown at a target outside the zone (again with one exception) favors the batter. The optimal target location is high-inside to this right-handed batter. Looking at the figure title, we see that the value of this optimal location is&nbsp; <span class="math inline">\(−0.035\)</span>.</p>
+<p><img src="figures/pitching/pitching35.png" class="img-fluid" style="width:70.0%"></p>
+<p>Suppose we consider the same situation (right-handed pitcher and batter, 0-0 count), but our pitcher is less accurate with σ = 0.35. What’s changed? Now the optimal target location is outside down in the zone. Note that the region of target locations favorable to the pitcher has expanded. Also the minimum pitch value is <span class="math inline">\(-0.024\)</span> which is smaller than the value for the more accurate pitcher. This indicates that the accuracy of the pitcher is an important input in learning about the optimal target location.</p>
+<p><img src="figures/pitching/pitching36.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="comments" class="level3" data-number="10.8">
+<h3 data-number="10.8" class="anchored" data-anchor-id="comments"><span class="header-section-number">10.8</span> Comments</h3>
+<ul>
+<li><p>(More exploration) The&nbsp;<code>OptimalPitchLocation</code>&nbsp;app can be used to find optimal pitch locations for different pitch type, count, batting side inputs. In a future post, we’ll show some interesting applications where we vary the pitch type and count.</p></li>
+<li><p>(Check out the Shiny apps) Both of the Shiny apps are available as part of the <code>ShinyBaseball</code> package. One can run each of the apps by downloading the <code>app.R</code> file from the inst folder, placing the downloaded file in a separate folder, opening up the file and running the app using the “Run App” button in the RStudio desktop. By inspecting the code for each app, you may need to install several necessary packages. Both apps use the Statcast datafile <code>sc2019_pv.txt</code> which is available in the data folder of the <code>ShinyBaseball</code> package.</p></li>
+</ul>
+<p>(Measuring pitcher accuracy) To use these apps for specific pitchers, one needs to estimate the standard deviation σ that determines the pitcher’s accuracy in throwing a specific type of pitch towards a zone location. One can gain some insight about plausible values of σ by collecting locations of pitches on particular counts for different pitcher of interest. We often hear about Greg Maddux’s ability to throw his two-seamer to a specific location. It would be an interesting study to explore pitchers’ abilities to throw, say a four-seamer, to a specific location.</p>
+</section>
+</section>
+<section id="studying-pitcher-fatigue-using-a-multinomial-regression-model" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="studying-pitcher-fatigue-using-a-multinomial-regression-model"><span class="header-section-number">11</span> Studying Pitcher Fatigue Using a Multinomial Regression Model</h2>
+<section id="introduction-6" class="level3" data-number="11.1">
+<h3 data-number="11.1" class="anchored" data-anchor-id="introduction-6"><span class="header-section-number">11.1</span> Introduction</h3>
+<p>Last year, I wrote a post describing an interesting presentation by Adie Wyner that explored the well-known Times Through the Order (TTTO) belief in baseball that pitchers tend to perform worse when facing batters for the second or third time during a game. In that post, I used Retrosheet play-by-play files to explore the TTTO effects for individual pitchers. I found some interesting TTTO effects, but it was unclear there were underlying pitcher talents. My takeaway from Wyner’s presentation is that pitchers tend to do worse in performance as they face more batters, but there is no abrupt change in performance at the second or third time through the lineup.</p>
+<p>The associated research paper “A Bayesian analysis of the time through the order penalty in baseball” by Brill, Deshpande and Wyner has been recently posted on the arXiv site. Although this is an interesting paper, it really seems written for a statistical audience. So I thought it would be beneficial to describe the multinomial regression model that these authors use and apply it to explore pitcher fatigue for some of the great pitchers in history. Maybe my explanation will help readers look at this paper and appreciate the results they found.</p>
+</section>
+<section id="the-data-1" class="level3" data-number="11.2">
+<h3 data-number="11.2" class="anchored" data-anchor-id="the-data-1"><span class="header-section-number">11.2</span> The Data</h3>
+<p>Brill, Deshapande and Wyner provide the dataset for their work on their Github site. This dataset is a collection of Retrosheet play-by-play files for the 1990 through 2020 seasons with some additional variables. For our work, one key variable is <code>BATTER_SEQ_NUM</code> that gives the number of the batter that a pitch has faced. Also for this study I need a variable of the quality of the hitter. Due to small sample sizes, the observed wOBA value for a given study may be unstable. Using a multilevel model, I adjust the raw wOBA measures to obtain better estimates of hitter quality.</p>
+</section>
+<section id="the-model" class="level3" data-number="11.3">
+<h3 data-number="11.3" class="anchored" data-anchor-id="the-model"><span class="header-section-number">11.3</span> The Model</h3>
+<p>Let <span class="math inline">\(y\)</span> denote one of the 7 possible outcomes of a plate appearance (out, single, double, triple, home run, unintentional walk, hbp). The variable <span class="math inline">\(y\)</span> is a multinomial outcome which is described by probabilities of these seven outcomes. The multinomial regression model says that the logarithm of the ratio of the probability of outcome <span class="math inline">\(k\)</span> to the probability of the first outcome “out” is a linear function of several covariates on the right hand side of the equation.</p>
+<p><img src="figures/pitching/pitching37.png" class="img-fluid" style="width:70.0%"></p>
+<p>What are possible covariates?</p>
+<ul>
+<li><p>the quality of the pitcher</p></li>
+<li><p>the quality of the hitter</p></li>
+<li><p>the handedness of the pitcher and hitter (same side or different side)</p></li>
+<li><p>is the game in the pitcher’s home park?</p></li>
+<li><p>the number of the batter faced – this is <span class="math inline">\(t_i\)</span> in the equation</p></li>
+</ul>
+<p>indicators that the pitcher has faced the hitter twice through the lineup (2TTO) or three times through the lineup (3TTO)</p>
+<p>In this exercise, we will fit this model for individual pitchers and focus on two important covariates – the number of the batter faced and the quality of the hitter. In this model, we will be estimating the intercept <span class="math inline">\(\alpha_{0k}\)</span>, the slope <span class="math inline">\(\alpha_{1k}\)</span> and the slope <span class="math inline">\(\eta_k\)</span> for each of the multinomial outcomes. Since there are six outcomes (besides “out”), we are estimating 6 x 3 = 18 model parameters.</p>
+</section>
+<section id="measure-of-performance" class="level3" data-number="11.4">
+<h3 data-number="11.4" class="anchored" data-anchor-id="measure-of-performance"><span class="header-section-number">11.4</span> Measure of Performance</h3>
+<p>When we fit this model for a specific pitcher, the parameter estimates can be reexpressed in terms of the multinomial probabilities for the seven outcomes of the plate appearance. But we are interested in learning about the overall performance of the pitcher. A good convenient summary measure is the expected wOBA measure that is a linear combination of the PA probabilities. Using the FanGraphs weights in the description of wOBA, we have</p>
+<p>Expected wOBA = 0.69 P(W) + 0.72 P(HBP) + 0.89 P(1B) + 1.27 P(2B) + 1.62 P(3B) + 2.10 P(HR)</p>
+<p>and so we can use the model fit to estimate a pitcher’s expected wOBA for specific values of the batter quality and batter number.</p>
+</section>
+<section id="fitting-the-model-to-individual-pitchers" class="level3" data-number="11.5">
+<h3 data-number="11.5" class="anchored" data-anchor-id="fitting-the-model-to-individual-pitchers"><span class="header-section-number">11.5</span> Fitting the Model to Individual Pitchers</h3>
+<p>For the period 1990 through 2020, I identified 126 pitchers who had faced at least 8000 batters during this period. For each pitcher, using the function <code>multinom()</code> in the <code>nnet</code> package, I fit the multinomial regression model using two covariates – the batter number and the quality of the hitter. I obtain parameter estimates and the associated variance-covariance matrix of the estimates. I can obtain a simulated sample of draws from the posterior distribution of the parameters.</p>
+<p>To show the fatigue effect for a specific pitcher, I fix a value of the batter quality (I use wOBA = 0.3), and obtain simulated draws of the expected wOBA for each of the batter numbers from 1 to 30. One can summarize the fatigue effect by fitting a line to the scatterplot of the simulated draws of expected wOBA and the batter number – if the slope is positive, there is a fatigue effect. If the slope is negative, then the pitcher is actually getting better as the batter number increases.</p>
+<p>Here is a histogram of the slopes (the summary fatigue effects) for the 126 pitchers. 74% of the slope estimates are positive, indicating that pitchers generally fatigue as they face more hitters during a game.</p>
+<p><img src="figures/pitching/pitching38.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="expected-woba-graphs-for-individual-pitchers" class="level3" data-number="11.6">
+<h3 data-number="11.6" class="anchored" data-anchor-id="expected-woba-graphs-for-individual-pitchers"><span class="header-section-number">11.6</span> Expected wOBA Graphs for Individual Pitchers</h3>
+<p>Among the 126 pitchers, I chose six pitchers that I’m interested in – Curt Schilling, Mike Mussina, Pedro Martinez, Randy Johnson, Roger Clemens and Roy Halladay. For a given pitcher, the scatterplot below displays simulated draws of the expected wOBA for each of the batter sequence numbers from 1 to 30 and a linear fit is overlaid to show the basic pattern. Five of the pitchers (Schilling, Mussina, Johnson, Clemens and Halladay) exhibit fatigue as their expected wOBA tends to increase for larger batter sequence values. There is an interesting outlier – Pedro Martinez appears to get better for larger batter sequence values. It might be a good study to explore in more detail Martinez’s pitching performance over innings.</p>
+<p><img src="figures/pitching/pitching39.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="whats-in-the-paper" class="level3" data-number="11.7">
+<h3 data-number="11.7" class="anchored" data-anchor-id="whats-in-the-paper"><span class="header-section-number">11.7</span> What’s In the Paper?</h3>
+<p>Here I am illustrating the basic multinomial regression model to give the reader a general sense of how it can be used to study pitcher fatigue. Brill, Deshapande and Wyner in their paper actually fit a multilevel version of the model including pitcher and batter effects and terms to allow for 2TTO and 3TTO effects. Here are some conclusions from their work.</p>
+<ul>
+<li><p>As we saw in our examples, Brill, Deshapande and Wyner show that the expected wOBA increases steadily over a game and there no special discontinuities for the 2nd and 3rd time through the order.</p></li>
+<li><p>The authors find little evidence of a strong batter learning effect.</p></li>
+<li><p>They recommend that managers base decisions on taking out a pitcher on the pitcher’s quality and continuous decline throughout the game.</p></li>
+</ul>
+<p>Here’s an illustration of this decision-making process in the current 2022 MLB playoffs. The Phillies pitcher Zack Wheeler was pitching great in 7 innings of the first game of the Phillies-Padres series allowing only two baserunners. Although Wheeler’s pitching performance was stellar, the team noticed a drop in the speed of his four-seam fastball in the later innings. As a result the manager decided to replace Wheeler with a reliever in the beginning of the 8th inning. In this situation, the Phillies appeared to be making a decision based on their general knowledge of Wheeler’s pitching and his performance during this particular game.</p>
+</section>
+<section id="r-code" class="level3" data-number="11.8">
+<h3 data-number="11.8" class="anchored" data-anchor-id="r-code"><span class="header-section-number">11.8</span> R Code?</h3>
+<p>Since one of you asked, here is a set of functions that I wrote for this task on my Github Gist site.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
