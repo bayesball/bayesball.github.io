@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jim Albert">
+<meta name="dcterms.date" content="2022-12-22">
+
+<title>Runs Expectancy</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Runs_Expectancy_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Runs_Expectancy_files/libs/quarto-html/quarto.js"></script>
+<script src="Runs_Expectancy_files/libs/quarto-html/popper.min.js"></script>
+<script src="Runs_Expectancy_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Runs_Expectancy_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Runs_Expectancy_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Runs_Expectancy_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Runs_Expectancy_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Runs_Expectancy_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Runs_Expectancy_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started"><span class="toc-section-number">2</span>  Getting Started</a>
+  <ul class="collapse">
+  <li><a href="#downloading-retrosheet-data" id="toc-downloading-retrosheet-data" class="nav-link" data-scroll-target="#downloading-retrosheet-data"><span class="toc-section-number">2.1</span>  Downloading Retrosheet Data</a></li>
+  <li><a href="#computing-the-runs-values" id="toc-computing-the-runs-values" class="nav-link" data-scroll-target="#computing-the-runs-values"><span class="toc-section-number">2.2</span>  Computing the Runs Values</a></li>
+  </ul></li>
+  <li><a href="#summarizing-a-runs-expectancy-matrix" id="toc-summarizing-a-runs-expectancy-matrix" class="nav-link" data-scroll-target="#summarizing-a-runs-expectancy-matrix"><span class="toc-section-number">3</span>  Summarizing a Runs Expectancy Matrix</a>
+  <ul class="collapse">
+  <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1"><span class="toc-section-number">3.1</span>  Introduction</a></li>
+  <li><a href="#basic-pattern" id="toc-basic-pattern" class="nav-link" data-scroll-target="#basic-pattern"><span class="toc-section-number">3.2</span>  Basic Pattern</a></li>
+  <li><a href="#interpreting-the-fit" id="toc-interpreting-the-fit" class="nav-link" data-scroll-target="#interpreting-the-fit"><span class="toc-section-number">3.3</span>  Interpreting the Fit</a></li>
+  <li><a href="#examining-the-residuals" id="toc-examining-the-residuals" class="nav-link" data-scroll-target="#examining-the-residuals"><span class="toc-section-number">3.4</span>  Examining the Residuals</a></li>
+  <li><a href="#using-this-summary" id="toc-using-this-summary" class="nav-link" data-scroll-target="#using-this-summary"><span class="toc-section-number">3.5</span>  Using this Summary</a></li>
+  </ul></li>
+  <li><a href="#computing-the-woba-weights" id="toc-computing-the-woba-weights" class="nav-link" data-scroll-target="#computing-the-woba-weights"><span class="toc-section-number">4</span>  Computing the wOBA Weights</a>
+  <ul class="collapse">
+  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"><span class="toc-section-number">4.1</span>  Introduction</a></li>
+  <li><a href="#runs-expectancy-matrix" id="toc-runs-expectancy-matrix" class="nav-link" data-scroll-target="#runs-expectancy-matrix"><span class="toc-section-number">4.2</span>  Runs Expectancy Matrix</a></li>
+  <li><a href="#runs-value-of-play" id="toc-runs-value-of-play" class="nav-link" data-scroll-target="#runs-value-of-play"><span class="toc-section-number">4.3</span>  Runs Value of Play</a></li>
+  <li><a href="#runs-value-of-an-outcome" id="toc-runs-value-of-an-outcome" class="nav-link" data-scroll-target="#runs-value-of-an-outcome"><span class="toc-section-number">4.4</span>  Runs Value of an Outcome</a></li>
+  <li><a href="#computing-the-weights" id="toc-computing-the-weights" class="nav-link" data-scroll-target="#computing-the-weights"><span class="toc-section-number">4.5</span>  Computing the Weights</a></li>
+  <li><a href="#bump-the-weights-so-that-outs-have-a-value-of-zero" id="toc-bump-the-weights-so-that-outs-have-a-value-of-zero" class="nav-link" data-scroll-target="#bump-the-weights-so-that-outs-have-a-value-of-zero"><span class="toc-section-number">4.6</span>  Bump the Weights So that Outs Have a Value of Zero</a></li>
+  <li><a href="#scaling-woba" id="toc-scaling-woba" class="nav-link" data-scroll-target="#scaling-woba"><span class="toc-section-number">4.7</span>  Scaling wOBA</a></li>
+  </ul></li>
+  <li><a href="#visualizations-of-pitch-value" id="toc-visualizations-of-pitch-value" class="nav-link" data-scroll-target="#visualizations-of-pitch-value"><span class="toc-section-number">5</span>  Visualizations of Pitch Value</a>
+  <ul class="collapse">
+  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3"><span class="toc-section-number">5.1</span>  Introduction</a></li>
+  <li><a href="#review-of-balls-and-strikes-effects" id="toc-review-of-balls-and-strikes-effects" class="nav-link" data-scroll-target="#review-of-balls-and-strikes-effects"><span class="toc-section-number">5.2</span>  Review of Balls and Strikes Effects</a></li>
+  <li><a href="#pitch-value" id="toc-pitch-value" class="nav-link" data-scroll-target="#pitch-value"><span class="toc-section-number">5.3</span>  Pitch Value</a></li>
+  <li><a href="#graph-of-pitch-values" id="toc-graph-of-pitch-values" class="nav-link" data-scroll-target="#graph-of-pitch-values"><span class="toc-section-number">5.4</span>  Graph of Pitch Values</a></li>
+  <li><a href="#values-of-four-seamers" id="toc-values-of-four-seamers" class="nav-link" data-scroll-target="#values-of-four-seamers"><span class="toc-section-number">5.5</span>  Values of Four-Seamers</a></li>
+  <li><a href="#values-of-sliders" id="toc-values-of-sliders" class="nav-link" data-scroll-target="#values-of-sliders"><span class="toc-section-number">5.6</span>  Values of Sliders</a></li>
+  <li><a href="#values-of-changeups" id="toc-values-of-changeups" class="nav-link" data-scroll-target="#values-of-changeups"><span class="toc-section-number">5.7</span>  Values of Changeups</a></li>
+  <li><a href="#r-work" id="toc-r-work" class="nav-link" data-scroll-target="#r-work"><span class="toc-section-number">5.8</span>  R Work?</a></li>
+  <li><a href="#further-reading-on-pitch-value" id="toc-further-reading-on-pitch-value" class="nav-link" data-scroll-target="#further-reading-on-pitch-value"><span class="toc-section-number">5.9</span>  Further Reading on Pitch Value</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Runs Expectancy</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jim Albert </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">December 22, 2022</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>This document contains several articles on the general topic of runs expectancy which is a central topic in sabermetrics.</p>
+<p>Section 2 describes the process of downloading play-by-play Retrosheet data for a specific season. Another function is helpful for computing the runs values for all of the plays that season.</p>
+<p>Section 3 discusses the runs expectancy matrix which can be used to evaluate values of plays and different strategies during a game. This section describes the use of a graph to summarize the main patterns of this matrix.</p>
+<p>A popular modern way to evaluate batting performance is the weighted on-base percentage or wOBA. We explain in Section 4 how to use Retrosheet play-by-play data to compute the weights of the different positive outcomes that are used in the wOBA.</p>
+<p>Runs values are also helpful in evaluating pitches. Section 5 describes the concept of a pitch value and shows the value of different types of pitches over the zone.</p>
+</section>
+<section id="getting-started" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="getting-started"><span class="header-section-number">2</span> Getting Started</h2>
+<section id="downloading-retrosheet-data" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="downloading-retrosheet-data"><span class="header-section-number">2.1</span> Downloading Retrosheet Data</h3>
+<p>Here’s an outline of how to download the Retrosheet play files for a particular season.</p>
+<p>There is a blog posting on this at https://baseballwithr.wordpress.com/2014/02/10/downloading-retrosheet-data-and-runs-expectancy/</p>
+<ol type="1">
+<li><p>Download the Chadwick files following the advice from the website mentioned on the blog post – this will parse the original source files.</p></li>
+<li><p>I set up the current working director to have the following file structure.</p></li>
+</ol>
+<p><img src="figures/expectancy/folderstructure.png" class="img-fluid"></p>
+<ol start="3" type="1">
+<li>I download the R function <code>parse.retrosheet2.pbp.R()</code> from my gist site.</li>
+</ol>
+<!-- -->
+<pre><code>library(devtools)
+source_gist("https://gist.github.com/bayesball/8892981",
+            filename="parse.retrosheet2.pbp.R")</code></pre>
+<ol start="4" type="1">
+<li>Now I am ready to download the Retrosheet play-by-play data for the 2021 season.</li>
+</ol>
+<!-- -->
+<pre><code>parse.retrosheet2.pbp(2021)</code></pre>
+<ol start="5" type="1">
+<li>Two new files “all2021.csv” and “roster.csv” are stored in the “download.folder/unzipped” folder. Using the <code>read_csv()</code> function I read in the play-by-play data.</li>
+</ol>
+<!-- -->
+<pre><code>library(readr)
+d2021 &lt;- read_csv("download.folder/unzipped/all2021.csv",
+                  col_names = FALSE)</code></pre>
+<ol start="6" type="1">
+<li>Last I want to add variable names to the header of the data file. I read a header file from our Github site and use this to assign the variable names.</li>
+</ol>
+<!-- -->
+<pre><code>fields &lt;- read.csv("https://raw.githubusercontent.com/beanumber/baseball_R/master/data/fields.csv")
+names(d2021) &lt;- fields[, "Header"]</code></pre>
+<ol start="7" type="1">
+<li>The data frame <code>d2021</code> is ready to explore. Here is the first row of the file.</li>
+</ol>
+<!-- -->
+<pre><code>d2021[1, ]</code></pre>
+</section>
+<section id="computing-the-runs-values" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="computing-the-runs-values"><span class="header-section-number">2.2</span> Computing the Runs Values</h3>
+<p>Once the Retrosheet play-by-play data is downloaded, then the function <code>compute.runs.expectancy()</code> will compute the runs values for all plays.</p>
+<p>One can download this function from the Github Gist site.</p>
+<pre><code>library(devtools)
+source_gist("https://gist.github.com/bayesball/8892999",
+            filename="compute.runs.expectancy.R")</code></pre>
+<p>Assuming the file “all2021.csv” is stored in the working directory, the following command will read in the csv file, compute the runs values and store the resulting data frame as `d2021’.</p>
+<pre><code>d2021 &lt;- compute.runs.expectancy(2021)</code></pre>
+<p>The following command will output the current state <code>STATE</code>, the new state <code>NEW.STATE</code> and the <code>RUNS.VALUE</code> for the first few plays in the season file.</p>
+<pre><code>library(dplyr)
+d2018 %&gt;% 
+  select(STATE, NEW.STATE, RUNS.VALUE) %&gt;% 
+  head()</code></pre>
+</section>
+</section>
+<section id="summarizing-a-runs-expectancy-matrix" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="summarizing-a-runs-expectancy-matrix"><span class="header-section-number">3</span> Summarizing a Runs Expectancy Matrix</h2>
+<section id="introduction-1" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">3.1</span> Introduction</h3>
+<p>A basic object in sabermetrics research is the Runs Expectancy Matrix that gives the mean number of runs scored in the remainder of the inning for each possible state (number of outs and runners on base) of a half-inning. This FanGraphs page provides a general description of this matrix and why it is so useful in baseball analyses. Chapter 5 of Analyzing Baseball With R describes how to construct this matrix from Retrosheet data and illustrates the use of this matrix to measure the values of plays. Here is the matrix for the 2019 season. For example, reading the “1 out, 023 runners” entry, this says that, on average, there will be 1.42 runs scored in the remainder of the inning when there is 1 out and runners on 2nd and 3rd.</p>
+<p><img src="figures/expectancy/runs0.png" class="img-fluid" style="width:70.0%"></p>
+<p>I am interested in exploring how the values in this matrix have changed over twenty seasons of Major League Baseball. Since the nature of run scoring has changed dramatically during the Statcast Era (due to the increasing count of home runs), I would think that this matrix would be changing in interesting ways.</p>
+<p>If we focus on the top left entry (000 with no outs) of the matrix, this graph shows how the runs expectancy for this situation has changed in the 20-year period from 2000 to 2019. We see a decline in average run production from 2006 to 2014 followed by a steady rise in the Statcast era from 2015 to 2019.</p>
+<p><img src="figures/expectancy/runs1.png" class="img-fluid" style="width:70.0%"></p>
+<p>To see the changes in the expectancy matrix over this period, I thought it would be helpful to summarize this matrix by use of a few numbers. If this could be done, it would facilitate comparisons across seasons. Here I present an attractive way to visualize and summarize the values in this 3 by 8 runs matrix.</p>
+</section>
+<section id="basic-pattern" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="basic-pattern"><span class="header-section-number">3.2</span> Basic Pattern</h3>
+<p>If you look at the runs expectancy matrix, note that I have arranged the runners on base values so that for a specific row (number of outs) the run values increase from left to right. What is the nature of this increase? Let’s define a Bases Score equal to the sum of bases occupied plus one if there is more than one runner on base, that is</p>
+<p>Bases Score = Sum(bases occupied) + I(# of Runners &gt; 1)</p>
+<p>where I() is the indicator function (1 if the argument is true and 0 otherwise). The Score values will go from 0 to 7 corresponding to the 8 columns of the matrix. Let’s graph the run values in the matrix as a function of the Score and fit a line to the points for each number of outs. Interestingly, we see three linear relations that appear to be a good fit to this data.</p>
+<p><img src="figures/expectancy/runs2.png" class="img-fluid" style="width:70.0%"></p>
+<p>I have a data frame RE with three variables – <code>Runs</code>, <code>Score</code> (numeric) and <code>Outs</code> (categorical). To find the equations of these three lines, I fit a linear model to Runs where there is an interaction between Score and Outs. This model allows for varying intercepts and varying slopes among the three values of Outs.</p>
+<pre><code>fit &lt;- lm(Runs ~ Outs * Score, data = RE)</code></pre>
+</section>
+<section id="interpreting-the-fit" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="interpreting-the-fit"><span class="header-section-number">3.3</span> Interpreting the Fit</h3>
+<p>This fit provides intercepts and slopes for the three fitted lines corresponding to the three Outs values.</p>
+<pre><code>##   Outs Intercept Slope
+## 1    0      0.64  0.24
+## 2    1      0.35  0.18
+## 3    2      0.13  0.08</code></pre>
+<ul>
+<li><p>The intercepts give estimates of the Runs when there are no runners on base (Score = 0). With the bases empty, we expect the team will score 0.64, 0.35, and 0.13 runs with 0, 1, and 2 outs, respectively.</p></li>
+<li><p>The slopes give the increase in Runs when the Score value increases by one. When there are no outs, each unit increase in Score will increase the expected Runs by 0.24. So if a runner on first successfully steals second with no outs, the Score increases by one and the Runs increases by 0.24. Suppose there is a runner on 1st with no outs and there is a walk. One is transitioning from the 100 state (Score = 1) to 120 state (Score = 4) and so the Runs would increase by 3 (0.24) = 0.72.</p></li>
+<li><p>Similarly, when there is one out, there will be a 0.18 increase in Runs for each unit increase in Score, and when there are two outs, there will be a 0.08 increase in Runs for each unit increase in Score. So for example, a walk with a runner on 1st, two outs, will increase the Runs by 3 (0.08) = 0.24.</p></li>
+<li><p>The fitted slopes clearly shows the effect of outs on run scoring. An event that improves the bases situation has more runs impact with 0 outs compared to one or two outs.</p></li>
+</ul>
+</section>
+<section id="examining-the-residuals" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="examining-the-residuals"><span class="header-section-number">3.4</span> Examining the Residuals</h3>
+<p>Of course, these lines don’t provide a perfect fit, and so we’re interested in exploring the vertical deviations (the residuals) for additional insight. Here I plot the residuals as a function of the Score using different colors for the Outs values. What do I see?</p>
+<p><img src="figures/expectancy/runs3.png" class="img-fluid" style="width:70.0%"></p>
+<ul>
+<li><p>Although the sizes of the residuals are small relative to the fitted values, there is a clear pattern – NEGATIVE (bases empty), POSITIVE (one runner), NEGATIVE (two runners), POSITIVE (bases loaded). I could remove this general pattern with a more sophisticated fit, but I would lose the simple interpretation of the linear fit.</p></li>
+<li><p>There are some interesting large residuals, 000 with no outs (LARGE NEGATIVE), 003 with 0 or 1 out (LARGE POSITIVE), and 120 with one out (LARGE NEGATIVE). Since there are multiple ways to advance a runner on 3rd with less than 2 outs (sac fly, wild pitch or passed ball), I am not surprised about the large positive residuals for 003 with 0 or 1 out. Perhaps the multiple ways to get outs in the 120 situation account for the large negative residual.</p></li>
+</ul>
+</section>
+<section id="using-this-summary" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="using-this-summary"><span class="header-section-number">3.5</span> Using this Summary</h3>
+<p>Sometime next year, I’ll post something related to run production in the last 20 years of baseball. But here are some thoughts about these summaries of the runs expectancy matrix.</p>
+<ul>
+<li><p>The Slopes. The main takeaway are the slopes 0.24, 0.18, and 0.08 which give the improvement in expected runs for each increase in the Bases Score variable. These are easy to remember and can be used in game situations. Suppose a manager wants to quickly compute the run value of a double that scores a runner on first with one out. The runners state has changed from 100 to 020 – since the change in Bases Score is 1, there is an advantage of 0.18 runs. Adding that to the single run scored, the runs value of this particular double is 0.18 + 1 = 1.18.</p></li>
+<li><p>Comparing Seasons. We have summarized the runs expectancies by six numbers – the three intercepts and the three slopes. One can compare run scoring of two seasons by comparing the intercepts or by comparing the slopes. We did illustrate comparison of average run scoring across twenty seasons which is a comparison of the intercepts with no outs.</p></li>
+<li><p>Impact of HR Hitting? One question is how the home run hitting impacts the run expectancy matrix. For example, if a team is really focusing on hitting home runs, what is the advantage of moving a runner from first to second? This is a question related to the slope summaries.</p></li>
+<li><p>Beyond Mean Runs. It would also be interesting to see how home run hitting affects other metrics such as the probability of scoring from a given state. Some years ago, I wrote a paper “Beyond Runs Expectancy” published in the Journal of Sports Analytics that looked at distributions of run scoring and how they change across different situations.</p></li>
+</ul>
+</section>
+</section>
+<section id="computing-the-woba-weights" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="computing-the-woba-weights"><span class="header-section-number">4</span> Computing the wOBA Weights</h2>
+<section id="introduction-2" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">4.1</span> Introduction</h3>
+<p>We start with the definition of <span class="math inline">\(wOBA\)</span> as given on the FanGraphs web site.</p>
+<p><span class="math display">\[
+wOBA = \frac{w_1 uBB + w_2 HBP + w_3 1B + w_4 2B + w_5 3B + w_6 HR}{AB + BB - IBB + SF + HBP}
+\]</span></p>
+<p>There are several features of this formula:</p>
+<ul>
+<li><p>The weights <span class="math inline">\(w_1, ..., w_6\)</span> are proportional to their runs values.</p></li>
+<li><p>Note that the denominator includes all batting plays with the exception of intentional walks (<span class="math inline">\(IBB\)</span>). Note that the outcome “out” does not appear in the numerator. Implicitly, this means that the weights for all “out” events are equal to zero.</p></li>
+<li><p>To be similar to the <span class="math inline">\(OBP\)</span> formula, we will see that we need to bump our weights so that the value assigned to the out outcome is zero.</p></li>
+<li><p>In addition, there is a scaling factor to include so that the average <span class="math inline">\(wOBA\)</span> value is equal to the average <span class="math inline">\(OBP\)</span> across all players in the given season.</p></li>
+</ul>
+</section>
+<section id="runs-expectancy-matrix" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="runs-expectancy-matrix"><span class="header-section-number">4.2</span> Runs Expectancy Matrix</h3>
+<p>To describe the process of obtaining the weights in the <span class="math inline">\(wOBA\)</span> formula, we begin by finding the runs expectancy matrix.</p>
+<p>A state of an half-inning consists the number of outs and the runners on base. Since there are three possible outs (0, 1, 2) and eight possible configurations of runners on base (each base can be occupied or not), there are 3 <span class="math inline">\(\times\)</span> 8 = 24 possible states. For each state, we find the average number of runs scored in the remainder of the half-inning. If we do this for all states, we obtain the runs expectancy matrix.</p>
+<p>Here is this matrix using all plays from the 2022 season:</p>
+<pre><code>    000   001   010   011   100   101   110   111
+0 0.477 1.231 1.092 2.000 0.863 1.765 1.443 2.396
+1 0.256 0.973 0.672 1.398 0.505 1.147 0.901 1.524
+2 0.097 0.378 0.306 0.548 0.207 0.500 0.436 0.768</code></pre>
+</section>
+<section id="runs-value-of-play" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="runs-value-of-play"><span class="header-section-number">4.3</span> Runs Value of Play</h3>
+<p>For any batting play, there are two states:</p>
+<ul>
+<li><span class="math inline">\(STATE_0\)</span>, the state of the inning when the hitter comes to bat</li>
+<li><span class="math inline">\(STATE_1\)</span>, the state of the inning after the batting play</li>
+</ul>
+<p>The runs value (<span class="math inline">\(Value\)</span>) of the batting play is defined as the difference in the runs value of the two states plus the runs scored on the play (<span class="math inline">\(RUNS\)</span>).</p>
+<p><span class="math display">\[
+Value = Runs(STATE_1) - Runs(STATE_0) + RUNS
+\]</span></p>
+<p>Using this formula, we can compute the value of all batting plays in the 2022 season.</p>
+</section>
+<section id="runs-value-of-an-outcome" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="runs-value-of-an-outcome"><span class="header-section-number">4.4</span> Runs Value of an Outcome</h3>
+<p>Suppose we are interested in the runs value of a particular batting outcome, say a home run. We average the runs values for all home runs hit in the 2022 season. We obtain the value of a home run hit in 2022 is 1.4. This likely seems small, but most home runs are hit with no runners on base and even when there are men on base, the runs value of the after state (bases are empty) will be smaller than the runs value of the state with runners on base.</p>
+</section>
+<section id="computing-the-weights" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="computing-the-weights"><span class="header-section-number">4.5</span> Computing the Weights</h3>
+<p>In a similar fashion, we can compute the runs value for all six events (unintentional walk, hit-by-pitch, single, double, triple, home run) and we obtain the following weights. The table gives the name of each event with the corresponding value of the variable <code>EVENT_CD</code> in the Retrosheet dataset.</p>
+<pre><code>  Event EVENT_CD Weight
+  &lt;chr&gt;    &lt;int&gt;  &lt;dbl&gt;
+1 uBB         14  0.316
+2 HBP         16  0.347
+3 1B          20  0.458
+4 2B          21  0.770
+5 3B          22  1.02 
+6 HR          23  1.40 </code></pre>
+</section>
+<section id="bump-the-weights-so-that-outs-have-a-value-of-zero" class="level3" data-number="4.6">
+<h3 data-number="4.6" class="anchored" data-anchor-id="bump-the-weights-so-that-outs-have-a-value-of-zero"><span class="header-section-number">4.6</span> Bump the Weights So that Outs Have a Value of Zero</h3>
+<p>Actually, we can compute the runs value of all outcomes of a plate appearance. In particular, we note that outs have a value of <span class="math inline">\(-0.26\)</span>. Since the value of outs is 0 in the definition of OBP, we want to adjust all of our event values so that out has a value of 0. We do this adjustment by adding 0.26 to the values of the six events, obtaining the new weights displayed below.</p>
+<pre><code>  Event EVENT_CD Weight
+  &lt;chr&gt;    &lt;int&gt;  &lt;dbl&gt;
+1 uBB         14  0.576
+2 HBP         16  0.607
+3 1B          20  0.718
+4 2B          21  1.03 
+5 3B          22  1.28 
+6 HR          23  1.66 </code></pre>
+</section>
+<section id="scaling-woba" class="level3" data-number="4.7">
+<h3 data-number="4.7" class="anchored" data-anchor-id="scaling-woba"><span class="header-section-number">4.7</span> Scaling wOBA</h3>
+<p>Last, we want to rescale the <span class="math inline">\(wOBA\)</span> value so the the mean <span class="math inline">\(wOBA\)</span> matches the mean on-base percentage <span class="math inline">\(OBP\)</span>.</p>
+<p>By applying the <span class="math inline">\(wOBA\)</span> formula to all batting plays, we obtain</p>
+<p><span class="math display">\[
+Mean(wOBA) = 0.2521
+\]</span></p>
+<p>Since the average <span class="math inline">\(OBP\)</span> for all players in the 2022 season is .310, our adjusted <span class="math inline">\(wOBA\)</span> is given by</p>
+<p><span class="math display">\[
+wOBA_{adj} = \frac{0.310}{0.2521} wOBA.
+\]</span></p>
+<p>With this adjustment, we obtain the following new weights.</p>
+<pre><code>    Event EVENT_CD Weight adj_Weight
+  &lt;chr&gt;    &lt;int&gt;  &lt;dbl&gt;      &lt;dbl&gt;
+1 uBB         14  0.576      0.708
+2 HBP         16  0.607      0.747
+3 1B          20  0.718      0.883
+4 2B          21  1.03       1.27 
+5 3B          22  1.28       1.57 
+6 HR          23  1.66       2.05</code></pre>
+<p>For comparison, I have added the 2022 wOBA weights as reported on the FanGraphs website.</p>
+<pre><code>   Event EVENT_CD Weight adj_Weight FanGraphs
+  &lt;chr&gt;    &lt;int&gt;  &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;
+1 uBB         14  0.576      0.708     0.689
+2 HBP         16  0.607      0.747     0.72 
+3 1B          20  0.718      0.883     0.884
+4 2B          21  1.03       1.27      1.26 
+5 3B          22  1.28       1.57      1.60 
+6 HR          23  1.66       2.05      2.07  </code></pre>
+<p>Note that our adjusted weights agree pretty closely with the FanGraphs weights. There are small discrepancies, but essentially we have reproduced the FanGraphs wOBA formula from the raw Retrosheet data.</p>
+</section>
+</section>
+<section id="visualizations-of-pitch-value" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="visualizations-of-pitch-value"><span class="header-section-number">5</span> Visualizations of Pitch Value</h2>
+<section id="introduction-3" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">5.1</span> Introduction</h3>
+<p>In last week’s post, we explored pitch decisions and the influence of the count on those decisions. For example, pitchers are most likely to throw off-speed pitches when they are ahead in the count. Also, the location of the pitch depends on the count. For example, on a 0-2 count, it is common for a pitcher to throw a low off-speed pitch or a high fastball. In contrast, when the pitcher is behind in the count, he is likely to throw a fastball in the middle of the zone. By use of density estimate graphs, we saw some interesting pitch location patterns for individual pitchers.</p>
+<p>Here we focus on the outcome of the pitch and how that outcome varies as a function of the pitch location. From the pitcher’s perspective, there are different ways to think about a desirable pitch outcome. During the plate appearance, the pitcher gains with a pitch resulting in an additional strike or loses with a pitch resulting in an additional ball. A pitch that ends the plate appearance with a strikeout or other out is a gain and a pitch that is put in-play for a hit is a loss for the pitcher. One way of measuring a desirable pitch outcome is by use of expected runs, specifically the runs gained (on average) from that pitch. We’ll review some of the material from the “Balls and Strikes Effects” chapter of <em>Analyzing Baseball with R</em>. Then we’ll use that material together with information about the runs value of different end-of-PA events to define pitch values. Once we have assigned a value to each pitch during the 2019 season, we can use graphs of a smoothed fit to understand the locations of the regions about the zone where a particular type of pitch is effective.</p>
+</section>
+<section id="review-of-balls-and-strikes-effects" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="review-of-balls-and-strikes-effects"><span class="header-section-number">5.2</span> Review of Balls and Strikes Effects</h3>
+<p>In Chapter 6 of ABWR we explain how to measure balls and strikes effects. Using Retrosheet play-by-play data, we first compute (from Chapter 5 work) the runs value for each plate appearance outcome that changes the state (runners on base, number of outs and runs scored). Next, we define variables c01, c10, c11, etc. that indicate if the count for a plate appearance passes through the respective counts 0-1, 1-0, 1-1, etc. By averaging the run values over each of these indicator variables, we obtain the mean run value passing through each possible count. I’ve displayed these mean run values in the following figure using 2019 season data – these are similar to the values displayed in ABWR, Figure 6.2 from data from an earlier season.</p>
+<p><img src="figures/expectancy/runs5.png" class="img-fluid" style="width:70.0%"></p>
+<p>We also can compute the runs value of each possible end-of-PA event (out, single, walk, HBP, strikeout, etc) by averaging the run values. We learn for example, that an out loses on average 0.28 runs and a single and home run, gain on average 0.46 and 1.38 runs, respectively. Note that these run values are averages and don’t depend on the current situation of runners and outs.</p>
+</section>
+<section id="pitch-value" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="pitch-value"><span class="header-section-number">5.3</span> Pitch Value</h3>
+<p>Once we’ve computed the runs value for each possible count and each end-of-PA event, then the value of a pitch is simply the change in runs value</p>
+<p>Pitch Value = Runs Value (new count or end of PA event) - Runs Value (old count).</p>
+<p>For example, suppose the count is 1-1 and the pitcher throws a ball, changing the count to 2-1. The value of that pitch (using numbers from the above figure) is</p>
+<p>Value = Runs Value (2-1) - Runs Value (1-1) = 0.035 - (-0.015) = 0.050</p>
+<p>Here a pitch adding a ball has a runs value of 0.05 favorable to the hitter. Suppose a batter hits a home run on an 0-2 pitch. The value of this pitch is</p>
+<p>Value = Runs Value (HR) - Runs Value (0-2) = 1.38 - (-0.103) = 1.48.</p>
+<p>Note that the pitch value of this home run exceeds the average HR runs value since the home run was hit on a 0-2 pitch.</p>
+</section>
+<section id="graph-of-pitch-values" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="graph-of-pitch-values"><span class="header-section-number">5.4</span> Graph of Pitch Values</h3>
+<p>Now that we have assigned values to all pitches, we are interested in seeing how the pitch value varies across the zone. I have already illustrated the use of the <code>CalledStrike</code> package in an earlier post to display patterns of smoothed fits of different batting measures, say launch speed or swinging rates, and so it is straightforward to use similar functions to display patterns of smoothed pitch values over the zone. Basically, one fits a generalized additive model where the pitch value is represented as a smooth function of the plate_x and plate_z variables, one uses the fitted model to predict the pitch value over a grid, and then graphs the fitted values by a filled contour graph.</p>
+<p>Usually we think of desirable pitch locations from the pitcher’s perspective. So we will consider the negative of the runs values, so a positive pitch value is advantageous to the pitcher. The values of the two pitches above (a ball on a 1-1 count) and a home run on a 0-2 pitch will be recoded as -0.050 and -1.48 respectively. The color scheme in the plots below will be orange for locations desirable for the pitcher and yellow for locations desirable to the hitter.</p>
+</section>
+<section id="values-of-four-seamers" class="level3" data-number="5.5">
+<h3 data-number="5.5" class="anchored" data-anchor-id="values-of-four-seamers"><span class="header-section-number">5.5</span> Values of Four-Seamers</h3>
+<p>To begin, here is a contour graph display of the smoothed pitch values of all four-seam fastballs thrown in the 2019 season. Since the pattern of the values depends on the pitcher and batter sides, there are four displays, one for each combination of sides. Orange indicates a region advantageous to the pitcher and yellow indicates an advantage to the hitter. For a left-handed hitter (left side of the graph), for pitchers of both sides we see that a fastball is beneficial outside and high. We see a similar pattern of orange (high and outside) for right-handed hitters. It is interesting that southpaws also seem to have positive value for fastballs thrown inside to right-handed hitters. Clearly it is not desirable to throw a fastball in the middle of the zone.</p>
+<p><img src="figures/expectancy/runs6.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="values-of-sliders" class="level3" data-number="5.6">
+<h3 data-number="5.6" class="anchored" data-anchor-id="values-of-sliders"><span class="header-section-number">5.6</span> Values of Sliders</h3>
+<p>Here is a similar display for all sliders thrown by both sides of pitcher to both sides of batter. A right-handed pitcher (bottom row) wants to throw the slider to the outside, either low outside or high outside. For southpaw pitchers (top row), they want to throw their sliders outside to left-handed hitters and high outside to right-handed hitters. It is interesting that there appears to be some advantage for a leftie to throw low and inside to a right-handed hitter.</p>
+<p><img src="figures/expectancy/runs7.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="values-of-changeups" class="level3" data-number="5.7">
+<h3 data-number="5.7" class="anchored" data-anchor-id="values-of-changeups"><span class="header-section-number">5.7</span> Values of Changeups</h3>
+<p>Here is a visual display of the pitch values of changeups. Generally effective changeups are ones that are low and outside. Looking at the right-right confrontation (bottom-right), note the large white circle in the middle indicating that poorly located sliders tend to have negative consequences.</p>
+<p><img src="figures/expectancy/runs8.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="r-work" class="level3" data-number="5.8">
+<h3 data-number="5.8" class="anchored" data-anchor-id="r-work"><span class="header-section-number">5.8</span> R Work?</h3>
+<p>I have outlined all of my work creating the pitch values and graphing the smoothed values over the zone on my Github Gist site. There are several new functions in the <code>CalledStrike</code> package – the function <code>compute_pitch_values()</code> will compute the pitch values for a Statcast dataset and the function <code>pitch_value_contour()</code> will produce the type of filled contour plots shown here.</p>
+</section>
+<section id="further-reading-on-pitch-value" class="level3" data-number="5.9">
+<h3 data-number="5.9" class="anchored" data-anchor-id="further-reading-on-pitch-value"><span class="header-section-number">5.9</span> Further Reading on Pitch Value</h3>
+<p>The notion of pitch value has been around awhile in sabermetrics so there is a good literature on the subject. Here are some older references that I found including the first one by my ABWR coauthor Max (by the way, there is a graph in Max’s post of pitch values of sliders that resembles the one presented here).</p>
+<ul>
+<li><p>Pitch Run Value and Count by Max Marchi, The Hardball Times</p></li>
+<li><p>Searching for the Game’s Best Pitch by John Walsh, The Hardball Times</p></li>
+<li><p>Pitch Type Linear Weights by Steve Slowinski, FanGraphs</p></li>
+<li><p>Run Value by Pitch Location by Dave Allen, The Baseball Analysts</p></li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
