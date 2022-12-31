@@ -100,6 +100,15 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#scatterplot-of-component-talents" id="toc-scatterplot-of-component-talents" class="nav-link" data-scroll-target="#scatterplot-of-component-talents"><span class="toc-section-number">8.4</span>  Scatterplot of Component Talents</a></li>
   <li><a href="#takeaways-1" id="toc-takeaways-1" class="nav-link" data-scroll-target="#takeaways-1"><span class="toc-section-number">8.5</span>  Takeaways</a></li>
   </ul></li>
+  <li><a href="#learning-about-batting-ability-using-components-of-batting-average" id="toc-learning-about-batting-ability-using-components-of-batting-average" class="nav-link" data-scroll-target="#learning-about-batting-ability-using-components-of-batting-average"><span class="toc-section-number">9</span>  Learning About Batting Ability Using Components of Batting Average</a>
+  <ul class="collapse">
+  <li><a href="#what-is-a-batting-average" id="toc-what-is-a-batting-average" class="nav-link" data-scroll-target="#what-is-a-batting-average"><span class="toc-section-number">9.1</span>  What is a Batting Average?</a></li>
+  <li><a href="#components-of-batting-average" id="toc-components-of-batting-average" class="nav-link" data-scroll-target="#components-of-batting-average"><span class="toc-section-number">9.2</span>  Components of Batting Average</a></li>
+  <li><a href="#estimating-component-abilities" id="toc-estimating-component-abilities" class="nav-link" data-scroll-target="#estimating-component-abilities"><span class="toc-section-number">9.3</span>  Estimating Component Abilities</a></li>
+  <li><a href="#graphs" id="toc-graphs" class="nav-link" data-scroll-target="#graphs"><span class="toc-section-number">9.4</span>  Graphs</a></li>
+  <li><a href="#using-the-model-to-predict" id="toc-using-the-model-to-predict" class="nav-link" data-scroll-target="#using-the-model-to-predict"><span class="toc-section-number">9.5</span>  Using the Model to Predict</a></li>
+  <li><a href="#closing-remarks" id="toc-closing-remarks" class="nav-link" data-scroll-target="#closing-remarks"><span class="toc-section-number">9.6</span>  Closing Remarks</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -143,6 +152,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Another special historical graph is a display of Ted Williams’ batting average in different areas of the strike zone. We describe how to construct similar graphs in Section 6 using the <code>ggplot2</code> package.</p>
 <p>Section 7 explores how the number of .300 hitters has changed over the history of baseball. Since there is a distinction between batting performance and batting ability, we use a multilevel model to estimate the number of “true” .300 hitters between 1969 and 2018.</p>
 <p>Section 8 revisits the notion of representing a batting average as a function of the strikeout rate and batting average on balls in play. I agree with Tom Tango that the media should stop reporting the batting average, but the component rates of BA are interpretable.</p>
+<p>Section 9 continues this exploration of a batting average in term of the component rates. This post uses a multilevel model to simultaneously estimate the component rates. By use of a new R package, one gets interesting visuals of the performances and associated abilities of these component rates.</p>
 </section>
 <section id="a-graph-of-a-batting-average" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="a-graph-of-a-batting-average"><span class="header-section-number">2</span> A Graph of a Batting Average</h2>
@@ -544,6 +554,58 @@ S.regular &lt;- filter(S2, AB &amp;gt;= min.AB)</code></pre>
 BA = (1 - SO.Rate) \times (HR.Rate + (1 - HR.Rate) \times BABIP)
 \]</span></p>
 <p>where <span class="math inline">\(SO.Rate = SO / AB\)</span>, <span class="math inline">\(HR.Rate = HR / (AB - SO)\)</span> and <span class="math inline">\(BABIP = (H - HR) / (AB - SO - HR)\)</span>. Since home runs are so prevalent, this decomposition can provide additional information about a batter’s home run ability and his ability to hit on a ball in play.</p>
+</section>
+</section>
+<section id="learning-about-batting-ability-using-components-of-batting-average" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="learning-about-batting-ability-using-components-of-batting-average"><span class="header-section-number">9</span> Learning About Batting Ability Using Components of Batting Average</h2>
+<section id="what-is-a-batting-average" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="what-is-a-batting-average"><span class="header-section-number">9.1</span> What is a Batting Average?</h3>
+<p>I know most baseball analysts don’t like a batting average since it isn’t a helpful measure of batting performance. But I think a batting average can be useful if it is expressed into components that involve strikeouts, home runs, and getting a hit on a ball in play. Here I focus on learning about batters’ hitting abilities and use a random effects model to learn about the ability aspects of the components of batting average. In this exercise, I illustrate the use of a new R package ggdensity that provides useful graphical displays of bivariate data.</p>
+</section>
+<section id="components-of-batting-average" class="level3" data-number="9.2">
+<h3 data-number="9.2" class="anchored" data-anchor-id="components-of-batting-average"><span class="header-section-number">9.2</span> Components of Batting Average</h3>
+<p>Here is a decomposition of a batting average – using some algebra, one writes the batting average as</p>
+<p><span class="math display">\[BA = \frac{H}{AB} = (1 - SO.Rate) (HR.Rate + (1 - HR.Rate) BABIP)\]</span></p>
+<p>where</p>
+<ul>
+<li><p><span class="math inline">\(SO.Rate = \frac{SO}{AB}\)</span> is the strikeout rate</p></li>
+<li><p><span class="math inline">\(HR.Rate = \frac{HR}{AB - SO}\)</span> is the rate of home runs on balls put into play</p></li>
+<li><p><span class="math inline">\(BABIP = \frac{H - HR}{AB - SO - HR}\)</span> is the rate of hits on balls put into play in the ballpark</p></li>
+</ul>
+<p>It is not helpful to talk about a player that “hits for average” since it is hard to understand the characteristics of the hitting talent that corresponds to, say, a .300 batting average. But I think it is advantageous to talk about batting ability using the components strikeout rate, home run rate, and BABIP. Strikeout rate relates to a player’s plate discipline and ability to make contact with the pitch and home run rate is a measure of a player’s slugging ability. One player might have a .320 batting average because he tends to put the ball in play (that is, a low strikeout rate) and has a high hit rate on balls put into play. In contrast, Aaron Judge’s current .310 average is likely a by-product of his high home run rate. We currently use slash stats (AVG / OBP / SLG) to describe a player’s hitting. Similarly it would seem reasonable to use another set of slash stats (SO.Rate / HR.Rate / BABIP) to describe the components of a player’s batting average.</p>
+</section>
+<section id="estimating-component-abilities" class="level3" data-number="9.3">
+<h3 data-number="9.3" class="anchored" data-anchor-id="estimating-component-abilities"><span class="header-section-number">9.3</span> Estimating Component Abilities</h3>
+<p>I collected the SO.Rate, HR.Rate and BABIP for each batter with at least 100 AB in the 2021 season. Let <span class="math inline">\(\alpha_j, \beta_j, \theta_j\)</span> denote the SO and HR and BABIP probabilities for the <span class="math inline">\(j\)</span>th batter in my dataset.</p>
+<p>Each batter has three associated probabilities. I convert each probability to a logit – let <span class="math inline">\(\gamma_j = (\alpha_j, \beta_j, \theta_j)\)</span> denote the vector of logits for the <span class="math inline">\(j\)</span>th player. Assuming we have N players, we assume that the batter vectors <span class="math inline">\(\gamma_1, ..., \gamma_N\)</span> come from a multivariate normal distribution with unknown mean vector <span class="math inline">\(\mu\)</span> and variance-covariance matrix <span class="math inline">\(\Sigma\)</span>. Then the parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\Sigma\)</span> are assigned weakly informative prior distributions.</p>
+<p>I fit this model to our 2021 season data. I won’t go into the details of the estimation procedure here. I used JAGS and the <code>runjags</code> package to fit this model by Markov chain Monte Carlo. Using the simulation output, I estimated the SO, HR and BABIP probabilities for all players.</p>
+</section>
+<section id="graphs" class="level3" data-number="9.4">
+<h3 data-number="9.4" class="anchored" data-anchor-id="graphs"><span class="header-section-number">9.4</span> Graphs</h3>
+<p>We compare the observed SO, HR and BABIP rates (on the logit scale) with the estimated logit probabilities for all players using the multilevel (random effects) model.</p>
+<p>Here is where we are applying the <code>ggdensity</code> package. When one visualizes distributions of two variables, then standard contour maps, say using the <code>geom_contour_filled()</code> function in ggplot2, are pretty but hard to interpret. The <code>ggdensity</code> package offers an attractive alternative – the function <code>geom_hdr()</code> is a replacement for the <code>ggplot2</code> function <code>geom_contour_filled()</code> that shows regions of highest probability content. By default, it will show one region containing 50% of the values, another region containing 80% of the values, and two larger regions showing respectively 95% and 99% of the values.</p>
+<p>Here we use these new contour graphs to display side-by-side scatterplots of the observed strikeout and home run rates (right) and the estimated strikeout and home run probabilities (left). Note several interesting things:</p>
+<p><img src="figures/avg/avg39.png" class="img-fluid" style="width:75.0%"></p>
+<ul>
+<li><p>To interpret these contours, note that 50% of the rates occur within the yellow region and 80% of the rates fall within the green region.</p></li>
+<li><p>Comparing the Observed and Ability graphs, we see these fitted models for ability essentially shrink or adjust the observed rates towards the average. That is, the model estimates adjust the extreme home run rates and strikeout rates towards the average rates for all hitters.</p></li>
+<li><p>When one looks at the scatterplot of the observed rates (right graph), one sees a small positive relationship between the two rates. In contrast, there is a relatively strong positive association between the strikeout rate and the home run rate ability estimates (left graph). This means that batters who strike out a lot tend to hit home runs at a high rate.</p></li>
+</ul>
+<p>Here are scatterplots of the observed and estimated SO and BABIP rates (first graph below) and the HR and BABIP rates (second graph below). Note that the BABIP ability estimates adjust the observed rates strongly towards the average. This is in contrast to what happens to the SO rates or the HR rates – for these rates there is a smaller adjustment of the observed rates towards the estimated ability rates. The takeway is that the strikeout rates and home run rates reflect the different player talents. In contrast, the differences in the observed BABIP rates reflect chance variation rather than meaningful differences in hitting abilities.</p>
+<p><img src="figures/avg/avg40.png" class="img-fluid" style="width:75.0%"></p>
+<p><img src="figures/avg/avg41.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="using-the-model-to-predict" class="level3" data-number="9.5">
+<h3 data-number="9.5" class="anchored" data-anchor-id="using-the-model-to-predict"><span class="header-section-number">9.5</span> Using the Model to Predict</h3>
+<p>One use of this model is to predict future batting performance. For example, since this model was based on 2021 season data, one can predict strikeout rates, home run rates and BABIP rates for the 2022 season. Suppose you have a player with a low strikeout rate, low home run rate and a high BABIP rate in 2022. Looking in the future, since strikeout rates and home run rates are ability-driven measures, I would anticipate small changes in these rates in a future season. In contrast, since BABIP rates are chance-driven, I would anticipate the high BABIP rate in in 2021 to drop close to the average BABIP in 2022. These type of predictions would be made automatically by simulating draws from the posterior predictive distribution.</p>
+</section>
+<section id="closing-remarks" class="level3" data-number="9.6">
+<h3 data-number="9.6" class="anchored" data-anchor-id="closing-remarks"><span class="header-section-number">9.6</span> Closing Remarks</h3>
+<ul>
+<li><p>Some years back I wrote a paper published in <em>Journal of Quantitative Analysis of Sports</em> on the estimation of batting average components. Since this journal has limited access, here is a arXiv version of the paper. The difference in the approach taken here is that I am assuming a multivariate normal prior on the component probabilities. This makes sense since I believe there is some positive association between a home run probability and a strikeout probability.</p></li>
+<li><p>I’ve written about these BA components in older posts. For example, here is a post where I focus on the the in-play rate 1 - SO / AB and the hit on all balls in play rate H / (AB - SO).</p></li>
+<li><p>The <code>ggdensity</code> package provides two useful functions <code>geom_hdr()</code> and <code>geom_hdr_lines()</code> that are easy to use (just replace the <code>ggplot2</code> geoms with these functions) and provide helpful interpretation for paired data. In addition, for a Bayesian, they provide useful interpretations of bivariate distributions of two parameters from simulation output.</p></li>
+</ul>
 </section>
 </section>
 
