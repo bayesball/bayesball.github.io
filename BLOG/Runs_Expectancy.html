@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2022-12-22">
+<meta name="dcterms.date" content="2023-01-01">
 
 <title>Runs Expectancy</title>
 <style>
@@ -84,6 +84,17 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#r-work" id="toc-r-work" class="nav-link" data-scroll-target="#r-work"><span class="toc-section-number">5.8</span>  R Work?</a></li>
   <li><a href="#further-reading-on-pitch-value" id="toc-further-reading-on-pitch-value" class="nav-link" data-scroll-target="#further-reading-on-pitch-value"><span class="toc-section-number">5.9</span>  Further Reading on Pitch Value</a></li>
   </ul></li>
+  <li><a href="#beyond-runs-expectancy" id="toc-beyond-runs-expectancy" class="nav-link" data-scroll-target="#beyond-runs-expectancy"><span class="toc-section-number">6</span>  Beyond Runs Expectancy</a>
+  <ul class="collapse">
+  <li><a href="#introduction-4" id="toc-introduction-4" class="nav-link" data-scroll-target="#introduction-4"><span class="toc-section-number">6.1</span>  Introduction</a></li>
+  <li><a href="#runs-scored-in-a-half-inning" id="toc-runs-scored-in-a-half-inning" class="nav-link" data-scroll-target="#runs-scored-in-a-half-inning"><span class="toc-section-number">6.2</span>  Runs Scored in a Half-Inning</a></li>
+  <li><a href="#comparing-runs-scored-between-two-situations" id="toc-comparing-runs-scored-between-two-situations" class="nav-link" data-scroll-target="#comparing-runs-scored-between-two-situations"><span class="toc-section-number">6.3</span>  Comparing Runs Scored Between Two Situations</a></li>
+  <li><a href="#advantage-in-all-situations" id="toc-advantage-in-all-situations" class="nav-link" data-scroll-target="#advantage-in-all-situations"><span class="toc-section-number">6.4</span>  Advantage in All Situations</a></li>
+  <li><a href="#a-new-table" id="toc-a-new-table" class="nav-link" data-scroll-target="#a-new-table"><span class="toc-section-number">6.5</span>  A New Table</a></li>
+  <li><a href="#graphing-the-effects" id="toc-graphing-the-effects" class="nav-link" data-scroll-target="#graphing-the-effects"><span class="toc-section-number">6.6</span>  Graphing the Effects</a></li>
+  <li><a href="#why" id="toc-why" class="nav-link" data-scroll-target="#why"><span class="toc-section-number">6.7</span>  Why?</a></li>
+  <li><a href="#a-statistical-note" id="toc-a-statistical-note" class="nav-link" data-scroll-target="#a-statistical-note"><span class="toc-section-number">6.8</span>  A Statistical Note</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -108,7 +119,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 22, 2022</p>
+      <p class="date">January 1, 2023</p>
     </div>
   </div>
   
@@ -120,11 +131,12 @@ ul.task-list li input[type="checkbox"] {
 
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
-<p>This document contains several articles on the general topic of runs expectancy which is a central topic in sabermetrics.</p>
+<p>This document contains several articles from the “Exploring Baseball Data with R” blog on the general topic of runs expectancy which is a central topic in sabermetrics.</p>
 <p>Section 2 describes the process of downloading play-by-play Retrosheet data for a specific season. Another function is helpful for computing the runs values for all of the plays that season.</p>
 <p>Section 3 discusses the runs expectancy matrix which can be used to evaluate values of plays and different strategies during a game. This section describes the use of a graph to summarize the main patterns of this matrix.</p>
 <p>A popular modern way to evaluate batting performance is the weighted on-base percentage or wOBA. We explain in Section 4 how to use Retrosheet play-by-play data to compute the weights of the different positive outcomes that are used in the wOBA.</p>
 <p>Runs values are also helpful in evaluating pitches. Section 5 describes the concept of a pitch value and shows the value of different types of pitches over the zone.</p>
+<p>One drawback of the runs expectancy matrix is that runs potential is measured solely by the mean runs in the remainder of the inning. Section 6 introduces a more general approach where runs are represented as an ordinal variable and one measures the advantage of a given situation by use of an ordinal regression model.</p>
 </section>
 <section id="getting-started" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="getting-started"><span class="header-section-number">2</span> Getting Started</h2>
@@ -393,6 +405,134 @@ wOBA_{adj} = \frac{0.310}{0.2521} wOBA.
 <li><p>Pitch Type Linear Weights by Steve Slowinski, FanGraphs</p></li>
 <li><p>Run Value by Pitch Location by Dave Allen, The Baseball Analysts</p></li>
 </ul>
+</section>
+</section>
+<section id="beyond-runs-expectancy" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="beyond-runs-expectancy"><span class="header-section-number">6</span> Beyond Runs Expectancy</h2>
+<section id="introduction-4" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">6.1</span> Introduction</h3>
+<p>We begin by displaying the well-known runs expectancy table (data from the recent 2022 season) introduced by George Lindsey in 1963. It gives the average runs scored in the remainder of the inning for each situation defined by runners on base and number of outs.</p>
+<p><img src="figures/expectancy/runs0.png" class="img-fluid" style="width:70.0%"></p>
+<p>This table provides the foundation for the development of many measures of performance such as wOBA. However, it always has seemed a bit unsatisfying to me since it provides an incomplete view of run scoring potential. For example, when there is a single out and runners on 2nd and 3rd, we see from the table that teams will score an average of 1.42 runs. But this is only an average and does not directly inform us on the probability of not scoring or the probability of scoring 2 or 3 runs. It seems better to describe runs potential in a way that would say more about the future distribution of runs scored than just the mean.</p>
+<p>Some years ago, I wrote a paper <em>Beyond Runs Expectancy</em> published in the <em>Journal of Sports Analytics</em> which models run scoring in a different way. Instead of focusing only on the average runs scored, I broke runs scored into the following 5 categories:</p>
+<p>0 runs, 1 run, 2 runs, 3 runs, 4 or more runs</p>
+<p>Then I used a popular regression model for ordinal outcomes to explore how run scoring differs between teams and how run scoring changes with respect to various situational effects like home vs away, runners on base, and so on. In this post, the plan is to introduce this modeling method and show how one can replace the runs expectancy table with a similar table (that I call a <em>Runs Advantage Table</em>) that gives us more information about the potential for scoring runs.</p>
+</section>
+<section id="runs-scored-in-a-half-inning" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="runs-scored-in-a-half-inning"><span class="header-section-number">6.2</span> Runs Scored in a Half-Inning</h3>
+<p>We treat the runs scored as an ordinal variable and compute logits to describe changes in the runs scored probabilities as we move from one category to another.</p>
+<p>Using 2022 season data, I collect the runs scored in the remainder of the inning in the situation where we have bases empty with no outs. From the following table, we see that in this situation, there were no runs scored in 73.4% of innings, 1 run scored in 14.3% of the innings and so on.</p>
+<pre><code>O_RUNS.ROI     n   Proportion
+          0 33073   0.734
+          1  6421   0.143
+          2  3091   0.069
+          3  1423   0.032
+         4+  1050   0.023</code></pre>
+<p>For each outcome, we compute a logit defined as the log of the ratio of the fraction less than or equal to the outcome to the fraction larger than the outcome.</p>
+<p><span class="math display">\[
+Logit = \log\left(\frac{frac \, outcome \, or \, smaller}{frac \, larger \, than \, outcome}\right)
+\]</span> So for the “0” outcome, we compute</p>
+<p><span class="math display">\[
+Logit = \log\left( \frac{.734}{.143 + .069 + .032 + .023}\right),
+\]</span> for the “1” outcome, we compute</p>
+<p><span class="math display">\[
+Logit = \log\left( \frac{.734 + .143 }{.069 + .032 + .023}\right),
+\]</span></p>
+<p>If we do this for all five outcomes we get the following table.</p>
+<pre><code>O_RUNS.ROI Percent smaller larger Logit
+         0   0.734   0.734  0.266 1.015
+         1   0.143   0.877  0.123 1.960
+         2   0.069   0.945  0.055 2.846
+         3   0.032   0.977  0.023 3.736
+        4+   0.023   1.000  0.000   Inf</code></pre>
+<p>We call the values in the <code>Logit</code> column boundary values – on the logit scale, they divide the probabilities of the 0, 1, 2, 3 outcome categories.</p>
+</section>
+<section id="comparing-runs-scored-between-two-situations" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="comparing-runs-scored-between-two-situations"><span class="header-section-number">6.3</span> Comparing Runs Scored Between Two Situations</h3>
+<p>Suppose now that we have runners on 1st and 2nd with no outs. There is more potential to score runs in this situation than in the “no runners, no outs” situation. How do we measure this advantage?</p>
+<p>We fit an ordinal logistic regression model to measure the changes in the logits dividing the “smaller” and “larger” categories of run scored.</p>
+<p>The model says that the logit of “smaller” in category <span class="math inline">\(k\)</span> is equal to a boundary value <span class="math inline">\(a_k\)</span> minus an effect <span class="math inline">\(\eta\)</span> due to the new situation.</p>
+<p><span class="math display">\[
+logit P(smaller) = a_k - \eta
+\]</span></p>
+<p>We fit this model using the <code>polr()</code> function in the <code>MASS</code> package.</p>
+<pre><code>polr(O_RUNS.ROI ~ 1 + STATE, 
+      data = filter(d2022, STATE %in% two_states))
+
+Coefficients:
+STATE110 0 
+  1.557154 
+
+Intercepts:
+     0|1      1|2      2|3     3|4+ 
+1.016599 1.956651 2.817440 3.704878 </code></pre>
+<p>The “Intercepts” in the R output are familiar – these are just the boundary logit values that we found between the different run categories. The coefficient estimate is <span class="math inline">\(\eta = 1.557\)</span> – this is the advantage of the “110 0” situation over the “000 0” situation on the logit scale.</p>
+<p>For any runs value <span class="math inline">\(k\)</span> and runners on 1st and 2nd with no outs. <span class="math display">\[
+logit P(category \, k \, or \, smaller) = a_k - 1.557
+\]</span> By construction, for the bases empty and no outs situation <span class="math display">\[
+logit P(category \, k \, or \, smaller) = a_k
+\]</span> so the advantage of the new situation is 1.557.</p>
+<p>It is probably easiest to understand this fit when expressed in terms of the runs probabilities. I display the fitted probabilities for the two states below. With this more advantageous runners on base situation, the chance of not scoring has dropped from 0.734 and 0.368 and the chance of a “big” inning (4 runs or more) has climbed from 0.024 to 0.105.</p>
+<pre><code>      State
+   000 0 110 0
+0  0.734 0.368
+1  0.142 0.231
+2  0.067 0.181
+3  0.032 0.116
+4+ 0.024 0.105</code></pre>
+</section>
+<section id="advantage-in-all-situations" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="advantage-in-all-situations"><span class="header-section-number">6.4</span> Advantage in All Situations</h3>
+<p>We can repeat this exercise for all situations defined by runners on base and number of outs. Using the <code>polr()</code> function we just fit the model</p>
+<pre><code>O_RUNS.ROI ~ 1 + STATE</code></pre>
+<p>The output of the fit are coefficients that give the advantage of each of the 24 states relative to the “bases empty, no outs” state.</p>
+</section>
+<section id="a-new-table" class="level3" data-number="6.5">
+<h3 data-number="6.5" class="anchored" data-anchor-id="a-new-table"><span class="header-section-number">6.5</span> A New Table</h3>
+<p>By letting runs scored be an ordinal response and fitting an ordinal logistic model, we obtain a new table of regression coefficients (called a Runs Advantage Table) that gives the advantage of a new situation over the “000 0” state.</p>
+<pre><code>              RUNS ADVANTAGE TABLE
+              
+    000   100   020   003   120  103  023  123
+0  0.00  0.75  1.23  1.59  1.58 2.05 2.29 2.60
+1 -0.67  0.04  0.55  1.23  0.77 1.37 1.64 1.70
+2 -1.60 -0.96 -0.34 -0.03 -0.20 0.06 0.05 0.43</code></pre>
+<p>To make sense of this new table …</p>
+<ul>
+<li>Remember, by model definition the “000 0” state has a value of run advantage 0. Negative run advantage values correspond to runner/outs states that are worse (in terms of scoring runs potential) then the “000 0” state. Positive values (like the “120 0” state) correspond to situations that are more advantageous for scoring runs.</li>
+<li>The numbers don’t represent mean runs scored in the remainder of the inning. Instead, they represent the change in logits over the base situation. For example, we see from the table that the value for bases loaded and one out is 1.70. This means that the logit <span class="math display">\[
+logit \left(\frac{scoring \le 2}{scoring &gt; 2}\right)
+\]</span> is 1.70 smaller than the same logit for the bases empty and no outs situation. Also by the model definition, the logit <span class="math display">\[
+logit \left(\frac{scoring \le k}{scoring &gt; k}\right)
+\]</span> would be 1.70 smaller than the base rate for any choice of boundary value <span class="math inline">\(k\)</span>.</li>
+</ul>
+</section>
+<section id="graphing-the-effects" class="level3" data-number="6.6">
+<h3 data-number="6.6" class="anchored" data-anchor-id="graphing-the-effects"><span class="header-section-number">6.6</span> Graphing the Effects</h3>
+<p>As I did earlier for the runs expectancy table, I can graph the run advantages of the different situations (the regression coefficients) as a function of the bases score defined by</p>
+<p>Bases Score = Sum(bases occupied) + I(# of Runners &gt; 1).</p>
+<p>As before, the color of the point corresponds to the number of outs and I have added smoothing curves to show the basic pattern of these run advantage values.</p>
+<p><img src="figures/expectancy/runs9.png" class="img-fluid" style="width:70.0%"></p>
+<ul>
+<li>The general behavior of these ordinal model coefficients is similar to the behavior of the runs expectancy values. As the bases score increases, there is an increasing trend in the coefficients.</li>
+<li>Also for a given value of the bases score, the coefficients decrease as a function of the number of outs.</li>
+<li>In contrast to the graph of run expectancies, the trend in these values for a given number of outs is nonlinear.<br>
+</li>
+<li>The nonlinear pattern is most obvious for two outs. There is a sizable increase when the bases score goes from 0 to 2. But for base score values from 2 to 7, there are only small increases in the coefficients. In contrast, when there no outs, there is (approximately) a constant increase in the coefficient value for each one unit increase in bases score.</li>
+</ul>
+</section>
+<section id="why" class="level3" data-number="6.7">
+<h3 data-number="6.7" class="anchored" data-anchor-id="why"><span class="header-section-number">6.7</span> Why?</h3>
+<p>What is the point of introducing a new table describe the advantage of particular runner and bases situations?</p>
+<ul>
+<li><p>Remember I was dissatisfied with just knowing the mean number of runs scored in the remainder of the inning. A mean number like 0.54 is not that helpful in the sense that a team can’t score 0.54 runs. It would be clearer to talk about the chance of scoring, say 0, 1, 2 runs in the remainder of the inning.</p></li>
+<li><p>In this method, I am using an ordinal regression model to estimate the run probabilities in the five categories 0, 1, 2, 3, 4+. The probabilities in the five categories change when one goes from the “bases empty and no runners” to another state. The model fit gives a single coefficient which is an additive change to the logits.</p></li>
+<li><p>Using this method, I can tell a manager exactly how the run distribution changes when there are runners on base. Although we are measuring things on a logit scale, one can also reexpress the logit distributions back to the probability scale.</p></li>
+<li><p>In a future post, I’ll provide some illustrations how this new table can be used similar to the applications of the basic runs expectancy table.</p></li>
+</ul>
+</section>
+<section id="a-statistical-note" class="level3" data-number="6.8">
+<h3 data-number="6.8" class="anchored" data-anchor-id="a-statistical-note"><span class="header-section-number">6.8</span> A Statistical Note</h3>
+<p>The runs expectancy table gives the mean number of runs scored in the remainder of the inning. Is it possible to create a probability table for runs scored if we know only the mean? Yes, if the distribution of runs scored has a Poisson distribution. Unfortunately, the Poisson is a poor fit to run scoring data for a single half-inning. I did try some alternative distributions like negative binomial, zero-inflated distributions, but they required too many parameters. That led me to use the ordinal scale for run scoring described here.</p>
 </section>
 </section>
 
