@@ -95,6 +95,15 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#why" id="toc-why" class="nav-link" data-scroll-target="#why"><span class="toc-section-number">6.7</span>  Why?</a></li>
   <li><a href="#a-statistical-note" id="toc-a-statistical-note" class="nav-link" data-scroll-target="#a-statistical-note"><span class="toc-section-number">6.8</span>  A Statistical Note</a></li>
   </ul></li>
+  <li><a href="#beyond-runs-expectancy---some-background" id="toc-beyond-runs-expectancy---some-background" class="nav-link" data-scroll-target="#beyond-runs-expectancy---some-background"><span class="toc-section-number">7</span>  Beyond Runs Expectancy - Some Background</a>
+  <ul class="collapse">
+  <li><a href="#introduction-modeling-runs-scored-in-an-inning" id="toc-introduction-modeling-runs-scored-in-an-inning" class="nav-link" data-scroll-target="#introduction-modeling-runs-scored-in-an-inning"><span class="toc-section-number">7.1</span>  Introduction: Modeling Runs Scored in an Inning</a></li>
+  <li><a href="#logistic-regression" id="toc-logistic-regression" class="nav-link" data-scroll-target="#logistic-regression"><span class="toc-section-number">7.2</span>  Logistic Regression</a></li>
+  <li><a href="#more-cutpoints---ordinal-regression" id="toc-more-cutpoints---ordinal-regression" class="nav-link" data-scroll-target="#more-cutpoints---ordinal-regression"><span class="toc-section-number">7.3</span>  More Cutpoints - Ordinal Regression</a></li>
+  <li><a href="#proportional-odds" id="toc-proportional-odds" class="nav-link" data-scroll-target="#proportional-odds"><span class="toc-section-number">7.4</span>  Proportional Odds</a></li>
+  <li><a href="#comparing-runs-expectancy-with-ordinal-coefficients" id="toc-comparing-runs-expectancy-with-ordinal-coefficients" class="nav-link" data-scroll-target="#comparing-runs-expectancy-with-ordinal-coefficients"><span class="toc-section-number">7.5</span>  Comparing Runs Expectancy with Ordinal Coefficients</a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="toc-section-number">7.6</span>  Takeaways</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -532,6 +541,66 @@ logit \left(\frac{scoring \le k}{scoring &gt; k}\right)
 <section id="a-statistical-note" class="level3" data-number="6.8">
 <h3 data-number="6.8" class="anchored" data-anchor-id="a-statistical-note"><span class="header-section-number">6.8</span> A Statistical Note</h3>
 <p>The runs expectancy table gives the mean number of runs scored in the remainder of the inning. Is it possible to create a probability table for runs scored if we know only the mean? Yes, if the distribution of runs scored has a Poisson distribution. Unfortunately, the Poisson is a poor fit to run scoring data for a single half-inning. I did try some alternative distributions like negative binomial, zero-inflated distributions, but they required too many parameters. That led me to use the ordinal scale for run scoring described here.</p>
+</section>
+</section>
+<section id="beyond-runs-expectancy---some-background" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="beyond-runs-expectancy---some-background"><span class="header-section-number">7</span> Beyond Runs Expectancy - Some Background</h2>
+<section id="introduction-modeling-runs-scored-in-an-inning" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="introduction-modeling-runs-scored-in-an-inning"><span class="header-section-number">7.1</span> Introduction: Modeling Runs Scored in an Inning</h3>
+<p>In last week’s post, I presented a different way of understanding runs potential over different states of an inning defined by the runners on base and the number of outs. The problem of modeling runs scored has addressed by many people over the years. For example, Keith Woolner in this article describes a RPI formula and Patriot describes in this post the Tango distribution and use of a zero-inflated negative binomial distribution.</p>
+<p>Some years ago, I did explore the use of standard distributions to represent the runs scored in a half-inning. What I found was that the Poisson model underestimated the probability of a scoreless inning and the negative binomial model (which uses an additional parameter) was unsatisfactory. I could have continued with more sophisticated probability models, but the ordinal response approach seemed pretty easy to apply.</p>
+<p>Since some readers may not be familiar with the cumulative logit ordinal response regression model, I will introduce this model by assuming that there is an unobserved run-scoring variable behind the scenes. This motivates the familiar logistic model, and by using more cutpoints, the ordinal regression model. There is an important assumption with this ordinal model, called proportional odds, and I’ll give evidence that this is approximately true for the run scoring data.</p>
+<p>Last I’ll contrast runs expectancy and my runs advantage tables over 20 seasons of data. Tom Tango suggested in my ordering of states that the “120” state (runners on 1st and 2nd) should go before the “003” state (runner on third). Runs expectancy suggests that “120” is more valuable than “003” when there are 0 or 2 outs, but runs advantage gives an opposite conclusion.</p>
+</section>
+<section id="logistic-regression" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="logistic-regression"><span class="header-section-number">7.2</span> Logistic Regression</h3>
+<p>Here is a graphical way to think about logistic regression. Suppose you could measure the run-scoring performance <span class="math inline">\(Z\)</span> of a team – you don’t observe this, but it is the culmination of the team’s ability to get on base and move runners to home. We assume that <span class="math inline">\(Z\)</span> has a logistic (bell-shaped) curve distribution with mean <span class="math inline">\(\mu\)</span> and scale 1 that I show below.</p>
+<p>I’d added a vertical line at <span class="math inline">\(Z = 0\)</span>. We observe for each inning if one or more runs scores (<span class="math inline">\(Z &gt; 0\)</span>) or a run does not score (<span class="math inline">\(Z \le 0\)</span>). The mean $ $ might depend on other things like the team, home vs away or other covariates. This representation is equivalent to a logistic regression model.</p>
+<p><img src="figures/expectancy/runs11.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="more-cutpoints---ordinal-regression" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="more-cutpoints---ordinal-regression"><span class="header-section-number">7.3</span> More Cutpoints - Ordinal Regression</h3>
+<p>In logistic regression we just recorded 1 if one or more run scores in an inning. Suppose instead we record if one of the five outcomes happens:</p>
+<p>no runs scored, 1 run, 2 runs, 3 runs, 4 or more runs</p>
+<p>Now we have an ordinal response. We represent the ordinal response model using the same picture but now we have four lines dividing the five possible outcomes. The mean <span class="math inline">\(\mu\)</span> is a function of different things that impact run scoring such as the state of the inning (number of outs and bases occupied.). So really ordinal regression and logistic regression follow the same representation about the logistic curve for <span class="math inline">\(Z\)</span>. The only difference is that we have one cutpoint (0) for the binary response in logistic regression and we have four cutpoints for the ordinal response in ordinal regression. When we fit the ordinal regression model, we estimate the boundaries (cutpoints) and the covariate effect.</p>
+<p><img src="figures/expectancy/runs12.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="proportional-odds" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="proportional-odds"><span class="header-section-number">7.4</span> Proportional Odds</h3>
+<p>There is one big assumption in ordinal logistic regression. Suppose we wish to compare the run scoring in two different states, say “no runners on with 0 outs” and “runner on 1st with 1 out”. We assume that the run scoring in the two states has the same logistic curve, where the only difference is the locations – that is, the two curves have the same spread.</p>
+<p>Suppose we collect the run scoring <span class="math inline">\(R\)</span> in two states and compute the logits</p>
+<p><span class="math display">\[LOGIT =  \log\left(\frac{P(R \le j)}{P(R &gt; j)}\right)\]</span></p>
+<p>and we plot these logits against the boundary (value of <span class="math inline">\(j\)</span>) for each state. The model assumes that these logit curves are parallel. That is</p>
+<p>LOGIT (state 2) = LOGIT(state 1) + constant.</p>
+<p>We can state this in terms of odds which is the ratio of the probability of runs less than or equal to j to the probability of runs greater than j.</p>
+<p><span class="math display">\[ODDS =  \frac{P(R \le j)}{P(R &gt; j)}\]</span></p>
+<p>For one state the ODDS is a constant multiple of the ODDS for a second state – this is the proportional odds assumption.</p>
+<p>ODDS (state 2) = constant <span class="math inline">\(\times\)</span> ODDS (state 1).</p>
+<p>We can check this assumption graphically for the 2022 season data. Below I plot the observed logits as a function of the boundary for all 24 states defined by number of outs and runners on base. Generally these logit curves do look parallel – this suggest that the ordinal regression model is reasonable for the run-scoring data.</p>
+<p><img src="figures/expectancy/runs10.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="comparing-runs-expectancy-with-ordinal-coefficients" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="comparing-runs-expectancy-with-ordinal-coefficients"><span class="header-section-number">7.5</span> Comparing Runs Expectancy with Ordinal Coefficients</h3>
+<p>There is an interesting comparison between the familiar runs expectancy table and my “runs advantage table” where you are displaying the ordinal regression slopes for all bases/outs situation.</p>
+<p>Here is the run expectancy table (using data for 20 seasons 2000-2019) and the graph of these values. Following Tom Tango’s suggestion, the “Bases Score” is defined to be</p>
+<p>Bases Score = 1 (runner on 1st) + 2 (runner on 2nd) + 4 (runner on 3rd)</p>
+<p><img src="figures/expectancy/runs13.png" class="img-fluid" style="width:70.0%"></p>
+<p>Note that, for 0 and 2 outs, the “003” situation (column 5) has lower runs expectation than the “120” situation (column 4).</p>
+<p>Here is the corresponding table and graph for my ordinal regression coefficients (again using 20 seasons of data). We note:</p>
+<p><img src="figures/expectancy/runs14.png" class="img-fluid" style="width:70.0%"></p>
+<p>We don’t have that situation described above – “120” has a smaller coefficient than “003” for each of the three outs values.</p>
+<p>Generally, the ordinal coefficients are monotone increasing as a function of the bases score for each values of outs.</p>
+</section>
+<section id="takeaways" class="level3" data-number="7.6">
+<h3 data-number="7.6" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">7.6</span> Takeaways</h3>
+<ul>
+<li><p>Probability Modeling of Runs Scored? Run scoring in baseball is not well represented by typical probability models like the Poisson or negative binomial which motivates the ordinal response regression approach.</p></li>
+<li><p>Ordinal and logistic regression are based on the same conceptual logistic distribution framework – you just have more boundaries with the ordinal approach.</p></li>
+<li><p>The proportional-odds assumption in ordinal regression seems to be supported by the observed run scoring data.</p></li>
+<li><p>Comparing Value of States. The ordinal regression coefficient estimates support the belief that the runner on 3rd situation is more valuable (from a run scoring perspective) than the runners on 1st and 2nd situation. The runs expectancy values don’t support this pattern.</p></li>
+<li><p>How Can a Team Score 0.5 Runs? I think the runs advantage table is better than runs expectancy since it tells you something about the distribution of runs scored, not just the average.</p></li>
+<li><p>Other Applications. I have illustrated the use of ordinal regression models in earlier posts. In this post, I explore the ordinal response that is the outcome in balls in play and in this post, I use an ordinal model to relate expected wOBA with the Statcast barrels definition.</p></li>
+</ul>
 </section>
 </section>
 
