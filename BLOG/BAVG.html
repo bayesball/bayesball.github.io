@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2022-12-22">
+<meta name="dcterms.date" content="2023-01-20">
 
 <title>Batting Average</title>
 <style>
@@ -61,53 +61,64 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#a-better-model" id="toc-a-better-model" class="nav-link" data-scroll-target="#a-better-model"><span class="toc-section-number">3.7</span>  A Better Model</a></li>
   <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="toc-section-number">3.8</span>  Takeaways</a></li>
   </ul></li>
-  <li><a href="#predicting-avg-using-xba-and-a-multilevel-model" id="toc-predicting-avg-using-xba-and-a-multilevel-model" class="nav-link" data-scroll-target="#predicting-avg-using-xba-and-a-multilevel-model"><span class="toc-section-number">4</span>  Predicting AVG using XBA and a Multilevel Model</a>
+  <li><a href="#expected-batting-average-and-hits-added" id="toc-expected-batting-average-and-hits-added" class="nav-link" data-scroll-target="#expected-batting-average-and-hits-added"><span class="toc-section-number">4</span>  Expected Batting Average and Hits Added</a>
   <ul class="collapse">
   <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1"><span class="toc-section-number">4.1</span>  Introduction</a></li>
-  <li><a href="#the-prediction-problem" id="toc-the-prediction-problem" class="nav-link" data-scroll-target="#the-prediction-problem"><span class="toc-section-number">4.2</span>  The Prediction Problem</a></li>
-  <li><a href="#using-the-in-play-ba" id="toc-using-the-in-play-ba" class="nav-link" data-scroll-target="#using-the-in-play-ba"><span class="toc-section-number">4.3</span>  Using the In-Play BA</a></li>
-  <li><a href="#using-the-expected-ba" id="toc-using-the-expected-ba" class="nav-link" data-scroll-target="#using-the-expected-ba"><span class="toc-section-number">4.4</span>  Using the Expected BA</a></li>
-  <li><a href="#using-a-multilevel-model" id="toc-using-a-multilevel-model" class="nav-link" data-scroll-target="#using-a-multilevel-model"><span class="toc-section-number">4.5</span>  Using a Multilevel Model</a></li>
-  <li><a href="#a-prediction-contest-which-method-does-best" id="toc-a-prediction-contest-which-method-does-best" class="nav-link" data-scroll-target="#a-prediction-contest-which-method-does-best"><span class="toc-section-number">4.6</span>  A Prediction Contest – Which Method Does Best?</a></li>
-  <li><a href="#what-have-we-learned" id="toc-what-have-we-learned" class="nav-link" data-scroll-target="#what-have-we-learned"><span class="toc-section-number">4.7</span>  What Have We Learned?</a></li>
-  <li><a href="#some-comments" id="toc-some-comments" class="nav-link" data-scroll-target="#some-comments"><span class="toc-section-number">4.8</span>  Some Comments</a></li>
+  <li><a href="#expected-batting-average-1" id="toc-expected-batting-average-1" class="nav-link" data-scroll-target="#expected-batting-average-1"><span class="toc-section-number">4.2</span>  Expected Batting Average</a></li>
+  <li><a href="#how-do-we-estimate-the-hit-probabilities" id="toc-how-do-we-estimate-the-hit-probabilities" class="nav-link" data-scroll-target="#how-do-we-estimate-the-hit-probabilities"><span class="toc-section-number">4.3</span>  How Do We Estimate the Hit Probabilities?</a></li>
+  <li><a href="#hits-added" id="toc-hits-added" class="nav-link" data-scroll-target="#hits-added"><span class="toc-section-number">4.4</span>  Hits Added</a></li>
+  <li><a href="#standardized-scores" id="toc-standardized-scores" class="nav-link" data-scroll-target="#standardized-scores"><span class="toc-section-number">4.5</span>  Standardized Scores</a></li>
+  <li><a href="#best-and-worst-hitters-in-the-statcast-era" id="toc-best-and-worst-hitters-in-the-statcast-era" class="nav-link" data-scroll-target="#best-and-worst-hitters-in-the-statcast-era"><span class="toc-section-number">4.6</span>  Best and Worst Hitters in the Statcast Era</a></li>
+  <li><a href="#pitcher-perspective" id="toc-pitcher-perspective" class="nav-link" data-scroll-target="#pitcher-perspective"><span class="toc-section-number">4.7</span>  Pitcher Perspective?</a></li>
+  <li><a href="#some-takeaways" id="toc-some-takeaways" class="nav-link" data-scroll-target="#some-takeaways"><span class="toc-section-number">4.8</span>  Some Takeaways</a></li>
   </ul></li>
-  <li><a href="#redrawing-steven-jay-goulds-graph" id="toc-redrawing-steven-jay-goulds-graph" class="nav-link" data-scroll-target="#redrawing-steven-jay-goulds-graph"><span class="toc-section-number">5</span>  Redrawing Steven Jay Gould’s Graph</a></li>
-  <li><a href="#construct-heat-maps-for-avg" id="toc-construct-heat-maps-for-avg" class="nav-link" data-scroll-target="#construct-heat-maps-for-avg"><span class="toc-section-number">6</span>  Construct Heat Maps for AVG</a>
+  <li><a href="#predicting-avg-using-xba-and-a-multilevel-model" id="toc-predicting-avg-using-xba-and-a-multilevel-model" class="nav-link" data-scroll-target="#predicting-avg-using-xba-and-a-multilevel-model"><span class="toc-section-number">5</span>  Predicting AVG using XBA and a Multilevel Model</a>
   <ul class="collapse">
-  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="toc-section-number">6.1</span>  The Data</a></li>
-  <li><a href="#mike-trout" id="toc-mike-trout" class="nav-link" data-scroll-target="#mike-trout"><span class="toc-section-number">6.2</span>  Mike Trout</a></li>
-  <li><a href="#a-contour-plot" id="toc-a-contour-plot" class="nav-link" data-scroll-target="#a-contour-plot"><span class="toc-section-number">6.3</span>  A Contour Plot</a></li>
-  <li><a href="#categorizing-avg" id="toc-categorizing-avg" class="nav-link" data-scroll-target="#categorizing-avg"><span class="toc-section-number">6.4</span>  Categorizing AVG</a></li>
-  <li><a href="#celebrating-the-cubs-with-heat-maps" id="toc-celebrating-the-cubs-with-heat-maps" class="nav-link" data-scroll-target="#celebrating-the-cubs-with-heat-maps"><span class="toc-section-number">6.5</span>  Celebrating the Cubs with Heat Maps</a></li>
-  <li><a href="#things-to-try" id="toc-things-to-try" class="nav-link" data-scroll-target="#things-to-try"><span class="toc-section-number">6.6</span>  Things to Try</a></li>
-  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code"><span class="toc-section-number">6.7</span>  R Code</a></li>
+  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"><span class="toc-section-number">5.1</span>  Introduction</a></li>
+  <li><a href="#the-prediction-problem" id="toc-the-prediction-problem" class="nav-link" data-scroll-target="#the-prediction-problem"><span class="toc-section-number">5.2</span>  The Prediction Problem</a></li>
+  <li><a href="#using-the-in-play-ba" id="toc-using-the-in-play-ba" class="nav-link" data-scroll-target="#using-the-in-play-ba"><span class="toc-section-number">5.3</span>  Using the In-Play BA</a></li>
+  <li><a href="#using-the-expected-ba" id="toc-using-the-expected-ba" class="nav-link" data-scroll-target="#using-the-expected-ba"><span class="toc-section-number">5.4</span>  Using the Expected BA</a></li>
+  <li><a href="#using-a-multilevel-model" id="toc-using-a-multilevel-model" class="nav-link" data-scroll-target="#using-a-multilevel-model"><span class="toc-section-number">5.5</span>  Using a Multilevel Model</a></li>
+  <li><a href="#a-prediction-contest-which-method-does-best" id="toc-a-prediction-contest-which-method-does-best" class="nav-link" data-scroll-target="#a-prediction-contest-which-method-does-best"><span class="toc-section-number">5.6</span>  A Prediction Contest – Which Method Does Best?</a></li>
+  <li><a href="#what-have-we-learned" id="toc-what-have-we-learned" class="nav-link" data-scroll-target="#what-have-we-learned"><span class="toc-section-number">5.7</span>  What Have We Learned?</a></li>
+  <li><a href="#some-comments" id="toc-some-comments" class="nav-link" data-scroll-target="#some-comments"><span class="toc-section-number">5.8</span>  Some Comments</a></li>
   </ul></li>
-  <li><a href="#the-vanishing-300-batting-average" id="toc-the-vanishing-300-batting-average" class="nav-link" data-scroll-target="#the-vanishing-300-batting-average"><span class="toc-section-number">7</span>  The Vanishing 300 Batting Average</a>
+  <li><a href="#redrawing-steven-jay-goulds-graph" id="toc-redrawing-steven-jay-goulds-graph" class="nav-link" data-scroll-target="#redrawing-steven-jay-goulds-graph"><span class="toc-section-number">6</span>  Redrawing Steven Jay Gould’s Graph</a></li>
+  <li><a href="#construct-heat-maps-for-avg" id="toc-construct-heat-maps-for-avg" class="nav-link" data-scroll-target="#construct-heat-maps-for-avg"><span class="toc-section-number">7</span>  Construct Heat Maps for AVG</a>
   <ul class="collapse">
-  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"><span class="toc-section-number">7.1</span>  Introduction</a></li>
-  <li><a href="#number-of-qualifying-300-hitters" id="toc-number-of-qualifying-300-hitters" class="nav-link" data-scroll-target="#number-of-qualifying-300-hitters"><span class="toc-section-number">7.2</span>  Number of Qualifying 300 Hitters</a></li>
-  <li><a href="#exploring-all-qualifying-avgs" id="toc-exploring-all-qualifying-avgs" class="nav-link" data-scroll-target="#exploring-all-qualifying-avgs"><span class="toc-section-number">7.3</span>  Exploring all Qualifying AVGs</a></li>
-  <li><a href="#deviations-from-normality" id="toc-deviations-from-normality" class="nav-link" data-scroll-target="#deviations-from-normality"><span class="toc-section-number">7.4</span>  Deviations from Normality</a></li>
-  <li><a href="#estimating-the-number-of-true-300-hitters" id="toc-estimating-the-number-of-true-300-hitters" class="nav-link" data-scroll-target="#estimating-the-number-of-true-300-hitters"><span class="toc-section-number">7.5</span>  Estimating the Number of True 300 Hitters</a></li>
-  <li><a href="#closing-comments" id="toc-closing-comments" class="nav-link" data-scroll-target="#closing-comments"><span class="toc-section-number">7.6</span>  Closing Comments</a></li>
+  <li><a href="#the-data" id="toc-the-data" class="nav-link" data-scroll-target="#the-data"><span class="toc-section-number">7.1</span>  The Data</a></li>
+  <li><a href="#mike-trout" id="toc-mike-trout" class="nav-link" data-scroll-target="#mike-trout"><span class="toc-section-number">7.2</span>  Mike Trout</a></li>
+  <li><a href="#a-contour-plot" id="toc-a-contour-plot" class="nav-link" data-scroll-target="#a-contour-plot"><span class="toc-section-number">7.3</span>  A Contour Plot</a></li>
+  <li><a href="#categorizing-avg" id="toc-categorizing-avg" class="nav-link" data-scroll-target="#categorizing-avg"><span class="toc-section-number">7.4</span>  Categorizing AVG</a></li>
+  <li><a href="#celebrating-the-cubs-with-heat-maps" id="toc-celebrating-the-cubs-with-heat-maps" class="nav-link" data-scroll-target="#celebrating-the-cubs-with-heat-maps"><span class="toc-section-number">7.5</span>  Celebrating the Cubs with Heat Maps</a></li>
+  <li><a href="#things-to-try" id="toc-things-to-try" class="nav-link" data-scroll-target="#things-to-try"><span class="toc-section-number">7.6</span>  Things to Try</a></li>
+  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code"><span class="toc-section-number">7.7</span>  R Code</a></li>
   </ul></li>
-  <li><a href="#making-sense-of-a-batting-average" id="toc-making-sense-of-a-batting-average" class="nav-link" data-scroll-target="#making-sense-of-a-batting-average"><span class="toc-section-number">8</span>  Making Sense of a Batting Average</a>
+  <li><a href="#the-vanishing-300-batting-average" id="toc-the-vanishing-300-batting-average" class="nav-link" data-scroll-target="#the-vanishing-300-batting-average"><span class="toc-section-number">8</span>  The Vanishing 300 Batting Average</a>
   <ul class="collapse">
-  <li><a href="#introduction-a-twitter-post" id="toc-introduction-a-twitter-post" class="nav-link" data-scroll-target="#introduction-a-twitter-post"><span class="toc-section-number">8.1</span>  Introduction: A Twitter Post</a></li>
-  <li><a href="#a-batting-average-is-the-product-of-two-rates" id="toc-a-batting-average-is-the-product-of-two-rates" class="nav-link" data-scroll-target="#a-batting-average-is-the-product-of-two-rates"><span class="toc-section-number">8.2</span>  A Batting Average is the Product of Two Rates</a></li>
-  <li><a href="#scatterplot-of-component-rates" id="toc-scatterplot-of-component-rates" class="nav-link" data-scroll-target="#scatterplot-of-component-rates"><span class="toc-section-number">8.3</span>  Scatterplot of Component Rates</a></li>
-  <li><a href="#scatterplot-of-component-talents" id="toc-scatterplot-of-component-talents" class="nav-link" data-scroll-target="#scatterplot-of-component-talents"><span class="toc-section-number">8.4</span>  Scatterplot of Component Talents</a></li>
-  <li><a href="#takeaways-1" id="toc-takeaways-1" class="nav-link" data-scroll-target="#takeaways-1"><span class="toc-section-number">8.5</span>  Takeaways</a></li>
+  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3"><span class="toc-section-number">8.1</span>  Introduction</a></li>
+  <li><a href="#number-of-qualifying-300-hitters" id="toc-number-of-qualifying-300-hitters" class="nav-link" data-scroll-target="#number-of-qualifying-300-hitters"><span class="toc-section-number">8.2</span>  Number of Qualifying 300 Hitters</a></li>
+  <li><a href="#exploring-all-qualifying-avgs" id="toc-exploring-all-qualifying-avgs" class="nav-link" data-scroll-target="#exploring-all-qualifying-avgs"><span class="toc-section-number">8.3</span>  Exploring all Qualifying AVGs</a></li>
+  <li><a href="#deviations-from-normality" id="toc-deviations-from-normality" class="nav-link" data-scroll-target="#deviations-from-normality"><span class="toc-section-number">8.4</span>  Deviations from Normality</a></li>
+  <li><a href="#estimating-the-number-of-true-300-hitters" id="toc-estimating-the-number-of-true-300-hitters" class="nav-link" data-scroll-target="#estimating-the-number-of-true-300-hitters"><span class="toc-section-number">8.5</span>  Estimating the Number of True 300 Hitters</a></li>
+  <li><a href="#closing-comments" id="toc-closing-comments" class="nav-link" data-scroll-target="#closing-comments"><span class="toc-section-number">8.6</span>  Closing Comments</a></li>
   </ul></li>
-  <li><a href="#learning-about-batting-ability-using-components-of-batting-average" id="toc-learning-about-batting-ability-using-components-of-batting-average" class="nav-link" data-scroll-target="#learning-about-batting-ability-using-components-of-batting-average"><span class="toc-section-number">9</span>  Learning About Batting Ability Using Components of Batting Average</a>
+  <li><a href="#making-sense-of-a-batting-average" id="toc-making-sense-of-a-batting-average" class="nav-link" data-scroll-target="#making-sense-of-a-batting-average"><span class="toc-section-number">9</span>  Making Sense of a Batting Average</a>
   <ul class="collapse">
-  <li><a href="#what-is-a-batting-average" id="toc-what-is-a-batting-average" class="nav-link" data-scroll-target="#what-is-a-batting-average"><span class="toc-section-number">9.1</span>  What is a Batting Average?</a></li>
-  <li><a href="#components-of-batting-average" id="toc-components-of-batting-average" class="nav-link" data-scroll-target="#components-of-batting-average"><span class="toc-section-number">9.2</span>  Components of Batting Average</a></li>
-  <li><a href="#estimating-component-abilities" id="toc-estimating-component-abilities" class="nav-link" data-scroll-target="#estimating-component-abilities"><span class="toc-section-number">9.3</span>  Estimating Component Abilities</a></li>
-  <li><a href="#graphs" id="toc-graphs" class="nav-link" data-scroll-target="#graphs"><span class="toc-section-number">9.4</span>  Graphs</a></li>
-  <li><a href="#using-the-model-to-predict" id="toc-using-the-model-to-predict" class="nav-link" data-scroll-target="#using-the-model-to-predict"><span class="toc-section-number">9.5</span>  Using the Model to Predict</a></li>
-  <li><a href="#closing-remarks" id="toc-closing-remarks" class="nav-link" data-scroll-target="#closing-remarks"><span class="toc-section-number">9.6</span>  Closing Remarks</a></li>
+  <li><a href="#introduction-a-twitter-post" id="toc-introduction-a-twitter-post" class="nav-link" data-scroll-target="#introduction-a-twitter-post"><span class="toc-section-number">9.1</span>  Introduction: A Twitter Post</a></li>
+  <li><a href="#a-batting-average-is-the-product-of-two-rates" id="toc-a-batting-average-is-the-product-of-two-rates" class="nav-link" data-scroll-target="#a-batting-average-is-the-product-of-two-rates"><span class="toc-section-number">9.2</span>  A Batting Average is the Product of Two Rates</a></li>
+  <li><a href="#scatterplot-of-component-rates" id="toc-scatterplot-of-component-rates" class="nav-link" data-scroll-target="#scatterplot-of-component-rates"><span class="toc-section-number">9.3</span>  Scatterplot of Component Rates</a></li>
+  <li><a href="#scatterplot-of-component-talents" id="toc-scatterplot-of-component-talents" class="nav-link" data-scroll-target="#scatterplot-of-component-talents"><span class="toc-section-number">9.4</span>  Scatterplot of Component Talents</a></li>
+  <li><a href="#takeaways-1" id="toc-takeaways-1" class="nav-link" data-scroll-target="#takeaways-1"><span class="toc-section-number">9.5</span>  Takeaways</a></li>
+  </ul></li>
+  <li><a href="#learning-about-batting-ability-using-components-of-batting-average" id="toc-learning-about-batting-ability-using-components-of-batting-average" class="nav-link" data-scroll-target="#learning-about-batting-ability-using-components-of-batting-average"><span class="toc-section-number">10</span>  Learning About Batting Ability Using Components of Batting Average</a>
+  <ul class="collapse">
+  <li><a href="#what-is-a-batting-average" id="toc-what-is-a-batting-average" class="nav-link" data-scroll-target="#what-is-a-batting-average"><span class="toc-section-number">10.1</span>  What is a Batting Average?</a></li>
+  <li><a href="#components-of-batting-average" id="toc-components-of-batting-average" class="nav-link" data-scroll-target="#components-of-batting-average"><span class="toc-section-number">10.2</span>  Components of Batting Average</a></li>
+  <li><a href="#estimating-component-abilities" id="toc-estimating-component-abilities" class="nav-link" data-scroll-target="#estimating-component-abilities"><span class="toc-section-number">10.3</span>  Estimating Component Abilities</a></li>
+  <li><a href="#graphs" id="toc-graphs" class="nav-link" data-scroll-target="#graphs"><span class="toc-section-number">10.4</span>  Graphs</a></li>
+  <li><a href="#using-the-model-to-predict" id="toc-using-the-model-to-predict" class="nav-link" data-scroll-target="#using-the-model-to-predict"><span class="toc-section-number">10.5</span>  Using the Model to Predict</a></li>
+  <li><a href="#closing-remarks" id="toc-closing-remarks" class="nav-link" data-scroll-target="#closing-remarks"><span class="toc-section-number">10.6</span>  Closing Remarks</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -133,7 +144,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 22, 2022</p>
+      <p class="date">January 20, 2023</p>
     </div>
   </div>
   
@@ -304,22 +315,90 @@ BA = (1 - SO.Rate) \times BABIP
 <p>I’ve been writing about expected batting averages in recent posts.&nbsp; In this post, I demonstrate there is more to hitting than just launch angle and exit velocities by plotting residuals (such as the Z score above) for two consecutive seasons.&nbsp; &nbsp;In a follow-up post, I focused on the error rates by using these expected BA predictions.</p>
 </section>
 </section>
-<section id="predicting-avg-using-xba-and-a-multilevel-model" class="level2" data-number="4">
-<h2 data-number="4" class="anchored" data-anchor-id="predicting-avg-using-xba-and-a-multilevel-model"><span class="header-section-number">4</span> Predicting AVG using XBA and a Multilevel Model</h2>
+<section id="expected-batting-average-and-hits-added" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="expected-batting-average-and-hits-added"><span class="header-section-number">4</span> Expected Batting Average and Hits Added</h2>
 <section id="introduction-1" class="level3" data-number="4.1">
 <h3 data-number="4.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">4.1</span> Introduction</h3>
+<p>Baseball Savant has a collection of Expected Statistics measures based on the Statcast data that has been available since the 2015 season. These measures are based on estimated values of expected <span class="math inline">\(BA\)</span>, <span class="math inline">\(SLG\)</span>, and <span class="math inline">\(wOBA\)</span> given values of the launch angle and exit velocity measurements. I’ve talked about Expected Batting Average in several posts in the past. Since I think there may be some confusion about how the <span class="math inline">\(xBA\)</span> is computed, I thought I would describe the computation with an example. But the main purpose of this post is to advocate the use of a new measure which I call Hits Added which may be useful in describing a player’s hitting performance beyond what is predicted on the basis of the launch variables. We describe some of the best and worst player seasons and careers with respect to the Hits Added measure.</p>
+</section>
+<section id="expected-batting-average-1" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="expected-batting-average-1"><span class="header-section-number">4.2</span> Expected Batting Average</h3>
+<p>As described on the Statcast Expected Leaderboard, expected outcomes are helpful in measuring the skill in batted ball contact removing the effect of defense or ballpark. Given the launch angle and exit velocity of a batted ball, one estimates the probability of a hit. Accumulating all of these hit probabilities over all balls in play, one computes the expected count of hits xH, and then computes an Expected Batting Average by the formula</p>
+<p><span class="math display">\[
+xBA = \frac{xH}{AB}
+\]</span> Let’s illustrate this computation for Juan Soto and Bryce Harper for the 2020 season. Here are the basic count statistics.</p>
+<p><img src="figures/avg/avg42.png" class="img-fluid" style="width:75.0%"></p>
+<p>For each of Harper’s 150 balls-in-play, we estimate the probability of a a hit. Accumulating these probabilities, one obtains <span class="math inline">\(xH\)</span> = 57.9 expected hits. Dividing this by his at-bats (<span class="math inline">\(AB\)</span> = 150 + 43 - 2 - 1 = 190), we get an expected <span class="math inline">\(BA\)</span> of <span class="math inline">\(xBA\)</span> = 0.305. For Sota, we obtain <span class="math inline">\(xH\)</span> = 50.8 and an <span class="math inline">\(xBA\)</span> value of 50.8 / (126 + 28) = 0.330. Note from the table that the <span class="math inline">\(xBA\)</span> values are much closer than the <span class="math inline">\(BA\)</span> values for the two players.</p>
+<p><img src="figures/avg/avg43.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="how-do-we-estimate-the-hit-probabilities" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="how-do-we-estimate-the-hit-probabilities"><span class="header-section-number">4.3</span> How Do We Estimate the Hit Probabilities?</h3>
+<p>If you have been reading my blog, you know that I like to use generalized additive modeling (GAM) as a general method for fitting nonlinear patterns to data. Specifically, I have fit a GAM of the form <span class="math display">\[
+logit(p(H)) = s(LA, LS),
+\]</span> where <span class="math inline">\(s()\)</span> is a smooth function of the launch angle and exit velocity as implemented in the <code>gam()</code> function in the <code>mgcv</code> package. Statcast uses a different method in its computation of these estimated hit probabilities. I have compared the two estimation methods (for example, see this post) and it appears that the GAM method (using the default number of basis functions in <code>gam()</code>) gives probability estimates that are somewhat inaccurate particularly in the area of (<code>LA, LS</code>) values where hits are likely. So I will use the Statcast estimated probabilities here that are conveniently available as a variable in the Statcast dataset. I think the GAM method will work fine using a larger number of basis functions.</p>
+</section>
+<section id="hits-added" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="hits-added"><span class="header-section-number">4.4</span> Hits Added</h3>
+<p>In a baseball standings, one computes the runs scored and runs allowed for each team and using the Pythagorean relationship, one can compute a Pythagorean expected number of wins. The number of team wins above the Pythagorean expectation is commonly called “Pythagorean Luck”. In a similar fashion, we are interested in learning about the performance of a hitter beyond what is explained by the launch variable measurements. We have the expected hits calculation <span class="math inline">\(xH\)</span>. One is interested in the number of hits the hitter obtains over what is expected – we will call this the “Hits Added” measure:</p>
+<p><span class="math display">\[
+HA = H - xH.
+\]</span></p>
+<p>Hits Added is attractive in that it has a clear interpretation in terms of hits – it represents the additional number of hits a batter gets over what would be expected based on his launch angle and exit velocity measurements. In our example, Harper had a hits added value of <span class="math inline">\(HA\)</span> = 51 - 57.9 = -6.9 and Sosa had <span class="math inline">\(HA\)</span> = 54 - 50.8 = 3.2. Perhaps Harper had a negative value due to his spray angle (he tends to pull the ball and is easily defended) while Sosa had a positive value due to his speed? (This conjecture invites further study.)</p>
+</section>
+<section id="standardized-scores" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="standardized-scores"><span class="header-section-number">4.5</span> Standardized Scores</h3>
+<p>There is a sample size effect here since large values of <span class="math inline">\(HA\)</span> will tend to be more variable than small values of <span class="math inline">\(HA\)</span>. A standard way to adjust for this sample size effect is to compute the standardized or <span class="math inline">\(Z\)</span>-score</p>
+<p><span class="math display">\[
+Z = \frac{HA}{\sqrt{EH}}
+\]</span></p>
+<p>Most of the <span class="math inline">\(Z\)</span>-scores will tend to fall between -2 and 2. So extreme values of HA correspond to values of <span class="math inline">\(Z\)</span> that are either larger than 2 or smaller than -2. I have demonstrated in an earlier post that <span class="math inline">\(Z\)</span> is meaningful in that it appears to measure a hitter’s ability (through spray angle or speed or something else) to obtain hits. If one constructs a scatterplot of the <span class="math inline">\(Z\)</span> scores for regular players two successive seasons, say 2018 and 2019, the correlation will be about 0.35.</p>
+<p>Here’s a graph of the <span class="math inline">\(Z\)</span>-scores against the balls in play for hitters in the 2019 season where a smoother has been added to see the pattern. Interestingly, there is a positive trend in the smooth which indicates that the regular players with more BIP tend to have positive <span class="math inline">\(Z\)</span>-scores. (Their hit counts exceed what would be expected given their launch variables.)</p>
+<p><img src="figures/avg/avg44.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="best-and-worst-hitters-in-the-statcast-era" class="level3" data-number="4.6">
+<h3 data-number="4.6" class="anchored" data-anchor-id="best-and-worst-hitters-in-the-statcast-era"><span class="header-section-number">4.6</span> Best and Worst Hitters in the Statcast Era</h3>
+<p>Now that we have six seasons of Statcast data (2015 through 2020), I thought it would be interesting in finding the best and worst player-seasons with respect to hits added. In addition, it would be interesting to find the hitters who had the highest and lowest cumulative hits added during the Statcast era.</p>
+<p>Focusing on hitters with at least 200 BIP in a season, I found 51 player/seasons where the standardized score <span class="math inline">\(Z\)</span>&nbsp;exceeded 2. The number of hits added for these seasons ranged from 15 to 53 with a median of 25. Dee Gordon had three extreme seasons and nine hitters (Xander Bogaerts, Jose Altuve, Jean Segura, Ender Inciarte, Jonathan Villar, Odubel Herrera, Kris Bryant, Eddie Rosario) each had two extreme seasons. At the low end was only one player/season (Ryan Howard in 2015) where the standardized score&nbsp;<span class="math inline">\(Z&lt;−2\)</span>.</p>
+<p><img src="figures/avg/avg45.png" class="img-fluid" style="width:50.0%"></p>
+<p>It would also be interesting to see which players gained and lost the most hits over the entire Statcast era (2015 - 2020). Here is the top 10 list – note that Xander Bogart, Dee Gordon and Jose Altuve stand out.</p>
+<p>Here is the bottom 10 list – Albert Pujols lost the most hits (beyond what would be expected in terms of launch variables). Googling “Albert Pujols slow”, I found this article that claims that Pujols was the slowest player in MLB in 2017.</p>
+<p><img src="figures/avg/avg46.png" class="img-fluid" style="width:50.0%"></p>
+</section>
+<section id="pitcher-perspective" class="level3" data-number="4.7">
+<h3 data-number="4.7" class="anchored" data-anchor-id="pitcher-perspective"><span class="header-section-number">4.7</span> Pitcher Perspective?</h3>
+<p>This entire exercise above was done from a hitter’s perspective. The obvious question is whether it is useful to consider the use of the <span class="math inline">\(Z\)</span>-score for pitchers. So I repeated the above exploration for pitchers during the Statcast era. Here are some findings.</p>
+<ul>
+<li><p>When one constructs a scatterplot of the <span class="math inline">\(Z\)</span>-scores for pitchers for successive seasons, one sees little association (<span class="math inline">\(r\)</span> = 0.04). This graph suggests there is little evidence that pitchers have the ability to control hits beyond what is predicted based on the launch variables.</p></li>
+<li><p>Looking for extreme pitcher-seasons, I only found only 8 extreme high and 2 extreme low Z-scores. From a pitcher’s perspective, low is good and they corresponded to Daniel Mengden and Michael Wacha.</p></li>
+<li><p>Also I looked for cumulative hits added among pitchers in the Statcast era. The best pitcher from a <span class="math inline">\(HA\)</span> criterion was Julio Teheran who saved 44 hits over the six-season period. The worst pitcher was Matthew Boyd who added 73.4 hits over the Statcast period.</p></li>
+</ul>
+<p>In summary, the hits added or subtracted values for pitchers were much smaller than the corresponding values for hitters. Of course, pitchers have some control over launch angle, but beyond the launch variables, it doesn’t appear that pitchers have much control on the Hit/Out outcome.</p>
+</section>
+<section id="some-takeaways" class="level3" data-number="4.8">
+<h3 data-number="4.8" class="anchored" data-anchor-id="some-takeaways"><span class="header-section-number">4.8</span> Some Takeaways</h3>
+<ul>
+<li><p>A Better Measure? Looking at the Statcast Leaderboard, I don’t think the definition of xBA is that meaningful since one is dividing the expected hits by AB. (I think it would make more sense to divide xH by BIP.) I think the Hits Added measure is easier to understand since we are focusing on the count of hits.</p></li>
+<li><p>How to Estimate the Hit Probabilities. It was surprising that GAM provided poor estimates at hit probabilities, but perhaps (as Tom Tango) suggested, it is due to the nature of the (LA, LS) region which is likely to result in a hit.</p></li>
+<li><p>HA is a Batter Characteristic. I showed in an earlier post that the variability in launch speeds or hit rates is primarily due to differences between batters than differences between pitchers. Similarly, hits added appears to be more a measure of hitting ability rather than pitching ability. Hitters who are able to direct their balls in play or have good speed will likely have positive HA values.</p></li>
+</ul>
+</section>
+</section>
+<section id="predicting-avg-using-xba-and-a-multilevel-model" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="predicting-avg-using-xba-and-a-multilevel-model"><span class="header-section-number">5</span> Predicting AVG using XBA and a Multilevel Model</h2>
+<section id="introduction-2" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">5.1</span> Introduction</h3>
 <p>I’ve been doing some exploring of batting data for the 2017 season, trying to better understand the advantages that the Astros hitters may have had by stealing signs. In the process, I thought it might be better to work with expected batting average (xBA) rather than batting average (BA) since it is more stable and reflective of a player’s hitting ability. That brought up a interesting side question – how much better is xBA than BA in prediction? And how does xBA compare with my favorite statistical method – multilevel modeling – in predicting future BA? This post is devoted to exploring this side question.</p>
 </section>
-<section id="the-prediction-problem" class="level3" data-number="4.2">
-<h3 data-number="4.2" class="anchored" data-anchor-id="the-prediction-problem"><span class="header-section-number">4.2</span> The Prediction Problem</h3>
+<section id="the-prediction-problem" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="the-prediction-problem"><span class="header-section-number">5.2</span> The Prediction Problem</h3>
 <p>Let’s pose the prediction problem. Suppose we divide all of the ball-in-play events in a particular season randomly into two equal parts – we’ll call one part the Training data and the second part the Test data. We are interested in using players’ in-play batting averages in the Training dataset to predict their in-play batting averages in the Test dataset. (We’ll focus this prediction for non-pitchers who have a reasonable number of balls in play.) We describe several ways of making these predictions.</p>
 </section>
-<section id="using-the-in-play-ba" class="level3" data-number="4.3">
-<h3 data-number="4.3" class="anchored" data-anchor-id="using-the-in-play-ba"><span class="header-section-number">4.3</span> Using the In-Play BA</h3>
+<section id="using-the-in-play-ba" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="using-the-in-play-ba"><span class="header-section-number">5.3</span> Using the In-Play BA</h3>
 <p>The obvious thing to do is to use a player’s BA on balls in play in the Training data to predict his BA in the future Test data. The problem is that this in-play BA is a type of batting measure that has a large “luck” component and it really does not do a good job in predicting future performance. Okay, the current BA is crummy in prediction – can we do better?</p>
 </section>
-<section id="using-the-expected-ba" class="level3" data-number="4.4">
-<h3 data-number="4.4" class="anchored" data-anchor-id="using-the-expected-ba"><span class="header-section-number">4.4</span> Using the Expected BA</h3>
+<section id="using-the-expected-ba" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="using-the-expected-ba"><span class="header-section-number">5.4</span> Using the Expected BA</h3>
 <p>Recently there has been a lot of attention in using launch variables such as launch velocity and launch speed to develop a better measure of batting ability. Suppose we use our Training data to fit a model of the form</p>
 <p><span class="math display">\[
 Prob(Hit) = s(LS, LA)
@@ -328,12 +407,12 @@ Prob(Hit) = s(LS, LA)
 <p>On a side note, I think that Expected BA statistics are helpful in many contexts. For example, here is a graph showing how the xBA measure depends on the count (2017 season data).</p>
 <p><img src="figures/avg/avg14.png" class="img-fluid" style="width:75.0%"></p>
 </section>
-<section id="using-a-multilevel-model" class="level3" data-number="4.5">
-<h3 data-number="4.5" class="anchored" data-anchor-id="using-a-multilevel-model"><span class="header-section-number">4.5</span> Using a Multilevel Model</h3>
+<section id="using-a-multilevel-model" class="level3" data-number="5.5">
+<h3 data-number="5.5" class="anchored" data-anchor-id="using-a-multilevel-model"><span class="header-section-number">5.5</span> Using a Multilevel Model</h3>
 <p>The use of Expected BA is attractive since it is using additional information, namely the launch velocity and launch angle measurements. But there is a simpler method that focus on the simultaneous estimation of a set of batting abilities. We ignore the launch variables and just fit an exchangeable model to the set of hitting probabilities. The number of hits in play <span class="math inline">\(y\)</span> is assumed to follow a binomial distribution with probability of hit <span class="math inline">\(p\)</span>. The set of hitting probabilities <span class="math inline">\(p_1, ..., p_N\)</span> are assumed to follow a common beta curve with shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. The beta parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are assigned weakly informative distributions. Given hitting data for a group of a players, this model is quick to fit, and it provides estimates for the batting probabilities that can be used to predict the BA in the future test data.</p>
 </section>
-<section id="a-prediction-contest-which-method-does-best" class="level3" data-number="4.6">
-<h3 data-number="4.6" class="anchored" data-anchor-id="a-prediction-contest-which-method-does-best"><span class="header-section-number">4.6</span> A Prediction Contest – Which Method Does Best?</h3>
+<section id="a-prediction-contest-which-method-does-best" class="level3" data-number="5.6">
+<h3 data-number="5.6" class="anchored" data-anchor-id="a-prediction-contest-which-method-does-best"><span class="header-section-number">5.6</span> A Prediction Contest – Which Method Does Best?</h3>
 <p>Okay, here is a simple experiment to show how these three prediction methods perform. I’m using 2017 data, although this procedure can be applied for any season data.</p>
 <ul>
 <li><p>In 2017, we have 126,625 batted ball plays excluding sacrifices. I randomly divide these plays into a Training dataset of 63,312 batted ball plays and a Test dataset of 63,313 plays. By randomly dividing the BIP, I am avoiding any effect due to the month of the season.</p></li>
@@ -345,8 +424,8 @@ Prob(Hit) = s(LS, LA)
 <p>Here are the results of my prediction contest. We see that the multilevel predictions are best, followed by xBA and BA.</p>
 <p><img src="figures/avg/avg15.png" class="img-fluid" style="width:75.0%"></p>
 </section>
-<section id="what-have-we-learned" class="level3" data-number="4.7">
-<h3 data-number="4.7" class="anchored" data-anchor-id="what-have-we-learned"><span class="header-section-number">4.7</span> What Have We Learned?</h3>
+<section id="what-have-we-learned" class="level3" data-number="5.7">
+<h3 data-number="5.7" class="anchored" data-anchor-id="what-have-we-learned"><span class="header-section-number">5.7</span> What Have We Learned?</h3>
 <p>If you try to replicate my experiment you will get slightly different results since I am randomly dividing the 2017 data into Training and Test parts. (Actually I provide the random number seed so you can replicate this work.) Even if you don’t use my random number seed, you’ll discover the following main results:</p>
 <ul>
 <li><p>The poorest estimate of future BA is the observed BA which is not surprising. One really can’t take a batting average very seriously if you are interested in predicting future performance.</p></li>
@@ -354,8 +433,8 @@ Prob(Hit) = s(LS, LA)
 <li><p>This is a bit surprising since no information about launch conditions is being used in the multilevel model estimates. Basically, the multilevel model estimates shrink the raw BA’s towards an overall average, where the degree of shrinkage depends on the luck/skill characteristics of the batting measure. (For a batting average, you’ll get a relatively large degree of shrinkage since BA has a large luck component.)</p></li>
 </ul>
 </section>
-<section id="some-comments" class="level3" data-number="4.8">
-<h3 data-number="4.8" class="anchored" data-anchor-id="some-comments"><span class="header-section-number">4.8</span> Some Comments</h3>
+<section id="some-comments" class="level3" data-number="5.8">
+<h3 data-number="5.8" class="anchored" data-anchor-id="some-comments"><span class="header-section-number">5.8</span> Some Comments</h3>
 <ul>
 <li><p>Value of Expected BA. I don’t want to sound too critical of expected BA. Researchers have understood that BA’s are pretty unstable and and using additional information in the launch conditions will lead to better predictions of BA.</p></li>
 <li><p>Multilevel Modeling. I hope this simple exercise will help to convince the reader of the value of multilevel modeling. This is an intelligent way of combining information from different sources and is especially relevant for baseball data. It is difficult to understand patterns when one has a limited amount of data for individual players and one has to combine data for many players to understand the underlying behavior of baseball measures. Here is one of my posts where I describe multilevel modeling to estimate batting abilities for Efron and Morris’ famous example.</p></li>
@@ -364,8 +443,8 @@ Prob(Hit) = s(LS, LA)
 </ul>
 </section>
 </section>
-<section id="redrawing-steven-jay-goulds-graph" class="level2" data-number="5">
-<h2 data-number="5" class="anchored" data-anchor-id="redrawing-steven-jay-goulds-graph"><span class="header-section-number">5</span> Redrawing Steven Jay Gould’s Graph</h2>
+<section id="redrawing-steven-jay-goulds-graph" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="redrawing-steven-jay-goulds-graph"><span class="header-section-number">6</span> Redrawing Steven Jay Gould’s Graph</h2>
 <p>The late Harvard paleontologist and baseball fan Steven Jay Gould wrote a famous study on the disappearance of the .400 batting average in baseball in his book Triumph and Tragedy in Mudville: A Lifelong Passion for Baseball. Essentially his argument was that (1) the variation in batting averages among “regular” players has showed a steady decrease over time, (2) great hitters are moved towards the average due to this smaller variation, and so (3) it is harder to get a .400 average.</p>
 <p>Gould used a graph to show the decrease in the standard deviation of batting averages over time. Michael Friendly has discussed the problems in Gould’s graph and shown an improved graph. Since I’m currently teaching principles of statistical graphics, I thought it would be helpful to show how one can use the <code>Lahman</code> package together with the <code>dplyr</code> and <code>ggplot2</code> packages to replicate Gould’s display and an improved one.</p>
 <p>First we start by collecting the number of hits, at-bats, walks, hit-by-pitches, and SFs for all players and seasons from the Lahman Batting data frame.</p>
@@ -403,17 +482,17 @@ S.regular &lt;- filter(S2, AB &amp;gt;= min.AB)</code></pre>
 <p><img src="figures/avg/avg18.png" class="img-fluid" style="width:75.0%"></p>
 <p>This interesting pattern of OBP sd’s probably deserves more study. For example, how has the spread of the OBPs of the first batter in the lineup changed over time? Are there other variables (such as strikeout rates) that might impact the spread of the OBPs? Generally, it would be interesting to better understand the reasons for the changes in variation over time.</p>
 </section>
-<section id="construct-heat-maps-for-avg" class="level2" data-number="6">
-<h2 data-number="6" class="anchored" data-anchor-id="construct-heat-maps-for-avg"><span class="header-section-number">6</span> Construct Heat Maps for AVG</h2>
+<section id="construct-heat-maps-for-avg" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="construct-heat-maps-for-avg"><span class="header-section-number">7</span> Construct Heat Maps for AVG</h2>
 <p>Williams and Underwood’s famous book The Science of Hitting (originally published in 1970) contains the following remarkable graph that shows Ted Williams’ batting average in different areas of the strike zone. &nbsp;(I wonder how this data was collected over 45 years ago?)</p>
 <p><img src="figures/avg/avg19.png" class="img-fluid" style="width:40.0%"></p>
 <p>In this blog post, I’ll provide a general overview of how to construct a similar graph using the ggplot2 package with pitchFX data, and use that as a springboard to present alternative graphical views of areas of “hot” and “cold” hitting.</p>
-<section id="the-data" class="level3" data-number="6.1">
-<h3 data-number="6.1" class="anchored" data-anchor-id="the-data"><span class="header-section-number">6.1</span> The Data</h3>
+<section id="the-data" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="the-data"><span class="header-section-number">7.1</span> The Data</h3>
 <p>Using the pitchRx package, I downloaded pitch data for five months of the 2016 season. &nbsp;I create a data frame with the variables <code>gameday_link</code>, <code>num</code>, <code>Batter</code>, <code>X</code>, <code>Z</code>, and <code>Event</code>. &nbsp;For my purposes, all I need is the name of the batter, the pitch location (<code>X</code> and <code>Z</code>) and the Event. &nbsp;Actually, the data frame only contains information on the last pitch in each plate appearance, since I’m interested in the relationship between the location of the final pitch and the PA outcome.</p>
 </section>
-<section id="mike-trout" class="level3" data-number="6.2">
-<h3 data-number="6.2" class="anchored" data-anchor-id="mike-trout"><span class="header-section-number">6.2</span> Mike Trout</h3>
+<section id="mike-trout" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="mike-trout"><span class="header-section-number">7.2</span> Mike Trout</h3>
 <p>Here are the steps to produce a “Williams/Underwood” style of graph for Mike Trout’s batting average in the 2016 season</p>
 <ul>
 <li>Restrict the events to only official at-bats (remove walks, etc) and define a <code>Hit</code> variable which is 1 for a hit and 0 for an out.</li>
@@ -422,24 +501,24 @@ S.regular &lt;- filter(S2, AB &amp;gt;= min.AB)</code></pre>
 </ul>
 <p><img src="figures/avg/avg20.png" class="img-fluid" style="width:75.0%"></p>
 </section>
-<section id="a-contour-plot" class="level3" data-number="6.3">
-<h3 data-number="6.3" class="anchored" data-anchor-id="a-contour-plot"><span class="header-section-number">6.3</span> A Contour Plot</h3>
+<section id="a-contour-plot" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="a-contour-plot"><span class="header-section-number">7.3</span> A Contour Plot</h3>
 <p>Although the above graph is nice, it is hard to detect the sweet spot (actually Williams and Underwood used different colors to help the reader find the hot zone). &nbsp;But if one uses a finer grid of points, say 50 by 50, we can create alternative displays that better communicate hot and cold zones.</p>
 <p>One possibility is a contour plot. &nbsp;Here I construct a contour plot (using the <code>geom_contour()</code> function) specifying contour lines at .2, .3, and .4. &nbsp;For a pretty large area in the middle of the strike zone, Trout is a .400+ hitter.</p>
 <p><img src="figures/avg/avg21.png" class="img-fluid" style="width:75.0%"></p>
 </section>
-<section id="categorizing-avg" class="level3" data-number="6.4">
-<h3 data-number="6.4" class="anchored" data-anchor-id="categorizing-avg"><span class="header-section-number">6.4</span> Categorizing AVG</h3>
+<section id="categorizing-avg" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="categorizing-avg"><span class="header-section-number">7.4</span> Categorizing AVG</h3>
 <p>If we are really interested in ranges of batting averages, then a reasonable thing to do is to create a new variable that categorizes the AVG into the intervals (0, 100), (100, 200), etc, and then plot the categorized values using different colors.</p>
 <p><img src="figures/avg/avg22.png" class="img-fluid" style="width:75.0%"></p>
 </section>
-<section id="celebrating-the-cubs-with-heat-maps" class="level3" data-number="6.5">
-<h3 data-number="6.5" class="anchored" data-anchor-id="celebrating-the-cubs-with-heat-maps"><span class="header-section-number">6.5</span> Celebrating the Cubs with Heat Maps</h3>
+<section id="celebrating-the-cubs-with-heat-maps" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="celebrating-the-cubs-with-heat-maps"><span class="header-section-number">7.5</span> Celebrating the Cubs with Heat Maps</h3>
 <p>One of my colleagues mentioned heat maps and R in the same sentence (he prefers MATLAB so it was notable that he mentioned R). &nbsp;It is straightforward to create heat maps of AVG over the strike zone using the <code>geom_tile()</code> function. &nbsp;In honor of the Cubs clinching a playoff spot, I show heat maps for two right handed hitters, Kris Bryant and Addison Russell, and two left-handed hitters Anthony Rizzo and Chris Coghlan. &nbsp;Remember that these graphs are from the catcher’s perspective. &nbsp;It is interesting that all of the hitters seem to like balls in the middle and outside of the strike zone (for the righties, outside is on the right, and for lefties, outside is on the left).</p>
 <p><img src="figures/avg/avg23.png" class="img-fluid" style="width:75.0%"></p>
 </section>
-<section id="things-to-try" class="level3" data-number="6.6">
-<h3 data-number="6.6" class="anchored" data-anchor-id="things-to-try"><span class="header-section-number">6.6</span> Things to Try</h3>
+<section id="things-to-try" class="level3" data-number="7.6">
+<h3 data-number="7.6" class="anchored" data-anchor-id="things-to-try"><span class="header-section-number">7.6</span> Things to Try</h3>
 <p>Hopefully this post has gotten folks interested in trying these displays. &nbsp;Here are some directions for future work.</p>
 <ul>
 <li>Instead of hit/out, one could define a success as hitting a home run, and see the sweet spot for hitting a home run for different batters.</li>
@@ -447,32 +526,32 @@ S.regular &lt;- filter(S2, AB &amp;gt;= min.AB)</code></pre>
 <li>Since Statcast provides the exit velocity for each ball, it would be interesting to look at contours of exit velocity of balls-in-play by pitch location. How does a batter’s sweet spot vary by the arm of the pitcher?</li>
 </ul>
 </section>
-<section id="r-code" class="level3" data-number="6.7">
-<h3 data-number="6.7" class="anchored" data-anchor-id="r-code"><span class="header-section-number">6.7</span> R Code</h3>
+<section id="r-code" class="level3" data-number="7.7">
+<h3 data-number="7.7" class="anchored" data-anchor-id="r-code"><span class="header-section-number">7.7</span> R Code</h3>
 <p>A function <code>heat_plot()</code> that will produce this type of heat graph can be found at my Github gist site.&nbsp; The inputs are the name of the batter, the data frame containing the <code>pitchRx</code> data, and an indicator if you want to see probability of a hit or the probability of a home run.</p>
 </section>
 </section>
-<section id="the-vanishing-300-batting-average" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="the-vanishing-300-batting-average"><span class="header-section-number">7</span> The Vanishing 300 Batting Average</h2>
-<section id="introduction-2" class="level3" data-number="7.1">
-<h3 data-number="7.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">7.1</span> Introduction</h3>
+<section id="the-vanishing-300-batting-average" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="the-vanishing-300-batting-average"><span class="header-section-number">8</span> The Vanishing 300 Batting Average</h2>
+<section id="introduction-3" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">8.1</span> Introduction</h3>
 <p>When one thinks of a great offensive hitter, several measures come to mind such as the count of home runs, on-base percentage, or a batting average. For example, the number 61 will always be associated with Roger Maris’s HR total in the 1961 season, and .406 is associated with Ted Williams’ AVG in 1941. We likely won’t see a .400 AVG again, but the .300 AVG is still valued by modern players. Given the current decline in baseball hitting, that raises several questions. How common is a .300 AVG hitter? Specifically, how has the number of .300 hitters changed in the last 50 years of baseball? After we address this issue, we’ll look more carefully at the distribution of all qualifying AVGs of hitters for the last 50 years. (Spoiler alert: there are some interesting deviations from a normal curve.) By the way, 1969 seemed to be a good starting point for my investigation, since 1968 was the “year of the pitcher” when the AL batting crown was won by Carl Yastrzemski with a mere .301 AVG.</p>
 <p>As you probably know, I make a big distinction between batting ability and batting performance. A player may get 30 out of 100 AB so his batting performance is AVG = 30 / 100 = .300. But that doesn’t mean that the player’s batting ability, that is, his chance of getting a hit in a single AB is .300 or higher. (In fact, I’d doubt this player really is a .300 ability hitter since his .300 performance is based on only 100 AB.) In the last part of this post, I’ll use a random effects model to estimate the hitting probabilities of all qualifying batters in a season. By using these batting ability estimates we can explore the number of true .300 hitters in the MLB in the past 50 seasons.</p>
 </section>
-<section id="number-of-qualifying-300-hitters" class="level3" data-number="7.2">
-<h3 data-number="7.2" class="anchored" data-anchor-id="number-of-qualifying-300-hitters"><span class="header-section-number">7.2</span> Number of Qualifying 300 Hitters</h3>
+<section id="number-of-qualifying-300-hitters" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="number-of-qualifying-300-hitters"><span class="header-section-number">8.2</span> Number of Qualifying 300 Hitters</h3>
 <p>First, using the Lahman database, we find the number of .300 hitters in each season. We restrict attention to qualifying hitters who have at least 3.1 *G plate appearances where G is the number of games played in a season (this is usually 162 with the exception of several strike-shortened seasons). Here’s a plot of the number of .300 hitters. This number ranged between 15 and 30 from 1969 through 1990, and the number dramatically increased to 40-50 in the years 1990 through 2000. Since the 2000 season, the number of .300 hitters has been in free fall mode – there were 14 of these hitters in the 2018 season.</p>
 <p><img src="figures/avg/avg30.png" class="img-fluid" style="width:75.0%"></p>
 </section>
-<section id="exploring-all-qualifying-avgs" class="level3" data-number="7.3">
-<h3 data-number="7.3" class="anchored" data-anchor-id="exploring-all-qualifying-avgs"><span class="header-section-number">7.3</span> Exploring all Qualifying AVGs</h3>
+<section id="exploring-all-qualifying-avgs" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="exploring-all-qualifying-avgs"><span class="header-section-number">8.3</span> Exploring all Qualifying AVGs</h3>
 <p>After constructing this graph, I was interested in looking more carefully at all qualifying AVGs for the past 50 seasons. I rounded each AVG to three decimal places and I’ve plotted the count of each possible AVG below.</p>
 <p><img src="figures/avg/avg31.png" class="img-fluid" style="width:75.0%"></p>
 <p>Since the shape looks pretty symmetric, it motivates fitting this distribution with a normal curve. I’ve added a normal curve with mean 0.278 and standard deviation 0.027 to the plot.</p>
 <p><img src="figures/avg/avg32.png" class="img-fluid" style="width:75.0%"></p>
 </section>
-<section id="deviations-from-normality" class="level3" data-number="7.4">
-<h3 data-number="7.4" class="anchored" data-anchor-id="deviations-from-normality"><span class="header-section-number">7.4</span> Deviations from Normality</h3>
+<section id="deviations-from-normality" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="deviations-from-normality"><span class="header-section-number">8.4</span> Deviations from Normality</h3>
 <p>How do these AVGs differ from normality? It is hard to tell from the above graph. But for each AVG value, I can compute the Pearson residual defined by</p>
 <p><span class="math inline">\(R = \frac{Observed - Expected}{\sqrt{Expected}}\)</span></p>
 <p>If the normal model is suitable, one expects these residuals to fall between -2 and 2. A graph of the residuals is shown below.</p>
@@ -483,8 +562,8 @@ S.regular &lt;- filter(S2, AB &amp;gt;= min.AB)</code></pre>
 <li><p>Another thing we notice is that the normal curve does a poor job in predicting low AVGs (like Chris Davis’ recent .168 AVG) and high AVGs (like Mookie Betts’ .346 and the other high AVGs in this period). Really the normal curve is not suitable for batting averages – the distribution of observed AVGs tends to have flatter tails than the normal.</p></li>
 </ul>
 </section>
-<section id="estimating-the-number-of-true-300-hitters" class="level3" data-number="7.5">
-<h3 data-number="7.5" class="anchored" data-anchor-id="estimating-the-number-of-true-300-hitters"><span class="header-section-number">7.5</span> Estimating the Number of True 300 Hitters</h3>
+<section id="estimating-the-number-of-true-300-hitters" class="level3" data-number="8.5">
+<h3 data-number="8.5" class="anchored" data-anchor-id="estimating-the-number-of-true-300-hitters"><span class="header-section-number">8.5</span> Estimating the Number of True 300 Hitters</h3>
 <p>As I mentioned earlier, I am interested not in the number of .300 hitters, but in the number of hitters whose batting probability exceeds .300. To find this number, I need to fit a model to season hitting data to estimate the hitting probabilities for all players. Here is one common statistical model for accomplishing this: first one assumes that the number of hits <span class="math inline">\(y_j\)</span> for the jth player is binomial(<span class="math inline">\(AB_j, p_j\)</span>). Then one assumes the logit probabilities logit <span class="math inline">\(p_1\)</span>, …, logit <span class="math inline">\(p_N\)</span> are normal with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\tau\)</span>. The second-stage parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\tau\)</span> are unknown and assigned a weakly informative prior.</p>
 <p>I am going to make one adjustment to this random effects model. I am going to assume the logit probabilities are distributed from a Cauchy density (instead of a normal) with unknown location and scale parameters. This adjustment will impact the hitting probability estimates, especially for outlying AVGs. (We saw above that batting averages tend not to be normally distributed. Likewise, I don’t believe hitting probabilities are normally distributed and the Cauchy density allows for more flexible distributions of hitting probabilities.)</p>
 <p>I am not going to describe the JAGS fitting procedure here. But below I graph the observed AVGs against the probability estimates for all 2018 players. For players with AVGs close to the middle of the distribution, the estimates will shrink or adjust the observed H / AB towards the middle AVG. But for extreme AVG players like Chris Davis and Mookie Betts, the degree of shrinkage is much less. Basically, we are treating these outliers differently – we see these .168 and .346 AVGS as special and we only perform modest shrinkage towards the mean.</p>
@@ -493,8 +572,8 @@ S.regular &lt;- filter(S2, AB &amp;gt;= min.AB)</code></pre>
 <p>I repeat this fitting procedure for each of 50 seasons and graph the number of true 300 hitters (that is, the number of players with .300+ estimated hitting probabilities). In the early seasons, the number of true 300 hitters was on average 5, it climbed to 15-25 in the 1995 - 2000 seasons, and is on a downward trend in recent seasons. I would not be surprised if this number approaches zero in a few seasons.</p>
 <p><img src="figures/avg/avg35.png" class="img-fluid" style="width:75.0%"></p>
 </section>
-<section id="closing-comments" class="level3" data-number="7.6">
-<h3 data-number="7.6" class="anchored" data-anchor-id="closing-comments"><span class="header-section-number">7.6</span> Closing Comments</h3>
+<section id="closing-comments" class="level3" data-number="8.6">
+<h3 data-number="8.6" class="anchored" data-anchor-id="closing-comments"><span class="header-section-number">8.6</span> Closing Comments</h3>
 <p>Here are some general takeaways or themes in this discussion.</p>
 <ul>
 <li><p>What is a .300 batting average? This post has shown that a meaning of .300 batting average really has changed through the history of baseball. In the 2000 season, a .300 AVG was relatively common and currently it is pretty rare. Will the .300 AVG disappear?</p></li>
@@ -504,16 +583,16 @@ S.regular &lt;- filter(S2, AB &amp;gt;= min.AB)</code></pre>
 </ul>
 </section>
 </section>
-<section id="making-sense-of-a-batting-average" class="level2" data-number="8">
-<h2 data-number="8" class="anchored" data-anchor-id="making-sense-of-a-batting-average"><span class="header-section-number">8</span> Making Sense of a Batting Average</h2>
-<section id="introduction-a-twitter-post" class="level3" data-number="8.1">
-<h3 data-number="8.1" class="anchored" data-anchor-id="introduction-a-twitter-post"><span class="header-section-number">8.1</span> Introduction: A Twitter Post</h3>
+<section id="making-sense-of-a-batting-average" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="making-sense-of-a-batting-average"><span class="header-section-number">9</span> Making Sense of a Batting Average</h2>
+<section id="introduction-a-twitter-post" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="introduction-a-twitter-post"><span class="header-section-number">9.1</span> Introduction: A Twitter Post</h3>
 <p>Last week, Tom Tango posted an observation on Twitter from watching the first game of the World Series.</p>
 <p><img src="figures/avg/avg36.png" class="img-fluid" style="width:75.0%"></p>
 <p>In this post Tango was making a sarcastic comment about the batting average AVG that is well-known to be a poor measure among sabermetricians of the quality of a hitter. But I suspect that the media will continue to show a player’s AVG. Instead of just criticizing the AVG, why don’t we try to get a better understanding of this traditional batting measure? Here I’ll review my perspective of a batting average that decomposes AVG into two parts. Although I agree that the batting average by itself isn’t currently that informative or interpretable, we’ll see that the components of AVG are helpful in understanding the batter’s abilities. Note that I am using the word ability – an estimate at a batter’s ability can be very different from the batter’s actual performance. (I’ll contrast measures of performance with estimates of ability below.)</p>
 </section>
-<section id="a-batting-average-is-the-product-of-two-rates" class="level3" data-number="8.2">
-<h3 data-number="8.2" class="anchored" data-anchor-id="a-batting-average-is-the-product-of-two-rates"><span class="header-section-number">8.2</span> A Batting Average is the Product of Two Rates</h3>
+<section id="a-batting-average-is-the-product-of-two-rates" class="level3" data-number="9.2">
+<h3 data-number="9.2" class="anchored" data-anchor-id="a-batting-average-is-the-product-of-two-rates"><span class="header-section-number">9.2</span> A Batting Average is the Product of Two Rates</h3>
 <p>Write the batting average as the product</p>
 <p><span class="math display">\[AVG = \frac{H}{AB} = \left(1 - \frac{SO}{AB}\right) \frac{H}{AB - SO}\]</span></p>
 <ul>
@@ -527,13 +606,13 @@ S.regular &lt;- filter(S2, AB &amp;gt;= min.AB)</code></pre>
 2 Juan Soto          0.818  0.429 0.351</code></pre>
 <p>DJ LeMahieu was better than Juan Soto in terms of putting balls into play, but Soto was better in getting hits on balls in play. If you present LeMahieu’s AVG as, say 0.364 (= 0.892 <span class="math inline">\(\times\)</span> 0.408), this provides some insight into LeMahieu’s batting performance. He seems to be effective in putting the ball into play since his in-play rate is close to 90%. This is especially notable in the 2020 baseball environment where strikeouts are pretty common.</p>
 </section>
-<section id="scatterplot-of-component-rates" class="level3" data-number="8.3">
-<h3 data-number="8.3" class="anchored" data-anchor-id="scatterplot-of-component-rates"><span class="header-section-number">8.3</span> Scatterplot of Component Rates</h3>
+<section id="scatterplot-of-component-rates" class="level3" data-number="9.3">
+<h3 data-number="9.3" class="anchored" data-anchor-id="scatterplot-of-component-rates"><span class="header-section-number">9.3</span> Scatterplot of Component Rates</h3>
 <p>Here’s a scatterplot of the component rates for the 2020 regular players. I have added lines corresponding to specific batting averages and I have represented LeMahieu’s and Soto’s performances by red points. Note the wide spread both in the in-play and hit-on-balls-in-play rates and the little relationship between the two rates.</p>
 <p><img src="figures/avg/avg37.png" class="img-fluid" style="width:75.0%"></p>
 </section>
-<section id="scatterplot-of-component-talents" class="level3" data-number="8.4">
-<h3 data-number="8.4" class="anchored" data-anchor-id="scatterplot-of-component-talents"><span class="header-section-number">8.4</span> Scatterplot of Component Talents</h3>
+<section id="scatterplot-of-component-talents" class="level3" data-number="9.4">
+<h3 data-number="9.4" class="anchored" data-anchor-id="scatterplot-of-component-talents"><span class="header-section-number">9.4</span> Scatterplot of Component Talents</h3>
 <p>One has to be careful in making sense of the above scatterplot since we had a shortened 2020 season and chance variation can play havoc on batting measures. One way to screen out the large binomial variation is to fit a random effects model to the collection of balls-in-play rates and fit the same model to the collection of BABIP rates. When you fit these models, the observed rates will be adjusted towards an average, and the degree of adjustment depends on the batting measure. The model estimates provide estimates at the batters’ talents that are better predictors of future performance than the observed rates. Here is an older post that describes the use of this random effects model to shrink batting averages.</p>
 <p>I’ve graphed a scatterplot of the estimated component talents using the same scale so we can easily compare the two scatterplots. (Again the red points correspond to the talents of LeMahieu and Soto.). The in-play rates are strongly driven by talent, so these model estimates adjust the observed in-play rates a small amount towards the average. In contrast, the BABIP rates are more “chancy” and the observed rates are shrunk strongly towards the average for these estimates. Although a few players had batting averages exceeding .350, the highest BA talent (DJ LeMahieu) was only .317.</p>
 <p><img src="figures/avg/avg38.png" class="img-fluid" style="width:75.0%"></p>
@@ -542,8 +621,8 @@ S.regular &lt;- filter(S2, AB &amp;gt;= min.AB)</code></pre>
 1 DJ LeMahieu   0.869       0.364      0.317
 2   Juan Soto   0.805       0.365      0.294</code></pre>
 </section>
-<section id="takeaways-1" class="level3" data-number="8.5">
-<h3 data-number="8.5" class="anchored" data-anchor-id="takeaways-1"><span class="header-section-number">8.5</span> Takeaways</h3>
+<section id="takeaways-1" class="level3" data-number="9.5">
+<h3 data-number="9.5" class="anchored" data-anchor-id="takeaways-1"><span class="header-section-number">9.5</span> Takeaways</h3>
 <ul>
 <li><p>Can we make sense of a batting average? There was a time in the past when a statement of a batting average was meaningful. For example, since Tony Gwynn rarely struck out, his .394 AVG in the 1994 season was interpretable. Gwynn’s .394 AVG reflected his remarkable success in getting hits on balls in play. (If Gwynn was playing today, I doubt that defenses would shift against him since Gwynn had the ability to hit to all fields.) In 2020 baseball AVG confounds two batting abilities – the ability to not strike out and the ability to get a hit on a BIP – so I don’t know how to interpret, say a .300 AVG. Since it is hard to make sense of the batting average, so one might question why media like to report this measure. But as explained here, the components of BA are interpretable.</p></li>
 <li><p>Will Fox Sports will replace AVG with something else? I guess the first step for Fox Sports or other networks is to replace AVG with a more meaningful or interpretable measure of batting performance. Probably the most obvious replacement would be the pair of measures OBP and SLG which can be combined by addition in the OPS measure. Although my component measures for AVG are somewhat intuitive, they are not that familiar to fans.</p></li>
@@ -556,14 +635,14 @@ BA = (1 - SO.Rate) \times (HR.Rate + (1 - HR.Rate) \times BABIP)
 <p>where <span class="math inline">\(SO.Rate = SO / AB\)</span>, <span class="math inline">\(HR.Rate = HR / (AB - SO)\)</span> and <span class="math inline">\(BABIP = (H - HR) / (AB - SO - HR)\)</span>. Since home runs are so prevalent, this decomposition can provide additional information about a batter’s home run ability and his ability to hit on a ball in play.</p>
 </section>
 </section>
-<section id="learning-about-batting-ability-using-components-of-batting-average" class="level2" data-number="9">
-<h2 data-number="9" class="anchored" data-anchor-id="learning-about-batting-ability-using-components-of-batting-average"><span class="header-section-number">9</span> Learning About Batting Ability Using Components of Batting Average</h2>
-<section id="what-is-a-batting-average" class="level3" data-number="9.1">
-<h3 data-number="9.1" class="anchored" data-anchor-id="what-is-a-batting-average"><span class="header-section-number">9.1</span> What is a Batting Average?</h3>
+<section id="learning-about-batting-ability-using-components-of-batting-average" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="learning-about-batting-ability-using-components-of-batting-average"><span class="header-section-number">10</span> Learning About Batting Ability Using Components of Batting Average</h2>
+<section id="what-is-a-batting-average" class="level3" data-number="10.1">
+<h3 data-number="10.1" class="anchored" data-anchor-id="what-is-a-batting-average"><span class="header-section-number">10.1</span> What is a Batting Average?</h3>
 <p>I know most baseball analysts don’t like a batting average since it isn’t a helpful measure of batting performance. But I think a batting average can be useful if it is expressed into components that involve strikeouts, home runs, and getting a hit on a ball in play. Here I focus on learning about batters’ hitting abilities and use a random effects model to learn about the ability aspects of the components of batting average. In this exercise, I illustrate the use of a new R package ggdensity that provides useful graphical displays of bivariate data.</p>
 </section>
-<section id="components-of-batting-average" class="level3" data-number="9.2">
-<h3 data-number="9.2" class="anchored" data-anchor-id="components-of-batting-average"><span class="header-section-number">9.2</span> Components of Batting Average</h3>
+<section id="components-of-batting-average" class="level3" data-number="10.2">
+<h3 data-number="10.2" class="anchored" data-anchor-id="components-of-batting-average"><span class="header-section-number">10.2</span> Components of Batting Average</h3>
 <p>Here is a decomposition of a batting average – using some algebra, one writes the batting average as</p>
 <p><span class="math display">\[BA = \frac{H}{AB} = (1 - SO.Rate) (HR.Rate + (1 - HR.Rate) BABIP)\]</span></p>
 <p>where</p>
@@ -574,14 +653,14 @@ BA = (1 - SO.Rate) \times (HR.Rate + (1 - HR.Rate) \times BABIP)
 </ul>
 <p>It is not helpful to talk about a player that “hits for average” since it is hard to understand the characteristics of the hitting talent that corresponds to, say, a .300 batting average. But I think it is advantageous to talk about batting ability using the components strikeout rate, home run rate, and BABIP. Strikeout rate relates to a player’s plate discipline and ability to make contact with the pitch and home run rate is a measure of a player’s slugging ability. One player might have a .320 batting average because he tends to put the ball in play (that is, a low strikeout rate) and has a high hit rate on balls put into play. In contrast, Aaron Judge’s current .310 average is likely a by-product of his high home run rate. We currently use slash stats (AVG / OBP / SLG) to describe a player’s hitting. Similarly it would seem reasonable to use another set of slash stats (SO.Rate / HR.Rate / BABIP) to describe the components of a player’s batting average.</p>
 </section>
-<section id="estimating-component-abilities" class="level3" data-number="9.3">
-<h3 data-number="9.3" class="anchored" data-anchor-id="estimating-component-abilities"><span class="header-section-number">9.3</span> Estimating Component Abilities</h3>
+<section id="estimating-component-abilities" class="level3" data-number="10.3">
+<h3 data-number="10.3" class="anchored" data-anchor-id="estimating-component-abilities"><span class="header-section-number">10.3</span> Estimating Component Abilities</h3>
 <p>I collected the SO.Rate, HR.Rate and BABIP for each batter with at least 100 AB in the 2021 season. Let <span class="math inline">\(\alpha_j, \beta_j, \theta_j\)</span> denote the SO and HR and BABIP probabilities for the <span class="math inline">\(j\)</span>th batter in my dataset.</p>
 <p>Each batter has three associated probabilities. I convert each probability to a logit – let <span class="math inline">\(\gamma_j = (\alpha_j, \beta_j, \theta_j)\)</span> denote the vector of logits for the <span class="math inline">\(j\)</span>th player. Assuming we have N players, we assume that the batter vectors <span class="math inline">\(\gamma_1, ..., \gamma_N\)</span> come from a multivariate normal distribution with unknown mean vector <span class="math inline">\(\mu\)</span> and variance-covariance matrix <span class="math inline">\(\Sigma\)</span>. Then the parameters <span class="math inline">\(\mu\)</span> and <span class="math inline">\(\Sigma\)</span> are assigned weakly informative prior distributions.</p>
 <p>I fit this model to our 2021 season data. I won’t go into the details of the estimation procedure here. I used JAGS and the <code>runjags</code> package to fit this model by Markov chain Monte Carlo. Using the simulation output, I estimated the SO, HR and BABIP probabilities for all players.</p>
 </section>
-<section id="graphs" class="level3" data-number="9.4">
-<h3 data-number="9.4" class="anchored" data-anchor-id="graphs"><span class="header-section-number">9.4</span> Graphs</h3>
+<section id="graphs" class="level3" data-number="10.4">
+<h3 data-number="10.4" class="anchored" data-anchor-id="graphs"><span class="header-section-number">10.4</span> Graphs</h3>
 <p>We compare the observed SO, HR and BABIP rates (on the logit scale) with the estimated logit probabilities for all players using the multilevel (random effects) model.</p>
 <p>Here is where we are applying the <code>ggdensity</code> package. When one visualizes distributions of two variables, then standard contour maps, say using the <code>geom_contour_filled()</code> function in ggplot2, are pretty but hard to interpret. The <code>ggdensity</code> package offers an attractive alternative – the function <code>geom_hdr()</code> is a replacement for the <code>ggplot2</code> function <code>geom_contour_filled()</code> that shows regions of highest probability content. By default, it will show one region containing 50% of the values, another region containing 80% of the values, and two larger regions showing respectively 95% and 99% of the values.</p>
 <p>Here we use these new contour graphs to display side-by-side scatterplots of the observed strikeout and home run rates (right) and the estimated strikeout and home run probabilities (left). Note several interesting things:</p>
@@ -595,12 +674,12 @@ BA = (1 - SO.Rate) \times (HR.Rate + (1 - HR.Rate) \times BABIP)
 <p><img src="figures/avg/avg40.png" class="img-fluid" style="width:75.0%"></p>
 <p><img src="figures/avg/avg41.png" class="img-fluid" style="width:75.0%"></p>
 </section>
-<section id="using-the-model-to-predict" class="level3" data-number="9.5">
-<h3 data-number="9.5" class="anchored" data-anchor-id="using-the-model-to-predict"><span class="header-section-number">9.5</span> Using the Model to Predict</h3>
+<section id="using-the-model-to-predict" class="level3" data-number="10.5">
+<h3 data-number="10.5" class="anchored" data-anchor-id="using-the-model-to-predict"><span class="header-section-number">10.5</span> Using the Model to Predict</h3>
 <p>One use of this model is to predict future batting performance. For example, since this model was based on 2021 season data, one can predict strikeout rates, home run rates and BABIP rates for the 2022 season. Suppose you have a player with a low strikeout rate, low home run rate and a high BABIP rate in 2022. Looking in the future, since strikeout rates and home run rates are ability-driven measures, I would anticipate small changes in these rates in a future season. In contrast, since BABIP rates are chance-driven, I would anticipate the high BABIP rate in in 2021 to drop close to the average BABIP in 2022. These type of predictions would be made automatically by simulating draws from the posterior predictive distribution.</p>
 </section>
-<section id="closing-remarks" class="level3" data-number="9.6">
-<h3 data-number="9.6" class="anchored" data-anchor-id="closing-remarks"><span class="header-section-number">9.6</span> Closing Remarks</h3>
+<section id="closing-remarks" class="level3" data-number="10.6">
+<h3 data-number="10.6" class="anchored" data-anchor-id="closing-remarks"><span class="header-section-number">10.6</span> Closing Remarks</h3>
 <ul>
 <li><p>Some years back I wrote a paper published in <em>Journal of Quantitative Analysis of Sports</em> on the estimation of batting average components. Since this journal has limited access, here is a arXiv version of the paper. The difference in the approach taken here is that I am assuming a multivariate normal prior on the component probabilities. This makes sense since I believe there is some positive association between a home run probability and a strikeout probability.</p></li>
 <li><p>I’ve written about these BA components in older posts. For example, here is a post where I focus on the the in-play rate 1 - SO / AB and the hit on all balls in play rate H / (AB - SO).</p></li>
