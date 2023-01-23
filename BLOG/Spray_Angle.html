@@ -495,7 +495,7 @@ geom_baseball(league = "MLB")</code></pre>
 <h2 data-number="8" class="anchored" data-anchor-id="a-shiny-app---babip-and-spray-angle"><span class="header-section-number">8</span> A Shiny App - BABIP and Spray Angle</h2>
 <section id="introduction-5" class="level3" data-number="8.1">
 <h3 data-number="8.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">8.1</span> Introduction</h3>
-<p>In the “Chance of Hit as Function of Launch Angle, Exit Velocity and Spray Angle” blog post, I illustrate the use of a generalized additive model to show how the probability of a in-play base hit depends on the launch angle, exit velocity and spray angle. Here I take an empirical approach and introduce the use of a Shiny app to show how the batting average on balls in play (BABIP) and related quantities depend on the spray angle.</p>
+<p>In the “Chance of Hit as Function of Launch Angle, Exit Velocity and Spray Angle” blog post, I illustrate the use of a generalized additive model to show how the probability of a in-play base hit depends on the launch angle, exit velocity and spray angle. Here I take a exploratory approach and introduce the use of a Shiny app to show how the batting average on balls in play (BABIP) and related quantities depend on the spray angle.</p>
 <p>There has been a recent emphasis on the use of defensive shifting in baseball and MLB has a new rule starting in the 2023 season to limit infield shifting. I thought it would be interesting to use this app to see the changes in BABIP in recent seasons. This look at the success of recent defensive alignments will be helpful when we get 2023 season data and explore the effect of the new MLB rule on these BABIP measures.</p>
 </section>
 <section id="data-and-inputs-to-the-shiny-app" class="level3" data-number="8.2">
@@ -508,35 +508,35 @@ geom_baseball(league = "MLB")</code></pre>
 <li><p>Batting average on balls in play <span class="math inline">\(BABIP = \frac{H}{BIP}\)</span></p></li>
 <li><p>Hits added <span class="math inline">\(HA = H - E(H)\)</span>, where</p></li>
 </ul>
-<p><span class="math inline">\(E(H)\)</span> is the expected count of hits given the launch angle and exit velocity measurements)</p>
+<p><span class="math inline">\(E(H)\)</span> is the expected count of hits given the launch angle and exit velocity measurements.</p>
 <ul>
 <li>the Z-score <span class="math inline">\(Z = \frac{HA}{\sqrt{E(H)}}\)</span>.</li>
 </ul>
-<p>The blog post “Expected Batting Average and Hits Added” describes the usefulness of the hits added and standardized version (Z) measures.</p>
+<p>The Z-score is a type of Pearson residual that divides the hits added by a standard error. The blog post “Expected Batting Average and Hits Added” describes the usefulness of the hits added and Z-score measures.</p>
 <p>Last one decides which seasons to compare among 2018, 2019, 2021 and 2022</p>
-<p>The adjusted spray angle values are grouped in the equally-spaced intervals (-45, -40), (-40, -35), …, (35, 40). The app plots the measure of interest against the bin midpoints where the color of the points and lines correspond to the season.</p>
+<p>The range of adjusted spray angle values are grouped in the equally-spaced intervals (-45, -40), (-40, -35), …, (35, 40). The app plots the measure of interest against the bin midpoints where the color of the points and lines correspond to the season.</p>
 </section>
 <section id="groundballs---comparing-the-2018-and-2022-seasons" class="level3" data-number="8.3">
 <h3 data-number="8.3" class="anchored" data-anchor-id="groundballs---comparing-the-2018-and-2022-seasons"><span class="header-section-number">8.3</span> Groundballs - Comparing the 2018 and 2022 Seasons</h3>
 <p>Since infield shifting is supposed to prevent hits on ground balls, we first consider this batted ball type. We select launch angle values between -80 and 10 degrees, hard hit balls from 90 to 120 mph, choose BABIP as our measure and select the 2018 and 2022 seasons.</p>
 <p><img src="figures/shift/shift35.png" class="img-fluid"></p>
-<p>The graph shows that the BABIP is smaller in the 2022 season (compared to 2018) for adjusted spray angles less than 15 degrees but the 2022 values are higher for spray angles exceeding 15 degrees.</p>
-<p>We can understand this improvement in terms of hits subtracted by selecting the HA option. Recall that HA measures the number of hits gained or lost beyond what is predicted based on the launch angle and exit velocity values.</p>
+<p>The graph shows that the BABIP is smaller in the 2022 season (compared to 2018) for adjusted spray angles less than 15 degrees but the 2022 BABIP values are higher for spray angles exceeding 15 degrees.</p>
+<p>We can understand the improvement in BABIP in terms of hits subtracted by selecting the hits added (HA) option. Recall that HA measures the number of hits gained or lost beyond what is predicted based on the launch angle and exit velocity values.</p>
 <p><img src="figures/shift/shift36.png" class="img-fluid"></p>
-<p>More ground balls are hit to the pull side, so the shifted defensive alignment tends to save more hits on the pull side then lost on the opposite side.</p>
+<p>Ground balls are are more likely hit to the pull side, so the shifted defensive alignment tends to save more hits on the pull side then lost on the opposite side.</p>
 </section>
 <section id="line-drives" class="level3" data-number="8.4">
 <h3 data-number="8.4" class="anchored" data-anchor-id="line-drives"><span class="header-section-number">8.4</span> Line Drives</h3>
-<p>Do the 2022 fielders go better in handling line drives? We change the launch angle range to between 10 and 25 degrees.</p>
+<p>Do the 2022 fielders go better in handling line drives? We answer this question by changing the range of the launch angle to 10 and 25 degrees.</p>
 <p><img src="figures/shift/shift37.png" class="img-fluid"></p>
 <p>It is interesting that the 2022 BABIP values are smaller than the 2018 values for these line drives for practically all values of adjusted spray angle. To understand this improvement in terms of hits, we choose the HA option.</p>
 <p><img src="figures/shift/shift38.png" class="img-fluid"></p>
 </section>
 <section id="fly-balls" class="level3" data-number="8.5">
 <h3 data-number="8.5" class="anchored" data-anchor-id="fly-balls"><span class="header-section-number">8.5</span> Fly Balls</h3>
-<p>How about fly balls corresponding to launch angles between 25 and 50 degrees? Obviously defensive positioning can’t impact home runs so we exclude home runs from this plot.</p>
+<p>How about fly balls corresponding to launch angle values between 25 and 50 degrees? Since defensive positioning can’t impact home runs, we exclude home runs in our computation of BABIP and hits added.</p>
 <p><img src="figures/shift/shift39.png" class="img-fluid"></p>
-<p>Here the size of the 2022 season improvement is less clear but the chance of a hit on these types of batted balls is relatively small.</p>
+<p>Here the size of the 2022 season improvement over the 2018 season is less clear but the chance of a hit on these types of batted balls is relatively small.</p>
 </section>
 <section id="some-details-on-the-shiny-app" class="level3" data-number="8.6">
 <h3 data-number="8.6" class="anchored" data-anchor-id="some-details-on-the-shiny-app"><span class="header-section-number">8.6</span> Some Details on the Shiny App</h3>
