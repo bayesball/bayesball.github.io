@@ -496,21 +496,24 @@ geom_baseball(league = "MLB")</code></pre>
 <section id="introduction-5" class="level3" data-number="8.1">
 <h3 data-number="8.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">8.1</span> Introduction</h3>
 <p>In the “Chance of Hit as Function of Launch Angle, Exit Velocity and Spray Angle” blog post, I illustrate the use of a generalized additive model to show how the probability of a in-play base hit depends on the launch angle, exit velocity and spray angle. Here I take an empirical approach and introduce the use of a Shiny app to show how the batting average on balls in play (BABIP) and related quantities depend on the spray angle.</p>
-<p>There has been a recent emphasis on the use of defensive shifting in baseball and MLB has a new rule starting in the 2023 season to limit infield shifting. I thought it would be interesting to use this app see the changes in BABIP in recent seasons. This look at the success of recent defensive alignments will be helpful when we get 2023 season data and explore the effect of the new MLB rule on these BABIP measures.</p>
+<p>There has been a recent emphasis on the use of defensive shifting in baseball and MLB has a new rule starting in the 2023 season to limit infield shifting. I thought it would be interesting to use this app to see the changes in BABIP in recent seasons. This look at the success of recent defensive alignments will be helpful when we get 2023 season data and explore the effect of the new MLB rule on these BABIP measures.</p>
 </section>
 <section id="data-and-inputs-to-the-shiny-app" class="level3" data-number="8.2">
 <h3 data-number="8.2" class="anchored" data-anchor-id="data-and-inputs-to-the-shiny-app"><span class="header-section-number">8.2</span> Data and Inputs to the Shiny App</h3>
 <p>I collect Statcast data for all balls put into play for the 2018, 2019, 2021 and 2022 seasons. For each ball in play, I collect the launch angle, launch speed, adjusted spray angle and the outcome of the ball in play (stored in the <code>events</code> varible). The spray angle is the horizontal angle of the ball put in play in degrees and the adjusted spray angle corrects the spray angle for the batter side so that negative values correspond to the pulled side and positive values correspond to the opposite side.</p>
 <p>Here are the inputs to my Shiny app:</p>
+<p>One selects a range of values of the launch angle and exit velocity of interest. This allows one to focus on ground balls, line drives, fly balls or pop ups hit at different speeds. One decides to include or exclude home runs in the graph.</p>
+<p>One decides on the measure of interest:</p>
 <ul>
-<li><p>One selects a range of values of the launch angle and exit velocity of interest. This allows one to focus on ground balls, line drives, fly balls or pop ups hit at different speeds.</p></li>
-<li><p>One decides to include or exclude home runs in the graph.</p></li>
-<li><p>One decides on the measure of interest, either the BABIP, the hits added (the quantity <span class="math inline">\(HA = H - E(H)\)</span> where <span class="math inline">\(E(H)\)</span> is the expected count of hits given the launch angle and exit velocity), or a Z-score which is <span class="math inline">\(HA / \sqrt{E(H)}\)</span>.</p></li>
+<li><p>Batting average on balls in play <span class="math inline">\(BABIP = \frac{H}{BIP}\)</span></p></li>
+<li><p>Hits added <span class="math inline">\(HA = H - E(H)\)</span>, where</p></li>
+</ul>
+<p><span class="math inline">\(E(H)\)</span> is the expected count of hits given the launch angle and exit velocity measurements)</p>
+<ul>
+<li>the Z-score <span class="math inline">\(Z = \frac{HA}{\sqrt{E(H)}}\)</span>.</li>
 </ul>
 <p>The blog post “Expected Batting Average and Hits Added” describes the usefulness of the hits added and standardized version (Z) measures.</p>
-<ul>
-<li>Last one decides which seasons to compare among 2018, 2019, 2021 and 2022</li>
-</ul>
+<p>Last one decides which seasons to compare among 2018, 2019, 2021 and 2022</p>
 <p>The adjusted spray angle values are grouped in the equally-spaced intervals (-45, -40), (-40, -35), …, (35, 40). The app plots the measure of interest against the bin midpoints where the color of the points and lines correspond to the season.</p>
 </section>
 <section id="groundballs---comparing-the-2018-and-2022-seasons" class="level3" data-number="8.3">
