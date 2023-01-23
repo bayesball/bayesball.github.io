@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2023-01-20">
+<meta name="dcterms.date" content="2023-01-23">
 
 <title>Spray Angle</title>
 <style>
@@ -115,6 +115,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#groundballs---comparing-the-2018-and-2022-seasons" id="toc-groundballs---comparing-the-2018-and-2022-seasons" class="nav-link" data-scroll-target="#groundballs---comparing-the-2018-and-2022-seasons"><span class="toc-section-number">8.3</span>  Groundballs - Comparing the 2018 and 2022 Seasons</a></li>
   <li><a href="#line-drives" id="toc-line-drives" class="nav-link" data-scroll-target="#line-drives"><span class="toc-section-number">8.4</span>  Line Drives</a></li>
   <li><a href="#fly-balls" id="toc-fly-balls" class="nav-link" data-scroll-target="#fly-balls"><span class="toc-section-number">8.5</span>  Fly Balls</a></li>
+  <li><a href="#some-details-on-the-shiny-app" id="toc-some-details-on-the-shiny-app" class="nav-link" data-scroll-target="#some-details-on-the-shiny-app"><span class="toc-section-number">8.6</span>  Some Details on the Shiny App</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -140,7 +141,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 20, 2023</p>
+      <p class="date">January 23, 2023</p>
     </div>
   </div>
   
@@ -153,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
 <p>This collection of blog posts from “Exploring Baseball Data with R” focuses on applications of the spray angle measurement in baseball.</p>
-<p>The spray angles of hitters is useful in understanding the best positioning of the defense. Sections 2 and 3 explore the use of defensive infield shifts between teams and the effectiveness of this strategy.</p>
+<p>Spray angles of hitters are useful in understanding the best positioning of the defense. Sections 2 and 3 explore the use of defensive infield shifts between teams and the effectiveness of this defensive strategy.</p>
 <p>Section 4 describes the use of a generalized additive model to show how the probability of a base hit depends on the launch angle, exit velocity and spray angle. This section describes how one computes the spray angle from Statcast data.</p>
 <p>A spray chart is the graph of the locations of a batter’s balls in play over the field. Sections 5 and 6 describe the construction of spray charts. Several Shiny apps are described that facilitate the comparison of spray charts between several batters of interest.</p>
 <p>Section 7 describes the relationship between the launch variables launch angle and exit velocity, zone location, and batted ball location. A Shiny app is described which allows one to select regions of one variable of interest (among launch variables, zone location, and batted ball location) and see how it affects values of the other two variables.</p>
@@ -494,41 +495,49 @@ geom_baseball(league = "MLB")</code></pre>
 <h2 data-number="8" class="anchored" data-anchor-id="a-shiny-app---babip-and-spray-angle"><span class="header-section-number">8</span> A Shiny App - BABIP and Spray Angle</h2>
 <section id="introduction-5" class="level3" data-number="8.1">
 <h3 data-number="8.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">8.1</span> Introduction</h3>
-<p>In the “Chance of Hit as Function of Launch Angle, Exit Velocity and Spray Angle” post, I illustrated the use of a generalized additive model to show how the probability of a in-play base hit depends on the launch angle, exit velocity and spray angle. Here I take an empirical approach and introduce the use of a Shiny app to show how the batting average on balls in play (BABIP) and related quantities depend on the spray angle.</p>
-<p>There has been a recent emphasis on the use of defensive shifting in baseball and MLB has a new rule starting in the 2023 season to limit infield shifting. I thought it would be interesting to use this app see the changes in BABIP in recent seasons. This will be helpful when we get 2023 season data and explore the effect of the new MLB rule on these BABIP measures.</p>
+<p>In the “Chance of Hit as Function of Launch Angle, Exit Velocity and Spray Angle” blog post, I illustrate the use of a generalized additive model to show how the probability of a in-play base hit depends on the launch angle, exit velocity and spray angle. Here I take an empirical approach and introduce the use of a Shiny app to show how the batting average on balls in play (BABIP) and related quantities depend on the spray angle.</p>
+<p>There has been a recent emphasis on the use of defensive shifting in baseball and MLB has a new rule starting in the 2023 season to limit infield shifting. I thought it would be interesting to use this app see the changes in BABIP in recent seasons. This look at the success of recent defensive alignments will be helpful when we get 2023 season data and explore the effect of the new MLB rule on these BABIP measures.</p>
 </section>
 <section id="data-and-inputs-to-the-shiny-app" class="level3" data-number="8.2">
 <h3 data-number="8.2" class="anchored" data-anchor-id="data-and-inputs-to-the-shiny-app"><span class="header-section-number">8.2</span> Data and Inputs to the Shiny App</h3>
-<p>I collected Statcast data for all balls put into play for the 2018, 2019, 2021 and 2022 seasons. For each ball in play, I collect the launch angle, launch speed, adjusted spray angle and the outcome of the ball in play (stored in the <code>events</code> varible). The spray angle is the horizontal angle of the ball put in play in degrees and the adjusted spray angle corrects the spray angle for the batter side so that negative values correspond to the pulled side and positive values correspond to the opposite side.</p>
+<p>I collect Statcast data for all balls put into play for the 2018, 2019, 2021 and 2022 seasons. For each ball in play, I collect the launch angle, launch speed, adjusted spray angle and the outcome of the ball in play (stored in the <code>events</code> varible). The spray angle is the horizontal angle of the ball put in play in degrees and the adjusted spray angle corrects the spray angle for the batter side so that negative values correspond to the pulled side and positive values correspond to the opposite side.</p>
 <p>Here are the inputs to my Shiny app:</p>
 <ul>
 <li><p>One selects a range of values of the launch angle and exit velocity of interest. This allows one to focus on ground balls, line drives, fly balls or pop ups hit at different speeds.</p></li>
 <li><p>One decides to include or exclude home runs in the graph.</p></li>
 <li><p>One decides on the measure of interest, either the BABIP, the hits added (the quantity <span class="math inline">\(HA = H - E(H)\)</span> where <span class="math inline">\(E(H)\)</span> is the expected count of hits given the launch angle and exit velocity), or a Z-score which is <span class="math inline">\(HA / \sqrt{E(H)}\)</span>.</p></li>
-<li><p>Last one decides which seasons to compare among 2018, 2019, 2021 and 2022</p></li>
 </ul>
-<p>The adjusted spray angle values are grouped in the intervals (-45, -40), (-40, -35), …, (35, 40). The app plots the measure of interest against the bin midpoints where the color of the points and lines correspond to the season.</p>
+<p>The blog post “Expected Batting Average and Hits Added” describes the usefulness of the hits added and standardized version (Z) measures.</p>
+<ul>
+<li>Last one decides which seasons to compare among 2018, 2019, 2021 and 2022</li>
+</ul>
+<p>The adjusted spray angle values are grouped in the equally-spaced intervals (-45, -40), (-40, -35), …, (35, 40). The app plots the measure of interest against the bin midpoints where the color of the points and lines correspond to the season.</p>
 </section>
 <section id="groundballs---comparing-the-2018-and-2022-seasons" class="level3" data-number="8.3">
 <h3 data-number="8.3" class="anchored" data-anchor-id="groundballs---comparing-the-2018-and-2022-seasons"><span class="header-section-number">8.3</span> Groundballs - Comparing the 2018 and 2022 Seasons</h3>
 <p>Since infield shifting is supposed to prevent hits on ground balls, we first consider this batted ball type. We select launch angle values between -80 and 10 degrees, hard hit balls from 90 to 120 mph, choose BABIP as our measure and select the 2018 and 2022 seasons.</p>
 <p><img src="figures/shift/shift35.png" class="img-fluid"></p>
-<p>The graph shows that the BABIP is smaller in the 2022 season for adjusted spray angles less than 15 degrees but the 2022 values are higher for spray angles exceeding 15 degrees.</p>
-<p>We can understand this improvement in terms of hits by selecting the HA option. Recall that HA measures the number of hits gained or lost beyond what is predicted based on the launch angle and exit velocity values.</p>
-<p><img src="figures/shift/shift36.png" class="img-fluid"> More ground balls are hit to the pull side, so the shifted defensive alignment tends to save more hits on the pull side.</p>
+<p>The graph shows that the BABIP is smaller in the 2022 season (compared to 2018) for adjusted spray angles less than 15 degrees but the 2022 values are higher for spray angles exceeding 15 degrees.</p>
+<p>We can understand this improvement in terms of hits subtracted by selecting the HA option. Recall that HA measures the number of hits gained or lost beyond what is predicted based on the launch angle and exit velocity values.</p>
+<p><img src="figures/shift/shift36.png" class="img-fluid"></p>
+<p>More ground balls are hit to the pull side, so the shifted defensive alignment tends to save more hits on the pull side then lost on the opposite side.</p>
 </section>
 <section id="line-drives" class="level3" data-number="8.4">
 <h3 data-number="8.4" class="anchored" data-anchor-id="line-drives"><span class="header-section-number">8.4</span> Line Drives</h3>
-<p>Do the 2022 fielders go better in handling line drives? We change the launch angle range to 10 to 25 degrees.</p>
+<p>Do the 2022 fielders go better in handling line drives? We change the launch angle range to between 10 and 25 degrees.</p>
 <p><img src="figures/shift/shift37.png" class="img-fluid"></p>
-<p>It is interesting that the 2022 BABIP values are smaller than the 2018 values for practically all values of adjusted spray angle. To understand this improvement in terms of hits, we choose the HA option.</p>
+<p>It is interesting that the 2022 BABIP values are smaller than the 2018 values for these line drives for practically all values of adjusted spray angle. To understand this improvement in terms of hits, we choose the HA option.</p>
 <p><img src="figures/shift/shift38.png" class="img-fluid"></p>
 </section>
 <section id="fly-balls" class="level3" data-number="8.5">
 <h3 data-number="8.5" class="anchored" data-anchor-id="fly-balls"><span class="header-section-number">8.5</span> Fly Balls</h3>
 <p>How about fly balls corresponding to launch angles between 25 and 50 degrees? Obviously defensive positioning can’t impact home runs so we exclude home runs from this plot.</p>
 <p><img src="figures/shift/shift39.png" class="img-fluid"></p>
-<p>Here the size of the improvement is less clear but the chance of a hit on these types of batted balls is relatively small.</p>
+<p>Here the size of the 2022 season improvement is less clear but the chance of a hit on these types of batted balls is relatively small.</p>
+</section>
+<section id="some-details-on-the-shiny-app" class="level3" data-number="8.6">
+<h3 data-number="8.6" class="anchored" data-anchor-id="some-details-on-the-shiny-app"><span class="header-section-number">8.6</span> Some Details on the Shiny App</h3>
+<p>The Shiny app is available as the function <code>BABIP_spray()</code> in the <code>ShinyBaseball</code> package. The balls in play data from the four seasons is stored as the data frame <code>scip_four_seasons</code> in the package. All of the graphics work is implemented in the function <code>plot_bip_rate()</code> in the <code>app.R</code> file.</p>
 </section>
 </section>
 
