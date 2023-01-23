@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jim Albert">
+<meta name="dcterms.date" content="2023-01-20">
+
+<title>Spray Angle</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="Spray_Angle_files/libs/clipboard/clipboard.min.js"></script>
+<script src="Spray_Angle_files/libs/quarto-html/quarto.js"></script>
+<script src="Spray_Angle_files/libs/quarto-html/popper.min.js"></script>
+<script src="Spray_Angle_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="Spray_Angle_files/libs/quarto-html/anchor.min.js"></script>
+<link href="Spray_Angle_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="Spray_Angle_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="Spray_Angle_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="Spray_Angle_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="Spray_Angle_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a></li>
+  <li><a href="#exploring-infield-shifting" id="toc-exploring-infield-shifting" class="nav-link" data-scroll-target="#exploring-infield-shifting"><span class="toc-section-number">2</span>  Exploring Infield Shifting</a>
+  <ul class="collapse">
+  <li><a href="#jake-arrieta" id="toc-jake-arrieta" class="nav-link" data-scroll-target="#jake-arrieta"><span class="toc-section-number">2.1</span>  Jake Arrieta</a></li>
+  <li><a href="#shifting-per-plate-appearance" id="toc-shifting-per-plate-appearance" class="nav-link" data-scroll-target="#shifting-per-plate-appearance"><span class="toc-section-number">2.2</span>  Shifting per Plate Appearance</a></li>
+  <li><a href="#shifts-by-teams" id="toc-shifts-by-teams" class="nav-link" data-scroll-target="#shifts-by-teams"><span class="toc-section-number">2.3</span>  Shifts by Teams</a></li>
+  <li><a href="#shifts-for-players" id="toc-shifts-for-players" class="nav-link" data-scroll-target="#shifts-for-players"><span class="toc-section-number">2.4</span>  Shifts for Players</a></li>
+  <li><a href="#is-shifting-effective" id="toc-is-shifting-effective" class="nav-link" data-scroll-target="#is-shifting-effective"><span class="toc-section-number">2.5</span>  Is Shifting Effective?</a></li>
+  <li><a href="#outcome-of-groundballs" id="toc-outcome-of-groundballs" class="nav-link" data-scroll-target="#outcome-of-groundballs"><span class="toc-section-number">2.6</span>  Outcome of Groundballs</a></li>
+  <li><a href="#value-of-plate-appearance" id="toc-value-of-plate-appearance" class="nav-link" data-scroll-target="#value-of-plate-appearance"><span class="toc-section-number">2.7</span>  Value of Plate Appearance</a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="toc-section-number">2.8</span>  Takeaways</a></li>
+  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code"><span class="toc-section-number">2.9</span>  R Code</a></li>
+  </ul></li>
+  <li><a href="#defensive-shifts-and-ground-ball-batting-averages" id="toc-defensive-shifts-and-ground-ball-batting-averages" class="nav-link" data-scroll-target="#defensive-shifts-and-ground-ball-batting-averages"><span class="toc-section-number">3</span>  Defensive Shifts and Ground Ball Batting Averages</a>
+  <ul class="collapse">
+  <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1"><span class="toc-section-number">3.1</span>  Introduction</a></li>
+  <li><a href="#shifting-rates-of-the-teams" id="toc-shifting-rates-of-the-teams" class="nav-link" data-scroll-target="#shifting-rates-of-the-teams"><span class="toc-section-number">3.2</span>  Shifting Rates of the Teams</a></li>
+  <li><a href="#batting-averages-on-grounders" id="toc-batting-averages-on-grounders" class="nav-link" data-scroll-target="#batting-averages-on-grounders"><span class="toc-section-number">3.3</span>  Batting Averages on Grounders</a></li>
+  <li><a href="#looking-deeper-at-team-infield-defense" id="toc-looking-deeper-at-team-infield-defense" class="nav-link" data-scroll-target="#looking-deeper-at-team-infield-defense"><span class="toc-section-number">3.4</span>  Looking Deeper at Team Infield Defense</a></li>
+  <li><a href="#is-it-worthwhile-to-shift" id="toc-is-it-worthwhile-to-shift" class="nav-link" data-scroll-target="#is-it-worthwhile-to-shift"><span class="toc-section-number">3.5</span>  Is it Worthwhile to Shift?</a></li>
+  <li><a href="#summing-up" id="toc-summing-up" class="nav-link" data-scroll-target="#summing-up"><span class="toc-section-number">3.6</span>  Summing Up</a></li>
+  </ul></li>
+  <li><a href="#chance-of-hit-as-function-of-launch-angle-exit-velocity-and-spray-angle" id="toc-chance-of-hit-as-function-of-launch-angle-exit-velocity-and-spray-angle" class="nav-link" data-scroll-target="#chance-of-hit-as-function-of-launch-angle-exit-velocity-and-spray-angle"><span class="toc-section-number">4</span>  Chance of Hit as Function of Launch Angle, Exit Velocity and Spray Angle</a>
+  <ul class="collapse">
+  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"><span class="toc-section-number">4.1</span>  Introduction</a></li>
+  <li><a href="#general-thoughts-about-spray-angle" id="toc-general-thoughts-about-spray-angle" class="nav-link" data-scroll-target="#general-thoughts-about-spray-angle"><span class="toc-section-number">4.2</span>  General Thoughts About Spray Angle</a></li>
+  <li><a href="#the-model" id="toc-the-model" class="nav-link" data-scroll-target="#the-model"><span class="toc-section-number">4.3</span>  The Model</a></li>
+  <li><a href="#graph" id="toc-graph" class="nav-link" data-scroll-target="#graph"><span class="toc-section-number">4.4</span>  Graph</a></li>
+  <li><a href="#ground-ball-launch-angle-of-0-degrees" id="toc-ground-ball-launch-angle-of-0-degrees" class="nav-link" data-scroll-target="#ground-ball-launch-angle-of-0-degrees"><span class="toc-section-number">4.5</span>  Ground Ball (Launch Angle of 0 Degrees)</a></li>
+  <li><a href="#liner-launch-angle-of-20-degrees" id="toc-liner-launch-angle-of-20-degrees" class="nav-link" data-scroll-target="#liner-launch-angle-of-20-degrees"><span class="toc-section-number">4.6</span>  Liner (Launch Angle of 20 Degrees)</a></li>
+  <li><a href="#fly-ball-launch-angle-of-30-degrees" id="toc-fly-ball-launch-angle-of-30-degrees" class="nav-link" data-scroll-target="#fly-ball-launch-angle-of-30-degrees"><span class="toc-section-number">4.7</span>  Fly Ball (Launch Angle of 30 Degrees)</a></li>
+  <li><a href="#look-at-many-angles" id="toc-look-at-many-angles" class="nav-link" data-scroll-target="#look-at-many-angles"><span class="toc-section-number">4.8</span>  Look at Many Angles</a></li>
+  <li><a href="#looking-ahead" id="toc-looking-ahead" class="nav-link" data-scroll-target="#looking-ahead"><span class="toc-section-number">4.9</span>  Looking Ahead</a></li>
+  </ul></li>
+  <li><a href="#spray-charts-from-statcast-data" id="toc-spray-charts-from-statcast-data" class="nav-link" data-scroll-target="#spray-charts-from-statcast-data"><span class="toc-section-number">5</span>  Spray Charts from Statcast Data</a>
+  <ul class="collapse">
+  <li><a href="#review-of-statcast-posts" id="toc-review-of-statcast-posts" class="nav-link" data-scroll-target="#review-of-statcast-posts"><span class="toc-section-number">5.1</span>  Review of Statcast Posts</a></li>
+  <li><a href="#an-improved-spray-chart" id="toc-an-improved-spray-chart" class="nav-link" data-scroll-target="#an-improved-spray-chart"><span class="toc-section-number">5.2</span>  An Improved Spray Chart</a></li>
+  <li><a href="#measuring-pull" id="toc-measuring-pull" class="nav-link" data-scroll-target="#measuring-pull"><span class="toc-section-number">5.3</span>  Measuring “Pull”</a></li>
+  <li><a href="#questions-to-explore" id="toc-questions-to-explore" class="nav-link" data-scroll-target="#questions-to-explore"><span class="toc-section-number">5.4</span>  Questions to Explore</a></li>
+  </ul></li>
+  <li><a href="#spray-charts-using-the-sportyr-package" id="toc-spray-charts-using-the-sportyr-package" class="nav-link" data-scroll-target="#spray-charts-using-the-sportyr-package"><span class="toc-section-number">6</span>  Spray Charts Using the sportyR Package</a>
+  <ul class="collapse">
+  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3"><span class="toc-section-number">6.1</span>  Introduction</a></li>
+  <li><a href="#getting-started" id="toc-getting-started" class="nav-link" data-scroll-target="#getting-started"><span class="toc-section-number">6.2</span>  Getting Started</a></li>
+  <li><a href="#coordinate-system" id="toc-coordinate-system" class="nav-link" data-scroll-target="#coordinate-system"><span class="toc-section-number">6.3</span>  Coordinate System</a></li>
+  <li><a href="#plotting-statcast-batted-ball-data" id="toc-plotting-statcast-batted-ball-data" class="nav-link" data-scroll-target="#plotting-statcast-batted-ball-data"><span class="toc-section-number">6.4</span>  Plotting Statcast Batted Ball Data</a></li>
+  <li><a href="#an-example" id="toc-an-example" class="nav-link" data-scroll-target="#an-example"><span class="toc-section-number">6.5</span>  An Example</a></li>
+  <li><a href="#final-comments" id="toc-final-comments" class="nav-link" data-scroll-target="#final-comments"><span class="toc-section-number">6.6</span>  Final Comments</a></li>
+  </ul></li>
+  <li><a href="#linking-pitch-location-spray-chart-and-launch-variables" id="toc-linking-pitch-location-spray-chart-and-launch-variables" class="nav-link" data-scroll-target="#linking-pitch-location-spray-chart-and-launch-variables"><span class="toc-section-number">7</span>  Linking Pitch Location, Spray Chart and Launch Variables</a>
+  <ul class="collapse">
+  <li><a href="#introduction-4" id="toc-introduction-4" class="nav-link" data-scroll-target="#introduction-4"><span class="toc-section-number">7.1</span>  Introduction</a></li>
+  <li><a href="#the-display" id="toc-the-display" class="nav-link" data-scroll-target="#the-display"><span class="toc-section-number">7.2</span>  The Display</a></li>
+  <li><a href="#brushing-zone-location" id="toc-brushing-zone-location" class="nav-link" data-scroll-target="#brushing-zone-location"><span class="toc-section-number">7.3</span>  Brushing Zone Location</a></li>
+  <li><a href="#brushing-batted-ball-location" id="toc-brushing-batted-ball-location" class="nav-link" data-scroll-target="#brushing-batted-ball-location"><span class="toc-section-number">7.4</span>  Brushing Batted Ball Location</a></li>
+  <li><a href="#brushing-batted-ball-type" id="toc-brushing-batted-ball-type" class="nav-link" data-scroll-target="#brushing-batted-ball-type"><span class="toc-section-number">7.5</span>  Brushing Batted Ball Type</a></li>
+  <li><a href="#the-shiny-app---code-details" id="toc-the-shiny-app---code-details" class="nav-link" data-scroll-target="#the-shiny-app---code-details"><span class="toc-section-number">7.6</span>  The Shiny App - Code Details</a></li>
+  <li><a href="#closing-remarks" id="toc-closing-remarks" class="nav-link" data-scroll-target="#closing-remarks"><span class="toc-section-number">7.7</span>  Closing Remarks</a></li>
+  </ul></li>
+  <li><a href="#a-shiny-app---babip-and-spray-angle" id="toc-a-shiny-app---babip-and-spray-angle" class="nav-link" data-scroll-target="#a-shiny-app---babip-and-spray-angle"><span class="toc-section-number">8</span>  A Shiny App - BABIP and Spray Angle</a>
+  <ul class="collapse">
+  <li><a href="#introduction-5" id="toc-introduction-5" class="nav-link" data-scroll-target="#introduction-5"><span class="toc-section-number">8.1</span>  Introduction</a></li>
+  <li><a href="#data-and-inputs-to-the-shiny-app" id="toc-data-and-inputs-to-the-shiny-app" class="nav-link" data-scroll-target="#data-and-inputs-to-the-shiny-app"><span class="toc-section-number">8.2</span>  Data and Inputs to the Shiny App</a></li>
+  <li><a href="#groundballs---comparing-the-2018-and-2022-seasons" id="toc-groundballs---comparing-the-2018-and-2022-seasons" class="nav-link" data-scroll-target="#groundballs---comparing-the-2018-and-2022-seasons"><span class="toc-section-number">8.3</span>  Groundballs - Comparing the 2018 and 2022 Seasons</a></li>
+  <li><a href="#line-drives" id="toc-line-drives" class="nav-link" data-scroll-target="#line-drives"><span class="toc-section-number">8.4</span>  Line Drives</a></li>
+  <li><a href="#fly-balls" id="toc-fly-balls" class="nav-link" data-scroll-target="#fly-balls"><span class="toc-section-number">8.5</span>  Fly Balls</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Spray Angle</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jim Albert </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">January 20, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>This collection of blog posts from “Exploring Baseball Data with R” focuses on applications of the spray angle measurement in baseball.</p>
+<p>The spray angles of hitters is useful in understanding the best positioning of the defense. Sections 2 and 3 explore the use of defensive infield shifts between teams and the effectiveness of this strategy.</p>
+<p>Section 4 describes the use of a generalized additive model to show how the probability of a base hit depends on the launch angle, exit velocity and spray angle. This section describes how one computes the spray angle from Statcast data.</p>
+<p>A spray chart is the graph of the locations of a batter’s balls in play over the field. Sections 5 and 6 describe the construction of spray charts. Several Shiny apps are described that facilitate the comparison of spray charts between several batters of interest.</p>
+<p>Section 7 describes the relationship between the launch variables launch angle and exit velocity, zone location, and batted ball location. A Shiny app is described which allows one to select regions of one variable of interest (among launch variables, zone location, and batted ball location) and see how it affects values of the other two variables.</p>
+<p>Section 8 describes the use of a Shiny app that explores batted ball rates across different seasons. In this app, one can choose the type of batted ball and compare batting averages across seasons. This illustrates the effectiveness of defensive positioning in recent MLB seasons.</p>
+</section>
+<section id="exploring-infield-shifting" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="exploring-infield-shifting"><span class="header-section-number">2</span> Exploring Infield Shifting</h2>
+<section id="jake-arrieta" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="jake-arrieta"><span class="header-section-number">2.1</span> Jake Arrieta</h3>
+<p>Jake Arrieta recently got into the news by criticizing the Phillies for their&nbsp;poor use of defense shifts.&nbsp; Thinking about defense shifts, Baseball Savant recently made infield and outfield assignment information available and one can download this data using the baseballr package.&nbsp; Here we’ll introduce this new shifting data and do a brief exploration.&nbsp; Here are some questions to get us started:</p>
+<ul>
+<li>How does infield shifting vary among teams?</li>
+<li>Who are the current hitters who are most shifted?</li>
+<li>Is shifting effective?</li>
+</ul>
+<p>This won’t be a complete analysis, but it hopefully will get the interested reader going on his or her own analysis.</p>
+</section>
+<section id="shifting-per-plate-appearance" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="shifting-per-plate-appearance"><span class="header-section-number">2.2</span> Shifting per Plate Appearance</h3>
+<p>When you download the 2018 Statcast data for batters, there are two new variables&nbsp;“if_fielding_alignment” and&nbsp;“of_fielding_alignment” that indicate the defensive alignment in the infield and outfield.&nbsp; Since each row of the data frame represents a pitch, this allows for changes in the defense alignment for each pitch.&nbsp; Focusing on the infield alignment, there are three values – “Standard” indicates the usual positioning, “Infield shift” indicates there are three or more infielders on one side of 2nd base, and “Strategic” represents positioning that is neither Standard or Infield Shift.&nbsp; MLB provides a nice webpage describing these infield alignments.</p>
+<p>Although infield positioning can vary across pitches, we will focus on the positioning at the last pitch of a PA.&nbsp; For each PA,&nbsp; I collect (1) the top or bottom half of the inning, (2) the PA event, (3) the launch angle and launch speed of this last pitch, (4) the infield positioning, (5) the batter’s name and (6) the side of the batter.&nbsp; Knowing the home and away teams and the top/bottom of inning indicator, I can define a new variable “defense” which is the team that is playing defense for a particular half-inning.</p>
+</section>
+<section id="shifts-by-teams" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="shifts-by-teams"><span class="header-section-number">2.3</span> Shifts by Teams</h3>
+<p>One thing I know is that positioning can vary depending on the side of the hitter.&nbsp; For each team, I compute the percentage of infield shifts against right-handed batters and the percentage of infield shifts against left-handed batters.&nbsp; I plot a scatterplot of these percentages below.&nbsp; The red line is the line y = x –&nbsp; note that all points are above the line indicating that all teams are more likely to shift against left-handed batters.&nbsp; (These summaries are reported by Baseball Savant which agree with the values presented here.)</p>
+<p><img src="figures/shift/shift1.png" class="img-fluid" style="width:75.0%"></p>
+<p>The variation of shifting among the teams is remarkable.&nbsp; Houston will shift 60% of the time against left-handed hitters – in contrast, the Cubs rarely shift against either right-handed or left-handed hitters.&nbsp; We see the Phillies are above-average in their shifting tendency.&nbsp; The Yankees shift against left-handed hitters much like Houston, but they don’t shift as much against right-handed hitters.</p>
+</section>
+<section id="shifts-for-players" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="shifts-for-players"><span class="header-section-number">2.4</span> Shifts for Players</h3>
+<p>Since teams have detailed data on the spray angles of all hitters, one would suspect that some players are heavily shifted.&nbsp; Below for all players, I plot the percentage of infield shifts against the number of PAs – I label the players where the shifting percentage is larger than 80%. Chris Davis is currently the shift leader with 190 shifts out of 207 for a shift percentage of 92%. (ESPN recently commented on Chris Davis’ rough season from a batting perspective.&nbsp; Maybe these shifts are working against Davis.)</p>
+<p><img src="figures/shift/shift2.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="is-shifting-effective" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="is-shifting-effective"><span class="header-section-number">2.5</span> Is Shifting Effective?</h3>
+<p>Since teams appear to vary a lot in how they employ infield shifts, that raises the obvious question –&nbsp; does it work?&nbsp; This is a complicated question to answer, since one needs to consider a variety of different outcomes of a PA and see how each outcome varies by the defensive alignment.&nbsp; Let me present several tables – one that shows that infield shifting is effective and a second that suggests that it may not be that effective.</p>
+</section>
+<section id="outcome-of-groundballs" class="level3" data-number="2.6">
+<h3 data-number="2.6" class="anchored" data-anchor-id="outcome-of-groundballs"><span class="header-section-number">2.6</span> Outcome of Groundballs</h3>
+<p>I would think that infield shifts would prevent ground balls from being base hits.&nbsp; I focus only on balls in play where the launch angle is smaller than 10 degrees.&nbsp; Here is a table of the batting average (BA) under the three infield alignments – the “Standard” BA is 0.280 and it drops to a BA of 0.232 with an infield shift – so it appears to work using this criterion.</p>
+<p><img src="figures/shift/shift3.png" class="img-fluid" style="width:50.0%"></p>
+</section>
+<section id="value-of-plate-appearance" class="level3" data-number="2.7">
+<h3 data-number="2.7" class="anchored" data-anchor-id="value-of-plate-appearance"><span class="header-section-number">2.7</span> Value of Plate Appearance</h3>
+<p>But the above definition of success is pretty limited – we’re only considering balls in play that are ground balls.&nbsp; Suppose we weight the outcome of each plate appearance using the 2018 wOBA weights (obtained from FanGraphs).&nbsp; Here I find the wOBA (remember we are using 2018 data) for each of the three infield alignments.&nbsp; Now we get a different story – the “Standard” wOBA value is 0.311 and it increases to 0.320 with an infield shift.&nbsp; So hitters tend to be more successful in their PA when there is a shift.&nbsp; The “strategic” alignment produces a small change in the wOBA.</p>
+<p><img src="figures/shift/shift4.png" class="img-fluid" style="width:50.0%"></p>
+</section>
+<section id="takeaways" class="level3" data-number="2.8">
+<h3 data-number="2.8" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">2.8</span> Takeaways</h3>
+<ul>
+<li>I’m excited that this infield and outfield alignment data is now publicly available from Baseball Savant.&nbsp; The main intent here was to introduce the data and explain briefly why it should be of interest to us.</li>
+<li>It is interesting that teams vary greatly in how they shift.&nbsp; This seems to indicate that the jury is still out on the value of shifting.&nbsp; &nbsp;One general goal is reducing the number of runs scored by the batting team.&nbsp; It has been said that the Phillies have lost a particular number of runs this season due to their shifting strategy.&nbsp; It would be interested in explore this runs measures for all teams.</li>
+<li>Generally I’d encourage the interested reader to look at the value of shifting using different outcomes.&nbsp; I just presented two outcomes that gave varying conclusions. Here I focused on the shifting at the last pitch of the PA.&nbsp; It would also be good to look at the change in shifting within a plate appearance – since this data gives alignment data for each pitch, this type of analysis is possible.</li>
+<li>There are some interesting reads on the value of shifting in baseball.&nbsp; ESPN just had an article on this topic, and Russell Carleton in his book The Shift&nbsp;devotes an entire chapter to this topic – it is more complicated that one might think.</li>
+</ul>
+</section>
+<section id="r-code" class="level3" data-number="2.9">
+<h3 data-number="2.9" class="anchored" data-anchor-id="r-code"><span class="header-section-number">2.9</span> R Code</h3>
+<p>Once you get the Statcast data downloaded, this analysis is pretty straightforward using the tidyverse collection of packages.&nbsp; Here is the code I used for this work.</p>
+</section>
+</section>
+<section id="defensive-shifts-and-ground-ball-batting-averages" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="defensive-shifts-and-ground-ball-batting-averages"><span class="header-section-number">3</span> Defensive Shifts and Ground Ball Batting Averages</h2>
+<section id="introduction-1" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">3.1</span> Introduction</h3>
+<p>A few years ago, I introduced the new shifting data available in Baseball Savant and illustrated some basic exploration on shifting. As we know, infield shifting is currently prevalent in MLB baseball, although I am not sure we understand the total impact of defensive positioning on offense. In this post, I’ll use the 2019 Statcast data to explore the current infield shifting patterns of the 30 MLB teams. One main purpose of infield repositioning is to prevent ground balls from being base hits. So we’ll focus on batting average on ground balls and explore how this batting average depends on the batter side, the direction of the batted ball (in the pull or opposite sides of the field), and the defensive positioning. We’ll provide a brief justification of shifting and show some interesting differences and similarities how teams approach right and left-handed batters.</p>
+</section>
+<section id="shifting-rates-of-the-teams" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="shifting-rates-of-the-teams"><span class="header-section-number">3.2</span> Shifting Rates of the Teams</h3>
+<p>In the Statcast dataset, there is a variable <code>if_fielding_alignment</code> that indicates the fielding positioning for each pitch. Using the 2019 data, I collected the fielding positioning for the last pitch of each batter and, for each team, found the percentage of shifts for all left-handed hitters and the percentage of shifts for all right-handed hitters. A scatterplot of these percentages is shown below and the red line indicates where the “left” and “right” percentages are equal. Several interesting comments from this graph:</p>
+<p><img src="figures/shift/shift5.png" class="img-fluid" style="width:75.0%"></p>
+<p>Teams tend to shift more often for left-handed hitters. Minnesota is the only team who shifts against left and right-handed hitters the same rate. Toronto is more typical – they shifted about 45% of the time against left-handed hitters and only 15% against righties.</p>
+<p>There is a remarkable variation between the teams on their shifting rates. The LA Dodgers have high rates of shifting for all hitters. Boston, in contrast, almost never shifted against righties and shifted about half the time against lefties. Cleveland appears to rarely shift against hitters on either side.</p>
+<p>The shifting variability that we see indicates that teams may have different philosophies about the value of shifting. I may have thought that teams might be more similar since they have access to the same data and much of the research on the value of shifting.</p>
+<p>We’re going to focus on hits on ground balls, so the following graph displays the allowed BA on grounders from hitters on both sides. The LA Dodgers are the stingiest team in the sense that their allowed BA on groundballs is smallest against lefties and righties. In contrast, Detroit and Texas allow high BA’s against both types of hitters. Of course, defense positioning is only one variable relevant to BA. A team also needs infielders with good range to field ground balls in the holes. This graph indicates that teams vary quite a bit on this defensive statistic since batting averages of 0.24 and 0.32 are quite different.</p>
+<p><img src="figures/shift/shift6.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="batting-averages-on-grounders" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="batting-averages-on-grounders"><span class="header-section-number">3.3</span> Batting Averages on Grounders</h3>
+<p>Let’s focus on players’ batting average on grounders. First we compute the BA for left and right-sided batters when they hit in the pull and opposite side directions. As one would expect, players hit for a higher BA when they hit to the opposite side, although the difference between the BA for grounders hit in the opposite and pull directions is much more pronounced for left-sided hitters.</p>
+<p><img src="figures/shift/shift7.png" class="img-fluid" style="width:75.0%"></p>
+<p>Infield positioning plays a large role in the player’s BA on a ground ball. Below I show the ground ball BA for both batting sides against different fielding alignments (shift, standard, or strategic). Clearly, the shift alignment appears to result in a large drop in the batting average and the size of the drop seems greater for left-sided hitters.<br>
+<img src="figures/shift/shift8.png" class="img-fluid" style="width:75.0%"></p>
+<p>The next graph shows how the ground ball BA depends on the batter side, the hit direction (opposite or pull), and the field positioning. For example, the effect of an infield shift drops the BA of a leftie under 0.200 on balls hit to the pull side. But the shift has the effect of increasing the BA of a leftie over .500 to balls hit to the opposite side. Similar effects happen to right-sided hitters – shifts do well in preventing pulled ground balls from becoming hits at the expense of making it easier to get singles on opposite side ground balls.</p>
+<p><img src="figures/shift/shift9.png" class="img-fluid" style="width:75.0%"></p>
+<p>Of course, teams know which players tend to pull their ground balls. Below I show the percentage of pulled grounders for each batting side and each possible fielding alignment. As expected, the “shifted” batters are much more likely to pull their balls than the batters getting a standard fielding positioning.</p>
+<p><img src="figures/shift/shift10.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="looking-deeper-at-team-infield-defense" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="looking-deeper-at-team-infield-defense"><span class="header-section-number">3.4</span> Looking Deeper at Team Infield Defense</h3>
+<p>We saw earlier that teams differ substantially on their shifting strategy. Can we detect the differences between teams by taking a closer look at their abilities to prevent hits on ground balls?</p>
+<p>Let’s focus on balls hit to the pull side. For a right-handed hitter, we can round the spray angles in the pull side to the values of -45, -44, …, -1 degrees where 0 degrees is up the middle. For each team and each degree value, I compute the fraction of ground balls that are hits and plot a smooth of the hit fractions as a function of the angle. This graph below is what I get. What is remarkable about these 30 plots is the similarity in the appearance. For most teams, a hitter can generally get hits at the -5 and -25 degree positions for all teams. What this tells me is that teams tend to have similar infield alignments against right-handed hitters.</p>
+<p><img src="figures/shift/shift11.png" class="img-fluid" style="width:75.0%"></p>
+<p>Let’s do a similar thing for left-hand batters who hit ground balls to the pull side. I divide the spray angles to the values 1, 2, …, 45 degrees and plot a smooth of the batting averages against the angle for all 30 teams. Here the graphs are not similar. For example, the curves for three good fielding teams who shift a lot (LA, HOU, BAL) are quite different in shape than the curves for three teams (CLE, COL, CWS) who don’t shift as much. What this tells me is that teams really differ on how they defend left-handed hitters. Teams like LA really seem to defend well against lefties to the pull side and other teams like PHI or CWS have patterns similar to what you see for right-handed hitters to the pull side.</p>
+<p><img src="figures/shift/shift12.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="is-it-worthwhile-to-shift" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="is-it-worthwhile-to-shift"><span class="header-section-number">3.5</span> Is it Worthwhile to Shift?</h3>
+<p>Teams are gambling when they shift. They are hoping that the batter will pull the ground ball in the area where they have an extra fielder. But the batter has a better chance of getting a hit when the ground ball is hit to the opposite side. Is it a good bet for the defense?</p>
+<p>This table gives the BIP and BA for left-handed hitters under different strategies and different hitting sides. This information is helpful for answering the question (the same logic works for right-handed hitters).</p>
+<p><img src="figures/shift/shift13.png" class="img-fluid" style="width:75.0%"></p>
+<ul>
+<li><p>When a shift is employed, the opposite side BA on ground balls is 0.549 compared with 0.345 with Standard fielding.</p></li>
+<li><p>Since shift fielding is used for 2048 BIP, the batters gain 2048 (0.549 - 0.345) = 418 additional hits from the shift.</p></li>
+<li><p>But on the pull side, the hitter’s BA is 0.155 on the shift compared with 0.260 with standard fielding.</p></li>
+<li><p>Since shift fielding was used for 6785 BIP, batters lose 6785 (.260 - .155) = 712 hits from the shift.</p></li>
+<li><p>So overall, the batters lose 712 - 418 = 294 hits with the shift which indicates that it is desirable defensive strategy.</p></li>
+</ul>
+</section>
+<section id="summing-up" class="level3" data-number="3.6">
+<h3 data-number="3.6" class="anchored" data-anchor-id="summing-up"><span class="header-section-number">3.6</span> Summing Up</h3>
+<p>Some interesting takeaways from this exploration.</p>
+<ul>
+<li><p>Teams are very different in how they shift in the infield. I suppose teams have to work with the specific fielding talents of their infielders which may impact their defensive strategies.</p></li>
+<li><p>Teams treat left-handed hitters differently from right-handed hitters. For example, teams shift much more against left-handed hitters although it seems there is value to shift more against right-handed hitters.</p></li>
+<li><p>Looking at the BA against spray angle graph, there appears to be a standard fielding alignment for right-handed hitters that is used by all teams. In contrast, teams appear to have different strategies positioning against left-handed hitters.</p></li>
+<li><p>I have only considered the impact of shifting on BA on grounders. Certainly the value of shifting is more than defending grounders and it would be interesting to explore other offensive measures that are impacted by shifting.</p></li>
+</ul>
+</section>
+</section>
+<section id="chance-of-hit-as-function-of-launch-angle-exit-velocity-and-spray-angle" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="chance-of-hit-as-function-of-launch-angle-exit-velocity-and-spray-angle"><span class="header-section-number">4</span> Chance of Hit as Function of Launch Angle, Exit Velocity and Spray Angle</h2>
+<section id="introduction-2" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">4.1</span> Introduction</h3>
+<p>In previous posts, I’ve considered how the probability of a hit varies as a function of the Statcast variables launch angle and exit velocity.&nbsp; I haven’t looked carefully at the spray angle, although it is an important aspect of hitting. &nbsp;Here I’ll explore how the probability of hit varies as a function of all three variables, focusing on the spray angle effect.</p>
+</section>
+<section id="general-thoughts-about-spray-angle" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="general-thoughts-about-spray-angle"><span class="header-section-number">4.2</span> General Thoughts About Spray Angle</h3>
+<p>How does spray angle affect hitting? &nbsp;Some initial thoughts …</p>
+<ul>
+<li>For a ground ball, the direction is pretty important. &nbsp;We all know that ground balls up the middle tend to be hits, also ground balls hit along the first and third base lines. &nbsp;In contrast, ground balls hit towards the infielders tend to be outs.</li>
+<li>For balls hit in the air, the impact of the direction is different. &nbsp;Since the outfielders are positioned in left, center, and right fields, it is desirable (from the hitter’s perspective) to hit away from the fielders which means along the first and base lines or in the gaps between the fielders. Balls hit in the air towards the fielders tend to be caught for outs.</li>
+<li>We are familiar with “bloop hits” – these are the ones hit at a low speed that seem to be away from the fielders. &nbsp;Certainly the spray angle is relevant in this situation. Obtaining the Spray Angle</li>
+</ul>
+<p>The Statcast data does not give a direct measurement of spray angle. &nbsp;But it does contain variables <code>hc_x</code> and <code>hc_y</code> which relate to the location of the batted ball. &nbsp;I’ve plotted values of these variables for 2000 batted balls.</p>
+<p><img src="figures/shift/shift14.png" class="img-fluid" style="width:75.0%"></p>
+<p>Following Bill Petti’s post, I’ll do an initial transformation</p>
+<p>x = hc_x - 125.42, y = 198.27 - hc_y</p>
+<p>which flips these points around and makes the origin home plate. &nbsp;Here are 2000 values of (x, y). (I’ve added lines corresponding to the 1st and 3rd base lines which indicate that this reexpression is reasonable.)</p>
+<p><img src="figures/shift/shift15.png" class="img-fluid" style="width:75.0%"></p>
+<p>We want to convert the (x, y) field location to a spray angle. &nbsp;I’ve drawn a right triangle on the field below and labeled the batted ball point (x, y) and the spray angle phi. &nbsp;Using basic trig knowledge, we have that</p>
+<p><img src="figures/shift/shift16.png" class="img-fluid" style="width:75.0%"></p>
+<p>phi = atan(x / y) =&nbsp;atan((hc_x-125.42)/(198.27-hc_y))</p>
+<p>where atan is the inverse tan function.</p>
+<p>Last, we adjust for the side of the batter – if the batter is left-handed, we let phi1 be the negative value of phi, otherwise we let ph1 = phi&nbsp; (We call this an adjusted spray angle.) &nbsp;So a negative adjusted spray angle corresponds to a batted ball that is pulled, and a positive spray angle is a batted ball hit to the opposite side.&nbsp; An adjusted spray angle of 0 degrees is a ball hit up the middle or towards dead center.</p>
+</section>
+<section id="the-model" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="the-model"><span class="header-section-number">4.3</span> The Model</h3>
+<p>Now I can use my current favorite toy, a generalized additive model, to fit a model of the form</p>
+<p>logit(prob(hit)) = s(launch_speed, launch_angle, adjusted_spray_angle)</p>
+<p>where <span class="math inline">\(s()\)</span> is a smooth function of the three variables. &nbsp;I fit this model to the 129,365 batted balls for the 2017 season.&nbsp; Using this model, I can predict the probability of a hit for any values of the three variables.</p>
+</section>
+<section id="graph" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="graph"><span class="header-section-number">4.4</span> Graph</h3>
+<p>Graphing hit probabilities when you have three input variables can be a challenge. &nbsp;Here’s what I did for the graphs below.</p>
+<ul>
+<li>I chose a wide range of adjusted spray angles from -45 degrees (pulling the ball along the line) to +45 degrees (hitting a ball along the “opposite” line).&nbsp; The horizontal axis for my plot will be the adjusted spray angle.</li>
+<li>I chose three representative launch speeds 80, 90, and 100 mph.</li>
+<li>I fixed the launch angle (a value between -20 and 40 degrees) and graphed the probability of a hit as a smooth curve against the adjusted spray angle for the three launch speeds.</li>
+</ul>
+<p>The graphs provide interesting insight on the affect of spray angle on hitting.</p>
+</section>
+<section id="ground-ball-launch-angle-of-0-degrees" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="ground-ball-launch-angle-of-0-degrees"><span class="header-section-number">4.5</span> Ground Ball (Launch Angle of 0 Degrees)</h3>
+<p>A launch angle of 0 degrees corresponds to a ball hit along the ground. &nbsp;In this situation, the red line in the graph below (corresponding to the largest launch speed) has the highest hit probabilities, followed by the blue line (90 mph) and the brown line (80 mph).&nbsp; Here spray angles of plus and minus 32 degrees are more likely to be hits, but the most likely location for a hit is a ball up the middle (spray angle of zero). &nbsp;(By the way, a useful reference value on the vertical scale is .33, the overall proportion of batted balls that are hits.)</p>
+<p><img src="figures/shift/shift17.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="liner-launch-angle-of-20-degrees" class="level3" data-number="4.6">
+<h3 data-number="4.6" class="anchored" data-anchor-id="liner-launch-angle-of-20-degrees"><span class="header-section-number">4.6</span> Liner (Launch Angle of 20 Degrees)</h3>
+<p>A batted ball of 20 degrees is classified by MLB as a liner. &nbsp;Here the impact of spray angle is dramatically different from the first case. &nbsp;For balls that are pulled (negative adjusted spray angles), hitting at a higher launch speed is better. &nbsp;But there is an interval about 0 (balls up the middle) where a 80 mpg batted ball is most likely (among the three launch speeds) to be a hit. &nbsp;Generally, a high fraction of balls hit at this “liner” launch angle are hits.</p>
+<p><img src="figures/shift/shift18.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="fly-ball-launch-angle-of-30-degrees" class="level3" data-number="4.7">
+<h3 data-number="4.7" class="anchored" data-anchor-id="fly-ball-launch-angle-of-30-degrees"><span class="header-section-number">4.7</span> Fly Ball (Launch Angle of 30 Degrees)</h3>
+<p>A batted ball of 30 degrees is classified by MLB as a fly ball. &nbsp;Generally these types of batted balls tend to be outs for launch speeds of 80 or 90. &nbsp;Harder hit balls (100 mph) with this launch angle are likely be hits for spray angles less than minus 15 degrees and greater than 15 degrees. &nbsp;We are seeing a home run effect here, especially for the balls hit at 100 mph.</p>
+<p><img src="figures/shift/shift19.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="look-at-many-angles" class="level3" data-number="4.8">
+<h3 data-number="4.8" class="anchored" data-anchor-id="look-at-many-angles"><span class="header-section-number">4.8</span> Look at Many Angles</h3>
+<p>To better understand the pattern of these hit probabilities, I built a Shiny app where one can input the launch angle and three launch speeds of interest and this probability of hit display is produced. &nbsp;Playing with the Shiny app, one gets a better handle on the importance of spray angle in hitting. &nbsp; I recently figured out how to embed a YouTube video in a post. &nbsp;The video below shows using the Shiny app to show the change in the hit probability (again with launch speeds of 80, 90, 100 mph) as the adjusted spray angle moves from minus 20 to 40 degrees.</p>
+<p>[youtube https://www.youtube.com/watch?v=6R0642MvyJQ?rel=0&amp;w=560&amp;h=315]</p>
+</section>
+<section id="looking-ahead" class="level3" data-number="4.9">
+<h3 data-number="4.9" class="anchored" data-anchor-id="looking-ahead"><span class="header-section-number">4.9</span> Looking Ahead</h3>
+<ul>
+<li>I think the use of a generalized additive model is useful in this application since the relationship of the three variables to the probability of a hit is complicated – a simple additive regression predictor of the form launch_angle + launch_speed + spray_angle won’t do.</li>
+<li>Certainly there are better outcomes of a batted ball such as linear weights, but MLB will be preoccupied with batting average, so using hit/out as the outcome still is important.&nbsp; This approach could be used with alternative response variables.</li>
+<li>I’d be interested next in exploring the use of this type of model at the player level.&nbsp; Certainly teams want to know the distribution of (launch_angle, launch_speed, spray_angle) for players for defensive purposes.&nbsp; But does this model produce reasonable estimates at the number of hits for all players, and if not, why not?</li>
+<li>To reproduce these plots, you first need to download the Statcast data from the <code>baseballr</code> package, define the new variables and fit the generalized additive model using the <code>gam()</code> function from the <code>mgcv</code> package, and then use the Shiny app and the <code>ggplot2</code> package for the graphing.</li>
+</ul>
+</section>
+</section>
+<section id="spray-charts-from-statcast-data" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="spray-charts-from-statcast-data"><span class="header-section-number">5</span> Spray Charts from Statcast Data</h2>
+<section id="review-of-statcast-posts" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="review-of-statcast-posts"><span class="header-section-number">5.1</span> Review of Statcast Posts</h3>
+<p>In last week’s post, we discussed how to obtain a spray angle from the Statcast data scraped from Baseball Savant and we used the spray angle (together with the launch angle and launch velocity) to obtain reasonable predictions of hit probabilities.&nbsp; This week, we’ll discuss several things:</p>
+<ul>
+<li>Baseball Savant will produce spray charts of batted ball locations (such as the one for Carlos Santana here) where the color of the location depends on a different variable such as the batted ball type.&nbsp; We’ll suggest a modification of this spray chart that adjusts for the batter side.&nbsp; We’ll illustrate it for two hitters who have different characteristics in pulling balls.</li>
+<li>These spray charts help us understand that batters can have different pull characteristics depending on the batted ball type.&nbsp; We’ll introduce several “average spray angle” measurements that may be useful in understand batted ball tendencies.</li>
+</ul>
+</section>
+<section id="an-improved-spray-chart" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="an-improved-spray-chart"><span class="header-section-number">5.2</span> An Improved Spray Chart</h3>
+<p>When we were modeling a hit probability, it was helpful to define an “adjusted spray angle” that adjusts for batting side, so a negative spray angle always corresponds to a ball that is pulled (a positive spray angle is a batted ball hit the opposite way).&nbsp; In a similar way it makes sense to adjust the horizontal batted ball location by the batter side so that a negative horizontal location corresponds to a pulled ball.</p>
+<p>Using this idea, we produce an adjusted spray chart.&nbsp; To make it more obvious that this is not the usual spray chart, I color the “pull” area using a yellow color.&nbsp; &nbsp;I’ll use this to display the spray hitting tendencies of two “extreme” hitters Carlos Santana and Joe Mauer.</p>
+<p>In this adjusted spray chart, we see below that Carlos Santana is a strong pull hitter as most of the ground balls are hit in the pull region.&nbsp; The direction of line drives and fly balls seems more evenly divided in the pull and opposite field directions.&nbsp; As one might expect, the foul popups (green color) are all hit on the opposite side direction.</p>
+<p><img src="figures/shift/shift20.png" class="img-fluid" style="width:75.0%"></p>
+<p>By the way, it is interesting to contrast my display with the following Baseball Savant display that does not adjust for side of the plate (Santana is a switch hitter, so it is unclear which balls are pulled).</p>
+<p><img src="figures/shift/shift21.png" class="img-fluid" style="width:75.0%"></p>
+<p>Joe Mauer has a very different spray pattern than Santana.&nbsp; His ground balls are more equally divided in the pull and opposite directions.&nbsp; A majority of the line drives and fly balls are hit in the opposite side direction.</p>
+<p><img src="figures/shift/shift22.png" class="img-fluid" style="width:75.0%"></p>
+<p>It is a little hard to compare the sprays of the two players by looking at the individual graphs.&nbsp; Below we use the facet feature of ggplot2 to compare the two players.&nbsp; Since the scale is the same on each graph, it is much easier to compare the sprays.</p>
+<p><img src="figures/shift/shift23.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="measuring-pull" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="measuring-pull"><span class="header-section-number">5.3</span> Measuring “Pull”</h3>
+<p>By looking at several of these spray graphs, we see that the spray angle distribution&nbsp; of one type of batted ball like a ground ball for a player like Joe Mauer can be different from the spray angle distribution from a line drive or a fly ball.&nbsp; For each player with at least 200 batted balls in the 2017 season, I find the mean adjusted spray angle for (1) all ground balls, (2) all fly balls, and (3) all line drives.&nbsp; (By the way, Fangraphs&nbsp;compute the percentage of batted balls that are pulled, hit the opposite way, and are hit in the center.&nbsp; In my work, it seems that Fangraphs says that a batted ball is pulled if the adjusted spray angle is smaller than minus 17 degrees.)</p>
+<p>Below I construct a scatterplot of the mean spray angles for ground balls and fly balls where we remember that negative spray angles correspond to balls that are pulled.&nbsp; I’ve labeled Carlos Santana and Joe Mauer – Santana has a strong tendency to pull his ground balls (mean spray angle about -0.4) but his average fly ball angle is 0 which indicates that his fly balls are equally divided between the pull and opposite field directions.&nbsp; Mauer has a modest tendency to pull his ground balls (mean spray angle about -0.2), but a strong tendency (mean spray angle of 0.4) to hit his fly balls to the opposite direction.&nbsp; &nbsp;Actually all players tend to pull ground balls and a majority of players tend to hit fly balls in the opposite side direction.</p>
+<p>Below I graph the mean spray angles for ground balls and line drives.&nbsp; Generally we see that a majority of players tend to pull their line drives, but the pull tendency is stronger for ground balls.&nbsp; There is a positive association here, so players that tend to strongly pull ground balls also strongly pull line drives.</p>
+<p><img src="figures/shift/shift24.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="questions-to-explore" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="questions-to-explore"><span class="header-section-number">5.4</span> Questions to Explore</h3>
+<p>Obviously, teams care about these spray charts since they help in deciding on the positions of fielders.&nbsp; Given that infield shifting is currently very common among MLB teams, the teams must be familiar with spray tendencies of hitters.</p>
+<p>I’d be interested next in understanding how pitchers affect the spray angles.&nbsp; Specifically,</p>
+<ul>
+<li>How does the pitch location affect the spray angle?&nbsp; I would think that batters are more likely to pull inside pitchers, but the size of this effect is unclear.</li>
+<li>What about pitch type?&nbsp; It would seem easier to pull off-speed pitches than fastballs.</li>
+<li>What about the effect of the pitch speed?&nbsp; Again, I would think it would be harder to pull a Chapman fastball that is thrown at 100 mph</li>
+</ul>
+</section>
+</section>
+<section id="spray-charts-using-the-sportyr-package" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="spray-charts-using-the-sportyr-package"><span class="header-section-number">6</span> Spray Charts Using the sportyR Package</h2>
+<section id="introduction-3" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">6.1</span> Introduction</h3>
+<p>Over the years I have illustrated the use of several R packages to facilitate the collection and exploration of baseball data. Several notable ones are the <code>Lahman</code> package for obtaining season-to-season data for all of MLB’s history, and the <code>baseballr</code> package for scraping other data sources such as the Statcast data from Baseball Savant. Due to Tom Tango’s tweet, I recently became aware of a new package <code>sportyR</code> written by Ross Drucker that uses <code>ggplot2</code> syntax to draw playing surfaces for a number of sports including football, basketball, soccer and baseball. I have already discussed constructing spray charts in several older posts. Here I will illustrate using the <code>sportyR</code> package to enhance these baseball spray charts.</p>
+</section>
+<section id="getting-started" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="getting-started"><span class="header-section-number">6.2</span> Getting Started</h3>
+<p>The <code>sportyR</code> package is very easy to use. Once you have installed the package from CRAN, to construct a regulation MLB field, the following script loads the package and constructs the MLB playing surface.</p>
+<pre><code>library(sportyR)
+geom_baseball(league = "MLB")</code></pre>
+<p><img src="figures/shift/shift26.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="coordinate-system" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="coordinate-system"><span class="header-section-number">6.3</span> Coordinate System</h3>
+<p>Before one can construct a spray chart, one needs to understand the coordinate system used by this package. The unit is feet and the home plate location is the origin (0, 0). I’ve labeled the coordinates for the four bases below. For example, the coordinates for 2nd base are (0, 126) which indicates that 2nd base is 126 feet from home plate.</p>
+<p><img src="figures/shift/shift27.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="plotting-statcast-batted-ball-data" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="plotting-statcast-batted-ball-data"><span class="header-section-number">6.4</span> Plotting Statcast Batted Ball Data</h3>
+<p>I’d like to use this playing field as a background for a spray chart of a sample of batted balls. I’ve talked about constructing spray charts using R in several posts – this post provides an introductory discussion and this post describes the construction of an improved spray chart where one shows the “pull” side.</p>
+<p>For balls put into play, Statcast provides the location variables hc_x and hc_y, but some reexpression is needed:</p>
+<pre><code>mutate(location_x = hc_x - 125.42,
+         location_y = 198.27 - hc_y)</code></pre>
+<p>This reexpression flips the points around and make the origin home plate. These (location_x, location_y) measurements do not correspond to feet, so an additional scaling value is needed so that the units of the values correspond to feet. After some trial and error, the scaling value of 2.5 seems to work, providing reasonable-looking spray charts.</p>
+<pre><code>mutate(location_x = 2.5 * (hc_x - 125.42),
+         location_y = 2.5 * (198.27 - hc_y))</code></pre>
+</section>
+<section id="an-example" class="level3" data-number="6.5">
+<h3 data-number="6.5" class="anchored" data-anchor-id="an-example"><span class="header-section-number">6.5</span> An Example</h3>
+<p>Once one has figured out the coordinate system, then it is straightforward to plot points on this playing field background. The <code>geom_baseball()</code> function creates a <code>ggplot2</code> object and one can add other plot or textual layers by use of the addition function in <code>ggplot2</code>. As an example, I collected a data frame <code>ff</code> containing information on the ground balls hit by Freddie Freeman for the 2019 season . The input variables are the batted ball location variables <code>location_x</code>, <code>location_y</code> and a character variable <code>H</code> indicating if the BIP resulted in a hit or out. Since we are plotting points on a dark background, one needs to choose plotting colors that are easy to see. By use of the <code>scale_colour_manual()</code> function I decide on letting “yellow” correspond to out and “red” correspond to a hit. I use the <code>ggtitle()</code> to add a descriptive title.</p>
+<p>The complete code for constructing this spray chart is shown below. Freddie Freeman is a left-handed hitter and we see from the graph that most of his ground balls are hit to the pull side. I would think that most teams would employ an defensive infield shift when Freeman is at-bat. (Checking with Statcast, I found that 68% of these Freeman ground balls during the 2019 season were fit against an infield shift, 15% were hit against a “strategic” shift, and only 17% were hit against a standard infield fielding alignment.)</p>
+<pre><code>geom_baseball(league = "MLB") +
+  geom_point(data = ff,
+             aes(location_x, location_y,
+                 color = H)) +
+  scale_colour_manual(values =
+                 c("yellow", "red")) +
+  ggtitle("Freddie Freeman Ground Balls - 2019")</code></pre>
+<p><img src="figures/shift/shift28.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="final-comments" class="level3" data-number="6.6">
+<h3 data-number="6.6" class="anchored" data-anchor-id="final-comments"><span class="header-section-number">6.6</span> Final Comments</h3>
+<p>The <code>sportyR</code> package provides visuals of the playing surfaces for many sports such as basketball, football, soccer and hockey. Location data is either available or will shortly be available for these other sports and so these backgrounds will be useful for constructing location graphs.</p>
+<p>I have several Shiny apps, functions <code>SprayChart()</code> and <code>SprayCompare()</code>, for constructing spray charts in my <code>ShinyBaseball</code> package. I have already revised this apps to use the playing fielding visual from the <code>sportyR</code> package. For example, here’s a snapshot of the use of the <code>SprayCompare()</code> function to compare the fly ball locations of Mike Trout and Rhys Hoskins for the 2019 season. It appears that Trout is more likely than Hoskins to hit fly balls to the opposite field.</p>
+<p><img src="figures/shift/shift29.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+</section>
+<section id="linking-pitch-location-spray-chart-and-launch-variables" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="linking-pitch-location-spray-chart-and-launch-variables"><span class="header-section-number">7</span> Linking Pitch Location, Spray Chart and Launch Variables</h2>
+<section id="introduction-4" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">7.1</span> Introduction</h3>
+<p>In last week’s post, we illustrated the use of Retrosheet’s <code>BATTEDBALL_LOC_TX</code> variable that categorizes the batted ball in one of the 32 regions of the playing field. Statcast data provides the actual location of the batted ball and assuming this is accurate, gives more precise information than the Retrosheet code. Reflecting on this location data, there are three relevant types of information in understanding hitting performance of a ball in play.</p>
+<ul>
+<li><p>the pitch location</p></li>
+<li><p>the quality of the ball off the bat as measured by the launch variables (specifically launch angle and exit velocity)</p></li>
+<li><p>the batted ball location on the field</p></li>
+</ul>
+<p>These three types of information are clearly associated. For example, balls thrown inside to a right-handed batter tend to be pulled to the left side of the field. Hard-hit balls, say over 105 mph, with an launch angle about 30 degrees tend to be home runs. So it seems natural to construct multiple scatterplot displays of pitch location, launch variables, and batted ball locations where the displays are linked by brushing. By using the interactive brushing capability built into Shiny apps, it is straightforward to construct an app where one is able to brush a region on one display and see the location of the brushed points on the other displays. I will first illustrate how this app can be used and then provide some information about the process of writing the Shiny code.</p>
+</section>
+<section id="the-display" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="the-display"><span class="header-section-number">7.2</span> The Display</h3>
+<p>This Shiny app (currently live at https://bayesball.shinyapps.io/statcast_app_3/ ) is easy to use. One selects a 2021 hitter from the dropdown menu (here, Bryce Harper) and one sees three graphs. The left graph is a scatterplot of the launch angle and launch speed measurements, and the right side shows the zone locations (top) and the field locations for all balls put into play (bottom). One explores the relationships between these three displays by selecting (brushing) a region in any one of the displays and looking at the corresponding highlighted batted balls in the other graphs. The lower-left region will show summary statistics for batted balls in the selected region.</p>
+<p><img src="figures/shift/shift30.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="brushing-zone-location" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="brushing-zone-location"><span class="header-section-number">7.3</span> Brushing Zone Location</h3>
+<p>Let’s illustrate the use of this app with the National League MVP Bryce Harper. What are the hitting characteristics of Harper balls in play hit in the lower portion of the zone? I select this particular region in the Zone Locations graph. From the Launch Variables graph, we see these low zone pitches result in a variety of types of batted balls with different launch angles and exit velocities. From the Batted Ball Locations graph, we see that most of the short landing balls are pulled (to the right side) and the balls landing in the outfield are hit to all fields. Looking at the table, the mean launch speed of these low zone pitches is 92.922 mph and the mean launch angle is 11.425 degrees. The hit rate of these pitches is 37 / 120 = 0.308.</p>
+<p><img src="figures/shift/shift31.png" class="img-fluid" style="width:75.0%"></p>
+<p>If we move our region to the middle of the zone, we see a general increase in both exit velocity and launch angle – the average values have increased to 95.576 mph and 16.865 degrees respectively. Also the hit rate has increased to 51 / 104 = 0.490. Comparing “low zone” balls with “middle of the zone” balls, we conclude Harper is more productive on pitches in the middle of the zone.</p>
+<p><img src="figures/shift/shift32.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="brushing-batted-ball-location" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="brushing-batted-ball-location"><span class="header-section-number">7.4</span> Brushing Batted Ball Location</h3>
+<p>Let’s instead look at the Batted Ball Locations graph and select the balls that were hit where the <code>location_y</code> variable exceeds 400 ft. From the Zone Locations graph, we see these deep balls were hit in the middle-inside portion of the zone. From the Launch Variables graph, we see that all of these balls were hit over 100 mph with launch angles between 20 and 40 degrees.</p>
+<p><img src="figures/shift/shift33.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="brushing-batted-ball-type" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="brushing-batted-ball-type"><span class="header-section-number">7.5</span> Brushing Batted Ball Type</h3>
+<p>There are three vertical lines on the Launch Variables plot dividing the batted balls into ground ball (launch angle less than 10 degrees), line drive (launch angle between 10 and 25 degrees), fly ball (launch angle between 25 and 50 degrees) and popup (launch angle greater than 50 degrees) groups. By selecting the popups below, we see from the Batted Ball Locations graph that these balls in play are relatively shallow and hit towards the opposite side (left field for a left-handed batter).</p>
+<p><img src="figures/shift/shift34.png" class="img-fluid" style="width:75.0%"></p>
+</section>
+<section id="the-shiny-app---code-details" class="level3" data-number="7.6">
+<h3 data-number="7.6" class="anchored" data-anchor-id="the-shiny-app---code-details"><span class="header-section-number">7.6</span> The Shiny App - Code Details</h3>
+<p>The live version of this Shiny app can be found on https://bayesball.shinyapps.io/statcast_app_3/ You are welcome to play with this app choosing any 2021 batter of interest (among the 257 batters with at least 200 balls in play) from the dropdown menu. You should discover some interesting findings – for example, you should be able to find your batter’s sweet spot in the zone and see the field locations for hard-hit line drives.</p>
+<p>All of the code can be found as a single file <code>app.R</code> here. (This app is included in my <code>ShinyBaseball</code> package.) To run this app on your laptop, just download the single app.R file and place it in a separate folder. If the folder is the current working directory, just type</p>
+<pre><code>runApp() </code></pre>
+<p>from the Console window in RStudio to run the app. (You should make sure that you have first installed the packages listed at the top of the <code>app.R</code> file.)</p>
+<p>If you look at the code in app.R, you’ll see that the data (the Statcast and Chadwick files) are downloaded from from my Github site and I have put all of the graphing work in separate functions. For example, the function <code>plot_locations()</code> constructs the Batted Ball Locations display. If you look at the <code>ui()</code> function defining the user interface, you see the use of the <code>selectInput()</code> function to set up the dropdown menu and the functions <code>plotOutput()</code> and <code>tableOutput()</code> set up the output regions for plotting and displaying the summary table. There are special arguments in <code>plotOutput()</code> for adding the brushing capability – the brush = “plot_brush” argument adds a brush called “plot_brush”. In the plotting functions, you’ll see that I use</p>
+<pre><code>geom_point(data = brushedPoints(new_data, input$plot_brush)</code></pre>
+<p>This indicates that I will use a subset of the points defined by the plot_brush input. The same <code>brushedPoints()</code> function is used in the <code>renderTable()</code> function creating the summary data frame.</p>
+<p>I have tried to make the user interface and server functions relatively succinct so the interested reader can use and hopefully improve what I have done here.</p>
+</section>
+<section id="closing-remarks" class="level3" data-number="7.7">
+<h3 data-number="7.7" class="anchored" data-anchor-id="closing-remarks"><span class="header-section-number">7.7</span> Closing Remarks</h3>
+<ul>
+<li><p>Using this App. Pitchers are interested in learning the in-play tendencies of batters that they will face. If they are pitching “to contact”, then they want to pitch to locations for a particular batter where the launch speed is low with low launch angles. This type of graphical exploration should be helpful in figuring out these good pitching locations. Also hitters might be interested in finding regions of the zone where the expected hit rate is high.</p></li>
+<li><p>See Relationships. This brushing exercise is potentially useful for understanding relationships between these variables, especially those that are not easily described by straight lines.</p></li>
+<li><p>Improving the App. It would be interesting to look at these graphs for particular situations such as facing pitch types that are either off-speed or fastballs. Or one could look for differences in these relationships for neutral, batter-friendly or pitcher-friendly counts. It is straightforward to modify the code for this Shiny app to provide these extensions.</p></li>
+<li><p>Other Brushing Examples? In a post earlier this year, I demonstrated the use of two Shiny apps that allowed one to compute batting and pitching measures over brushed regions of the zone.</p></li>
+</ul>
+</section>
+</section>
+<section id="a-shiny-app---babip-and-spray-angle" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="a-shiny-app---babip-and-spray-angle"><span class="header-section-number">8</span> A Shiny App - BABIP and Spray Angle</h2>
+<section id="introduction-5" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">8.1</span> Introduction</h3>
+<p>In the “Chance of Hit as Function of Launch Angle, Exit Velocity and Spray Angle” post, I illustrated the use of a generalized additive model to show how the probability of a in-play base hit depends on the launch angle, exit velocity and spray angle. Here I take an empirical approach and introduce the use of a Shiny app to show how the batting average on balls in play (BABIP) and related quantities depend on the spray angle.</p>
+<p>There has been a recent emphasis on the use of defensive shifting in baseball and MLB has a new rule starting in the 2023 season to limit infield shifting. I thought it would be interesting to use this app see the changes in BABIP in recent seasons. This will be helpful when we get 2023 season data and explore the effect of the new MLB rule on these BABIP measures.</p>
+</section>
+<section id="data-and-inputs-to-the-shiny-app" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="data-and-inputs-to-the-shiny-app"><span class="header-section-number">8.2</span> Data and Inputs to the Shiny App</h3>
+<p>I collected Statcast data for all balls put into play for the 2018, 2019, 2021 and 2022 seasons. For each ball in play, I collect the launch angle, launch speed, adjusted spray angle and the outcome of the ball in play (stored in the <code>events</code> varible). The spray angle is the horizontal angle of the ball put in play in degrees and the adjusted spray angle corrects the spray angle for the batter side so that negative values correspond to the pulled side and positive values correspond to the opposite side.</p>
+<p>Here are the inputs to my Shiny app:</p>
+<ul>
+<li><p>One selects a range of values of the launch angle and exit velocity of interest. This allows one to focus on ground balls, line drives, fly balls or pop ups hit at different speeds.</p></li>
+<li><p>One decides to include or exclude home runs in the graph.</p></li>
+<li><p>One decides on the measure of interest, either the BABIP, the hits added (the quantity <span class="math inline">\(HA = H - E(H)\)</span> where <span class="math inline">\(E(H)\)</span> is the expected count of hits given the launch angle and exit velocity), or a Z-score which is <span class="math inline">\(HA / \sqrt{E(H)}\)</span>.</p></li>
+<li><p>Last one decides which seasons to compare among 2018, 2019, 2021 and 2022</p></li>
+</ul>
+<p>The adjusted spray angle values are grouped in the intervals (-45, -40), (-40, -35), …, (35, 40). The app plots the measure of interest against the bin midpoints where the color of the points and lines correspond to the season.</p>
+</section>
+<section id="groundballs---comparing-the-2018-and-2022-seasons" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="groundballs---comparing-the-2018-and-2022-seasons"><span class="header-section-number">8.3</span> Groundballs - Comparing the 2018 and 2022 Seasons</h3>
+<p>Since infield shifting is supposed to prevent hits on ground balls, we first consider this batted ball type. We select launch angle values between -80 and 10 degrees, hard hit balls from 90 to 120 mph, choose BABIP as our measure and select the 2018 and 2022 seasons.</p>
+<p><img src="figures/shift/shift35.png" class="img-fluid"></p>
+<p>The graph shows that the BABIP is smaller in the 2022 season for adjusted spray angles less than 15 degrees but the 2022 values are higher for spray angles exceeding 15 degrees.</p>
+<p>We can understand this improvement in terms of hits by selecting the HA option. Recall that HA measures the number of hits gained or lost beyond what is predicted based on the launch angle and exit velocity values.</p>
+<p><img src="figures/shift/shift36.png" class="img-fluid"> More ground balls are hit to the pull side, so the shifted defensive alignment tends to save more hits on the pull side.</p>
+</section>
+<section id="line-drives" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="line-drives"><span class="header-section-number">8.4</span> Line Drives</h3>
+<p>Do the 2022 fielders go better in handling line drives? We change the launch angle range to 10 to 25 degrees.</p>
+<p><img src="figures/shift/shift37.png" class="img-fluid"></p>
+<p>It is interesting that the 2022 BABIP values are smaller than the 2018 values for practically all values of adjusted spray angle. To understand this improvement in terms of hits, we choose the HA option.</p>
+<p><img src="figures/shift/shift38.png" class="img-fluid"></p>
+</section>
+<section id="fly-balls" class="level3" data-number="8.5">
+<h3 data-number="8.5" class="anchored" data-anchor-id="fly-balls"><span class="header-section-number">8.5</span> Fly Balls</h3>
+<p>How about fly balls corresponding to launch angles between 25 and 50 degrees? Obviously defensive positioning can’t impact home runs so we exclude home runs from this plot.</p>
+<p><img src="figures/shift/shift39.png" class="img-fluid"></p>
+<p>Here the size of the improvement is less clear but the chance of a hit on these types of batted balls is relatively small.</p>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
