@@ -130,6 +130,14 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#whats-in-the-paper" id="toc-whats-in-the-paper" class="nav-link" data-scroll-target="#whats-in-the-paper"><span class="toc-section-number">12.7</span>  What’s In the Paper?</a></li>
   <li><a href="#r-code-1" id="toc-r-code-1" class="nav-link" data-scroll-target="#r-code-1"><span class="toc-section-number">12.8</span>  R Code?</a></li>
   </ul></li>
+  <li><a href="#ability-and-luck-in-fangraphs-pitching-statistics" id="toc-ability-and-luck-in-fangraphs-pitching-statistics" class="nav-link" data-scroll-target="#ability-and-luck-in-fangraphs-pitching-statistics"><span class="toc-section-number">13</span>  Ability and Luck in FanGraphs Pitching Statistics</a>
+  <ul class="collapse">
+  <li><a href="#introduction-8" id="toc-introduction-8" class="nav-link" data-scroll-target="#introduction-8"><span class="toc-section-number">13.1</span>  Introduction</a></li>
+  <li><a href="#the-dashboard-pitching-stats" id="toc-the-dashboard-pitching-stats" class="nav-link" data-scroll-target="#the-dashboard-pitching-stats"><span class="toc-section-number">13.2</span>  The Dashboard Pitching Stats</a></li>
+  <li><a href="#many-pairs-of-seasons" id="toc-many-pairs-of-seasons" class="nav-link" data-scroll-target="#many-pairs-of-seasons"><span class="toc-section-number">13.3</span>  Many Pairs of Seasons</a></li>
+  <li><a href="#random-effects" id="toc-random-effects" class="nav-link" data-scroll-target="#random-effects"><span class="toc-section-number">13.4</span>  Random Effects</a></li>
+  <li><a href="#closing-comments-1" id="toc-closing-comments-1" class="nav-link" data-scroll-target="#closing-comments-1"><span class="toc-section-number">13.5</span>  Closing Comments</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -546,6 +554,7 @@ E = - p_R \, \log(p_R) - p_S \, log(p_S) - p_C \, log(p_C)
 <li><p>There are 2430 games during a complete baseball season. Since there are two starting pitchers, there are 2 x 2430 = 4860 opportunities to throw Perfect-k games. We see, for example, there tend to be about 1400 Perfect-1 games in a season which represents about 29% of all opportunities. This is surprising – I thought there would be a greater percentage of 1-2-3 first innings.</p></li>
 <li><p>Following is a table showing the total count of Perfect-k games (over the 20 seasons) and the corresponding percentage for values of k equal to 1 through 8. Reading the third row, we see for only 3.33% of the game opportunities, there is a Perfect-3 game where the entire lineup 1-9 does not reach base in the first three innings. There have been 17 Perfect-8 games in this period which represents only 0.02% of the game opportunities. There has been a total of 7 Perfect Games in this twenty season period which (by subtraction) means that there were 10 games where the pitcher had a Perfect-8 game and either the starting pitcher was replaced or a batter reached base in the ninth inning.</p></li>
 </ul>
+<!-- -->
 <pre><code>    N_Innings Total Percentage
       &lt;int&gt; &lt;int&gt;      &lt;dbl&gt;
 1         1 28288      29.1 
@@ -793,6 +802,65 @@ E = - p_R \, \log(p_R) - p_S \, log(p_S) - p_C \, log(p_C)
 <section id="r-code-1" class="level3" data-number="12.8">
 <h3 data-number="12.8" class="anchored" data-anchor-id="r-code-1"><span class="header-section-number">12.8</span> R Code?</h3>
 <p>Since one of you asked, here is a set of functions that I wrote for this task on my Github Gist site.</p>
+</section>
+</section>
+<section id="ability-and-luck-in-fangraphs-pitching-statistics" class="level2" data-number="13">
+<h2 data-number="13" class="anchored" data-anchor-id="ability-and-luck-in-fangraphs-pitching-statistics"><span class="header-section-number">13</span> Ability and Luck in FanGraphs Pitching Statistics</h2>
+<section id="introduction-8" class="level3" data-number="13.1">
+<h3 data-number="13.1" class="anchored" data-anchor-id="introduction-8"><span class="header-section-number">13.1</span> Introduction</h3>
+<p>If one looks at the Pitcher Leaders section of the FanGraphs site, one sees a remarkable number of pitching measures. There are the familiar ones in the “Dashboard” such as the strikeouts, walks and home runs allowed per nine innings. Under the “Plate Discipline” tab, one sees various percentage rates of swing and contact in and out of the zone, the “Pitch Value” tab gives summary pitch values for various pitch types, and the “Batted Ball” tab describes percentages of batted ball types (ground ball, line drive, fly balls and popups), direction, and hardness of contact.</p>
+<p>All of these pitching performance measures are interesting on face value, but it is unclear about the usefulness of these measures in understanding pitcher abilities. That is, what particular measures are helpful in predicting performance in future seasons? This question is relevant in this hot stove season when teams are deciding which free agents to add to their rosters.</p>
+<p>Jay Bennett and I talked about the general issue of distinguishing performance and ability in our book <em>Curve Ball</em>. This topic was especially relevant in the Situational Statistics chapter. We were exploring the situational batting measures of Scott Rolen (newly inducted this year in the Hall of Fame) and tried to make sense of how Rolen hit at home vs away games, hit against pitchers of the same or opposite arms, hit on different counts, and so on.</p>
+<p>In this situational stats chapter we distinguished between situations that</p>
+<ul>
+<li>have no “real” effect (the player abilities were the same in either situation)</li>
+<li>represent a bias (there could be an advantage playing at home but the ability advantage is the same across all hitters)</li>
+<li>represent abilities (here batters have different abilities to take advantage of the particular situation)</li>
+</ul>
+<p>If a situational measure, say the difference between home and away performance, is ability-driven, then it will be predictive of future performance. Other situational measures are more luck driven, or due to other variables besides the batter abilities. One way of checking the ability characteristic of a measure is to construct a scatterplot of the situational measure for two consecutive seasons. If there is a significant positive association in this graph, the situation is indeed ability driven. We used this to demonstrate in <em>Curve Ball</em> that home/away effects for one season are not predictive of home/away effects for the following season.</p>
+<p>In this post, I illustrate the use of a Shiny app to explore scatterplots of pitching measures for consecutive seasons. By repeating and summarizing the relationships over many pairs of seasons, we get a sense of the “ability/luck” aspects of different measures. Then I will illustrate the use of a random effects model for several pitching measures to confirm the findings.</p>
+</section>
+<section id="the-dashboard-pitching-stats" class="level3" data-number="13.2">
+<h3 data-number="13.2" class="anchored" data-anchor-id="the-dashboard-pitching-stats"><span class="header-section-number">13.2</span> The Dashboard Pitching Stats</h3>
+<p>I begin by collecting FanGraphs pitching leaders data, from the default Dashboard, for seasons 2013 through 2022. I only include pitchers who pitched at least 100 innings for a given season. One nice feature of the FanGraphs site is that one can separate out the season information in the download.</p>
+<p>Here is a snapshot of a Shiny app that constructs a scatterplot of a particular pitching measure for the 2021 and 2022 seasons. One chooses the measure of interest (among the FanGraphs measures) on the left. Besides the scatterplot, the value of the correlation is displayed. Also one can brush the scatterplot to see the identities of interesting points that are extreme or deviate from the general pattern. Here we see that BB/9 is an ability measure since the correlation between values for two seasons is 0.61. By use of brushing, we highlight three pitchers (Eovali, Scherzer, and Kershaw) who had low walk rates both seasons.</p>
+<p><img src="figures/pitching/pitching44.png" class="img-fluid"></p>
+<p>Other measures are less-ability driven such as the home run rate where the correlation between rates for the two seasons is only 0.28.</p>
+<p><img src="figures/pitching/pitching45.png" class="img-fluid"></p>
+<p>You can play with this particular Shiny app by going to the site</p>
+<p>https://bayesball.shinyapps.io/FanGraphs_Pitching_Measures</p>
+</section>
+<section id="many-pairs-of-seasons" class="level3" data-number="13.3">
+<h3 data-number="13.3" class="anchored" data-anchor-id="many-pairs-of-seasons"><span class="header-section-number">13.3</span> Many Pairs of Seasons</h3>
+<p>These correlation values will vary depending on the choice of consecutive season pairs. So we consider scatterplots over the seasons 2013-2014, 2014-2015, …, 2021-2022. (We skip the short 2020 season.) Also we consider all 12 measures on the FanGraphs Dashboard for pitching leaders.</p>
+<p>Below I display the season-to-season correlation values for each of the 12 pitching measures, where the measures are arranged by the median correlation. The measures at the top with large correlations, such as fastball velocity (vFA), ground ball percentage (GB%), strikeout rate (K/9) are ability driven. In contrast, measures with small correlations such as the home run rate among flyballs (HR/FB), runners left on base percentage (LOB%), and batting average on balls in play (BABIP) are less reflective of pitcher abilities.</p>
+<p><img src="figures/pitching/pitching46.png" class="img-fluid"></p>
+</section>
+<section id="random-effects" class="level3" data-number="13.4">
+<h3 data-number="13.4" class="anchored" data-anchor-id="random-effects"><span class="header-section-number">13.4</span> Random Effects</h3>
+<p>Another way to distinguish the ability/luck characteristics of different measures is to fit a random effects model.</p>
+<p>For the <span class="math inline">\(j\)</span>th pitcher, we record the number of strikeouts <span class="math inline">\(y_j\)</span> among <span class="math inline">\(n_j\)</span> batters faced where we assume <span class="math inline">\(y_j\)</span> is binomial(<span class="math inline">\(n_j, p_j\)</span>). The strikeout probabilities of <span class="math inline">\(N\)</span> pitchers <span class="math inline">\(p_1, ..., p_N\)</span> follow a distribution with unknown parameters <span class="math inline">\(\eta\)</span> and <span class="math inline">\(K\)</span>. The parameter <span class="math inline">\(\eta\)</span> represents an average value and <span class="math inline">\(K\)</span> is a precision that determines the spread of the probabilities</p>
+<p>We fit this model to the strikeout rates, the walk rates and the home run rates of the pitchers in the 2022 season.</p>
+<p>The table gives the estimated values of <span class="math inline">\(\eta\)</span> and <span class="math inline">\(K\)</span> for each set of rates.</p>
+<pre><code>  Rate_Type   Eta       K
+1 Strikeout 0.222  81.491
+2      Walk 0.072 245.029
+3  Home Run 0.029 902.315</code></pre>
+<p>What do we learn?</p>
+<ul>
+<li><p>Strikeout rates reflect the abilities of the players. The relatively small value of <span class="math inline">\(K\)</span> indicates that pitchers have different true strikeout rates.</p></li>
+<li><p>In contrast, the large value of <span class="math inline">\(K\)</span> for home runs indicate that pitchers’ abilities to give up home runs are pretty similar.</p></li>
+<li><p>The ability dimension of walks lies between the ability dimensions of strikeouts and home runs.</p></li>
+</ul>
+<p>These random effects model fits agree with the season-to-season correlation values in ranking the different pitching measures on the ability/luck scale. In addition, using this fit it is straightforward to predict a pitcher’s strikeout rate in the following season.</p>
+</section>
+<section id="closing-comments-1" class="level3" data-number="13.5">
+<h3 data-number="13.5" class="anchored" data-anchor-id="closing-comments-1"><span class="header-section-number">13.5</span> Closing Comments</h3>
+<ul>
+<li><p>Part of this post was motivated by the relative ease of obtaining the FanGraphs data. Any table can be downloaded as a csv file on the push of a button.</p></li>
+<li><p>The use of the word “luck” may be misunderstood – readers might think that I am saying that the pitcher performances are lucky. When I say that pitcher home run rates are luck-driven, this just means that the variability in home run rates are due to other factors (like the hitters) than the pitcher abilities.</p></li>
+<li><p>I’ve written a lot on the use of random effects models in baseball situations. See the section on Bayesian modeling in my Baseball Research page for more examples.</p></li>
+</ul>
 </section>
 </section>
 
