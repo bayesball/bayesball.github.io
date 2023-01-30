@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>A Batting Average: Does It Represent Ability or Luck?</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="batting_average_files/libs/clipboard/clipboard.min.js"></script>
+<script src="batting_average_files/libs/quarto-html/quarto.js"></script>
+<script src="batting_average_files/libs/quarto-html/popper.min.js"></script>
+<script src="batting_average_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="batting_average_files/libs/quarto-html/anchor.min.js"></script>
+<link href="batting_average_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="batting_average_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="batting_average_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="batting_average_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="batting_average_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a></li>
+  <li><a href="#batting-average-by-count" id="toc-batting-average-by-count" class="nav-link" data-scroll-target="#batting-average-by-count"><span class="toc-section-number">2</span>  Batting Average by Count</a></li>
+  <li><a href="#a-decomposition-of-batting-average" id="toc-a-decomposition-of-batting-average" class="nav-link" data-scroll-target="#a-decomposition-of-batting-average"><span class="toc-section-number">3</span>  A Decomposition of Batting Average</a></li>
+  <li><a href="#empirical-analysis" id="toc-empirical-analysis" class="nav-link" data-scroll-target="#empirical-analysis"><span class="toc-section-number">4</span>  Empirical Analysis</a></li>
+  <li><a href="#model-based-analysis" id="toc-model-based-analysis" class="nav-link" data-scroll-target="#model-based-analysis"><span class="toc-section-number">5</span>  Model-Based Analysis</a></li>
+  <li><a href="#comparison-of-players" id="toc-comparison-of-players" class="nav-link" data-scroll-target="#comparison-of-players"><span class="toc-section-number">6</span>  Comparison of Players</a>
+  <ul class="collapse">
+  <li><a href="#mike-schmidt-and-george-brett" id="toc-mike-schmidt-and-george-brett" class="nav-link" data-scroll-target="#mike-schmidt-and-george-brett"><span class="toc-section-number">6.1</span>  Mike Schmidt and George Brett</a></li>
+  <li><a href="#barry-bonds" id="toc-barry-bonds" class="nav-link" data-scroll-target="#barry-bonds"><span class="toc-section-number">6.2</span>  Barry Bonds</a></li>
+  <li><a href="#tony-gwynn" id="toc-tony-gwynn" class="nav-link" data-scroll-target="#tony-gwynn"><span class="toc-section-number">6.3</span>  Tony Gwynn</a></li>
+  </ul></li>
+  <li><a href="#concluding-remarks" id="toc-concluding-remarks" class="nav-link" data-scroll-target="#concluding-remarks"><span class="toc-section-number">7</span>  Concluding Remarks</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">8</span>  References</a></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">A Batting Average: Does It Represent Ability or Luck?</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p><strong>ABSTRACT</strong></p>
+<p>Recently Bickel and Stotz (2003) explored differences in players’ batting average (AVG) over pitch count, and noted that many people misinterpreted the drop in batting average when there was two strikes. Stotz (2004) decomposes AVG as a product of two terms, the rate of not striking out, and an “in-play” batting average, and illustrates the patterns of these two measures over baseball history. Here we compare AVG with other batting statistics expressible as rates and show that AVG is a relatively poor measure of a player’s hitting ability. This analysis suggests that we should focus more on ability measures such as strikeout rate, walk rate, and home run rate when we evaluate hitters. We use these measures to compare the hitting of Mike Schmidt and George Brett and to better understand the great hitting of Barry Bonds and Tony Gwynn.</p>
+<section id="introduction" class="level1" data-number="1">
+<h1 data-number="1"><span class="header-section-number">1</span> Introduction</h1>
+<p>The batting average is the standard measure that has been used to compare batters ever since the early years of professional baseball. It is well-known that a batting average is a relatively poor measure of the performance of a hitter. There are two obvious criticisms of a batting average. First, by considering only the official at-bats, the AVG ignores walks, and second, the AVG implicitly assumes that every base hit has the same value. Albert and Bennett (2003), Chapters 6-8 consider a number of alternative measures of hitting performance that are much better than batting average in predicting the number of team runs scored.</p>
+<p>Despite the criticism of AVG as a batting measure, players are still compared with respect to this measure. When one clicks on the “Stats” link on the official MLB website (www.mlb.com), one sees (at the top of the page) a listing of the five highest batting averages during the 2003 season, and Albert Pujols, with the highest batting average, is considered by many fans to be the best hitter this season.</p>
+<p>That raises an interesting question: how useful is the batting average in measuring the hitting ability of a player?</p>
+<p>One general theme of Albert and Bennett (2003) is the predominate role of luck, or chance variation, in the game of baseball. Chance manifests itself in team competition and in the performance of players. In a particular season, each team has an inherent ability or talent to win ballgames. But since the 30 teams are relatively homogenous with respect to talent and short playoff series are used to determine the winners in the post-season, it is very likely that the team with the most talent (the truly “best” team) is not the winner of the World Series. In other words, chance variation plays a big role in the results of baseball competition. Also, chance variation makes it difficult to assess players’ ability on the basis of performance in a single season. In the evaluation of two players with respect to on-base percentage, it is possible that one player has the better ability than another player to get on-base, but by chance variability, the second player obtains the higher on-base percentage for one particular season. In the 2003 American League, Manny Ramirez had a .427 OBP followed closely by Carlos Delgado by a .426 OBP. Although Ramirez had the higher OBP season performance, most people would agree that the one-point difference is insufficient evidence to say that Ramirez was truly better than Delgado in 2003 in getting on-base.</p>
+<p>Here we investigate what a batting average tells us about a batter’s hitting ability. Are there alternative “basic” measures of a batter’s performance (based on the raw counts of walks, singles, etc.) that are more indicative of a batter’s ability?</p>
+<p>Here we focus on the basic outcomes when a player comes up to bat. A batter has a plate appearance (PA). Ignoring some rare events such as sacrifices and hit-by-pitches, there are two results of this PA – either he gets a walk (BB) or he has an official at-bat (AB). When he has an AB, then the batter can either strikeout (SO) or put the ball in play (IP). When a ball is in-play, then there can be an OUT based on a fielder’s play or there can be one of the four base hits – single (1B), double (2B), triple (3B), or home run (HR). The different outcomes of a plate appearance are shown graphically in Figure 1.</p>
+<p><img src="figures/luck/figure1.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="batting-average-by-count" class="level1" data-number="2">
+<h1 data-number="2"><span class="header-section-number">2</span> Batting Average by Count</h1>
+<p>In Chapter 4 of Albert and Bennett (2003), we looked at the significance of situational hitting statistics. We explored differences in players’ batting average due to location (home versus away), handedness of the pitcher, time (before and after the All- Star break), game situation (runners in scoring position versus no runners on, no outs), and pitch count. Generally, the conclusion from this analysis was that most of the “interesting” effects that we see in situational data are due to chance variation. But we did notice a substantial change in batting average due to pitch count. Generally, players hit for a much lower average when the pitch count is two strikes compared to ahead in the count. Moreover, this pitch count was regarded as an “ability effect” in Albert and Bennett (2003). This means that the difference in batting average due to pitch count seems to depend on the player. We noted that there was a big difference in players’ tendency to strike out and this would contribute to the wide variation in this pitch count effect.</p>
+<p>Bickel and Stotz (2003) recently looked carefully at the differences in batting averages for different pitch counts. Using Stanford University baseball data for a fouryear time period, they calculated the batting average (AVG) and the slugging percentage (SLG) for different pitch counts. They showed that AVG and SLG both significantly dropped when the pitch count was two strikes. But Bickel and Stotz made the basic observation that strikeouts were only possible when there were two strikes, and they made the conjecture that there would be small differences in these statistics due to pitch count when the strikeout effect was removed. They defined the number of hits for all pitches thrown for strikes (HPS) and showed that batters actually were more likely to get a hit off a pitch thrown for a strike when there were two strikes than other counts. Bickel and Stotz also considered a player’s batting average restricted to balls that were put inplay, and showed that there were small differences in this measure due to pitch count.</p>
+</section>
+<section id="a-decomposition-of-batting-average" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> A Decomposition of Batting Average</h1>
+<p>In a plate appearance, a batter’s first objective is to get his bat on the ball – that is, avoid striking out. Then he wants to hit the ball in a place that is not reachable by the fielders. Using this analogy, Bickel (2004) represents the batting average as</p>
+<p><span class="math display">\[
+AVG = \frac{H}{AB} \\
+= \frac{IP}{AB}\frac{H}{IP} \\
+= \left(1 - \frac{SO}{AB}\right)\frac{H}{IP}
+\]</span></p>
+<p>where <span class="math inline">\(IP\)</span> is the number of balls in play. We see from this equation that a batting average is dependent on two ratios:</p>
+<ul>
+<li>the rate of striking out <span class="math display">\[\frac{SO}{AB}\]</span></li>
+<li>the rate of getting a batted ball (or a ball in-play) to fall in for a hit <span class="math display">\[ \frac{H}{IP}\]</span></li>
+</ul>
+<p>Bickel (2004) looked at the pattern of the strikeout rate and the in-play batting average over the history of baseball. He showed that the chance of getting a batted ball to fall in for a hit has remained pretty constant over the last 100 years of baseball. In contrast, there have been dramatic changes in the strikeout rate over this same period. Currently the strikeout rate among players is high and this places a constraint on the size of batting averages and Bickel thinks it will be unlikely for a player to hit for a .400 batting average in the near future.</p>
+</section>
+<section id="empirical-analysis" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Empirical Analysis</h1>
+<p>Based on the decomposition of batting average, there are a number of hitting statistics one can compute based on rates of the basic events. A player can be evaluated by means of his walk rate <span class="math display">\[\frac{BB}{PA}\]</span> the ratio of walks to plate appearances, or his strikeout rate <span class="math display">\[\frac{SO}{AB}\]</span> the ratio of strikeouts to at-bats. We also consider the standard measures AVG and OBP that we define as <span class="math display">\[\frac{H + BB}{PA}\]</span> the ratio of hits and walks to plate appearances. (This simplified definition of OBP is approximately equal to the usual definition of on-base percentage that accounts for sacrifice flies and hit-by-pitches.) In addition, we consider the in-play average, the in-play single rate, the in-play doubles + triples rate, and in-play home run rate that are found respectively by dividing the counts of hits, singles, etc. by the number of batted balls (the number of balls in play).</p>
+<p>Each of the eight hitting statistics is a measure of a player’s ability to hit. But some statistics are better measures of ability than other statistics. Generally the variation that we see in a given statistic, say batting average, is based in part on differences between player abilities to hit, and the remaining variation is attributable to chance. One way of assessing how much “ability” is contained in a hitting statistic is by exploring two years of hitting data. If one particular statistic for one year is a good measurement of an ability of a player, then one would explain the players to have similar values of the statistic for two consecutive years. We collect the hitting statistics for all players with at least 100 at-bats for the 2002 and 2003 seasons. In Figure 2 (top), we construct a scatterplot of the AVGs for the two seasons and in Figure 2 (bottom) we construct a similar scatterplot of the strikeout rates. Note that there is relatively weak association in the 2002 and 2003 AVGs – in contrast, there is a much stronger positive association between the 2002 and 2003 strikeout rates. This indicates that strikeout rate is more closely related to a batter’s ability than his batting average.</p>
+<p><img src="figures/luck/figure2a.png" class="img-fluid"></p>
+<p>We can summarize the relationships we see in the scatterplots by correlations – the correlations in the AVG and SO rate graphs are 0.36 and 0.83, respectively. These correlations confirm that SO rate is ability-driven relative to the batting average. We did similar analyses for the remaining six hitting statistics described above. Figure 3 graphs the correlation values from the scatterplots. These values indicate that SO rate, BB rate, and IP HR rate are good representations of the abilities of the hitters, and, in contrast, IP AVG, AG, IP doubles and triples rate, and IP singles rate are relatively weak measures of hitting ability.</p>
+<p><img src="figures/luck/figure4a.png" class="img-fluid"></p>
+</section>
+<section id="model-based-analysis" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Model-Based Analysis</h1>
+<p>The empirical analysis of Section 4 is useful in understanding what measures are indicative of players’ abilities. But this analysis doesn’t actually tell us how much of the variation in a particular statistic, say batting average, for a given season is due to ability and how much is due to chance variation. Towards this goal, we fit the following random effects model. Since all of the statistics are in the form of proportions, we can use a binomial model for the observed counts where the underlying player “true rates” follow an ability distribution. Letting <span class="math inline">\(y_i\)</span> and <span class="math inline">\(n_i\)</span> denote the number of “successes” and opportunities for the <span class="math inline">\(i\)</span>th player in a given season, we assume that <span class="math inline">\(y_i\)</span> is distributed binomial (<span class="math inline">\(n_i, p_i\)</span>), where <span class="math inline">\(p_i\)</span> is the probability that the given player obtains a success in a single opportunity. If we have <span class="math inline">\(N\)</span> players, then we assume that the abilities of the players, <span class="math inline">\(p_1, ..., p_N\)</span>, come from an ability distribution <span class="math inline">\(g(p)\)</span>. It is convenient to assume that the ability distribution has the beta form</p>
+<p><span class="math display">\[
+g(p) \propto p ^{K\eta - 1} (1 - p)^{K(1-\eta) - 1},
+\]</span></p>
+<p>where <span class="math inline">\(\eta\)</span> represents the mean or average ability of all players and <span class="math inline">\(K\)</span> gives some indication of the spread of the abilities. Small values of <span class="math inline">\(K\)</span> indicate that there is a wide range of abilities among ballplayers and large values of <span class="math inline">\(K\)</span> indicate that there are small differences in abilities.</p>
+<p>We fit the above random effects model to each of the eight hitting measures using data for all players in the 2003 season with at least 100 at-bats. The following table displays the estimated values of <span class="math inline">\(K\)</span> and <span class="math inline">\(\eta\)</span> for each of the model fits.</p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="table table-sm table-striped">
+<thead>
+<tr class="header">
+<th style="text-align: left;">Statistic</th>
+<th style="text-align: right;">K</th>
+<th style="text-align: right;">eta</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">SO Rate</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">0.184</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">IP HR Rate</td>
+<td style="text-align: right;">69</td>
+<td style="text-align: right;">0.038</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">BB Rate</td>
+<td style="text-align: right;">81</td>
+<td style="text-align: right;">0.086</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OBP</td>
+<td style="text-align: right;">205</td>
+<td style="text-align: right;">0.330</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IP AVG</td>
+<td style="text-align: right;">410</td>
+<td style="text-align: right;">0.326</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">AVG</td>
+<td style="text-align: right;">475</td>
+<td style="text-align: right;">0.268</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">IP 2+3 Rate</td>
+<td style="text-align: right;">474</td>
+<td style="text-align: right;">0.073</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>This table sorts the statistics with respect to ability – statistics at the top are more indicative of batting skill and the bottom statistics are more reflective of chance variation. There is a wide variation in the true strikeout rates for the players – 90% of the players strike out between 9 and 28 percent of the time. Similarly, players seem to have varying abilities to draw a walk or hit a home run.</p>
+<p>In contrast, other batting measures seem to be primarily chance-driven, which means that much of the variation in the player values is due to basic binomial (coin tossing) variation. The most extreme measure of this type is the IP singles rate. Ninety percent of the true IP singles rates fall between .186 and .245 which is a rather short interval. One implication of this finding is it is relatively difficult for a batter to use his skill to aim his hits so that they fall in for singles. Likewise, we note from the table that the true IP doubles + triples rates and true batting averages have relatively narrow intervals.</p>
+</section>
+<section id="comparison-of-players" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Comparison of Players</h1>
+<section id="mike-schmidt-and-george-brett" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="mike-schmidt-and-george-brett"><span class="header-section-number">6.1</span> Mike Schmidt and George Brett</h2>
+<p>The categorization of hitting statistics by the ability/luck dimension has implications in our comparison of the hitting of two players. What this means is that we should focus our hitter comparison on statistics that are more ability-driven rather than chance driven.</p>
+<p>For example, suppose we wish to compare Mike Schmidt and George Brett, two Hall-of-Fame third basemen who played during the same era. To compare the hitting for these two players, one can compare their career trajectories, which are the plots of a hitting statistic against the age of the player. It is well-known that the career trajectory of a player will rise until a peak value (usually attained when the player is in his late 20’s or early 30’s) and then fall until retirement. So we compare the career trajectories keeping in mind the general rise and fall shape of this curve. Figure 6 plots the career trajectories of Schmidt and Brett for the statistics AVG, SO rate, BB rate, and IP HR rate.</p>
+<p><img src="figures/luck/figure6.png" class="img-fluid"></p>
+<p>First, if we look at the AVG graphs of Brett and Schmidt in the upper left corner, it is difficult to make an overall judgment who was the better hitter with respect to batting average. Part of the difficulty is due to the chance variability of season-to-season batting averages. Brett looks better than Schmidt in the early years, but after age 30, there is a lot of up-and-down variation in the season batting averages, making comparison difficult. Brett had an unusually high AVG (.390) at age 27, but there is a lot of fluctuation in his AVG in surrounding years, so it is difficult to assess Brett’s true batting average.</p>
+<p>It is easier to compare the two hitters using one of the other hitting statistics, such as strikeout rate, walk rate, or IP home run rate. With respect to the strikeout rate, we see from the upper right graph of Figure 6 that Brett had a consistently low tendency to strike out, although there was some increase in this rate as he got older. Schmidt, in contrast, had a very strikeout rate in his youth and the rate decreased as he got older. (See Albert (1998) for a similar study of Schmidt’s pattern of home run hitting over time.) With respect to BB rate, we see from the lower left graph that Schmidt generally walked at a higher rate than Brett, although the rates were more similar at later ages. Also, we see that Schmidt’s IP HR rate was consistently in the .08 range over most of his career and Brett hit home runs at approximately half the rate of Schmidt. By looking at these three statistics that are more ability-driven, we get a better understanding of the particular hitting talents of these two great hitters.</p>
+</section>
+<section id="barry-bonds" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="barry-bonds"><span class="header-section-number">6.2</span> Barry Bonds</h2>
+<p>Figure 7 shows career trajectories of Barry Bonds for six hitting statistics AVG, SO rate, BB rate, IP singles rate, IP doubles + triples rate, and IP home run rate. The values of the statistic for Bonds are indicated by dots and a LOESS smoothing curve is place on top showing the general pattern. In addition, each graph shows error bars – the limits of the bars correspond to the 5th, 50th, 95th percentiles of the values of the statistic for all players with at least 300 at-bats for each season. By comparing Bonds’ statistic values with the error bars, we can appreciate how Bonds excelled as a hitter. What patterns do we see in the six graphs?</p>
+<p><img src="figures/luck/figure7.png" class="img-fluid"></p>
+<ul>
+<li><p>Batting average (AVG). This first graph is difficult to interpret. Bonds’ batting average appears to increase until 1995, takes a dip, and then increases for the last four years. But this pattern may be spurious due to the large year-to-year variation in this statistic.</p></li>
+<li><p>Strikeout rate (SO rate). In contrast to the first graph, Bonds’ tendency to strike out has been very consistent over his career. His rate seems pretty average, but Bonds’ value should be considered low given that he is a home run hitter.</p></li>
+<li><p>Walk rate (BB rate). This graph reflects one remarkable aspect of Bonds’ career – his ability to draw walks. He clearly shows improvement in getting walks from his early years and his walk rates since 1991 have been unusually high. The extremely high values for the last three seasons (2001 – 2003) is likely due to the large number of intentional walks.</p></li>
+<li><p>In play singles rate (IP Single’s rate). It is interesting to note that Bonds has always had a below-average singles rate. There could be several explanations for this low rate including his upper-cut swing and his tendency to pull the ball. In the 2001 season when he hit 73 home runs, he had a very low singles rate.</p></li>
+<li><p>In play doubles plus triples rate (IP DT rate). The unusual pattern in this graph is simply due to the high variability in this statistic across seasons. Bonds’ doubles plus triples rate has generally been a little above average.</p></li>
+<li><p>In play home run rate (IP HR rate). We see from the graph that Bonds’ IP home run rates have climbed steadily through the years, from about .05 in 1985 to .13 in 2003.</p></li>
+<li><p>There is one noticeable large outlier at age 36 – this is the year that he hit 73 home runs. Note that some of the clearest patterns in Figure 7 correspond to the “ability” measures SO rate, BB rate, and HR IP rate, and it is harder to find patterns in the “chance” measures AVG and Doubles + Triples IP rate.</p></li>
+</ul>
+</section>
+<section id="tony-gwynn" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="tony-gwynn"><span class="header-section-number">6.3</span> Tony Gwynn</h2>
+<p>Tony Gwynn was considered one of the greatest hitters of all time. Schell (1999), after making adjustments for different eras, varying talent pools, home parks, and late career declines, ranks Gwynn the best hitter of all time from the perspective of batting average. But why did Gwynn hit so well for average? We can get a better understanding of Gwynn’s hitting ability by constructing a set of career trajectory plots as displayed in Figure 8.</p>
+<p><img src="figures/luck/figure8.png" class="img-fluid"></p>
+<p>The career trajectory of batting average (the top left graph of Figure 8) clearly shows that Gwynn had an unusually high average over his entire career. But there is a lot of variation in his batting average across years, and the pattern shown by the smoothing curve may not be significant. This season-to-season variation of AVG is expected, since we know that AVG has a large chance or random element. In contrast, the consistently small value of Gwynn’s strikeout rate across seasons (the top right graph of Figure 8) is remarkable. Gwynn had an extraordinary ability to get his bat on the ball and his strikeout rate stayed in the 4 to 5 percent rate over his entire career.</p>
+<p>The patterns of the remaining four graphs are consistent with the basic theme of this paper. Gwynn’s tendency to walk, as measured by the walk rate, was consistently a little below-average, and his home run rate stayed about 1 percent (although he displayed some additional home run power towards the end of his career). We see much year-toyear fluctuation in Gwynn’s in-play singles rate and his in-play doubles plus triples rate. It is clear that the variation in the season AVGs is controlled, in large part, by the variation in the in-play singles rates and doubles plus triples rates. Gwynn’s in-play singles rate was consistently at the upper tail of the distribution for regular players, suggesting that Gwynn had a skill to hit a ball in a location for a single. This skill to single was probably related to his skill in not striking out.</p>
+</section>
+</section>
+<section id="concluding-remarks" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Concluding Remarks</h1>
+<p>It is well-known by sabermetricians (the people who do research on baseball statistics) that batting average is a poor measure of hitting performance. AVG ignores walks and the different values of hits, and so there are much superior measures of hitting performance such as Runs Created, OPS (on-base percentage plus slugging percentage), and the Linear Weights measure. But our criticism of AVG is more subtle. The batting average is difficult to interpret since it confounds two hitting characteristics, the propensity of striking out and the ability to make a batted ball fall in for a hit. For this reason, it is difficult to understand what it means for a player to possess a batting average of .320. What does this say about this player’s hitting ability? We have shown here that AVG is a relatively poor measure of a batter’s ability, and there are superior measures of ability such as strikeout rate, walk rate, and in-play home run rate. Moreover, in Section 5, we have measured the size of “ability” of different statistics by estimating the random effects distribution of abilities. The variation of the ability distribution of AVG, in-play singles rate, and in-play doubles plus triples rates is relatively narrow, while the ability distribution of strikeout rate, walk rate, and in-play home run rate are wide.</p>
+<p>Although our methodology of measuring “ability” may be new, the main points are likely known by sabermetricians. For example, Runquist (2001) explains that strikeouts and walks are more reliable than hits – hits are more subject to random variation. There has been much current interest if a pitcher really has an ability to control the location of balls that are placed in play. McCracken (2001) claimed that the variation in turning balls-in-play into outs mainly reflected chance rather than pitchers’ abilities. Rankin (2001) investigated career totals for a number of outstanding pitchers and showed that, as these pitchers matured, their in-play batting averages tended to decrease.</p>
+<p>Probably the most interesting aspect of this study is that it motivates new ways of evaluating hitters. Instead of looking at summary measures of batting performance, it seems useful to look at particular qualities of hitting, such as striking out, drawing a walk, or hitting a home run, that are more ability-driven than other measures. We demonstrated the usefulness of this perspective in Section 6 in comparing the career hitting of Mike Schmidt and George Brett and in studying the hitting of Barry Bonds and Tony Gwynne. For future study, it would be useful to look at a large number of great hitters, today and in the past, with respect to these qualities.</p>
+</section>
+<section id="references" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> References</h1>
+<p>Albert, J. (1998), “The Home Run Hitting of Mike Schmidt,” Chance, 11, 27-34.</p>
+<p>Albert, J. and Bennett (2003), Curve Ball, Copernicus Press, revised edition.</p>
+<p>Bickel, E. (2004), “Why It’s So Hard to Hit .400”. Baseball Research Journal, 32, 15- 21.</p>
+<p>Bickel, E. and Stotz, D. (2003), “Batting Average by Count and Pitch Type,” Baseball Research Journal, 31, 29-34.</p>
+<p>McCracken, V. (2001), “Pitching and Defense,” Baseball Prospectus (www.baseballprospectus.com).</p>
+<p>Rankin, D. (2001), “Trends in Career Pitcher Ball-in-Play Average,” By the Numbers (Newsletter of the SABR Statistical Analysis Committee), Vol. 11, Number 2, 5-6.</p>
+<p>Runquist, W. (2001), “The Reliability of Pitcher Ball-in-Play Average,” By the Numbers (Newsletter of the SABR Statistical Analysis Committee), Vol. 11, Number 4, 1-2.</p>
+<p>Schell, M. (1999), Baseball’s All-Time Best Hitters, Princeton University Press.</p>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
