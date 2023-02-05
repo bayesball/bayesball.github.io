@@ -882,27 +882,27 @@ E = - p_R \, \log(p_R) - p_S \, log(p_S) - p_C \, log(p_C)
 <p>In a recent post, I illustrated plotting FanGraphs pitching measures for consecutive seasons as a means of detecting which measures were informative about pitching ability. Here is a graph of ground ball percentages for the 2021 and 2022 seasons. This is an illustration of a measure with a high positive correlation value that reflects pitching ability.</p>
 <p>There are two obvious circled outliers in this plot – Cristian Javier had unusually small ground ball rates under 30% and Framber Valdez had unusually high rates around 70%.</p>
 <p><img src="figures/pitching/pitching47.png" class="img-fluid" style="width:70.0%"></p>
-<p>Since I am a Phillies fan, I recall that Javier and Valdez both pitched well against the Phillies in the 2022 World Series won by the Astros. Below I graph the launch variables of the balls put into play by the Phillies against these two pitchers in the World Series. I’ve added a vertical line which is the dividing line for a ground ball. Note that the Phillies did hit some balls hard against Valdez but most of them were ground balls. Against Javier, the Phillies did get some balls in the air but most of them were not hit hard.</p>
+<p>Since I am a Phillies fan, I recall that Javier and Valdez both pitched well against the Phillies in the 2022 World Series won by the Astros. Below I graph the launch variables of the balls put into play by the Phillies against these two pitchers in the World Series. I’ve added a vertical line located at the dividing launch angle value (10 degrees) for a ground ball. Note that the Phillies did hit some balls hard against Valdez but most of them were ground balls. Against Javier, the Phillies did get some balls in the air but most of them were not hit hard.</p>
 <p><img src="figures/pitching/pitching53.png" class="img-fluid" style="width:70.0%"></p>
-<p>In this post, I use these unusual ground ball rates as a springboard to explore the pitching characteristics of these two Astros starters. We will illustrate the use of various functions from the <code>CalledStrike</code> package to plot different pitching measures about the zone.</p>
+<p>In this post, I use these unusual ground ball rates as a springboard to explore the pitching characteristics of these two Astros starters for the 2021 and 2022 seasons. We will illustrate the use of various functions from the <code>CalledStrike</code> package to plot different pitching measures about the zone.</p>
 </section>
 <section id="pitch-types" class="level3" data-number="14.2">
 <h3 data-number="14.2" class="anchored" data-anchor-id="pitch-types"><span class="header-section-number">14.2</span> Pitch Types</h3>
-<p>Exploring the Statcast data for the 2023 season, we first look at what pitch types tend to result in ground balls. We define a GroundBall variable (“Yes” if the launch angle doesn’t exceed 10 degrees, and “No” otherwise) and construct a frequency table of pitch_type and GroundBall.</p>
-<p>Here’s Javier’s table. He tends to throw a four-seamer that tends not to induce ground balls – only 69 (32%) of the 148 + 69 = 217 balls in play are ground balls.</p>
+<p>Exploring the Statcast data for the 2021-2022 seasons, we first look at what pitch types tend to result in ground balls. We define a GroundBall variable (“Yes” if the launch angle doesn’t exceed 10 degrees, and “No” otherwise) and construct a frequency table of pitch_type and GroundBall.</p>
+<p>Here’s Javier’s table. He tends to throw a four-seamer that tends not to induce ground balls – only 120 (32%) of the 252 + 120 = 372 balls in play are ground balls.</p>
 <pre><code>pitch_type  No Yes
-         CH   7   6
-         FF 148  69
-         KC  14   5
-         SL  64  20</code></pre>
-<p>In contrast, here is the table for Valdez. He likes to throw a sinker and 236 (73%) out of the 86 + 236 = 322 balls in play result in ground balls.</p>
-<pre><code>pitch_type No Yes
-         CH 11  43
-         CU 35  61
-         FC 22  37
-         FF  5  15
-         SI 86 236</code></pre>
-<p>For the following discussion, we’ll focus on Javier’s four seamers and Valdez’s sinkers thrown to right-handed hitters.</p>
+         CH  19  13
+         FF 252 120
+         KC  21  10
+         SL  99  31</code></pre>
+<p>In contrast, here is the table for Valdez. He likes to throw a sinker and 401 (75%) out of the 133 + 401 = 534 balls in play result in ground balls.</p>
+<pre><code> pitch_type  No Yes
+         CH  26  91
+         CU  64 111
+         FC  22  37
+         FF  11  31
+         SI 133 401</code></pre>
+<p>For the following discussion, we’ll focus on Javier’s four seamers and Valdez’s sinkers thrown to right-handed hitters for these two seasons.</p>
 </section>
 <section id="pitch-locations" class="level3" data-number="14.3">
 <h3 data-number="14.3" class="anchored" data-anchor-id="pitch-locations"><span class="header-section-number">14.3</span> Pitch Locations</h3>
@@ -921,13 +921,13 @@ E = - p_R \, \log(p_R) - p_S \, log(p_S) - p_C \, log(p_C)
 </section>
 <section id="expected-woba" class="level3" data-number="14.6">
 <h3 data-number="14.6" class="anchored" data-anchor-id="expected-woba"><span class="header-section-number">14.6</span> Expected wOBA</h3>
-<p>Below I display tile plots of the expected wOBA of the two pitches for balls put into play by right-handed hitters. Batters do more damage on the four seamers on the outside of the zone. In contrast, when facing the sinker, the batters do best inside and high outside of the zone.</p>
+<p>Below I display tile plots of the expected wOBA of the two pitches for balls put into play by right-handed hitters. Batters do more damage on the four seamers towards the top-middle of the zone. Similarly, when facing the sinker, the batters do best when the pitch is thrown high in the zone. Hitters don’t do as well when they make contact with either pitch towards the bottom of the zone.</p>
 <p><img src="figures/pitching/pitching51.png" class="img-fluid" style="width:70.0%"></p>
 </section>
 <section id="pitch-values" class="level3" data-number="14.7">
 <h3 data-number="14.7" class="anchored" data-anchor-id="pitch-values"><span class="header-section-number">14.7</span> Pitch Values</h3>
 <p>One convenient way of summarizing these findings is to focus on the pitch value which includes the call on a pitch not swung at (ball or strike) and the outcome of the ball put into play. These pitch values are expressed such that a positive value favors the pitcher.</p>
-<p>Javier’s four seamer has its highest value in the middle to high region of the zone. Valdez’s sinker is most valuable in the lower outside region of the zone which induces many of these ground balls on balls put into play. Note that Valdez even gets positive value for low pitches outside of the zone.</p>
+<p>Javier’s four seamer has its highest values in the low-middle to high-outside regions of the zone. Valdez’s sinker is most valuable in the lower middle region of the zone which induces many of these ground balls on balls put into play. Note that Valdez even gets positive value for low pitches outside of the zone that would be called balls.</p>
 <p><img src="figures/pitching/pitching52.png" class="img-fluid" style="width:70.0%"></p>
 </section>
 <section id="closing-remarks-1" class="level3" data-number="14.8">
