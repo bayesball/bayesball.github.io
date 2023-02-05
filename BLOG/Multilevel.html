@@ -2,22 +2,28 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-0.9.309">
+<meta name="generator" content="quarto-1.2.269">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2022-11-28">
+<meta name="dcterms.date" content="2023-02-05">
 
 <title>Multilevel Modeling in Baseball</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
-span.underline{text-decoration: underline;}
-div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
 div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
 </style>
+
 
 <script src="Multilevel_files/libs/clipboard/clipboard.min.js"></script>
 <script src="Multilevel_files/libs/quarto-html/quarto.js"></script>
@@ -25,10 +31,10 @@ ul.task-list{list-style: none;}
 <script src="Multilevel_files/libs/quarto-html/tippy.umd.min.js"></script>
 <script src="Multilevel_files/libs/quarto-html/anchor.min.js"></script>
 <link href="Multilevel_files/libs/quarto-html/tippy.css" rel="stylesheet">
-<link id="quarto-text-highlighting-styles" href="Multilevel_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet">
+<link href="Multilevel_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="Multilevel_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="Multilevel_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="Multilevel_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+<link href="Multilevel_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
@@ -38,39 +44,40 @@ ul.task-list{list-style: none;}
 
 <div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
 <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-  <nav id="TOC" role="doc-toc">
+  <nav id="TOC" role="doc-toc" class="toc-active">
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"> <span class="header-section-number">1</span> Introduction</a></li>
-  <li><a href="#exchangeable-modeling" id="toc-exchangeable-modeling" class="nav-link" data-scroll-target="#exchangeable-modeling"> <span class="header-section-number">2</span> Exchangeable Modeling</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a></li>
+  <li><a href="#exchangeable-modeling" id="toc-exchangeable-modeling" class="nav-link" data-scroll-target="#exchangeable-modeling"><span class="toc-section-number">2</span>  Exchangeable Modeling</a>
   <ul class="collapse">
-  <li><a href="#efron-and-morris-baseball-study" id="toc-efron-and-morris-baseball-study" class="nav-link" data-scroll-target="#efron-and-morris-baseball-study"> <span class="header-section-number">2.1</span> Efron and Morris’ Baseball Study</a></li>
-  <li><a href="#a-shiny-app-to-predict-batting-rates" id="toc-a-shiny-app-to-predict-batting-rates" class="nav-link" data-scroll-target="#a-shiny-app-to-predict-batting-rates"> <span class="header-section-number">2.2</span> A Shiny App to Predict Batting Rates</a></li>
+  <li><a href="#efron-and-morris-baseball-study" id="toc-efron-and-morris-baseball-study" class="nav-link" data-scroll-target="#efron-and-morris-baseball-study"><span class="toc-section-number">2.1</span>  Efron and Morris’ Baseball Study</a></li>
+  <li><a href="#a-shiny-app-to-predict-batting-rates" id="toc-a-shiny-app-to-predict-batting-rates" class="nav-link" data-scroll-target="#a-shiny-app-to-predict-batting-rates"><span class="toc-section-number">2.2</span>  A Shiny App to Predict Batting Rates</a></li>
+  <li><a href="#batter-pitcher-matchups" id="toc-batter-pitcher-matchups" class="nav-link" data-scroll-target="#batter-pitcher-matchups"><span class="toc-section-number">2.3</span>  Batter Pitcher Matchups</a></li>
   </ul></li>
-  <li><a href="#nonnested-multilevel-models" id="toc-nonnested-multilevel-models" class="nav-link" data-scroll-target="#nonnested-multilevel-models"> <span class="header-section-number">3</span> Nonnested Multilevel Models</a>
+  <li><a href="#nonnested-multilevel-models" id="toc-nonnested-multilevel-models" class="nav-link" data-scroll-target="#nonnested-multilevel-models"><span class="toc-section-number">3</span>  Nonnested Multilevel Models</a>
   <ul class="collapse">
-  <li><a href="#is-pitching-75-of-baseball" id="toc-is-pitching-75-of-baseball" class="nav-link" data-scroll-target="#is-pitching-75-of-baseball"> <span class="header-section-number">3.1</span> Is Pitching 75% of Baseball?</a></li>
-  <li><a href="#run-scoring-offensive-and-defensive-effects" id="toc-run-scoring-offensive-and-defensive-effects" class="nav-link" data-scroll-target="#run-scoring-offensive-and-defensive-effects"> <span class="header-section-number">3.2</span> Run Scoring – Offensive and Defensive Effects</a></li>
+  <li><a href="#is-pitching-75-of-baseball" id="toc-is-pitching-75-of-baseball" class="nav-link" data-scroll-target="#is-pitching-75-of-baseball"><span class="toc-section-number">3.1</span>  Is Pitching 75% of Baseball?</a></li>
+  <li><a href="#run-scoring-offensive-and-defensive-effects" id="toc-run-scoring-offensive-and-defensive-effects" class="nav-link" data-scroll-target="#run-scoring-offensive-and-defensive-effects"><span class="toc-section-number">3.2</span>  Run Scoring – Offensive and Defensive Effects</a></li>
   </ul></li>
-  <li><a href="#situation-splits-changing-intercepts-changing-slopes-model" id="toc-situation-splits-changing-intercepts-changing-slopes-model" class="nav-link" data-scroll-target="#situation-splits-changing-intercepts-changing-slopes-model"> <span class="header-section-number">4</span> Situation Splits (Changing Intercepts, Changing Slopes Model)</a>
+  <li><a href="#situation-splits-changing-intercepts-changing-slopes-model" id="toc-situation-splits-changing-intercepts-changing-slopes-model" class="nav-link" data-scroll-target="#situation-splits-changing-intercepts-changing-slopes-model"><span class="toc-section-number">4</span>  Situation Splits (Changing Intercepts, Changing Slopes Model)</a>
   <ul class="collapse">
-  <li><a href="#count-effects" id="toc-count-effects" class="nav-link" data-scroll-target="#count-effects"> <span class="header-section-number">4.1</span> Count Effects</a></li>
-  <li><a href="#platoon-effects" id="toc-platoon-effects" class="nav-link" data-scroll-target="#platoon-effects"> <span class="header-section-number">4.2</span> Platoon Effects</a></li>
+  <li><a href="#count-effects" id="toc-count-effects" class="nav-link" data-scroll-target="#count-effects"><span class="toc-section-number">4.1</span>  Count Effects</a></li>
+  <li><a href="#platoon-effects" id="toc-platoon-effects" class="nav-link" data-scroll-target="#platoon-effects"><span class="toc-section-number">4.2</span>  Platoon Effects</a></li>
   </ul></li>
-  <li><a href="#multilevel-modeling-of-career-trajectories" id="toc-multilevel-modeling-of-career-trajectories" class="nav-link" data-scroll-target="#multilevel-modeling-of-career-trajectories"> <span class="header-section-number">5</span> Multilevel Modeling of Career Trajectories</a>
+  <li><a href="#multilevel-modeling-of-career-trajectories" id="toc-multilevel-modeling-of-career-trajectories" class="nav-link" data-scroll-target="#multilevel-modeling-of-career-trajectories"><span class="toc-section-number">5</span>  Multilevel Modeling of Career Trajectories</a>
   <ul class="collapse">
-  <li><a href="#introduction-7" id="toc-introduction-7" class="nav-link" data-scroll-target="#introduction-7"> <span class="header-section-number">5.1</span> Introduction</a></li>
-  <li><a href="#the-wrong-way-to-look-at-aging-data" id="toc-the-wrong-way-to-look-at-aging-data" class="nav-link" data-scroll-target="#the-wrong-way-to-look-at-aging-data"> <span class="header-section-number">5.2</span> The Wrong Way to Look at Aging Data</a></li>
-  <li><a href="#derek-jeters-obp-trajectory" id="toc-derek-jeters-obp-trajectory" class="nav-link" data-scroll-target="#derek-jeters-obp-trajectory"> <span class="header-section-number">5.3</span> Derek Jeter’s OBP Trajectory</a></li>
-  <li><a href="#the-problem-individual-fits-can-be-crummy" id="toc-the-problem-individual-fits-can-be-crummy" class="nav-link" data-scroll-target="#the-problem-individual-fits-can-be-crummy"> <span class="header-section-number">5.4</span> The Problem: Individual Fits Can be Crummy</a></li>
-  <li><a href="#what-can-we-do" id="toc-what-can-we-do" class="nav-link" data-scroll-target="#what-can-we-do"> <span class="header-section-number">5.5</span> What Can We Do?</a></li>
-  <li><a href="#multilevel-modeling-to-the-rescue" id="toc-multilevel-modeling-to-the-rescue" class="nav-link" data-scroll-target="#multilevel-modeling-to-the-rescue"> <span class="header-section-number">5.6</span> Multilevel Modeling to the Rescue</a></li>
-  <li><a href="#multilevel-modelling-gives-reasonable-fits" id="toc-multilevel-modelling-gives-reasonable-fits" class="nav-link" data-scroll-target="#multilevel-modelling-gives-reasonable-fits"> <span class="header-section-number">5.7</span> Multilevel Modelling Gives Reasonable Fits</a></li>
-  <li><a href="#when-do-players-peak" id="toc-when-do-players-peak" class="nav-link" data-scroll-target="#when-do-players-peak"> <span class="header-section-number">5.8</span> When Do Players Peak?</a></li>
-  <li><a href="#some-closing-comments" id="toc-some-closing-comments" class="nav-link" data-scroll-target="#some-closing-comments"> <span class="header-section-number">5.9</span> Some Closing Comments</a></li>
+  <li><a href="#introduction-8" id="toc-introduction-8" class="nav-link" data-scroll-target="#introduction-8"><span class="toc-section-number">5.1</span>  Introduction</a></li>
+  <li><a href="#the-wrong-way-to-look-at-aging-data" id="toc-the-wrong-way-to-look-at-aging-data" class="nav-link" data-scroll-target="#the-wrong-way-to-look-at-aging-data"><span class="toc-section-number">5.2</span>  The Wrong Way to Look at Aging Data</a></li>
+  <li><a href="#derek-jeters-obp-trajectory" id="toc-derek-jeters-obp-trajectory" class="nav-link" data-scroll-target="#derek-jeters-obp-trajectory"><span class="toc-section-number">5.3</span>  Derek Jeter’s OBP Trajectory</a></li>
+  <li><a href="#the-problem-individual-fits-can-be-crummy" id="toc-the-problem-individual-fits-can-be-crummy" class="nav-link" data-scroll-target="#the-problem-individual-fits-can-be-crummy"><span class="toc-section-number">5.4</span>  The Problem: Individual Fits Can be Crummy</a></li>
+  <li><a href="#what-can-we-do" id="toc-what-can-we-do" class="nav-link" data-scroll-target="#what-can-we-do"><span class="toc-section-number">5.5</span>  What Can We Do?</a></li>
+  <li><a href="#multilevel-modeling-to-the-rescue" id="toc-multilevel-modeling-to-the-rescue" class="nav-link" data-scroll-target="#multilevel-modeling-to-the-rescue"><span class="toc-section-number">5.6</span>  Multilevel Modeling to the Rescue</a></li>
+  <li><a href="#multilevel-modelling-gives-reasonable-fits" id="toc-multilevel-modelling-gives-reasonable-fits" class="nav-link" data-scroll-target="#multilevel-modelling-gives-reasonable-fits"><span class="toc-section-number">5.7</span>  Multilevel Modelling Gives Reasonable Fits</a></li>
+  <li><a href="#when-do-players-peak" id="toc-when-do-players-peak" class="nav-link" data-scroll-target="#when-do-players-peak"><span class="toc-section-number">5.8</span>  When Do Players Peak?</a></li>
+  <li><a href="#some-closing-comments" id="toc-some-closing-comments" class="nav-link" data-scroll-target="#some-closing-comments"><span class="toc-section-number">5.9</span>  Some Closing Comments</a></li>
   </ul></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"> <span class="header-section-number">6</span> References</a></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">6</span>  References</a></li>
   </ul>
 </nav>
 </div>
@@ -80,8 +87,6 @@ ul.task-list{list-style: none;}
 <div class="quarto-title">
 <h1 class="title">Multilevel Modeling in Baseball</h1>
 </div>
-
-
 
 
 
@@ -97,9 +102,10 @@ ul.task-list{list-style: none;}
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 28, 2022</p>
+      <p class="date">February 5, 2023</p>
     </div>
   </div>
+  
     
   </div>
   
@@ -261,13 +267,80 @@ ul.task-list{list-style: none;}
 <p>This Shiny app is currently the function <code>PredictingBattingRates()</code> in my <code>ShinyBaseball</code> package. The code for the app is contained in a single file <code>app.R</code> that can be found here.</p>
 </section>
 </section>
+<section id="batter-pitcher-matchups" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="batter-pitcher-matchups"><span class="header-section-number">2.3</span> Batter Pitcher Matchups</h3>
+<section id="introduction-3" class="level4" data-number="2.3.1">
+<h4 data-number="2.3.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">2.3.1</span> Introduction</h4>
+<p>There is much&nbsp;interest in batter-pitcher matchups. The media likes to report batters who have unusually good or poor batting averages against specific pitchers. That raises the obvious questions:</p>
+<p>Is there any information in these batting averages? Many of these batting averages are based on small numbers of at-bats, so maybe we are just reporting interesting noise? This post says to be careful about interpreting this type of data. If there is some information in these batter/pitcher splits, how can we report these splits in some meaningful way?</p>
+<p>In this post we use R and Retrosheet data to find batting averages of all hitters who face a particular pitcher of interest. I will focus on all hitters who faced Jamie Moyer who had a long pitching career. We see that these breakdowns are hard to interpret due to the different sample sizes. We apply some model smoothing to get reasonable estimates at the true batting averages.</p>
+</section>
+<section id="collecting-the-retrosheet-data" class="level4" data-number="2.3.2">
+<h4 data-number="2.3.2" class="anchored" data-anchor-id="collecting-the-retrosheet-data"><span class="header-section-number">2.3.2</span> Collecting the Retrosheet Data</h4>
+<p>I first collect Retrosheet play-by-play data for all seasons from 1960 through 2013. &nbsp;After downloading this data, I store all of this data in three R data frames – the&nbsp;“pbp.60.79” data frame contains play-by-play for the 1960 through 1979 seasons, a second “pbp.80.99” contains&nbsp;data for seasons 1980 through 1999, and a third “pbp.00.13” contains for seasons 2000-2013. I store this data into three workspaces and load these into R before using the function below. (By the way, 54 years of Retrosheet data represent about 8.9 million lines of plays and 99 variables, but R seems to handle that amount of data fine.) Currently, these R workspaces can be downloaded from my web server.</p>
+<pre><code>load(url("http://bayes.bgsu.edu/baseball/pbp.1960.1979.Rdata"))
+load(url("http://bayes.bgsu.edu/baseball/pbp.1980.1999.Rdata"))
+load(url("http://bayes.bgsu.edu/baseball/pbp.2000.2013.Rdata"))</code></pre>
+</section>
+<section id="the-raw-batting-averages" class="level4" data-number="2.3.3">
+<h4 data-number="2.3.3" class="anchored" data-anchor-id="the-raw-batting-averages"><span class="header-section-number">2.3.3</span> The Raw Batting Averages</h4>
+<p>Suppose we collect (H, AB) for all batters for a given pitcher and plot the batting averages H/AB against the AB. A typical example of this graph is given below – we plot the batting averages for all 1436 batters who faced Jamie Moyer. I use the number of hits as the plotting point in this graph.</p>
+<p><img src="figures/multilevel/matchup1.png" class="img-fluid" style="width:70.0%"></p>
+<p>Clearly, this graph is hard to interpret. There is much variability in the batting averages for players with small numbers of at-bats. There were players who had 1000 and 0 batting averages against Moyer, but certainly these weren’t the best or worst hitters against Jamie. We suspect that the best hitters are the ones who faced Moyer a number of times, but this cloud of chance variability is making the identification of these best hitters difficult.</p>
+</section>
+<section id="smoothing-the-batting-averages" class="level4" data-number="2.3.4">
+<h4 data-number="2.3.4" class="anchored" data-anchor-id="smoothing-the-batting-averages"><span class="header-section-number">2.3.4</span> Smoothing the Batting Averages</h4>
+<p>Fortunately, there is a straightforward way to make sense of this data. For all of the 1436 batters, we imagine that there are underlying hitting probabilities <span class="math inline">\(p_1, ..., p_{1436}\)</span>, and we’d like to estimate all of these probabilities. A reasonable model (a so-called random effects model) says that these probabilities come from a beta curve and we estimate the parameters of this curve from this data.</p>
+<p>When we fit this model, there will be estimates that we call <span class="math inline">\(\eta\)</span> and <span class="math inline">\(K\)</span>. The estimate <span class="math inline">\(\eta\)</span> is a typical batting average, and <span class="math inline">\(K\)</span> is an indication of the spread of the probabilities with smaller <span class="math inline">\(K\)</span> values indicating more spread.</p>
+<p>One good feature of this approach is that it gives us smoothed estimates at the hitting probabilities. A good estimate at the hitting probability for a particular player is given by <span class="math display">\[
+ESTIMATE = \frac{H + K \eta}{AB + K}
+\]</span></p>
+<p>For example, Chris Gomez was 3 for 30 against Jamie Moyer in his career for a 3/30 = .100 batting average. From the Moyer data, we estimate <span class="math inline">\(\eta = 0.266\)</span> and <span class="math inline">\(K = 194\)</span>. So I estimate Gomez’s true hitting probability against Moyer to be <span class="math display">\[
+\frac{3 + 194 \times 0.266}{30 + 194} = 0.244
+\]</span> This estimate smooths the raw average towards the overall Moyer batting average of 0.266.</p>
+<p>Assuming you have all of the Retrosheet data available in your R workspace, the function <code>batter.matchup.ggplot()</code> will (1) find all of the (H, AB) data for all batters who face a specific pitcher, and (2) fit the random effects model, and give you the estimates of <span class="math inline">\(\eta\)</span> and <span class="math inline">\(K\)</span>, and computes and graphs these smoothed estimates. The function can be found at my gist site here. I illustrate this function for Jamie Moyer. (Actually when you source this gist, you will load in all of the Retrosheet data into the workspace and then read in the function. After this function is sourced, you can apply batter.matchup.ggplot for different pitchers who played in the seasons 1960 through 2013.)</p>
+<pre><code>library(devtools)
+source_gist("2b70b09a447a3d06188b")
+B1 &lt;- batter.matchup.ggplot("Jamie Moyer")</code></pre>
+<p><img src="figures/multilevel/matchup2.png" class="img-fluid" style="width:70.0%"></p>
+<p>Note that these smoothed estimates adjust the batting averages for the hitters with small values of AB heavily towards the average. In contrast, the smoothing effect is smaller for the players with large number of AB.</p>
+<p>The output gives the estimates of <span class="math inline">\(\eta\)</span> and <span class="math inline">\(K\)</span> and ranks the hitters who had the largest (and smallest) probability estimate against Moyer. The data frame B1 contains the H, AB, and improved estimates for all hitters. The top and bottom 2 hitters are labeled in the graph.</p>
+<pre><code>###       eta          K
+###  0.265939 194.454480
+###
+###    BAT_ID AB  H      Batter.Name  Estimate Num
+###1 kotsm001 36 21      Mark Kotsay 0.3155202   1
+###2 willb002 87 34  Bernie Williams 0.3045360   2
+###3 delgc001 82 32   Carlos Delgado 0.3028095   3
+###4 wrigd002 55 23     David Wright 0.2995057   4
+###5 snowj001 21 12       J. T. Snow 0.2957146   5
+###6 galaa001 41 17 Andres Galarraga 0.2918315   6
+###
+###    BAT_ID AB H     Batter.Name  Estimate  Num
+###1 velar001 49 8   Randy Velarde 0.2452739 1431
+###2 hernr002 41 6 Ramon Hernandez 0.2451133 1432
+###3 nixoo001 21 1      Otis Nixon 0.2446597 1433
+###4 bross001 46 7   Scott Brosius 0.2441753 1434
+###5 gomec001 30 3     Chris Gomez 0.2437600 1435
+###6 randj002 48 7       Joe Randa 0.2421611 1436</code></pre>
+</section>
+<section id="reversals" class="level4" data-number="2.3.5">
+<h4 data-number="2.3.5" class="anchored" data-anchor-id="reversals"><span class="header-section-number">2.3.5</span> Reversals</h4>
+<p>We see that by this table, Mark Kotsay had the highest probability estimate against Moyer, and Joe Randa had the worst. We get some interesting reversals in this ranking. For example, who was better – David Wright with a 23/55 = 0.418 batting average or Carlos Delgado with an average of 32/82 = 0.390? Wright had a higher average, but Delgado’s performance was based on a larger number of AB – we have more information about Delgado’s true batting average. Our method makes an appropriate adjustment – Delgado’s estimate of 0.303 is actually higher than Wright’s estimate of 0.300.</p>
+<p>This function is fun to apply and you are welcome to try it out for any pitcher of interest. One thing you learn is that for some pitchers, the variability between the hitting probabilities is small (I am thinking of Nolan Ryan) and other pitchers (think of Dennis Eckersley) had a high variability. Pitchers who are especially tough against batters on the same side will have small estimates of <span class="math inline">\(K\)</span>.</p>
+<p>Once you have the Retrosheet data and the function, you can look at Eckersley and Ryan’s splits by typing:</p>
+<pre><code>B2 &lt;- batter.matchup.ggplot("Dennis Eckersley")
+B3 &lt;- batter.matchup.ggplot("Nolan Ryan")</code></pre>
+<p>The lesson here is that batter-pitcher matchups data are not just noise. There is variation between the true batting averages against a specific pitcher and one can measure this variation by a random-effects model. This allows us to smooth the raw batting averages in a reasonable way to learn about the good and bad matchups.</p>
+</section>
+</section>
 </section>
 <section id="nonnested-multilevel-models" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="nonnested-multilevel-models"><span class="header-section-number">3</span> Nonnested Multilevel Models</h2>
 <section id="is-pitching-75-of-baseball" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="is-pitching-75-of-baseball"><span class="header-section-number">3.1</span> Is Pitching 75% of Baseball?</h3>
-<section id="introduction-3" class="level4" data-number="3.1.1">
-<h4 data-number="3.1.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">3.1.1</span> Introduction</h4>
+<section id="introduction-4" class="level4" data-number="3.1.1">
+<h4 data-number="3.1.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">3.1.1</span> Introduction</h4>
 <p>Baseball legend Connie Mack supposedly said that pitching was 75% of baseball. I’m not sure how Mack arrived at the number 75%, but a general problem of interest is to understand the batter/pitcher dynamics. When one looks at a plate appearance, how much of the outcome is determined by the hitter and how much is determined by the pitcher?</p>
 <p>Noah Thurm recently wrote an interesting article on FanGraphs on understanding the attributes of successful pitchers from Statcast data. Here’s the opening three sentences of this article:</p>
 <p>“Successful pitchers limit damage by minimizing the quality of contact they allow. How they can best do that remains up for debate, as pitchers tend to focus on some combination of deception, movement, and location to try and miss barrels. I propose that the most important pitcher-influenced variable to quality of contact is Launch Angle, and understanding and influencing it ought to be a priority for all pitchers.”</p>
@@ -281,17 +354,17 @@ ul.task-list{list-style: none;}
 <p>where <span class="math inline">\(\beta_i\)</span> is the effect of the batter and <span class="math inline">\(\gamma_i\)</span> is the effect of the pitcher. We assume that the batter effects <span class="math inline">\(\beta_1, ..., \beta_I\)</span> come from a normal distribution with mean 0 and standard deviation <span class="math inline">\(\sigma_B\)</span>, and the pitcher effects <span class="math inline">\(\gamma_1, ..., \gamma_J\)</span> are a sample from a normal distribution with mean 0 and standard deviation <span class="math inline">\(\sigma_P\)</span>.</p>
 <p>When we fit this model to data, we focus on the estimates of <span class="math inline">\(\sigma_B\)</span> and <span class="math inline">\(\sigma_P\)</span> which tells us how much variability of the outcomes is due respectively to the batters and to the pitchers. We can compare these two standard deviation estimates by computing the ratio <span class="math inline">\(R = \sigma_B / \sigma_P\)</span>. If <span class="math inline">\(R &gt; 1\)</span>, this tells us that the batters have more control over the different outcomes – if instead <span class="math inline">\(R &lt; 1\)</span>, then the pitchers have more control over the outcome variation.</p>
 <p>Here’s an example of quick fitting this model on R using the <code>glmer()</code> function in the <code>lme4</code> package. We have the Retrosheet play-by-play files for the 2019 season, <code>SO</code> is an indicator of a strikeout and <code>BAT_ID</code> and <code>PIT_ID</code> are respectively codes for the batter and pitcher. I use the <code>VarCorr()</code> function to extract the standard deviation estimates and compute the ratio of standard deviations <span class="math inline">\(R\)</span>.</p>
-<pre><code>fit &lt;- glmer(SO ~ (1 | PIT_ID) + (1 | BAT_ID),
-                 data = d,
-                 family = binomial)
+<pre><code>    fit &lt;- glmer(SO ~ (1 | PIT_ID) + (1 | BAT_ID),
+                     data = d,
+                     family = binomial)
 
-(sds &lt;- VarCorr(fit))
-Groups Name        Std.Dev.
- BAT_ID (Intercept) 0.5016  
- PIT_ID (Intercept) 0.3118
+    (sds &lt;- VarCorr(fit))
+    Groups Name        Std.Dev.
+     BAT_ID (Intercept) 0.5016  
+     PIT_ID (Intercept) 0.3118
 
-(R &lt;- 0.5016 / 0.3118)
-[1] 1.608724</code></pre>
+    (R &lt;- 0.5016 / 0.3118)
+    [1] 1.608724</code></pre>
 <p>In the old days of baseball, the pitchers were supposed to throw underhand – essentially they were just putting the ball in play. In this scenario, one would think that the batters controlled the variability in the outcomes of plate appearances. If we fit this model to batting outcomes from this old-time era, we should find that <span class="math inline">\(R &gt; 1\)</span>. Of course, baseball has changed since those early years and pitchers are now trying to get the batters out, so it is less clear if the batters or the pitchers are currently contributing more to the variability of the PA outcome.</p>
 </section>
 <section id="outcomes-of-a-plate-appearance" class="level4" data-number="3.1.3">
@@ -340,8 +413,8 @@ Groups Name        Std.Dev.
 </section>
 <section id="run-scoring-offensive-and-defensive-effects" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="run-scoring-offensive-and-defensive-effects"><span class="header-section-number">3.2</span> Run Scoring – Offensive and Defensive Effects</h3>
-<section id="introduction-4" class="level4" data-number="3.2.1">
-<h4 data-number="3.2.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">3.2.1</span> Introduction</h4>
+<section id="introduction-5" class="level4" data-number="3.2.1">
+<h4 data-number="3.2.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">3.2.1</span> Introduction</h4>
 <p>Watching the 2022 World Series, it seemed that the Astros and the Phillies had similar offensives, but the Astros had a deeper and more talented pitching staff, leading to their victory in 6 games in the Series. That makes one reflect about the relative importance of the offense and the defense (pitching and fielding) in baseball. Let’s focus on run scoring in a game.</p>
 <p>How much of run scoring in a game is due to the offense and how much is attributed to the defense?</p>
 <p>Tom Tango recently posted on this topic titled “Revenge of the Defense”. He focused on average numbers of runs scored and runs allowed for teams across seasons. One takeaway from Tom’s exploration is that the variation in run scoring, in recent seasons, is more about differences in team defenses than it is about difference in team offensives.</p>
@@ -401,8 +474,8 @@ Groups Name        Std.Dev.
 <h2 data-number="4" class="anchored" data-anchor-id="situation-splits-changing-intercepts-changing-slopes-model"><span class="header-section-number">4</span> Situation Splits (Changing Intercepts, Changing Slopes Model)</h2>
 <section id="count-effects" class="level3" data-number="4.1">
 <h3 data-number="4.1" class="anchored" data-anchor-id="count-effects"><span class="header-section-number">4.1</span> Count Effects</h3>
-<section id="introduction-5" class="level4" data-number="4.1.1">
-<h4 data-number="4.1.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">4.1.1</span> Introduction</h4>
+<section id="introduction-6" class="level4" data-number="4.1.1">
+<h4 data-number="4.1.1" class="anchored" data-anchor-id="introduction-6"><span class="header-section-number">4.1.1</span> Introduction</h4>
 <p>In a previous post I introduced some situational hitting data, setting the stage for this post’s discussion of Bayesian multilevel models. Multilevel modeling is one of the big Bayesian success stories and it is a great way of implementing a regression model when there is a natural grouping of the data. By the way, the Economist currently has forecasts for the US 2020 Presidential election that are based on the use of dynamic Bayesian multilevel models on polling data.</p>
 <p>Let’s review the basic situational data problem introduced in last week’s post. We’re interested in learning about the hitter’s advantage when he has a favorable count. Here we are going to compare “neutral” counts (0-0, 1-0, 1-1, 2-1, 3-2) with “behind” counts (0-1, 0-2, 1-2, 2-2) and see how a batter’s expected wOBA improves as he is in a neutral count as opposed to being behind in the count. (I decided on not using the “ahead” counts due to the small sample sizes.). We’re going to use a simple regression model to make this comparison and we’ll contrast three approaches:</p>
 <ul>
@@ -474,8 +547,8 @@ summary(newfit)</code></pre>
 </section>
 <section id="platoon-effects" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="platoon-effects"><span class="header-section-number">4.2</span> Platoon Effects</h3>
-<section id="introduction-6" class="level4" data-number="4.2.1">
-<h4 data-number="4.2.1" class="anchored" data-anchor-id="introduction-6"><span class="header-section-number">4.2.1</span> Introduction</h4>
+<section id="introduction-7" class="level4" data-number="4.2.1">
+<h4 data-number="4.2.1" class="anchored" data-anchor-id="introduction-7"><span class="header-section-number">4.2.1</span> Introduction</h4>
 <p>In an earlier post, I examined pitcher and batting side changes in baseball, but I didn’t say anything about platoon advantages. I am working on a survey paper on situational effects in baseball, and I was rereading Chapter 6 of The Book by Tango, Lichtman, and Dolphin. I was focusing on the following table (reproduced from Table 66 on page 156):</p>
 <p><img src="figures/multilevel/platoon1.png" class="img-fluid" style="width:70.0%"></p>
 <p>This particular chapter of The Book considers the meaning of platoon effects. We know that players generally have a higher weighted on-base percentages (wOBA) when facing a pitcher from the opposite side. But these platoon splits are hard to interpret due to the small sample sizes. The authors are primarily interested in the spread not in the observed platoon splits, but rather the spread in the players’ platoon talents. In this post, I will give an overview of how one can measure the size of the platoon skill variation using R and the Retrosheet play-by-play data for the 2014 season.</p>
@@ -521,8 +594,8 @@ y = \alpha + \beta OPP
 </section>
 <section id="multilevel-modeling-of-career-trajectories" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="multilevel-modeling-of-career-trajectories"><span class="header-section-number">5</span> Multilevel Modeling of Career Trajectories</h2>
-<section id="introduction-7" class="level3" data-number="5.1">
-<h3 data-number="5.1" class="anchored" data-anchor-id="introduction-7"><span class="header-section-number">5.1</span> Introduction</h3>
+<section id="introduction-8" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="introduction-8"><span class="header-section-number">5.1</span> Introduction</h3>
 <p>A general problem in sabermetrics is to understand the patterns of career trajectories of baseball players. Specifically, when does a baseball player achieve peak performance? Phil Birbaum recently had a post in his Sabermetric Research blog where he talks about using regression models to understand trajectory patterns. This is a topic that I’ve played around with (probably too much!) for many years. Here’s my latest attempt to describe the use of Bayesian multilevel models to understand these trajectories. Monika Hu and I recently completed an undergraduate text on Bayesian modeling and this application is one of the case studies in our last chapter. I think this Bayesian modeling approach is one of the most attractive ways of learning about trajectories of professional athletes. Also, this will give me an opportunity to show the ease of fitting these multilevel models using Stan, the current “fast” algorithm for simulating Bayesian models by Markov chain Monte Carlo.</p>
 </section>
 <section id="the-wrong-way-to-look-at-aging-data" class="level3" data-number="5.2">
@@ -603,8 +676,26 @@ y = \alpha + \beta OPP
 
 </main>
 <!-- /main column -->
-<script type="application/javascript">
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
   const icon = "";
   const anchorJS = new window.AnchorJS();
   anchorJS.options = {
@@ -626,7 +717,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     button.classList.add('code-copy-button-checked');
     var currentTitle = button.getAttribute("title");
     button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
     setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
       button.setAttribute("title", currentTitle);
       button.classList.remove('code-copy-button-checked');
     }, 1000);
@@ -654,31 +762,50 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   for (var i=0; i<noterefs.length; i++) {
     const ref = noterefs[i];
     tippyHover(ref, function() {
-      let href = ref.getAttribute('href');
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
     });
   }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
   var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
   for (var i=0; i<bibliorefs.length; i++) {
     const ref = bibliorefs[i];
-    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
-    tippyHover(ref, function() {
-      var popup = window.document.createElement('div');
-      cites.forEach(function(cite) {
-        var citeDiv = window.document.createElement('div');
-        citeDiv.classList.add('hanging-indent');
-        citeDiv.classList.add('csl-entry');
-        var biblioDiv = window.document.getElementById('ref-' + cite);
-        if (biblioDiv) {
-          citeDiv.innerHTML = biblioDiv.innerHTML;
-        }
-        popup.appendChild(citeDiv);
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
       });
-      return popup.innerHTML;
-    });
+    }
   }
 });
 </script>
