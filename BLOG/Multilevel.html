@@ -89,7 +89,17 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#comparing-five-recent-seasons" id="toc-comparing-five-recent-seasons" class="nav-link" data-scroll-target="#comparing-five-recent-seasons"><span class="toc-section-number">6.7</span>  Comparing Five Recent Seasons</a></li>
   <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up"><span class="toc-section-number">6.8</span>  Wrap-Up</a></li>
   </ul></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">7</span>  References</a></li>
+  <li><a href="#ba-on-balls-in-play-launch-conditions-and-random-effects" id="toc-ba-on-balls-in-play-launch-conditions-and-random-effects" class="nav-link" data-scroll-target="#ba-on-balls-in-play-launch-conditions-and-random-effects"><span class="toc-section-number">7</span>  BA on Balls in Play, Launch Conditions, and Random Effects</a>
+  <ul class="collapse">
+  <li><a href="#introduction-11" id="toc-introduction-11" class="nav-link" data-scroll-target="#introduction-11"><span class="toc-section-number">7.1</span>  Introduction</a></li>
+  <li><a href="#estimating-batting-average-on-balls-in-play-from-launch-conditions" id="toc-estimating-batting-average-on-balls-in-play-from-launch-conditions" class="nav-link" data-scroll-target="#estimating-batting-average-on-balls-in-play-from-launch-conditions"><span class="toc-section-number">7.2</span>  Estimating Batting Average on Balls in Play from Launch Conditions</a></li>
+  <li><a href="#a-random-effects-model-1" id="toc-a-random-effects-model-1" class="nav-link" data-scroll-target="#a-random-effects-model-1"><span class="toc-section-number">7.3</span>  A Random Effects Model</a></li>
+  <li><a href="#understanding-differences-in-babip" id="toc-understanding-differences-in-babip" class="nav-link" data-scroll-target="#understanding-differences-in-babip"><span class="toc-section-number">7.4</span>  Understanding Differences in BABIP</a></li>
+  <li><a href="#an-adjustment-model-for-babip-data" id="toc-an-adjustment-model-for-babip-data" class="nav-link" data-scroll-target="#an-adjustment-model-for-babip-data"><span class="toc-section-number">7.5</span>  An Adjustment Model for BABIP Data</a></li>
+  <li><a href="#comparing-the-two-random-effects-models" id="toc-comparing-the-two-random-effects-models" class="nav-link" data-scroll-target="#comparing-the-two-random-effects-models"><span class="toc-section-number">7.6</span>  Comparing the Two Random Effects Models</a></li>
+  <li><a href="#summing-up" id="toc-summing-up" class="nav-link" data-scroll-target="#summing-up"><span class="toc-section-number">7.7</span>  Summing Up</a></li>
+  </ul></li>
+  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">8</span>  References</a></li>
   </ul>
 </nav>
 </div>
@@ -190,6 +200,8 @@ ul.task-list li input[type="checkbox"] {
 <p>This question relates to the general issue of aging among baseball players. In particular, at what age does a hitter or pitcher achieve peak performance? Section 5 uses a multilevel level to address this issue. One represents the pattern of career performance of a player by a quadratic regression model. One can simultaneously estimate the regression parameters for the players by the multilevel model. This provides improved fits of the players trajectories and one can obtain estimates of the ages where they achieve peak performance.</p>
 <p><strong>Understanding home run talents (Section 6)</strong></p>
 <p>It can be difficult to predict future home run performance since it depends on understanding a hitter’s <em>ability</em> to hit home runs but all we have are measures of his home run <em>performance</em>. Section 6 describes the use of a multilevel model to understand the distribution of home run abilities for all players in a particular season.</p>
+<p><strong>Random Effects Models</strong></p>
+<p>Multilevel modeling is similar to the use of random effects in regression models. Section 7 describes the use of several random effects models to understand player-to-player variation in the batting average on balls in play.</p>
 </section>
 <section id="exchangeable-modeling" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="exchangeable-modeling"><span class="header-section-number">2</span> Exchangeable Modeling</h2>
@@ -800,8 +812,55 @@ y = \alpha + \beta OPP
 </ul>
 </section>
 </section>
-<section id="references" class="level2" data-number="7">
-<h2 data-number="7" class="anchored" data-anchor-id="references"><span class="header-section-number">7</span> References</h2>
+<section id="ba-on-balls-in-play-launch-conditions-and-random-effects" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="ba-on-balls-in-play-launch-conditions-and-random-effects"><span class="header-section-number">7</span> BA on Balls in Play, Launch Conditions, and Random Effects</h2>
+<section id="introduction-11" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="introduction-11"><span class="header-section-number">7.1</span> Introduction</h3>
+<p>If you have been reading my blog over the years, you know that I talk a bit about random effects models where one shrinks measures of performance (such as a batting average) towards a common value. These shrunken estimates are much better predictors of future performance than standard measures that don’t make this adjustment. Also with the availability of Statcast data, I’ve devoted a lot of space on this blog talking about the use and interpretation of launch condition measurements such as launch angle and exit velocity towards positive outcomes like getting a base hit. I recently read an interesting paper on models that can incorporate general functions of fixed effects together with random effects. These are easy to fit using the mgcv package in R. I’ll review the use of some basic models and then show how one can construct and interpret these more sophisticated models.</p>
+</section>
+<section id="estimating-batting-average-on-balls-in-play-from-launch-conditions" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="estimating-batting-average-on-balls-in-play-from-launch-conditions"><span class="header-section-number">7.2</span> Estimating Batting Average on Balls in Play from Launch Conditions</h3>
+<p>I am going to focus on a random sample of 100 players who had at least 300 balls in play during the 2019 season. We are focusing only on balls in play so we are excluding home runs. We want to estimate the probability p that a ball in play is a hit. We’ll use the generalized additive model of the form</p>
+<p><span class="math display">\[
+logit(p) = s(LA, LS)
+\]</span></p>
+<p>where logit is the function <span class="math inline">\(\log(p/(1-p))\)</span> and <span class="math inline">\(s(LA, LS)\)</span> represents a smooth function of Launch Angle and Launch Speed. This is easy to fit using the <code>gam()</code> function in the <code>mgcv</code> package in R. Below I show contours of the fitted probability of a hit as a function of the two launch variables. (Remember I am excluding home runs, but still hard hit balls over 100 mpg are likely to be base hits.) I think this display clearly indicates the sweet location in terms of LA and LS for obtaining a base hit.</p>
+<p><img src="figures/multilevel/re1.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="a-random-effects-model-1" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="a-random-effects-model-1"><span class="header-section-number">7.3</span> A Random Effects Model</h3>
+<p>A different perspective focuses on estimating the probabilities of hit (on balls in play) for these 100 batters. One can also quickly fit a random effects model where one assumes (on a logit scale) that the hitter hit probabilities follow a normal distribution with mean m and standard deviation s. One estimates the mean m and standard deviation s from the data and this can be used to estimate the hit probabilities. Here I graph the estimates (on the probability scale) against the raw BA on balls in play. We notice several things. First, the observed BABIP values are shrunk about 50% towards the common value of 0.300. Second, there are some interesting outliers among my group of 100 – Tim Anderson and Bryan Reynolds on the high side and Jurickson Profar on the low side.</p>
+<p><img src="figures/multilevel/re2.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="understanding-differences-in-babip" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="understanding-differences-in-babip"><span class="header-section-number">7.4</span> Understanding Differences in BABIP</h3>
+<p>Why do batters differ so much on their BABIP (batting average on balls in play) probabilities? Well, getting a hit on a ball in play depends on a number of variables such as launch speed, exit velocity, spray angle, and batter speed, and certainly batters differ on all of these variables. Unfortunately, all of these variables are confounded when we compare two players BABIP probabilities. We don’t know if one player has a higher BABIP probability than another player since he hits the ball harder, or hits the ball at a better launch angle, or is faster. Wouldn’t it be nice if we could somehow adjust these BABIP probabilities for some of these variables? This would help us understand better why players differ in their BABIP values.</p>
+</section>
+<section id="an-adjustment-model-for-babip-data" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="an-adjustment-model-for-babip-data"><span class="header-section-number">7.5</span> An Adjustment Model for BABIP Data</h3>
+<p>The good news is that it is straightforward to fit a model that includes both launch condition variables and random effects. This model has the general form</p>
+<p><span class="math display">\[
+logit(p_{ij}) = s(LA_{ij}, LS_{ij}) + b_i
+\]</span></p>
+<p>where <span class="math inline">\(p_{ij}\)</span> is the probability the ith player gets a hit on his <span class="math inline">\(j\)</span>th ball in play, <span class="math inline">\(LA_{ij}, LS_{ij}\)</span> are values of launch angle and launch speed for this ball in play, and <span class="math inline">\(b_i\)</span> is a random effect where the collection of all random effects are assumed to be normal with mean 0 and standard deviation s.</p>
+<p>How do we compare these two random effects models? In the basic model, the term <span class="math inline">\(b_i\)</span> represents the ability of the player to get a hit on a ball in play. Now in this new model, <span class="math inline">\(b_i\)</span> represents the ability of the player to get a hit after adjusting for launch speed and launch angle. So if we compare two players using the new random effect estimates, these estimates have already been controlled for launch angle and launch speed, and differences are solely due to other variables such as speed or spray angle.</p>
+</section>
+<section id="comparing-the-two-random-effects-models" class="level3" data-number="7.6">
+<h3 data-number="7.6" class="anchored" data-anchor-id="comparing-the-two-random-effects-models"><span class="header-section-number">7.6</span> Comparing the Two Random Effects Models</h3>
+<p>For each of the 100 players in my sample, I have two random effect estimates – one for the Constant model which has only random effects and one for the Regression model that includes the term for the launch conditions. I’ve constructed a scatterplot of the two sets of estimates below. As one might expect, there is a positive association in the graph, but there is a good amount of scatter indicating that the ranks of players differ using the two measures. For example, DJ LeMahieu has a high random effect for the constant model and an average random effect for the regression model. That indicates that LeMaheiu’s good BABIP performance is attributed to his good launch speed and launch angle measurements. In contrast, Mallex Smith has an average random effect for the constant model and high random effect for the regression model. This suggests that Smith’s strength in BABIP is due to other variables like speed and spray angle (placement of balls in play).</p>
+<p><img src="figures/multilevel/re3.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="summing-up" class="level3" data-number="7.7">
+<h3 data-number="7.7" class="anchored" data-anchor-id="summing-up"><span class="header-section-number">7.7</span> Summing Up</h3>
+<ul>
+<li><p>Here is a link to the paper on hierarchical generalized additive models that got me interested in this particular analysis, specifically the ease of fitting these models using the <code>mgcv</code> package.</p></li>
+<li><p>On my Github Gist site, you’ll find all of the R code that I used for this analysis.</p></li>
+<li><p>This is preliminary work, but hopefully it will encourage others to try these models.</p></li>
+</ul>
+</section>
+</section>
+<section id="references" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="references"><span class="header-section-number">8</span> References</h2>
 <p>I have a number of posts that illustrate Bayesian multilevel modeling in different contexts. Here are some links:</p>
 <ul>
 <li>Here is one of my more popular posts where I use loess smoothing of trajectories to learn about peak age performance:</li>
