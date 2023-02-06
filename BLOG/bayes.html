@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jim Albert">
+<meta name="dcterms.date" content="2023-02-06">
+
+<title>Bayes Thinking</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="bayes_files/libs/clipboard/clipboard.min.js"></script>
+<script src="bayes_files/libs/quarto-html/quarto.js"></script>
+<script src="bayes_files/libs/quarto-html/popper.min.js"></script>
+<script src="bayes_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="bayes_files/libs/quarto-html/anchor.min.js"></script>
+<link href="bayes_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="bayes_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="bayes_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="bayes_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="bayes_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a></li>
+  <li><a href="#bayesian-learning-about-a-hitting-probability" id="toc-bayesian-learning-about-a-hitting-probability" class="nav-link" data-scroll-target="#bayesian-learning-about-a-hitting-probability"><span class="toc-section-number">2</span>  Bayesian Learning about a Hitting Probability</a>
+  <ul class="collapse">
+  <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1"><span class="toc-section-number">2.1</span>  Introduction</a></li>
+  <li><a href="#installing-the-probbayes-package" id="toc-installing-the-probbayes-package" class="nav-link" data-scroll-target="#installing-the-probbayes-package"><span class="toc-section-number">2.2</span>  Installing the ProbBayes Package</a></li>
+  <li><a href="#learning-about-a-hitting-probability" id="toc-learning-about-a-hitting-probability" class="nav-link" data-scroll-target="#learning-about-a-hitting-probability"><span class="toc-section-number">2.3</span>  Learning about a Hitting Probability</a></li>
+  <li><a href="#using-an-informative-prior" id="toc-using-an-informative-prior" class="nav-link" data-scroll-target="#using-an-informative-prior"><span class="toc-section-number">2.4</span>  Using an Informative Prior</a></li>
+  <li><a href="#try-the-course" id="toc-try-the-course" class="nav-link" data-scroll-target="#try-the-course"><span class="toc-section-number">2.5</span>  Try the Course?</a></li>
+  </ul></li>
+  <li><a href="#modeldata-simulations" id="toc-modeldata-simulations" class="nav-link" data-scroll-target="#modeldata-simulations"><span class="toc-section-number">3</span>  Model/Data Simulations</a>
+  <ul class="collapse">
+  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"><span class="toc-section-number">3.1</span>  Introduction</a></li>
+  <li><a href="#construct-a-prior" id="toc-construct-a-prior" class="nav-link" data-scroll-target="#construct-a-prior"><span class="toc-section-number">3.2</span>  Construct a Prior</a></li>
+  <li><a href="#decide-on-a-statistic" id="toc-decide-on-a-statistic" class="nav-link" data-scroll-target="#decide-on-a-statistic"><span class="toc-section-number">3.3</span>  Decide on a Statistic</a></li>
+  <li><a href="#modeldata-simulation" id="toc-modeldata-simulation" class="nav-link" data-scroll-target="#modeldata-simulation"><span class="toc-section-number">3.4</span>  Model/Data Simulation</a></li>
+  <li><a href="#inference" id="toc-inference" class="nav-link" data-scroll-target="#inference"><span class="toc-section-number">3.5</span>  Inference</a></li>
+  <li><a href="#r-functions" id="toc-r-functions" class="nav-link" data-scroll-target="#r-functions"><span class="toc-section-number">3.6</span>  R Functions</a></li>
+  <li><a href="#example-1-statistic-is-the-sum" id="toc-example-1-statistic-is-the-sum" class="nav-link" data-scroll-target="#example-1-statistic-is-the-sum"><span class="toc-section-number">3.7</span>  Example 1: Statistic is the Sum</a></li>
+  <li><a href="#example-2-statistic-is-the-largest-ofer" id="toc-example-2-statistic-is-the-largest-ofer" class="nav-link" data-scroll-target="#example-2-statistic-is-the-largest-ofer"><span class="toc-section-number">3.8</span>  Example 2: Statistic is the Largest Ofer</a></li>
+  <li><a href="#using-this-method-in-teaching" id="toc-using-this-method-in-teaching" class="nav-link" data-scroll-target="#using-this-method-in-teaching"><span class="toc-section-number">3.9</span>  Using this Method in Teaching</a></li>
+  </ul></li>
+  <li><a href="#constructing-a-prior-for-lindors-hit-probability" id="toc-constructing-a-prior-for-lindors-hit-probability" class="nav-link" data-scroll-target="#constructing-a-prior-for-lindors-hit-probability"><span class="toc-section-number">4</span>  Constructing a Prior for Lindor’s Hit Probability</a>
+  <ul class="collapse">
+  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3"><span class="toc-section-number">4.1</span>  Introduction</a></li>
+  <li><a href="#the-prediction-problem" id="toc-the-prediction-problem" class="nav-link" data-scroll-target="#the-prediction-problem"><span class="toc-section-number">4.2</span>  The Prediction Problem</a></li>
+  <li><a href="#lindors-batting-record" id="toc-lindors-batting-record" class="nav-link" data-scroll-target="#lindors-batting-record"><span class="toc-section-number">4.3</span>  Lindor’s Batting Record</a></li>
+  <li><a href="#specify-parameter-values-of-the-beta-prior" id="toc-specify-parameter-values-of-the-beta-prior" class="nav-link" data-scroll-target="#specify-parameter-values-of-the-beta-prior"><span class="toc-section-number">4.4</span>  Specify Parameter Values of the Beta Prior</a></li>
+  <li><a href="#update-with-2021-data" id="toc-update-with-2021-data" class="nav-link" data-scroll-target="#update-with-2021-data"><span class="toc-section-number">4.5</span>  Update with 2021 Data</a></li>
+  <li><a href="#prediction" id="toc-prediction" class="nav-link" data-scroll-target="#prediction"><span class="toc-section-number">4.6</span>  Prediction</a></li>
+  <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments"><span class="toc-section-number">4.7</span>  Comments</a></li>
+  </ul></li>
+  <li><a href="#what-do-you-learn-from-45-home-runs" id="toc-what-do-you-learn-from-45-home-runs" class="nav-link" data-scroll-target="#what-do-you-learn-from-45-home-runs"><span class="toc-section-number">5</span>  What Do You Learn From 45 Home Runs?</a>
+  <ul class="collapse">
+  <li><a href="#introduction-4" id="toc-introduction-4" class="nav-link" data-scroll-target="#introduction-4"><span class="toc-section-number">5.1</span>  Introduction</a></li>
+  <li><a href="#constructing-a-reasonable-prior" id="toc-constructing-a-reasonable-prior" class="nav-link" data-scroll-target="#constructing-a-reasonable-prior"><span class="toc-section-number">5.2</span>  Constructing a Reasonable Prior</a></li>
+  <li><a href="#predictive-checks-on-my-prior" id="toc-predictive-checks-on-my-prior" class="nav-link" data-scroll-target="#predictive-checks-on-my-prior"><span class="toc-section-number">5.3</span>  Predictive Checks on My Prior</a></li>
+  <li><a href="#updating-my-beliefs-with-data" id="toc-updating-my-beliefs-with-data" class="nav-link" data-scroll-target="#updating-my-beliefs-with-data"><span class="toc-section-number">5.4</span>  Updating My Beliefs with Data</a></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up"><span class="toc-section-number">5.5</span>  Wrap-Up</a></li>
+  </ul></li>
+  <li><a href="#pythagorean-modeling---i" id="toc-pythagorean-modeling---i" class="nav-link" data-scroll-target="#pythagorean-modeling---i"><span class="toc-section-number">6</span>  Pythagorean Modeling - I</a>
+  <ul class="collapse">
+  <li><a href="#introduction-5" id="toc-introduction-5" class="nav-link" data-scroll-target="#introduction-5"><span class="toc-section-number">6.1</span>  Introduction</a></li>
+  <li><a href="#bill-james-pythagorean-formula" id="toc-bill-james-pythagorean-formula" class="nav-link" data-scroll-target="#bill-james-pythagorean-formula"><span class="toc-section-number">6.2</span>  Bill James’ Pythagorean Formula</a></li>
+  <li><a href="#a-statistical-model-based-on-the-formula" id="toc-a-statistical-model-based-on-the-formula" class="nav-link" data-scroll-target="#a-statistical-model-based-on-the-formula"><span class="toc-section-number">6.3</span>  A Statistical Model Based on the Formula</a></li>
+  <li><a href="#figuring-out-the-prior" id="toc-figuring-out-the-prior" class="nav-link" data-scroll-target="#figuring-out-the-prior"><span class="toc-section-number">6.4</span>  Figuring Out the Prior</a></li>
+  <li><a href="#simulating-from-the-predictive-distribution" id="toc-simulating-from-the-predictive-distribution" class="nav-link" data-scroll-target="#simulating-from-the-predictive-distribution"><span class="toc-section-number">6.5</span>  Simulating from the Predictive Distribution</a></li>
+  <li><a href="#what-went-wrong-and-adjusting-my-prior" id="toc-what-went-wrong-and-adjusting-my-prior" class="nav-link" data-scroll-target="#what-went-wrong-and-adjusting-my-prior"><span class="toc-section-number">6.6</span>  What Went Wrong and Adjusting My Prior</a></li>
+  <li><a href="#comments-and-looking-ahead" id="toc-comments-and-looking-ahead" class="nav-link" data-scroll-target="#comments-and-looking-ahead"><span class="toc-section-number">6.7</span>  Comments and Looking Ahead</a></li>
+  </ul></li>
+  <li><a href="#pythagorean-modeling---ii" id="toc-pythagorean-modeling---ii" class="nav-link" data-scroll-target="#pythagorean-modeling---ii"><span class="toc-section-number">7</span>  Pythagorean Modeling - II</a>
+  <ul class="collapse">
+  <li><a href="#introduction-6" id="toc-introduction-6" class="nav-link" data-scroll-target="#introduction-6"><span class="toc-section-number">7.1</span>  Introduction</a></li>
+  <li><a href="#posterior" id="toc-posterior" class="nav-link" data-scroll-target="#posterior"><span class="toc-section-number">7.2</span>  Posterior</a></li>
+  <li><a href="#brute-force-calculation" id="toc-brute-force-calculation" class="nav-link" data-scroll-target="#brute-force-calculation"><span class="toc-section-number">7.3</span>  Brute Force Calculation</a></li>
+  <li><a href="#simulation-using-stan-software" id="toc-simulation-using-stan-software" class="nav-link" data-scroll-target="#simulation-using-stan-software"><span class="toc-section-number">7.4</span>  Simulation using Stan Software</a></li>
+  <li><a href="#prediction-of-wins" id="toc-prediction-of-wins" class="nav-link" data-scroll-target="#prediction-of-wins"><span class="toc-section-number">7.5</span>  Prediction of Wins</a></li>
+  <li><a href="#summing-up" id="toc-summing-up" class="nav-link" data-scroll-target="#summing-up"><span class="toc-section-number">7.6</span>  Summing Up</a></li>
+  </ul></li>
+  <li><a href="#learning-from-selected-data---introduction-to-approximate-bayesian-computation" id="toc-learning-from-selected-data---introduction-to-approximate-bayesian-computation" class="nav-link" data-scroll-target="#learning-from-selected-data---introduction-to-approximate-bayesian-computation"><span class="toc-section-number">8</span>  Learning from Selected Data - Introduction to Approximate Bayesian Computation</a>
+  <ul class="collapse">
+  <li><a href="#introduction-7" id="toc-introduction-7" class="nav-link" data-scroll-target="#introduction-7"><span class="toc-section-number">8.1</span>  Introduction</a></li>
+  <li><a href="#learning-from-season-statistics" id="toc-learning-from-season-statistics" class="nav-link" data-scroll-target="#learning-from-season-statistics"><span class="toc-section-number">8.2</span>  Learning from Season Statistics</a></li>
+  <li><a href="#learning-from-selected-data" id="toc-learning-from-selected-data" class="nav-link" data-scroll-target="#learning-from-selected-data"><span class="toc-section-number">8.3</span>  Learning from Selected Data</a></li>
+  <li><a href="#some-takeaways" id="toc-some-takeaways" class="nav-link" data-scroll-target="#some-takeaways"><span class="toc-section-number">8.4</span>  Some Takeaways</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Bayes Thinking</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jim Albert </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 6, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>This is a collection of posts from the blog “Exploring Baseball Data With R” that focus on Bayesian reasoning for baseball problems. Section 2 describes basic tenets of a Bayesian analysis in the problem of learning about a hitting probability. Section 3 describes a simulation-based way of doing Bayesian inference by simulating pairs of values of the parameter and the statistic.</p>
+<p>Section 4 illustrates the process of constructing a prior for a hitting probability for a specific player. Section 5 considers the situation where one only observes the number of home runs and the number of at-bats and the home run probability are unknown. This section illustrates the process of constructing a prior on two parameters and performing the inference.</p>
+<p>Bill James’ Pythagorean formula is used to illustrate Bayesian modeling in Sections 6 and 7. One obtains interval estimates for the power parameter in the formula and one can predict the number of team wins given a value of the runs/runs allowed ratio.</p>
+</section>
+<section id="bayesian-learning-about-a-hitting-probability" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="bayesian-learning-about-a-hitting-probability"><span class="header-section-number">2</span> Bayesian Learning about a Hitting Probability</h2>
+<section id="introduction-1" class="level3" data-number="2.1">
+<h3 data-number="2.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">2.1</span> Introduction</h3>
+<p>For those of you learning data science and have some free time, there is a nice resource called DataCamp which offers short courses on a wide range of data science and modeling topics. I’ve just completed my own DataCamp course “Beginning Bayes” that will be available in the next month. I tried to put together a course where the only prerequisites are (1) some knowledge of R and (2) a little background in probability and regression. (I don’t do any calculus and there are few formulas.) The idea is to present Bayesian thinking to data scientists who don’t have strong math backgrounds.</p>
+<p>I thought I’d introduce some of the ideas in my course and a new package <code>ProbBayes</code> that provides a number of helper functions for communicating Bayesian thinking. Of course, I’ll use baseball as my context.</p>
+</section>
+<section id="installing-the-probbayes-package" class="level3" data-number="2.2">
+<h3 data-number="2.2" class="anchored" data-anchor-id="installing-the-probbayes-package"><span class="header-section-number">2.2</span> Installing the ProbBayes Package</h3>
+<p>Although the package is on CRAN, I’d recommend installing the developmental version of the package from my github site:</p>
+<pre><code>library(devtools)
+install_github("bayesball/ProbBayes")</code></pre>
+</section>
+<section id="learning-about-a-hitting-probability" class="level3" data-number="2.3">
+<h3 data-number="2.3" class="anchored" data-anchor-id="learning-about-a-hitting-probability"><span class="header-section-number">2.3</span> Learning about a Hitting Probability</h3>
+<p>Here is an illustration of using discrete priors to learn about a player’s hitting probability. Suppose you are interested in estimating <span class="math inline">\(p\)</span>, the probability of a hit, for a specific player. You think that values of .2, .21, .22, …, .34 are all plausible values of his hitting probability and you assign a uniform prior to these values where each value gets the same probability (here there are 15 values and so I assign a probability of 1/15 to each value). This prior indicates that I am pretty clueless about possible true batting averages.</p>
+<p>I set up a data frame with the variable <code>P</code> the values of <span class="math inline">\(p\)</span>, and the variable <code>Prior</code> has the prior probabilities.</p>
+<pre><code>bayes_df &lt;- data.frame(P = seq(.2, .34, by=.01),
+                       Prior = rep(1/15, 15))</code></pre>
+<p>Next we observe some data. My player gets to hit 100 times, getting 30 hits. This is binomial data with sample size 100 and probability of success <span class="math inline">\(p\)</span>. The likelihood is the binomial probability of this outcome, viewed as a function of the hitting probability. I add the likelihoods to the table using the function <code>dbinom()</code>.</p>
+<pre><code>bayes_df$Likelihood &lt;- dbinom(30, size=100, prob=bayes_df$P)</code></pre>
+<p>What have we learned about the player’s hitting probability? We use Bayes’ rule – there is a special function <code>bayesian_crank()</code> for computing the posterior probabilities for P. (Bayesians use the “bayesian crank” phrase to express the straightforward way of revising opinion using Bayes’ rule.)</p>
+<pre><code>library(ProbBayes)
+(bayes_df &lt;- bayesian_crank(bayes_df))
+      P      Prior  Likelihood      Product   Posterior
+1  0.20 0.06666667 0.005189643 0.0003459762 0.006441961
+2  0.21 0.06666667 0.009298519 0.0006199013 0.011542353
+3  0.22 0.06666667 0.015390090 0.0010260060 0.019103886
+4  0.23 0.06666667 0.023665974 0.0015777316 0.029376831
+5  0.24 0.06666667 0.033980304 0.0022653536 0.042180121
+6  0.25 0.06666667 0.045753808 0.0030502538 0.056794699
+7  0.26 0.06666667 0.057990835 0.0038660557 0.071984655
+8  0.27 0.06666667 0.069414736 0.0046276491 0.086165268
+9  0.28 0.06666667 0.078696286 0.0052464190 0.097686556
+10 0.29 0.06666667 0.084715503 0.0056477002 0.105158276
+11 0.30 0.06666667 0.086783865 0.0057855910 0.107725756
+12 0.31 0.06666667 0.084766785 0.0056511190 0.105221933
+13 0.32 0.06666667 0.079079112 0.0052719408 0.098161762
+14 0.33 0.06666667 0.070565582 0.0047043722 0.087593825
+15 0.34 0.06666667 0.060308919 0.0040205946 0.074862118</code></pre>
+<p>The <code>prior_post_plot()</code> function graphically compares the prior and posterior distributions for <code>P</code>.</p>
+<pre><code>prior_post_plot(bayes_df)</code></pre>
+<p><img src="figures/bayes/bayes1.png" class="img-fluid" style="width:70.0%"></p>
+<p>Before observing any hitting data, we were clueless about the guy’s hitting probability, but now it is more likely to be in a range of values about <code>P = .300</code>.</p>
+<p>In fact, we can use the <code>discint()</code> function in the <code>ProbBayes</code> package to find a probability interval for <code>P</code>– the first input is a data frame (or matrix) with two variables (the first contains the values and the second the probabilities) and the second input is the probability content.</p>
+<pre><code>discint(select(bayes_df, P, Posterior), 0.6)
+$prob
+[1] 0.6015481
+
+$set
+[1] 0.28 0.29 0.30 0.31 0.32 0.33</code></pre>
+<p>The probability the hitting probability falls between 0.28 and 0.33 is about 60 percent.</p>
+</section>
+<section id="using-an-informative-prior" class="level3" data-number="2.4">
+<h3 data-number="2.4" class="anchored" data-anchor-id="using-an-informative-prior"><span class="header-section-number">2.4</span> Using an Informative Prior</h3>
+<p>But of course our choice of prior was a bit lame. I know baseball and so I likely know something about the player’s hitting probability. We illustrate using an informative normal prior, and an approximate normal/normal Bayesian analysis here.</p>
+<p>Suppose I’m interested in estimating Joey Votto’s 2016 batting probability before the beginning of the 2016 season. Looking at his season stats on Baseball-Reference, I see that his season AVG’s are generally in the .300 through .320 range. After some thought, I make the following statements:</p>
+<p>His 2016 hitting probability <span class="math inline">\(p\)</span> is equally likely to be smaller or larger than .310 (that is the median is .310). It is unlikely (with probability 0.10) that his hitting probability is smaller than 0.280 – in other words my prior 10th percentile of P is .280.</p>
+<p>The function <code>normal.select()</code> with find the mean and standard deviation of the normal prior that matches this information:</p>
+<pre><code>(normal_prior &lt;- normal.select(list(p=.5, x=.320),
+    list(p=.1, x=.280)))
+$mu
+[1] 0.32
+
+$sigma
+[1] 0.03121217</code></pre>
+<p>I draw my normal(.320, .031) prior below using the special normal_draw() function.</p>
+<pre><code>normal_draw(c(.320, .031))</code></pre>
+<p><img src="figures/bayes/bayes2.png" class="img-fluid" style="width:60.0%"></p>
+<p>Next we observe Votto’s 2016 hitting performance – he batting .326 with 556 at-bats. Here the data estimate of his hitting probability is .326 with an associated standard error of <span class="math inline">\(\sqrt{.326 * (1 - .326) / 556} = 0.0199\)</span>.</p>
+<p>The <code>normal_update()</code> function will compute the mean and standard deviation of the normal posterior given a normal prior and a normal sampling density (reasonable approximation here). The inputs are the prior (mean and standard deviation) and data (sample mean and standard error). The <code>teach=TRUE</code> option is helpful for seeing how the prior and data information get combined.</p>
+<pre><code>normal_update(normal_prior, c(.326, .0199), teach=TRUE)
+       Type      Mean Precision  Stand_Dev
+1     Prior 0.3200000  1026.484 0.03121217
+2      Data 0.3260000  2525.189 0.01990000
+3 Posterior 0.3242659  3551.673 0.01677967</code></pre>
+<p>The posterior is normal with mean .324 and standard deviation 0.0168 – I use the <code>many_normal_plots()</code> function to compare the prior and posterior densities for <code>P</code>. This plot shows I am more confident (after seeing the 2016 season data) about Votto’s hitting probability.</p>
+<pre><code>many_normal_plots(list(c(.320, 0.0312), c(.324, 0.0168)))</code></pre>
+<p><img src="figures/bayes/bayes3.png" class="img-fluid" style="width:60.0%"></p>
+<p>Finally, I use the <code>qnorm()</code> function to construct a 90% probability interval for Votto’s 2016 hitting probability.</p>
+<pre><code>qnorm(c(0.05, 0.95), mean=.324, sd=0.0168)
+[1] 0.2963665 0.3516335</code></pre>
+</section>
+<section id="try-the-course" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="try-the-course"><span class="header-section-number">2.5</span> Try the Course?</h3>
+<p>I encourage you to try the <em>Beginning Bayes</em> class at DataCamp when it is available. Since this is new type of teaching experience for me, I’m very interested in any feedback. One thing that is fascinating about teaching is that your audience always changes and one needs to think and try out new methods or pedagogies to be effective in communicating statistics.</p>
+</section>
+</section>
+<section id="modeldata-simulations" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="modeldata-simulations"><span class="header-section-number">3</span> Model/Data Simulations</h2>
+<section id="introduction-2" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">3.1</span> Introduction</h3>
+<p>One of the innovative aspects of my book <em>Teaching Statistics Using Baseball</em> is its use of Bayesian thinking to introduce statistical inference. I thought it would be instructive to illustrate a simulation-based way of performing Bayesian inference for a hitting probability. I call this “model/data simulation” – I coauthored a paper in the <em>American Statistician</em> back in 2001 that describes this method in more detail.</p>
+</section>
+<section id="construct-a-prior" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="construct-a-prior"><span class="header-section-number">3.2</span> Construct a Prior</h3>
+<p>We are interested in learning about <span class="math inline">\(p\)</span>, the probability a particular batter gets a hit. Suppose we think that values of <span class="math inline">\(p\)</span> of .15, .16, …, .39, .4 are all possible and our prior assigns each value the same probability. (The choice of uniform prior can be modified if one believes that particular values of P are more or less likely.)</p>
+</section>
+<section id="decide-on-a-statistic" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="decide-on-a-statistic"><span class="header-section-number">3.3</span> Decide on a Statistic</h3>
+<p>We are going to observe the batting outcomes (hit or out) for, say 500 at-bats – we can represent the outcomes as the sequence</p>
+<p>0, 1, 0, 0, 1, 1, 0, 0, 0, …</p>
+<p>where 1 (0) denotes a hit (out). We will compute a Statistic <span class="math inline">\(S\)</span> based on these 500 outcomes – possible Statistics are (1) the number of hits, or (2) the largest “ofer” (that is, the largest gap between consecutive base hits).</p>
+</section>
+<section id="modeldata-simulation" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="modeldata-simulation"><span class="header-section-number">3.4</span> Model/Data Simulation</h3>
+<p>Okay, here is how one implements the algorithm. First one simulates a value of <span class="math inline">\(p\)</span> from my prior, call it <span class="math inline">\(p_0\)</span>. Then one simulates batting outcomes assuming <span class="math inline">\(p = p_0\)</span> and computes the value of the statistic <span class="math inline">\(S\)</span>. One repeats this a large number of times, obtaining many ordered pairs <span class="math inline">\((p, S)\)</span>.</p>
+</section>
+<section id="inference" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="inference"><span class="header-section-number">3.5</span> Inference</h3>
+<p>To implement Bayes’ rule, suppose that we observe <span class="math inline">\(S = S_{obs}\)</span>. Then we look at the simulated values of <span class="math inline">\(p\)</span> only for the pairs where <span class="math inline">\(S = S_{obs}\)</span>. This sample represents a simulated sample from the posterior distribution of <span class="math inline">\(p\)</span> conditional on <span class="math inline">\(S = S_{obs}\)</span>. We perform various inferences by summarizing this posterior sample.</p>
+</section>
+<section id="r-functions" class="level3" data-number="3.6">
+<h3 data-number="3.6" class="anchored" data-anchor-id="r-functions"><span class="header-section-number">3.6</span> R Functions</h3>
+<p>I’ve written two R functions <code>model_data_simulation()</code> and <code>inference_plot()</code> (available on my github gist site) that implements this method. The first function does the model/data simulation and the second function implements the Bayesian inference once we observe <span class="math inline">\(S = S_{obs}\)</span>. These functions can be read into the workspace by use of the <code>source_gist()</code> function.</p>
+<pre><code>library(devtools)
+source_gist("2a78aaf69a0e54fe1a35fbedeb662e62",
+            filename="model_data_simulation.R")</code></pre>
+</section>
+<section id="example-1-statistic-is-the-sum" class="level3" data-number="3.7">
+<h3 data-number="3.7" class="anchored" data-anchor-id="example-1-statistic-is-the-sum"><span class="header-section-number">3.7</span> Example 1: Statistic is the Sum</h3>
+<p>Suppose we wish to learn about <span class="math inline">\(p\)</span> based on the sum of the binary outcomes, that is, the number of hits. In the R script, we first define a vector <code>P_vector</code> containing the possible values of <span class="math inline">\(p\)</span> between 0.15 and 0.40. Then we use the model_data_simulation function with arguments <code>P_vector</code> , <code>N</code> (the number of at-bats), and <code>mystat</code>, the choice of statistic (here sum ). The output is a plot of the simulated draws of <span class="math inline">\(p\)</span> and <span class="math inline">\(S\)</span>. As one might anticipate, there is a positive association between the value of <span class="math inline">\(p\)</span> and the number of hits in 500 at-bats</p>
+<pre><code>P_vector &lt;- seq(.15, .40, by=.01)
+S1 &lt;- model_data_simulation(P_vector,
+                            N=500,
+                            mystat=sum)</code></pre>
+<p><img src="figures/bayes/bayes4.png" class="img-fluid" style="width:60.0%"></p>
+<p>Suppose we observe the batter get 150 hits in the 500 at-bats. We use <code>inference_plot()</code> with arguments <code>S1</code> (the simulated draws of <span class="math inline">\(p\)</span> and <span class="math inline">\(S\)</span> from the model/data simulation) and 150 (the observed value of the statistic). The output is a density plot of the simulated values of <span class="math inline">\(p\)</span> conditional on <span class="math inline">\(S\)</span> = 150. We show the location of a 50% interval estimate – here the probability P is in the interval (.290, .310) is 0.50.</p>
+<pre><code>inference_plot(S1, 150)</code></pre>
+<p><img src="figures/bayes/bayes5.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="example-2-statistic-is-the-largest-ofer" class="level3" data-number="3.8">
+<h3 data-number="3.8" class="anchored" data-anchor-id="example-2-statistic-is-the-largest-ofer"><span class="header-section-number">3.8</span> Example 2: Statistic is the Largest Ofer</h3>
+<p>To illustrate the use of a different statistic, suppose we focus on the largest “ofer” value – that is, the length of the longest streak of 0’s in the sequence. First I write a function <code>max_ofer()</code> that computes the largest ofer (note that I’m using a function from my <code>BayesTestStreak</code> package). Then I rerun model_data_simulation where the statistics function is <code>max_ofer</code> . Here note there is a negative association between <span class="math inline">\(p\)</span> and the longest ofer – weak hitters tend to have larger ofers.</p>
+<pre><code>max_ofer &lt;- function(y){
+  require(BayesTestStreak)
+  max(find.spacings(y)$y)
+}
+S2 &lt;- model_data_simulation(P_vector,
+                           N=500,
+                           mystat=max_ofer)</code></pre>
+<p><img src="figures/bayes/bayes6.png" class="img-fluid" style="width:60.0%"></p>
+<p>Suppose you observe a hitter whose maximum ofer is 30. We run inference_plot using the statistics value of 30. We see we are 50% sure that <span class="math inline">\(p\)</span> is between 0.160 and 0.200 – the batter is relatively weak.</p>
+<pre><code>inference_plot(S2, 30)</code></pre>
+<p><img src="figures/bayes/bayes7.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="using-this-method-in-teaching" class="level3" data-number="3.9">
+<h3 data-number="3.9" class="anchored" data-anchor-id="using-this-method-in-teaching"><span class="header-section-number">3.9</span> Using this Method in Teaching</h3>
+<p>I like this method of introducing inference for several reasons:</p>
+<ul>
+<li>It helps the student understand the distinction between the parameter and the statistic.</li>
+<li>It is flexible – one can play with different choices of statistic S.</li>
+<li>Inference is easy to implement – one performs inference by data analysis on a simulated sample, and one can make straight-forward interpretations of interval estimates. (One does not have to consider samples that you did not observe.)</li>
+</ul>
+</section>
+</section>
+<section id="constructing-a-prior-for-lindors-hit-probability" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="constructing-a-prior-for-lindors-hit-probability"><span class="header-section-number">4</span> Constructing a Prior for Lindor’s Hit Probability</h2>
+<section id="introduction-3" class="level3" data-number="4.1">
+<h3 data-number="4.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">4.1</span> Introduction</h3>
+<p>As the reader probably knows, I am a Bayesian statistician and have illustrated Bayesian thinking for a number of posts over the years of this blog. I’m thinking of collecting many of my Bayesian posts into a “Bayesball” book. In doing this, I realized that I have written little on the process of constructing a subjective prior. After all, one advantage of a Bayesian perspective is the ability to input subjective belief or prior information into the inference process. This seems especially relevant for baseball problems where one has collected many measures of performance for players and certainly has opinions about players’ abilities.</p>
+<p>This post illustrates the process of constructing a beta prior that reflecting my beliefs about a player’s hitting ability. We focus on learning about the 2021 hitting probability for the great shortstop Francisco Lindor. We have relevant information on his hitting performance during the seasons with the Indians. We use this information to construct a prior, at the start of the 2021 season, for his hitting probability. We update this prior with data for the first few months of the 2021 season, obtaining a posterior. This posterior will be used to predict Lindor’s batting average for the remainder of the season.</p>
+<p>In this exercise, I’ll illustrate the use of one of my Shiny apps that facilitates learning about a proportion using a beta prior.</p>
+</section>
+<section id="the-prediction-problem" class="level3" data-number="4.2">
+<h3 data-number="4.2" class="anchored" data-anchor-id="the-prediction-problem"><span class="header-section-number">4.2</span> The Prediction Problem</h3>
+<p>One of the recent big free-agent signings in Major League Baseball was Francisco Lindor who signed a 10-year contract with the New York Mets starting with the 2021 season. Through the games of June 27, 2021, Lindor has had a relatively poor hitting season with 58 hits in 265 at-bats for a 58/265 = 0.219 batting average. We are interested in predicting Lindor’s batting average for the remainder of the 2021 season.</p>
+<p>We illustrate the use of a subjective prior on Lindor’s true 2021 batting average&nbsp;<span class="math inline">\(p\)</span>.</p>
+<ul>
+<li><p>We use Lindor’s batting record for his first six seasons to construct a beta prior for&nbsp;<span class="math inline">\(p\)</span>.</p></li>
+<li><p>We update our beliefs about <span class="math inline">\(p\)</span>&nbsp;by using Lindor’s batting performance in the first part of the 2021 season.</p></li>
+<li><p>We use the current beliefs about <span class="math inline">\(p\)</span>&nbsp;to construct a prediction interval for Lindor’s future performance in 2021.</p></li>
+</ul>
+<p>It will be helpful to use a Shiny app in this process that can be found at</p>
+<p>https://bayesball.shinyapps.io/ChooseBetaNew2/</p>
+</section>
+<section id="lindors-batting-record" class="level3" data-number="4.3">
+<h3 data-number="4.3" class="anchored" data-anchor-id="lindors-batting-record"><span class="header-section-number">4.3</span> Lindor’s Batting Record</h3>
+<p>We want to construct a prior for&nbsp;<span class="math inline">\(p\)</span>, Lindor’s hitting probability for the 2021 season. We have relevant information, specifically Lindor’s batting performance for the 2015 through 2020 seasons. Below we display the number of at-bats (AB), hits (H) for these seasons.</p>
+<pre><code>##    Year    AB     H    BA
+##   &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## 1  2015   390   122 0.313
+## 2  2016   604   182 0.301
+## 3  2017   651   178 0.273
+## 4  2018   661   183 0.277
+## 5  2019   598   170 0.284
+## 6  2020   236    61 0.258</code></pre>
+<p>The batting averages&nbsp;<span class="math inline">\(AVG = H / AB\)</span>&nbsp;are not hitting probabilities, but represent Lindor’s hitting performances for these six seasons. But we can construct interval estimates for the hitting probabilities for the respective seasons. A standard 95% interval estimate for a probability has the form</p>
+<p><span class="math display">\[\hat p - 1.96 SE, \hat p + 1.96 SE\]</span>,</p>
+<p>where&nbsp;<span class="math inline">\(\hat p = H / AB\)</span> is the sample proportion&nbsp;and the associated standard error is</p>
+<p><span class="math display">\[SE = \sqrt{\frac{\hat p (1 - \hat p)}{AB}}\]</span>.</p>
+<p>(By the way, these intervals are approximately Bayesian 95% probability intervals using a weakly informative prior.) I display the 95% bounds for the hitting probabilities against the season in the following graph. By looking at this graph, one see plausible values of&nbsp;the hitting probability&nbsp;for each season.</p>
+<p><img src="figures/bayes/bayes8.png" class="img-fluid" style="width:60.0%"></p>
+<p>What do we see from this graph?</p>
+<ul>
+<li><p>Lindor’s best seasons with respect to batting average were in the initial 2015 and 2016 seasons.</p></li>
+<li><p>In 2017 through 2019, Lindor’s BA was pretty consistent between 0.277 and 0.284.</p></li>
+<li><p>In 2020, Lindor had his smallest BA of 0.258, but we have less confidence in the value of the corresponding hitting probability since it was based on only 236 AB.</p></li>
+</ul>
+</section>
+<section id="specify-parameter-values-of-the-beta-prior" class="level3" data-number="4.4">
+<h3 data-number="4.4" class="anchored" data-anchor-id="specify-parameter-values-of-the-beta-prior"><span class="header-section-number">4.4</span> Specify Parameter Values of the Beta Prior</h3>
+<p>We wish to construct a <span class="math inline">\(beta(a, b)\)</span> prior for Lindor’s hitting probability&nbsp;<span class="math inline">\(p\)</span>&nbsp;for the 2021 season. It is difficult to directly specify the beta shape parameters&nbsp;<span class="math inline">\(a\)</span>&nbsp;and&nbsp;<span class="math inline">\(b\)</span> of this prior. It is helpful instead to specify values of&nbsp;<span class="math inline">\(\eta\)</span>&nbsp;and&nbsp;<span class="math inline">\(K\)</span>&nbsp;where</p>
+<p><span class="math display">\[
+a = K \eta,  \, \,  b = K (1 − \eta).
+\]</span></p>
+<p>We first specify&nbsp;<span class="math inline">\(\eta\)</span>, the prior mean for&nbsp;<span class="math inline">\(p\)</span>. I place more weight on Lindor’s performance during the two most recent full seasons 2018 and 2019. So I specify that <span class="math inline">\(\eta\)</span> = 0.280. (In other words, we think that Lindor is a “.280 hitter” during the 2021 season.)</p>
+<p>The parameter <span class="math inline">\(K\)</span>&nbsp;is reflective of the sureness of my prior guess that&nbsp;<span class="math inline">\(p\)</span>&nbsp;is equal to 0.280. If I choose a larger value of&nbsp;<span class="math inline">\(K\)</span>,&nbsp;the hitting probability&nbsp;is more likely to be close to 0.280.</p>
+<p>The Shiny app is helpful in determining a reasonable choice for&nbsp;<span class="math inline">\(K\)</span>. In the app, by use of sliders I choose the mean value&nbsp;<span class="math inline">\(\eta\)</span>&nbsp;and the precision value&nbsp;<span class="math inline">\(K\)</span>. The top graph shows the selected beta prior and displays a 90% interval estimate for the hitting probability <span class="math inline">\(p\)</span>. (See the app snapshot below.) I choose a value for&nbsp;<span class="math inline">\(K\)</span>&nbsp;that gives a plausible interval estimate for&nbsp;<span class="math inline">\(p\)</span>. After some trial and error, I am comfortable with the 90% interval estimate (0.244, 0.318) that corresponds to a beta prior where <span class="math inline">\(\eta\)</span> = 0.280&nbsp;and&nbsp;<span class="math inline">\(K\)</span> = 400.</p>
+<p><img src="figures/bayes/bayes9.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="update-with-2021-data" class="level3" data-number="4.5">
+<h3 data-number="4.5" class="anchored" data-anchor-id="update-with-2021-data"><span class="header-section-number">4.5</span> Update with 2021 Data</h3>
+<p>Using data from the 2015 to 2020 seasons, I have constructed a beta prior with&nbsp; <span class="math inline">\(\eta\)</span> = 0.280&nbsp;and&nbsp;<span class="math inline">\(K\)</span> = 400. The corresponding shape parameter values of the beta curve are <span class="math display">\[
+a = K \eta = 400 (0.280) = 112,  \, \, b = K (1 − \eta) = 400 (1 − 0.280) = 288.
+\]</span> Now I observe 2021 hitting data for Lindor – he has 58 hits in 265 AB. Equivalently, he has 58 successes (hits) and 265 - 58 = 207 failures (outs).</p>
+<p>One obtains the beta shape parameters for the posterior by simply adding the prior shape parameters to the numbers of successes and failures.</p>
+<p><span class="math display">\[
+a_1 = 112 + 58 = 170,  \, \,  b_1 = 288 + 207 = 495.
+\]</span> The posterior mean is <span class="math inline">\(\eta_1 = 170 / (170 + 495) = 0.256\)</span> and the posterior precision parameter is <span class="math inline">\(K_1 = 170 + 495 = 665\)</span>.</p>
+</section>
+<section id="prediction" class="level3" data-number="4.6">
+<h3 data-number="4.6" class="anchored" data-anchor-id="prediction"><span class="header-section-number">4.6</span> Prediction</h3>
+<p>One we have established that the posterior distribution for&nbsp;<span class="math inline">\(p\)</span>&nbsp;is beta(170, 495), it is straightforward to make predictions for Lindor’s hitting for the remainder of the 2021 season by use of the posterior predictive distribution.</p>
+<p>We can use our Shiny app to obtain a prediction interval. By using the sliders, we select the beta parameters&nbsp;<span class="math inline">\(\eta\)</span> = 0.256 and&nbsp;<span class="math inline">\(K\)</span> = 665. We have to choose the number of at-bats for Lindor the remainder of the season. Lindor is an everyday player – he has currently averaged 265 / 72 = 3.68 AB in the Mets’ first 72 games. If we assume the same per-game AB for the Mets’ 89 remaining games, Lindor would have 89 (3.68 ) = 328 remaining at-bats. So we select 328 AB for the size of the future sample.</p>
+<p><img src="figures/bayes/bayes10.png" class="img-fluid" style="width:60.0%"></p>
+<p>There are two graphs in the app.</p>
+<ul>
+<li><p>The top graph displays the posterior density for Lindor’s 2021 hitting probability&nbsp;<span class="math inline">\(p\)</span>. From the posterior, we are 90% confident that&nbsp;his hitting probability&nbsp;is between 0.228 and 0.283.</p></li>
+<li><p>The bottom graph displays the predictive distribution for Lindor’s BA in the remaining part of the 2021 season. The 90% prediction interval for his BA is (0.207, 0.302). The probability this interval contains the future BA is 90%.</p></li>
+</ul>
+</section>
+<section id="comments" class="level3" data-number="4.7">
+<h3 data-number="4.7" class="anchored" data-anchor-id="comments"><span class="header-section-number">4.7</span> Comments</h3>
+<ul>
+<li><p>A Bayesian analysis allows one to input expert knowledge by the use of a prior density. The process of actually constructing a prior is challenging since most of us have little practice doing it. Choosing a beta density to reflect beliefs about the location of a probability is relatively simple, but this activity can give one experience in constructing priors for more sophisticated problems.</p></li>
+<li><p>As the Shiny app shows, a prior or posterior has an associated predictive distribution for future data. For example, the last Shiny snapshot shows the posterior of the hitting probability and the implied (posterior) predictive distribution. Note that the predictive distribution is much wider than the posterior – for example, the 90% prediction interval estimate of the future BA is (.207, .302) which is wider than the 90% interval estimate for the true hitting probability. Predictive densities are wider since they incorporate two types of uncertainty – the uncertainty in the value of the hitting probability and the uncertainty in the observed BA given the hitting probability.</p></li>
+</ul>
+</section>
+</section>
+<section id="what-do-you-learn-from-45-home-runs" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="what-do-you-learn-from-45-home-runs"><span class="header-section-number">5</span> What Do You Learn From 45 Home Runs?</h2>
+<section id="introduction-4" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">5.1</span> Introduction</h3>
+<p>Here is a simple question. Suppose you are told that a MLB hitter slugged exactly 45 home runs in a season. What have you learned about the number of balls in play and his rate of hitting home runs? This is a variation of the simple model where one assumes that one has binomial trials with a known sample size <span class="math inline">\(N\)</span> and you want to learn about the hitting probability <span class="math inline">\(p\)</span>. Here both the sample size and the probability are unknown. This is actually a common problem when we want to predict a player’s home run count in the following season. We don’t know how many opportunities he will have next season and we don’t know the true rate that he will be hitting home runs.</p>
+<p>I’ll illustrate a Bayesian approach to this problem. Our model is that <span class="math inline">\(y\)</span> the number of home runs is binomial(<span class="math inline">\(N, p\)</span>) where both <span class="math inline">\(N\)</span> and <span class="math inline">\(p\)</span> are unknown. I’ll construct a reasonable prior for <span class="math inline">\((N, p)\)</span>, update this prior with the observed count of <span class="math inline">\(y = 45\)</span> home runs, and we’ll see what we have learned from this data.</p>
+</section>
+<section id="constructing-a-reasonable-prior" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="constructing-a-reasonable-prior"><span class="header-section-number">5.2</span> Constructing a Reasonable Prior</h3>
+<p>I decide to focus on non-pitchers, and I decide to look at all of the players in the 2017 season with at least 100 balls in play. I don’t see much of a relationship between the balls in play and the home run rates, so I assume that my beliefs about <span class="math inline">\(N\)</span> and <span class="math inline">\(p\)</span> are independent, so I can represent my prior as <span class="math inline">\(g(N, p) = g(N) g(p)\)</span> and focus on obtaining priors individually on each unknown parameter.</p>
+<p>Below I show a histogram of the balls in play for all players with at least 100 BIP for the 2017 season. The smooth curve <span class="math inline">\(g(N) = 4.5 + 0.1898 N + 0.00033 N ^ 2\)</span> seems to be a reasonable fit these BIP, so I’ll use that for my prior.</p>
+<p><img src="figures/bayes/bayes11.png" class="img-fluid" style="width:60.0%"></p>
+<p>The prior on the batter’s probability <span class="math inline">\(p\)</span> is more difficult to construct, as we don’t directly observe <span class="math inline">\(p\)</span> but instead observe the HR rates <span class="math inline">\(HR / BIP\)</span> for all hitters with at least 100 <span class="math inline">\(BIP\)</span>. We use the random effects model <span class="math inline">\(logit(p_i) = \theta_i\)</span>, where the <span class="math inline">\(\theta_i\)</span> are assumed normal with mean <span class="math inline">\(\mu\)</span> and standard deviation <span class="math inline">\(\sigma\)</span>. Using JAGS to fit this model, we obtain posterior estimates <span class="math inline">\(\hat \mu = -3.07, \hat\sigma = 0.542\)</span>. Assuming that our hitter is just a representative hitter among those with at least 100 BIP, I assume that <span class="math inline">\(logit(p)\)</span> is <span class="math inline">\(N(-3.07, 0.542)\)</span>.</p>
+<p>Below I display a contour graph of my prior on <span class="math inline">\(N\)</span> and <span class="math inline">\(logit(p)\)</span>. This indicates that I’m pretty ignorant about the BIP, but I have some idea about the location of the home run probability.</p>
+<p><img src="figures/bayes/bayes12.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="predictive-checks-on-my-prior" class="level3" data-number="5.3">
+<h3 data-number="5.3" class="anchored" data-anchor-id="predictive-checks-on-my-prior"><span class="header-section-number">5.3</span> Predictive Checks on My Prior</h3>
+<p>Before I am set with my prior, I should check if it predicts home run counts similar to what is actually observed in current seasons. I used the actual BIP counts and my normal prior on the logits to simulate a set of home run counts, and by summing the home run counts, I get an estimate at the total HR count for all hitters with at least 100 BIP. I repeated this simulation a number of times, and the actual 2017 home run count was consistent with values simulated from this predictive distribution. So I am satisfied that I have a reasonable prior and I can now update this prior with data.</p>
+</section>
+<section id="updating-my-beliefs-with-data" class="level3" data-number="5.4">
+<h3 data-number="5.4" class="anchored" data-anchor-id="updating-my-beliefs-with-data"><span class="header-section-number">5.4</span> Updating My Beliefs with Data</h3>
+<p>It is a relatively simple process to obtain the posterior of <span class="math inline">\((N, p)\)</span>. Remember I observed exactly 45 home runs and the likelihood is given by <span class="math inline">\(L(N, p) = {N \choose p} p^{45} (1 - p)^{N - 45}\)</span>. For each of the points in my grid, I multiply values of the prior and the likelihood, obtaining the posterior contour plot below. Note that <span class="math inline">\(p\)</span> and <span class="math inline">\(N\)</span> are negatively correlated – 45 home runs reflects a large <span class="math inline">\(p\)</span> for a part-time player but a smaller <span class="math inline">\(p\)</span> for a full-time player. I’m pretty confident that our hitter had at least 350 BIP in this season.</p>
+<p><img src="figures/bayes/bayes13.png" class="img-fluid" style="width:60.0%"></p>
+<p>We are most interested in the player’s HR probability <span class="math inline">\(p\)</span>. To obtain that, I first simulate draws of <span class="math inline">\((N, logit p)\)</span> from the grid of values – here I place the simulated draws on top of the contour graph.</p>
+<p><img src="figures/bayes/bayes14.png" class="img-fluid" style="width:60.0%"></p>
+<p>I obtain the marginal posterior of <span class="math inline">\(p\)</span> by constructing a density estimate of the simulated draws of <span class="math inline">\(p\)</span>. Based on observing 45 home runs, I am pretty sure that his home run rate is between 0.07 and 0.13.</p>
+<p><img src="figures/bayes/bayes15.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="wrap-up" class="level3" data-number="5.5">
+<h3 data-number="5.5" class="anchored" data-anchor-id="wrap-up"><span class="header-section-number">5.5</span> Wrap-Up</h3>
+<p>Here’s some interesting features about this analysis.</p>
+<ul>
+<li><p>The sample size is unknown. We probability spend too much time talking about the binomial model where we know the sample size in advance. In reality, we don’t know <span class="math inline">\(N\)</span>, so we should include that into the Bayesian analysis.</p></li>
+<li><p>Using an informative prior. Assuming that the sample size is unknown complicates matters since, for example, there is not an obvious choice for a prior. But that is good since we need more practice thinking of informative priors. If we can’t think of relevant priors in the baseball context, then good luck working on priors on other applications.</p></li>
+<li><p>Applying predictive checks. To see if any prior is reasonable, it is a good exercise to see if data predicted from the prior makes sense. Actually, it is easier to think about prediction of future data than it is to think about abstract parameters.</p></li>
+<li><p>Computation is easy. This grid/simulation approach for summarizing posterior distributions is easy to apply and is a good starting point for learning about more sophisticated Bayesian simulation methods.</p></li>
+</ul>
+</section>
+</section>
+<section id="pythagorean-modeling---i" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="pythagorean-modeling---i"><span class="header-section-number">6</span> Pythagorean Modeling - I</h2>
+<section id="introduction-5" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">6.1</span> Introduction</h3>
+<p>As you may know, I am a Bayesian statistician and so I think of inference and prediction from a Bayesian perspective. Although many of my posts have illustrated Bayesian thinking, I thought it would be good to have a new series of posts introducing Bayesian modeling in simple settings. Here I introduce some features of Bayes, using a model that should be familiar to all “quantitative” baseball fans. (By the way, I know that some MLB teams have placed ads for analysts who are familiar with Bayesian inference, so MLB understands the usefulness of this inferential approach.)</p>
+</section>
+<section id="bill-james-pythagorean-formula" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="bill-james-pythagorean-formula"><span class="header-section-number">6.2</span> Bill James’ Pythagorean Formula</h3>
+<p>Many years ago, Bill James found empirically a simple relationship between a team’s wins and losses and the runs scored and allowed. This Pythagorean relationship has the simple form that the ratio of wins ( W) to losses (L) is equal to a power of the ratio of the runs scored (R) to runs allowed (RA):</p>
+<p><span class="math display">\[
+\frac{W}{L} = \left(\frac{R}{RA}\right)^k
+\]</span></p>
+<p>This formula is easy to demonstrate graphically. Below I construct a scatterplot of <span class="math inline">\(R/RA\)</span> against <span class="math inline">\(W/L\)</span> for the 2019 MLB teams and have overlaid a Pythagorean curve using the exponent value of <span class="math inline">\(k = 1.8\)</span>.</p>
+<p><img src="figures/bayes/bayes17.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="a-statistical-model-based-on-the-formula" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="a-statistical-model-based-on-the-formula"><span class="header-section-number">6.3</span> A Statistical Model Based on the Formula</h3>
+<p>Here is a Bayesian extension of this Pythagorean relationship. We assume that a team’s actual win loss ratio <span class="math inline">\(W/L\)</span> is normally distributed with a mean given by the runs ratio taken to a power <span class="math inline">\(k\)</span>, and a standard deviation <span class="math inline">\(\sigma\)</span>. We write this as</p>
+<p><span class="math display">\[
+\frac{W}{L} \sim N( \left(\frac{R}{RA}\right)^k,\sigma)
+\]</span></p>
+<p>The unknown parameters of this model (the quantities we want to learn about) are the exponent value <span class="math inline">\(k\)</span> and the standard deviation <span class="math inline">\(\sigma\)</span>. In Bayesian thinking, we regard these unknown parameter values as random and we express our beliefs about the location of these values by means of a prior probability distribution.</p>
+</section>
+<section id="figuring-out-the-prior" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="figuring-out-the-prior"><span class="header-section-number">6.4</span> Figuring Out the Prior</h3>
+<p>Okay, this is one of the tricky Bayesian things – how does one specify priors for the model parameters k and <span class="math inline">\(\sigma\)</span>? I describe some ways of doing this below.</p>
+<ul>
+<li><p>Independence. First, I am going to assume that my prior beliefs about the power parameter <span class="math inline">\(k\)</span> are independent or unrelated to my prior beliefs about <span class="math inline">\(\sigma\)</span>. That seems to be a reasonable assumption and it makes it easier to construct a prior.</p></li>
+<li><p>Prior for the Pythagorean exponent <span class="math inline">\(k\)</span>? When Bill James introduced this formula, he said that <span class="math inline">\(k\)</span> was in the neighborhood of the value 2. So a reasonable guess at <span class="math inline">\(k\)</span> would be 2 and this would be the mean of my prior. So I start with the belief that <span class="math inline">\(k\)</span> is normally distributed with mean 2 and a standard deviation <span class="math inline">\(S_1\)</span>. The value of the standard deviation <span class="math inline">\(S_1\)</span> reflects the strength of my prior belief that <span class="math inline">\(k\)</span> is equal to 2. Suppose I don’t have a lot of confidence in the guess of 2, and think that <span class="math inline">\(k\)</span> could plausibly be any value between 1.5 and 2.5. Based on this statement, I assume that <span class="math inline">\(S_1\)</span> = 0.5. My prior for <span class="math inline">\(k\)</span> is normal with mean 2 and standard deviation 0.5.</p></li>
+<li><p>Prior for the standard deviation <span class="math inline">\(\sigma\)</span>? It is pretty hard to construct a prior for the standard deviation <span class="math inline">\(\sigma\)</span>. This standard deviation reflects the variation of a team’s win/loss ratio for a fixed value of the runs ratio. (Looking at the scatterplot above, these would be the vertical deviations from the average for a fixed value of the horizontal variable <span class="math inline">\(R/RA\)</span>.) This might be a hard parameter to guess at since we aren’t that familiar with teams’ win/loss ratios and how they can vary. In cases like this when it is hard to think of a prior, one can use a weakly informative prior for <span class="math inline">\(\sigma\)</span> that reflects little knowledge about this parameter. Here is one weakly informative prior we can try: <span class="math inline">\(\sigma\)</span> has an exponential distribution with rate 1.</p></li>
+</ul>
+</section>
+<section id="simulating-from-the-predictive-distribution" class="level3" data-number="6.5">
+<h3 data-number="6.5" class="anchored" data-anchor-id="simulating-from-the-predictive-distribution"><span class="header-section-number">6.5</span> Simulating from the Predictive Distribution</h3>
+<p>Does this prior make sense? So we have stated a prior where the exponent <span class="math inline">\(k\)</span> is normal(2, 0.5) and <span class="math inline">\(\sigma\)</span> is exponential(1). Is this a reasonable prior? Before we go further, a good idea is to perform so-called predictive checks. Basically, what we do is to simulate data, that is win/loss ratios, from the predictive distribution assuming our prior and see if this simulated predicted data looks like data we might see in baseball seasons. If this simulated data looks fine, then our prior is reasonable.</p>
+<ul>
+<li>A predictive simulation. Suppose we have a team whose runs ratio is equal to 1.2 – that is, this team scores 20% more runs than it allows. What values of the <span class="math inline">\(W/L\)</span> ratio would we predict for this team assuming our prior model? We do this in two steps: (1) We first simulate values of <span class="math inline">\(k\)</span> and <span class="math inline">\(\sigma\)</span> from our prior (from normal and exponential distributions) and (2) simulate W/L ratios from a normal distribution with mean (1.2)^k and standard deviation <span class="math inline">\(\sigma\)</span>. I can do this using three R commands.</li>
+</ul>
+<!-- -->
+<pre><code>k &lt;- rnorm(1000, mean = 2, sd = 0.5)
+sigma &lt;- rexp(1000, rate = 1)
+wl_ratio &lt;- rnorm(1000, 1.2 ^ k, sigma)</code></pre>
+<p>Since we are not familiar with win/loss ratios, I will convert those ratios to games won in a 162 game season, and then display a histogram of the games won.</p>
+<p><img src="figures/bayes/bayes22.png" class="img-fluid" style="width:60.0%"></p>
+<p>Even the casual baseball fan will realize that this plot does not make sense – how can a baseball team win a negative number of games or even win 150 games in a 162-game season?</p>
+</section>
+<section id="what-went-wrong-and-adjusting-my-prior" class="level3" data-number="6.6">
+<h3 data-number="6.6" class="anchored" data-anchor-id="what-went-wrong-and-adjusting-my-prior"><span class="header-section-number">6.6</span> What Went Wrong and Adjusting My Prior</h3>
+<p>What we showed is that if we assume a particular prior for <span class="math inline">\(k\)</span> and <span class="math inline">\(\sigma\)</span>, we get unrealistic predictions for the number of games won (in a full season) by a team who scores 20% more runs than it allows. If our prior results in bad predictions, this suggests that we need to adjust our prior. Recall our prior is</p>
+<p><span class="math inline">\(k\)</span> is normal(2, 0.5) and <span class="math inline">\(\sigma\)</span> is exponential(1)</p>
+<p>After some reflection, I think my prior on <span class="math inline">\(k\)</span> is reasonable, but the prior on <span class="math inline">\(\sigma\)</span> puts a lot of probability on large values of <span class="math inline">\(\sigma\)</span> which seems unreasonable given the scatterplot that we saw earlier. (The variation of the points for fixed values of <span class="math inline">\(R/RA\)</span> is certainly smaller than 1.) I am going to revise my prior on <span class="math inline">\(\sigma\)</span> so that the mean is 0.1 instead of 1, so my prior is now</p>
+<p><span class="math inline">\(k\)</span> is normal(2, 0.5) and <span class="math inline">\(\sigma\)</span> is exponential(10)</p>
+<p>(By the way, the rate parameter of an exponential is the reciprocal of the mean, so a rate of 10 is the same as a mean of 1 / 10 = 0.01.) Let’s simulate new data using this prior. Again assume we have a team that scores 20% more runs than it allows. Using the same simulation scheme, here is a histogram of the number of wins for this team in a 162-game season. This plot looks more reasonable although it is seems somewhat likely for this team to win 100+ games.</p>
+<p><img src="figures/bayes/bayes23.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="comments-and-looking-ahead" class="level3" data-number="6.7">
+<h3 data-number="6.7" class="anchored" data-anchor-id="comments-and-looking-ahead"><span class="header-section-number">6.7</span> Comments and Looking Ahead</h3>
+<ul>
+<li><p>This post was inspired by my reading of the 2nd edition of the Bayesian regression text <em>Rethinking Statistics</em> where McElreath talks a lot about the use of predictive simulations to understand the consequences of a particular choice of prior.</p></li>
+<li><p>The idea here is to introduce Bayesian modeling in a setting that is familiar. We took Bill James’ Pythagorean formula and created a corresponding regression model, allowing for variability in the <span class="math inline">\(W/L\)</span> ratio for a fixed <span class="math inline">\(R/RA\)</span> ratio.</p></li>
+<li><p>One advantage of Bayesian thinking is that it gives one the opportunity to use expert information in constructing a prior. But we see that prior construction can be challenging, especially when dealing with a parameter like <span class="math inline">\(\sigma\)</span> that is harder to interpret and specify. One is tempted as we did to try a weakly informative prior instead of doing the extra work to specify an informative prior.</p></li>
+<li><p>Predictive simulation checks are very helpful in seeing if our prior makes sense. We saw that the choice of a weak prior for <span class="math inline">\(\sigma\)</span> was not great since it led to predictions for game wins that seemed counter to what we know about games won in a season. This predictive check motivated us to think harder, and revise our prior for <span class="math inline">\(\sigma\)</span>.</p></li>
+</ul>
+<p>In part II of this post, we’ll continue the study of this model and use our prior and data from a recent season in a Bayesian posterior analysis. In particular, we will illustrate how we can perform both inference (learning about the locations of <span class="math inline">\(k\)</span> and <span class="math inline">\(\sigma\)</span>) and prediction (how many games a team will win in a future season).</p>
+</section>
+</section>
+<section id="pythagorean-modeling---ii" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="pythagorean-modeling---ii"><span class="header-section-number">7</span> Pythagorean Modeling - II</h2>
+<section id="introduction-6" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="introduction-6"><span class="header-section-number">7.1</span> Introduction</h3>
+<p>In Part I of this Bayesian modeling post, I introduced a Bayesian version of Bill James’ Pythagorean relationship. This model had two unknowns, the Pythagorean exponent <span class="math inline">\(k\)</span> and the error standard deviation <span class="math inline">\(\sigma\)</span> and I described constructing a prior for (<span class="math inline">\(k\)</span>, <span class="math inline">\(\sigma\)</span>) that reflected one’s knowledge about the value of the power in James’ formula and how win/loss ratios can deviate from this formula. In this post, assuming we have a sampling model and a prior, I am going to discuss the mechanics of Bayesian learning about these parameters and predicting future response values.</p>
+<p>Since one typically is interested in predicting wins instead of win/loss ratios, I am going to work with a slightly different version of the model where the number of team wins (in a 162-game season) follows a normal distribution where the mean is given by James’ formula, and <span class="math inline">\(\sigma\)</span> reflects the variation of the win totals about the mean.</p>
+<p><span class="math display">\[
+\frac{W}{L} \sim N( \left(\frac{R}{RA}\right)^k,\sigma)
+\]</span></p>
+<p>For a prior, I will assume <span class="math inline">\(k\)</span> is normal with mean 2 and standard deviation 0.5 and <span class="math inline">\(\sigma\)</span> is exponential with rate 1.</p>
+</section>
+<section id="posterior" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="posterior"><span class="header-section-number">7.2</span> Posterior</h3>
+<p>We now observe data, that is, the <span class="math inline">\(W\)</span> and <span class="math inline">\(R/RA\)</span> values for the 30 teams in the 2019 season, and by Bayes’ rule, we find the new or posterior probability distribution for (<span class="math inline">\(k\)</span>, <span class="math inline">\(\sigma\)</span>). The posterior density of (<span class="math inline">\(k\)</span>, <span class="math inline">\(\sigma\)</span>) is equal to (up to a proportionality constant) the product of the likelihood (the probability of the observed data viewed as a function of the parameters) and the prior. All types of inference are found by summarizing this bivariate probability distribution.</p>
+</section>
+<section id="brute-force-calculation" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="brute-force-calculation"><span class="header-section-number">7.3</span> Brute Force Calculation</h3>
+<p>A straightforward way to summarize the posterior is to find a grid of (<span class="math inline">\(k\)</span>, <span class="math inline">\(\sigma\)</span>) values that cover most of the probability. I have a R package <code>LearnBayes</code> that makes it easy to implement this brute-force method. One writes a function <code>logpost2()</code> that computes the logarithm of the posterior density of (<span class="math inline">\(k\)</span>, <span class="math inline">\(\sigma\)</span>). The arguments to this function are the vector of parameters <code>theta</code> and a data frame <code>d</code> that contains the data. Note that I’ve included both the likelihood and prior terms in this function.</p>
+<pre><code>logpost2 &lt;- function(theta, d){
+  k &lt;- theta[1]
+  sigma &lt;- theta[2]
+  n_mean &lt;- 162 * d$RR ^ k / (1 + d$RR ^ k)
+  sum(dnorm(d$W, n_mean, sigma, log = TRUE)) +
+    dnorm(k, 2, 0.5, log = TRUE) +
+    dexp(sigma, 1, log = TRUE)
+}</code></pre>
+<p>Next, by use of the <code>gcontour()</code> function, one finds a rectangle that covers the region where most of the probability falls. This function produces a contour plot where the contours are drawn at 10%, 1% and 0.1% of the largest posterior value and, by trial and error, I find a rectangle (specifically 1.6 &lt; <span class="math inline">\(k\)</span> &lt; 2.3 and 2 &lt; <span class="math inline">\(\sigma\)</span> &lt; 6) that covers these three contour lines.</p>
+<pre><code>gcontour(logpost2, c(1.6, 2.3, 2, 6), d)</code></pre>
+<p><img src="figures/bayes/bayes25.png" class="img-fluid" style="width:60.0%"></p>
+<p>This contour graph is produced by computing the posterior density on a 50 by 50 grid. One way to summarize the posterior is to simulate a large number of values from the posterior computed on this grid and then summarize the simulated draws. I use the <code>simcontour()</code> function to do the simulation from this grid:</p>
+<pre><code>pts &lt;- simcontour(logpost2, c(1.6, 2.3, 2, 6), 
+                  d, 5000)</code></pre>
+<p>Here I display 5000 simulated draws from the posterior on the contour plot.</p>
+<p><img src="figures/bayes/bayes26.png" class="img-fluid" style="width:60.0%"></p>
+<p>If I am interested primarily in learning about the exponent value <span class="math inline">\(k\)</span>, I collect those simulated values of <span class="math inline">\(k\)</span> to perform inference. For example, here is a density estimate which represents the marginal posterior density of <span class="math inline">\(k\)</span>. A 90% interval estimate for <span class="math inline">\(k\)</span> (found from the simulated draws) is (1.81, 2.09).</p>
+<p><img src="figures/bayes/bayes27.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="simulation-using-stan-software" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="simulation-using-stan-software"><span class="header-section-number">7.4</span> Simulation using Stan Software</h3>
+<p>Currently a popular and powerful way to perform Bayesian computations is to simulate from a Markov Chain that convergences in theory to the posterior distribution of interest. One particular type of simulation methodology is Hamiltonian MCMC sampling implemented by the Stan software. There are interfaces of Stan to other languages such as R or Python and the brms package provides a very attractive interface for fitting a large class of Bayesian models. I’ll illustrate using this package below.</p>
+<p>First I specify the prior on (<span class="math inline">\(k\)</span>, <span class="math inline">\(\sigma\)</span>) by use of two applications of the <code>prior()</code> function.</p>
+<pre><code>prior1 &lt;- c(prior(normal(2, 0.5), nlpar = "b1"),
+            prior(exponential(1), class = "sigma"))</code></pre>
+<p>Then I implement the Stan simulation by use of the <code>brm()</code> function in the <code>brms</code> package. Note that this function actually specifies this nonlinear model and the “family = gaussian” argument indicates that we are assuming normally distributed errors.</p>
+<pre><code>fit1 &lt;- brm(bf(W ~ 0 + 
+              162 * RR ^ b1 / (1 + RR ^ b1), 
+              b1 ~ 1, nl = TRUE),
+            data = d, prior = prior1,
+            family = gaussian)</code></pre>
+<p>Below I show some output of this function. The right set of graphs show streams of simulated draws of the parameters k and <span class="math inline">\(\sigma\)</span> and the left set of graphs display density estimates of the simulated posterior draws of these parameters. One gets essentially the same estimates of the power parameter k as I got using the brute-force method. For example, the 90% interval estimate using Stan is (1.79, 2.12) which is very close to the interval (1.81, 2.09) using brute force. One advantage of the Stan software is that it can efficiently sample from very complicated Bayesian models with many parameters.</p>
+<p><img src="figures/bayes/bayes28.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="prediction-of-wins" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="prediction-of-wins"><span class="header-section-number">7.5</span> Prediction of Wins</h3>
+<p>Actually, the objective here is not about learning about the parameters <span class="math inline">\(k\)</span> and <span class="math inline">\(\sigma\)</span>, but rather to predict the number of wins of a team who has a particular runs ratio.</p>
+<p>We predict the number of wins by use of the (posterior) predictive distribution which can be simulated in a similar way that we simulated future data from the (prior) predictive distribution in Part I of my post. Specifically, we simulate a future number of wins by first simulating values of (<span class="math inline">\(k\)</span>, <span class="math inline">\(\sigma\)</span>) from the posterior distribution and then simulating a wins total from the normal sampling distribution using these simulated parameter values. Using the <code>brms</code> package this is done using the <code>posterior_predict()</code> function. The arguments are <code>fit1</code> (the output of the posterior fitting) and a data frame <code>newdata</code> containing the values of the runs ratio that we are interested in.</p>
+<pre><code>PP &lt;- posterior_predict(fit1,
+               newdata = data.frame(
+                RR = seq(0.8, 1.2, by = 0.1)))</code></pre>
+<p>I use violin plots below to summarize the simulated number of wins from the predictive distributions for these five values of the runs ratio. For example, a team that scores the same number of runs as it allows (RR = 1) will likely win between 70 and 90 games in a 162-game season. The amount of variation in these win totals might be surprising – this tells us, that there is more to winning games than just having a good runs ratio.</p>
+<p><img src="figures/bayes/bayes29.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="summing-up" class="level3" data-number="7.6">
+<h3 data-number="7.6" class="anchored" data-anchor-id="summing-up"><span class="header-section-number">7.6</span> Summing Up</h3>
+<ul>
+<li><p>All of the R code for this exercise is available on my Github gist site.</p></li>
+<li><p>In this study, we placed priors on the parameters and one general concern is the impact of these priors on the posterior analysis. This is easy to address by trying other priors and seeing if there is a change in the inferential summaries or predictions. If the predictions seem to depend on the choice of prior, then I’d think harder about the prior.</p></li>
+<li><p>When possible, it is good to check one’s work by trying different computational methods. We did this by showing both a brute-force method and a modern simulation approach – both methods gave very similar estimates at the parameter <span class="math inline">\(k\)</span> and <span class="math inline">\(\sigma\)</span>.</p></li>
+</ul>
+<p>The purpose of this two-part post was to illustrate Bayesian modeling for a small regression problem. But we can easily generalize this problem to a situation where there is a obvious grouping of the data, and one is interested in doing many regressions, one for each group. For example, suppose we are exploring this Pythagorean relationship for many seasons and we want to apply this regression model for each season. Or maybe we have data for different professional leagues, say minor league, MLB, Japanese professional baseball, etc. and we want to apply this model to each league. This motivates the consideration of Bayesian multilevel modeling (and fitting using Stan) which will be the subject for a future set of posts.</p>
+</section>
+</section>
+<section id="learning-from-selected-data---introduction-to-approximate-bayesian-computation" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="learning-from-selected-data---introduction-to-approximate-bayesian-computation"><span class="header-section-number">8</span> Learning from Selected Data - Introduction to Approximate Bayesian Computation</h2>
+<section id="introduction-7" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="introduction-7"><span class="header-section-number">8.1</span> Introduction</h3>
+<p>The media is fascinated with extreme performances during the regular season. For example, during the 2019 season, Mookie Betts had a 9 for 16 hitting performance. That is, during a specific group of 16 consecutive at-bats, Betts had 9 hits for a 9/16 = 0.562 batting average. Should we be impressed? What have we learned about Betts’ true batting average based on this selected data?</p>
+<p>We can answer this question using Bayesian reasoning. We have some initial (prior) beliefs about Betts’ hitting probability that we represent by a prior density. We observe the data “9 hits in 16 at-bats” during the season and we use Bayes rule to find our updated (posterior) density of Betts’ probability <span class="math inline">\(p\)</span> given this new information. The problem is that Bayes rule is challenging to implement for this specific problem. That is, the likelihood function (the chance of observing this 9 for 16 data for a specific value of <span class="math inline">\(p\)</span>) is hard to construct and so one struggles to write down the expression for the posterior density. In situations like this, there is a simulation-based method called “approximate Bayesian computation” (ABC) that can be used to compute the posterior distribution. I introduce this ABC method for a simple example and then show how it can be used for our selected data problem.</p>
+</section>
+<section id="learning-from-season-statistics" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="learning-from-season-statistics"><span class="header-section-number">8.2</span> Learning from Season Statistics</h3>
+<p>Let’s first describe exact and ABC approximations for a familiar Bayesian problem. Suppose I don’t know much about Betts’ hitting ability – I think Betts is an average hitter and construct a beta curve with shape parameters 55 and 155 to represent these beliefs. This beta prior says that my best guess at Betts’ hitting probability is around 0.262 and I’m 90% sure his probability is between 0.213 and 0.313. Now I observe Betts’ 2019 stats – he had 597 AB with 176 hits. Since we used a beta prior, a routine Bayesian calculation tells us that the posterior is also beta with new shape parameters 55 + 176 and 155 + (597 - 176).</p>
+<p>Here is the ABC way of doing this calculation. This method is based on simulating a large number of values of the parameter <span class="math inline">\(p\)</span> and the number of hits <span class="math inline">\(y\)</span> from the Bayesian model. We start by simulating a large number of values of <span class="math inline">\(p\)</span> from the prior. Since we are assuming the number of hits <span class="math inline">\(y\)</span> is binomial with sample size 597 and probability of success <span class="math inline">\(p\)</span>, we next simulate values of <span class="math inline">\(y\)</span> from a binomial distribution using the simulated values of <span class="math inline">\(p\)</span>. We can implement these two ABC steps in R using two lines of code.</p>
+<pre><code>iter &lt;- 100000
+p &lt;- rbeta(iter, 55, 155)
+y &lt;- rbinom(iter, size = 597, prob = p)</code></pre>
+<p>We observe 176 hits for Betts, that is <span class="math inline">\(y\)</span> = 176. We collect the simulated values from the prior and keep only the values of <span class="math inline">\(p\)</span> where y = <span class="math inline">\(176\)</span> (the observed number of hits) – this new sample of values of <span class="math inline">\(p\)</span> comes from the posterior.</p>
+<p>Does this ABC method work? Below I graph the prior (brown curve), the exact beta posterior (red curve), and the density estimate of the ABC posterior simulated sample (blue curve). Since the beta and ABC posteriors are very similar, the ABC method appears to provide a good approximation to the posterior in this example.</p>
+<p><img src="figures/bayes/bayes31.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="learning-from-selected-data" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="learning-from-selected-data"><span class="header-section-number">8.3</span> Learning from Selected Data</h3>
+<p>Now that we’ve illustrated that the ABC method works, let’s apply it for our selected data problem. We start with the same beta(55, 155) prior, we observe a 9/16 streaky performance and we want to find the updated (posterior) distribution for <span class="math inline">\(p\)</span>.</p>
+<p>Here are the steps for implementing the ABC method. This algorithm can be modified easy for other types of selected data.</p>
+<ul>
+<li><p>(Simulate from the Prior) We simulate a single value p from my beta(55, 155) prior.</p></li>
+<li><p>(Simulate Hit/Out Data) We simulate a sequence of 597 Bernoulli (0, 1) observations where the probability of hit is p.</p></li>
+<li><p>(Did We Observe Our Streak?) We look over all sequences of 16 at-bats in our binary sequence – if we observe at least 9 hits in one 16 AB sequence, we record the statistic STAT = 1, otherwise STAT = 0.</p></li>
+<li><p>(Repeat) We repeat steps 1, 2, 3 a large number of times, collecting a large sample of values of p and STAT.</p></li>
+<li><p>(Obtain Posterior Sample) Since we observed a 9 out of 16 streak, we keep only the values of p where STAT = 1 – these filtered values will be a sample from the posterior.</p></li>
+</ul>
+<p>Here’s a graph of the results – I graph the beta prior and the posterior using this ABC method. The posterior reflects what we learned about Betts’ hitting probability on the basis of his 9 for 16 performance. What is interesting is that the location of the posterior is located just a little to the right of the prior. This means is that we haven’t learned much about Betts’ hitting probability based on this 9 for 16 streak. Comparing this figure with the figure above, we certainly have learned less about Betts hitting probability from his 9 for 16 performance than we learned from Betts 176 hits in 597 at-bats in a full season.</p>
+<p><img src="figures/bayes/bayes33.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="some-takeaways" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="some-takeaways"><span class="header-section-number">8.4</span> Some Takeaways</h3>
+<ul>
+<li><p>Baseball fans tend to get excited about extreme performances such as no-hitters, hitting streaks or slumps, and World Series heroes. Although it is fine to recognize top performances in playoffs, these extreme performances don’t really tell us that much about the players’ abilities. In our example, we didn’t learn much about Betts hitting ability based on a 9 for 16 performance.</p></li>
+<li><p>ABC provides a conceptually simple way to implement Bayes. It may be difficult to write down the likelihood function for a specific problem, but one can simulate parameter and data values from the model as we did above.</p></li>
+<li><p>Suppose we observe that a player has a hitting slump of 0 for 20. It is easy to modify this ABC method to obtain the posterior from this slump data.</p></li>
+<li><p>The tricky thing is that the ABC method is pretty inefficient (we only keep values of the parameter where the data value is what we observed) and one may not have a large enough sample of simulated values to get accurate estimates of the posterior. In that case, it may be better to keep the parameter values where the data value is “close” to what you did observe. There is an active research effort to work on good selections of “close”.</p></li>
+<li><p>If you google “approximate Bayesian calculation” you’ll find many interesting applications of ABC. Given the simplicity of the algorithm, I think it is potentially useful in teaching Bayes at an introductory level.</p></li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
