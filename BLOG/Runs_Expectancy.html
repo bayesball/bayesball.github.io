@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2023-01-01">
+<meta name="dcterms.date" content="2023-02-05">
 
 <title>Runs Expectancy</title>
 <style>
@@ -104,6 +104,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#comparing-runs-expectancy-with-ordinal-coefficients" id="toc-comparing-runs-expectancy-with-ordinal-coefficients" class="nav-link" data-scroll-target="#comparing-runs-expectancy-with-ordinal-coefficients"><span class="toc-section-number">7.5</span>  Comparing Runs Expectancy with Ordinal Coefficients</a></li>
   <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="toc-section-number">7.6</span>  Takeaways</a></li>
   </ul></li>
+  <li><a href="#calculation-of-in-game-win-probabilities" id="toc-calculation-of-in-game-win-probabilities" class="nav-link" data-scroll-target="#calculation-of-in-game-win-probabilities"><span class="toc-section-number">8</span>  Calculation of In-Game Win Probabilities</a>
+  <ul class="collapse">
+  <li><a href="#part-1" id="toc-part-1" class="nav-link" data-scroll-target="#part-1"><span class="toc-section-number">8.1</span>  Part 1</a></li>
+  <li><a href="#part-2" id="toc-part-2" class="nav-link" data-scroll-target="#part-2"><span class="toc-section-number">8.2</span>  Part 2</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -128,7 +133,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">January 1, 2023</p>
+      <p class="date">February 5, 2023</p>
     </div>
   </div>
   
@@ -146,6 +151,7 @@ ul.task-list li input[type="checkbox"] {
 <p>A popular modern way to evaluate batting performance is the weighted on-base percentage or wOBA. We explain in Section 4 how to use Retrosheet play-by-play data to compute the weights of the different positive outcomes that are used in the wOBA.</p>
 <p>Runs values are also helpful in evaluating pitches. Section 5 describes the concept of a pitch value and shows the value of different types of pitches over the zone.</p>
 <p>One drawback of the runs expectancy matrix is that runs potential is measured solely by the mean runs in the remainder of the inning. Section 6 introduces a more general approach where runs are represented as an ordinal variable and one measures the advantage of a given situation by use of an ordinal regression model. Section 7 provides some background material on this ordinal response approach. This section provides some interesting comparisons between the runs expectancy table and the “runs advantage” table which displays the ordinal regression coefficient for all states.</p>
+<p>Of course, the objective of a team is not simply to score runs, but to win by scoring more runs than their opponent. Section 8 describes how one computes the in-game win probabilities that are typically displayed as part of the game report.</p>
 </section>
 <section id="getting-started" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="getting-started"><span class="header-section-number">2</span> Getting Started</h2>
@@ -631,6 +637,81 @@ logit \left(\frac{scoring \le k}{scoring &gt; k}\right)
 <li><p>How Can a Team Score 0.5 Runs? I think the runs advantage table is better than runs expectancy since it tells you something about the distribution of runs scored, not just the average.</p></li>
 <li><p>Other Applications. I have illustrated the use of ordinal regression models in earlier posts. In this post, I explore the ordinal response that is the outcome in balls in play and in this post, I use an ordinal model to relate expected wOBA with the Statcast barrels definition.</p></li>
 </ul>
+</section>
+</section>
+<section id="calculation-of-in-game-win-probabilities" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="calculation-of-in-game-win-probabilities"><span class="header-section-number">8</span> Calculation of In-Game Win Probabilities</h2>
+<section id="part-1" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="part-1"><span class="header-section-number">8.1</span> Part 1</h3>
+<p>When you visit Baseball Reference’s boxes pages, such as the extended box score of the final game of the 2014 season, you will see a display of win probabilities. One particular graph shows the probability of the Giants winning the game after each play. These are used to measure player performances. For example, Madison Bumgarner was the most valuable player of this game since his total win probability added (WPA) over all of his plays was 0.603. (On a side note, Jay Bennett and I presented these type of calculations in <em>Curve Ball</em>.)</p>
+<p>It is straightforward to compute these win probabilities. A first step in this calculation is to compute, at the end of each inning, the probability the home team wins the game. We illustrate one method of performing this computation using Retrosheet game logs for a particular season.</p>
+<p>A function <code>plot.prob.home()</code> is available on this github gist page. Let me outline the main steps of this function.</p>
+<ul>
+<li>The game logs for the particular season are downloaded from Retrosheet. A short file is also downloaded from my site that gives the header (variable <code>names</code>) for the game log file.</li>
+<li>The game log file contains the line scores for the home and visiting teams. The function will parse these line scores and create a numerical variable of runs scored for all innings. (The string function <code>strsplit()</code> is helpful for doing this parsing.)</li>
+<li>It didn’t seem obvious how to parse line scores for games where with innings where 10 or more runs are scored. So I have omitted those line scores – I don’t think this would impact the results very much.</li>
+<li>A logistic regression model is used to develop a smooth curve for predicting the probability of a home team victor given the winning margin. This model has the form <span class="math display">\[
+\log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1 {\rm Home.Team.Lead}
+\]</span> This model is applied for each of the bottoms of the eight innings. The regression intercept <span class="math inline">\(\beta_0\)</span> represents the home team advantage and <span class="math inline">\(\beta_1\)</span> represents the additional advantage for the home team (on the logit scale) for each additional run lead.</li>
+<li>I use the <code>ggplot2</code> package to plot the probability the home team wins as a function of the inning number (1 through 8) for each of the home team leads -4, -3, -2, -1, 0, 1, 2, 3, 4.</li>
+</ul>
+<p>Here are a couple of illustrations of the use of this function for two seasons – 1980 and 2013. Assuming you have the packages <code>devtools</code> , <code>arm</code> , and <code>ggplot2</code> installed, you can just type the following R code into the Console window to see these graphs and have the probabilities displayed in a data frame.</p>
+<pre><code>library(devtools)
+source_gist("70a166149f71622fed97")
+plot.prob.home(1993)</code></pre>
+<p><img src="figures/expectancy/runs15.png" class="img-fluid" style="width:70.0%"></p>
+<pre><code>plot.prob.home(2013)</code></pre>
+<p><img src="figures/expectancy/runs16.png" class="img-fluid" style="width:70.0%"></p>
+<p>Several comments about what we see in these graphs.</p>
+<ul>
+<li>Note that the home team has a slight advantage at the beginning, about 0.54, of winning the game. The size of the home advantage has stayed pretty consistent through recent baseball seasons. Also, the home team maintains this slight advantage for tied games at the end of each inning.</li>
+<li>As one might expect, the probability the home team wins with a small lead gets closer to 1 as the game approaches the end. One way of measuring the impact of a team’s closer is to compare these late-game probabilities across teams.</li>
+<li>Following up this last comment, if you look at the description of the WPA methodology, you will note that these probability calculations are for an “average team”, and it would be desirable to get probability and WPA estimates that take in account the offense and defense capabilities of the individual teams.</li>
+</ul>
+<p>The calculation of these win probabilities is a start towards computing the WPAs after each baseball play. The WPAs can be found by using this work together with run expectancies and the details of this work will be found in a future post.</p>
+</section>
+<section id="part-2" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="part-2"><span class="header-section-number">8.2</span> Part 2</h3>
+<p>In an earlier post, I described how one can compute end-of-inning win probabilities for the home team using Retrosheet game log data. One is usually interested in computing win probabilities after each play, and using these to find so-called WPA (win-probability added) values that we can attribute to specific players. Here we describe using Retrosheet play-by-play data to compute these win probabilities and we’ll contrast these values with the ones posted on the Baseball-Reference site.</p>
+<p>To review some previous work, we have already described in a previous post the process of downloading all play-by-play data for a specific season from Retrosheet and computing the run values (from the run expectancy table) for all players. We will be using these run values in this work.</p>
+<section id="computing-the-inning-win-probabilities" class="level4" data-number="8.2.1">
+<h4 data-number="8.2.1" class="anchored" data-anchor-id="computing-the-inning-win-probabilities"><span class="header-section-number">8.2.1</span> Computing the Inning Win Probabilities</h4>
+<p>I wrote a new function <code>prob.win.game2()</code> that will download the Retrosheet play-by-play data for a specific season and use these to estimate the probability the home team wins at the end of each half-inning. Essentially, I collect the winning margin (home score - visitor score) and the ultimate game outcome (1 if the home team wins, and 0 otherwise) at the end of a specific half-inning and fit the logistic model <span class="math display">\[
+\log \left( \frac{p} {1 - p}\right) = \beta_0 + \beta_1 \times (WIN MARGIN)
+\]</span> where <span class="math inline">\(p\)</span> is the probability the home team wins. We fit 16 of these models, corresponding to each of the half-innings top-of-first, bottom-of-first, …, top-of eighth, bottom-of-eighth. (In the 9th inning and beyond, we use the same model that was used for the 8th inning.) For example, at the end of the 4th inning, we have the fit <span class="math display">\[
+\log \left( \frac{p} {1 - p}\right) = 0.074 + 0.632 \times (WIN MARGIN)
+\]</span> So by leading by an additional run after 4 innings, the home team’s probability of winning (on the logit scale) is increased by 0.632.</p>
+</section>
+<section id="computing-the-play-win-probabilities" class="level4" data-number="8.2.2">
+<h4 data-number="8.2.2" class="anchored" data-anchor-id="computing-the-play-win-probabilities"><span class="header-section-number">8.2.2</span> Computing the Play Win Probabilities</h4>
+<p>Actually, we want to compute the probability the home team wins after each play in an inning. For example, suppose the home team has runners on 1st and 2nd with one out in the 4th – what is the probability they will win? Using a rule of probabilities <span class="math display">\[
+P(Win) = \sum P(R) P(Win | R),
+\]</span> where <span class="math inline">\(P(R)\)</span> is the probability the team scores R runs in the inning, and <span class="math inline">\(P(Win | R)\)</span> is the probability the team wins at the end of the inning if they have scored R runs. This probability is tedious to compute, but we can approximate it by <span class="math display">\[
+P(Win) \approx P(Win | \bar R),
+\]</span> where <span class="math inline">\(\bar R\)</span> is the expected run value, and <span class="math inline">\(P(Win | \bar R)\)</span> is the probability the home team wins (computed using the logistic model) if the team has scored <span class="math inline">\(\bar R\)</span> runs. For example, suppose that a home team currently has a 2 run lead, and runners on 1st and 2nd with two outs in the bottom of the forth. The expected number of runs in the remainder of the inning is 0.40 (from 2014 data). Using the logistic model, the logit of the probability of the home team winning at the bottom of that inning is estimated to be <span class="math display">\[
+\log \left( \frac{p} {1 - p}\right) = 0.074 + 0.632 \times (2 + 0.40) = 1.59,
+\]</span> and the probability the home team wins the game is <span class="math display">\[
+\frac{\exp(1.59)}{(1 + \exp(1.59))} = 0.83.
+\]</span></p>
+<p>To compute these win probs, I first use the function <code>compute.runs.expectancy()</code> to compute all of the run values and then use a new function <code>compute.win.probs()</code> to compute the win probabilities after all plays. This last function uses both the data frame that contains the Retrosheet data and run values, and also the data frame containing the logistic regression coefficients for all half-innings.</p>
+</section>
+<section id="displaying-play-win-probabilities" class="level4" data-number="8.2.3">
+<h4 data-number="8.2.3" class="anchored" data-anchor-id="displaying-play-win-probabilities"><span class="header-section-number">8.2.3</span> Displaying Play Win Probabilities</h4>
+<p>I have saved the data frame containing all of this work for the 2014 season on my website. You can plot the win probabilities for a specific game by downloading the data frame and sourcing in a new function <code>graph.game()</code> that will do the plotting. The function outputs the rows of the data frame corresponding to the game. Here is an illustration of how it works – we’ll plot the win probabilities for the New York Yankees at Tampa Bay Rays game of April 18, 2014.&nbsp; The plays</p>
+<pre><code>load(url("http://bayes.bgsu.edu/baseball/pbp2014winprob.Rdata"))
+library(devtools)
+source_gist("a8e5255c98954d151974")
+d.game &lt;- graph.game(d, "TBA201404180")</code></pre>
+<p><img src="figures/expectancy/runs17.png" class="img-fluid" style="width:70.0%"></p>
+<p>You can plot win probabilities for any game for the 2014 season – just change the game code in the input of <code>graph.game()</code>.</p>
+</section>
+<section id="checking-my-work" class="level4" data-number="8.2.4">
+<h4 data-number="8.2.4" class="anchored" data-anchor-id="checking-my-work"><span class="header-section-number">8.2.4</span> Checking My Work</h4>
+<p>If you look at the Baseball-Reference description of this game here, you’ll see the same type of win probabilities plotted and each play has an associated value of WPA. I’m not sure of the exact method that was used, but it is easy to download their data and compare their values of WPA with my values. Here is a scatterplot of the two sets of values for this particular game.</p>
+<p><img src="figures/expectancy/runs18.png" class="img-fluid" style="width:70.0%"></p>
+<p>I’m encouraged that the WPA values are similar in this case. In particular, both methods would identify the important plays in this game. The key play was James Loney’s single in the bottom of the 7th that raised the Tampa win probability by over 40%.</p>
+<p>The code for the two new functions <code>prob.win.game2()</code> and <code>compute.win.probs()</code> can be found on my gist site here.</p>
+</section>
 </section>
 </section>
 
