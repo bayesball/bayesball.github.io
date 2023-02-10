@@ -1,0 +1,909 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.269">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Jim Albert">
+<meta name="dcterms.date" content="2023-02-10">
+
+<title>Swing and Miss</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="swing_files/libs/clipboard/clipboard.min.js"></script>
+<script src="swing_files/libs/quarto-html/quarto.js"></script>
+<script src="swing_files/libs/quarto-html/popper.min.js"></script>
+<script src="swing_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="swing_files/libs/quarto-html/anchor.min.js"></script>
+<link href="swing_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="swing_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="swing_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="swing_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="swing_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body>
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+  <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a></li>
+  <li><a href="#a-new-swing-and-miss-stat" id="toc-a-new-swing-and-miss-stat" class="nav-link" data-scroll-target="#a-new-swing-and-miss-stat"><span class="toc-section-number">2</span>  A New Swing and Miss Stat</a></li>
+  <li><a href="#world-series-swing-and-miss-rates" id="toc-world-series-swing-and-miss-rates" class="nav-link" data-scroll-target="#world-series-swing-and-miss-rates"><span class="toc-section-number">3</span>  World Series Swing and Miss Rates</a></li>
+  <li><a href="#historical-contact-rates" id="toc-historical-contact-rates" class="nav-link" data-scroll-target="#historical-contact-rates"><span class="toc-section-number">4</span>  Historical Contact Rates</a></li>
+  <li><a href="#fouls-with-two-strikes" id="toc-fouls-with-two-strikes" class="nav-link" data-scroll-target="#fouls-with-two-strikes"><span class="toc-section-number">5</span>  Fouls with Two Strikes</a></li>
+  <li><a href="#ws-game-3---swing-and-miss" id="toc-ws-game-3---swing-and-miss" class="nav-link" data-scroll-target="#ws-game-3---swing-and-miss"><span class="toc-section-number">6</span>  WS Game 3 - Swing and Miss</a>
+  <ul class="collapse">
+  <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1"><span class="toc-section-number">6.1</span>  Introduction</a></li>
+  <li><a href="#basic-swing-and-miss-stats" id="toc-basic-swing-and-miss-stats" class="nav-link" data-scroll-target="#basic-swing-and-miss-stats"><span class="toc-section-number">6.2</span>  Basic Swing and Miss Stats</a></li>
+  <li><a href="#different-pitch-types" id="toc-different-pitch-types" class="nav-link" data-scroll-target="#different-pitch-types"><span class="toc-section-number">6.3</span>  Different Pitch Types?</a></li>
+  <li><a href="#pitch-location" id="toc-pitch-location" class="nav-link" data-scroll-target="#pitch-location"><span class="toc-section-number">6.4</span>  Pitch Location?</a></li>
+  <li><a href="#special-point-in-the-graph" id="toc-special-point-in-the-graph" class="nav-link" data-scroll-target="#special-point-in-the-graph"><span class="toc-section-number">6.5</span>  Special Point in the Graph?</a></li>
+  <li><a href="#r-code" id="toc-r-code" class="nav-link" data-scroll-target="#r-code"><span class="toc-section-number">6.6</span>  R Code?</a></li>
+  <li><a href="#game-4-update-added-sunday-morning" id="toc-game-4-update-added-sunday-morning" class="nav-link" data-scroll-target="#game-4-update-added-sunday-morning"><span class="toc-section-number">6.7</span>  Game 4 Update (Added Sunday Morning)</a></li>
+  </ul></li>
+  <li><a href="#modeling-swing-rates" id="toc-modeling-swing-rates" class="nav-link" data-scroll-target="#modeling-swing-rates"><span class="toc-section-number">7</span>  Modeling Swing Rates</a>
+  <ul class="collapse">
+  <li><a href="#mixed-models" id="toc-mixed-models" class="nav-link" data-scroll-target="#mixed-models"><span class="toc-section-number">7.1</span>  Mixed Models</a></li>
+  <li><a href="#why-look-at-swing-rates" id="toc-why-look-at-swing-rates" class="nav-link" data-scroll-target="#why-look-at-swing-rates"><span class="toc-section-number">7.2</span>  Why Look at Swing Rates?</a></li>
+  <li><a href="#a-simple-random-effects-model" id="toc-a-simple-random-effects-model" class="nav-link" data-scroll-target="#a-simple-random-effects-model"><span class="toc-section-number">7.3</span>  A Simple Random Effects Model</a></li>
+  <li><a href="#an-alternative-mixed-model-based-on-logits" id="toc-an-alternative-mixed-model-based-on-logits" class="nav-link" data-scroll-target="#an-alternative-mixed-model-based-on-logits"><span class="toc-section-number">7.4</span>  An Alternative Mixed Model Based on Logits</a></li>
+  <li><a href="#extending-the-logit-model" id="toc-extending-the-logit-model" class="nav-link" data-scroll-target="#extending-the-logit-model"><span class="toc-section-number">7.5</span>  Extending the Logit Model</a></li>
+  <li><a href="#the-details" id="toc-the-details" class="nav-link" data-scroll-target="#the-details"><span class="toc-section-number">7.6</span>  The Details</a></li>
+  </ul></li>
+  <li><a href="#first-pitch-strike-and-swing-and-miss-rate" id="toc-first-pitch-strike-and-swing-and-miss-rate" class="nav-link" data-scroll-target="#first-pitch-strike-and-swing-and-miss-rate"><span class="toc-section-number">8</span>  First Pitch Strike and Swing and Miss Rate</a>
+  <ul class="collapse">
+  <li><a href="#two-fangraph-pitching-stats" id="toc-two-fangraph-pitching-stats" class="nav-link" data-scroll-target="#two-fangraph-pitching-stats"><span class="toc-section-number">8.1</span>  Two FanGraph Pitching Stats</a></li>
+  <li><a href="#predicting-war-from-these-two-stats" id="toc-predicting-war-from-these-two-stats" class="nav-link" data-scroll-target="#predicting-war-from-these-two-stats"><span class="toc-section-number">8.2</span>  Predicting WAR from These Two Stats</a></li>
+  <li><a href="#looking-at-residuals" id="toc-looking-at-residuals" class="nav-link" data-scroll-target="#looking-at-residuals"><span class="toc-section-number">8.3</span>  Looking at Residuals</a></li>
+  <li><a href="#the-big-residuals" id="toc-the-big-residuals" class="nav-link" data-scroll-target="#the-big-residuals"><span class="toc-section-number">8.4</span>  The Big Residuals</a></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up"><span class="toc-section-number">8.5</span>  Wrap-Up</a></li>
+  </ul></li>
+  <li><a href="#exploring-whiff-rates" id="toc-exploring-whiff-rates" class="nav-link" data-scroll-target="#exploring-whiff-rates"><span class="toc-section-number">9</span>  Exploring Whiff Rates</a>
+  <ul class="collapse">
+  <li><a href="#introduction-and-data-source" id="toc-introduction-and-data-source" class="nav-link" data-scroll-target="#introduction-and-data-source"><span class="toc-section-number">9.1</span>  Introduction and Data Source</a></li>
+  <li><a href="#batter-whiff-and-k-rates" id="toc-batter-whiff-and-k-rates" class="nav-link" data-scroll-target="#batter-whiff-and-k-rates"><span class="toc-section-number">9.2</span>  Batter Whiff and K Rates</a></li>
+  <li><a href="#pitcher-whiff-and-k-rates" id="toc-pitcher-whiff-and-k-rates" class="nav-link" data-scroll-target="#pitcher-whiff-and-k-rates"><span class="toc-section-number">9.3</span>  Pitcher Whiff and K Rates</a></li>
+  <li><a href="#how-does-whiff-rate-depend-on-the-pitch-batter-view" id="toc-how-does-whiff-rate-depend-on-the-pitch-batter-view" class="nav-link" data-scroll-target="#how-does-whiff-rate-depend-on-the-pitch-batter-view"><span class="toc-section-number">9.4</span>  How Does Whiff Rate Depend on the Pitch (Batter View)?</a></li>
+  <li><a href="#how-does-whiff-rate-depend-on-the-pitch-pitcher-view" id="toc-how-does-whiff-rate-depend-on-the-pitch-pitcher-view" class="nav-link" data-scroll-target="#how-does-whiff-rate-depend-on-the-pitch-pitcher-view"><span class="toc-section-number">9.5</span>  How Does Whiff Rate Depend on the Pitch (Pitcher View)?</a></li>
+  <li><a href="#why-does-this-matter" id="toc-why-does-this-matter" class="nav-link" data-scroll-target="#why-does-this-matter"><span class="toc-section-number">9.6</span>  Why Does This Matter?</a></li>
+  <li><a href="#final-thoughts" id="toc-final-thoughts" class="nav-link" data-scroll-target="#final-thoughts"><span class="toc-section-number">9.7</span>  Final Thoughts</a></li>
+  </ul></li>
+  <li><a href="#world-series-special---swing-and-miss-rates" id="toc-world-series-special---swing-and-miss-rates" class="nav-link" data-scroll-target="#world-series-special---swing-and-miss-rates"><span class="toc-section-number">10</span>  World Series Special - Swing and Miss Rates</a>
+  <ul class="collapse">
+  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"><span class="toc-section-number">10.1</span>  Introduction</a></li>
+  <li><a href="#the-2017-world-series-teams" id="toc-the-2017-world-series-teams" class="nav-link" data-scroll-target="#the-2017-world-series-teams"><span class="toc-section-number">10.2</span>  The 2017 World Series Teams</a></li>
+  </ul></li>
+  <li><a href="#swing-and-miss-rates" id="toc-swing-and-miss-rates" class="nav-link" data-scroll-target="#swing-and-miss-rates"><span class="toc-section-number">11</span>  2018 Swing and Miss Rates</a>
+  <ul class="collapse">
+  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3"><span class="toc-section-number">11.1</span>  Introduction</a></li>
+  <li><a href="#swing-and-miss-rates-of-regular-hitters" id="toc-swing-and-miss-rates-of-regular-hitters" class="nav-link" data-scroll-target="#swing-and-miss-rates-of-regular-hitters"><span class="toc-section-number">11.2</span>  Swing and Miss Rates of Regular Hitters</a></li>
+  <li><a href="#swing-and-miss-rates-of-2018-world-series-players" id="toc-swing-and-miss-rates-of-2018-world-series-players" class="nav-link" data-scroll-target="#swing-and-miss-rates-of-2018-world-series-players"><span class="toc-section-number">11.3</span>  Swing and Miss Rates of 2018 World Series Players</a></li>
+  <li><a href="#swing-and-miss-rates-for-different-pitch-types" id="toc-swing-and-miss-rates-for-different-pitch-types" class="nav-link" data-scroll-target="#swing-and-miss-rates-for-different-pitch-types"><span class="toc-section-number">11.4</span>  Swing and Miss Rates for Different Pitch Types</a></li>
+  <li><a href="#swing-and-miss-rates-for-different-counts" id="toc-swing-and-miss-rates-for-different-counts" class="nav-link" data-scroll-target="#swing-and-miss-rates-for-different-counts"><span class="toc-section-number">11.5</span>  Swing and Miss Rates for Different Counts</a></li>
+  <li><a href="#swing-and-miss-rates-and-pitch-location" id="toc-swing-and-miss-rates-and-pitch-location" class="nav-link" data-scroll-target="#swing-and-miss-rates-and-pitch-location"><span class="toc-section-number">11.6</span>  Swing and Miss Rates and Pitch Location</a></li>
+  <li><a href="#wrapping-up" id="toc-wrapping-up" class="nav-link" data-scroll-target="#wrapping-up"><span class="toc-section-number">11.7</span>  Wrapping Up</a></li>
+  <li><a href="#data-and-code" id="toc-data-and-code" class="nav-link" data-scroll-target="#data-and-code"><span class="toc-section-number">11.8</span>  Data and Code</a></li>
+  <li><a href="#related-posts" id="toc-related-posts" class="nav-link" data-scroll-target="#related-posts"><span class="toc-section-number">11.9</span>  Related Posts</a></li>
+  </ul></li>
+  <li><a href="#tribute-to-joe-mauer-exploring-miss-rates" id="toc-tribute-to-joe-mauer-exploring-miss-rates" class="nav-link" data-scroll-target="#tribute-to-joe-mauer-exploring-miss-rates"><span class="toc-section-number">12</span>  Tribute to Joe Mauer: Exploring Miss Rates</a>
+  <ul class="collapse">
+  <li><a href="#introduction-4" id="toc-introduction-4" class="nav-link" data-scroll-target="#introduction-4"><span class="toc-section-number">12.1</span>  Introduction</a></li>
+  <li><a href="#data" id="toc-data" class="nav-link" data-scroll-target="#data"><span class="toc-section-number">12.2</span>  Data</a></li>
+  <li><a href="#a-career-look-at-mauers-miss-rates" id="toc-a-career-look-at-mauers-miss-rates" class="nav-link" data-scroll-target="#a-career-look-at-mauers-miss-rates"><span class="toc-section-number">12.3</span>  A Career Look at Mauer’s Miss Rates</a></li>
+  <li><a href="#how-did-mauer-compare-to-the-best" id="toc-how-did-mauer-compare-to-the-best" class="nav-link" data-scroll-target="#how-did-mauer-compare-to-the-best"><span class="toc-section-number">12.4</span>  How Did Mauer Compare to the Best?</a></li>
+  <li><a href="#who-did-mauer-struggle-against" id="toc-who-did-mauer-struggle-against" class="nav-link" data-scroll-target="#who-did-mauer-struggle-against"><span class="toc-section-number">12.5</span>  Who Did Mauer Struggle Against?</a></li>
+  <li><a href="#takeaway" id="toc-takeaway" class="nav-link" data-scroll-target="#takeaway"><span class="toc-section-number">12.6</span>  Takeaway</a></li>
+  <li><a href="#revision-coming-out-soon" id="toc-revision-coming-out-soon" class="nav-link" data-scroll-target="#revision-coming-out-soon"><span class="toc-section-number">12.7</span>  Revision Coming Out Soon</a></li>
+  </ul></li>
+  <li><a href="#calledstrike-package-and-swing-and-miss-stats" id="toc-calledstrike-package-and-swing-and-miss-stats" class="nav-link" data-scroll-target="#calledstrike-package-and-swing-and-miss-stats"><span class="toc-section-number">13</span>  CalledStrike Package and Swing and Miss Stats</a>
+  <ul class="collapse">
+  <li><a href="#introduction-5" id="toc-introduction-5" class="nav-link" data-scroll-target="#introduction-5"><span class="toc-section-number">13.1</span>  Introduction</a></li>
+  <li><a href="#process-of-constructing-a-display" id="toc-process-of-constructing-a-display" class="nav-link" data-scroll-target="#process-of-constructing-a-display"><span class="toc-section-number">13.2</span>  Process of Constructing a Display</a></li>
+  <li><a href="#swing-and-miss-study" id="toc-swing-and-miss-study" class="nav-link" data-scroll-target="#swing-and-miss-study"><span class="toc-section-number">13.3</span>  Swing and Miss Study</a></li>
+  <li><a href="#making-contact-with-the-pitch" id="toc-making-contact-with-the-pitch" class="nav-link" data-scroll-target="#making-contact-with-the-pitch"><span class="toc-section-number">13.4</span>  Making Contact with the Pitch</a></li>
+  <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments"><span class="toc-section-number">13.5</span>  Comments</a></li>
+  </ul></li>
+  <li><a href="#consecutive-swings-without-a-miss" id="toc-consecutive-swings-without-a-miss" class="nav-link" data-scroll-target="#consecutive-swings-without-a-miss"><span class="toc-section-number">14</span>  87 Consecutive Swings Without a Miss?</a>
+  <ul class="collapse">
+  <li><a href="#introduction---streaks-on-swings" id="toc-introduction---streaks-on-swings" class="nav-link" data-scroll-target="#introduction---streaks-on-swings"><span class="toc-section-number">14.1</span>  Introduction - Streaks on Swings</a></li>
+  <li><a href="#correct-denominator" id="toc-correct-denominator" class="nav-link" data-scroll-target="#correct-denominator"><span class="toc-section-number">14.2</span>  Correct Denominator?</a></li>
+  <li><a href="#r-work" id="toc-r-work" class="nav-link" data-scroll-target="#r-work"><span class="toc-section-number">14.3</span>  R Work</a></li>
+  <li><a href="#longest-streaks-in-the-2021-season" id="toc-longest-streaks-in-the-2021-season" class="nav-link" data-scroll-target="#longest-streaks-in-the-2021-season"><span class="toc-section-number">14.4</span>  Longest Streaks in the 2021 Season</a></li>
+  <li><a href="#all-statcast-seasons" id="toc-all-statcast-seasons" class="nav-link" data-scroll-target="#all-statcast-seasons"><span class="toc-section-number">14.5</span>  All Statcast Seasons</a></li>
+  <li><a href="#coin-flipping-doesnt-predict-these-extreme-streaks" id="toc-coin-flipping-doesnt-predict-these-extreme-streaks" class="nav-link" data-scroll-target="#coin-flipping-doesnt-predict-these-extreme-streaks"><span class="toc-section-number">14.6</span>  Coin Flipping Doesn’t Predict These Extreme Streaks</a></li>
+  <li><a href="#closing-comments" id="toc-closing-comments" class="nav-link" data-scroll-target="#closing-comments"><span class="toc-section-number">14.7</span>  Closing Comments</a></li>
+  </ul></li>
+  </ul>
+</nav>
+</div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Swing and Miss</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Jim Albert </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 10, 2023</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>This is a collection of blog posts from Exploring Baseball Data With R that focus on statistics related to the batting outcome “swing and miss”. (In my review, I was surprised that I had written so many posts on this general topic.). These posts are arranged in the chronological order that they were written.</p>
+<p>Section 2 proposes a model-based method (based on logistic regression) of measuring a pitcher’s ability to induce a swing and miss on a pitch. Section 3 explores contact rates of hitters during the 2015 World Series. To get a better understanding of contact rates, Section 4 does a historical studies of team contact rates for the seasons 2007 through 2016.</p>
+<p>On important type of contact is getting a foul on a two-strike count. Section 5 explores the average number of fouls on two-strikes for hitters during the 2015 season. Section 6 revisits swing and miss statistics for the 2016 World Series including a look at the corresponding pitch locations about the zone.</p>
+<p>Section 7 looks at swing rates from a modeling perspective. Random effects models are used to measure the variation between batters in swing and miss rates. Section 8 explores the first-pitch strike rates and swing and miss rates for pitchers reported on the FanGraphs web site. We see from this study that these measures are helpful in understanding the effectiveness of a pitcher.</p>
+<p>Section 9 looks at the relationship between whiff (swing and miss) rates and strikeout rates for hitters and pitchers. We also look how the whiff rates depend on the pitch type. Section 10 revisits this topic for the 2017 World Series players. 50% swing contours are seen to be helpful in distinguish swing zones for players. These type of rates are also explored in Section 11 for 2018 regulars and World Series players in the 2018 season. Count and pitch effects are considered for swinging and missing</p>
+<p>Section 12 is a tribute to the great player Joe Mauer, focusing on the use of measures to understand his great plate discipline</p>
+<p>Section 13 focuses on the use of the <code>CalledStrike</code> package to visualize a variety of measures such as swing and miss rates over the zone. This package is especially helpful in comparing the swing characteristics of different hitters. One way of exhibiting plate discipline is to have a streak of swings where the player does not whiff at the pitch. Section 14 looks these particular accomplishments from a historical perspective and finds one remarkable hitter who had a sequence of 87 swings without a whiff.</p>
+</section>
+<section id="a-new-swing-and-miss-stat" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="a-new-swing-and-miss-stat"><span class="header-section-number">2</span> A New Swing and Miss Stat</h2>
+<p>Watching the 2015 playoffs, one has to be impressed (from the pitcher’s perspective) with the number of pitches that are swung and missed. That raises the question: what is a reasonable way to measure a pitcher’s ability to induce a miss on a batting swing? One could simply report the fraction of swings that are missed – for example, the TBS announcer reported that batters missed 31% of Clayton Kershaw pitches which seems like a large percentage. But that raises several questions</p>
+<p>Any given pitcher has specific pitches (I’m thinking of off-speed pitches) that are more likely to result in a swing and miss. So maybe we should focus on the misses on particular types of pitches. Also it would seem that a batter’s propensity to miss a pitch would depend on the pitch’s location. Many of the misses that I saw in last night’s game between the Mets and Dodgers were sliders and changeups that were thrown near the ground.</p>
+<p>This brief study will attempt to add some extra insight to the basic “fraction of missing pitch with the swing” statistic and compare four of the great playoff starters using this statistic.</p>
+<p>From the pitchFX data, I collect the pitcher name, the pitch type, the destination of the pitch (variable des) and the pitch location (variables px and pz). For a particular pitcher and particular pitch, I restrict attention to only the batter swings. For this filtered data, I record two new variables:</p>
+<ul>
+<li>Outcome = 1 if the batter misses the pitch, and Outcome = 0 otherwise</li>
+<li>Distance – the distance of the pitch from the center of the strike zone</li>
+</ul>
+<p>For this data (specific pitcher and pitch), I fit the logistic model <span class="math display">\[
+p = \frac{\exp(a + b \times DISTANCE)}{1 + \exp(a + b \times DISTANCE)}
+\]</span> Here <span class="math inline">\(p\)</span> is the probability the batter misses the pitch, and the variables <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> give the intercept and slope of the logistic fit.</p>
+<p>I fit this logistic model to four playoff pitchers Clayton Kershaw, Zack Greinke, Jake Arrieta, and Dallas Keuchel using a large group of 2015 pitchFX data. For a fair comparison, I am looking at only sliders thrown by the four pitchers. The following table shows (for the sliders) the number of swings, the number of misses, and estimates of the quantities a and b from the logistic model.</p>
+<pre><code>            Clayton Kershaw Zack Greinke Jake Arrieta Dallas Keuchel
+N_Swings             415.00       288.00       476.00         256.00
+N_Misses             186.00       103.00       116.00          97.00
+(Intercept)           -2.72        -3.77        -3.08          -4.80
+Distance               2.45         2.78         2.13           3.04</code></pre>
+<p>In the figure below, I summarize these four logistic fits by plotting the probability of a miss as a function of the distance from the center of the strike zone.</p>
+<p><img src="figures/swing/swing1.png" class="img-fluid" style="width:70.0%"></p>
+<p>Here’s how to interpret the logistic fit for a specific pitcher.</p>
+<p>If we plug in the value <code>DISTANCE = 0</code> into our logistic fit, we get an estimate of the logit of the probability a batter misses a slider thrown in the middle of the plate. One has to convert the logit to a probability. For Kershaw, the intercept estimate is -2.72. So the probability a batter misses a slider in the middle of the plate is <span class="math inline">\(p = \exp(-2.72) / (1 + \exp(-2.72)) = 0.06\)</span>. This is a poorly located slider – batters tend not to miss these pitches. It is more helpful to look at the fits for pitches thrown away from the middle of the plate. For example, if a pitch is a foot away from the center, DISTANCE = 1, and the probability of missing is estimated by <span class="math inline">\(\exp(-2.72 + 2.45) / (1 + \exp(-2.72 + 2.45)) = .43.\)</span> The value of the slope tells us the importance of pitch location. For Kershaw, the slope estimate is 2.45. There is a useful “divide by four” interpretation for a slope in a logistic model. For every additional foot the pitch is from the center of the player, the probability the batter misses the pitch is increased by the “slope divided by 4” or 2.45 / 4 = 0.61. This is a large change in probability, emphasizing the importance of throwing the pitch in a good location.</p>
+<p>Comparing the four pitchers …</p>
+<ul>
+<li>Clearly Kershaw has the best slider – for any distance from the middle of the plate, the batter is more likely to miss the pitch. Also it is clear that Kuechel has the worst slider from the viewpoint of getting the batter to miss the swing.</li>
+<li>There is an interesting comparison between Greinke and Arrieta. The two pitchers are similar with respect to pitches thrown within a foot of the center of the strike zone. But Greinke appears to be better in getting the batter to miss the pitches thrown, say two feet away from the middle of the plate. (Grinch’s “slope” is greater than Arrieta’s “slope”.)</li>
+</ul>
+<p>As I am sure someone has said, the three most important aspects of pitching are location, location, and location, and this brief analysis illustrates this truth for pitching. There is a lot more that can be said using this new pitching measure and I have a group of Bowling Green State University students in the ACTION program exploring swing-and-missing in various ways.</p>
+</section>
+<section id="world-series-swing-and-miss-rates" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="world-series-swing-and-miss-rates"><span class="header-section-number">3</span> World Series Swing and Miss Rates</h2>
+<p>In the 2015 World Series, the Fox announcers are making a big deal that the Royals are better contact hitters than the Mets. What does that mean? One interpretation is that the Royals are less likely to miss a pitch (a whiff or swinging strike) in a swing. That raises the obvious question: Are the Royals hitters more likely to whiff on a swing than the Mets hitters in this Series?</p>
+<p>This question is easy to address from the PitchFX data. Here’s what I did.</p>
+<ul>
+<li>Using Carson’s PitchRx package, I downloaded the PitchFX data for the first four games of the World Series.</li>
+<li>For all hitters, I collected the number of swings, the number of “swinging strikes”, and computed the fraction of whiffs.</li>
+<li>I want to only include hitters who play regularly (not pitchers), so I looked only at the hitters who have had at least 10 swings during the series.</li>
+<li>In the following graph, I use a Cleveland-style dot plot to graph the whiff rates (number of misses divided by the number of swings) for these batters with at least 10 swings, color coding the dots by the team.</li>
+</ul>
+<p><img src="figures/swing/swing7.png" class="img-fluid" style="width:70.0%"></p>
+<p>What do we see?</p>
+<ul>
+<li>First we see much variation in these whiff rates from Mike Moustakas (only 1 whiff in 35 swings for a 3% rate) to Kendrys Morales (7 whiffs in 17 swings for a whiff rate exceeding 40%).</li>
+<li>Comparing the two teams, the whiff rates are pretty comparable. For example, of the five highest whiff rates, 3 are Mets and 2 are Royals players.</li>
+<li>This does not mean that the Royals are not better contact hitters since a “swing and miss” is a function of the hitter and the pitcher. It is very possible that the Mets pitchers are better in inducing swinging strikes (the Mets pitchers have higher strikeout rates, for example), and so the Royals better ability to make contact is mitigated by the Mets’ pitching.</li>
+</ul>
+</section>
+<section id="historical-contact-rates" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="historical-contact-rates"><span class="header-section-number">4</span> Historical Contact Rates</h2>
+<p>I have a group of Bowling Green students who have been studying “swing and miss” data from the recent season. &nbsp;That motivated me to see how contact rates (proportion of all swings that make some contact with the ball) have changed over the 10 seasons including 2016.</p>
+<p>I’ve displayed parallel boxplots of team contact rates below. &nbsp;(I used Fangraphs data that is easily downloadable as a cvs file.) &nbsp;The box contains the middle 50%, the “whiskers” go to the extremes, and unusual rates (found by a standard rule for flagging outliers) are indicated by individual points.</p>
+<p><img src="figures/swing/swing8.png" class="img-fluid" style="width:70.0%"></p>
+<p>I expected contact rates to decrease in recent years due to the rise in strikeouts, but the drop in the 2016 season is noticeable. &nbsp;(The Rays have made contact with less than 72% of their swings this season.) Perhaps there is a cold weather effect where the pitcher has an advantage? &nbsp;I think there needs to be a proper balance in baseball where the pitchers or batters don’t seem to have too much of an advantage.</p>
+<p>It will be interesting to see if this pattern continues the rest of the season.</p>
+</section>
+<section id="fouls-with-two-strikes" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="fouls-with-two-strikes"><span class="header-section-number">5</span> Fouls with Two Strikes</h2>
+<p>In recent posts, I have looked at pitch count transitions for hitters and pitchers. Here I will focus on one particular pitch count transition that looks interesting and may be helpful for measuring batter ability.</p>
+<p>Here are the counts of the different transitions for the 2015 Mike Trout (recall the state X refers to the end of the plate appearance which could be a SO, BB, or a ball in play.)</p>
+<pre><code>    0-0 0-1 1-0 0-2 1-1 2-0 1-2 2-1 3-0 2-2 3-1 3-2   X
+0-0   0 361 294   0   0   0   0   0   0   0   0   0  27
+0-1   0   0   0 139 162   0   0   0   0   0   0   0  60
+1-0   0   0   0   0 130 125   0   0   0   0   0   0  39
+0-2   0   0   0  29   0   0  96   0   0   0   0   0  43
+1-1   0   0   0   0   0   0 133 115   0   0   0   0  44
+2-0   0   0   0   0   0   0   0  57  55   0   0   0  13
+1-2   0   0   0   0   0   0  53   0   0 139   0   0  90
+2-1   0   0   0   0   0   0   0   0   0  79  50   0  43
+3-0   0   0   0   0   0   0   0   0   0   0  26   0  29
+2-2   0   0   0   0   0   0   0   0   0  64   0 108 110
+3-1   0   0   0   0   0   0   0   0   0   0   0  33  43
+3-2   0   0   0   0   0   0   0   0   0   0   0  49 141
+X     0   0   0   0   0   0   0   0   0   0   0   0   0</code></pre>
+<p>When one watches a plate appearance, one notes the tendency of a batter to extend the PA by fouling off pitches. Down by two strikes, the batter will sometimes foul off a number of pitches. This seems to be desirable from a batter’s perspective. It lengthens the pitch count, the batter sees more pitches and is more likely to make good contact on the next pitch, etc. Looking at Trout’s table, let’s focus on the foul balls with two strikes which correspond to the transitions from “0-2” to “0-2”, “1-2” to “1-2”, “2-2” to “2-2”, and “3-2” to “3-2”. We see that Trout had 29 + 53 + 64 + 49 = 195 of these two-strike foul balls in 2015.</p>
+<p>Creating a useful statistic, Trout had 195 2-strike foul balls in 682 plate appearances, so his average number of 2-strike foul balls (per plate appearance) was 195 / 682 = 0.286.</p>
+<p>To see if Trout’s foul average is unusually low or high, we computed this statistic for all 2015 players with at least 400 PA. Below, I show the hitters where this foul average was .3 or higher, and the hitters who had a foul average of .2 or lower.</p>
+<p><img src="figures/swing/swing9.png" class="img-fluid" style="width:70.0%"></p>
+<p><img src="figures/swing/swing10.png" class="img-fluid" style="width:70.0%"></p>
+<p>Some comments from looking at these high and low graphs:</p>
+<ul>
+<li>We see that Victor Martinez was the foul average leader in 2015 and Andrelton Simmons was at the bottom with respect to this statistic.</li>
+<li>Being a Phillies fan, it is a bit remarkable to find a statistic where two of the top six are Phillies – Odubel Herrera and Freddy Galvis. &nbsp;Actually, I did see a recent Phillies game where the commentator commented on Herrara’s ability to stay in the count with a foul hit.</li>
+<li>Looking at the list of low foul averages, it seems that many light-hitting players are on this list such as Andrelton Simmons, Ben Revere and Billy Hamilton. &nbsp;I am a bit surprised that Buster Posey is on this low foul average list.</li>
+<li>Note that I am computing the average number of fouls on two-strike counts. &nbsp;Other statistics could be computed; for example, I also looked at the fraction of PA’s where there was at least one foul on a two-strike count. &nbsp;My sense is that you would have a similar list of top and bottom batters using this fraction statistic.</li>
+<li>From a statistical perspective, I guess I am more interested in the significance of these values. &nbsp;Is a foul average a batting skill which is related to other batting measures? &nbsp;Can one accurately predict one’s 2-strike foul&nbsp;average in the next season using this season’s data? &nbsp;Given that the length of a PA is considered to be a batter skill, I would think that a 2-strike foul average would behave in a similar fashion. &nbsp;This recent fangraphs article asks if foul balls are a skill.</li>
+<li>Generally, it&nbsp;would be interesting to look more carefully about usefulness of foul data to learn more about the abilities of batters and pitchers.</li>
+</ul>
+</section>
+<section id="ws-game-3---swing-and-miss" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="ws-game-3---swing-and-miss"><span class="header-section-number">6</span> WS Game 3 - Swing and Miss</h2>
+<section id="introduction-1" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">6.1</span> Introduction</h3>
+<p>It was an exciting pitchers’ duel in the third game of the World Series. Yesterday, my ACTION freshmen research group did a great job in presenting work on “swing and miss” data. To recognize their accomplishment, it seemed appropriate to analyze last night’s game from a “swing and miss” perspective.</p>
+</section>
+<section id="basic-swing-and-miss-stats" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="basic-swing-and-miss-stats"><span class="header-section-number">6.2</span> Basic Swing and Miss Stats</h3>
+<p>First, how often did batters swing at pitches, how often did they miss the pitch, and did the percentage differ between the two teams?</p>
+<pre><code>   Team     N  Miss   Pct
+--------------------------
+1  Cubs    66    22    33
+2 Tribe    60    19    32</code></pre>
+<p>We see that the Cubs missed 22 out of 66 swings, the Indians 19 out of 60, and so they were very similar – both teams tended to miss about 1/3 of their swings.</p>
+</section>
+<section id="different-pitch-types" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="different-pitch-types"><span class="header-section-number">6.3</span> Different Pitch Types?</h3>
+<p>Next, we explore the effect of the pitch type. Since a large number of pitch types were thrown, we classify them into fast (“FC”, “FF”, “FT”, “SI”) or slow (“CH”, “CU”, “KC”, “SL”) and see how the swings and misses varied between slow and fast pitches for each team.</p>
+<pre><code>   Team  Type     N  Miss   Pct
+--------------------------------
+1  Cubs  fast    44     9    20
+2  Cubs  slow    22    13    59
+3 Tribe  fast    33    12    36
+4 Tribe  slow    27     7    26</code></pre>
+<p>This is an interesting pattern and deserves a graph.</p>
+<p><img src="figures/swing/swing11.png" class="img-fluid" style="width:70.0%"></p>
+<p>In this game, the Cubs appeared to be more susceptible to off-speed pitches – they missed 59% of them compared to only 26% for the Indians. The Tribe missed a larger percentage of fastballs.</p>
+</section>
+<section id="pitch-location" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="pitch-location"><span class="header-section-number">6.4</span> Pitch Location?</h3>
+<p>Let’s look at the location of these pitches that were swung at. I use color to distinguish the type of pitch (fast or slow) and use the size of the point to indicate if the batter missed the pitch (yes is large).</p>
+<p><img src="figures/swing/swing12.png" class="img-fluid" style="width:70.0%"></p>
+<p>As one might anticipate, batters tend to miss the low off-speed pitches and the high fastballs.</p>
+</section>
+<section id="special-point-in-the-graph" class="level3" data-number="6.5">
+<h3 data-number="6.5" class="anchored" data-anchor-id="special-point-in-the-graph"><span class="header-section-number">6.5</span> Special Point in the Graph?</h3>
+<p>You may have noticed that I have colored one special point purple. This is the last pitch in the game where Javier Baez missed a high fastball (really out of the zone) thrown by Cody Allen.</p>
+</section>
+<section id="r-code" class="level3" data-number="6.6">
+<h3 data-number="6.6" class="anchored" data-anchor-id="r-code"><span class="header-section-number">6.6</span> R Code?</h3>
+<p>The complete R script that I used to produce this work can be found on my gist site. The pitchRx package was used to download the pitchFX data.</p>
+</section>
+<section id="game-4-update-added-sunday-morning" class="level3" data-number="6.7">
+<h3 data-number="6.7" class="anchored" data-anchor-id="game-4-update-added-sunday-morning"><span class="header-section-number">6.7</span> Game 4 Update (Added Sunday Morning)</h3>
+<p>After watching Game 4 last night, I wondered if the Cubs pattern of swinging and missing at slow pitches out of the zone was continuing. Combining the results from the two games, the Cubs have missed 25 out of 68 swings at off-speed pitches (37%) contrasted with missing 12 out of 72 swings at fast balls (17%). In contrast, the Indians have missed 11 out of swings on 44 off-speed pitches (25%) and 20 out of swings on 86 fastballs (23%). Yeah, the Cubs have been susceptible to off-speed pitches. Here’s a new graph showing the locations of swings and misses of the two teams in Games 3 and 4.</p>
+<p><img src="figures/swing/swing13.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+</section>
+<section id="modeling-swing-rates" class="level2" data-number="7">
+<h2 data-number="7" class="anchored" data-anchor-id="modeling-swing-rates"><span class="header-section-number">7</span> Modeling Swing Rates</h2>
+<section id="mixed-models" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="mixed-models"><span class="header-section-number">7.1</span> Mixed Models</h3>
+<p>Recently I have been exploring hitter swing rates as reported in the “Plate Discipline” section of their Batting Leaders – for example, here is the page for 2016 leaders. &nbsp;Also a&nbsp;reader recently asked&nbsp;for clarification on the mixed models approach taken, for example, in this Baseball Prospectus article by Judge et al.&nbsp;&nbsp;I see this as an opportunity to explain the use of these models for a simple example. &nbsp;I’ll illustrate the use of a binomial/beta model, and then discuss an alternative method on logits that leads to more sophisticated modeling as described in the Judge et al post.</p>
+</section>
+<section id="why-look-at-swing-rates" class="level3" data-number="7.2">
+<h3 data-number="7.2" class="anchored" data-anchor-id="why-look-at-swing-rates"><span class="header-section-number">7.2</span> Why Look at Swing Rates?</h3>
+<p>I think the point of the “plate discipline” section of Fangraphs is to dig deeper into the strikeout (SO) and walk (BB) outcomes. &nbsp;Why are batters striking out at such a high rate? &nbsp;Why are some hitters such as Joey Votto good in drawing walks? &nbsp;Since they are measuring swing rates for pitches thrown inside or outside of the zone, this suggests that some hitters may be chasing too many pitches outside of the zone.</p>
+<p>If you glance at the swing rates in Fangraphs, you will see a lot of variation between the hitters – some batters tend to be free-swingers and other batters are reluctant to swing. &nbsp;But there several problems in making sense of these swing rates. &nbsp;First, these are observed rates based on sample sizes that are not given. &nbsp;What conclusions can we draw about the “true” swing rates or swing probabilities? &nbsp;Second, since pitchers have a lot to do with batters’ swings, how much of the variability in swing rates is due to the variation between pitchers compared to the variation between hitters? &nbsp;Mixed models or random-effects models are helpful for addressing these questions.</p>
+</section>
+<section id="a-simple-random-effects-model" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="a-simple-random-effects-model"><span class="header-section-number">7.3</span> A Simple Random Effects Model</h3>
+<p>Here is a binomial/beta mixed model that I have talked about before in the context of Efron and Morris’ example of batting averages. &nbsp;Suppose we collect the number of swings and number of&nbsp;pitches for each batter in the 2016 season. &nbsp;(I collect this data&nbsp;using the PitchFX system – the FanGraphs data does not provide the sample sizes.) &nbsp;We assume that <span class="math inline">\(y_i\)</span>, the number of swings of the <span class="math inline">\(i\)</span>th batter, is binomial with sample size <span class="math inline">\(n_i\)</span> and probability of success <span class="math inline">\(p_i\)</span>. &nbsp;We believe the swing probabilities <span class="math inline">\(p_1, ..., p_N\)</span> come from a beta curve with shape parameters <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. &nbsp;This mixed model is simple to fit using my <code>LearnBayes</code> package – I write a short wrapper function that inputs the vector of swing counts, and the vector of sample sizes and the output is the estimate of the beta shape parameters. &nbsp;I apply this fit to the 1103 players who came to bat during the 2016 season. &nbsp;It turns out that the beta shape parameters are <span class="math inline">\(a\)</span> = 46.5 and <span class="math inline">\(b\)</span> = 51.1. &nbsp;Here is the fitted beta curve – this represents the distribution of the swing probabilities, that we can call the swing talents.</p>
+<p><img src="figures/swing/swing14.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="an-alternative-mixed-model-based-on-logits" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="an-alternative-mixed-model-based-on-logits"><span class="header-section-number">7.4</span> An Alternative Mixed Model Based on Logits</h3>
+<p>There is an alternative mixed model approach that leads to several interesting generalizations. &nbsp;Think of our raw data consisting of two variables, swing (either 1 or 0) and the identity of the batter, batter_name. &nbsp;In my PitchFX dataset, I have data on 718,292 pitches where I collect these two variables. &nbsp;As above, I let <span class="math inline">\(p\)</span> denote the probability of a swing for a particular observation, and define the logit, logit <span class="math inline">\(p\)</span> = <span class="math inline">\(\log(p) - \log(1-p)\)</span>. &nbsp;The model says that</p>
+<p><span class="math display">\[
+logit p = b0 + u_i
+\]</span></p>
+<p>where <span class="math inline">\(u_i\)</span> is a coefficient for the ith&nbsp;batter and <span class="math inline">\(b0\)</span> is an unknown constant. &nbsp;We assume that the <span class="math inline">\(u_i\)</span> follow a normal distribution with mean 0 and standard deviation <span class="math inline">\(\sigma\)</span>. &nbsp;This is a similar model to the binomial/beta model – in the bb model, we assigned the swing probabilities an unknown beta curve, and here we are assigning the u_i (on the logit scale) a normal curve with unknown standard deviation.</p>
+<p>This logit random effects model is also easily fit using the <code>glmer()</code> function from the <code>lme4</code> package. &nbsp;Here is the basic syntax:</p>
+<pre><code>fit &lt;- glmer(Swing ~ (1 | batter_name), family=binomial, data=All_Data)</code></pre>
+<p>This takes a bit more time to fit (remember we have&nbsp;718,292 pitches). &nbsp;When you look at the output, you get an intercept estimate of -0.9403 and <span class="math inline">\(\sigma\)</span> = 0.2025.</p>
+<p>On the surface, it looks like we get very different fits, but remember that the bb model is fitting on the probability scale, and here we are fitting on the logit scale. &nbsp;It turns out that both methods can be shown to give essentially the same answer – so the curve above represents the fitted talent curve for swing rates using either model.</p>
+</section>
+<section id="extending-the-logit-model" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="extending-the-logit-model"><span class="header-section-number">7.5</span> Extending the Logit Model</h3>
+<p>One attractive feature of this second approach is that it allows for easy generalizations. &nbsp;As said before, the probability of a swing depends both on the identity of the batter and the identity of the pitcher. &nbsp;That raises the interesting question: &nbsp;how much of the variability in the swing rates is due to the batters and how much is due to the pitchers? &nbsp;This logit random effects model (and the use of the glmer function) can be generalized to add random effects for both the batters and the pitchers and we can answer this question from fitting the model.</p>
+</section>
+<section id="the-details" class="level3" data-number="7.6">
+<h3 data-number="7.6" class="anchored" data-anchor-id="the-details"><span class="header-section-number">7.6</span> The Details</h3>
+<p>In a future post, I’ll focus more on the coding and show the code for fitting both types of random effects models. &nbsp;These are important models since they really address the “who is better” questions among hitters, and allow us to separate variation into the part that is due to chance, and the part that is due to the differences in player talents. &nbsp;Without some type of analysis like this, one really can’t make sense of the raw percentages reported by the Fangraphs site.</p>
+</section>
+</section>
+<section id="first-pitch-strike-and-swing-and-miss-rate" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="first-pitch-strike-and-swing-and-miss-rate"><span class="header-section-number">8</span> First Pitch Strike and Swing and Miss Rate</h2>
+<section id="two-fangraph-pitching-stats" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="two-fangraph-pitching-stats"><span class="header-section-number">8.1</span> Two FanGraph Pitching Stats</h3>
+<p>In the Pitcher Leaderboard of the Fangraphs site, they have an interesting Plate Discipline tab that provides an interesting collection of contact and swing percentages for all qualifying pitchers for the 2016 season. &nbsp;Let’s focus on exploring two of these statistics:</p>
+<ul>
+<li>F-Strike % – percentage of first pitches that are strikes</li>
+<li>SwStr % - percentage of pitches that are swing and misses</li>
+</ul>
+<p>One always hears about the desirability of a first pitch strike for a pitcher. &nbsp;Also it seems clearly desirable (from the pitcher’s perspective) to induce a swing and miss, so one would like SwStr % also to be high.</p>
+<p>I downloaded this data for 2016 qualifying pitchers – here is a scatterplot of the two proportions. &nbsp; It is interesting that there is little association in the graph – knowing that a pitcher is good in getting a first-pitch strike doesn’t tell you much about the proportion of swinging strikes.</p>
+<p><img src="figures/swing/swing2.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="predicting-war-from-these-two-stats" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="predicting-war-from-these-two-stats"><span class="header-section-number">8.2</span> Predicting WAR from These Two Stats</h3>
+<p>A summary measure of a pitcher’s effectiveness during the season is the WAR (wins above replacement) stat. &nbsp;(I know that a WAR doesn’t isolate the pitcher’s effectiveness from the contribution of his defense, but we won’t go down that road here.) &nbsp;I also collected the WAR values from the FanGraphs Value page and merged this with the plate discipline stats. &nbsp;I redraw the scatterplot where the size of the plotting point is proportional to the WAR value.</p>
+<p><img src="figures/swing/swing3.png" class="img-fluid" style="width:70.0%"></p>
+<p>Since the WAR values seem higher in the upper right section of the plot, this motivates the use of the regression model</p>
+<p>WAR = a + b1 First_Pitch_Strike_Proportion + b2 Proportion_Swinging_Strikes</p>
+<p>that is easy to fit using the lm function:</p>
+<pre><code>fit &lt;- lm(WAR ~ F_Strike + SwStr, data=d2)</code></pre>
+<p>I display the fit on the scatterplot by showing lines where the predicted WAR is equal to 0, 2, 4, and 6.</p>
+<p><img src="figures/swing/swing4.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="looking-at-residuals" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="looking-at-residuals"><span class="header-section-number">8.3</span> Looking at Residuals</h3>
+<p>For particular pitchers, this model does a great job in explaining R – here is a list of the pitchers whose absolute residual was smaller than 0.1.</p>
+<pre><code>            Name F_Strike SwStr   WAR     Residual
+1     Cole Hamels    0.576 0.122   3.0 -0.029145560
+2    Max Scherzer    0.651 0.153   5.6  0.091603020
+3   Ricky Nolasco    0.610 0.092   2.5 -0.009598109
+4 Edinson Volquez    0.563 0.085   1.5  0.080470932
+5     Chad Bettis    0.627 0.087   2.6 -0.022889175
+6     Doug Fister    0.596 0.059   1.1  0.068429141</code></pre>
+<p>For example, Max Sherzer’s 2016 WAR value of 5.6 is accurately predicted knowing his first strike and swing and miss rates.</p>
+</section>
+<section id="the-big-residuals" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="the-big-residuals"><span class="header-section-number">8.4</span> The Big Residuals</h3>
+<p>Although the regression indicates that both first pitch strike and swing and miss are helpful in explaining the variation in WAR values, it is interesting to find pitchers who succeed (or failure) despite their first pitch strike and/or swing and miss proportions. Let’s first locate the residuals that are larger than 2 – these points correspond to pitchers who do much better (from a WAR perspective) than predicted from their first pitch strike and swing and miss rates. I indicate those with a + on the scatterplot.</p>
+<p><img src="figures/swing/swing5.png" class="img-fluid" style="width:70.0%"></p>
+<p>These two pitchers, Rick Porcello and Jose Quintana, have above-average first pitch strike rates, but below-average swing and miss rates. Of course we know Porcello had a great 2016 season – finished with a 22-3 record and a Cy Young crown. Why was he successful? Here’s an interesting quote from an ESPN article:</p>
+<p>“Porcello’s most common explanation for last season’s breakthrough is that he better understands what makes him effective. In 2015, he strayed from his signature sinker in an attempt to strike out more hitters with his relatively ordinary four-seam fastball. Last year, he got back to throwing the ant-killing sinker that induces so many weak ground balls.”</p>
+<p>Next, we find the residuals smaller than -2 – these pitchers underperform (with respect to WAR) given their first pitch strike and swing and miss rates.</p>
+<p><img src="figures/swing/swing6.png" class="img-fluid" style="width:70.0%"></p>
+<p>Here are the five pitchers:</p>
+<pre><code>            Name F_Strike SwStr   WAR  Residual
+1 Michael Pineda    0.673 0.141   3.2 -2.248726
+2    Josh Tomlin    0.677 0.074   1.0 -2.019739
+3   Jered Weaver    0.642 0.081  -0.2 -2.863600
+4  James Shields    0.547 0.092  -0.9 -2.298488
+5    R.A. Dickey    0.621 0.106   1.0 -2.225892</code></pre>
+<p>Michael Pineda was great with respect to first-pitch strikes and swing and misses, but he had an average WAR value, suggesting some problems. This article examines the locations and movements of his pitches in the 2016 season.</p>
+<p>It is interesting that Jered Weaver had similar first-pitch strike and swing and miss rates as Rick Porcello, but Weaver’s WAR value was actually negative. A quick look at his pitching statistics suggests that he left two many pitches over the middle of the plate, allowing 37 home runs in 2016.</p>
+</section>
+<section id="wrap-up" class="level3" data-number="8.5">
+<h3 data-number="8.5" class="anchored" data-anchor-id="wrap-up"><span class="header-section-number">8.5</span> Wrap-Up</h3>
+<p>This brief exploration shows that first-pitch strike and swing and miss rates are important stats to consider when one looks at a pitcher’s effectiveness. These two rates, by themselves, explain about 50 percent of the variability in WAR values. But, as the exploration of residuals indicates, there are other factors to consider. Pitchers can be effective in inducing groundballs or flyballs for outs. Or location problems can doom pitchers who look good relative to first-pitch strikes and swing and misses.</p>
+</section>
+</section>
+<section id="exploring-whiff-rates" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="exploring-whiff-rates"><span class="header-section-number">9</span> Exploring Whiff Rates</h2>
+<section id="introduction-and-data-source" class="level3" data-number="9.1">
+<h3 data-number="9.1" class="anchored" data-anchor-id="introduction-and-data-source"><span class="header-section-number">9.1</span> Introduction and Data Source</h3>
+<p>Baseball Savant provides a “Statcast Search” page where one can query the MLB Statcast Database and get interesting datasets, each that can be downloaded as a csv file and easily imported into R. &nbsp;Using this page, I downloaded four files:</p>
+<ul>
+<li>By using Player Type = Batter, and Pitch Type = Fastballs, I downloaded summary data on fastballs for all hitters up to the last game in the 2017 season</li>
+<li>By using Player Type = Pitcher and Pitch Type = Fastballs, I downloaded summary data for fastballs for all 2017 pitchers</li>
+<li>I repeated the above two queries using Pitch Type = Offspeed, for Batters, and then for Pitchers</li>
+</ul>
+<p>I also downloaded Standard Measures for batters and pitchers from Fangraphs.</p>
+<p>By merging these datasets, I get two data frames, one for batters and one for pitchers, that I’ll use to explore whiff rates, where a whiff rate = # of whiffs / # of swings. (The relevant variables in the StatCast csv file are swings and whiffs.)</p>
+</section>
+<section id="batter-whiff-and-k-rates" class="level3" data-number="9.2">
+<h3 data-number="9.2" class="anchored" data-anchor-id="batter-whiff-and-k-rates"><span class="header-section-number">9.2</span> Batter Whiff and K Rates</h3>
+<p>The first observation is that a batter’s whiff rate is strongly associated with his strikeout rate. &nbsp;Here I construct a plot of whiff rates and K rates. &nbsp;There are four hitters, Chris Davis, Keon Broxton, Miguel Sano, and Joel Gallo with unusually high K rates over 35%. &nbsp;On the other end, Dustin Pedroia has the smallest whiff rate and K rate among hitters who have faced at least 500 pitches.</p>
+<p><img src="figures/swing/swing15.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="pitcher-whiff-and-k-rates" class="level3" data-number="9.3">
+<h3 data-number="9.3" class="anchored" data-anchor-id="pitcher-whiff-and-k-rates"><span class="header-section-number">9.3</span> Pitcher Whiff and K Rates</h3>
+<p>A similar pattern of association between whiff rate and K rage is true for pitchers. &nbsp;In the scatterplot, five pitchers stand out on the high end and four pitchers are unusually low in their ability to get whiffs and strike out batters.</p>
+<p><img src="figures/swing/swing16.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="how-does-whiff-rate-depend-on-the-pitch-batter-view" class="level3" data-number="9.4">
+<h3 data-number="9.4" class="anchored" data-anchor-id="how-does-whiff-rate-depend-on-the-pitch-batter-view"><span class="header-section-number">9.4</span> How Does Whiff Rate Depend on the Pitch (Batter View)?</h3>
+<p>Okay, what variables are associated with whiff rates? &nbsp;In watching a lot of baseball, it seems that off-speed pitches are often used to strikeout hitters. &nbsp;So I would think that batters would have higher whiff rates on off-speed pitches than fastballs. &nbsp;This motivates the definition of the difference</p>
+<p>Difference = Whiff Rate on Offspeed Pitches - Whiff Rate on Fastballs</p>
+<p>In the scatterplot below, I plot the batter’s whiff rate against this difference. &nbsp;What do we see?</p>
+<p><img src="figures/swing/swing17.png" class="img-fluid" style="width:70.0%"></p>
+<ul>
+<li>As expected, practically all hitters fall above the line Difference = 0, indicating that they do have &nbsp;higher K rates on off-speed pitches.</li>
+<li>But there are two interesting outliers – Scott Schebler and Corey Dickerson – who actually miss a greater fraction of fastballs than off-speed pitches.</li>
+<li>I’ve label two high K guys (Gallo and Broxton) and three high Difference guys Cesar Hernandez, Alex Gordon, and Aaron Hicks. &nbsp;Hernandez, Gordon, and Hicks appear to perform poorly on off-speed (relative to fastballs), although I am just looking at the whiff rates.</li>
+</ul>
+</section>
+<section id="how-does-whiff-rate-depend-on-the-pitch-pitcher-view" class="level3" data-number="9.5">
+<h3 data-number="9.5" class="anchored" data-anchor-id="how-does-whiff-rate-depend-on-the-pitch-pitcher-view"><span class="header-section-number">9.5</span> How Does Whiff Rate Depend on the Pitch (Pitcher View)?</h3>
+<p>A similar type of graph can be produced for pitchers. &nbsp;Practically all pitchers (Jake Odorizzi is a notable exception) get higher whiff rates at offspeed pitches than fastballs. Luis Perdomo is notable in that his whiff rate on offspeed pitches is over 0.35 higher than the whiff rate on fastballs. &nbsp;Clayton Kershaw and Corey Kluber have similar difference values, but Kluber is higher than Kershaw on whiff rate. &nbsp;Jacob deGrom has a high whiff rate but he does about the same on offspeed and fastball pitches.</p>
+<p><img src="figures/swing/swing18.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="why-does-this-matter" class="level3" data-number="9.6">
+<h3 data-number="9.6" class="anchored" data-anchor-id="why-does-this-matter"><span class="header-section-number">9.6</span> Why Does This Matter?</h3>
+<p>I imagine that MLB teams have this information about batters and this information could impact strategy – that is, how pitchers will throw to batters. &nbsp;To see if this is generally true, I have graphed the Difference (whiff rate on offspeed pitches minus whiff rate on fastballs) against the proportion of off-speed pitches thrown to the hitter. &nbsp;There is a slight positive association which means that players with a high difference do tend to get a higher fraction of off-speed pitches. &nbsp;But since the association is not that strong, this tells us that other factors might determine the fraction of off-speed pitches thrown. &nbsp;For example, look at Aaron Hicks, Alex Gordon, and Cesar Hernandez. &nbsp;All three hitters have high difference values indicating that they are much less successful at making contact with off-speed pitches. &nbsp;But Hicks tends to get a “high” fraction of off-speed pitches and Hernandez a “low” fraction. &nbsp;I wonder why.</p>
+<p><img src="figures/swing/swing19.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="final-thoughts" class="level3" data-number="9.7">
+<h3 data-number="9.7" class="anchored" data-anchor-id="final-thoughts"><span class="header-section-number">9.7</span> Final Thoughts</h3>
+<p>One purpose of this study is to illustrate the relative ease of accessing the Baseball Savant database which is a window to the new Statcast Data. &nbsp;Given the current increase in strikeouts (currently 21.5% of PAs result in strikeouts), it would seem interesting to understand better the cause of this high percentage. &nbsp;A high whiff rate may mean simply that a hitter cannot make contact with a fastball, or it might mean that the hitter is swinging at an unhittable pitch outside of the strike zone. &nbsp;As usual, more can be done with a careful exploration of this data.</p>
+</section>
+</section>
+<section id="world-series-special---swing-and-miss-rates" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="world-series-special---swing-and-miss-rates"><span class="header-section-number">10</span> World Series Special - Swing and Miss Rates</h2>
+<section id="introduction-2" class="level3" data-number="10.1">
+<h3 data-number="10.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">10.1</span> Introduction</h3>
+<p>If you have been watching the 2017 MLB playoff games, it should be obvious is that much of the game is the contest between the pitcher and the batter, and a relatively small portion of the game is devoted to the action on the field such as balls put in play, defense, and running bases.&nbsp; From the batter’s perspective, there are two primary issues:&nbsp; (1)&nbsp; First should the batter swing or take the pitch?&nbsp; (2) If the batter does swing, then he wants to make contact.&nbsp; This motivates the consideration of two rates:</p>
+<p>Swing Rate = the percentage of pitches that are swung at Miss Rate = the percentage of swings that are missed completely (the so-called swinging strikes)</p>
+<p>These two rates have a lot to do with strikeouts and walks.&nbsp; Players who are reluctant to swing tend to walk more often.&nbsp; Also, players with high swing rates and high miss rates tend to have a high rate of strikeouts.</p>
+</section>
+<section id="the-2017-world-series-teams" class="level3" data-number="10.2">
+<h3 data-number="10.2" class="anchored" data-anchor-id="the-2017-world-series-teams"><span class="header-section-number">10.2</span> The 2017 World Series Teams</h3>
+<p>How do the players on the Dodgers and the Astros compare with respect to swing and miss rates?&nbsp; Here is a scatterplot of the swing and miss rates (percentages) for the Astros and Dodgers regulars.</p>
+<p><img src="figures/swing/swing20.png" class="img-fluid" style="width:70.0%"></p>
+<p>Several observations from this scatterplot:</p>
+<ul>
+<li>The Astros (red) tend to have similar swing rates and there is more variability in the Dodger (blue) swing rates.&nbsp; Several Dodgers such as Utley and Barnes are reluctant to swing and other Dodgers such as Bellinger and Seager like to swing.</li>
+<li>With respect to miss rates, there is also more variation among the Dodgers regulars.&nbsp; Utley and Barnes are not likely to miss when they swing and Bellinger has a high miss rate. It is interesting that the five highest miss rates all are Dodgers.</li>
+<li>Jose Altuve has a high swing rate, but he has a low miss rate which partially explains his hitting success. Looking at Swing Locations</li>
+</ul>
+<p>Okay we know batters vary with respect to swing rates, but where do they like to swing?&nbsp; The Statcast data contains the (x, y) coordinates for each pitch, and using a generalized additive model, one can estimate the probability of a swing at any pitch location.&nbsp; For each batter, I fit this model and the blue contour lines represent a 50% probability of a swing – points inside the contour have a probability of swing that exceeds 50%.&nbsp; &nbsp;Here are the swing contours for the Dodgers regulars.&nbsp; As one might expect, Barnes and Utley are likely to swing only in a small region inside the zone – in contrast, Bellinger, Seager, Pederson, and Puig are likely to swing in a large region.</p>
+<p><img src="figures/swing/swing21.png" class="img-fluid" style="width:70.0%"></p>
+<p>Here is a similar graph for the Astros regulars.&nbsp; Note that Beltran and Gattis like to swing at pitches high in the strike zone (didn’t Evan Gattis hit a home run in the ALCS on a high pitch?).&nbsp; Also George Springer has a large swing zone.&nbsp; Jose Altuve appears to like to swing at balls near the center of the zone.</p>
+<p><img src="figures/swing/swing22.png" class="img-fluid" style="width:70.0%"></p>
+<p>Other Comments</p>
+<ul>
+<li>In modern baseball, I would think that the teams are well-aware of batters’ swinging tendencies.&nbsp; The Dodgers and Astros are among the top teams with respect to analytics and I would think that the coaching staff&nbsp; would be provided graphs such as these to inform the pitchers.</li>
+<li>The data was downloaded as csv files from the Statcast Search page of Baseball Savant.&nbsp; All of the R code for the graphs and the generalized additive modeling is available from my gist site.</li>
+</ul>
+</section>
+</section>
+<section id="swing-and-miss-rates" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="swing-and-miss-rates"><span class="header-section-number">11</span> 2018 Swing and Miss Rates</h2>
+<section id="introduction-3" class="level3" data-number="11.1">
+<h3 data-number="11.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">11.1</span> Introduction</h3>
+<p>It wasn’t that long ago that folks focused about strikeout rates and walk rates.&nbsp; Since we now have much more data on pitch locations and outcomes, we hear more about swing and miss rates.&nbsp; Here we’ll explore swing and miss rates for 2018 hitters, see how these rates vary by pitch type and count, and use heat maps to explore patterns of these rates about the zone.&nbsp; In general, we define a swing rate as the percentage of pitches that are swung at, and a miss rate is the percentage of swinging strikes among those pitches that are swung at.&nbsp;&nbsp; For point of reference, the overall swing rate in 2018 was 46% and the overall miss rate was 23%.</p>
+</section>
+<section id="swing-and-miss-rates-of-regular-hitters" class="level3" data-number="11.2">
+<h3 data-number="11.2" class="anchored" data-anchor-id="swing-and-miss-rates-of-regular-hitters"><span class="header-section-number">11.2</span> Swing and Miss Rates of Regular Hitters</h3>
+<p>To start, I collect and graph the swing and miss rates for all 2018 hitters who have seen at least 1000 pitches.&nbsp; There is a slight positive trend in the graph indicating that players who have high swing rates tend to have high miss rates.&nbsp;&nbsp; I label some interesting players – Jorge Alfaro had an unusually high swing rate and high miss rate.&nbsp; Joey Gallo, in contrast, had a moderate swing rate but a high miss rate.&nbsp; Mookie Betts, the likely MVP in the American League in 2018, is very low on both rates.&nbsp; Three players, David Fletcher, Joe Panik, and Michael Brantley had miss rates under 10 percent.</p>
+<p><img src="figures/swing/swing23.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="swing-and-miss-rates-of-2018-world-series-players" class="level3" data-number="11.3">
+<h3 data-number="11.3" class="anchored" data-anchor-id="swing-and-miss-rates-of-2018-world-series-players"><span class="header-section-number">11.3</span> Swing and Miss Rates of 2018 World Series Players</h3>
+<p>Since we are watching the 2018 World Series, it is interesting to plot the swing and miss rates for the Dodgers (blue) and Red Sox (red).&nbsp; One interesting thing is that the Dodgers tend to have low swing and high miss rates, and the Red Sox tend to have high swing rates and low miss rates.&nbsp; In other words, the Red Sox appear to be more aggressive (high swing rates), and more successful in their swings (low miss rates).</p>
+<p><img src="figures/swing/swing24.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="swing-and-miss-rates-for-different-pitch-types" class="level3" data-number="11.4">
+<h3 data-number="11.4" class="anchored" data-anchor-id="swing-and-miss-rates-for-different-pitch-types"><span class="header-section-number">11.4</span> Swing and Miss Rates for Different Pitch Types</h3>
+<p>How do these rates depend on the pitch type?&nbsp; Here I graph the rates where each plotted point corresponds to a particular type of pitch.&nbsp; Batters tend to swing at splitters (FS), change ups (CH) and cutters (FC), and are less likely to swing at curve balls (CU).&nbsp; With respect to miss rates, batters are less likely to miss sinkers (SI) and two-seam fastballs (FT) and more likely to miss splitters (FS), sliders (SL), knuckle curves (KC) and curve balls (CU).</p>
+<p><img src="figures/swing/swing25.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="swing-and-miss-rates-for-different-counts" class="level3" data-number="11.5">
+<h3 data-number="11.5" class="anchored" data-anchor-id="swing-and-miss-rates-for-different-counts"><span class="header-section-number">11.5</span> Swing and Miss Rates for Different Counts</h3>
+<p>How does the count impact swinging and missing?&nbsp; Here I plot the rates for each count where I color the label by the type of count (favoring the pitcher, favoring the batter, or neutral).&nbsp; Generally, batters are more likely to swing at deeper counts – most likely will swing on a full count (3-2).&nbsp; Batters are most likely to miss the pitch on a 0-2 count and less likely on a 3-0 count.&nbsp; Generally the pitcher counts (0-2, 1-2, 2-2) are associated with high swing rates and high miss rates.&nbsp; This makes sense since the pitcher has the advantage and can strike the batter out with a pitch out of the zone.</p>
+<p><img src="figures/swing/swing26.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="swing-and-miss-rates-and-pitch-location" class="level3" data-number="11.6">
+<h3 data-number="11.6" class="anchored" data-anchor-id="swing-and-miss-rates-and-pitch-location"><span class="header-section-number">11.6</span> Swing and Miss Rates and Pitch Location</h3>
+<p>How does a batter’s propensity to swing or miss depend on the location of the pitch?&nbsp; I fit a generalized additive model where the outcome is 1 (swing) or 0 (no swing) and the logit of the probability of a swing is a smooth function of the pitch location.&nbsp; Here is a heat map of the fitted probability of swinging.&nbsp; This graph isn’t that exciting – it just says that a batter is most likely to swing in the zone.</p>
+<p><img src="figures/swing/swing27.png" class="img-fluid" style="width:40.0%"></p>
+<p>I fit a second model where I only consider the pitches where the batter swings and the response is 1 is the batter misses the pitch and 0 otherwise.&nbsp; I fit a GAM where the logit of the probability of miss depends smoothly on the location.&nbsp; This graph is more interesting – it is common to miss low and high pitches (red area), and it is uncommon to miss pitches (blue) in a wide area across the zone.</p>
+<p><img src="figures/swing/swing28.png" class="img-fluid" style="width:40.0%"></p>
+<p>I would suspect that the miss region would depend on the batting side.&nbsp; So I fit this model twice – once to the batters on the left side and one to the batters on the right side.&nbsp; The corresponding heat maps are shown below.&nbsp; The miss regions (red) look similar to me, but I notice differences in the not-miss regions (blue).&nbsp;&nbsp; Generally it can be said that batters are likely to make contact with balls on the inside of the zone and less likely to make contact with balls on the outside of the zone.</p>
+<p><img src="figures/swing/swing29.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="wrapping-up" class="level3" data-number="11.7">
+<h3 data-number="11.7" class="anchored" data-anchor-id="wrapping-up"><span class="header-section-number">11.7</span> Wrapping Up</h3>
+<p>Although I have shown general tendencies of swing and miss rate, I would think that teams would be very interested in understanding these rates for individual batters.&nbsp; For example, here are heat maps for the probability of missing for Mookie Betts and Max Muncy.&nbsp; Betts’s sweet spot (in terms of not missing the pitch) is large, while Muncy can miss pitches in the outer region of the zone.</p>
+<p><img src="figures/swing/swing30.png" class="img-fluid" style="width:70.0%"></p>
+<p>Also I would think a team would be interested in these missing and swinging rates for individual batters against different types of pitches, different count situations (pitcher and hitter counts), etc.&nbsp; Basically, one is interested in learning about all of the possible variables that can contribute to a batter missing the pitch.</p>
+</section>
+<section id="data-and-code" class="level3" data-number="11.8">
+<h3 data-number="11.8" class="anchored" data-anchor-id="data-and-code"><span class="header-section-number">11.8</span> Data and Code</h3>
+<p>All of the data was collected from the baseballr package – I have a data frame containing information about all 721,188 pitches in the 2018 season.&nbsp; On my GithubGist site, I show all of the R code that I use for this particular blog post.</p>
+</section>
+<section id="related-posts" class="level3" data-number="11.9">
+<h3 data-number="11.9" class="anchored" data-anchor-id="related-posts"><span class="header-section-number">11.9</span> Related Posts</h3>
+<p>I’ve written previous posts on swing and miss rates.</p>
+<ul>
+<li>A New “Swing and Miss” Stat proposes a different way of understanding miss rates for pitchers.</li>
+<li>WS Games 3 &amp; 4 — Swing and Miss – I explore this type of data for a couple of World Series games in 2016.</li>
+<li>World Series Special – Swing and Miss Rates – I use 50% contour plots to show the likely swing regions in the zone for special players in the 2017 World Series.</li>
+</ul>
+</section>
+</section>
+<section id="tribute-to-joe-mauer-exploring-miss-rates" class="level2" data-number="12">
+<h2 data-number="12" class="anchored" data-anchor-id="tribute-to-joe-mauer-exploring-miss-rates"><span class="header-section-number">12</span> Tribute to Joe Mauer: Exploring Miss Rates</h2>
+<section id="introduction-4" class="level3" data-number="12.1">
+<h3 data-number="12.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">12.1</span> Introduction</h3>
+<p>There was a big moment for the Minnesota Twins this week:&nbsp; Joe Mauer announced his retirement after playing 15 seasons for the Twins.&nbsp; Obviously Mauer had a great career – he was the only catcher to win three American League batting titles and was the AL Most Valuable Player in 2009.&nbsp; If one scans Mauer’s batting statistics, one obviously notices his high batting averages and low strikeout totals.&nbsp; It would appear that Mauer had great batting control.&nbsp; (There was a recent USA-Today article that talks about Mauer’s great plate discipline.) I thought I would look at this aspect of hitting more carefully.&nbsp; That is, look at his Miss Rates defined by the number of swinging strikes divided by the number of swings.&nbsp; Specifically …</p>
+<ul>
+<li>How did Mauer’s miss rates compare to other full-time players during his career?</li>
+<li>As we know, strikeout rates and miss rates have increased over recent seasons – did Mauer’s miss rates also increase during this period?</li>
+<li>Over his career, how did Mauer compare to the top hitters with respect to miss rates?</li>
+<li>What pitchers did Mauer struggle against from the perspective of miss rates?</li>
+</ul>
+</section>
+<section id="data" class="level3" data-number="12.2">
+<h3 data-number="12.2" class="anchored" data-anchor-id="data"><span class="header-section-number">12.2</span> Data</h3>
+<p>For this study, I used Retrosheet play-by-play data since it was easy to access the data on my computer.&nbsp; The key variable is <code>PITCH_SEQ_TX</code> that contains the results of all pitches during a plate appearance.&nbsp; (Recall that each line in the play-by-play file is a plate appearance.)</p>
+</section>
+<section id="a-career-look-at-mauers-miss-rates" class="level3" data-number="12.3">
+<h3 data-number="12.3" class="anchored" data-anchor-id="a-career-look-at-mauers-miss-rates"><span class="header-section-number">12.3</span> A Career Look at Mauer’s Miss Rates</h3>
+<p>To start, I looked at seasons 2005 - 2017 where Mauer had at least 300 plate appearances.&nbsp; For each season, I collected the miss rates for all hitters with at least 300 PAs.&nbsp;&nbsp; Below I display parallel dotplots of the miss rates.&nbsp; The red line corresponds to the median miss rate, the orange lines correspond to the quartiles, and Mauer’s values are shown as blue dots.&nbsp; Generally, we see that Mauer’s miss rates fall in the lower quarter of the distribution.&nbsp; In his best seasons, his miss rates fell under 10 percent.&nbsp; His miss rates climbed over 15% during the 2013-2015 seasons, but it dropped to about 12 percent in 2017.&nbsp; I guess it is not surprising that there was an increase in his miss rates since the median miss rate of all regulars increased from 0.17 to 0.21 during this period.&nbsp; By the way, note that a miss rate of 30% or higher was rare in 2005, but relatively likely in 2017. This is one indication how the game of baseball has changed.</p>
+<p><img src="figures/swing/swing31.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="how-did-mauer-compare-to-the-best" class="level3" data-number="12.4">
+<h3 data-number="12.4" class="anchored" data-anchor-id="how-did-mauer-compare-to-the-best"><span class="header-section-number">12.4</span> How Did Mauer Compare to the Best?</h3>
+<p>For the period 2005 through 2017, I collected all of the hitters who had at least 5000 swings (there were 294 players in this group).&nbsp; Here are the top 10 hitters with respect to miss rates – Juan Pierre is at the top with a rate of 5.6 % and I don’t see Joe Mauer.&nbsp; Looking further, I find that Mauer’s miss rate of 12.5 % is 37th on this list (out of 294).&nbsp; So he compares very favorably with respect to miss rates among the hitters in this period.</p>
+<p><img src="figures/swing/swing32.png" class="img-fluid" style="width:50.0%"></p>
+</section>
+<section id="who-did-mauer-struggle-against" class="level3" data-number="12.5">
+<h3 data-number="12.5" class="anchored" data-anchor-id="who-did-mauer-struggle-against"><span class="header-section-number">12.5</span> Who Did Mauer Struggle Against?</h3>
+<p>I thought it would be interesting to explore how Mauer performed against different pitchers.&nbsp; Specifically, for all pitchers that Mauer faced for at least 50 swings, who were the top 10 pitchers with respect to miss rates?&nbsp; The most challenging pitcher was …. Jimmy Gobble?&nbsp; (For those of you who are wondering, Jimmy Gobble was primarily a relief paper who pitched for the Royals and White Sox for seven seasons.)&nbsp; Anyway, there are some notable pitchers on this list such as CC Sabathia, Carlos Carrasco, Corey Kluber and Chris Sale.</p>
+<p><img src="figures/swing/swing33.png" class="img-fluid" style="width:50.0%"></p>
+<p>At the other extreme, here are the 10 pitchers (at least 50 swings) that Mauer had his lowest miss rates.&nbsp; It is a bit surprising that Max Scherzer is at the top of the list – Mauer missed only 3 out of 81 swings against Scherzer.&nbsp; (One has to be careful about drawing strong conclusions here due to the relatively small sample sizes.)</p>
+<p><img src="figures/swing/swing34.png" class="img-fluid" style="width:50.0%"></p>
+</section>
+<section id="takeaway" class="level3" data-number="12.6">
+<h3 data-number="12.6" class="anchored" data-anchor-id="takeaway"><span class="header-section-number">12.6</span> Takeaway</h3>
+<p>My motivation for this post was to give recognition to one of my favorite players Joe Mauer who will certainly be inducted in the Baseball Hall of Fame.&nbsp; Due to the availability of data on each pitch, I think measures such as miss rates will get more attention as they are strongly associated with strikeout rates. For those of you learning R, this type of exercise is good practice.&nbsp; One needs to use string functions to extract the number of swings and swinging strikes from the <code>PITCH_SEQ_TX</code> variable.&nbsp; The <code>dplyr</code> package is convenient for grouping the Retrosheet data using player id as a grouping variable and summarizing each group by the number of swings and misses. If you are interested in learning more about miss rates, look at my recent post which explores swing rates and miss rates for 2018 regular hitters using Statcast data.</p>
+</section>
+<section id="revision-coming-out-soon" class="level3" data-number="12.7">
+<h3 data-number="12.7" class="anchored" data-anchor-id="revision-coming-out-soon"><span class="header-section-number">12.7</span> Revision Coming Out Soon</h3>
+<p>A reader asks:&nbsp; “I’m wondering if you all have any plans to update this book, especially since StatCast data is a significant source of data that came out since the book has been published, and you have written on using the data to analyze players. Thanks!”</p>
+<p>The 2nd edition of <em>Analyzing Baseball with R</em> is coming out in a few weeks.&nbsp; I was fortunate to enlist Ben Baumer as a new coauthor.&nbsp; The R code has been updated in all chapters to reflect the tidyverse and we have two new chapters that use Statcast data.</p>
+</section>
+</section>
+<section id="calledstrike-package-and-swing-and-miss-stats" class="level2" data-number="13">
+<h2 data-number="13" class="anchored" data-anchor-id="calledstrike-package-and-swing-and-miss-stats"><span class="header-section-number">13</span> CalledStrike Package and Swing and Miss Stats</h2>
+<section id="introduction-5" class="level3" data-number="13.1">
+<h3 data-number="13.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">13.1</span> Introduction</h3>
+<p>In last week’s post, I talked about graphs of density estimates of occurrences of events about the strike zone. That discussion leads naturally to a description of graphs of measures such as batting average or swing percentages defined over the zone. In February 2019, I introduced the <code>CalledStrike</code> package that provides visualizations of measures over the strike zone. (By the way, I named my package <code>CalledStrike</code> since I used it initially to look at regions of called strikes over the zone.) Recently I’ve updated the package – currently one has more choices on the metric to visualize and the one can use facets to visualize different types comparisons such as across pitcher side (Left and Right), across pitch types (Fastball and Off-Speed), and across count (Ahead, Neutral and Behind in the Count).</p>
+<p>In this post I’ll briefly explain the process of constructing a display and then illustrate the use of the <code>CalledStrike</code> package to explore swing and contact statistics of players during the 2019 season. One can download the package from my Github site and this page provides a general introduction to the <code>CalledStrike</code> package. Even if you are unable to download the package, I think the individual functions in <code>CalledStrike</code> may be useful for those who are interested to doing similar work.</p>
+</section>
+<section id="process-of-constructing-a-display" class="level3" data-number="13.2">
+<h3 data-number="13.2" class="anchored" data-anchor-id="process-of-constructing-a-display"><span class="header-section-number">13.2</span> Process of Constructing a Display</h3>
+<p>Let’s illustrate the process of constructing a visualization using DJ LeMahieu. We’re interested in exploring the pattern over the zone of his batting average on balls in play for the 2019 season.</p>
+<ul>
+<li>Step 1. We start by collecting the relevant data, specifically the 2019 balls put into play for DJ LeMahieu. Here is a scatterplot of the locations of the balls put into play where I have colored the point by hit (blue) and out (black).</li>
+</ul>
+<p><img src="figures/swing/swing35.png" class="img-fluid" style="width:70.0%"></p>
+<ul>
+<li><p>Step 2: Next, we fit a generalized additive model (GAM) to smooth this graph. We have a binary response (hit or out) and the model represents the probability of a hit as a smooth function of the <code>plate_x</code> and <code>plate_z</code> coordinates. A single <code>gam()</code> function from the <code>mgcv</code> package does the fitting.</p></li>
+<li><p>Step 3: Last we set up a 50 by 50 grid over the zone and use the model fit to predict the probability of a hit for each point on the grid - the <code>grid_predict()</code> function in <code>CalledStrike</code> does this part.</p></li>
+<li><p>Step 4: We have two choices how to graph these predicted probabilities – we can either use a tile plot or a filled contour plot. If we use a contour graph, we can specify the level values for the contours. Here I use values from 0 to 1 in steps of 0.02. (By the way, this is a fascinating pattern of hitting for LeMahieu which deserves further exploration.) This step uses the <code>ggplot2</code> and <code>metR</code> packages and the <code>geom_tile()</code> and geom_<code>filled_contour()</code> functions.</p></li>
+</ul>
+<p><img src="figures/swing/swing36.png" class="img-fluid" style="width:70.0%"></p>
+<p>The function <code>hit_contour()</code> in CalledStrike produces this graph where the inputs are the Statcast data, the vector of contour values and the title of the graph.</p>
+<pre><code>dj &lt;- filter(statcast2019,
+             player_name == "DJ LeMahieu")
+hit_contour(dj, L = seq(0, 1, by = 0.02),
+            title = "2019 LeMahieu Probability of Hit")</code></pre>
+<p>If you examine the <code>hit_contour()</code> function, it shows the basic steps described above</p>
+<pre><code>filter(statcast2019,
+             player_name == "DJ LeMahieu") %&gt;%
+      setup_inplay() %&gt;%
+      hr_h_gam_fit(HR = FALSE) %&gt;%
+      grid_predict() %&gt;%
+      contour_graph(L = seq(0, 1, by = 0.02),
+            title = "2019 LeMahieu Probability of Hit")</code></pre>
+</section>
+<section id="swing-and-miss-study" class="level3" data-number="13.3">
+<h3 data-number="13.3" class="anchored" data-anchor-id="swing-and-miss-study"><span class="header-section-number">13.3</span> Swing and Miss Study</h3>
+<p>Let’s focus on the hitters in the 2019 season who were extreme on their tendency to swing and on their tendency to make contact on their swings. We begin with the FanGraphs leaderboard (look at the Plate Discipline tab) where I plot the swing fraction (horizontal) against the contact fraction (vertical) for all qualified hitters. I have labeled nine points corresponding to players who are reluctant swingers (left) and wild swingers (right).</p>
+<p><img src="figures/swing/swing37.png" class="img-fluid" style="width:70.0%"></p>
+<p>Using my package, I construct contour graphs for the smoothed swing probabilities for these nine players. We see dramatic differences between the two groups.</p>
+<p><img src="figures/swing/swing38.png" class="img-fluid" style="width:70.0%"></p>
+<p>Let’s focus on Mike Trout who appears to be a reluctant swinger. How does Trout’s swing tendency depend on the pitcher arm? I use the functions <code>split_LR()</code> and <code>swing_contour()</code> to display a smoothed swing probability for both pitching arms. The region of high swing probability appears similar for both arms, but there are some differences. For example, Trout is more likely to swing on low and outside against lefties and he is more likely to swing on middle-outside pitches to righties.</p>
+<p><img src="figures/swing/swing39.png" class="img-fluid" style="width:70.0%"></p>
+<p>How does Trout’s swing probability depend on the pitch type (fastball or off-speed)? I use the functions <code>split_pitchtype()</code> and <code>swing_contour()</code> to show the smoothed swing probability for fastballs and offspeed pitches. We see that Trout is reluctant to swing on an offspeed pitch – if he does swing on an offspeed pitch, it tends to be low in the zone.</p>
+<p><img src="figures/swing/swing40.png" class="img-fluid" style="width:70.0%"></p>
+<p>How does Trout’s swing probability depend on the count? I break down the count into three situations (ahead, neutral and behind) and the functions <code>split_count()</code> and <code>swing_contour()</code> are used to construct this graph. We see that Trout rarely swings in ahead in count and neutral count situations. Even in behind in count situations, he only swings at low balls outside of the zone.</p>
+<p><img src="figures/swing/swing41.png" class="img-fluid" style="width:70.0%"></p>
+<p>Let’s contrast the last graph with a similar display for Jeff McNeil, one of the free swingers. This display is dramatically different. McNeil is very likely to swing in neutral counts and it is likely for him to swing in outside pitches when he is behind in the count.</p>
+<p><img src="figures/swing/swing42.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="making-contact-with-the-pitch" class="level3" data-number="13.4">
+<h3 data-number="13.4" class="anchored" data-anchor-id="making-contact-with-the-pitch"><span class="header-section-number">13.4</span> Making Contact with the Pitch</h3>
+<p>Let’s revisit our scatterplot and identify nine extreme hitters on their tendency to make contact on a swing.</p>
+<p><img src="figures/swing/swing43.png" class="img-fluid" style="width:70.0%"></p>
+<p>Here are smoothed estimates of the probability of contact for these nine players. The four low-contact hitters really stand out in this display.</p>
+<p><img src="figures/swing/swing44.png" class="img-fluid" style="width:70.0%"></p>
+<p>Let’s focus on Luke Voit, who had low contact for the 2019 season. Maybe Voit had problems on a specific pitch type? We breakdown his probability of contact graph by pitch type – fastball or offspeed. We see that Voit missed a lot of high fastballs and low offspeed pitches, even within the zone.</p>
+<p><img src="figures/swing/swing45.png" class="img-fluid" style="width:70.0%"></p>
+<p>Did Voit struggle against pitchers on a particular side? Being a right-handed hitter, one would expect him to struggle more against right-handed pitcher which seems to be the case here. He misses pitches that are both high and low within the zone. Voit’s behavior against lefties is harder to interpret, although we see that he is likely to miss low in the zone.</p>
+<p><img src="figures/swing/swing46.png" class="img-fluid" style="width:70.0%"></p>
+<p>Since both pitch type and pitcher side seem to be relevant predictors, it makes sense to graph these probabilities of contact for all combinations of the two predictors. Now we see clearly that Voit struggles against left-handed off-speed pitches inside and low in the zone. He appears most successful on fastballs from left-handers.</p>
+<p><img src="figures/swing/swing47.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="comments" class="level3" data-number="13.5">
+<h3 data-number="13.5" class="anchored" data-anchor-id="comments"><span class="header-section-number">13.5</span> Comments</h3>
+<p>On my Github Gist site, I have the code for the work on this post. Also this page provides a general introduction to the <code>CalledStrike</code> package.</p>
+<p>The <code>CalledStrike</code> package currently has functions for plotting eleven different metrics as a function of the location in the zone. It would be easy to create functions for new metrics. Since the functions are all pretty short, it would be straightforward to modify the functions for other uses.</p>
+<p>Each of the functions, for example <code>swing_contour()</code>, allows for the input of a single Statcast data frame or a list of several Statcast data frames. By use of the <code>split()</code> function, one can create a list of data frames divided by a grouping variable. When the function has a list argument, it will create a paneled display as shown above</p>
+<p>There are many graphical comparisons possible. One can compare different hitters or pitchers, or a particular hitter across different Statcast seasons. One can see how a particular metric depends on the pitch type, the pitcher side, or the count.</p>
+<p>The package has several “collect” functions that are wrappers to the Statcast scraping functions in Bill Petti’s <code>baseballr</code> package. If one struggles with downloading the Statcast data from Baseball Savant, <code>CalledStrike</code> does include a sample Statcast dataset, <code>sc_example</code>, that one can use to check out the plotting functions.</p>
+<p>Although the <code>CalledStrike</code> package has been improved in some sense, it represents a package in development. So I would appreciate any suggestions for improvement or issues if it exhibits some strange behavior.</p>
+</section>
+</section>
+<section id="consecutive-swings-without-a-miss" class="level2" data-number="14">
+<h2 data-number="14" class="anchored" data-anchor-id="consecutive-swings-without-a-miss"><span class="header-section-number">14</span> 87 Consecutive Swings Without a Miss?</h2>
+<section id="introduction---streaks-on-swings" class="level3" data-number="14.1">
+<h3 data-number="14.1" class="anchored" data-anchor-id="introduction---streaks-on-swings"><span class="header-section-number">14.1</span> Introduction - Streaks on Swings</h3>
+<p>I was watching a recent game (maybe July 23?) between the Phillies and Braves. The announcer commented about a remarkable statistic – Freddie Freeman hadn’t whiffed on a swing for a long sequence of pitches. This article mentions that Freeman hadn’t swung and missed on 23 plate appearances (and counting). Is this really an extreme performance?</p>
+<p>Given the current high “swing and miss” environment in baseball, I thought I would explore Statcast data and find the players in recent baseball history who have had unusually high streaks of “making contact” on swings. We will see that one remarkable hitter did indeed have a sequence of 87 swings without a whiff.</p>
+</section>
+<section id="correct-denominator" class="level3" data-number="14.2">
+<h3 data-number="14.2" class="anchored" data-anchor-id="correct-denominator"><span class="header-section-number">14.2</span> Correct Denominator?</h3>
+<p>During the Phillies game, the announcer talked about the number of consecutive pitches Freeman had faced without whiffing on a swing. The Audacy Sports article mentioned the long streak of plate appearances by Freeman without a whiff. What is a reasonable thing to consider in this study:</p>
+<ul>
+<li><p>the number of pitches without a whiff?</p></li>
+<li><p>the number of PAs without a whiff?</p></li>
+<li><p>something else?</p></li>
+</ul>
+<p>I imagine there are some batters who are reluctant swingers, so I don’t think the number of pitches is the right context for this streak study. I think it makes more sense to consider only the pitches where the batter swings. So here’s our question:</p>
+<p>In the sequence of batter swings, what are extreme streaks of making contact (not missing) with the pitch?</p>
+</section>
+<section id="r-work" class="level3" data-number="14.3">
+<h3 data-number="14.3" class="anchored" data-anchor-id="r-work"><span class="header-section-number">14.3</span> R Work</h3>
+<p>Given Statcast data for a particular season, I am interested in finding all of the streaks of making contact for all hitters. To begin this exploration, I wrote a single R function <code>swing_miss()</code> that finds the maximum streak length for a specific hitter. Here are the steps in this function:</p>
+<ul>
+<li><p>Using the <code>filter()</code> function from the <code>dplyr</code> package, I consider only the swings for the hitter.</p></li>
+<li><p>I sort the data by <code>Game_Date</code>, <code>game_pk</code> (game id), <code>at_bat_number</code>, and <code>pitch_number</code>.</p></li>
+<li><p>The outcome of the swing is whether the hitter missed or not (made some contact).</p></li>
+<li><p>The <code>rle()</code> function will find the lengths of all streaks of misses and lengths of all streaks of contact.</p></li>
+<li><p>The output of the function is a data frame containing (1) the player name, (2) the number of swings, (3) the overall miss rate and (4) the length of the longest contact streak and .</p></li>
+</ul>
+<p>Here’s an example of using this function for Freddie Freeman for the 2021 season (through August 5). The inputs are the name of the player and the Statcast dataset.</p>
+<pre><code>swing_miss("Freeman, Freddie", statcast2021)
+            Player   N Miss_Rate Longest_Streak
+1 Freeman, Freddie 916 0.1899563             66</code></pre>
+<p>We see that Freeman had 916 swings in the 2021 season with a miss rates of 19% – he had a streak of 66 swings where he made contact with the pitch.</p>
+<p>Using the <code>map_dfr()</code> function from the <code>purrr</code> package, I run the <code>swing_miss()</code> function for all players in the 2021 season, collecting the results in a data frame.</p>
+</section>
+<section id="longest-streaks-in-the-2021-season" class="level3" data-number="14.4">
+<h3 data-number="14.4" class="anchored" data-anchor-id="longest-streaks-in-the-2021-season"><span class="header-section-number">14.4</span> Longest Streaks in the 2021 Season</h3>
+<p>Here is a scatterplot of the miss rates and longest contact streaks for all players in the 2021 season with at least 500 swings, labeling the points for hitters who had a streak of at least 50. In this group, Jake Cronenworth has the longest streak of 68, followed by Freeman at 66. As one would expect, there is a negative association between miss rate and longest streak and generally the high streak players are those with low miss rates.</p>
+<p><img src="figures/swing/swing48.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="all-statcast-seasons" class="level3" data-number="14.5">
+<h3 data-number="14.5" class="anchored" data-anchor-id="all-statcast-seasons"><span class="header-section-number">14.5</span> All Statcast Seasons</h3>
+<p>Which players had the longest contact on swing streaks during the Statcast era (seasons 2015 through 2021)? The following table lists the longest streaks of length 60 or more. The number of swings N, the miss rate, and the length of the longest contact steak are listed for each player/season. Freddie Freeman’s streak of 66 is actually eighth on this list. There are two remarkable streaks exceeding 80 by Ichiro Suzuki in 2015 and Nick Madrigal in 2021. Suzuki is universally regarded as one of the best bat-on-ball hitters in baseball history. Interestingly, Suzuki had a relatively poor batting season in 2015 with a BA of 0.229 in 438 plate appearances. Nick Madrigal is a current second-baseman for the 2021 White Sox – his nickname is “Nicky Two Strikes” for his excellent performance when down with two strikes. Looking at the list, Freeman’s long streak of 66 is perhaps most remarkable since Freeman has the largest miss rate among this group. Another player on this leaderboard, Ben Revere was a speedy, low strikeout hitter who played for the Phillies and other teams between 2010 and 2017.</p>
+<pre><code>   Season              Player    N MissRate Streak
+1    2015       Ichiro Suzuki  705    0.087     87
+2    2021      Madrigal, Nick  368    0.082     81
+3    2017      Anthony Rendon 1070    0.127     78
+4    2015          Ben Revere  940    0.099     76
+5    2021   Cronenworth, Jake  728    0.133     68
+6    2019      David Fletcher  954    0.089     68
+7    2017           Joe Panik  944    0.100     67
+8    2021    Freeman, Freddie  909    0.189     66
+9    2018         Ian Kinsler  949    0.112     65
+10   2019         Jose Peraza  736    0.148     65
+11   2019         Nicky Lopez  754    0.130     65
+12   2016       Jose Iglesias  890    0.087     63
+13   2015    Michael Brantley  910    0.074     62
+14   2019         Luis Arraez  627    0.067     62
+15   2016        Martin Prado 1015    0.091     61</code></pre>
+</section>
+<section id="coin-flipping-doesnt-predict-these-extreme-streaks" class="level3" data-number="14.6">
+<h3 data-number="14.6" class="anchored" data-anchor-id="coin-flipping-doesnt-predict-these-extreme-streaks"><span class="header-section-number">14.6</span> Coin Flipping Doesn’t Predict These Extreme Streaks</h3>
+<p>A standard coin-flipping model says that the swing outcomes are Bernoulli trials with a constant probability of success where a success is defined as making contact. Suppose, for example, that Suzuki is taking 705 swings where the miss probability is 0.087 – what values of longest streaks of contact would one predict?</p>
+<p>This is easy to answer by a simulation. The <code>rbinom()</code> function is used to simulate outcomes for specific values of N (number of swings) and p (chance of a miss), and the <code>rle()</code> function is used to find the longest streak. Repeating this process a large number of times, one obtains the predictive distribution of the longest streak from this coin flipping model.</p>
+<p>The graph below displays a histogram of the longest contact streak for this simulation experiment for Suzuki where N = 705 and p = 0.087. We see that long streaks between 40 and 60 are common, but Suzuki’s 2015 streak of 87 (indicated by a red vertical line) is in the extreme right-tail of this predictive distribution. This indicates that this coin-flipping model is unrealistic for modeling Suzuki’s hitting. Suzuki’s miss on swing probability may have changed values across the season, or perhaps the swing outcomes have some strong autocorrelation. One would see a similar graphical display if one ran a simulation for any of the observed streaks displayed in the leaders table.</p>
+<p><img src="figures/swing/swing49.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="closing-comments" class="level3" data-number="14.7">
+<h3 data-number="14.7" class="anchored" data-anchor-id="closing-comments"><span class="header-section-number">14.7</span> Closing Comments</h3>
+<ul>
+<li><p>A General Streak Finder. For those readers interested in hitting streaks, the Player Batting Streak Finder in Baseball Reference’s Stathead Baseball tools is a great reference. For example, suppose one is interested in players with the greatest on-base streaks in modern baseball. By making several selections on a set of menus, one can access this leaderboard pretty easily. And the results are downloadable as a csv file for future work. Stathead requires a subscription, but the first month is free – it is worth a look.</p></li>
+<li><p>Statcast Streak Finder. The Stathead Baseball site considers streaks on a game to game basis. By using the raw Statcast data, we are looking at streaks on a pitch-to-pitch basis. My earlier post on ofers considered streaks in the sequence of plate appearances.</p></li>
+<li><p>A New Type of Batting Skill. Here we are focussing on the batter skill of making contact with the pitch. Perhaps the longest contact streak can be paired with the miss rate to measure this particular skill. Players who have small miss rates and high production on balls in play, like Freddie Freeman, are especially valuable hitters.</p></li>
+<li><p>R Code? Here’s the <code>swing_miss()</code> function that I am using in this post.</p></li>
+</ul>
+<pre><code>swing_miss &lt;- function(pname, sc){
+  require(dplyr)
+  swing_situations &lt;- c("hit_into_play", "foul",
+                      "swinging_strike",
+                      "swinging_strike_blocked",
+                      "missed_bunt", "hit_into_play_no_out",
+                      "foul_bunt", "foul_tip",
+                      "hit_into_play_score")
+  foul_situations &lt;- c("foul", "foul_bunt", "foul_tip")
+  sc %&gt;% filter(player_name == pname,
+              description %in% swing_situations) %&gt;%
+       mutate(Miss = ifelse(description %in%
+         c("swinging_strike", "swinging_strike_blocked"), 1, 0)) -&gt;
+  sc_swing
+
+sc_swing %&gt;%
+  arrange(Game_Date, game_pk,
+          at_bat_number, pitch_number) -&gt;
+  sc_swing
+
+outcomes &lt;- rle(sc_swing$Miss)
+
+data.frame(Player = pname,
+           N = nrow(sc_swing),
+           Miss_Rate = mean(sc_swing$Miss),
+           Longest_Streak =
+           max(outcomes$lengths[outcomes$values == 0]))
+}</code></pre>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
