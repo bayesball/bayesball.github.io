@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2023-02-10">
+<meta name="dcterms.date" content="2023-02-21">
 
 <title>Game Strategy</title>
 <style>
@@ -74,6 +74,16 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#data-notes" id="toc-data-notes" class="nav-link" data-scroll-target="#data-notes"><span class="toc-section-number">5.6</span>  Data Notes</a></li>
   <li><a href="#comments" id="toc-comments" class="nav-link" data-scroll-target="#comments"><span class="toc-section-number">5.7</span>  Comments</a></li>
   </ul></li>
+  <li><a href="#situational-runner-advancement" id="toc-situational-runner-advancement" class="nav-link" data-scroll-target="#situational-runner-advancement"><span class="toc-section-number">6</span>  Situational Runner Advancement</a>
+  <ul class="collapse">
+  <li><a href="#introduction-6" id="toc-introduction-6" class="nav-link" data-scroll-target="#introduction-6"><span class="toc-section-number">6.1</span>  Introduction</a></li>
+  <li><a href="#situations-influencing-runner-advancement" id="toc-situations-influencing-runner-advancement" class="nav-link" data-scroll-target="#situations-influencing-runner-advancement"><span class="toc-section-number">6.2</span>  Situations Influencing Runner Advancement</a></li>
+  <li><a href="#advancing-a-runner-on-1st" id="toc-advancing-a-runner-on-1st" class="nav-link" data-scroll-target="#advancing-a-runner-on-1st"><span class="toc-section-number">6.3</span>  Advancing a Runner on 1st</a></li>
+  <li><a href="#advancing-a-runner-on-2nd" id="toc-advancing-a-runner-on-2nd" class="nav-link" data-scroll-target="#advancing-a-runner-on-2nd"><span class="toc-section-number">6.4</span>  Advancing a Runner on 2nd</a></li>
+  <li><a href="#advancing-runners-on-1st-and-2nd" id="toc-advancing-runners-on-1st-and-2nd" class="nav-link" data-scroll-target="#advancing-runners-on-1st-and-2nd"><span class="toc-section-number">6.5</span>  Advancing Runners on 1st and 2nd</a></li>
+  <li><a href="#other-relevant-situational-variables" id="toc-other-relevant-situational-variables" class="nav-link" data-scroll-target="#other-relevant-situational-variables"><span class="toc-section-number">6.6</span>  Other Relevant Situational Variables</a></li>
+  <li><a href="#data-and-r-work" id="toc-data-and-r-work" class="nav-link" data-scroll-target="#data-and-r-work"><span class="toc-section-number">6.7</span>  Data and R Work</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -98,7 +108,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 10, 2023</p>
+      <p class="date">February 21, 2023</p>
     </div>
   </div>
   
@@ -113,7 +123,7 @@ ul.task-list li input[type="checkbox"] {
 <p>This article contains a collection of posts from the “Exploring Baseball Data with R” blog on the general topic of baseball game strategy. Section 2 contains two articles on sacrifice hits. “Sacrifice Fly: When to Send the Runner?” explores how the success of a sacrifice fly attempt depends on the depth and direction of the batted ball to the outfield. “Demise of the Sacrifice Hit” explores issues related to the use of the sacrifice hit in Major League Baseball.</p>
 <p>Section 3 has two articles on the use of bunts in MLB. “A Historical Look at Bunts” looks at the use of bunts both as a sacrifice and as an infield hit. “Exploring 2015 Bunts” takes a detailed use of bunts among teams and players in the 2015 season.</p>
 <p>Section 4 contains two articles on stolen base attempts. The first article is a tribute to the 2013 Kansas City Royals who were remarkable in their propensity for stealing bases. The second article illustrates the use of play-by-play Retrosheet data to explore stolen base attempts and successes in the 2016 season.</p>
-<p>Section 5 provides an exploration of the use of the designated hitter over 49 seasons of baseball. We discuss the use of the DH, where this hitter hits in the batting order and the benefit of the DH over non-pitchers.</p>
+<p>Section 5 provides an exploration of the use of the designated hitter over 49 seasons of baseball. We discuss the use of the DH, where this hitter hits in the batting order and the benefit of the DH over non-pitchers. Section 6 explores how runners on 1st, on 2nd, and 1st and 2nd can advance when there is a single hit to the outfield. This section explores how the chance of taking an extra base varies across seasons and across different situations like the number of outs, direction of the hit, and closeness of the game.</p>
 </section>
 <section id="sacrifices" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="sacrifices"><span class="header-section-number">2</span> Sacrifices</h2>
@@ -397,8 +407,9 @@ ggplot(team.stealing, aes(Attempts, Success.Rate, label=BAT_TEAM_ID)) +
 outs.stealing &lt;- mutate(outs.stealing,
                         Success.Rate = SB / (SB + CS),
                         Attempts = SB + CS)
-outs.stealing</code></pre>
-<pre><code>##
+outs.stealing
+
+##
 ##   OUTS_CT  SB  CS Success.Rate Attempts
 ## 1       0 559 244       0.6961      803
 ## 2       1 785 359       0.6862     1144
@@ -412,8 +423,9 @@ inning.stealing &lt;- mutate(inning.stealing, Inning=pmin(INN_CT, 10) )
 inning.stealing &lt;- summarize(group_by(inning.stealing, Inning),
                            SB=sum(SB), CS=sum(CS),
                            Success.Rate=SB / (SB + CS))
-inning.stealing</code></pre>
-<pre><code>## Source: local data frame [10 x 4]
+inning.stealing
+
+## Source: local data frame [10 x 4]
 ##
 ##    Inning  SB  CS Success.Rate
 ## 1       1 343 129       0.7267
@@ -425,8 +437,9 @@ inning.stealing</code></pre>
 ## 7       7 271  90       0.7507
 ## 8       8 259  86       0.7507
 ## 9       9 164  60       0.7321
-## 10     10  63  14       0.8182</code></pre>
-<pre><code>ggplot(inning.stealing, aes(Inning, Success.Rate)) + geom_point(size=4)</code></pre>
+## 10     10  63  14       0.8182
+
+ggplot(inning.stealing, aes(Inning, Success.Rate)) + geom_point(size=4)</code></pre>
 <p><img src="figures/strategy/sb2.png" class="img-fluid" style="width:70.0%"></p>
 </section>
 <section id="the-pitcher-effect" class="level4" data-number="4.1.4">
@@ -446,8 +459,9 @@ stealing.pitcher &lt;-
 N &lt;- dim(stealing.pitcher)[1]
 stealing.pitcher[(N - 9) : N,
                  c("First.Name", "Last.Name", "SB", "CS",
-                   "Attempts", "Success.Rate")]</code></pre>
-<pre><code>##     First.Name Last.Name SB CS Attempts Success.Rate
+                   "Attempts", "Success.Rate")]
+
+##     First.Name Last.Name SB CS Attempts Success.Rate
 ## 591      Ervin   Santana 13  8       21       0.6190
 ## 592         Yu   Darvish 15  7       22       0.6818
 ## 593      Felix Hernandez 17  5       22       0.7727
@@ -572,6 +586,77 @@ stealing.pitcher[(N - 9) : N,
 <li><p>I am currently puzzled with the strange pattern of the DH rate over seasons, but probably can be explained if I look at the DH rates over leagues and teams.</p></li>
 <li><p>The roles of pitchers and non-pitchers are currently changing in the 2022 season. It is rare for a pitcher to bat, but it is increasing common for non-pitchers to pitch innings in blowout games. (As I am writing this, Toronto is defeating Boston 28-5 in an extreme blowout game.). Also we currently have a great two-way player Shohei Ohtani who excels in both pitching and hitting.</p></li>
 </ul>
+</section>
+</section>
+<section id="situational-runner-advancement" class="level2" data-number="6">
+<h2 data-number="6" class="anchored" data-anchor-id="situational-runner-advancement"><span class="header-section-number">6</span> Situational Runner Advancement</h2>
+<section id="introduction-6" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="introduction-6"><span class="header-section-number">6.1</span> Introduction</h3>
+<p>I was recently reflecting on the rule changes for the upcoming 2023 MLB season. One rule that they will keep is the so-called zombie runner rule introduced in the shortened 2020 season where each half-inning in extra innings starts with a runner on 2nd base. Of course when one has a runner on 2nd with no outs, a team wants to advance this runner to third and eventually to home.</p>
+<p>That made me think more generally about runner advancement in baseball and specifically, how runners advance with a single. For example, suppose there is a runner on 1st. With a single hit to the outfield, the runner can go to second or take the extra base and reach third. That raises several questions.</p>
+<ul>
+<li><p>How likely is it for a runner to take the extra base, and how has the chance of this outcome changed in recent seasons of baseball?</p></li>
+<li><p>Also, the chance of taking this extra base might depend on other variables such as the number of outs, the closeness of the score and the direction of the base hits. How does the chance of taking the extra base depend on these variables?</p></li>
+</ul>
+<p>In this post, I’ll look at 20-seasons of baseball from 2000 through 2019 and see how the chance of taking the extra base has changed over this period. I focus on the runner advancement on an outfield single in three runner situations:</p>
+<ul>
+<li><p>runner on 1st (100)</p></li>
+<li><p>runner on 2nd (020)</p></li>
+<li><p>runners on 1st and 2nd (120)</p></li>
+</ul>
+<p>I will display graphs that show how the chance of taking an extra base changes over the period 2000 through 2019 and how it changes with respect to various situations.</p>
+</section>
+<section id="situations-influencing-runner-advancement" class="level3" data-number="6.2">
+<h3 data-number="6.2" class="anchored" data-anchor-id="situations-influencing-runner-advancement"><span class="header-section-number">6.2</span> Situations Influencing Runner Advancement</h3>
+<p>One can imagine a number of different variables that influence the chance of a runner or runners taking extra bases, but I will focus on the following variables.</p>
+<ul>
+<li><p>Home/away. Perhaps it is more likely for the home team (compared with the visiting team) to take the extra base on a single.</p></li>
+<li><p>Late inning. In the 8th inning or later, perhaps a team will be more aggressive and take the extra base.</p></li>
+<li><p>Close. In a game where the score is close (where the margin of lead is 0 or 1 runs), perhaps a team will be more aggressive in runner advancement.</p></li>
+<li><p>Close and Late. Here we combine the last two variables focusing on late-inning situations where the game is close.</p></li>
+<li><p>Outs. Perhaps a runner will be more aggressive (take an extra base) when there are 2 outs, compared to 0 or 1 outs</p></li>
+<li><p>Outfield. The chance of taking an extra base may depend on the direction of the outfield single (left field, center field or right right). For example, we are familiar with the situation where the runner on 1st moves to 3rd on a base hit to right field.</p></li>
+</ul>
+</section>
+<section id="advancing-a-runner-on-1st" class="level3" data-number="6.3">
+<h3 data-number="6.3" class="anchored" data-anchor-id="advancing-a-runner-on-1st"><span class="header-section-number">6.3</span> Advancing a Runner on 1st</h3>
+<p>I wrote a Shiny app where one selects the runners situation (either 100, 020 or 120) and the particular situation of interest among the six situations listed above. First I consider a runner on 1st (100) and the home/away situation. The below graph displays the percentage of runners successively taking the extra base (code 1-3) among all opportunities for home and away teams across the 20 seasons. There is much variability in these percentages so the pattern across seasons is not clear. But it appears that it is generally more likely for a home runner than the visitor runner to take the extra base.</p>
+<p><img src="figures/strategy/ad_100_home.png" class="img-fluid" style="width:70.0%"></p>
+<p>Here is another situation, close/not-close games, where the situational pattern is clearer. It is more likely to take the extra-base (runner moving from 1st to 3rd) when the current score margin is one run or less.</p>
+<p><img src="figures/strategy/ad_100_close.png" class="img-fluid" style="width:70.0%"></p>
+<p>Does the number of outs matter? Below I display the chance of taking an extra base for 0, 1, and 2 outs. We see several interesting things. First, it is generally more likely to take the extra base with 2 outs. Second, the probability of taking the extra bases with 2 outs has been increasing in recent seasons.</p>
+<p><img src="figures/strategy/ad_100_outs.png" class="img-fluid" style="width:70.0%"></p>
+<p>It is not surprising that the chance of taking the extra base is dependent on the location of the single. It is easiest to take the extra base for a single to right field (S9), followed by a single to center field (S8) and a single to left field (S7).</p>
+<p><img src="figures/strategy/ad_100_outfield.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="advancing-a-runner-on-2nd" class="level3" data-number="6.4">
+<h3 data-number="6.4" class="anchored" data-anchor-id="advancing-a-runner-on-2nd"><span class="header-section-number">6.4</span> Advancing a Runner on 2nd</h3>
+<p>Here are several interesting graphs when we explore runner advancement for a sole runner on 2nd with a single to the outfield. Below we see that it is more likely to score (2-H) when the game is close (margin within one run) and late (inning 8 or later).</p>
+<p><img src="figures/strategy/ad_020_close_late.png" class="img-fluid" style="width:70.0%"></p>
+<p>With respect to direction of the hit, it is most likely for this runner on 2nd to score when the hit is in center field, followed by a hit to right field and a hit to left field.</p>
+<p><img src="figures/strategy/ad_020_outfield.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="advancing-runners-on-1st-and-2nd" class="level3" data-number="6.5">
+<h3 data-number="6.5" class="anchored" data-anchor-id="advancing-runners-on-1st-and-2nd"><span class="header-section-number">6.5</span> Advancing Runners on 1st and 2nd</h3>
+<p>Last we consider the advancement of runners on 1st and 2nd (120) when there is an outfield single. Below we show the chance that both runners advance extra bases (codes 1-3, 2-H) for each situation. The first graph shows that when games are close, it is more likely for both runners to take the extra base.</p>
+<p><img src="figures/strategy/ad_120_close.png" class="img-fluid" style="width:70.0%"></p>
+<p>With respect to the direction of the single, it is most likely for both runners to take the extra base when the ball is hit to right field, followed by center field and left field.</p>
+<p><img src="figures/strategy/ad_120_outfield.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="other-relevant-situational-variables" class="level3" data-number="6.6">
+<h3 data-number="6.6" class="anchored" data-anchor-id="other-relevant-situational-variables"><span class="header-section-number">6.6</span> Other Relevant Situational Variables</h3>
+<p>These graphs don’t reflect much of a change in these extra base probabilities across these 20 seasons. But it is obvious that variables like the direction of the single, number of outs and the current game score are relevant variables that influence these probabilities. The third base coach who provides guidance on taking the extra bases likely is familiar these situational variables. For example, this coach may have a strategy to be more aggressive in base running decisions in close and late game situations and when there are two outt.</p>
+<p>From the viewpoint of the third-base coach, there are likely additional relevant variables that guide his decision on whether to take the extra base. These relevant variables include …</p>
+<ul>
+<li><p>the speeds of the runners on base</p></li>
+<li><p>the fielding and throwing ability of the outfielder retrieving the single</p></li>
+<li><p>attributes of the single including its exit velocity, launch angle and where the ball is fielded in the outfield</p></li>
+</ul>
+<p>By using more detailed data such as Statcast, we can look more carefully at these additional variables and see their impact on the chance of a runner successfully taking an extra base.</p>
+</section>
+<section id="data-and-r-work" class="level3" data-number="6.7">
+<h3 data-number="6.7" class="anchored" data-anchor-id="data-and-r-work"><span class="header-section-number">6.7</span> Data and R Work</h3>
+<p>For this runner advancement exercise, I collected Retrosheet play-by-play data for the twenty seasons 2000 through 2019. I focused on situations where the current runners situations were either 100, 020, and 120 and a single was hit. One useful Retrosheet variable is <code>EVENT_TX</code> which is a character string giving the direction of the single and all runner advancement on the play. I wrote a Shiny app which displays these “taking the extra base” percentages as a function of the season where different point colors corresponding to the situation of interest. The code for the Shiny app is contained in this single <code>app.R</code> file. To generate these graphs, all one needs is to place the single <code>app.R</code> file into a folder, open the file, and execute the <code>Run App</code> command in RStudio. The Retrosheet dataset for this particular exercise <code>runner_advancement_1.csv</code> is read from one of my Github repositories.</p>
 </section>
 </section>
 
