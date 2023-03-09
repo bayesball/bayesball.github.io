@@ -55,6 +55,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#dustin-pedroias-hit-streak" id="toc-dustin-pedroias-hit-streak" class="nav-link" data-scroll-target="#dustin-pedroias-hit-streak"><span class="toc-section-number">2.2</span>  Dustin Pedroia’s Hit Streak</a></li>
   <li><a href="#hank-aaron---part-1" id="toc-hank-aaron---part-1" class="nav-link" data-scroll-target="#hank-aaron---part-1"><span class="toc-section-number">2.3</span>  Hank Aaron - Part 1</a></li>
   <li><a href="#hank-aaron---part-2" id="toc-hank-aaron---part-2" class="nav-link" data-scroll-target="#hank-aaron---part-2"><span class="toc-section-number">2.4</span>  Hank Aaron - Part 2</a></li>
+  <li><a href="#streaky-.400-avg-performances" id="toc-streaky-.400-avg-performances" class="nav-link" data-scroll-target="#streaky-.400-avg-performances"><span class="toc-section-number">2.5</span>  Streaky .400 AVG Performances</a></li>
   </ul></li>
   <li><a href="#streakiness-in-team-performance" id="toc-streakiness-in-team-performance" class="nav-link" data-scroll-target="#streakiness-in-team-performance"><span class="toc-section-number">3</span>  Streakiness in Team Performance</a>
   <ul class="collapse">
@@ -381,13 +382,65 @@ Measure = \frac{Var}{M (M + 1)}
 <p>I wrote a Chance paper a few years ago that explored streaky patterns of home run hitting. I used different measures of streakiness, but I reached the same conclusion in Section 5 of that paper that Aaron had a unusually consistent pattern of home run hitting.</p>
 </section>
 </section>
+<section id="streaky-.400-avg-performances" class="level3" data-number="2.5">
+<h3 data-number="2.5" class="anchored" data-anchor-id="streaky-.400-avg-performances"><span class="header-section-number">2.5</span> Streaky .400 AVG Performances</h3>
+<section id="introduction-4" class="level4" data-number="2.5.1">
+<h4 data-number="2.5.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">2.5.1</span> Introduction</h4>
+<p>Over the years I have been interested in streaky performances of baseball hitters. Recently, I saw Bill James post an observation about one remarkable hitting accomplishment on Twitter:</p>
+<p>“In a stretch of 25 games in 2004, July 25 to August 21, Ichiro Suzuki had 57 hits good for a .514 average. 57 hits in 25 games.”</p>
+<p>That started a train of thought about remarkable hitting records. A .400 batting average was at one time a standard of excellence in hitting. The last season we saw a .400 average was Ted Williams’ .406 AVG in 1941 (185 hits in 456 at-bats) and it is very unlikely that we will ever see a .400 final season AVG again in MLB. On this subject, Dan Agonistes discusses Stephen Jay Gould’s rationale for decreasing batting averages.</p>
+<p>But that raises a related question: what are the most notable .400+ batting averages stretches within a particular season? For example, Ichiro Suzuki had a season .372 AVG in the 2004 season. Although Suzuki didn’t bat .400 for the season, there was likely a long stretch of consecutive AB during the 2004 season when he did bat over .400. Scanning over his AB, what was the largest number of consecutive AB when he did have a .400+ average? And how does that compare with other hitters in the past 20 seasons? So here “most notable” means a long stretch of at-bats with at least a .400 average.</p>
+</section>
+<section id="a-simple-example" class="level4" data-number="2.5.2">
+<h4 data-number="2.5.2" class="anchored" data-anchor-id="a-simple-example"><span class="header-section-number">2.5.2</span> A Simple Example</h4>
+<p>To understand what I am thinking about, here is a sample of the outcomes of 30 at-bats of Ichiro Suzuki (specifically at-bats numbered 200 through 229) for the 2004 season where 1 denotes a Hit and 0 denotes an Out.</p>
+<pre><code>1 1 0 0 1 0 0 0 0 0 1 0 1 0 0 1 0 1 0 0 0 1 0 0 1 1 0 1 0 0</code></pre>
+<p>For this 30 AB period, you can check that Suzuki’s AVG was 11 out of 30 = 0.367. But if one chooses shorter stretches of AB, then you’ll find periods among these 30 at-bats where Suzuki did indeed bat over 0.400. For example, in the first four AB, Suzuki was 2 for 4 for an average of 2 / 4 = .500 but that isn’t that impressive since it is based on only 4 AB. What was the longest period where he bats at least .400? One can check that in this 30 AB example there is a stretch of 20 AB where he did hit at least 0.400. For this simple example, the longest period of at-bats of .400 hitting was 20. We’d like to do this computation for all hitter seasons between the 2000 and 2019 seasons. Specifically, what are the longest stretches of .400 hitting in the past 20 years?</p>
+</section>
+<section id="using-r-and-retrosheet" class="level4" data-number="2.5.3">
+<h4 data-number="2.5.3" class="anchored" data-anchor-id="using-r-and-retrosheet"><span class="header-section-number">2.5.3</span> Using R and Retrosheet</h4>
+<p>Here is an outline of how I work on this problem using R. For a particular season, the relevant data are the Retrosheet play-by-play files where each row corresponds to a single plate appearance.</p>
+<ul>
+<li><p>I collect the number of at-bats for all hitters in that season. I decide to collect the ids for only the hitters who have at least 300 at-bats since they are the hitters that have the opportunities of having long stretches of .400 hitting.</p></li>
+<li><p>I have to make sure that the rows are ordered by game number and plate appearance, so I am actually working with the AB results as they occur during the season.</p></li>
+<li><p>For a hitter and particular window of at-bats, say 120, I compute all of the rolling (or moving) batting averages and find the maximum AVG among all of these periods.</p></li>
+<li><p>I repeat this process for sequences of length 5 through the total number of AB. I find the largest sequence length where the maximum AVG exceeds .400.</p></li>
+<li><p>I repeat this process for all hitters – I record the players with the five highest sequence lengths of .400 hitting.</p></li>
+</ul>
+<p>Using my function, here are the top five streaky .400 leaders for the 2019 season. Charlie Blackmon and Ketel Marte each had a stretch where they were each 68 for 140 = .400. Actually 140 doesn’t sound like a long stretch of .400 hitting and we’ll see that these are short stretches of hot hitting in recent baseball history.</p>
+<p><img src="figures/streaky/streaky14.png" class="img-fluid" style="width:60.0%"></p>
+</section>
+<section id="best-.400-stretches-in-the-past-20-seasons" class="level4" data-number="2.5.4">
+<h4 data-number="2.5.4" class="anchored" data-anchor-id="best-.400-stretches-in-the-past-20-seasons"><span class="header-section-number">2.5.4</span> Best .400 Stretches in the Past 20 Seasons</h4>
+<p>I repeated this process for each of the 20 seasons 2000 through 2019. I looked at all batters who had at least 300 AB in a season, computed all of the rolling AVG of different lengths, and found the five hitters who had the longest stretches of .400 hitting for each season. I plot the results below – I show a scatterplot of the AB length against the season. I add a smoothing curve to show the general pattern and label a few points corresponding to unusually large stretches.</p>
+<p><img src="figures/streaky/streaky15.png" class="img-fluid" style="width:70.0%"></p>
+<p>Here are some observations from this graph:</p>
+<ul>
+<li><p>Generally, the top hitters are displaying shorter sequences of .400 hitting as one moves from 2000 to 2019. It was more common to have a 200+ AB sequence in the 2000 season. We have not seen a 200+ sequence of .400 hitting in the last three seasons, and I would doubt that we would see one in future 162-game seasons.</p></li>
+<li><p>There are some special hitters that have shown long stretches of .400 hitting. The top two are Ichiro Suzuki who had a 520 AB stretch of .400 hitting in that remarkable 2004 season and Todd Helton who had a 445 AB stretch in 2000. The next longest stretch was Josh Hamilton’s 357 AB stretch in 2010. In recent seasons, Jose Altuve had two long .400 stretches – a 320 AB stretch in 2017 and a 300 AB stretch in 2016. Joey Votto also had a 292 AB stretch of .400 hitting in 2016.</p></li>
+<li><p>By the way, Ted Williams only had 456 AB in the 1941 season to get his .406 AVG, so perhaps Suzuki’s batting accomplishment was more impressive since he hit .400 in a longer stretch of AB (520) in a single season.</p></li>
+</ul>
+</section>
+<section id="final-comments" class="level4" data-number="2.5.5">
+<h4 data-number="2.5.5" class="anchored" data-anchor-id="final-comments"><span class="header-section-number">2.5.5</span> Final Comments</h4>
+<ul>
+<li><p>In the upcoming 2020 season, we are going to see some large batting averages, but these will be due to the high variability of AVGs in small sample sizes. I like this investigation since it focuses on the number of AB instead of the AVG. A .400 AVG in 400 AB is much more impressive than a .400 AVG in 200 AB.</p></li>
+<li><p>Why do current hitters have short .400 stretches? The rate of strikeouts in baseball is currently at an all-time high and it is difficult to hit for high average. Honestly, it seems that teams are more interested in home run hitters than batters that hit for AVG. Hitters like Ichiro Suzuki are rare in modern baseball.</p></li>
+<li><p>I wrote a single function <code>best_streaks()</code> that does all of this work. The input is the Retrosheet dataset for a particular season and the output are the five hitters with the longest .400 seasons for that season. This function with some examples are posted on my Github Gist site.</p></li>
+<li><p>If you like reading about streaky performances, here are some “streaky” posts on this site where I talk about other types of “hot performances” such as streakiness in home run hitting, in team performances, and in Statcast off-the-bat measurements.</p></li>
+<li><p>Streaky Home Run Hitting</p></li>
+<li><p>Streaky and Consistent Teams</p></li>
+<li><p>Statcast Streakiness</p></li>
+</ul>
+</section>
+</section>
 </section>
 <section id="streakiness-in-team-performance" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="streakiness-in-team-performance"><span class="header-section-number">3</span> Streakiness in Team Performance</h2>
 <section id="general-approach" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="general-approach"><span class="header-section-number">3.1</span> General Approach</h3>
-<section id="introduction-4" class="level4" data-number="3.1.1">
-<h4 data-number="3.1.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">3.1.1</span> Introduction</h4>
+<section id="introduction-5" class="level4" data-number="3.1.1">
+<h4 data-number="3.1.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">3.1.1</span> Introduction</h4>
 <p>In honor of the Cleveland Indians’ recent 22-game winning streak, it seemed appropriate to do something about streakiness of baseball teams. Although the Indians had a remarkably long streak of wins, I don’t think of them as a particular streaky team. I’ll explain here …</p>
 <ul>
 <li>what I mean by a streaky team and a consistent team</li>
@@ -444,8 +497,8 @@ Measure = \frac{Var}{M (M + 1)}
 </section>
 <section id="seasons-of-team-performance" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="seasons-of-team-performance"><span class="header-section-number">3.2</span> 50 Seasons of Team Performance</h3>
-<section id="introduction-5" class="level4" data-number="3.2.1">
-<h4 data-number="3.2.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">3.2.1</span> Introduction</h4>
+<section id="introduction-6" class="level4" data-number="3.2.1">
+<h4 data-number="3.2.1" class="anchored" data-anchor-id="introduction-6"><span class="header-section-number">3.2.1</span> Introduction</h4>
 <p>In the last post, I described some methodology for detecting streaky and consistent team performance. &nbsp;One observes a team’s wins (W) and losses (L) – for example the 1968 Mets had a 73-89 record and we observe the sequence of wins and losses during the season. &nbsp;There are three scenarios:</p>
 <ul>
 <li>The sequence of 73 Wins and 89 Losses is random in the sense that the streaky and slump patterns resemble those when the 73 Wins are assigned randomly throughout the 162 games.</li>
@@ -706,8 +759,8 @@ Measure = \frac{Var}{M (M + 1)}
 <p>Here I illustrate p-values for the 2016 teams using a permutation test and the CLUMP statistic.&nbsp; Basically, the p-values shown are “averages” of the p-values using the losing streaks and the winning streaks.&nbsp; I use color to identify teams that had unusually consistent or streaky seasons.</p>
 <p><img src="figures/streaky/streaky3b.png" class="img-fluid"></p>
 </section>
-<section id="final-comments" class="level4" data-number="3.3.6">
-<h4 data-number="3.3.6" class="anchored" data-anchor-id="final-comments"><span class="header-section-number">3.3.6</span> Final Comments</h4>
+<section id="final-comments-1" class="level4" data-number="3.3.6">
+<h4 data-number="3.3.6" class="anchored" data-anchor-id="final-comments-1"><span class="header-section-number">3.3.6</span> Final Comments</h4>
 <p>Several takeaways from this work:</p>
 <ul>
 <li>If one says a team is streaky, this could mean long runs of wins or long runs of losses.&nbsp; The use of a statistic such as CLUMP takes account of both types of long runs and it seems preferable to other measures like LCLUMP or WCLUMP.</li>
@@ -764,8 +817,8 @@ Measure = \frac{Var}{M (M + 1)}
 </section>
 <section id="streakiness-in-swing-outcomes-and-expected-ba-on-balls-in-play" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="streakiness-in-swing-outcomes-and-expected-ba-on-balls-in-play"><span class="header-section-number">4.2</span> Streakiness in Swing Outcomes and Expected BA on Balls in Play</h3>
-<section id="introduction-6" class="level4" data-number="4.2.1">
-<h4 data-number="4.2.1" class="anchored" data-anchor-id="introduction-6"><span class="header-section-number">4.2.1</span> Introduction</h4>
+<section id="introduction-7" class="level4" data-number="4.2.1">
+<h4 data-number="4.2.1" class="anchored" data-anchor-id="introduction-7"><span class="header-section-number">4.2.1</span> Introduction</h4>
 <p>A couple of years ago, I wrote a post exploring streaky patterns in hitting, focusing on patterns of a batter’s launch speed during a season. This analysis (which I am calling part I of my work) can be improved in several ways. First, in my earlier post I only looked at launch speed and actually the two variables launch speed and launch angle are collectively important in getting a successful outcome on a ball put into play. Second, the batter needs to make contact with the pitch to put a ball in play and perhaps there are interesting patterns of a batter’s sequence of misses and not-misses on swings during a season. So in Part II of this study I am going to look at both patterns of swing outcomes and patterns of outcomes on balls in play in this post. I’ll use several measures of streakiness to identify players that appear to be unusually streaky and unusually consistent during the short 2020 season.</p>
 </section>
 <section id="some-general-comments-about-streakiness" class="level4" data-number="4.2.2">
@@ -818,8 +871,8 @@ Measure = \frac{Var}{M (M + 1)}
 </section>
 <section id="using-a-shiny-app" class="level3" data-number="4.3">
 <h3 data-number="4.3" class="anchored" data-anchor-id="using-a-shiny-app"><span class="header-section-number">4.3</span> Using a Shiny App</h3>
-<section id="introduction-7" class="level4" data-number="4.3.1">
-<h4 data-number="4.3.1" class="anchored" data-anchor-id="introduction-7"><span class="header-section-number">4.3.1</span> Introduction</h4>
+<section id="introduction-8" class="level4" data-number="4.3.1">
+<h4 data-number="4.3.1" class="anchored" data-anchor-id="introduction-8"><span class="header-section-number">4.3.1</span> Introduction</h4>
 <p>Back in a post from March 2018, I stated a question from Dan Turkenkopf (from his article “Catching Up with Baseball’s Hilbert Problems”)&nbsp;asking if slumps and streaks were correlated with speed-off-bat. In this post, I looked at patterns of batter’s launch speed over a season and identified hitters who were usually streaky or unusually consistent in their launch speed during the 2017 season. In a second post from October 2020, I explored streaky patterns in both whiffs and estimated hit probabilities. In my closing remarks of that post, I commented that Statcast measurements are likely more ability-driven then results of balls put into play and so I think there is a better chance of identifying streakiness through these launch condition measurements.</p>
 <p>In the “Streakiness” chapter from our book Curve Ball (coauthored by Jay Bennett), we used moving average plots to detect streakiness in hit/out data and we distinguished observed streakiness from true streakiness where the streakiness is more than one would predict based on some “consistent” probability model. Here I will illustrate this Curve Ball approach by means of a Shiny app. I’ll describe the method, show some snapshots from the app, and provide some examples of hitters who were unusually streaky or unusually consistent in the 2021 season.</p>
 </section>
@@ -868,8 +921,8 @@ Measure = \frac{Var}{M (M + 1)}
 <h2 data-number="5" class="anchored" data-anchor-id="ofer-study"><span class="header-section-number">5</span> Ofer Study</h2>
 <section id="historical-look-at-ofers" class="level3" data-number="5.1">
 <h3 data-number="5.1" class="anchored" data-anchor-id="historical-look-at-ofers"><span class="header-section-number">5.1</span> Historical Look at Ofers</h3>
-<section id="introduction-8" class="level4" data-number="5.1.1">
-<h4 data-number="5.1.1" class="anchored" data-anchor-id="introduction-8"><span class="header-section-number">5.1.1</span> Introduction</h4>
+<section id="introduction-9" class="level4" data-number="5.1.1">
+<h4 data-number="5.1.1" class="anchored" data-anchor-id="introduction-9"><span class="header-section-number">5.1.1</span> Introduction</h4>
 <p>Rhys Hoskins of the Phillies recently went through an 0 for 33 slump – that is, he had a streak of 33 consecutive outs in his official at-bats. On the surface, that sounds like Hoskins had a severe batting slump, but it is hard to view this “accomplishment” without understanding the context. Is it really unusual to have an “ofer” of length 33? In this post, I’ll explore the history of ofers over the twenty full seasons from 2000 through 2019. Here are some questions that we’ll try to answer.</p>
 <ul>
 <li><p>How do you obtain this streak data from the Retrosheet play-by-play files?</p></li>
@@ -945,8 +998,8 @@ Measure = \frac{Var}{M (M + 1)}
 </section>
 <section id="predictive-checking-of-a-coin-flipping-model" class="level3" data-number="5.2">
 <h3 data-number="5.2" class="anchored" data-anchor-id="predictive-checking-of-a-coin-flipping-model"><span class="header-section-number">5.2</span> Predictive Checking of a Coin Flipping Model</h3>
-<section id="introduction-9" class="level4" data-number="5.2.1">
-<h4 data-number="5.2.1" class="anchored" data-anchor-id="introduction-9"><span class="header-section-number">5.2.1</span> Introduction</h4>
+<section id="introduction-10" class="level4" data-number="5.2.1">
+<h4 data-number="5.2.1" class="anchored" data-anchor-id="introduction-10"><span class="header-section-number">5.2.1</span> Introduction</h4>
 <p>In last week’s post, I explored the historical patterns of so-called ofers (runs of outs between consecutive hits). We saw that ofers are more common in modern baseball due to the decrease in the overall batting average. Also we found some interesting long ofers in the last twenty seasons. In this post we try to make sense of a player’s “long” ofer value. Specifically, what does this ofer value say about the player’s ability? We use this example to illustrate Bayesian predictive checking.</p>
 </section>
 <section id="a-simple-model-for-hitting" class="level4" data-number="5.2.2">
@@ -1017,8 +1070,8 @@ Measure = \frac{Var}{M (M + 1)}
 </section>
 <section id="predictive-checking-of-a-streaky-model" class="level3" data-number="5.3">
 <h3 data-number="5.3" class="anchored" data-anchor-id="predictive-checking-of-a-streaky-model"><span class="header-section-number">5.3</span> Predictive Checking of a Streaky Model</h3>
-<section id="introduction-10" class="level4" data-number="5.3.1">
-<h4 data-number="5.3.1" class="anchored" data-anchor-id="introduction-10"><span class="header-section-number">5.3.1</span> Introduction</h4>
+<section id="introduction-11" class="level4" data-number="5.3.1">
+<h4 data-number="5.3.1" class="anchored" data-anchor-id="introduction-11"><span class="header-section-number">5.3.1</span> Introduction</h4>
 <p>This is part 3 of a series of posts on Extreme Ofers and Predictive Checking. In part 1 of this series, I explored some extreme ofer (streaks of consecutive outs) values in recent MLB history. In part 2 of this series, I tried to interpret the meaning of a “0 for 33” slump by introducing a coin-flipping model and illustrating how Bayesian predictive checking indicates that this extreme slump is unusual for a coin-flipping model. In this last post, I’ll describe an attractive alternative streaky model for baseball hitting and show how predictive checking can be used for this model.</p>
 </section>
 <section id="a-streaky-model-for-hitting" class="level4" data-number="5.3.2">
@@ -1087,8 +1140,8 @@ Measure = \frac{Var}{M (M + 1)}
 </section>
 <section id="exploring-a-season-of-ofers" class="level3" data-number="5.4">
 <h3 data-number="5.4" class="anchored" data-anchor-id="exploring-a-season-of-ofers"><span class="header-section-number">5.4</span> Exploring a Season of Ofers</h3>
-<section id="introduction-11" class="level4" data-number="5.4.1">
-<h4 data-number="5.4.1" class="anchored" data-anchor-id="introduction-11"><span class="header-section-number">5.4.1</span> Introduction</h4>
+<section id="introduction-12" class="level4" data-number="5.4.1">
+<h4 data-number="5.4.1" class="anchored" data-anchor-id="introduction-12"><span class="header-section-number">5.4.1</span> Introduction</h4>
 <p>In last week’s post we explored the home run hitting patterns of two great hitters, Hank Aaron and Albert Pujols. In that exploration, we looked at the spacings, the gaps (in at-bats) between consecutive home runs. Aaron appeared to have a consistent pattern of hitting home runs. In contrast, Pujols displayed several long gaps between home runs that exceeded 100 AB.</p>
 <p>As the baseball fan knows, the media makes a big deal out of so-called “ofers”. A batter will be hitless in 30 consecutive AB, so he is in a 0 for 30 slump. Likewise, a power hitter may not hit a home run in a period during the season (like Pujols) and have a 0 for 100 slump – he has not hit in a home run in 100 consecutive at-bats. The implication from these statements of ofers is that the particular hitters are struggling at the plate. These ofers may get the manager’s attention and the hitter may be benched or placed lower in the batter lineup.</p>
 <p>Finding these long ofers is interesting, but it is unclear that they have any meaning. My tennis friend noticed today that he lost the tennis spin (guessing incorrectly the outcome of spinning the racquet to determine who serves first) four consecutive times. But that doesn’t mean that the tennis spin process is crooked – it is very possible to lose the spin four times in a row even when the spin process is random and fair. Shifting over to baseball, it is possible that these observed long ofers have no meaning. After all, we are looking at the hitting outcomes for many players and these long ofers may just be the result of natural random variation. For example, the longest ofer among a group of players will certainly be longer than the longest ofer of one player of interest.</p>
