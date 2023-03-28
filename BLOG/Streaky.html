@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2023-02-09">
+<meta name="dcterms.date" content="2023-03-28">
 
 <title>Streakiness Patterns in Baseball</title>
 <style>
@@ -56,6 +56,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#hank-aaron---part-1" id="toc-hank-aaron---part-1" class="nav-link" data-scroll-target="#hank-aaron---part-1"><span class="toc-section-number">2.3</span>  Hank Aaron - Part 1</a></li>
   <li><a href="#hank-aaron---part-2" id="toc-hank-aaron---part-2" class="nav-link" data-scroll-target="#hank-aaron---part-2"><span class="toc-section-number">2.4</span>  Hank Aaron - Part 2</a></li>
   <li><a href="#streaky-.400-avg-performances" id="toc-streaky-.400-avg-performances" class="nav-link" data-scroll-target="#streaky-.400-avg-performances"><span class="toc-section-number">2.5</span>  Streaky .400 AVG Performances</a></li>
+  <li><a href="#streaky-rhys-hoskins" id="toc-streaky-rhys-hoskins" class="nav-link" data-scroll-target="#streaky-rhys-hoskins"><span class="toc-section-number">2.6</span>  Streaky Rhys Hoskins?</a></li>
   </ul></li>
   <li><a href="#streakiness-in-team-performance" id="toc-streakiness-in-team-performance" class="nav-link" data-scroll-target="#streakiness-in-team-performance"><span class="toc-section-number">3</span>  Streakiness in Team Performance</a>
   <ul class="collapse">
@@ -100,7 +101,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 9, 2023</p>
+      <p class="date">March 28, 2023</p>
     </div>
   </div>
   
@@ -113,7 +114,7 @@ ul.task-list li input[type="checkbox"] {
 <section id="introduction" class="level2" data-number="1">
 <h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
 <p>This is a collection of blog posts from <em>Exploring Baseball Data Using R</em> (https://baseballwithr.wordpress.com/) on the general topic of streakiness behavior of individuals and teams in baseball.</p>
-<p>Section 2 focuses on posts on streakiness patterns of individual players such as Mookie Betts and Hank Aaron. We describe ways to measuring streaky behavior and how observed behavior of players differs from what you might anticipate from “random behavior” similar to coin flipping.</p>
+<p>Section 2 focuses on posts on streakiness patterns of individual players such as Mookie Betts, Hank Aaron and Rhys Hoskins. We describe ways to measuring streaky behavior and how observed behavior of players differs from what you might anticipate from “random behavior” similar to coin flipping.</p>
 <p>Section 3 considers streaky patterns of a team’s sequence of wins and losses during a season. In a historical look at teams’ win/loss sequences we see which teams differ from what one would expect from “random” behavior.</p>
 <p>Section 4 describes the search for streakiness of individual players using some of the modern measures of baseball performance in the Statcast era. These measures include a the launch speed on a ball put in play and the expected batting average given the launch angle and launch speed.</p>
 <p>Section 5 focuses on “ofers”, the number of failures between successive outcomes. For example, when an announcer is saying that Bryce Harper had a 0-20 hitting slump, this means that we have observed 20 outs between successive hits for Harper. This section provides a historical view of ofers and uses predictive checking to assess the suitability of coin flipping and “hot-hand” probability models.</p>
@@ -434,13 +435,73 @@ Measure = \frac{Var}{M (M + 1)}
 </ul>
 </section>
 </section>
+<section id="streaky-rhys-hoskins" class="level3" data-number="2.6">
+<h3 data-number="2.6" class="anchored" data-anchor-id="streaky-rhys-hoskins"><span class="header-section-number">2.6</span> Streaky Rhys Hoskins?</h3>
+<section id="introduction-5" class="level4" data-number="2.6.1">
+<h4 data-number="2.6.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">2.6.1</span> Introduction</h4>
+<p>The Phillies had some sad news last week. Rhys Hoskins, one of their most popular players, had an ACL injury during a spring training game that will keep him out of the 2023 season. Hoskins will be a pending free agent at the end of this season and perhaps has played his last games with the Phillies. So I thought it would be worthwhile to explore Hoskins’ batting performance for his Phillies seasons 2017 to 2022. Specifically, since Hoskins is thought by many to be a streaky hitter, I thought it would be interesting to explore Hoskins’ streakiness and see how his streakiness compares with other hitters during this six-year period.</p>
+<p>I present a moving average plot of Hoskins wOBA measure to illustrate the patterns of streakiness that Hoskins has exhibited during this career. When one looks at this graph, it is natural to wonder if Hoskins’ streakiness is unusual. Specifically does the pattern of streakiness differ from the natural streakiness that one would observe if his wOBA values were randomly distributed through his career? We use a permutation test to answer this question. A p-value (tail probability) measures the likelihood that the streakiness in a randomly distribution of wOBA values exceeds the observed streakiness in Hoskins data. Using this method, we explore the wOBA streakiness of all hitters with large number of plate appearances during the 2017-2022 period.</p>
+</section>
+<section id="moving-average-plot-of-woba" class="level4" data-number="2.6.2">
+<h4 data-number="2.6.2" class="anchored" data-anchor-id="moving-average-plot-of-woba"><span class="header-section-number">2.6.2</span> Moving Average Plot of wOBA</h4>
+<p>From Retrosheet data, we collect the outcome of each of 2877 plate appearances in Rhys Hoskins’s career. We assign to each PA a wOBA weight using the FanGraphs values. Below I display a moving average plot of Hoskins wOBA using a moving window of 50 PA. Looking at this plot, we see that Hoskins had a great start with the Phillies (his moving wOBA value was in the 0.5-0.6 range), but he has clearly experienced many highs and lows as a hitter over his career. Some periods his wOBA over 50 PA was as high as 0.6 and other times his wOBA was under 0.2.</p>
+<p><img src="figures/streaky/hoskins1.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="a-measurement-of-streakiness" class="level4" data-number="2.6.3">
+<h4 data-number="2.6.3" class="anchored" data-anchor-id="a-measurement-of-streakiness"><span class="header-section-number">2.6.3</span> A Measurement of Streakiness</h4>
+<p>We can measure the observed streakiness of a hitter from these moving averages of wOBA. One basic measure is the total area in this graph which is the sum of the absolute values of the moving wOBA values from the overall career wOBA. We’ll call this measure BLUE since it is the total blue area in this graph. A streaky hitter will have a high BLUE value – a very consistent hitter will have a small BLUE value.</p>
+</section>
+<section id="what-streakiness-does-one-predict-by-chance" class="level4" data-number="2.6.4">
+<h4 data-number="2.6.4" class="anchored" data-anchor-id="what-streakiness-does-one-predict-by-chance"><span class="header-section-number">2.6.4</span> - What Streakiness Does One Predict by Chance?</h4>
+<p>If we compute a value of BLUE from Hoskins’ moving wOBA values, how do we interpret this value? If Hoskins is truly streaky, then he should have a BLUE value that is larger than BLUE values assuming a “chance” model. This chance model assumes that the plate appearance numbers are not meaningful and so all possible permutations of the wOBA weights are equally likely. Suppose Hoskins hits home runs on the 78th, 311th, and 478th plate appearances. This model assumes that Hoskins has the same chance of hitting these three home runs in these PAs as in any other grouping of three PA. In this chance model, there is no true streakiness and any unusual streaky pattern in the data is just a reflection of random variation.</p>
+<p>Here’s how we can simulate the distribution of BLUE values from this chance model.</p>
+<ul>
+<li><p>Randomly arrange the wOBA weights from Hoskins 2877 plate appearances.</p></li>
+<li><p>Construct a moving average plot of the wOBA values (same window of 50 PA) and compute the BLUE statistic.</p></li>
+<li><p>Repeat the two above steps many times collecting the BLUE values</p></li>
+</ul>
+<p>We did this for 500 iterations and here is a histogram of the BLUE statistics assuming this chance model.</p>
+<p><img src="figures/streaky/hoskins2.png" class="img-fluid" style="width:70.0%"></p>
+<p>What do we see in this display?</p>
+<ul>
+<li><p>The BLUE areas under the chance model tend to average 170 and most of them fall between 160 and 190.</p></li>
+<li><p>The observed BLUE value from the Hoskins moving average wOBA plot (red vertical line in the plot) is over 200.</p></li>
+<li><p>The p-value is the chance of seeing a BLUE area (from the chance model) at least as large as the observed BLUE area – this is computed as 0.012 in our simulation</p></li>
+</ul>
+<p>Since the p-value is close to zero, the conclusion is that Hoskins’ pattern of hitting is streakier than one would predict from the chance model. There is some evidence that Hoskins is truly a streaky hitter.</p>
+</section>
+<section id="comparison-with-other-hitters" class="level4" data-number="2.6.5">
+<h4 data-number="2.6.5" class="anchored" data-anchor-id="comparison-with-other-hitters"><span class="header-section-number">2.6.5</span> Comparison with Other Hitters</h4>
+<p>How does the streakiness pattern of Hoskins compare to other hitters during the 2017 to 2022 seasons? We collected the hitters who had at least 1500 plate appearances – there were 239 players in this group. For each player, we computed the BLUE value of the moving averages of the wOBA weights assuming a window of 50 PA. To see if this observed BLUE value was extreme for each player, we ran the simulation assuming a chance model and computed a p-value. (We ran a total of 239 simulation experiments.)</p>
+<p>Here is a scatterplot of the career (over the seasons 2017 to 2022) wOBA and the p-value for these 239 players.</p>
+<p><img src="figures/streaky/hoskins3.png" class="img-fluid" style="width:70.0%"></p>
+<p>The two red points correspond to players with wOBA values close to 0.36 and p-values that are close to 1. The six blue points correspond to players with wOBA values close to 0.36 but p-values close to 0.</p>
+<ul>
+<li><p>The blue points are the streaky hitters – their pattern of streakiness found in the moving average of the wOBA weights are more streaky than one would predict from the chance model.</p></li>
+<li><p>The red points are also unusual – these correspond to consistent hitters whose pattern of streakiness is significantly less streaky than predicted from the chance.</p></li>
+</ul>
+<p>Let’s compare the moving average plots of two consistent hitters, Brandon Nimmo and Matt Olson, who have p-values close to 1, and two streaky hitters, Jesse Winkler and Rhys Hoskins who have p-values close to 0. Here are comparative moving average plots for these four hitters. All of these players had overall wOBA values close to 0.36. It may take a careful eye to distinguish the patterns in these four moving average displays. But Nimmo and Olson display fewer large swings of poor and great rolling wOBA values (left side) than Winker and Hoskins (right side).</p>
+<p><img src="figures/streaky/hoskins4.png" class="img-fluid" style="width:70.0%"></p>
+<p>By the way, it is also interesting to display a histogram of the p-values for these 239 players shown below. Since the shape of the histogram is right-skewed, this indicates that there tend to more streaky hitters than consistent hitters in our group.</p>
+<p><img src="figures/streaky/hoskins5.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="closing-comments" class="level4" data-number="2.6.6">
+<h4 data-number="2.6.6" class="anchored" data-anchor-id="closing-comments"><span class="header-section-number">2.6.6</span> Closing Comments</h4>
+<ul>
+<li><p>We generally see many interesting patterns of streakiness in hitting data, but it unclear if these streaky patterns are meaningful. That is, even if Rhys Hoskins is just a hitting machine where the probabilities of hits and outs are constant, one would still observe interesting patterns of hitting over short periods of plate appearances.</p></li>
+<li><p>So the idea here is to compare the streaky patterns of Hoskins with the streaky patterns assuming a chance model. Using this method, we indeed see that the observed streakiness of Hoskins exceeds what would be predicted from this model.</p></li>
+<li><p>In our study, some players tend to be more streaky than predicted and other players are more consistent than predicted from the chance model. But as the histogram of p-values indicates, we see more streaky than consistent hitters among those players with at least 1500 PA in this period.</p></li>
+<li><p>Streakiness and the hot-hand have been popular topics of mine over the years. This page from my baseball research site collects many of my posts on streakiness in baseball.</p></li>
+</ul>
+</section>
+</section>
 </section>
 <section id="streakiness-in-team-performance" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="streakiness-in-team-performance"><span class="header-section-number">3</span> Streakiness in Team Performance</h2>
 <section id="general-approach" class="level3" data-number="3.1">
 <h3 data-number="3.1" class="anchored" data-anchor-id="general-approach"><span class="header-section-number">3.1</span> General Approach</h3>
-<section id="introduction-5" class="level4" data-number="3.1.1">
-<h4 data-number="3.1.1" class="anchored" data-anchor-id="introduction-5"><span class="header-section-number">3.1.1</span> Introduction</h4>
+<section id="introduction-6" class="level4" data-number="3.1.1">
+<h4 data-number="3.1.1" class="anchored" data-anchor-id="introduction-6"><span class="header-section-number">3.1.1</span> Introduction</h4>
 <p>In honor of the Cleveland Indians’ recent 22-game winning streak, it seemed appropriate to do something about streakiness of baseball teams. Although the Indians had a remarkably long streak of wins, I don’t think of them as a particular streaky team. I’ll explain here …</p>
 <ul>
 <li>what I mean by a streaky team and a consistent team</li>
@@ -497,8 +558,8 @@ Measure = \frac{Var}{M (M + 1)}
 </section>
 <section id="seasons-of-team-performance" class="level3" data-number="3.2">
 <h3 data-number="3.2" class="anchored" data-anchor-id="seasons-of-team-performance"><span class="header-section-number">3.2</span> 50 Seasons of Team Performance</h3>
-<section id="introduction-6" class="level4" data-number="3.2.1">
-<h4 data-number="3.2.1" class="anchored" data-anchor-id="introduction-6"><span class="header-section-number">3.2.1</span> Introduction</h4>
+<section id="introduction-7" class="level4" data-number="3.2.1">
+<h4 data-number="3.2.1" class="anchored" data-anchor-id="introduction-7"><span class="header-section-number">3.2.1</span> Introduction</h4>
 <p>In the last post, I described some methodology for detecting streaky and consistent team performance. &nbsp;One observes a team’s wins (W) and losses (L) – for example the 1968 Mets had a 73-89 record and we observe the sequence of wins and losses during the season. &nbsp;There are three scenarios:</p>
 <ul>
 <li>The sequence of 73 Wins and 89 Losses is random in the sense that the streaky and slump patterns resemble those when the 73 Wins are assigned randomly throughout the 162 games.</li>
@@ -705,8 +766,8 @@ Measure = \frac{Var}{M (M + 1)}
 <p>To understand the relationship between winning records and streakiness, I subdivided the p-values into the bins (0, .1), (.1, .2), …, (.9, 1), and compared the winning fractions of the teams in these 10 bins. &nbsp;Here I display parallel boxplots. &nbsp;A p-value of 0.5 is what one might expect for a random sequence. &nbsp;Generally teams have p-values that are centered about 0.5, but teams with winning fractions between .35 and .40 average a p-value of .40, and the really weak teams (winning fraction under .35) tend to be streaky. &nbsp;This suggests that poor performance tends to be associated with streaky performance.</p>
 <p><img src="figures/streaky/streaky2b.png" class="img-fluid"></p>
 </section>
-<section id="closing-comments" class="level4" data-number="3.2.7">
-<h4 data-number="3.2.7" class="anchored" data-anchor-id="closing-comments"><span class="header-section-number">3.2.7</span> Closing comments</h4>
+<section id="closing-comments-1" class="level4" data-number="3.2.7">
+<h4 data-number="3.2.7" class="anchored" data-anchor-id="closing-comments-1"><span class="header-section-number">3.2.7</span> Closing comments</h4>
 <p>Of course we get excited by streaky patterns such as the Indians’ 22-game winning streak in 2017. &nbsp;Likewise, there is much said about long streaks of hitting or long streaks of futility (the well-known “ofer” statistics). &nbsp;But I think there is a lot to say about the virtue of consistency – these correspond to teams or players that avoid streaky patterns and exhibit patterns that are different from those of “randomness”. &nbsp;I would think that teams would value consistent players, although we don’t routinely measure this aspect of performance.</p>
 </section>
 </section>
@@ -817,8 +878,8 @@ Measure = \frac{Var}{M (M + 1)}
 </section>
 <section id="streakiness-in-swing-outcomes-and-expected-ba-on-balls-in-play" class="level3" data-number="4.2">
 <h3 data-number="4.2" class="anchored" data-anchor-id="streakiness-in-swing-outcomes-and-expected-ba-on-balls-in-play"><span class="header-section-number">4.2</span> Streakiness in Swing Outcomes and Expected BA on Balls in Play</h3>
-<section id="introduction-7" class="level4" data-number="4.2.1">
-<h4 data-number="4.2.1" class="anchored" data-anchor-id="introduction-7"><span class="header-section-number">4.2.1</span> Introduction</h4>
+<section id="introduction-8" class="level4" data-number="4.2.1">
+<h4 data-number="4.2.1" class="anchored" data-anchor-id="introduction-8"><span class="header-section-number">4.2.1</span> Introduction</h4>
 <p>A couple of years ago, I wrote a post exploring streaky patterns in hitting, focusing on patterns of a batter’s launch speed during a season. This analysis (which I am calling part I of my work) can be improved in several ways. First, in my earlier post I only looked at launch speed and actually the two variables launch speed and launch angle are collectively important in getting a successful outcome on a ball put into play. Second, the batter needs to make contact with the pitch to put a ball in play and perhaps there are interesting patterns of a batter’s sequence of misses and not-misses on swings during a season. So in Part II of this study I am going to look at both patterns of swing outcomes and patterns of outcomes on balls in play in this post. I’ll use several measures of streakiness to identify players that appear to be unusually streaky and unusually consistent during the short 2020 season.</p>
 </section>
 <section id="some-general-comments-about-streakiness" class="level4" data-number="4.2.2">
@@ -871,8 +932,8 @@ Measure = \frac{Var}{M (M + 1)}
 </section>
 <section id="using-a-shiny-app" class="level3" data-number="4.3">
 <h3 data-number="4.3" class="anchored" data-anchor-id="using-a-shiny-app"><span class="header-section-number">4.3</span> Using a Shiny App</h3>
-<section id="introduction-8" class="level4" data-number="4.3.1">
-<h4 data-number="4.3.1" class="anchored" data-anchor-id="introduction-8"><span class="header-section-number">4.3.1</span> Introduction</h4>
+<section id="introduction-9" class="level4" data-number="4.3.1">
+<h4 data-number="4.3.1" class="anchored" data-anchor-id="introduction-9"><span class="header-section-number">4.3.1</span> Introduction</h4>
 <p>Back in a post from March 2018, I stated a question from Dan Turkenkopf (from his article “Catching Up with Baseball’s Hilbert Problems”)&nbsp;asking if slumps and streaks were correlated with speed-off-bat. In this post, I looked at patterns of batter’s launch speed over a season and identified hitters who were usually streaky or unusually consistent in their launch speed during the 2017 season. In a second post from October 2020, I explored streaky patterns in both whiffs and estimated hit probabilities. In my closing remarks of that post, I commented that Statcast measurements are likely more ability-driven then results of balls put into play and so I think there is a better chance of identifying streakiness through these launch condition measurements.</p>
 <p>In the “Streakiness” chapter from our book Curve Ball (coauthored by Jay Bennett), we used moving average plots to detect streakiness in hit/out data and we distinguished observed streakiness from true streakiness where the streakiness is more than one would predict based on some “consistent” probability model. Here I will illustrate this Curve Ball approach by means of a Shiny app. I’ll describe the method, show some snapshots from the app, and provide some examples of hitters who were unusually streaky or unusually consistent in the 2021 season.</p>
 </section>
@@ -921,8 +982,8 @@ Measure = \frac{Var}{M (M + 1)}
 <h2 data-number="5" class="anchored" data-anchor-id="ofer-study"><span class="header-section-number">5</span> Ofer Study</h2>
 <section id="historical-look-at-ofers" class="level3" data-number="5.1">
 <h3 data-number="5.1" class="anchored" data-anchor-id="historical-look-at-ofers"><span class="header-section-number">5.1</span> Historical Look at Ofers</h3>
-<section id="introduction-9" class="level4" data-number="5.1.1">
-<h4 data-number="5.1.1" class="anchored" data-anchor-id="introduction-9"><span class="header-section-number">5.1.1</span> Introduction</h4>
+<section id="introduction-10" class="level4" data-number="5.1.1">
+<h4 data-number="5.1.1" class="anchored" data-anchor-id="introduction-10"><span class="header-section-number">5.1.1</span> Introduction</h4>
 <p>Rhys Hoskins of the Phillies recently went through an 0 for 33 slump – that is, he had a streak of 33 consecutive outs in his official at-bats. On the surface, that sounds like Hoskins had a severe batting slump, but it is hard to view this “accomplishment” without understanding the context. Is it really unusual to have an “ofer” of length 33? In this post, I’ll explore the history of ofers over the twenty full seasons from 2000 through 2019. Here are some questions that we’ll try to answer.</p>
 <ul>
 <li><p>How do you obtain this streak data from the Retrosheet play-by-play files?</p></li>
@@ -998,8 +1059,8 @@ Measure = \frac{Var}{M (M + 1)}
 </section>
 <section id="predictive-checking-of-a-coin-flipping-model" class="level3" data-number="5.2">
 <h3 data-number="5.2" class="anchored" data-anchor-id="predictive-checking-of-a-coin-flipping-model"><span class="header-section-number">5.2</span> Predictive Checking of a Coin Flipping Model</h3>
-<section id="introduction-10" class="level4" data-number="5.2.1">
-<h4 data-number="5.2.1" class="anchored" data-anchor-id="introduction-10"><span class="header-section-number">5.2.1</span> Introduction</h4>
+<section id="introduction-11" class="level4" data-number="5.2.1">
+<h4 data-number="5.2.1" class="anchored" data-anchor-id="introduction-11"><span class="header-section-number">5.2.1</span> Introduction</h4>
 <p>In last week’s post, I explored the historical patterns of so-called ofers (runs of outs between consecutive hits). We saw that ofers are more common in modern baseball due to the decrease in the overall batting average. Also we found some interesting long ofers in the last twenty seasons. In this post we try to make sense of a player’s “long” ofer value. Specifically, what does this ofer value say about the player’s ability? We use this example to illustrate Bayesian predictive checking.</p>
 </section>
 <section id="a-simple-model-for-hitting" class="level4" data-number="5.2.2">
@@ -1070,8 +1131,8 @@ Measure = \frac{Var}{M (M + 1)}
 </section>
 <section id="predictive-checking-of-a-streaky-model" class="level3" data-number="5.3">
 <h3 data-number="5.3" class="anchored" data-anchor-id="predictive-checking-of-a-streaky-model"><span class="header-section-number">5.3</span> Predictive Checking of a Streaky Model</h3>
-<section id="introduction-11" class="level4" data-number="5.3.1">
-<h4 data-number="5.3.1" class="anchored" data-anchor-id="introduction-11"><span class="header-section-number">5.3.1</span> Introduction</h4>
+<section id="introduction-12" class="level4" data-number="5.3.1">
+<h4 data-number="5.3.1" class="anchored" data-anchor-id="introduction-12"><span class="header-section-number">5.3.1</span> Introduction</h4>
 <p>This is part 3 of a series of posts on Extreme Ofers and Predictive Checking. In part 1 of this series, I explored some extreme ofer (streaks of consecutive outs) values in recent MLB history. In part 2 of this series, I tried to interpret the meaning of a “0 for 33” slump by introducing a coin-flipping model and illustrating how Bayesian predictive checking indicates that this extreme slump is unusual for a coin-flipping model. In this last post, I’ll describe an attractive alternative streaky model for baseball hitting and show how predictive checking can be used for this model.</p>
 </section>
 <section id="a-streaky-model-for-hitting" class="level4" data-number="5.3.2">
@@ -1127,8 +1188,8 @@ Measure = \frac{Var}{M (M + 1)}
 <p><img src="figures/streaky/ofer6.png" class="img-fluid"></p>
 <p>By using this app, you can experiment with different players or choices of the priors on the hot and cold probabilities. By the way, if you place the same prior on <span class="math inline">\(p_H\)</span> and <span class="math inline">\(p_C\)</span>, this is similar to assuming that the player has only a single hitting probability during the season.</p>
 </section>
-<section id="closing-comments-1" class="level4" data-number="5.3.6">
-<h4 data-number="5.3.6" class="anchored" data-anchor-id="closing-comments-1"><span class="header-section-number">5.3.6</span> Closing Comments</h4>
+<section id="closing-comments-2" class="level4" data-number="5.3.6">
+<h4 data-number="5.3.6" class="anchored" data-anchor-id="closing-comments-2"><span class="header-section-number">5.3.6</span> Closing Comments</h4>
 <ul>
 <li><p><strong>Ease of Predictive Checking</strong>. I thought this was a neat example since it is so easy to implement. It is straightforward to simulate parameters from the streaky model, and then simulate hitting data given the parameters.</p></li>
 <li><p><strong>Fitting the Markov Switching Model</strong>. A different problem is to fit this streaky model to a sequence of hit/out data for a player in a season. This is more challenging since the likelihood function is more complicated, but there are attractive fitting MCMC algorithms available.</p></li>
@@ -1140,8 +1201,8 @@ Measure = \frac{Var}{M (M + 1)}
 </section>
 <section id="exploring-a-season-of-ofers" class="level3" data-number="5.4">
 <h3 data-number="5.4" class="anchored" data-anchor-id="exploring-a-season-of-ofers"><span class="header-section-number">5.4</span> Exploring a Season of Ofers</h3>
-<section id="introduction-12" class="level4" data-number="5.4.1">
-<h4 data-number="5.4.1" class="anchored" data-anchor-id="introduction-12"><span class="header-section-number">5.4.1</span> Introduction</h4>
+<section id="introduction-13" class="level4" data-number="5.4.1">
+<h4 data-number="5.4.1" class="anchored" data-anchor-id="introduction-13"><span class="header-section-number">5.4.1</span> Introduction</h4>
 <p>In last week’s post we explored the home run hitting patterns of two great hitters, Hank Aaron and Albert Pujols. In that exploration, we looked at the spacings, the gaps (in at-bats) between consecutive home runs. Aaron appeared to have a consistent pattern of hitting home runs. In contrast, Pujols displayed several long gaps between home runs that exceeded 100 AB.</p>
 <p>As the baseball fan knows, the media makes a big deal out of so-called “ofers”. A batter will be hitless in 30 consecutive AB, so he is in a 0 for 30 slump. Likewise, a power hitter may not hit a home run in a period during the season (like Pujols) and have a 0 for 100 slump – he has not hit in a home run in 100 consecutive at-bats. The implication from these statements of ofers is that the particular hitters are struggling at the plate. These ofers may get the manager’s attention and the hitter may be benched or placed lower in the batter lineup.</p>
 <p>Finding these long ofers is interesting, but it is unclear that they have any meaning. My tennis friend noticed today that he lost the tennis spin (guessing incorrectly the outcome of spinning the racquet to determine who serves first) four consecutive times. But that doesn’t mean that the tennis spin process is crooked – it is very possible to lose the spin four times in a row even when the spin process is random and fair. Shifting over to baseball, it is possible that these observed long ofers have no meaning. After all, we are looking at the hitting outcomes for many players and these long ofers may just be the result of natural random variation. For example, the longest ofer among a group of players will certainly be longer than the longest ofer of one player of interest.</p>
