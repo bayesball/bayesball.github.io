@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2023-02-06">
+<meta name="dcterms.date" content="2023-04-11">
 
 <title>Bayes Thinking</title>
 <style>
@@ -101,6 +101,15 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#learning-from-selected-data" id="toc-learning-from-selected-data" class="nav-link" data-scroll-target="#learning-from-selected-data"><span class="toc-section-number">7.3</span>  Learning from Selected Data</a></li>
   <li><a href="#some-takeaways" id="toc-some-takeaways" class="nav-link" data-scroll-target="#some-takeaways"><span class="toc-section-number">7.4</span>  Some Takeaways</a></li>
   </ul></li>
+  <li><a href="#predicting-home-run-count-using-a-random-effects-model" id="toc-predicting-home-run-count-using-a-random-effects-model" class="nav-link" data-scroll-target="#predicting-home-run-count-using-a-random-effects-model"><span class="toc-section-number">8</span>  Predicting Home Run Count Using a Random Effects Model</a>
+  <ul class="collapse">
+  <li><a href="#introduction-7" id="toc-introduction-7" class="nav-link" data-scroll-target="#introduction-7"><span class="toc-section-number">8.1</span>  Introduction</a></li>
+  <li><a href="#home-runs-per-game-are-not-poisson" id="toc-home-runs-per-game-are-not-poisson" class="nav-link" data-scroll-target="#home-runs-per-game-are-not-poisson"><span class="toc-section-number">8.2</span>  Home Runs per Game are Not Poisson</a></li>
+  <li><a href="#a-random-effects-model" id="toc-a-random-effects-model" class="nav-link" data-scroll-target="#a-random-effects-model"><span class="toc-section-number">8.3</span>  A Random Effects Model</a></li>
+  <li><a href="#fitting-the-model-using-stan-and-the-brms-package" id="toc-fitting-the-model-using-stan-and-the-brms-package" class="nav-link" data-scroll-target="#fitting-the-model-using-stan-and-the-brms-package"><span class="toc-section-number">8.4</span>  Fitting the Model using Stan and the brms Package</a></li>
+  <li><a href="#how-many-2019-home-runs" id="toc-how-many-2019-home-runs" class="nav-link" data-scroll-target="#how-many-2019-home-runs"><span class="toc-section-number">8.5</span>  How Many 2019 Home Runs?</a></li>
+  <li><a href="#improving-the-model-and-other-things" id="toc-improving-the-model-and-other-things" class="nav-link" data-scroll-target="#improving-the-model-and-other-things"><span class="toc-section-number">8.6</span>  Improving the Model and Other Things</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -125,7 +134,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 6, 2023</p>
+      <p class="date">April 11, 2023</p>
     </div>
   </div>
   
@@ -141,6 +150,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Section 3 illustrates the process of constructing a prior for a hitting probability for a specific player. Section 4 considers the situation where one only observes the number of home runs and the number of at-bats and the home run probability are unknown. This section illustrates the process of constructing a prior on two parameters and performing the inference.</p>
 <p>Bill James’ Pythagorean formula is used to illustrate Bayesian modeling in Sections 5 and 6. One obtains interval estimates for the power parameter in the formula and one can predict the number of team wins given a value of the runs/runs allowed ratio.</p>
 <p>Section 7 describes a simulation-based method, called Approximate Bayesian Computation, of implementing Bayesian inference by simulating pairs of values of the parameter and the statistic.</p>
+<p>Section 8 illustrates the use of a Poisson multilevel model to fit game-by-game home run data and predict the count of home runs in the remainder of the season.</p>
 </section>
 <section id="bayesian-learning-about-a-hitting-probability" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="bayesian-learning-about-a-hitting-probability"><span class="header-section-number">2</span> Bayesian Learning about a Hitting Probability</h2>
@@ -532,6 +542,66 @@ y &lt;- rbinom(iter, size = 597, prob = p)</code></pre>
 <li><p>Suppose we observe that a player has a hitting slump of 0 for 20. It is easy to modify this ABC method to obtain the posterior from this slump data.</p></li>
 <li><p>The tricky thing is that the ABC method is pretty inefficient (we only keep values of the parameter where the data value is what we observed) and one may not have a large enough sample of simulated values to get accurate estimates of the posterior. In that case, it may be better to keep the parameter values where the data value is “close” to what you did observe. There is an active research effort to work on good selections of “close”.</p></li>
 <li><p>If you google “approximate Bayesian calculation” you’ll find many interesting applications of ABC. Given the simplicity of the algorithm, I think it is potentially useful in teaching Bayes at an introductory level.</p></li>
+</ul>
+</section>
+</section>
+<section id="predicting-home-run-count-using-a-random-effects-model" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="predicting-home-run-count-using-a-random-effects-model"><span class="header-section-number">8</span> Predicting Home Run Count Using a Random Effects Model</h2>
+<section id="introduction-7" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="introduction-7"><span class="header-section-number">8.1</span> Introduction</h3>
+<p>I’m excited – saberseminar is coming up this Saturday and Sunday. I’m not sure I’ll be able to listen to all 50+ presentations, but there is a great lineup of talks and I’m happy to have the opportunity to present. There will be five talks on Sunday that talk about home runs and the bat &amp; ball collusion. (We might learn at saberseminar what is happening with the baseball that has contributed to the increase in home run hitting.)</p>
+<p>Since there likely will be a lot of discussion about home runs this week, I thought I’d devote this post to predicting the 2019 home run rate. This is an interesting statistical problem and I thought it would be instructive to show how a modern Bayesian might approach this prediction problem. This approach is a good foundation for more sophisticated models as I will explain in the closing comments.</p>
+<p>In an earlier post, I illustrated an empirical approach for doing this home run prediction. Bob Carpenter gave a good illustration of Bayesian thinking for this problem in his comments to this earlier post. Here I am implementing a Bayesian model-based approach which has the advantage that it can be generalized in different ways.</p>
+</section>
+<section id="home-runs-per-game-are-not-poisson" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="home-runs-per-game-are-not-poisson"><span class="header-section-number">8.2</span> Home Runs per Game are Not Poisson</h3>
+<p>To start, a basic statistical model says that the home run count for a particular game is Poisson with a single unknown rate parameter <span class="math inline">\(\lambda\)</span>. Honestly, I don’t believe this model is reasonable since I think that the rate of home runs per game is not constant – the rate would depend on the ballpark, teams playing, etc. Let’s illustrate a simple graphical method, called a Poisonness Plot, for checking if the observed home run counts over many games is Poisson distributed.</p>
+<ul>
+<li><p>(Get data) Starting with the Statcast data I collect the count of home runs in each game played in the 2019 season.</p></li>
+<li><p>(Bin the data) I have the home run counts in all games – numbers like 4, 3, 2, 3, etc. We bin these counts – get the number of games with a home run count of 0, number of games with a home run count of 1, etc.</p></li>
+<li><p>(Construct the plot) We have the binned data <span class="math inline">\((y, Ny)\)</span> where <span class="math inline">\(Ny\)</span> is the number of games where there are exactly <span class="math inline">\(y\)</span> home runs hit in a game. We compute the proportions <span class="math inline">\(p\)</span> where <span class="math inline">\(p =y / Ny.\)</span> A Poissonness plot graphs the values of <span class="math inline">\(y\)</span> (horizontal) against the values <span class="math inline">\(PPy = log(p) + log(y!)\)</span> (vertical). If these points follow a straight line, then the home runs are Poisson distributed where the slope is <span class="math inline">\(\log \lambda\)</span>. If not, there is some evidence that a Poisson distribution with a single rate is not suitable.</p></li>
+</ul>
+<p>Here’s this Poisonness plot for the 2019 home run counts. There is a clear nonlinear pattern here – there are more low home run games and more high home run games than one would predict on the basis of a Poisson model with a constant rate.</p>
+<p><img src="figures/bayes/bayes41.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="a-random-effects-model" class="level3" data-number="8.3">
+<h3 data-number="8.3" class="anchored" data-anchor-id="a-random-effects-model"><span class="header-section-number">8.3</span> A Random Effects Model</h3>
+<p>Okay, the Poisson model with a single rate parameter doesn’t work for home run counts per game. A simple way to generalize this model is by the following random effects model.</p>
+<p>Assume that the count of home runs for the <span class="math inline">\(j\)</span>th game is Poisson(<span class="math inline">\(\lambda_j\)</span>) – we are assuming that the true rate of home runs is different for each game.</p>
+<p>One assumes that the logarithms of the rates <span class="math inline">\(\lambda_1, ..., \lambda_N\)</span> follow a normal distribution with mean <span class="math inline">\(M\)</span> and standard deviation <span class="math inline">\(S\)</span>.</p>
+<p>To complete the Bayesian model, one places weakly informative priors on <span class="math inline">\(M\)</span> and <span class="math inline">\(S\)</span>.</p>
+</section>
+<section id="fitting-the-model-using-stan-and-the-brms-package" class="level3" data-number="8.4">
+<h3 data-number="8.4" class="anchored" data-anchor-id="fitting-the-model-using-stan-and-the-brms-package"><span class="header-section-number">8.4</span> Fitting the Model using Stan and the brms Package</h3>
+<p>Currently, we can fit these random effect models using simulation-based Bayesian software. One of the most attractive MCMC algorithms is Hamiltonian sampling implemented by the Stan software and the R package <code>brms</code> provides an attractive interface for this MCMC engine for many popular regression models.</p>
+<p>It is remarkably easy to fit this random effects model. Here I have a data frame <code>S</code> with two variables <code>game_pk</code> and <code>Hr</code>. There is a simple formula to write the random effects model and by default (by use of the <code>family = Poisson</code> option) there will be a linear model on the log rates.</p>
+<pre><code>fit &lt;- brm(HR ~ (1 | game_pk),
+           data = S,
+           family = poisson)</code></pre>
+<p>When you run this program, you get estimates for <span class="math inline">\(M\)</span> and <span class="math inline">\(S\)</span>, the parameters of the normal random effects density. Here the posterior means of M and S are 0.99 and 0.24, respectively. I’ve graphed the N(0.99, 0.24) density below. The fitted model says that the log Poisson means (for the different games) are distributed from this density.</p>
+<p><img src="figures/bayes/bayes43.png" class="img-fluid" style="width:70.0%"></p>
+<p>Actually this function provides simulated draws of the joint posterior for all parameters – in particular, one obtains a simulated sample of values of <span class="math inline">\((M, S)\)</span> – this represents a sample from the marginal posterior of <span class="math inline">\((M, S)\)</span>.</p>
+</section>
+<section id="how-many-2019-home-runs" class="level3" data-number="8.5">
+<h3 data-number="8.5" class="anchored" data-anchor-id="how-many-2019-home-runs"><span class="header-section-number">8.5</span> How Many 2019 Home Runs?</h3>
+<p>We want to predict the number of home runs in the remaining games in the 2019 season. Using Bayesian talk, we are essentially simulating from the posterior predictive distribution. One can simulate the count of home runs by a three step process:</p>
+<ul>
+<li><p>(Step 1) First simulate a pair <span class="math inline">\((M, S)\)</span> from the posterior – this represents a single (normal) random effects distribution.</p></li>
+<li><p>(Step 2) In our illustration we have 799 games remaining. We simulate 799 values <span class="math inline">\(\lambda_1, ..., \lambda_{799}\)</span> from the normal(<span class="math inline">\(M, S\)</span>) distribution – these represent the true rates for the remaining games.</p></li>
+<li><p>(Step 3) Finally we simulate home run game counts <span class="math inline">\(y_1, ..., y_{799}\)</span> from independent Poisson distributions where <span class="math inline">\(y_j \sim Poisson(\lambda_j)\)</span> – these numbers represent draws from the predictive distribution.</p></li>
+<li><p>(Prediction) We sum these simulated home run counts <span class="math inline">\(y_1 + \cdots + y_{799}\)</span> and add the current home run count – this total is a prediction of the final 2019 home run count.</p></li>
+</ul>
+<p>I repeated this simulation 1000 times and collected the simulated final 2019 HR counts. Here’s a histogram of these simulated predictions. Quickly, I can see that my best guess for the 2019 HR total is about 6700 and I am pretty certain that this total will fall in the interval (6600, 6800).</p>
+<p><img src="figures/bayes/bayes44.png" class="img-fluid" style="width:70.0%"></p>
+<p>By the way, when I did this exercise (Friday, August 2), we had played 1631 MLB games and there were 799 remaining games to play – at this time there were 4505 home runs hit in these 1631 games. So I expect to see about 2100 to 2300 additional home runs this season.</p>
+</section>
+<section id="improving-the-model-and-other-things" class="level3" data-number="8.6">
+<h3 data-number="8.6" class="anchored" data-anchor-id="improving-the-model-and-other-things"><span class="header-section-number">8.6</span> Improving the Model and Other Things</h3>
+<ul>
+<li><p>I like this approach since it illustrates the application of a complete Bayesian multilevel model and how one predicts future data from the model.</p></li>
+<li><p>Also this model can be generalized in various ways. Earlier I mentioned that the home run count should depend on the ballpark and the teams. One can explicitly model this dependence by placing a regression model on the true rates <span class="math inline">\(\lambda_j\)</span>. This would be a good exercise for the interested reader.</p></li>
+<li><p>All of the R code for this exercise can be found here on my Github Gist site. If you have the Statcast data, then you’ll see that the coding is pretty compact.</p></li>
+<li><p>In my next post, I’ll focus on some of the interesting talks from the 2019 saberseminar.</p></li>
 </ul>
 </section>
 </section>
