@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2023-04-11">
+<meta name="dcterms.date" content="2023-04-12">
 
 <title>Bayes Thinking</title>
 <style>
@@ -101,14 +101,10 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#learning-from-selected-data" id="toc-learning-from-selected-data" class="nav-link" data-scroll-target="#learning-from-selected-data"><span class="toc-section-number">7.3</span>  Learning from Selected Data</a></li>
   <li><a href="#some-takeaways" id="toc-some-takeaways" class="nav-link" data-scroll-target="#some-takeaways"><span class="toc-section-number">7.4</span>  Some Takeaways</a></li>
   </ul></li>
-  <li><a href="#predicting-home-run-count-using-a-random-effects-model" id="toc-predicting-home-run-count-using-a-random-effects-model" class="nav-link" data-scroll-target="#predicting-home-run-count-using-a-random-effects-model"><span class="toc-section-number">8</span>  Predicting Home Run Count Using a Random Effects Model</a>
+  <li><a href="#modeling-home-runs-per-game-data" id="toc-modeling-home-runs-per-game-data" class="nav-link" data-scroll-target="#modeling-home-runs-per-game-data"><span class="toc-section-number">8</span>  Modeling Home Runs Per Game Data</a>
   <ul class="collapse">
-  <li><a href="#introduction-7" id="toc-introduction-7" class="nav-link" data-scroll-target="#introduction-7"><span class="toc-section-number">8.1</span>  Introduction</a></li>
-  <li><a href="#home-runs-per-game-are-not-poisson" id="toc-home-runs-per-game-are-not-poisson" class="nav-link" data-scroll-target="#home-runs-per-game-are-not-poisson"><span class="toc-section-number">8.2</span>  Home Runs per Game are Not Poisson</a></li>
-  <li><a href="#a-random-effects-model" id="toc-a-random-effects-model" class="nav-link" data-scroll-target="#a-random-effects-model"><span class="toc-section-number">8.3</span>  A Random Effects Model</a></li>
-  <li><a href="#fitting-the-model-using-stan-and-the-brms-package" id="toc-fitting-the-model-using-stan-and-the-brms-package" class="nav-link" data-scroll-target="#fitting-the-model-using-stan-and-the-brms-package"><span class="toc-section-number">8.4</span>  Fitting the Model using Stan and the brms Package</a></li>
-  <li><a href="#how-many-2019-home-runs" id="toc-how-many-2019-home-runs" class="nav-link" data-scroll-target="#how-many-2019-home-runs"><span class="toc-section-number">8.5</span>  How Many 2019 Home Runs?</a></li>
-  <li><a href="#improving-the-model-and-other-things" id="toc-improving-the-model-and-other-things" class="nav-link" data-scroll-target="#improving-the-model-and-other-things"><span class="toc-section-number">8.6</span>  Improving the Model and Other Things</a></li>
+  <li><a href="#predicting-home-run-count-using-a-random-effects-model" id="toc-predicting-home-run-count-using-a-random-effects-model" class="nav-link" data-scroll-target="#predicting-home-run-count-using-a-random-effects-model"><span class="toc-section-number">8.1</span>  Predicting Home Run Count Using a Random Effects Model</a></li>
+  <li><a href="#game-time-temperature-and-home-runs" id="toc-game-time-temperature-and-home-runs" class="nav-link" data-scroll-target="#game-time-temperature-and-home-runs"><span class="toc-section-number">8.2</span>  Game-Time Temperature and Home Runs</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -134,7 +130,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 11, 2023</p>
+      <p class="date">April 12, 2023</p>
     </div>
   </div>
   
@@ -150,7 +146,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Section 3 illustrates the process of constructing a prior for a hitting probability for a specific player. Section 4 considers the situation where one only observes the number of home runs and the number of at-bats and the home run probability are unknown. This section illustrates the process of constructing a prior on two parameters and performing the inference.</p>
 <p>Bill James’ Pythagorean formula is used to illustrate Bayesian modeling in Sections 5 and 6. One obtains interval estimates for the power parameter in the formula and one can predict the number of team wins given a value of the runs/runs allowed ratio.</p>
 <p>Section 7 describes a simulation-based method, called Approximate Bayesian Computation, of implementing Bayesian inference by simulating pairs of values of the parameter and the statistic.</p>
-<p>Section 8 illustrates the use of a Poisson multilevel model to fit game-by-game home run data and predict the count of home runs in the remainder of the season.</p>
+<p>Section 8 considers several models for homeruns per game data. Section 8.1 the use of a Poisson random effects model to fit game-by-game home run data and predict the count of home runs in the remainder of the season. Section 8.2 considers the use of Poisson and negative binomial models to learn about the effect of temperature on home run hitting.</p>
 </section>
 <section id="bayesian-learning-about-a-hitting-probability" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="bayesian-learning-about-a-hitting-probability"><span class="header-section-number">2</span> Bayesian Learning about a Hitting Probability</h2>
@@ -545,16 +541,18 @@ y &lt;- rbinom(iter, size = 597, prob = p)</code></pre>
 </ul>
 </section>
 </section>
-<section id="predicting-home-run-count-using-a-random-effects-model" class="level2" data-number="8">
-<h2 data-number="8" class="anchored" data-anchor-id="predicting-home-run-count-using-a-random-effects-model"><span class="header-section-number">8</span> Predicting Home Run Count Using a Random Effects Model</h2>
-<section id="introduction-7" class="level3" data-number="8.1">
-<h3 data-number="8.1" class="anchored" data-anchor-id="introduction-7"><span class="header-section-number">8.1</span> Introduction</h3>
+<section id="modeling-home-runs-per-game-data" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="modeling-home-runs-per-game-data"><span class="header-section-number">8</span> Modeling Home Runs Per Game Data</h2>
+<section id="predicting-home-run-count-using-a-random-effects-model" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="predicting-home-run-count-using-a-random-effects-model"><span class="header-section-number">8.1</span> Predicting Home Run Count Using a Random Effects Model</h3>
+<section id="introduction-7" class="level4" data-number="8.1.1">
+<h4 data-number="8.1.1" class="anchored" data-anchor-id="introduction-7"><span class="header-section-number">8.1.1</span> Introduction</h4>
 <p>I’m excited – saberseminar is coming up this Saturday and Sunday. I’m not sure I’ll be able to listen to all 50+ presentations, but there is a great lineup of talks and I’m happy to have the opportunity to present. There will be five talks on Sunday that talk about home runs and the bat &amp; ball collusion. (We might learn at saberseminar what is happening with the baseball that has contributed to the increase in home run hitting.)</p>
 <p>Since there likely will be a lot of discussion about home runs this week, I thought I’d devote this post to predicting the 2019 home run rate. This is an interesting statistical problem and I thought it would be instructive to show how a modern Bayesian might approach this prediction problem. This approach is a good foundation for more sophisticated models as I will explain in the closing comments.</p>
 <p>In an earlier post, I illustrated an empirical approach for doing this home run prediction. Bob Carpenter gave a good illustration of Bayesian thinking for this problem in his comments to this earlier post. Here I am implementing a Bayesian model-based approach which has the advantage that it can be generalized in different ways.</p>
 </section>
-<section id="home-runs-per-game-are-not-poisson" class="level3" data-number="8.2">
-<h3 data-number="8.2" class="anchored" data-anchor-id="home-runs-per-game-are-not-poisson"><span class="header-section-number">8.2</span> Home Runs per Game are Not Poisson</h3>
+<section id="home-runs-per-game-are-not-poisson" class="level4" data-number="8.1.2">
+<h4 data-number="8.1.2" class="anchored" data-anchor-id="home-runs-per-game-are-not-poisson"><span class="header-section-number">8.1.2</span> Home Runs per Game are Not Poisson</h4>
 <p>To start, a basic statistical model says that the home run count for a particular game is Poisson with a single unknown rate parameter <span class="math inline">\(\lambda\)</span>. Honestly, I don’t believe this model is reasonable since I think that the rate of home runs per game is not constant – the rate would depend on the ballpark, teams playing, etc. Let’s illustrate a simple graphical method, called a Poisonness Plot, for checking if the observed home run counts over many games is Poisson distributed.</p>
 <ul>
 <li><p>(Get data) Starting with the Statcast data I collect the count of home runs in each game played in the 2019 season.</p></li>
@@ -564,15 +562,15 @@ y &lt;- rbinom(iter, size = 597, prob = p)</code></pre>
 <p>Here’s this Poisonness plot for the 2019 home run counts. There is a clear nonlinear pattern here – there are more low home run games and more high home run games than one would predict on the basis of a Poisson model with a constant rate.</p>
 <p><img src="figures/bayes/bayes41.png" class="img-fluid" style="width:70.0%"></p>
 </section>
-<section id="a-random-effects-model" class="level3" data-number="8.3">
-<h3 data-number="8.3" class="anchored" data-anchor-id="a-random-effects-model"><span class="header-section-number">8.3</span> A Random Effects Model</h3>
+<section id="a-random-effects-model" class="level4" data-number="8.1.3">
+<h4 data-number="8.1.3" class="anchored" data-anchor-id="a-random-effects-model"><span class="header-section-number">8.1.3</span> A Random Effects Model</h4>
 <p>Okay, the Poisson model with a single rate parameter doesn’t work for home run counts per game. A simple way to generalize this model is by the following random effects model.</p>
 <p>Assume that the count of home runs for the <span class="math inline">\(j\)</span>th game is Poisson(<span class="math inline">\(\lambda_j\)</span>) – we are assuming that the true rate of home runs is different for each game.</p>
 <p>One assumes that the logarithms of the rates <span class="math inline">\(\lambda_1, ..., \lambda_N\)</span> follow a normal distribution with mean <span class="math inline">\(M\)</span> and standard deviation <span class="math inline">\(S\)</span>.</p>
 <p>To complete the Bayesian model, one places weakly informative priors on <span class="math inline">\(M\)</span> and <span class="math inline">\(S\)</span>.</p>
 </section>
-<section id="fitting-the-model-using-stan-and-the-brms-package" class="level3" data-number="8.4">
-<h3 data-number="8.4" class="anchored" data-anchor-id="fitting-the-model-using-stan-and-the-brms-package"><span class="header-section-number">8.4</span> Fitting the Model using Stan and the brms Package</h3>
+<section id="fitting-the-model-using-stan-and-the-brms-package" class="level4" data-number="8.1.4">
+<h4 data-number="8.1.4" class="anchored" data-anchor-id="fitting-the-model-using-stan-and-the-brms-package"><span class="header-section-number">8.1.4</span> Fitting the Model using Stan and the brms Package</h4>
 <p>Currently, we can fit these random effect models using simulation-based Bayesian software. One of the most attractive MCMC algorithms is Hamiltonian sampling implemented by the Stan software and the R package <code>brms</code> provides an attractive interface for this MCMC engine for many popular regression models.</p>
 <p>It is remarkably easy to fit this random effects model. Here I have a data frame <code>S</code> with two variables <code>game_pk</code> and <code>Hr</code>. There is a simple formula to write the random effects model and by default (by use of the <code>family = Poisson</code> option) there will be a linear model on the log rates.</p>
 <pre><code>fit &lt;- brm(HR ~ (1 | game_pk),
@@ -582,8 +580,8 @@ y &lt;- rbinom(iter, size = 597, prob = p)</code></pre>
 <p><img src="figures/bayes/bayes43.png" class="img-fluid" style="width:70.0%"></p>
 <p>Actually this function provides simulated draws of the joint posterior for all parameters – in particular, one obtains a simulated sample of values of <span class="math inline">\((M, S)\)</span> – this represents a sample from the marginal posterior of <span class="math inline">\((M, S)\)</span>.</p>
 </section>
-<section id="how-many-2019-home-runs" class="level3" data-number="8.5">
-<h3 data-number="8.5" class="anchored" data-anchor-id="how-many-2019-home-runs"><span class="header-section-number">8.5</span> How Many 2019 Home Runs?</h3>
+<section id="how-many-2019-home-runs" class="level4" data-number="8.1.5">
+<h4 data-number="8.1.5" class="anchored" data-anchor-id="how-many-2019-home-runs"><span class="header-section-number">8.1.5</span> How Many 2019 Home Runs?</h4>
 <p>We want to predict the number of home runs in the remaining games in the 2019 season. Using Bayesian talk, we are essentially simulating from the posterior predictive distribution. One can simulate the count of home runs by a three step process:</p>
 <ul>
 <li><p>(Step 1) First simulate a pair <span class="math inline">\((M, S)\)</span> from the posterior – this represents a single (normal) random effects distribution.</p></li>
@@ -595,14 +593,90 @@ y &lt;- rbinom(iter, size = 597, prob = p)</code></pre>
 <p><img src="figures/bayes/bayes44.png" class="img-fluid" style="width:70.0%"></p>
 <p>By the way, when I did this exercise (Friday, August 2), we had played 1631 MLB games and there were 799 remaining games to play – at this time there were 4505 home runs hit in these 1631 games. So I expect to see about 2100 to 2300 additional home runs this season.</p>
 </section>
-<section id="improving-the-model-and-other-things" class="level3" data-number="8.6">
-<h3 data-number="8.6" class="anchored" data-anchor-id="improving-the-model-and-other-things"><span class="header-section-number">8.6</span> Improving the Model and Other Things</h3>
+<section id="improving-the-model-and-other-things" class="level4" data-number="8.1.6">
+<h4 data-number="8.1.6" class="anchored" data-anchor-id="improving-the-model-and-other-things"><span class="header-section-number">8.1.6</span> Improving the Model and Other Things</h4>
 <ul>
 <li><p>I like this approach since it illustrates the application of a complete Bayesian multilevel model and how one predicts future data from the model.</p></li>
 <li><p>Also this model can be generalized in various ways. Earlier I mentioned that the home run count should depend on the ballpark and the teams. One can explicitly model this dependence by placing a regression model on the true rates <span class="math inline">\(\lambda_j\)</span>. This would be a good exercise for the interested reader.</p></li>
 <li><p>All of the R code for this exercise can be found here on my Github Gist site. If you have the Statcast data, then you’ll see that the coding is pretty compact.</p></li>
 <li><p>In my next post, I’ll focus on some of the interesting talks from the 2019 saberseminar.</p></li>
 </ul>
+</section>
+</section>
+<section id="game-time-temperature-and-home-runs" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="game-time-temperature-and-home-runs"><span class="header-section-number">8.2</span> Game-Time Temperature and Home Runs</h3>
+<section id="introduction-8" class="level4" data-number="8.2.1">
+<h4 data-number="8.2.1" class="anchored" data-anchor-id="introduction-8"><span class="header-section-number">8.2.1</span> Introduction</h4>
+<p>There is an interesting paper “Global warming, home runs, and the future of America’s pastime” by Callahan, Dominy, DeSilva and Mankin recently accepted for publication in the Bulletin of the American Meteorological Society. Reading from the abstract, the paper claims to show that higher temperatures substantially increase home runs. Connecting this finding with climate models, they find that over 500 home runs since 2010 are attributable to climate warming.</p>
+<p>The paper can be divided into two parts. The first part describes several exploratory studies showing a temperature effect in hitting home runs. The second part of the paper relates this result with work from climate model experiments. I am not familiar with these climate model experiments, so I won’t comment on that part of the paper. But as part of the MLB home run commission, we did look at the effect of the game-time temperature on home run hitting. So I was particularly interested in the authors’ work on the connection between temperature and home runs and seeing if their results were consistent with our findings. The description of the statistical models used in the paper seemed incomplete. So I thought it would be a good exercise to describe the use of one particular model mentioned in the paper for exploring the relationship between temperature and home runs. In particular, I will demonstrate the problems with the use of a Poisson log linear model for this home run data. Using a more suitable Negative Binomial regression model, i show how one can implement Bayesian prediction of home run counts for a future season where the game-time temperatures are increased.</p>
+</section>
+<section id="the-data" class="level4" data-number="8.2.2">
+<h4 data-number="8.2.2" class="anchored" data-anchor-id="the-data"><span class="header-section-number">8.2.2</span> The Data</h4>
+<p>From the Retrosheet play-by-play files, I collected the home run counts for all games in the ten full seasons from 2012 through 2022. In addition, these files include the game-time temperature (degrees Fahrenheit) for all of these games. (By the way, the Chadwick command function cwgame was helpful to obtain these temperatures.) I have a single data frame with variables game id, temperature, home runs and season – each row corresponds to an individual game. Since we are interested in the effect of temperature on home runs in open-air stadiums, I remove all of the game data for home teams that have dome or retractable roof stadiums.</p>
+</section>
+<section id="a-poisson-model-for-home-runs-per-game" class="level4" data-number="8.2.3">
+<h4 data-number="8.2.3" class="anchored" data-anchor-id="a-poisson-model-for-home-runs-per-game"><span class="header-section-number">8.2.3</span> A Poisson Model for Home Runs Per Game</h4>
+<p>The paper fits the following “Poisson fixed effects” model relating the home runs hit in a game (HR) to the daily high temperature of the day of the game <span class="math inline">\(Tx\)</span>, the park <span class="math inline">\(p\)</span>, day of year <span class="math inline">\(d\)</span> and year <span class="math inline">\(y\)</span>.</p>
+<p><span class="math display">\[HR_{pdy} = \exp(\beta Tx_{pdy} + \mu_p + \gamma_d + \delta_y + \epsilon_{pdy})\]</span></p>
+<p>Here are some comments on this particular model expression:</p>
+<ul>
+<li><p>If we think of <span class="math inline">\(HR\)</span> as the mean number of home runs hit in game, this is a Poisson log-linear model. The logarithm of the Poisson mean is written as a linear combination of several covariates.</p></li>
+<li><p>Certainly it is reasonable to include park and season as covariates. We know the ballpark can have a significant impact on home run hitting and there have been large changes in home runs across recent seasons due to a combination of player and manufacture of ball behavior.</p></li>
+<li><p>I didn’t understand the reasoning for day of the year as a covariate. The authors explain that it is included to account for the seasonality of home runs, but I would think that temperature variable would capture most of this effect.</p></li>
+<li><p>The inclusion of the <span class="math inline">\(\epsilon\)</span> term is puzzling since the Poisson family doesn’t have an extra error term. In fact, the Poisson model is characterized only by the mean and one is modeling the mean by a linear function of the covariates.</p></li>
+</ul>
+<p>One can fit a Bayesian version of this Poisson regression model with covariates temperature, park and season using the <code>brm()</code> function from the <code>brms package</code>. This function implements the Stan algorithm to produce a simulated sample from the posterior distribution.</p>
+<pre><code>bfit &lt;- brm(HR ~ TEMP_PARK_CT  + PARK_ID + Season,
+           family = "poisson",
+           data = all_data2)</code></pre>
+</section>
+<section id="a-problem" class="level4" data-number="8.2.4">
+<h4 data-number="8.2.4" class="anchored" data-anchor-id="a-problem"><span class="header-section-number">8.2.4</span> A Problem</h4>
+<p>The Poisson is a poor fit to this home run data. The problem is that the data is overdispersed – there is more variability in the home run counts that one would predict from a Poisson model. You can detect this by use of a posterior predictive check.</p>
+<ul>
+<li><p>First we simulate a replicated dataset from the posterior predictive distribution. We do this in two steps:</p></li>
+<li><p>We simulate regression parameters (intercept and coefficients for temperature, ballpark and season) from the posterior distribution.</p></li>
+</ul>
+<p>Given these parameter values, we simulate HR per game from Poisson distributions with means <span class="math inline">\(\exp(\beta Tx_{pdy} + \mu_p + \gamma_d + \delta_y)\)</span>. We call this a replicated dataset since we are using the temperature, ballpark and season values from the original dataset. The size of the replicated dataset will be the same as the original data.</p>
+<p>The question is – do these simulated HR per game from the posterior predictive distribution look like the HR per game in our original dataset?</p>
+<p>To answer this question, one thinks of a suitable “checking function” <span class="math inline">\(T(y)\)</span>. Here the checking function consists of the sample mean and standard deviation of the simulated sample from the predictive distribution. We repeat this simulation process (steps 1 and 2) a number of times, collecting the values of the checking function, and construct a scatterplot of the means and standard deviations. If the observed mean and standard deviation agree with the simulated values from the predictive distribution, then the data seems consistent with predictions from the model. Here is the posterior predictive check graph for our model fit:</p>
+<p><img src="figures/bayes/bayes35.png" class="img-fluid" style="width:70.0%"></p>
+<p>The black dot is the mean and standard deviation of our observed home run counts. Clearly the observed standard deviation is much higher than values of the SD predicted from our model fit. The Poisson model is unsatisfactory – you don’t want to use it for any home run predictions for future seasons.</p>
+</section>
+<section id="fitting-a-better-model" class="level4" data-number="8.2.5">
+<h4 data-number="8.2.5" class="anchored" data-anchor-id="fitting-a-better-model"><span class="header-section-number">8.2.5</span> Fitting a Better Model</h4>
+<p>One can improve things by using a probability distribution that can accommodate the dispersion issue. The Negative Binomial does the trick – it is parameterized by the mean and an additional parameter that can soak up the additional variation. Like the Poisson, the log mean is written as a linear function of the predictors. The authors of the global warming paper say that the Negative Binomial regression model gives similar results as the Poisson. Some of the inferential results will be similar, say for learning about a regression coefficient. But predictions using the two models will be very different. And one goal of the paper is to predict the change in home runs for a future season with increased temperatures.</p>
+<p>Here’s the function for fitting the same log-linear model with Negative Binomial errors. All I am changing is the family argument in the <code>brm()</code> function.</p>
+<pre><code>bfit2 &lt;- brm(HR ~ TEMP_PARK_CT + PARK_ID + Season,
+            family = "negbinomial",
+            data = all_data2)</code></pre>
+<p>We can do a similar posterior predictive check for this fitted regression model. This is just like steps 1 and 2 above with the exception that in step 1, you will also be simulating a value of the Negative Binomial dispersion parameter and simulating Negative Binomial variates in step 2. The scatterplot of the predictive means and standard deviations from the many simulations is displayed below. Note that the observed mean and standard deviation is right in the middle of the predictive distribution. This is telling us that the data is consistent with predictions from this Negative Binomial regression model using this particular checking function.</p>
+<p><img src="figures/bayes/bayes36.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="estimating-the-temperature-effect" class="level4" data-number="8.2.6">
+<h4 data-number="8.2.6" class="anchored" data-anchor-id="estimating-the-temperature-effect"><span class="header-section-number">8.2.6</span> Estimating the Temperature Effect</h4>
+<p>From the fit of this Negative Binomial regression model, we can estimate season, ballpark and temperature effects. We estimate the temperature coefficient <span class="math inline">\(\beta\)</span> to be 0.009. Remember that our regression model is on the log scale, so 0.009 is the change in the log mean HR/game for each one degree increase in temperature. If the log mean increases by 0.009, then the mean will increase by a factor of exp(0.009) = 1.009. So each increase in one degree Fahrenheit at game time results in approximately 1% more home runs.</p>
+</section>
+<section id="predicting-home-runs-in-a-warmer-season" class="level4" data-number="8.2.7">
+<h4 data-number="8.2.7" class="anchored" data-anchor-id="predicting-home-runs-in-a-warmer-season"><span class="header-section-number">8.2.7</span> Predicting Home Runs in a Warmer Season</h4>
+<p>The paper talks about the increase in the total home run count in a future season with warmer temperatures. Let’s do a similar prediction exercise. Let’s suppose in a future season that the games are played in the same ballparks as in the 2022 season but each game time temperature is one degree higher than the 2022 temperature. We create a new dataset newdata2 with these new temperatures and the function predict() will simulate home run predictions for all games for this future season.</p>
+<pre><code>out2 &lt;- predict(bfit2, newdata = newdata2,
+               summary = FALSE)</code></pre>
+<p>Here is a histogram of the predictive distribution of the total home run count for this warmer season.</p>
+<p><img src="figures/bayes/bayes37.png" class="img-fluid" style="width:70.0%"></p>
+<p>The total home run count for the 2022 season (for the open-air stadiums) was 3751 and the mean prediction for this future season is 3787. So we would predict that there would be 3787 - 3751 = 36 additional home runs due to this one degree increase in temperature. Again, note that a one-degree increase in temperature corresponds to approximately a 1% increase in the home run count. But we should not ignore the large variability in this prediction – a 90% prediction interval for the total HR count is (3635, 3943). So it is very possible that we would observe fewer home runs in this season despite the temperature increase. By the way, we would get a much narrower prediction interval estimate if we used the less suitable Poisson model. Part of the prediction process is simulating from the sampling distribution and one would get different results from simulating from the Poisson instead of the Negative Binomial distribution.</p>
+</section>
+<section id="comments-1" class="level4" data-number="8.2.8">
+<h4 data-number="8.2.8" class="anchored" data-anchor-id="comments-1"><span class="header-section-number">8.2.8</span> Comments</h4>
+<ul>
+<li><p>(The Paper) The Callahan, Dominy, DeSilva and Mankin paper is interesting, especially with its connection of climate change research with home run hitting. But I thought the statistical work describing the effects of temperature lacked clarity that motivated this post.</p></li>
+<li><p>(Alan’s Post). Alan Nathan, who chaired the MLB Home Run committees, also wrote a short article on temperature and home runs. He focuses on the application of a second model that represents the probability that an inplay ball is a home run as a function of launch variables, ballpark, season and temperature. Here’s a link to his article.</p></li>
+<li><p>(Temperature Effects are Relatively Small) Although temperature plays a significant role in hitting home runs, the size of the temperature effect is small relative to the effects of other variables during the Statcast era. In particular, I have shown in previous effects the large changes in home run hitting due to changes in player behavior (launch variables) and the composition of the ball. For example, there were 707 fewer home runs hit in 2022 compared to 2021 – that drop appears to be attributable to the composition of the ball.</p></li>
+<li><p>(Other Models for Overdispersion) There are other ways of generalizing the Poisson model to accommodate overdispersion of the game home run counts. In this post from 2019, I illustrate the use of random effects – each game is assigned a different Poisson mean and the Poisson means are assigned a random effects distribution. I used a Bayesian treatment of this model to predict the final 2019 season home run count.</p></li>
+<li><p>(Posterior Predictive Checking). Posterior predictive checking is a standard way for Bayesians to check if a fitted model is reasonable. We give a simple example of posterior predictive checking for binomial data in our Bayesian text here.</p></li>
+<li><p>(Got Code?) All of the R code for this modeling can be found on my Github Gist site. The home run data is available on one of my Github repositories, so the interested reader should be able to reproduce my work including figures from the R script on the Github Gist page.</p></li>
+</ul>
+</section>
 </section>
 </section>
 
