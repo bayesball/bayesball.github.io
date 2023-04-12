@@ -633,11 +633,11 @@ y &lt;- rbinom(iter, size = 597, prob = p)</code></pre>
 <section id="a-problem" class="level4" data-number="8.2.4">
 <h4 data-number="8.2.4" class="anchored" data-anchor-id="a-problem"><span class="header-section-number">8.2.4</span> A Problem</h4>
 <p>The Poisson is a poor fit to this home run data. The problem is that the data is overdispersed – there is more variability in the home run counts that one would predict from a Poisson model. You can detect this by use of a posterior predictive check.</p>
+<p>First we simulate a replicated dataset from the posterior predictive distribution. We do this in two steps:</p>
 <ul>
-<li><p>First we simulate a replicated dataset from the posterior predictive distribution. We do this in two steps:</p></li>
-<li><p>We simulate regression parameters (intercept and coefficients for temperature, ballpark and season) from the posterior distribution.</p></li>
+<li><p>(Step 1) We simulate regression parameters (intercept and coefficients for temperature, ballpark and season) from the posterior distribution.</p></li>
+<li><p>(Step 2) Given these parameter values, we simulate HR per game from Poisson distributions with means <span class="math inline">\(\exp(\beta Tx_{pdy} + \mu_p + \gamma_d + \delta_y)\)</span>. We call this a replicated dataset since we are using the temperature, ballpark and season values from the original dataset. The size of the replicated dataset will be the same as the original data.</p></li>
 </ul>
-<p>Given these parameter values, we simulate HR per game from Poisson distributions with means <span class="math inline">\(\exp(\beta Tx_{pdy} + \mu_p + \gamma_d + \delta_y)\)</span>. We call this a replicated dataset since we are using the temperature, ballpark and season values from the original dataset. The size of the replicated dataset will be the same as the original data.</p>
 <p>The question is – do these simulated HR per game from the posterior predictive distribution look like the HR per game in our original dataset?</p>
 <p>To answer this question, one thinks of a suitable “checking function” <span class="math inline">\(T(y)\)</span>. Here the checking function consists of the sample mean and standard deviation of the simulated sample from the predictive distribution. We repeat this simulation process (steps 1 and 2) a number of times, collecting the values of the checking function, and construct a scatterplot of the means and standard deviations. If the observed mean and standard deviation agree with the simulated values from the predictive distribution, then the data seems consistent with predictions from the model. Here is the posterior predictive check graph for our model fit:</p>
 <p><img src="figures/bayes/bayes35.png" class="img-fluid" style="width:70.0%"></p>
