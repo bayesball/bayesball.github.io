@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2023-04-14">
+<meta name="dcterms.date" content="2023-04-23">
 
 <title>Simulation in Baseball</title>
 <style>
@@ -56,7 +56,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#the-simulation-function" id="toc-the-simulation-function" class="nav-link" data-scroll-target="#the-simulation-function"><span class="toc-section-number">2.3</span>  The Simulation Function</a></li>
   <li><a href="#how-do-the-simulation-results-compare-with-real-baseball" id="toc-how-do-the-simulation-results-compare-with-real-baseball" class="nav-link" data-scroll-target="#how-do-the-simulation-results-compare-with-real-baseball"><span class="toc-section-number">2.4</span>  How Do the Simulation Results Compare with Real Baseball?</a></li>
   </ul></li>
-  <li><a href="#measuring-cluster-luck-in-scoring" id="toc-measuring-cluster-luck-in-scoring" class="nav-link" data-scroll-target="#measuring-cluster-luck-in-scoring"><span class="toc-section-number">3</span>  Measuring Cluster Luck in Scoring</a></li>
+  <li><a href="#measuring-cluster-luck-in-scoring" id="toc-measuring-cluster-luck-in-scoring" class="nav-link" data-scroll-target="#measuring-cluster-luck-in-scoring"><span class="toc-section-number">3</span>  Measuring Cluster Luck in Scoring</a>
+  <ul class="collapse">
+  <li><a href="#introduction-to-the-method" id="toc-introduction-to-the-method" class="nav-link" data-scroll-target="#introduction-to-the-method"><span class="toc-section-number">3.1</span>  Introduction to the Method</a></li>
+  <li><a href="#cluster-luck-scoring-in-2022-season" id="toc-cluster-luck-scoring-in-2022-season" class="nav-link" data-scroll-target="#cluster-luck-scoring-in-2022-season"><span class="toc-section-number">3.2</span>  Cluster Luck Scoring in 2022 Season</a></li>
+  </ul></li>
   <li><a href="#measuring-situational-hitting" id="toc-measuring-situational-hitting" class="nav-link" data-scroll-target="#measuring-situational-hitting"><span class="toc-section-number">4</span>  Measuring Situational Hitting</a>
   <ul class="collapse">
   <li><a href="#situational-hitting" id="toc-situational-hitting" class="nav-link" data-scroll-target="#situational-hitting"><span class="toc-section-number">4.1</span>  Situational Hitting</a></li>
@@ -67,7 +71,7 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#simulating-a-60-game-season" id="toc-simulating-a-60-game-season" class="nav-link" data-scroll-target="#simulating-a-60-game-season"><span class="toc-section-number">5</span>  Simulating a 60-Game Season</a>
   <ul class="collapse">
-  <li><a href="#introduction-1" id="toc-introduction-1" class="nav-link" data-scroll-target="#introduction-1"><span class="toc-section-number">5.1</span>  Introduction</a></li>
+  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"><span class="toc-section-number">5.1</span>  Introduction</a></li>
   <li><a href="#a-model-for-baseball-competition" id="toc-a-model-for-baseball-competition" class="nav-link" data-scroll-target="#a-model-for-baseball-competition"><span class="toc-section-number">5.2</span>  A Model for Baseball Competition</a></li>
   <li><a href="#simulating-a-season" id="toc-simulating-a-season" class="nav-link" data-scroll-target="#simulating-a-season"><span class="toc-section-number">5.3</span>  Simulating a Season</a></li>
   <li><a href="#simulating-many-seasons" id="toc-simulating-many-seasons" class="nav-link" data-scroll-target="#simulating-many-seasons"><span class="toc-section-number">5.4</span>  Simulating Many Seasons</a></li>
@@ -78,7 +82,7 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#modeldata-simulations" id="toc-modeldata-simulations" class="nav-link" data-scroll-target="#modeldata-simulations"><span class="toc-section-number">6</span>  Model/Data Simulations</a>
   <ul class="collapse">
-  <li><a href="#introduction-2" id="toc-introduction-2" class="nav-link" data-scroll-target="#introduction-2"><span class="toc-section-number">6.1</span>  Introduction</a></li>
+  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3"><span class="toc-section-number">6.1</span>  Introduction</a></li>
   <li><a href="#the-algorithm" id="toc-the-algorithm" class="nav-link" data-scroll-target="#the-algorithm"><span class="toc-section-number">6.2</span>  The Algorithm</a></li>
   <li><a href="#example-1-statistic-is-the-sum" id="toc-example-1-statistic-is-the-sum" class="nav-link" data-scroll-target="#example-1-statistic-is-the-sum"><span class="toc-section-number">6.3</span>  Example 1: Statistic is the Sum</a></li>
   <li><a href="#example-2-statistic-is-the-largest-ofer" id="toc-example-2-statistic-is-the-largest-ofer" class="nav-link" data-scroll-target="#example-2-statistic-is-the-largest-ofer"><span class="toc-section-number">6.4</span>  Example 2: Statistic is the Largest Ofer</a></li>
@@ -86,7 +90,7 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#streaky-mike-trout" id="toc-streaky-mike-trout" class="nav-link" data-scroll-target="#streaky-mike-trout"><span class="toc-section-number">7</span>  Streaky Mike Trout?</a>
   <ul class="collapse">
-  <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3"><span class="toc-section-number">7.1</span>  Introduction</a></li>
+  <li><a href="#introduction-4" id="toc-introduction-4" class="nav-link" data-scroll-target="#introduction-4"><span class="toc-section-number">7.1</span>  Introduction</a></li>
   <li><a href="#applying-method-to-trout" id="toc-applying-method-to-trout" class="nav-link" data-scroll-target="#applying-method-to-trout"><span class="toc-section-number">7.2</span>  Applying Method to Trout</a></li>
   <li><a href="#concluding-remarks" id="toc-concluding-remarks" class="nav-link" data-scroll-target="#concluding-remarks"><span class="toc-section-number">7.3</span>  Concluding Remarks</a></li>
   <li><a href="#added-note-11-22-16" id="toc-added-note-11-22-16" class="nav-link" data-scroll-target="#added-note-11-22-16"><span class="toc-section-number">7.4</span>  Added note (11-22-16):</a></li>
@@ -115,7 +119,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 14, 2023</p>
+      <p class="date">April 23, 2023</p>
     </div>
   </div>
   
@@ -194,6 +198,8 @@ sim.R
 </section>
 <section id="measuring-cluster-luck-in-scoring" class="level2" data-number="3">
 <h2 data-number="3" class="anchored" data-anchor-id="measuring-cluster-luck-in-scoring"><span class="header-section-number">3</span> Measuring Cluster Luck in Scoring</h2>
+<section id="introduction-to-the-method" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="introduction-to-the-method"><span class="header-section-number">3.1</span> Introduction to the Method</h3>
 <p>In the last post, I devised a simple model for run scoring in a half-inning. Based on the probabilities of the different PA events and runner advancement probabilities, I wrote a function to simulate the number of runs scored, and the patterns using this model seem to resemble real run scoring in baseball.</p>
 <p>I want to use my work to address the following problem. Suppose a team scores 10 runs in a game. I would like to measure the so called “cluster luck” of this run scoring. That is, how many of these 10 runs are attributed to the fact that the team was able to cluster their on-base events? (By the way, this problem has been addressed in other ways – in particular, this post uses a measure which compares the actual runs scored with a runs-created formula.)</p>
 <p>Here is my approach. As an example, let’s look at the June 12, 2015 game between the Red Sox and the Blue Jays where the Red Sox scored 10 runs. Using Retrosheet play-by-play data, it was straightforward to extract all of the outcomes (in sequence) of the PA’s during this game.</p>
@@ -228,6 +234,78 @@ sim.R
 <p><img src="figures/simulation/simulation16.png" class="img-fluid" style="width:70.0%"></p>
 <p>In this case, the results are a bit surprising. Using the actual PA sequence, the Red Sox would score 9-10 runs in this game – the number tends to understate the actual runs scored (10) a little since my run-scoring model ignores stealing, sacrifices, etc. In the random arrangement model, the Red Sox would also score, on average 9 runs, although the simulated runs scored between 5 and 13. For this particular game I would say that the cluster luck effect in run scoring is pretty small.</p>
 <p>Although this work represents a first look at this run clustering issue, it looks promising. One should be able to use this method to compare teams in their abilities to cluster on-base events to score runs. Obviously this is an important issue for a baseball manager. For example, the Phillies manager currently plays with the batting order of his hitters. Using this method, can one offer some guidance on an optimal batting order to make most efficient use of the run clustering effect?</p>
+</section>
+<section id="cluster-luck-scoring-in-2022-season" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="cluster-luck-scoring-in-2022-season"><span class="header-section-number">3.2</span> Cluster Luck Scoring in 2022 Season</h3>
+<section id="introduction-1" class="level4" data-number="3.2.1">
+<h4 data-number="3.2.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">3.2.1</span> Introduction</h4>
+<p>Baseball fans are familiar with the clustering aspect of run scoring. To score runs, a team must cluster a number of on-base events during particular innings. A team won’t score runs if they get 9 singles where there is one single in each inning. Instead the team has to group or cluster these singles together to produce runs.</p>
+<p>Related to this clustering issue, I addressed the following question in a June 2016 post.</p>
+<p>“Suppose a team scores 10 runs in a game. I would like to measure the so called “cluster luck” of this run scoring. That is, how many of these 10 runs are attributed to the fact that the team was able to cluster their on-base events?”</p>
+<p>In that June 2016 post, I proposed a simulation-based approach to addressing this question. I proposed a relatively simple model for simulating the runs scored in a half-inning. This model assumes that the different on-base events occur in a random fashion through the grame. Given a sequence of plate appearance events, I used tables of runner advancement probabilities to simulate runner advancement and runs scored. We can then compare the actual runs scored in a game by each team with the expected number of runs scored from the model. If the runs scored exceeds the expected number, this indicates that the team effectively clustered their on-base events to score runs. On the other hand, if the runs scored is smaller than the expected number, this indicates that the team spread out their on-base events through the nine innings and didn’t cluster the hits and walks to score runs.</p>
+<p>In this post, we’ll apply this method across all teams and games in the 2022 season. There are several questions of interest.</p>
+<ul>
+<li><p>How good is my run scoring model? Specifically, does it predict accurately the actual runs scored in a game?</p></li>
+<li><p>Are there teams that tend to score more or less runs than predicted from the model?</p></li>
+<li><p>Can we pick out interesting outliers? That is, can we identify teams that scored many more runs than one would predict solely on the number of on-base events? Also we want to identify teams that scored far fewer runs than predicted from the model.</p></li>
+</ul>
+</section>
+<section id="simulating-a-half-inning-of-baseball-1" class="level4" data-number="3.2.2">
+<h4 data-number="3.2.2" class="anchored" data-anchor-id="simulating-a-half-inning-of-baseball-1"><span class="header-section-number">3.2.2</span> Simulating a Half-Inning of Baseball</h4>
+<p>I recently attended a Phillies/Reds game on April 16, 2023 where I observed the following PA events for the Phillies:</p>
+<pre><code> [1] "HR"  "1B"  "BB"  "BB"  "1B"  "OUT" "1B"  "2B"  "1B"  "OUT" "1B" 
+[12] "2B"  "OUT" "OUT" "2B"  "OUT" "OUT" "OUT" "OUT" "1B"  "BB"  "1B" 
+[23] "1B"  "OUT" "2B"  "1B"  "BB"  "OUT" "BB"  "OUT" "OUT" "2B"  "OUT"
+[34] "1B"  "OUT" "OUT" "OUT" "BB"  "OUT" "OUT" "OUT" "HR"  "OUT" "OUT"
+[45] "OUT" "1B"  "OUT" "1B"  "OUT" "1B"  "1B"  "OUT" "OUT" "1B"  "1B" 
+[56] "OUT"</code></pre>
+<p>The Phillies scored 14 runs in this game. The question is: how well did the Phillies cluster these on-base events in this particular game? I simulated the runs scored using the following model:</p>
+<ul>
+<li><p>First, I randomly permuted there 56 plate appearance outcomes. (The model assumes that all of these possible permutation of outcomes are equally likely.)</p></li>
+<li><p>I divided these random PA’s into 9 innings and simulated the runs scored in each inning using runner advancement probability tables.</p></li>
+<li><p>I repeated this process 100 times, collecting the runs scored in all 100 simulations.</p></li>
+</ul>
+<p>I described this run scoring simulation algorithm in a 2016 post.</p>
+<p>From the model that assumes no real clustering of events, the mean runs scored was 14.77. The Phillies actually scored 14 runs in this particular game which is 0.77 lower than expected from my model. So I didn’t see any unusual clustering of on-base events in this game.</p>
+</section>
+<section id="games-in-the-2022-season---general-patterns" class="level4" data-number="3.2.3">
+<h4 data-number="3.2.3" class="anchored" data-anchor-id="games-in-the-2022-season---general-patterns"><span class="header-section-number">3.2.3</span> Games in the 2022 Season - General Patterns</h4>
+<p>I collected the Retrosheet play-by-play files for the 2022 season. For each game, I collected the sequence of plate appearance outcomes (1B, 2B, 3B, HR, BB or HBP, OUT) and used my run scoring model to simulate the run scored assuming no real clustering of events. For each team, I compute the runs scored minus the expected runs scored from the simulations using my model.</p>
+<p>Below I display a graph of the residuals (Runs Minus Expected Runs) for all games plotted against the batting team. I overlay a vertical line at zero.</p>
+<p><img src="figures/simulation/simulation17.png" class="img-fluid" style="width:70.0%"></p>
+<p>Generally, it is clear that my run scoring model underestimates the actual number of runs scored in these games. One can compute the the mean residual is 0.82 which means that there are, on average, 0.82 more runs scored than predicted from the model. My model is just based on the hit and walk/hbp events, ignoring runner advancements due to errors, wild pitches and sacrifices, so it is not surprising that the model would underestimate the observed runs. Also I would suspect some natural clustering of the on-base outcomes since one may be facing an unusually weak pitcher or strong pitcher in particular innings.</p>
+<p>I don’t see any team effect in this graph. That is, I don’t see teams that are especially good or especially weak in clustering runs. But then again, perhaps this particular graph is not that helpful in picking out these unusual teams.</p>
+</section>
+<section id="unusual-run-scoring-games" class="level4" data-number="3.2.4">
+<h4 data-number="3.2.4" class="anchored" data-anchor-id="unusual-run-scoring-games"><span class="header-section-number">3.2.4</span> Unusual Run-Scoring Games</h4>
+<p>This graph does show some particular games where the Runs - Expected value is unusually high positive or high negative. These are the games where the team scored significantly more or fewer runs that one would predict based on the “random” run scoring model.</p>
+<p>Here are the top 5 games where the team scored many more runs than expected. On July 12, Oakland scored 14 runs from their 19 on-base events, but they were predicted from the “random” model to score only 4.97.</p>
+<pre><code>       Game_Id Team Runs Expected Outs On_Base X_Base Residual
+1 TEX202207120  OAK   14     4.97   36      19      4     9.03
+2 CHN202204230  CHN   21    13.51   24      28      5     7.49
+3 SLN202210010  SLN   13     5.88   24      18      4     7.12
+4 WAS202204200  ARI   11     3.98   27      14      3     7.02
+5 CLE202204201  CLE   11     3.99   24      14      1     7.01</code></pre>
+<p>Let’s focus on the leader – Oakland scoring 14 runs when the expected runs was only 4.97. Looking at the box-score of the Texas/Oakland game on July 12 on Baseball Reference, this was an interesting scoring game for Oakland. In this game, Oakland used 7 on-base plays including a home run at the end to score 8 runs in the top of the 12th inning.</p>
+<p>Here is the graph at the low end – the five largest negative residuals. Looking at the first line, on June 23, the White Sox were shut out, but were expected to score 3.11 runs from the random model on their 13 on-base events.</p>
+<pre><code>          Game_Id Team Runs Expected Outs On_Base X_Base Residual
+4700 CHA202206230  CHA    0     3.11   27      13      4    -3.11
+4701 ANA202209070  DET    5     8.28   27      16      7    -3.28
+4702 MIA202208120  MIA    3     6.47   27      18      5    -3.47
+4703 DET202205130  BAL    2     5.48   27      17      2    -3.48
+4704 SFN202207290  SFN    2     6.11   27      16      6    -4.11</code></pre>
+</section>
+<section id="comments" class="level4" data-number="3.2.5">
+<h4 data-number="3.2.5" class="anchored" data-anchor-id="comments"><span class="header-section-number">3.2.5</span> Comments</h4>
+<ul>
+<li><p>(General Approach). This post illustrates a general method of understanding variation in baseball outcomes. One proposes a simple probability model for generating outcomes, here the number of runs scored in a game. Then one uses a simulation to predict outcomes based on the model, and checks how closely the model predictions compare to the actual observed outcomes.</p></li>
+<li><p>(Related Posts). This is actually part 3 of a three-part series on cluster luck scoring. Part 1 describes the run-scoring algorithm, Part 2 describes the general method of using this algorithm to measure cluster luck scoring, and this post extends this idea to explore the clustering of runs scored for all games in the 2022 season.</p></li>
+<li><p>(Other Methods) Certainly there could be other methods of assessing the so-called clutch luck scoring in baseball. This particular model appears to underestimate the actual game runs. But I think these predictions provide a reasonable baseline in identifying games where the team is unusually effective in producing runs.</p></li>
+<li><p>(A Better Model?) One could improve this model by incorporating other runner advancement possibilities such as sacrifice, wild pitches and stolen bases. But as said before, this relatively simple model seems to be helpful in identifying the clutch luck scoring games.</p></li>
+<li><p>(R Code) All of my R code for this work is available on my Github Gist site. There are two main functions – the function generate_runs() takes a vector of observed PA outcomes as input and outputs the expected runs scored across 100 iterations. The function retro_game_work() takes some Retrosheet data and a game id of interest, extracts the plays for each team, and runs the generate_runs() function simulation separately for each team. You will need some Retrosheet play by play data for a particular season to use this function.</p></li>
+</ul>
+</section>
+</section>
 </section>
 <section id="measuring-situational-hitting" class="level2" data-number="4">
 <h2 data-number="4" class="anchored" data-anchor-id="measuring-situational-hitting"><span class="header-section-number">4</span> Measuring Situational Hitting</h2>
@@ -279,8 +357,8 @@ sim.R
 </section>
 <section id="simulating-a-60-game-season" class="level2" data-number="5">
 <h2 data-number="5" class="anchored" data-anchor-id="simulating-a-60-game-season"><span class="header-section-number">5</span> Simulating a 60-Game Season</h2>
-<section id="introduction-1" class="level3" data-number="5.1">
-<h3 data-number="5.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">5.1</span> Introduction</h3>
+<section id="introduction-2" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">5.1</span> Introduction</h3>
 <p>This is one of my popular things to talk about – the nature of baseball competition. We’d like to think that the winner of the World Series is the “best team in baseball. But if you carefully think what this means, you’ll learn that the winner of the World Series is likely not the team with the most talent. Bill James talked about this topic at a meeting at my school in 1992 (here is a post with more detail) and I’ve written about this in different places.</p>
 <p>Anyway, this topic is very relevant today since MLB is planning on a 60-game season for the 2020 season which is 63% shorter than the regular 162-game season. So that motivates this post where I speculate using a simulation what a 60-game regular season will look like. I apply a reasonable model called a Bradley-Terry random effects model for representing baseball competition. By running this simulation for 1000 seasons, we can learn about the association of a team’s ability with its performance and learn also how many games it will take for a team to make the playoffs.</p>
 </section>
@@ -345,8 +423,8 @@ sim.R
 </section>
 <section id="modeldata-simulations" class="level2" data-number="6">
 <h2 data-number="6" class="anchored" data-anchor-id="modeldata-simulations"><span class="header-section-number">6</span> Model/Data Simulations</h2>
-<section id="introduction-2" class="level3" data-number="6.1">
-<h3 data-number="6.1" class="anchored" data-anchor-id="introduction-2"><span class="header-section-number">6.1</span> Introduction</h3>
+<section id="introduction-3" class="level3" data-number="6.1">
+<h3 data-number="6.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">6.1</span> Introduction</h3>
 <p>One of the innovative aspects of my <em>Teaching Statistics Using Baseball</em> text is its use of Bayesian thinking to introduce statistical inference. I thought it would be instructive to illustrate a simulation-based way of performing Bayesian inference for a hitting probability. I call this “model/data simulation” – I coauthored a paper in the American Statistician back in 2001 that describes this method in more detail.</p>
 </section>
 <section id="the-algorithm" class="level3" data-number="6.2">
@@ -415,8 +493,8 @@ S2 &lt;- model_data_simulation(P_vector,
 </section>
 <section id="streaky-mike-trout" class="level2" data-number="7">
 <h2 data-number="7" class="anchored" data-anchor-id="streaky-mike-trout"><span class="header-section-number">7</span> Streaky Mike Trout?</h2>
-<section id="introduction-3" class="level3" data-number="7.1">
-<h3 data-number="7.1" class="anchored" data-anchor-id="introduction-3"><span class="header-section-number">7.1</span> Introduction</h3>
+<section id="introduction-4" class="level3" data-number="7.1">
+<h3 data-number="7.1" class="anchored" data-anchor-id="introduction-4"><span class="header-section-number">7.1</span> Introduction</h3>
 <p>As you probably know, Mike Trout was chosen to be the American League MVP in 2016. &nbsp;Trout has had a remarkable five full seasons in the big leagues – for two seasons he was chosen MVP and the other three seasons he finished runner-up in the MVP voting. &nbsp;(I wish Trout played for a east-coast team, so I would have more opportunities to see him play. &nbsp;Mike Trout was a Phillies fan growing up.)</p>
 <p>Obvious, Trout has had great season totals in WAR, home runs, etc. &nbsp;But we’ll explore Trout’s hitting from a different perspective — how streaky has Trout been in his pattern of hitting in the 2012 through 2016 seasons?</p>
 <p>I’ll give you some background on my work on streakiness. &nbsp;(Here’s a link to a Chance article on streakiness in home run hitting.)</p>
