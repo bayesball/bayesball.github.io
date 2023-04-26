@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2023-04-23">
+<meta name="dcterms.date" content="2023-04-26">
 
 <title>Simulation in Baseball</title>
 <style>
@@ -68,6 +68,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#what-do-we-find" id="toc-what-do-we-find" class="nav-link" data-scroll-target="#what-do-we-find"><span class="toc-section-number">4.3</span>  What Do We Find?</a></li>
   <li><a href="#where-to-go-from-here" id="toc-where-to-go-from-here" class="nav-link" data-scroll-target="#where-to-go-from-here"><span class="toc-section-number">4.4</span>  Where to Go From Here?</a></li>
   <li><a href="#r-work" id="toc-r-work" class="nav-link" data-scroll-target="#r-work"><span class="toc-section-number">4.5</span>  R Work?</a></li>
+  <li><a href="#situational-measures-for-two-consecutive-seasaons" id="toc-situational-measures-for-two-consecutive-seasaons" class="nav-link" data-scroll-target="#situational-measures-for-two-consecutive-seasaons"><span class="toc-section-number">4.6</span>  Situational Measures for Two Consecutive Seasaons</a></li>
   </ul></li>
   <li><a href="#simulating-a-60-game-season" id="toc-simulating-a-60-game-season" class="nav-link" data-scroll-target="#simulating-a-60-game-season"><span class="toc-section-number">5</span>  Simulating a 60-Game Season</a>
   <ul class="collapse">
@@ -119,7 +120,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">April 23, 2023</p>
+      <p class="date">April 26, 2023</p>
     </div>
   </div>
   
@@ -241,7 +242,7 @@ sim.R
 <h4 data-number="3.2.1" class="anchored" data-anchor-id="introduction-1"><span class="header-section-number">3.2.1</span> Introduction</h4>
 <p>Baseball fans are familiar with the clustering aspect of run scoring. To score runs, a team must cluster a number of on-base events during particular innings. A team won’t score runs if they get 9 singles where there is one single in each inning. Instead the team has to group or cluster these singles together to produce runs.</p>
 <p>Related to this clustering issue, I addressed the following question in a June 2016 post.</p>
-<p>“Suppose a team scores 10 runs in a game. I would like to measure the so called “cluster luck” of this run scoring. That is, how many of these 10 runs are attributed to the fact that the team was able to cluster their on-base events?”</p>
+<p>“Suppose a team scores 10 runs in a game. I would like to measure the so called”cluster luck” of this run scoring. That is, how many of these 10 runs are attributed to the fact that the team was able to cluster their on-base events?”</p>
 <p>In that June 2016 post, I proposed a simulation-based approach to addressing this question. I proposed a relatively simple model for simulating the runs scored in a half-inning. This model assumes that the different on-base events occur in a random fashion through the grame. Given a sequence of plate appearance events, I used tables of runner advancement probabilities to simulate runner advancement and runs scored. We can then compare the actual runs scored in a game by each team with the expected number of runs scored from the model. If the runs scored exceeds the expected number, this indicates that the team effectively clustered their on-base events to score runs. On the other hand, if the runs scored is smaller than the expected number, this indicates that the team spread out their on-base events through the nine innings and didn’t cluster the hits and walks to score runs.</p>
 <p>In this post, we’ll apply this method across all teams and games in the 2022 season. There are several questions of interest.</p>
 <ul>
@@ -343,7 +344,7 @@ sim.R
 <p><img src="figures/simulation/simulation14.png" class="img-fluid" style="width:70.0%"></p>
 <p>The next graph focuses on the clutch issue by plotting <span class="math inline">\(R - M\)</span> against season, where <span class="math inline">\(R - M\)</span> is the number of additional runs Ortiz got by clever situational hitting.</p>
 <p><img src="figures/simulation/simulation15.png" class="img-fluid" style="width:70.0%"></p>
-<p>We see that Ortiz was most clutch in 2005, getting 13 additional runs, but this was unusual. &nbsp;Note that the values of R - M fluctuate around zero indicating that there is little evidence that Ortiz was consistently clutch through his career.</p>
+<p>We see that Ortiz was most clutch in 2005, getting 13 additional runs, but this was unusual. &nbsp;Note that the values of <span class="math inline">\(R - M\)</span> fluctuate around zero indicating that there is little evidence that Ortiz was consistently clutch through his career.</p>
 </section>
 <section id="where-to-go-from-here" class="level3" data-number="4.4">
 <h3 data-number="4.4" class="anchored" data-anchor-id="where-to-go-from-here"><span class="header-section-number">4.4</span> Where to Go From Here?</h3>
@@ -353,6 +354,31 @@ sim.R
 <section id="r-work" class="level3" data-number="4.5">
 <h3 data-number="4.5" class="anchored" data-anchor-id="r-work"><span class="header-section-number">4.5</span> R Work?</h3>
 <p>I have a R markdown file that implements this permutation test procedure for David Ortiz and Derek Jeter. &nbsp;(Spoiler alert: &nbsp;There is little evidence that Jeter had clutch hitting ability using this method.) &nbsp;Here I’m&nbsp;using a single data frame that contains 17 seasons of Retrosheet play-by-play data.</p>
+</section>
+<section id="situational-measures-for-two-consecutive-seasaons" class="level3" data-number="4.6">
+<h3 data-number="4.6" class="anchored" data-anchor-id="situational-measures-for-two-consecutive-seasaons"><span class="header-section-number">4.6</span> Situational Measures for Two Consecutive Seasaons</h3>
+<p>Generally one way of assessing if a particular baseball measure of performance is ability-driven is to collect the measure for two consecutive seasons. If the scatterplot of the two measures displays some positive association, this indicates that the measure has an ability component. The measure for one season is somewhat predictive of the measure for the following season.</p>
+<p>We implemented this method for our situational hitting measure. Here’s an outline of what I did.</p>
+<ul>
+<li><p>I collected the hitters who had at least 300 plate appearances in the 2021 and 2022 seasons.</p></li>
+<li><p>For each player in each season, I computed the <span class="math inline">\(R\)</span>, the number of runs producted and <span class="math inline">\(M\)</span>, the mean number of runs produced assuming the “situation is independent of the PA” model. So for each player we have two clutch measures:</p></li>
+</ul>
+<p><span class="math display">\[
+Clutch_{2021} = R_{2021} - M_{2021}
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+Clutch_{2022} = R_{2022} - M_{2022}
+\]</span></p>
+<p>Each clutch statistic measures the additional runs produced by the hitter above what would be predicted from the random model.</p>
+<p>The following figure displays a scatterplot of the clutch statistics for the 2021 and 2022 seasons.</p>
+<p><img src="figures/simulation/simulation21.png" class="img-fluid" style="width:70.0%"></p>
+<p>We see several things:</p>
+<ul>
+<li><p>Each clutch measure seems to be symmetric about 0. For each season, you will find players who produce 10 more runs than expected and you’ll also find players who produce 10 fewer runs than expected. There is a wide spread of clutch values for the players for a particular season.</p></li>
+<li><p>There is little association in the graph. This indicates that the clutch measure is not predictive. Knowing the clutch measure for a particular player in the 2021 season doesn’t help you to predict the clutch measure for the following season.</p></li>
+</ul>
+<p>In summary, David Ortiz was certainly clutch in one season. But that doesn’t mean that we’d predict him to be clutch in a future season.</p>
 </section>
 </section>
 <section id="simulating-a-60-game-season" class="level2" data-number="5">
