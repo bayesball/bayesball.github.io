@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.269">
+<meta name="generator" content="quarto-1.3.340">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2023-02-05">
+<meta name="dcterms.date" content="2023-05-24">
 
 <title>Multilevel Modeling in Baseball</title>
 <style>
@@ -19,7 +19,7 @@ div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
 ul.task-list{list-style: none;}
 ul.task-list li input[type="checkbox"] {
   width: 0.8em;
-  margin: 0 0.8em 0.2em -1.6em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
 </style>
@@ -36,6 +36,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="Multilevel_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="Multilevel_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 </head>
@@ -48,58 +49,63 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="toc-section-number">1</span>  Introduction</a></li>
-  <li><a href="#exchangeable-modeling" id="toc-exchangeable-modeling" class="nav-link" data-scroll-target="#exchangeable-modeling"><span class="toc-section-number">2</span>  Exchangeable Modeling</a>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#exchangeable-modeling" id="toc-exchangeable-modeling" class="nav-link" data-scroll-target="#exchangeable-modeling"><span class="header-section-number">2</span> Exchangeable Modeling</a>
   <ul class="collapse">
-  <li><a href="#efron-and-morris-baseball-study" id="toc-efron-and-morris-baseball-study" class="nav-link" data-scroll-target="#efron-and-morris-baseball-study"><span class="toc-section-number">2.1</span>  Efron and Morris’ Baseball Study</a></li>
-  <li><a href="#a-shiny-app-to-predict-batting-rates" id="toc-a-shiny-app-to-predict-batting-rates" class="nav-link" data-scroll-target="#a-shiny-app-to-predict-batting-rates"><span class="toc-section-number">2.2</span>  A Shiny App to Predict Batting Rates</a></li>
-  <li><a href="#batter-pitcher-matchups" id="toc-batter-pitcher-matchups" class="nav-link" data-scroll-target="#batter-pitcher-matchups"><span class="toc-section-number">2.3</span>  Batter Pitcher Matchups</a></li>
+  <li><a href="#efron-and-morris-baseball-study" id="toc-efron-and-morris-baseball-study" class="nav-link" data-scroll-target="#efron-and-morris-baseball-study"><span class="header-section-number">2.1</span> Efron and Morris’ Baseball Study</a></li>
+  <li><a href="#a-shiny-app-to-predict-batting-rates" id="toc-a-shiny-app-to-predict-batting-rates" class="nav-link" data-scroll-target="#a-shiny-app-to-predict-batting-rates"><span class="header-section-number">2.2</span> A Shiny App to Predict Batting Rates</a></li>
+  <li><a href="#batter-pitcher-matchups" id="toc-batter-pitcher-matchups" class="nav-link" data-scroll-target="#batter-pitcher-matchups"><span class="header-section-number">2.3</span> Batter Pitcher Matchups</a></li>
   </ul></li>
-  <li><a href="#nonnested-multilevel-models" id="toc-nonnested-multilevel-models" class="nav-link" data-scroll-target="#nonnested-multilevel-models"><span class="toc-section-number">3</span>  Nonnested Multilevel Models</a>
+  <li><a href="#nonnested-multilevel-models" id="toc-nonnested-multilevel-models" class="nav-link" data-scroll-target="#nonnested-multilevel-models"><span class="header-section-number">3</span> Nonnested Multilevel Models</a>
   <ul class="collapse">
-  <li><a href="#is-pitching-75-of-baseball" id="toc-is-pitching-75-of-baseball" class="nav-link" data-scroll-target="#is-pitching-75-of-baseball"><span class="toc-section-number">3.1</span>  Is Pitching 75% of Baseball?</a></li>
-  <li><a href="#run-scoring-offensive-and-defensive-effects" id="toc-run-scoring-offensive-and-defensive-effects" class="nav-link" data-scroll-target="#run-scoring-offensive-and-defensive-effects"><span class="toc-section-number">3.2</span>  Run Scoring – Offensive and Defensive Effects</a></li>
-  <li><a href="#estimating-wobas" id="toc-estimating-wobas" class="nav-link" data-scroll-target="#estimating-wobas"><span class="toc-section-number">3.3</span>  Estimating wOBAs</a></li>
+  <li><a href="#is-pitching-75-of-baseball" id="toc-is-pitching-75-of-baseball" class="nav-link" data-scroll-target="#is-pitching-75-of-baseball"><span class="header-section-number">3.1</span> Is Pitching 75% of Baseball?</a></li>
+  <li><a href="#run-scoring-offensive-and-defensive-effects" id="toc-run-scoring-offensive-and-defensive-effects" class="nav-link" data-scroll-target="#run-scoring-offensive-and-defensive-effects"><span class="header-section-number">3.2</span> Run Scoring – Offensive and Defensive Effects</a></li>
+  <li><a href="#estimating-wobas" id="toc-estimating-wobas" class="nav-link" data-scroll-target="#estimating-wobas"><span class="header-section-number">3.3</span> Estimating wOBAs</a></li>
   </ul></li>
-  <li><a href="#situation-splits-changing-intercepts-changing-slopes-model" id="toc-situation-splits-changing-intercepts-changing-slopes-model" class="nav-link" data-scroll-target="#situation-splits-changing-intercepts-changing-slopes-model"><span class="toc-section-number">4</span>  Situation Splits (Changing Intercepts, Changing Slopes Model)</a>
+  <li><a href="#situation-splits-changing-intercepts-changing-slopes-model" id="toc-situation-splits-changing-intercepts-changing-slopes-model" class="nav-link" data-scroll-target="#situation-splits-changing-intercepts-changing-slopes-model"><span class="header-section-number">4</span> Situation Splits (Changing Intercepts, Changing Slopes Model)</a>
   <ul class="collapse">
-  <li><a href="#count-effects" id="toc-count-effects" class="nav-link" data-scroll-target="#count-effects"><span class="toc-section-number">4.1</span>  Count Effects</a></li>
-  <li><a href="#platoon-effects" id="toc-platoon-effects" class="nav-link" data-scroll-target="#platoon-effects"><span class="toc-section-number">4.2</span>  Platoon Effects</a></li>
+  <li><a href="#count-effects" id="toc-count-effects" class="nav-link" data-scroll-target="#count-effects"><span class="header-section-number">4.1</span> Count Effects</a></li>
+  <li><a href="#platoon-effects" id="toc-platoon-effects" class="nav-link" data-scroll-target="#platoon-effects"><span class="header-section-number">4.2</span> Platoon Effects</a></li>
   </ul></li>
-  <li><a href="#multilevel-modeling-of-career-trajectories" id="toc-multilevel-modeling-of-career-trajectories" class="nav-link" data-scroll-target="#multilevel-modeling-of-career-trajectories"><span class="toc-section-number">5</span>  Multilevel Modeling of Career Trajectories</a>
+  <li><a href="#multilevel-modeling-of-career-trajectories" id="toc-multilevel-modeling-of-career-trajectories" class="nav-link" data-scroll-target="#multilevel-modeling-of-career-trajectories"><span class="header-section-number">5</span> Multilevel Modeling of Career Trajectories</a>
   <ul class="collapse">
-  <li><a href="#introduction-9" id="toc-introduction-9" class="nav-link" data-scroll-target="#introduction-9"><span class="toc-section-number">5.1</span>  Introduction</a></li>
-  <li><a href="#the-wrong-way-to-look-at-aging-data" id="toc-the-wrong-way-to-look-at-aging-data" class="nav-link" data-scroll-target="#the-wrong-way-to-look-at-aging-data"><span class="toc-section-number">5.2</span>  The Wrong Way to Look at Aging Data</a></li>
-  <li><a href="#derek-jeters-obp-trajectory" id="toc-derek-jeters-obp-trajectory" class="nav-link" data-scroll-target="#derek-jeters-obp-trajectory"><span class="toc-section-number">5.3</span>  Derek Jeter’s OBP Trajectory</a></li>
-  <li><a href="#the-problem-individual-fits-can-be-crummy" id="toc-the-problem-individual-fits-can-be-crummy" class="nav-link" data-scroll-target="#the-problem-individual-fits-can-be-crummy"><span class="toc-section-number">5.4</span>  The Problem: Individual Fits Can be Crummy</a></li>
-  <li><a href="#what-can-we-do" id="toc-what-can-we-do" class="nav-link" data-scroll-target="#what-can-we-do"><span class="toc-section-number">5.5</span>  What Can We Do?</a></li>
-  <li><a href="#multilevel-modeling-to-the-rescue" id="toc-multilevel-modeling-to-the-rescue" class="nav-link" data-scroll-target="#multilevel-modeling-to-the-rescue"><span class="toc-section-number">5.6</span>  Multilevel Modeling to the Rescue</a></li>
-  <li><a href="#multilevel-modelling-gives-reasonable-fits" id="toc-multilevel-modelling-gives-reasonable-fits" class="nav-link" data-scroll-target="#multilevel-modelling-gives-reasonable-fits"><span class="toc-section-number">5.7</span>  Multilevel Modelling Gives Reasonable Fits</a></li>
-  <li><a href="#when-do-players-peak" id="toc-when-do-players-peak" class="nav-link" data-scroll-target="#when-do-players-peak"><span class="toc-section-number">5.8</span>  When Do Players Peak?</a></li>
-  <li><a href="#some-closing-comments" id="toc-some-closing-comments" class="nav-link" data-scroll-target="#some-closing-comments"><span class="toc-section-number">5.9</span>  Some Closing Comments</a></li>
+  <li><a href="#introduction-9" id="toc-introduction-9" class="nav-link" data-scroll-target="#introduction-9"><span class="header-section-number">5.1</span> Introduction</a></li>
+  <li><a href="#the-wrong-way-to-look-at-aging-data" id="toc-the-wrong-way-to-look-at-aging-data" class="nav-link" data-scroll-target="#the-wrong-way-to-look-at-aging-data"><span class="header-section-number">5.2</span> The Wrong Way to Look at Aging Data</a></li>
+  <li><a href="#derek-jeters-obp-trajectory" id="toc-derek-jeters-obp-trajectory" class="nav-link" data-scroll-target="#derek-jeters-obp-trajectory"><span class="header-section-number">5.3</span> Derek Jeter’s OBP Trajectory</a></li>
+  <li><a href="#the-problem-individual-fits-can-be-crummy" id="toc-the-problem-individual-fits-can-be-crummy" class="nav-link" data-scroll-target="#the-problem-individual-fits-can-be-crummy"><span class="header-section-number">5.4</span> The Problem: Individual Fits Can be Crummy</a></li>
+  <li><a href="#what-can-we-do" id="toc-what-can-we-do" class="nav-link" data-scroll-target="#what-can-we-do"><span class="header-section-number">5.5</span> What Can We Do?</a></li>
+  <li><a href="#multilevel-modeling-to-the-rescue" id="toc-multilevel-modeling-to-the-rescue" class="nav-link" data-scroll-target="#multilevel-modeling-to-the-rescue"><span class="header-section-number">5.6</span> Multilevel Modeling to the Rescue</a></li>
+  <li><a href="#multilevel-modelling-gives-reasonable-fits" id="toc-multilevel-modelling-gives-reasonable-fits" class="nav-link" data-scroll-target="#multilevel-modelling-gives-reasonable-fits"><span class="header-section-number">5.7</span> Multilevel Modelling Gives Reasonable Fits</a></li>
+  <li><a href="#when-do-players-peak" id="toc-when-do-players-peak" class="nav-link" data-scroll-target="#when-do-players-peak"><span class="header-section-number">5.8</span> When Do Players Peak?</a></li>
+  <li><a href="#some-closing-comments" id="toc-some-closing-comments" class="nav-link" data-scroll-target="#some-closing-comments"><span class="header-section-number">5.9</span> Some Closing Comments</a></li>
   </ul></li>
-  <li><a href="#home-run-talent-distributions" id="toc-home-run-talent-distributions" class="nav-link" data-scroll-target="#home-run-talent-distributions"><span class="toc-section-number">6</span>  Home Run Talent Distributions</a>
+  <li><a href="#home-run-talent-distributions" id="toc-home-run-talent-distributions" class="nav-link" data-scroll-target="#home-run-talent-distributions"><span class="header-section-number">6</span> Home Run Talent Distributions</a>
   <ul class="collapse">
-  <li><a href="#introduction-10" id="toc-introduction-10" class="nav-link" data-scroll-target="#introduction-10"><span class="toc-section-number">6.1</span>  Introduction</a></li>
-  <li><a href="#distinction-between-home-run-talent-and-home-run-performance-comparing-two-hitters" id="toc-distinction-between-home-run-talent-and-home-run-performance-comparing-two-hitters" class="nav-link" data-scroll-target="#distinction-between-home-run-talent-and-home-run-performance-comparing-two-hitters"><span class="toc-section-number">6.2</span>  Distinction Between Home Run Talent and Home Run Performance – Comparing Two Hitters</a></li>
-  <li><a href="#estimating-home-run-probabilities" id="toc-estimating-home-run-probabilities" class="nav-link" data-scroll-target="#estimating-home-run-probabilities"><span class="toc-section-number">6.3</span>  Estimating Home Run Probabilities</a></li>
-  <li><a href="#a-multilevel-model" id="toc-a-multilevel-model" class="nav-link" data-scroll-target="#a-multilevel-model"><span class="toc-section-number">6.4</span>  A Multilevel Model</a></li>
-  <li><a href="#comparing-normal-and-cauchy-models" id="toc-comparing-normal-and-cauchy-models" class="nav-link" data-scroll-target="#comparing-normal-and-cauchy-models"><span class="toc-section-number">6.5</span>  Comparing Normal and Cauchy Models</a></li>
-  <li><a href="#comparing-2001-and-2019" id="toc-comparing-2001-and-2019" class="nav-link" data-scroll-target="#comparing-2001-and-2019"><span class="toc-section-number">6.6</span>  Comparing 2001 and 2019</a></li>
-  <li><a href="#comparing-five-recent-seasons" id="toc-comparing-five-recent-seasons" class="nav-link" data-scroll-target="#comparing-five-recent-seasons"><span class="toc-section-number">6.7</span>  Comparing Five Recent Seasons</a></li>
-  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up"><span class="toc-section-number">6.8</span>  Wrap-Up</a></li>
+  <li><a href="#introduction-10" id="toc-introduction-10" class="nav-link" data-scroll-target="#introduction-10"><span class="header-section-number">6.1</span> Introduction</a></li>
+  <li><a href="#distinction-between-home-run-talent-and-home-run-performance-comparing-two-hitters" id="toc-distinction-between-home-run-talent-and-home-run-performance-comparing-two-hitters" class="nav-link" data-scroll-target="#distinction-between-home-run-talent-and-home-run-performance-comparing-two-hitters"><span class="header-section-number">6.2</span> Distinction Between Home Run Talent and Home Run Performance – Comparing Two Hitters</a></li>
+  <li><a href="#estimating-home-run-probabilities" id="toc-estimating-home-run-probabilities" class="nav-link" data-scroll-target="#estimating-home-run-probabilities"><span class="header-section-number">6.3</span> Estimating Home Run Probabilities</a></li>
+  <li><a href="#a-multilevel-model" id="toc-a-multilevel-model" class="nav-link" data-scroll-target="#a-multilevel-model"><span class="header-section-number">6.4</span> A Multilevel Model</a></li>
+  <li><a href="#comparing-normal-and-cauchy-models" id="toc-comparing-normal-and-cauchy-models" class="nav-link" data-scroll-target="#comparing-normal-and-cauchy-models"><span class="header-section-number">6.5</span> Comparing Normal and Cauchy Models</a></li>
+  <li><a href="#comparing-2001-and-2019" id="toc-comparing-2001-and-2019" class="nav-link" data-scroll-target="#comparing-2001-and-2019"><span class="header-section-number">6.6</span> Comparing 2001 and 2019</a></li>
+  <li><a href="#comparing-five-recent-seasons" id="toc-comparing-five-recent-seasons" class="nav-link" data-scroll-target="#comparing-five-recent-seasons"><span class="header-section-number">6.7</span> Comparing Five Recent Seasons</a></li>
+  <li><a href="#wrap-up" id="toc-wrap-up" class="nav-link" data-scroll-target="#wrap-up"><span class="header-section-number">6.8</span> Wrap-Up</a></li>
   </ul></li>
-  <li><a href="#ba-on-balls-in-play-launch-conditions-and-random-effects" id="toc-ba-on-balls-in-play-launch-conditions-and-random-effects" class="nav-link" data-scroll-target="#ba-on-balls-in-play-launch-conditions-and-random-effects"><span class="toc-section-number">7</span>  BA on Balls in Play, Launch Conditions, and Random Effects</a>
+  <li><a href="#ba-on-balls-in-play-launch-conditions-and-random-effects" id="toc-ba-on-balls-in-play-launch-conditions-and-random-effects" class="nav-link" data-scroll-target="#ba-on-balls-in-play-launch-conditions-and-random-effects"><span class="header-section-number">7</span> BA on Balls in Play, Launch Conditions, and Random Effects</a>
   <ul class="collapse">
-  <li><a href="#introduction-11" id="toc-introduction-11" class="nav-link" data-scroll-target="#introduction-11"><span class="toc-section-number">7.1</span>  Introduction</a></li>
-  <li><a href="#estimating-batting-average-on-balls-in-play-from-launch-conditions" id="toc-estimating-batting-average-on-balls-in-play-from-launch-conditions" class="nav-link" data-scroll-target="#estimating-batting-average-on-balls-in-play-from-launch-conditions"><span class="toc-section-number">7.2</span>  Estimating Batting Average on Balls in Play from Launch Conditions</a></li>
-  <li><a href="#a-random-effects-model-1" id="toc-a-random-effects-model-1" class="nav-link" data-scroll-target="#a-random-effects-model-1"><span class="toc-section-number">7.3</span>  A Random Effects Model</a></li>
-  <li><a href="#understanding-differences-in-babip" id="toc-understanding-differences-in-babip" class="nav-link" data-scroll-target="#understanding-differences-in-babip"><span class="toc-section-number">7.4</span>  Understanding Differences in BABIP</a></li>
-  <li><a href="#an-adjustment-model-for-babip-data" id="toc-an-adjustment-model-for-babip-data" class="nav-link" data-scroll-target="#an-adjustment-model-for-babip-data"><span class="toc-section-number">7.5</span>  An Adjustment Model for BABIP Data</a></li>
-  <li><a href="#comparing-the-two-random-effects-models" id="toc-comparing-the-two-random-effects-models" class="nav-link" data-scroll-target="#comparing-the-two-random-effects-models"><span class="toc-section-number">7.6</span>  Comparing the Two Random Effects Models</a></li>
-  <li><a href="#summing-up" id="toc-summing-up" class="nav-link" data-scroll-target="#summing-up"><span class="toc-section-number">7.7</span>  Summing Up</a></li>
+  <li><a href="#introduction-11" id="toc-introduction-11" class="nav-link" data-scroll-target="#introduction-11"><span class="header-section-number">7.1</span> Introduction</a></li>
+  <li><a href="#estimating-batting-average-on-balls-in-play-from-launch-conditions" id="toc-estimating-batting-average-on-balls-in-play-from-launch-conditions" class="nav-link" data-scroll-target="#estimating-batting-average-on-balls-in-play-from-launch-conditions"><span class="header-section-number">7.2</span> Estimating Batting Average on Balls in Play from Launch Conditions</a></li>
+  <li><a href="#a-random-effects-model-1" id="toc-a-random-effects-model-1" class="nav-link" data-scroll-target="#a-random-effects-model-1"><span class="header-section-number">7.3</span> A Random Effects Model</a></li>
+  <li><a href="#understanding-differences-in-babip" id="toc-understanding-differences-in-babip" class="nav-link" data-scroll-target="#understanding-differences-in-babip"><span class="header-section-number">7.4</span> Understanding Differences in BABIP</a></li>
+  <li><a href="#an-adjustment-model-for-babip-data" id="toc-an-adjustment-model-for-babip-data" class="nav-link" data-scroll-target="#an-adjustment-model-for-babip-data"><span class="header-section-number">7.5</span> An Adjustment Model for BABIP Data</a></li>
+  <li><a href="#comparing-the-two-random-effects-models" id="toc-comparing-the-two-random-effects-models" class="nav-link" data-scroll-target="#comparing-the-two-random-effects-models"><span class="header-section-number">7.6</span> Comparing the Two Random Effects Models</a></li>
+  <li><a href="#summing-up" id="toc-summing-up" class="nav-link" data-scroll-target="#summing-up"><span class="header-section-number">7.7</span> Summing Up</a></li>
   </ul></li>
-  <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="toc-section-number">8</span>  References</a></li>
+  <li><a href="#was-ty-cobb-a-true-.400-hitter" id="toc-was-ty-cobb-a-true-.400-hitter" class="nav-link" data-scroll-target="#was-ty-cobb-a-true-.400-hitter"><span class="header-section-number">8</span> Was Ty Cobb a True .400 Hitter?</a>
+  <ul class="collapse">
+  <li><a href="#carl-morris-work" id="toc-carl-morris-work" class="nav-link" data-scroll-target="#carl-morris-work"><span class="header-section-number">8.1</span> Carl Morris’ Work</a></li>
+  <li><a href="#multilevel-woba-player-comparison" id="toc-multilevel-woba-player-comparison" class="nav-link" data-scroll-target="#multilevel-woba-player-comparison"><span class="header-section-number">8.2</span> Multilevel wOBA Player Comparison</a></li>
+  </ul></li>
+  <li><a href="#other-postspapers-on-multilevel-models" id="toc-other-postspapers-on-multilevel-models" class="nav-link" data-scroll-target="#other-postspapers-on-multilevel-models"><span class="header-section-number">9</span> Other Posts/Papers on Multilevel Models</a></li>
   </ul>
 </nav>
 </div>
@@ -124,7 +130,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">February 5, 2023</p>
+      <p class="date">May 24, 2023</p>
     </div>
   </div>
   
@@ -200,8 +206,12 @@ ul.task-list li input[type="checkbox"] {
 <p>This question relates to the general issue of aging among baseball players. In particular, at what age does a hitter or pitcher achieve peak performance? Section 5 uses a multilevel level to address this issue. One represents the pattern of career performance of a player by a quadratic regression model. One can simultaneously estimate the regression parameters for the players by the multilevel model. This provides improved fits of the players trajectories and one can obtain estimates of the ages where they achieve peak performance.</p>
 <p><strong>Understanding home run talents (Section 6)</strong></p>
 <p>It can be difficult to predict future home run performance since it depends on understanding a hitter’s <em>ability</em> to hit home runs but all we have are measures of his home run <em>performance</em>. Section 6 describes the use of a multilevel model to understand the distribution of home run abilities for all players in a particular season.</p>
-<p><strong>Random Effects Models</strong></p>
+<p><strong>Random Effects Models (Section 7)</strong></p>
 <p>Multilevel modeling is similar to the use of random effects in regression models. Section 7 describes the use of several random effects models to understand player-to-player variation in the batting average on balls in play.</p>
+<p><strong>Was Ty Cobb a True .400 Hitter (Section 8)</strong></p>
+<p>In 1982 Carl Morris used a multilevel model to explore the career AVG trajectory of Ty Cobb. We illustrate his analysis using a beta-binomial model where the means follow a quadratic curve. In part 2 of this section, we use this general approach and a normal/normal multilevel model to explore the career trajectories of wOBA for several Hall of Fame players of interest.</p>
+<p><strong>Other Posts/Articles (Section 9)</strong></p>
+<p>This section gives links to other related articles applying multilevel models to baseball data.</p>
 </section>
 <section id="exchangeable-modeling" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="exchangeable-modeling"><span class="header-section-number">2</span> Exchangeable Modeling</h2>
@@ -859,8 +869,119 @@ logit(p_{ij}) = s(LA_{ij}, LS_{ij}) + b_i
 </ul>
 </section>
 </section>
-<section id="references" class="level2" data-number="8">
-<h2 data-number="8" class="anchored" data-anchor-id="references"><span class="header-section-number">8</span> References</h2>
+<section id="was-ty-cobb-a-true-.400-hitter" class="level2" data-number="8">
+<h2 data-number="8" class="anchored" data-anchor-id="was-ty-cobb-a-true-.400-hitter"><span class="header-section-number">8</span> Was Ty Cobb a True .400 Hitter?</h2>
+<section id="carl-morris-work" class="level3" data-number="8.1">
+<h3 data-number="8.1" class="anchored" data-anchor-id="carl-morris-work"><span class="header-section-number">8.1</span> Carl Morris’ Work</h3>
+<section id="introduction-12" class="level4" data-number="8.1.1">
+<h4 data-number="8.1.1" class="anchored" data-anchor-id="introduction-12"><span class="header-section-number">8.1.1</span> Introduction</h4>
+<p>I was saddened to learn about Professor Carl Morris’ recent passing. Carl was a great statistician famous for his groundbreaking work in empirical/hierarchical Bayesian modeling. On a personal note, Carl and I worked in similar research areas. When I was working on my dissertation, I read the famous series of papers by Brad Efron and Carl Morris in the 1970’s. I was fortunate to meet Carl at one of the first conferences I attended – he was always very supportive of my Bayesian work.</p>
+<p>Besides statistics, Carl Morris and I shared a passion for sports and the application of statistical thinking to sports problems. Carl played tennis – one of his earliest sports papers was on the most important point in a game of tennis. He also was an avid baseball fan and he used baseball examples to illustrate statistical concepts.</p>
+<p>One of Carl Morris’ most influential papers was “Parametric Empirical Bayes Inference: Theory and Applications” published in the Journal of the American Statistical Association in 1983. This paper provided an overview of multilevel modeling with the use of empirical Bayes methods in parameter estimation.</p>
+<p>In Section 5 of this empirical Bayes paper, Carl uses the season to season batting averages of Ty Cobb to illustrate the application of multilevel models. Specifically, he wishes to address the question whether Cobb was ever a true .400 hitter during his career. As a tribute to Carl’s research, I thought it would be interesting to revisit Carl’s example using simulation-based computations from a similar multilevel model.</p>
+</section>
+<section id="the-data-and-quadratic-fit" class="level4" data-number="8.1.2">
+<h4 data-number="8.1.2" class="anchored" data-anchor-id="the-data-and-quadratic-fit"><span class="header-section-number">8.1.2</span> The Data and Quadratic Fit</h4>
+<p>Here is a scatterplot of Ty Cobb’s batting averages for all of his seasons from 1905 through 1928. We add a quadratic smoothing curve that seems to be a reasonable fit to these data.</p>
+<p><img src="figures/multilevel/morris1.png" class="img-fluid" style="width:70.0%"></p>
+<p>We see from the graph that Cobb had an average exceeding .400 in the 1911, 1912 and 1922 seasons. But these averages don’t directly display Cobb’s talent. For example, Cobb’s .419 average in the 1911 season is influenced both by his hitting talent and the sampling variation due to other factors such as the fielding, pitching and ballpark characteristics. An interesting question is: “Did Cobb’s batting ability exceed .400 sometime during his career?” We address this question as Morris did by use of a statistical model.</p>
+</section>
+<section id="a-multilevel-model-1" class="level4" data-number="8.1.3">
+<h4 data-number="8.1.3" class="anchored" data-anchor-id="a-multilevel-model-1"><span class="header-section-number">8.1.3</span> A Multilevel Model</h4>
+<p>Let <span class="math inline">\(y_j\)</span> denote the number of hits of Cobb in <span class="math inline">\(n_j\)</span> at-bats in the <span class="math inline">\(j\)</span>th season. We assume that <span class="math inline">\(y_j\)</span> is binomial with sample size <span class="math inline">\(n_j\)</span> and probability <span class="math inline">\(p_j\)</span>. We can think of <span class="math inline">\(p_j\)</span> as representing Cobb’s true ability of getting a hit in that particular season.</p>
+<p>Since a quadratic model seems to be a reasonable fit to these data, we let <span class="math inline">\(p_j\)</span> have a beta distribution with mean <span class="math inline">\(\eta_j\)</span> and precision <span class="math inline">\(K\)</span> where the means satisfy the logistic model</p>
+<p><span class="math display">\[\log \left(\frac{\eta_j}{1 - \eta_j}\right) = \beta_0 + \beta_1 j + \beta_2 j^2.\]</span></p>
+<p>At the final stage of the model, we assign the regression parameters <span class="math inline">\(\beta_0, \beta_1, \beta_2\)</span> and <span class="math inline">\(K\)</span> weakly informative priors.</p>
+</section>
+<section id="fitting-the-model" class="level4" data-number="8.1.4">
+<h4 data-number="8.1.4" class="anchored" data-anchor-id="fitting-the-model"><span class="header-section-number">8.1.4</span> Fitting the Model</h4>
+<p>We fit this model by constructing a MCMC algorithm to sample from the joint posterior distribution. This was conveniently done using the JAGS software and the associated runjags R package.</p>
+<p>As in Carl’s paper, we focus on Bayesian estimates of the hit probabilities <span class="math inline">\(p_j\)</span>. One can write the estimate of <span class="math inline">\(p_j\)</span> as</p>
+<p><span class="math display">\[\tilde p_j = \frac{y_j + \hat K \hat{p_j}}{n_j + \hat K},\]</span></p>
+<p>where <span class="math inline">\(\hat p_j\)</span> is an estimate of <span class="math inline">\(p_j\)</span> based on the quadratic fit and <span class="math inline">\(\hat K\)</span> is an estimate of the precision parameter. Essentially one is moving the raw batting average <span class="math inline">\(y_j/n_j\)</span> towards the quadratic estimate and the size of the movement is governed by <span class="math inline">\(\hat K\)</span>. I plot the observed, quadratic fit and multilevel AVG estimates below. Here the estimate of <span class="math inline">\(K\)</span> is 812; since this estimate exceeds the AB counts for Cobb, this indicates that the multilevel estimate adjusts the raw AVG over 50% of the way towards the quadratic estimate</p>
+<p><img src="figures/multilevel/morris2.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="was-ty-cobb-ever-a-true-.400-hitter" class="level4" data-number="8.1.5">
+<h4 data-number="8.1.5" class="anchored" data-anchor-id="was-ty-cobb-ever-a-true-.400-hitter"><span class="header-section-number">8.1.5</span> Was Ty Cobb Ever a True .400 Hitter?</h4>
+<p>We know that Ty Cobb did hit over .400 for several seasons during his career. But we are asking a different question – did his true batting average <span class="math inline">\(p_j\)</span> exceed .400 for any season?</p>
+<p>We can easily address this question from our Bayesian fitting. We define the maximum batting probability</p>
+<p><span class="math display">\[p = \max \{p_1, …, p_{23}\}\]</span></p>
+<p>and examine the posterior density of the maximum probability <span class="math inline">\(p\)</span>. This posterior density is displayed below. One computes the probability the maximum probability exceeds .400 is 0.761, so we conclude that it is likely that Cobb was a true .400 hitter.</p>
+<p><img src="figures/multilevel/morris3.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="relation-with-morris-work" class="level4" data-number="8.1.6">
+<h4 data-number="8.1.6" class="anchored" data-anchor-id="relation-with-morris-work"><span class="header-section-number">8.1.6</span> Relation With Morris’ Work</h4>
+<p>In Carl Morris’ 1982 JASA paper, a similar multilevel model was fit based on normal distributions. This paper predated fitting Bayesian models by Markov Chain Monte Carlo, so Morris relied on approximate empirical Bayes methods to do the fitting. Figure 2 from his Parametric Empirical Bayes paper is shown below which resembles my graph.</p>
+<p><img src="figures/multilevel/morris4.png" class="img-fluid" style="width:70.0%"></p>
+<p>Carl Morris gets similar results – for example, he comments that the shrinkage (movement) of the Bayesian estimates is typically 62% of the way towards the quadratic curve which agrees with our work. By using an independence argument he computes the posterior probability that Cobb was a .400 hitter (for at least one season) to be 88 percent which again is similar to our computed probability.</p>
+</section>
+<section id="the-player_function_lb-function" class="level4" data-number="8.1.7">
+<h4 data-number="8.1.7" class="anchored" data-anchor-id="the-player_function_lb-function"><span class="header-section-number">8.1.7</span> The <code>player_function_lb()</code> Function</h4>
+<p>I thought it would be worthwhile to write a R function that would perform these calculations for a player of interest. The function <code>player_function_lb()</code> accepts as input the Lahman player id of the player. The function will fit this multilevel model to the <span class="math inline">\((H, AB)\)</span> data for the player where the underlying probabilities are believed to follow a quadratic model. The two main outputs are …</p>
+<ul>
+<li><p>a plot displaying the observed AVG, the quadratic fit, and the multilevel estimates plotted as a function of the season</p></li>
+<li><p>a plot displaying the posterior density of the maximum hitting probability</p></li>
+</ul>
+<p>In addition, all of the data used in the plots are included as part of the output. I’ve posted the player_function_lb() function on my Github Gist site.</p>
+<p>To make the function self-contained, the multilevel model fitting is implemented through a two-step approach using functions from the <code>LearnBayes</code> package. The marginal posterior of the hyperparameters (<span class="math inline">\(\beta_0, \beta_1, \beta_2, \log K\)</span>) is estimated by a normal approximation. For the Ty Cobb example, the probability estimates were approximately the same as the ones found using the JAGS/MCMC fitting.</p>
+</section>
+<section id="further-comments" class="level4" data-number="8.1.8">
+<h4 data-number="8.1.8" class="anchored" data-anchor-id="further-comments"><span class="header-section-number">8.1.8</span> Further Comments</h4>
+<ul>
+<li><p>In 2014, I had the opportunity to interview Carl Morris for Chance magazine. This interview focuses on Morris’ interests in sports and statistics, and his comments about the current and future use of statistical thinking in sports.</p></li>
+<li><p>I have written several posts about the famous baseball example in a paper by Brad Efron and Carl Morris to illustrate these shrinkage estimates. In this post, I illustrate fitting a random effects model using 1970 season data found from Retrosheet. In this second post, given batting data for the beginning of a season, I describe the use of a Shiny app to predict batting rates for the remainder of the season.</p></li>
+<li><p>A modern criticism of this study is that AVG (batting average) is a poor measure of batting ability. In a future post, I will illustrate how this type of modeling can be used in exploring career trajectories of Hall of Famers using a modern measure of batting performance such as wOBA.</p></li>
+</ul>
+</section>
+</section>
+<section id="multilevel-woba-player-comparison" class="level3" data-number="8.2">
+<h3 data-number="8.2" class="anchored" data-anchor-id="multilevel-woba-player-comparison"><span class="header-section-number">8.2</span> Multilevel wOBA Player Comparison</h3>
+<section id="introduction-13" class="level4" data-number="8.2.1">
+<h4 data-number="8.2.1" class="anchored" data-anchor-id="introduction-13"><span class="header-section-number">8.2.1</span> Introduction</h4>
+<p>In last weeks post, I revisited Carl Morris’ exploration of Ty Cobb’s career trajectory of batting average. Morris used a multilevel model to shrink or adjust the observed AVGs towards a quadratic curve, and explored the posterior distribution of Cobb’s highest batting probability. In our work, we learned that Cobb was likely a true .400 hitter sometime during his baseball career.</p>
+<p>Since batting average is a poor measure of batting performance, I wanted to extend Morris’ work using a better batting measure. Here’s the plan for this post.</p>
+<ul>
+<li><p>I focus on a player’s trajectory of wOBA values displayed as a function of his age.</p></li>
+<li><p>I fit a multilevel model (a so-called normal/normal multilevel model) on the wOBA measures. I assume that the wOBA values are normally distributed with unknown means, and then I assume the means follow a quadratic curve where both the regression coefficients and the spread (standard deviation) about the curve are unknown.</p></li>
+</ul>
+<p>Since we are usually interested in comparing hitters, I focus on the comparison of these multilevel fits for two Hall of Fame players of interest. We will see that this modeling tells us if the quadratic fit is a reasonable fit to a player’s wOBA trajectory. In addition, it will allow us to compare the posteriors of the maximum expected wOBA for the two players.</p>
+</section>
+<section id="a-multilevel-model-for-woba" class="level4" data-number="8.2.2">
+<h4 data-number="8.2.2" class="anchored" data-anchor-id="a-multilevel-model-for-woba"><span class="header-section-number">8.2.2</span> A Multilevel Model for wOBA</h4>
+<p>For a particular hitter, at age <span class="math inline">\(x_j\)</span>, we observe the weighted on-base percentage <span class="math inline">\(wOBA_j\)</span> in <span class="math inline">\(PA_j\)</span> plate appearances for all seasons of his career.</p>
+<ul>
+<li><p>At the sampling stage, we assume that the observed <span class="math inline">\(wOBA_j\)</span> is normal with mean <span class="math inline">\(\theta_j\)</span> and standard deviation <span class="math inline">\(\sigma / \sqrt{PA}\)</span>. Given the FanGraphs data, we can’t directly estimate the sampling standard deviation <span class="math inline">\(\sigma\)</span>, but we will assign a reasonable value for <span class="math inline">\(\sigma\)</span> based on Retrosheet play-by-play data.</p></li>
+<li><p>At the prior stage, we assume the means <span class="math inline">\(\theta_j\)</span> are normal(<span class="math inline">\(\mu_j, \tau\)</span>) where the prior means follow the quadratic model <span class="math inline">\(\mu_j = \beta_0 + \beta_1 x_j + \beta_2 x_j^2\)</span>.</p></li>
+<li><p>At the last stage, we assign the regression parameters <span class="math inline">\(\beta_0, \beta_1, \beta_2, \tau\)</span> weak informative prior distributions.</p></li>
+</ul>
+<p>We focus on learning about the expected <span class="math inline">\(wOBA_j\)</span> value, <span class="math inline">\(\theta_j\)</span>. On one extreme, if we don’t have any information about other seasons, the best estimate at <span class="math inline">\(\theta_j\)</span> is the observed <span class="math inline">\(wOBA\)</span> for that season. At the other extreme, if we believe the expected <span class="math inline">\(wOBA_j\)</span> follow the quadratic aging curve, the best estimate is the value on the estimated curve. The posterior mean of <span class="math inline">\(\theta_j\)</span> is a compromise between these two estimates – we say that the observed <span class="math inline">\(wOBA_j\)</span> is shrunk towards the estimate on the curve. The shrinkage percentage for the <span class="math inline">\(j\)</span>th season is defined to be</p>
+<p><span class="math display">\[SHRINKAGE = 100 \frac{1/\tau^2}{1/\tau^2 + PA_j / \sigma^2}\]</span>.</p>
+<p>The degree of shrinkage is controlled by the estimate at the prior standard deviation <span class="math inline">\(\tau\)</span>. This is an example of an adaptive estimate – if the observed <span class="math inline">\(wOBA_j\)</span> values do follow the curve, we would estimate a small value for <span class="math inline">\(\tau\)</span> and the posterior means would resemble the estimates on the curve. On the other hand, if the observed <span class="math inline">\(wOBA_j\)</span> have a different (non-quadratic) shape, there would be limited shrinkage towards the quadratic curve.</p>
+</section>
+<section id="comparing-joe-morgan-and-barry-larkin" class="level4" data-number="8.2.3">
+<h4 data-number="8.2.3" class="anchored" data-anchor-id="comparing-joe-morgan-and-barry-larkin"><span class="header-section-number">8.2.3</span> Comparing Joe Morgan and Barry Larkin</h4>
+<p>To illustrate the use of this multilevel modeling, we compare the wOBA career trajectories of two Hall of Fame infielders for the Reds, Barry Larkin and Joe Morgan. Larkin played from 1986 through 2004, and Morgan played from 1963 to 1984.</p>
+<p>The first graph displays the observed, quadratic fit and multilevel estimates of the expected wOBA for the two players. Both players appear to peak in their early 30’s. Larkin’s wOBA values seem to closely match the quadratic fit. In contrast, Morgan wOBA values show a different shape where the wOBA values are unusually high in the period from 30-32, and unusually low in the periods about the middle 20’s and the middle 30’s. As a consequence, the multilevel estimates are moved closer to the quadratic estimates for Larkin than for Morgan.</p>
+<p><img src="figures/multilevel/morris5.png" class="img-fluid" style="width:70.0%"></p>
+<p>The difference in shrinkage behavior is more dramatically illustrated in the following graph that displays the shrinkages plotted against the ages. The shrinkages for Larkin tend to be 75 percent contrasted with the 40 percent values for Morgan.</p>
+<p><img src="figures/multilevel/morris6.png" class="img-fluid" style="width:70.0%"></p>
+<p>One can compare the expected wOBA estimates for the two players by the construction of 50% probability intervals for the expected wOBAs. This confirms that the two players had significantly different trajectory shapes for wOBA.</p>
+<p><img src="figures/multilevel/morris7.png" class="img-fluid" style="width:70.0%"></p>
+<p>Who was the better player at his peak? We address this question by plotting posterior distributions for the maximum expected wOBA for the two players. Morgan’s expected wOBA peaked around 0.43 compared to 0.40 for Larkin.</p>
+<p><img src="figures/multilevel/morris8.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="computation-notes" class="level4" data-number="8.2.4">
+<h4 data-number="8.2.4" class="anchored" data-anchor-id="computation-notes"><span class="header-section-number">8.2.4</span> Computation Notes</h4>
+<ul>
+<li><p>I’ve written a Shiny app that allows the comparison of two Hall of Fame batters of interest by selecting the players from two dropdown menus. When you run the app, the Estimates, Shrinkages, Posteriors, and max WOBA tabs display the four plots shown here. The R code is contained in the self-contained file <code>app.R</code> in my <code>ShinyBaseball</code> package. A live version of this app can be found here. The Shiny app is self-contained as the FanGraphs data is read from a file on my Github repository.</p></li>
+<li><p>So that this function runs quickly in real time, I implement an approximate fit of the multilevel model. As mentioned before, I fix <span class="math inline">\(\sigma\)</span> to be a reasonable estimate based on previous work and I use the laplace() function from the LearnBayes package to find modal estimates of the marginal posterior of <span class="math inline">\(\beta_0, \beta_1, \beta_2, \log \tau\)</span>. Posterior distributions for a particular <span class="math inline">\(\theta_j = E(wOBA_j)\)</span> is done in two steps – first I simulate values from the posterior of <span class="math inline">\(\beta_0, \beta_1, \beta_2, \log \tau\)</span>, and then given these hyperparameter values, I simulate from the posterior of <span class="math inline">\(\theta_j\)</span>. By the way, in the Shiny app, <code>woba_player_function()</code> implements the fitting and <code>comparison_plots()</code> does the <code>ggplot2</code> graphs.</p></li>
+<li><p>Since there have been substantial changes in offense over baseball history, these comparisons are most helpful when one is comparing two players who played in similar ears. So, for example, it makes more sense to compare Mickey Mantle and Willie Mays, than compare Mantle with Babe Ruth, since Mantle and Mays played in the same baseball era. Perhaps my comparison of Joe Morgan and Barry Larkin was not the best since they played in nonoverlapping seasons. I chose these two players since they were infielders for the same franchise (Cincinnati Reds) and they illustrate different shrinkage patterns of the multilevel estimates.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="other-postspapers-on-multilevel-models" class="level2" data-number="9">
+<h2 data-number="9" class="anchored" data-anchor-id="other-postspapers-on-multilevel-models"><span class="header-section-number">9</span> Other Posts/Papers on Multilevel Models</h2>
 <p>I have a number of posts that illustrate Bayesian multilevel modeling in different contexts. Here are some links:</p>
 <ul>
 <li>Here is one of my more popular posts where I use loess smoothing of trajectories to learn about peak age performance:</li>
@@ -913,9 +1034,23 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     icon: icon
   };
   anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
   const clipboard = new window.ClipboardJS('.code-copy-button', {
-    target: function(trigger) {
-      return trigger.previousElementSibling;
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
     }
   });
   clipboard.on('success', function(e) {
@@ -980,6 +1115,92 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       return note.innerHTML;
     });
   }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
   const findCites = (el) => {
     const parentEl = el.parentElement;
     if (parentEl) {
