@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2023-12-28">
+<meta name="dcterms.date" content="2024-01-31">
 
 <title>Home Run Posts</title>
 <style>
@@ -126,6 +126,11 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#estimating-home-run-ability-by-an-outlier-model" id="toc-estimating-home-run-ability-by-an-outlier-model" class="nav-link" data-scroll-target="#estimating-home-run-ability-by-an-outlier-model"><span class="header-section-number">10.1</span> Estimating Home Run Ability by an Outlier Model</a></li>
   <li><a href="#exploring-peak-home-run-rates-using-a-multilevel-model" id="toc-exploring-peak-home-run-rates-using-a-multilevel-model" class="nav-link" data-scroll-target="#exploring-peak-home-run-rates-using-a-multilevel-model"><span class="header-section-number">10.2</span> Exploring Peak Home Run Rates Using a Multilevel Model</a></li>
   </ul></li>
+  <li><a href="#homerun-ball-effects-at-player-level" id="toc-homerun-ball-effects-at-player-level" class="nav-link" data-scroll-target="#homerun-ball-effects-at-player-level"><span class="header-section-number">11</span> Homerun Ball Effects at Player Level</a>
+  <ul class="collapse">
+  <li><a href="#deadball-home-run-effects" id="toc-deadball-home-run-effects" class="nav-link" data-scroll-target="#deadball-home-run-effects"><span class="header-section-number">11.1</span> 2022 Deadball Home Run Effects</a></li>
+  <li><a href="#what-if-aaron-judge-was-hitting-a-2019-ball" id="toc-what-if-aaron-judge-was-hitting-a-2019-ball" class="nav-link" data-scroll-target="#what-if-aaron-judge-was-hitting-a-2019-ball"><span class="header-section-number">11.2</span> What if Aaron Judge was Hitting a 2019 Ball?</a></li>
+  </ul></li>
   </ul>
 </nav>
 </div>
@@ -150,7 +155,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">December 28, 2023</p>
+      <p class="date">January 31, 2024</p>
     </div>
   </div>
   
@@ -166,6 +171,7 @@ ul.task-list li input[type="checkbox"] {
 <p>Section 2 explores how home run hitting varies by different situations such as runners on base, home vs away, and the count. Section 3 explores the association between strikeout rates and home run rates. Are there players who are able to combine a high home run rate with a low strikeout rate? Section 4 explores the weather effect in hitting home runs in the 2017 season. This section also looks at the waiting times between home runs and compares the home run rates between the 2000 and 2017 seasons.</p>
 <p>Section 5 looks at the zone locations of the 2017 season home runs and the popular counts for home runs. As one would expect, the odds of a home run are greatest in so-called hitters counts. Section 6 looks more generally at run production and specifically what percentage of runs scored that are attributed to home runs.</p>
 <p>Section 7 explores all pitcher/batter matchups in hitting home runs. Using a random effects model we’ll see how much of the variability in home run rates are due to differences between batters and how much are due to differences between pitchers. Section 8 explores a player’s ability to hit home runs beyond what would be predicted based on the exit velocity and launch angle variables. Using a Shiny app, we identify particular hitters who have clear patterns in the direction of their home runs. Section 9 explores a player’s cumulative home run count as a function of his age. This section explores home run paths of several great sluggers and uses several summaries from these path displays to distinguish these hitters.</p>
+<p>Section 10 revisits one of my earliest papers on home run hitting. A leaderboard of career home runs can be misleading since it doesn’t account for a player’s career trajectory and says little about his peak performance. I use an outlier model to fit a quadratic curve to a player’s trajectory. Since player’s trajectory shapes don’t usually fit a parabola, the second part of this section illustrates the use of a multilevel model to fit home run trajectories. There have been changes to the construction of the ball that have led to interesting changes in overall home run hitting during the Statcast era. Section 11 illustrates the effects of a “dead” ball on individual player home run counts. In particular, we see that Aaron Judge may have hit more home runs in 2022 if MLB was using a ball from a previous season.</p>
 </section>
 <section id="situational-home-run-hitting" class="level2" data-number="2">
 <h2 data-number="2" class="anchored" data-anchor-id="situational-home-run-hitting"><span class="header-section-number">2</span> Situational Home Run Hitting</h2>
@@ -717,6 +723,91 @@ ul.task-list li input[type="checkbox"] {
 <li><p><strong>What is the right denominator for a HR rate?</strong>  When one computes a home run rate, should you divide by PA (plate appearances), AB (at-bats), or BIP (balls in play)? I think it is harder to interpret a rate defined by HR / AB, since many of the at-bats can result in strikeouts, and so a home run rate is impacted by the strikeout rate. Since we currently focus on launch variables on balls in play, maybe it is easier to interpret the HR rate on balls in play.</p></li>
 <li><p><strong>Got code?</strong> I have a Shiny app called HomeRunPeak() in my ShinyBaseball package that does the calculations for this exercise. One chooses a hitter and one can plot the home run rates, a quadratic fit, and the multilevel model estimates against age. Also this app displays the posterior densities of the peak ability and age where he obtained the peak. I am using the Lahman package for the data and JAGS is used to fit the multilevel model. (One needs to have the JAGS software installed on your laptop.)</p></li>
 <li><p><strong>Other illustrations of multilevel modeling?</strong> If you follow our blog, you have seen a number of illustrations of multilevel modeling for baseball data. On this page, I include many of these multilevel examples from this blog.</p></li>
+</ul>
+</section>
+</section>
+</section>
+<section id="homerun-ball-effects-at-player-level" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="homerun-ball-effects-at-player-level"><span class="header-section-number">11</span> Homerun Ball Effects at Player Level</h2>
+<section id="deadball-home-run-effects" class="level3" data-number="11.1">
+<h3 data-number="11.1" class="anchored" data-anchor-id="deadball-home-run-effects"><span class="header-section-number">11.1</span> 2022 Deadball Home Run Effects</h3>
+<section id="introduction-8" class="level4" data-number="11.1.1">
+<h4 data-number="11.1.1" class="anchored" data-anchor-id="introduction-8"><span class="header-section-number">11.1.1</span> Introduction</h4>
+<p>As most of the readers know, we have seen a curious pattern of home run hitting during the Statcast era from 2015 through 2022. MLB players are hitting baseballs harder and at “good” launch angles conducive to hitting home runs. By this reason alone, one would think there would be a pattern of increasing home run rates over the Statcast era. But there have been changes to the construction of the baseball over this era that have counteracted the player effect and led to a curious pattern of home run hitting. Specifically, we have seen an increase in home run hitting in 2017, followed by a decrease in 2018, followed by a big increase in 2019, and decreased home run rates in 2020-2022. Here we focus on changes in the carry characteristics (that is, the drag coefficients) of the baseballs between the 2021 and 2022 seasons. First I will explain how one can measure the “ball effect” in home run hitting and show that the deadened baseball has led to a significant drop in home run hitting in 2022 compared to 2021. Then I will show how this ball effect has led to decreases in home run hitting for individual players and ballparks.</p>
+</section>
+<section id="general-method" class="level4" data-number="11.1.2">
+<h4 data-number="11.1.2" class="anchored" data-anchor-id="general-method"><span class="header-section-number">11.1.2</span> General Method</h4>
+<p><strong>STEP 1 (Fitting)</strong></p>
+<p>We begin by fitting a model to the in-play Statcast data from the 2021 season to understand the relationship between the launch conditions (launch speed and launch angle) and home run hitting. Letting P denote the probability of a home run, we fit the generalized additive model</p>
+<p>logit(P) = s(Launch Angle, Launch Speed)</p>
+<p>where logit(P) = log(P) - log(1 - P) and s() is a smooth function of the launch variables.</p>
+<p><strong>STEP 2 (Prediction)</strong></p>
+<p>Using this fitted model, we can predict the probability of a home run for any values of the launch conditions. For example, suppose a batter hits the ball at a launch angle of 25 degrees and an exit velocity of 105 mph. Using this fitted model, we estimate the probability of a home run is 0.78. We call this the “2021 ball model” since this fitted model is based on 2021 Statcast data and is describing the carry properties of the balls used in the 2021 season.</p>
+<p>We use this 2021 ball model to predict the probability of a home run for each batted ball in the first half of the 2022 season. It is important to note that we are using the observed 2022 launch conditions, so any errors in these predictions are primarily due to changes in the carry properties of the ball between 2021 and 2022.</p>
+<p>We did this prediction for all in-play events in 2022 (first half) and summed the fitted probabilities – we predict that there will be a total of 3322 home runs hit this season. But actually we observed only 2948 home runs, so the deadened ball has resulted in 3322 - 2948 = 374 fewer home runs hit in this first half of the 2022 season.</p>
+</section>
+<section id="individual-player-effects" class="level4" data-number="11.1.3">
+<h4 data-number="11.1.3" class="anchored" data-anchor-id="individual-player-effects"><span class="header-section-number">11.1.3</span> Individual Player Effects</h4>
+<p>How does this change from the 2021 ball to the 2022 ball affect performances of individual hitters? For each hitter, I use the “2021 ball model” to predict the home runs using the values of this player’s launch angle and exit velocity measurements on balls in-play for the 2022 season. Below I display a scatterplot of the predicted (horizontal) and actual observed (vertical) home run counts for all players. I draw the line Observed = Predicted for comparison – note that most of the points fall below the line showing that 2022 players are generally hitting fewer home runs than predicted from the 2021 ball model.</p>
+<p><img src="figures/hr_special/hr39.png" class="img-fluid" style="width:70.0%"></p>
+<p>To look more carefully, I define the residual</p>
+<p>Residual = Observed - Predicted</p>
+<p>and the following graph plots the predicted (horizontal) against the residuals (vertical). I have labeled the points with the last names of the players who are predicted to get at least 20 home runs in the first half of the 2022 season. What is interesting is that many of the current home run sluggers such as Judge, Trout, Schwarber and Ohtani have really been hurt by the deadened 2022 ball. Ohani’s residual, for example, is -9 which means that his 2022 home run total is 9 less than the predicted total using the 2021 ball model and his 2022 launch variables. Judge, Trout, Schwarber and Freeman would all be predicted to have higher 2022 home run counts if they were hitting balls with the carry characteristics of the 2021 ball.</p>
+<p><img src="figures/hr_special/hr40.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="park-effects" class="level4" data-number="11.1.4">
+<h4 data-number="11.1.4" class="anchored" data-anchor-id="park-effects"><span class="header-section-number">11.1.4</span> Park Effects</h4>
+<p>How has the ball change from 2021 to 2022 affected the home run counts in each ballpark? For each ballpark, I compute the predicted number of home runs using the 2021 ball model and the 2022 launch variables. Then I compute Residual = Observed - Predicted for each park. Here’s a dotplot of the ballpark residuals. For 26 of the 30 parks, we observe a negative residual – for many parks, the home run count is about 15 to 25 smaller than the predicted count from the 2021 ball model. There are a few ballparks experiencing positive residuals – for example, Great American Ball Park is seeing over 20 more home runs hit in 2022 than one would predict from the 2021 ball model.</p>
+<p><img src="figures/hr_special/hr41.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="closing-remarks" class="level4" data-number="11.1.5">
+<h4 data-number="11.1.5" class="anchored" data-anchor-id="closing-remarks"><span class="header-section-number">11.1.5</span> Closing Remarks</h4>
+<ul>
+<li><p><strong>Individual Player Effects</strong>. I have written about the overall changes in home run hitting over the Statcast era. For example, here is a post from last year where I look at both changes in launch condition and changes in home run rates over two seasons. The point of this post is to show that these home run effects can be illustrated at the individual player or park level. In the old days, we used to think of home run hitting in terms of sluggers and nonsluggers. In 1927, Babe Ruth was the only slugger and in 1998, Mark McGwire and Sammy Sosa were among the small number of sluggers who hit home runs at a high rate. Today, most players have home run hitting ability, and the deadened baseball is really decreasing the home run counts for many players.</p></li>
+<li><p><strong>Other Factors?</strong> Are there factors besides the composition of the baseball that could explain the decrease in home run hitting in 2022? Some people such as the Phillies batting coach think the decrease in home run hitting is due to the introduction of humidors in all MLB ballparks. Some ballparks did use humidors in 2021 and we have explored changes (from 2021 to 2022) in home run rates for the ballparks using humidors both seasons and the ballparks that started humidors in 2022. The takeaway from this exploration is that the introduction of humidors is not the primary reason behind the decrease in home run rates.</p></li>
+</ul>
+</section>
+</section>
+<section id="what-if-aaron-judge-was-hitting-a-2019-ball" class="level3" data-number="11.2">
+<h3 data-number="11.2" class="anchored" data-anchor-id="what-if-aaron-judge-was-hitting-a-2019-ball"><span class="header-section-number">11.2</span> What if Aaron Judge was Hitting a 2019 Ball?</h3>
+<section id="introduction-9" class="level4" data-number="11.2.1">
+<h4 data-number="11.2.1" class="anchored" data-anchor-id="introduction-9"><span class="header-section-number">11.2.1</span> Introduction</h4>
+<p>Aaron Judge’s home run chase has brought much attention to the current 2022 baseball season. As I am writing this (evening of Sunday, October 2), Judge currently has 61 home runs with four Yankees games remaining. What if Judge hits his 62nd home run?</p>
+<p>All people would agree that Judge has broken Roger Maris’ American League record of 61 home runs hit in the 1961 season. But he certainly has not broken the single season MLB home run mark of 73 home runs hit by Barry Bonds in the 2001 season. And there were other players such as Mark McGwire and Sammy Sosa who have hit more than 62 home runs in a single season.</p>
+<p>Some people would say that Judge is the true MLB home run leader since the other leaders such Bonds, McGwire and Sosa are all believed to enhance their hitting performance by the use of steroids. If Judge hits his 62nd home run, he is the best single season home run performer among the “clean” players.</p>
+<p>I don’t want to get into this particular argument about Judge’s 62nd homeman since both sides make reasonable cases. But I want to address Judge’s accomplishment from a different perspective. We are aware of the current dead baseball currently being used in the 2022 baseball. Baseball will have the smallest total count of home runs since the 2015 season due to the deadened baseball. That raises the question:<br>
+How many home runs would Aaron Judge hit if he was playing in a different season when the ball had better carry properties than the ball used in the current 2022 season?</p>
+</section>
+<section id="method" class="level4" data-number="11.2.2">
+<h4 data-number="11.2.2" class="anchored" data-anchor-id="method"><span class="header-section-number">11.2.2</span> Method</h4>
+<p>The process of hitting home run has three steps. First, the batter has to put the ball in play. Second, he has to hit the ball with sufficient exit velocity and suitable launch angle to reach and go over the outfield fences. Third, the ball needs to have sufficient carry to actually reach the seats. One can relate values of the launch variables with the home run outcome by use of a statistical model. Our basic model says that the logit of the in-play home run probability is a smooth function of the launch angle and launch speed. Given this model, we can make predictions – for example, if the ball is hit at a 35 degree launch angle and at 100 mph launch speed, we can estimate the probability the batted ball is a home run.</p>
+<p>We call this a “ball model” since this model measures the carry properties of the baseball for a particular season. Since the manufactured properties of the MLB ball has gone through changes during the Statcast era (2015 through 2022), we fit different models for each of the 7 previous Statcast seasons.</p>
+</section>
+<section id="aaron-judges-launch-speeds-and-angles" class="level4" data-number="11.2.3">
+<h4 data-number="11.2.3" class="anchored" data-anchor-id="aaron-judges-launch-speeds-and-angles"><span class="header-section-number">11.2.3</span> Aaron Judge’s Launch Speeds and Angles</h4>
+<p>One remarkable aspect of Aaron Judge’s 2022 season performance is the quality of his batted balls. To understand this, we compare the launch variables of Judge for the batted balls that he hit during the 2019 and 2022 seasons. Below I display the values of the launch angle and launch speed for balls hit during the two seasons – I have colored the balls by the outcome (home run or not). What is remarkable is the large number of batted balls in 2022 where the launch speed exceeds 110 mpg and the launch angle is between 20 and 30 degrees. The takeaway is that Judge is not hitting cheap home runs in 2022 – no other player this season is hitting balls like Aaron Judge. He certainly wasn’t hitting balls this way in the 2019 season.</p>
+<p><img src="figures/hr_special/hr42.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="predicting-home-run-counts-using-a-different-ball" class="level4" data-number="11.2.4">
+<h4 data-number="11.2.4" class="anchored" data-anchor-id="predicting-home-run-counts-using-a-different-ball"><span class="header-section-number">11.2.4</span> Predicting Home Run Counts Using a Different Ball</h4>
+<p>I am interested in predicting Judge’s home run count if we were using a ball from a previous season. Here’s the method (I will illustrate the idea for the 2019 season, but I’ll repeat this for all seasons.):</p>
+<p>First, I have a fitted model that predicts the probability of a home run given values of the launch angle and launch speed from all batted balls in the 2019 season.</p>
+<p>I have the values of the launch variables for all balls in play by Aaron Judge in the current 2022 season. Using these values, using the 2019 ball model, I can compute the probabilities of a home run for all batted balls.</p>
+<p>Here’s a graph of these predicted home run probabilities for the 2022 balls in play where Judge hit a home run (top) and when he didn’t (bottom). Note there were a few “lucky” home runs where the 2019 prediction HR probability was under 0.5. These home runs could have been hit down the lines where the distances to the fences was short. But there were more cases (I count 16 of them) where Judge didn’t hit a home run and the 2019 prediction probability was over 0.5.</p>
+<p><img src="figures/hr_special/hr43.png" class="img-fluid" style="width:70.0%"></p>
+<p>By summing these home run probabilities, I get a prediction of the total number of 2022 Judge home runs if we were using the 2019 ball.</p>
+<p>I can also use these predicted probabilities and a simulation exercise to produce a prediction interval for the total HR count. I present 90% intervals that cover 90% of the prediction distribution.</p>
+<p>I repeat this procedure for each of the Statcast seasons 2015 through 2021. Here is a graph of the prediction intervals.</p>
+<p><img src="figures/hr_special/hr44.png" class="img-fluid" style="width:70.0%"></p>
+<p>Aaron Judge currently has 61 home runs. But using the ball fitted model from each of the previous Statcast seasons, we would predict Judge home run count in 2022 to be in the 70’s. For example, a 90% prediction interval for Judge’s HR count using the 2019 ball would be (69, 81). It is interesting that the highest prediction is for the 2017 season and lowest for the 2018 and 2021 seasons. Judge may have actually eclipsed Barry Bonds single-season record of 73 if MLB in 2022 was using a baseball similar to what was used in the previous Statcast seasons. Perhaps due to this “ball bias”, we don’t appreciate the magnitude of Judge’s accomplishment in the 2022 season.</p>
+</section>
+<section id="comments" class="level4" data-number="11.2.5">
+<h4 data-number="11.2.5" class="anchored" data-anchor-id="comments"><span class="header-section-number">11.2.5</span> Comments</h4>
+<ul>
+<li><p><strong>Earlier post on this topic</strong>. This post is a continuation of an earlier post where I look at the 2022 “deadball home run effects” for individual hitters.</p></li>
+<li><p><strong>Comparing players from different eras</strong>. It is difficult to compare hitting accomplishments of players from different eras since baseball has gone through many changes. Babe Ruth hitting 60 home runs in the 1927 season was different in many ways from Roger Maris’s 61 home runs in the 1961 season and Barry Bonds 73 home runs in the 2001 season. It is unfair only to focus on the raw home run numbers without understanding the context of the different seasons.</p></li>
+<li><p><strong>The season has a large effect</strong>. This exercise provides a good illustration of the effect of season on hitting accomplishments. Home run hitting has gone through dramatic increases and decreases in recent Statcast seasons driven by the changes in batter behavior (changes in launch speeds and launch angles) and changes in the properties of the baseball.</p></li>
+<li><p><strong>Comparing the leader and the next-to leader</strong>. Another way of understanding Judge’s home run dominance is to look at the home run leaderboard. Judge’s 61 home runs is 17 higher than the 44 home runs by the next person (Kyle Schwarber) on the list. It would be interesting to do a historical study of particular hitting accomplishments where there is a large gap between the leader and the next-to leader.</p></li>
 </ul>
 </section>
 </section>
