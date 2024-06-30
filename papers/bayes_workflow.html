@@ -3162,7 +3162,7 @@ rwOBA = \sqrt{E(wOBA)}
 <li><p>Collect the data in a list.</p></li>
 <li><p>Fit the Bayesian model by running the MCMC algorithm using the <code>run.jags()</code> function from the <code>runjags</code> package with the model script and data as inputs.</p></li>
 </ol>
-<p>The following JAGS script defines this multilevel model with the count as a bias term. The normal sampling and prior distributions are indicated using the <code>dnorm</code> syntax. One unusual aspect is that the parameters <code>dnorm</code> function are the mean and the precision which is the reciprocal of the square of the standard deviation. In assignment statements, the precisions are defined in terms of the standard deviation parameters <code>sigma</code> and <code>tau</code>. Note that this script states priors for the unknown parameters at the last stage. The mean <code>theta</code> and bias effect <code>beta</code> are assigned normal priors with means 0 and precisions 0.001 (corresponding to standard deviations of 31.6) reflecting vague prior knowledge about the locations of these parameters. The standard deviation parameters <code>sigma</code> and <code>tau</code> are assigned standard t distributions (<code>dt</code> function) with one degree of freedom that are truncated below by zero.</p>
+<p>The following JAGS script defines this multilevel model with the count as a bias term. The normal sampling and prior distributions are indicated using the <code>dnorm</code> syntax. One unusual aspect is that the parameters of the <code>dnorm</code> function are the mean and the precision which is the reciprocal of the square of the standard deviation. In assignment statements in the script, the precisions are defined in terms of the standard deviation parameters <code>sigma</code> and <code>tau</code>. Note that this script states priors for the unknown parameters at the last stage. The mean <code>theta</code> and bias effect <code>beta</code> are assigned normal priors with means 0 and precisions 0.001 (corresponding to standard deviations of 31.6) reflecting vague prior knowledge about the locations of these parameters. The standard deviation parameters <code>sigma</code> and <code>tau</code> are assigned standard t distributions (<code>dt</code> function) with one degree of freedom that are truncated below by zero.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>modelString <span class="ot">&lt;-</span><span class="st">&quot;</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="st">model {</span></span>
@@ -3228,7 +3228,7 @@ rwOBA = \sqrt{E(wOBA)}
 </section>
 <section id="bias-coefficient" class="level3" data-number="6.2">
 <h3 data-number="6.2" class="anchored" data-anchor-id="bias-coefficient"><span class="header-section-number">6.2</span> Bias Coefficient</h3>
-<p>For example, we can ask if hitters generally take advantage of the neutral count situation compared to the behind count. We answer this by inspecting the posterior of the bias coefficient <span class="math inline">\(\beta\)</span>. <a href="#fig-figure2">Figure 5</a> constructs a density estimate of the simulated draws of <span class="math inline">\(\beta\)</span> displaying the limits of a 90% interval estimate. On the root wOBA scale, this interval estimate is (0.021, 0.032) – since this interval doesn’t cover zero, there is a significant count effect on the outcomes of balls in play.</p>
+<p>We can ask if hitters generally take advantage of the neutral count situation compared to the behind count. This question is addressed by inspecting the posterior of the bias coefficient <span class="math inline">\(\beta\)</span>. <a href="#fig-figure2">Figure 5</a> constructs a density estimate of the simulated draws of <span class="math inline">\(\beta\)</span> displaying the limits of a 90% interval estimate. On the root wOBA scale, this interval estimate is (0.021, 0.032). Since this interval doesn’t cover zero, there is a significant count effect on the outcomes of balls in play.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-figure2" class="quarto-figure quarto-figure-center anchored">
@@ -3242,7 +3242,7 @@ rwOBA = \sqrt{E(wOBA)}
 </section>
 <section id="batter-abilities" class="level3" data-number="6.3">
 <h3 data-number="6.3" class="anchored" data-anchor-id="batter-abilities"><span class="header-section-number">6.3</span> Batter Abilities</h3>
-<p>Estimates of the batter abilities are found by taking posterior means of the <span class="math inline">\(\{\alpha_j\}\)</span>. <a href="#fig-figure3">Figure 6</a> compares the posterior means with the collection of batter sample means of the root wOBA values using parallel jittered dotplots. Note that the variability of the posterior means are substantially smaller than the variability of the individual ability estimates.</p>
+<p>Estimates of the batter abilities are found by taking posterior means of the <span class="math inline">\(\{\alpha_j\}\)</span>. <a href="#fig-figure3">Figure 6</a> compares the posterior means with the collection of batter sample means of the root wOBA values using parallel jittered dotplots. Note that the variability of the posterior means is substantially smaller than the variability of the individual ability estimates.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-figure3" class="quarto-figure quarto-figure-center anchored">
@@ -3270,7 +3270,7 @@ rwOBA = \sqrt{E(wOBA)}
 <h2 data-number="7" class="anchored" data-anchor-id="prediction"><span class="header-section-number">7</span> Prediction</h2>
 <section id="posterior-predictive-distribution" class="level3" data-number="7.1">
 <h3 data-number="7.1" class="anchored" data-anchor-id="posterior-predictive-distribution"><span class="header-section-number">7.1</span> Posterior Predictive Distribution</h3>
-<p>One advantage of the Bayesian viewpoint is that there is a straightforward way of predicting future data through the posterior predictive distribution. Letting <span class="math inline">\(y\)</span> and <span class="math inline">\(y^*\)</span> denote observed and future data, the objective is to simulate from the posterior density <span class="math inline">\(f(y^* | y)\)</span> which is represented as the mixture <span class="math display">\[
+<p>One advantage of the Bayesian viewpoint is that there is a straightforward way of predicting future data through the posterior predictive distribution. Letting <span class="math inline">\(y\)</span> and <span class="math inline">\(y^*\)</span> denote observed and future data, the objective is to simulate from the predictive density <span class="math inline">\(f(y^* | y)\)</span> which is represented as the mixture <span class="math display">\[
 f(y^* | y) = \int f(y^* | \theta) g(\theta | y) d\theta,
 \]</span> where <span class="math inline">\(g()\)</span> represents the posterior density of parameters <span class="math inline">\(\theta\)</span> given the observed data <span class="math inline">\(y\)</span>, and <span class="math inline">\(f()\)</span> is the sampling density of future data <span class="math inline">\(y^*\)</span> given the parameters <span class="math inline">\(\theta\)</span>. This representation motives how one simulates a draw <span class="math inline">\(y^{*S}\)</span> from the posterior predictive density.</p>
 <ol type="1">
@@ -3297,10 +3297,10 @@ f(y^* | y) = \int f(y^* | \theta) g(\theta | y) d\theta,
 </div>
 <p>In <a href="#fig-figure4">Figure 8</a>, we are just comparing one posterior predictive simulation with the observed data and noted that the two datasets had similar variability. To see if this statement is true in general, we simulate many samples from the posterior predictive distribution. For each sample, we compute two “test” measures:</p>
 <ol type="1">
-<li><p><span class="math inline">\(S_1 =\)</span> standard deviation of the averages {<span class="math inline">\((\bar {Y_{n}} + \bar {Y_{b}}) / 2\)</span>}}.</p></li>
-<li><p><span class="math inline">\(S_2 =\)</span> standard deviation of the differences {<span class="math inline">\(\bar {Y_{n}} - \bar {Y_{b}}\)</span>}}</p></li>
+<li><p><span class="math inline">\(S_M =\)</span> standard deviation of the averages {<span class="math inline">\((\bar {Y_{n}} + \bar {Y_{b}}) / 2\)</span>}}.</p></li>
+<li><p><span class="math inline">\(S_D =\)</span> standard deviation of the differences {<span class="math inline">\(\bar {Y_{n}} - \bar {Y_{b}}\)</span>}}</p></li>
 </ol>
-<p>We looked at 500 posterior predictive simulations and <a href="#fig-figure5">Figure 9</a> displays values of <span class="math inline">\((S_1, S_2)\)</span> from simulations of the posterior predictive distribution. The red dot represents values of this ordered pair from the observed data. This dot is in the center of the posterior predictive distribution. From a variability perspective, we conclude that simulations from the model resemble the observed data from the 2023 season.</p>
+<p>We looked at 500 posterior predictive simulations and <a href="#fig-figure5">Figure 9</a> displays values of <span class="math inline">\((S_M, S_D)\)</span> from simulations of the posterior predictive distribution. The red dot represents values of this ordered pair from the observed data. This dot is in the center of the posterior predictive distribution. From a variability perspective, we conclude that simulations from the model resemble the observed data from the 2023 season.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-figure5" class="quarto-figure quarto-figure-center anchored">
