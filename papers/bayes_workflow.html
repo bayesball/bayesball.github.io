@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2024-07-06">
+<meta name="dcterms.date" content="2024-07-07">
 
 <title>Bayesian Workflow of a Situational Random Effects Model</title>
 <style>
@@ -3036,12 +3036,13 @@ vertical-align: -.125em;
   </ul></li>
   <li><a href="#closing-comments" id="toc-closing-comments" class="nav-link" data-scroll-target="#closing-comments"><span class="header-section-number">8</span> Closing Comments</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references"><span class="header-section-number">9</span> References</a></li>
-  <li><a href="#appendix" id="toc-appendix" class="nav-link" data-scroll-target="#appendix"><span class="header-section-number">10</span> Appendix</a>
+  <li><a href="#appendix---alternative-fitting-methods" id="toc-appendix---alternative-fitting-methods" class="nav-link" data-scroll-target="#appendix---alternative-fitting-methods"><span class="header-section-number">10</span> Appendix - Alternative Fitting Methods</a>
   <ul class="collapse">
   <li><a href="#maximum-likelhood-fit-with-the-lme4-package" id="toc-maximum-likelhood-fit-with-the-lme4-package" class="nav-link" data-scroll-target="#maximum-likelhood-fit-with-the-lme4-package"><span class="header-section-number">10.1</span> Maximum Likelhood Fit with the <code>lme4</code> Package</a></li>
   <li><a href="#bayesian-fit-with-stan-using-the-brms-package" id="toc-bayesian-fit-with-stan-using-the-brms-package" class="nav-link" data-scroll-target="#bayesian-fit-with-stan-using-the-brms-package"><span class="header-section-number">10.2</span> Bayesian Fit with Stan using the <code>brms</code> Package</a></li>
   <li><a href="#computing-times" id="toc-computing-times" class="nav-link" data-scroll-target="#computing-times"><span class="header-section-number">10.3</span> Computing Times</a></li>
   </ul></li>
+  <li><a href="#appendix---grouping-data-for-computational-speed" id="toc-appendix---grouping-data-for-computational-speed" class="nav-link" data-scroll-target="#appendix---grouping-data-for-computational-speed"><span class="header-section-number">11</span> Appendix - Grouping Data for Computational Speed</a></li>
   </ul>
 </nav>
 </div>
@@ -3066,7 +3067,7 @@ vertical-align: -.125em;
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 6, 2024</p>
+      <p class="date">July 7, 2024</p>
     </div>
   </div>
   
@@ -3349,8 +3350,8 @@ f(y^* | y) = \int f(y^* | \theta) g(\theta | y) d\theta,
 <li><p>Stan Development Team. 2024. Stan Modeling Language Users Guide and Reference Manual, Version 2.3.5. https://mc-stan.org</p></li>
 </ul>
 </section>
-<section id="appendix" class="level2" data-number="10">
-<h2 data-number="10" class="anchored" data-anchor-id="appendix"><span class="header-section-number">10</span> Appendix</h2>
+<section id="appendix---alternative-fitting-methods" class="level2" data-number="10">
+<h2 data-number="10" class="anchored" data-anchor-id="appendix---alternative-fitting-methods"><span class="header-section-number">10</span> Appendix - Alternative Fitting Methods</h2>
 <p>This section describes the R implementation of alternative fitting methods of this multilevel model with a bias component for this 2023 Statcast dataset.</p>
 <section id="maximum-likelhood-fit-with-the-lme4-package" class="level3" data-number="10.1">
 <h3 data-number="10.1" class="anchored" data-anchor-id="maximum-likelhood-fit-with-the-lme4-package"><span class="header-section-number">10.1</span> Maximum Likelhood Fit with the <code>lme4</code> Package</h3>
@@ -3409,6 +3410,40 @@ f(y^* | y) = \int f(y^* | \theta) g(\theta | y) d\theta,
 </table>
 <p>The maximum likelihood fit using <code>lmer()</code> is remarkably fast, but it is essentially an approximation to the joint posterior fit since it doesn’t provide standard errors for all estimated parameters. JAGS (function <code>run_jags()</code>) and Stan (function <code>brm()</code>) are applying different MCMC algorithms with a similar number of iterations, but Stan is approximately eight times slower than JAGS. It should be mentioned that Stan was specifically developed to handle large multilevel models (larger than what is capable for JAGS) and it uses more information about the posterior distribution in its simulation algorithm.</p>
 </section>
+</section>
+<section id="appendix---grouping-data-for-computational-speed" class="level2" data-number="11">
+<h2 data-number="11" class="anchored" data-anchor-id="appendix---grouping-data-for-computational-speed"><span class="header-section-number">11</span> Appendix - Grouping Data for Computational Speed</h2>
+<p>One reason why the computational speeds for implementing the MCMC fits are slow is that we are working with a large dataset with over 36,000 rows. Since the model inputs are only the player id and the count effect, one can reduce the size of the dataset by the use of sufficient statistics on grouped data.</p>
+<p>For a particular player and particular count effect, one observes the response values <span class="math inline">\(y_1, ..., y_m\)</span> that are a sample from a <span class="math inline">\(N(\mu, \sigma)\)</span> distribution. Sufficient statistics for this sample are the sample mean <span class="math inline">\(\bar y\)</span> and sum of squares about the mean <span class="math inline">\(S\)</span> given by <span class="math display">\[
+\bar y = \frac{\sum_{j=1}^m y_j}{m}, \, \, S = \sum_{j=1}^m (y_j - \bar y)^2.
+\]</span></p>
+<p>Moreover, <span class="math inline">\(\bar y\)</span> and <span class="math inline">\(S\)</span> are independent where <span class="math display">\[
+\bar y \sim N\left(\mu, \frac{\sigma}{\sqrt{m}}\right),
+S \sim Gamma\left(\frac{m-1}{2}, \frac{1}{2 \sigma^2}\right)
+\]</span></p>
+<p>For each player and count value, we compute values of <span class="math inline">\(\bar y\)</span> and <span class="math inline">\(S\)</span>. By using these sufficient statistics, the dataset is reduced from 36,000 rows to 498 rows. We revise the JAGS script to accommodate the use of these sufficient statistics in the sampling component of the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>modelString <span class="ot">&lt;-</span><span class="st">&quot;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="st">model {</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="st">## sampling</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="st">for (i in 1:N){</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="st">y[i] ~ dnorm(mu[i], ny[i] * invsigma2)</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="st">s[i] ~ dgamma((ny[i] - 1) / 2, invsigma2 / 2) </span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="st">mu[i] &lt;- beta * eff[i] + alpha_j[player[i]]</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="st">## priors</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="st">for (j in 1:J){</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="st">   alpha_j[j] ~ dnorm(theta, invtau2)</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="st">theta ~ dnorm(0, 0.001)</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="st">beta ~ dnorm(0, 0.001)</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="st">invsigma2 &lt;- 1 / (sigma * sigma)</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a><span class="st">sigma ~ dt(0, 1, 1) T(0, )</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a><span class="st">invtau2 &lt;- 1 / (tau * tau)</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a><span class="st">tau ~ dt(0, 1, 1) T(0, )</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The use of sufficient statistics for the grouped data leads to a large decrease in the JAGS simulation time. For the ungrouped data, it takes 2.54 minutes and with the grouping, the time is decreased to 0.08 minutes. A similar increase in efficiency can be achieved using Stan if the script uses the sufficient statistics in the sampling description.</p>
 </section>
 
 </main>
