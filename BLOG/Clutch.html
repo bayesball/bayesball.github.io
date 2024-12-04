@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Jim Albert">
-<meta name="dcterms.date" content="2024-11-17">
+<meta name="dcterms.date" content="2024-12-04">
 
 <title>Clutch Performances</title>
 <style>
@@ -74,10 +74,14 @@ ul.task-list li input[type="checkbox"] {
   <ul class="collapse">
   <li><a href="#introduction-3" id="toc-introduction-3" class="nav-link" data-scroll-target="#introduction-3"><span class="header-section-number">7.1</span> Introduction</a></li>
   <li><a href="#data-work" id="toc-data-work" class="nav-link" data-scroll-target="#data-work"><span class="header-section-number">7.2</span> Data Work</a></li>
-  <li><a href="#sandy-koufax" id="toc-sandy-koufax" class="nav-link" data-scroll-target="#sandy-koufax"><span class="header-section-number">7.3</span> Sandy Koufax</a></li>
-  <li><a href="#some-graphs" id="toc-some-graphs" class="nav-link" data-scroll-target="#some-graphs"><span class="header-section-number">7.4</span> Some Graphs</a></li>
-  <li><a href="#some-unusual-pitchers" id="toc-some-unusual-pitchers" class="nav-link" data-scroll-target="#some-unusual-pitchers"><span class="header-section-number">7.5</span> Some Unusual Pitchers</a></li>
-  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="header-section-number">7.6</span> Takeaways</a></li>
+  <li><a href="#a-r-function" id="toc-a-r-function" class="nav-link" data-scroll-target="#a-r-function"><span class="header-section-number">7.3</span> A R function</a></li>
+  <li><a href="#career-wl-and-rra-measures" id="toc-career-wl-and-rra-measures" class="nav-link" data-scroll-target="#career-wl-and-rra-measures"><span class="header-section-number">7.4</span> Career W/L and R/RA Measures</a></li>
+  <li><a href="#residuals-from-the-fit" id="toc-residuals-from-the-fit" class="nav-link" data-scroll-target="#residuals-from-the-fit"><span class="header-section-number">7.5</span> Residuals from the Fit</a></li>
+  <li><a href="#percentage-of-games-started" id="toc-percentage-of-games-started" class="nav-link" data-scroll-target="#percentage-of-games-started"><span class="header-section-number">7.6</span> Percentage of Games Started</a></li>
+  <li><a href="#comparing-successful-and-less-successful-pitchers" id="toc-comparing-successful-and-less-successful-pitchers" class="nav-link" data-scroll-target="#comparing-successful-and-less-successful-pitchers"><span class="header-section-number">7.7</span> Comparing Successful and Less Successful Pitchers</a></li>
+  <li><a href="#focus-on-starters" id="toc-focus-on-starters" class="nav-link" data-scroll-target="#focus-on-starters"><span class="header-section-number">7.8</span> Focus on Starters</a></li>
+  <li><a href="#a-top-ten-list-for-starters" id="toc-a-top-ten-list-for-starters" class="nav-link" data-scroll-target="#a-top-ten-list-for-starters"><span class="header-section-number">7.9</span> A Top-Ten List for Starters</a></li>
+  <li><a href="#takeaways" id="toc-takeaways" class="nav-link" data-scroll-target="#takeaways"><span class="header-section-number">7.10</span> Takeaways</a></li>
   </ul></li>
   <li><a href="#clutch-hitters-in-2024---a-runs-added-approach" id="toc-clutch-hitters-in-2024---a-runs-added-approach" class="nav-link" data-scroll-target="#clutch-hitters-in-2024---a-runs-added-approach"><span class="header-section-number">8</span> Clutch Hitters in 2024 - A Runs Added Approach</a>
   <ul class="collapse">
@@ -111,7 +115,7 @@ ul.task-list li input[type="checkbox"] {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">November 17, 2024</p>
+      <p class="date">December 4, 2024</p>
     </div>
   </div>
   
@@ -446,52 +450,79 @@ for(j in 2:30)
 <h3 data-number="7.2" class="anchored" data-anchor-id="data-work"><span class="header-section-number">7.2</span> Data Work</h3>
 <p>I decided to focus on the career statistics for all pitchers who debuted in the 1955 season or later and had at least 250 pitching decisions (I wanted to include Sandy Koufax who had a sterling 165-87 career W/L record.). There were 171 pitchers in this group. The standard statistics using the Lahman database only include the runs allowed by the pitcher, not the runs scored by the pitcher’s team. So I went through all of the Retrosheet play-by-play season files. For each inning where the pitcher pitched, I collected the runs scored and the runs allowed. For convenience, I ignored the situation where the pitcher only pitched part of the inning – an inning was credited to a pitcher if he started the inning. For each pitcher in my group, I collect the career wins (W), losses (L), runs scored (R) and runs allowed (RA).</p>
 </section>
-<section id="sandy-koufax" class="level3" data-number="7.3">
-<h3 data-number="7.3" class="anchored" data-anchor-id="sandy-koufax"><span class="header-section-number">7.3</span> Sandy Koufax</h3>
-<p>Since I was originally thinking about Sandy Koufax, I have that Koufax had a 165-87 W/L record in his career. For the innings that he pitched, Koufax had 1152 runs scored and 846 runs allowed. Based on the Pythagorean relationship (to be described shortly), we will compute that, based on this runs data, Koufax is expected to win 160.3 games. So Koufax won 165 - 160.3 = 4.7 more games than expected.</p>
-</section>
-<section id="some-graphs" class="level3" data-number="7.4">
-<h3 data-number="7.4" class="anchored" data-anchor-id="some-graphs"><span class="header-section-number">7.4</span> Some Graphs</h3>
-<p>If you read “The Relation Between Runs and Wins” chapter in the Second Edition of <em>Analyzing Baseball Data with R</em>, you’ll see that there tends to be a linear relationship between the logarithm of the ratio of a teams wins and losses <span class="math inline">\(\log (W / L)\)</span> and the logarithm of the ratio of a teams runs scored to runs allowed <span class="math inline">\(\log (R / RA)\)</span>. Baseball Reference indicates that the slope of this Pythagorean relationship is about 1.81. So I will graph a pitcher’s career <span class="math inline">\(\log (W / L)\)</span> value against his career <span class="math inline">\(\log (R / RA)\)</span> and overlay a line corresponding to the Pythagorean relationship. If a pitcher’s point in this graph is above the line, that indicates that he wins more games than would be anticipated by the runs/runs allowed data.</p>
-<p>First I constructed a scatterplot for all pitchers with winning career records. Many of the points do follow the Pythagorean line. But I notice many pitchers with points below the line – these pitchers win less games than expected giving the runs data. There is one extreme pitcher Lindy McDaniel (point on the lower right) where his team scored 2040 runs while he allowed 859 runs – his 141-119 W/L record was much weaker than one would expect based on the runs data. (I think I should look more carefully at McDaniel’s data to see if this is correct.)</p>
-<p><img src="figures/clutch/clutch13.png" class="img-fluid" style="width:70.0%"></p>
-<p>Since we are primarily interested in studying the better pitchers, I constructed a new scatterplot for those pitchers who won at least 55% of their game decisions. For these pitchers, the Pythagorean line seems to provide a good fit to the general pattern.</p>
-<p><img src="figures/clutch/clutch14.png" class="img-fluid" style="width:70.0%"></p>
-<p>In this group of pitchers, let’s explore the residuals where I define a residual as</p>
-<p>Residual = <span class="math inline">\(\log(W / L) - 1.81 \log (R / RA)\)</span></p>
-<p>Here’s a graph of the residuals with a horizontal comparison line at 0. The large residuals in absolute value tend to be negative – there are a number of pitchers where the winning percentage is significantly smaller than the prediction based on the Pythagorean formula.</p>
-<p><img src="figures/clutch/clutch15.png" class="img-fluid" style="width:70.0%"></p>
-</section>
-<section id="some-unusual-pitchers" class="level3" data-number="7.5">
-<h3 data-number="7.5" class="anchored" data-anchor-id="some-unusual-pitchers"><span class="header-section-number">7.5</span> Some Unusual Pitchers</h3>
-<p>Here are some lists of the extreme residuals among the pitchers with at least a 55% winning percentage. To make these easier to understand, I express these residuals on the wins scale. The Pythagorean relationship can be written in terms of the proportion of wins P:</p>
-<p><span class="math inline">\(P = \frac{(R / RA)^{1.81}}{1 + (R / RA)^{1.81}}\)</span></p>
-<p>By multiplying these proportions by the number of decisions (W + L), one obtains the expected number of wins for all pitchers. I first show a list of the top positive residuals – these are the pitchers who win (W) more than expected (EW) based on the runs data. Then I display the top negative residuals – these pitchers who win less than expected. On the top list, we see several great pitchers such as Randy Johnson and Roger Clemens – they won 13.6 and 11.2 more games than expected based on the Pythagorean model. In contrast, John Candelaria had by far the largest negative residual – he won 23.3 fewer games than expected from the model.</p>
-<pre><code>  Pitcher           W    EW    RW
-  &lt;chr&gt;         &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1 Randy Johnson   303  289.  13.6
-2 Bob Welch       211  200.  11.3
-3 Roger Clemens   354  343.  11.2
-4 Kevin Brown     211  200.  10.5
-5 Dave McNally    184  177.   7.2
-6 Don Sutton      324  317    7  
-
-  Pitcher             W    EW    RW
-  &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1 John Candelaria   177  200. -23.3
-2 Jim Perry         215  238. -22.7
-3 Fergie Jenkins    284  305. -21.3
-4 Luis Tiant        229  247. -17.7
-5 John Smoltz       213  229. -15.8
-6 Don Drysdale      209  222. -13.1</code></pre>
-</section>
-<section id="takeaways" class="level3" data-number="7.6">
-<h3 data-number="7.6" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">7.6</span> Takeaways</h3>
+<section id="a-r-function" class="level3" data-number="7.3">
+<h3 data-number="7.3" class="anchored" data-anchor-id="a-r-function"><span class="header-section-number">7.3</span> A R function</h3>
+<p>I have a new function <code>collect_runs_season()</code> that has two inputs – the pitcher id and the retrosheet data for the seasons 1954 through 2023. The output is a data frame containing the runs scored and runs allowed in each season for all innings pitched by the particular pitcher. Here are the basic steps in the function:</p>
 <ul>
-<li><p>Is a pitcher’s W/L record meaningful? Looking at pitcher career W/L records, the Pythagorean relationship appears to provide reasonable predictions of a pitcher’s winning percentage from his ratio of runs scored to runs allowed. The deviations from the Pythagorean relationship tend to be larger on the negative side – these pitchers win less games than predicted based on their career values of R and RA.</p></li>
-<li><p>Interesting pitchers. One interesting takeaway was that the “extreme” pitchers tended to win fewer games than expected due to the Pythagorean relationship. By looking at the season-to-season performance of these pitchers, one may get additional insight on why they won fewer games.</p></li>
-<li><p>Looking at wins at a finer level? Bill Ripken believes that the winning pitchers tend to make the good pitchers at crucial points during a game. A careful investigation of this claim would be a different study that focuses on the pitch values of specific games. Do better pitchers tend to throw good pitches during important situations?</p></li>
-<li><p>My belief? I would agree with Tom Tango that a pitcher’s win/loss record by itself is informative about the quality of a pitcher. But this study doesn’t appear to help the case for the usefulness of a pitcher’s W/L record beyond the multitude of other pitching measures. One understands a pitcher’s W/L record by just seeing the runs scored and runs allowed. It is unfortunate that the media use a pitcher’s W/L record to decide on pitching awards – wins and losses are really a measure of the quality of a team rather than the quality of a particular starting pitcher.</p></li>
+<li><p>Create a new variable that identifies the game and the inning.</p></li>
+<li><p>Collect the game innings where the pitcher pitched and focus on Retrosheet data for the play files for those game innings.</p></li>
+<li><p>Collect the runs in the half innings where the pitcher pitched (runs against) and the half innings where the pitcher didn’t pitch (runs scored).</p></li>
+</ul>
+<p>Note that this runs against measure I collect will be larger than the pitcher’s actual RA statistic since it includes runs scored due to other pitchers who pitched in the inning. For example, if the pitcher enters a game with the bases loaded and allows a grand slam, then I would record 4 runs scored against in the inning although the actual RA value for that pitcher would be 1. I thought my computation based on full innings would be reasonably accurate since most pitchers in my study are starters that pitch complete innings, but we will see interesting results for one pitcher who primarily was a reliever.</p>
+</section>
+<section id="career-wl-and-rra-measures" class="level3" data-number="7.4">
+<h3 data-number="7.4" class="anchored" data-anchor-id="career-wl-and-rra-measures"><span class="header-section-number">7.4</span> Career W/L and R/RA Measures</h3>
+<p>I focus on the pitchers with at least 250 career W/L decisions and collect the career Wins, Losses, Runs Scored and Runs Allowed for these pitchers. I plot the log(R/RA), log(W/L) pairs below – the least-squares fit gives the formula</p>
+<p><span class="math display">\[
+\log(W / L) = 0.127 + 1.276 \times \log(R / RA)
+\]</span></p>
+<p><img src="figures/clutch/clutch17.png" class="img-fluid" style="width:70.0%"></p>
+<p>It is interesting that the best-line fit is different from the Pythogorean relationship</p>
+<p><span class="math display">\[
+\log(W / L) = 1.81 \times \log(R / RA)
+\]</span></p>
+<p>Comparing this scatterplot with the corresponding scatterplot in my 2022 post, we see a much tighter relationship here which indicates that log(R / RA) is a useful predictor of log(W / L).</p>
+</section>
+<section id="residuals-from-the-fit" class="level3" data-number="7.5">
+<h3 data-number="7.5" class="anchored" data-anchor-id="residuals-from-the-fit"><span class="header-section-number">7.5</span> Residuals from the Fit</h3>
+<p>Since we wish to see if log(W/L) is informative beyond what is predicted based on log(R / RA), we explore the residuals graphed below. Note that practically of the residuals are within 0.2 in absolute value. But there is one obvious residual outlier at 0.6 corresponding to Lindy McDaniel. Looking back at the data, I have McDaniel scoring 1143 runs, allowing 1756 runs, but his career W/L record was 141-119 – this explains his large positive residual. What is going on?</p>
+<p><img src="figures/clutch/clutch18.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="percentage-of-games-started" class="level3" data-number="7.6">
+<h3 data-number="7.6" class="anchored" data-anchor-id="percentage-of-games-started"><span class="header-section-number">7.6</span> Percentage of Games Started</h3>
+<p>Since McDaniel’s stats were so unusual, I had to check this. I collected the R, RA values for all innings he pitched in the 1956 season and looked carefully at the 1956 game logs of McDaniel as displayed in Baseball Reference (B-R). (By the way, B-R is very useful for checking one’s computations with Retrosheet files.). It appears that my R, RA values were consistent with the values in B-R indicating that my coding was likely correct. But in this particular season, McDaniel only started in 7 of the 39 games he appeared, and there were many instances where McDaniel entered in the middle of an inning where the previous pitcher had already let up runs and there were runners on base. So the 118 runs allowed for the 1956 season for innings when McDaniel pitched was much larger than the actual 60 runs he allowed as recorded in B-R. So my RA value collected for McDaniel was a poor approximation to his actual performance in allowing runs.</p>
+<p>I thought it would be helpful to collect the percentage of games started (100 * GS / G) for the pitchers in my 250 decisions database. I have plotted an one-dimensional scatterplot of these starting pitcher percentages below – we see most pitchers in this group started a high percentage of games and McDaniel’s value of 7.5% was an outlier at the low end.</p>
+<p><img src="figures/clutch/clutch19.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="comparing-successful-and-less-successful-pitchers" class="level3" data-number="7.7">
+<h3 data-number="7.7" class="anchored" data-anchor-id="comparing-successful-and-less-successful-pitchers"><span class="header-section-number">7.7</span> Comparing Successful and Less Successful Pitchers</h3>
+<p>Let’s return to my original question about the value of W/L records beyond what is predicted based on R and RA. The median winning percentage of my pitchers was 53.7% – pitchers below that we classify as “Low”, otherwise they are classified as “High”. Here is a jittered scatterplot of the residuals grouped by W/L group where I have drawn red lines at the median values. Ignoring the one obvious outlier, we see an interesting pattern – the residuals for the “High” pitchers tend to be higher than the residuals for the “Low” pitchers. This suggests that the better pitchers (defined by W/L record) have the tendency to be more successful after adjusting for the R/RA values.</p>
+<p><img src="figures/clutch/clutch20.png" class="img-fluid" style="width:70.0%"></p>
+</section>
+<section id="focus-on-starters" class="level3" data-number="7.8">
+<h3 data-number="7.8" class="anchored" data-anchor-id="focus-on-starters"><span class="header-section-number">7.8</span> Focus on Starters</h3>
+<p>It seems reasonable to focus my work on starters where I define a starter as one where the percentage of starts among games pitched (GS / G) is at least 75%. Of the 173 pitchers with 250 pitching decisions, 139 (80%) were starters. Here is a new scatterplot of log(R / RA) against log(W / L) for the starters with a best-line fit drawn on top.</p>
+<p><img src="figures/clutch/clutch21.png" class="img-fluid" style="width:70.0%"></p>
+<p>A best fitting line to this starters data is</p>
+<p><span class="math display">\[
+\log(W / L) = 0.0822 + 1.61812 \times \log(R / RA)
+\]</span></p>
+<p>It is interesting that the intercept is at 0.08 (not 0) so one would predict a starter where R = RA (log(R/RA) = 0) to have a winning record where W &gt; L. The slope of 1.62 resembles the value of 1.83 used by Baseball Reference.</p>
+</section>
+<section id="a-top-ten-list-for-starters" class="level3" data-number="7.9">
+<h3 data-number="7.9" class="anchored" data-anchor-id="a-top-ten-list-for-starters"><span class="header-section-number">7.9</span> A Top-Ten List for Starters</h3>
+<p>Suppose we rank starter pitchers by means of an “adjusted winning percentage” measure which is the residual from the best line fit to the (log(R/RA), log(W/L)) data for starters. Here are the top 10 pitchers. Then the top spot is held by Sandy Koufax and the top 10 list includes one of my Phillies favorites Roy Halladay. So Koufax was the starting pitcher in this period (1955 through 2023) who led in adjusted winning percentage. Among the starters, Koufax had the best winning percentage after adjusting for the runs scored and runs against.</p>
+<pre><code>      Pitcher             W     L     R    RA residual
+   &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+ 1 Sandy Koufax      165    87  1098   900    0.236
+ 2 Ron Guidry        170    91  1298  1040    0.184
+ 3 Mike Cuellar      185   130  1316  1247    0.183
+ 4 Bob Welch         211   146  1514  1381    0.137
+ 5 Dwight Gooden     194   112  1554  1265    0.134
+ 6 Mike Flanagan     167   143  1432  1486    0.133
+ 7 Sonny Siebert     140   114  1043  1047    0.129
+ 8 Dennis Martinez   245   193  2081  2046    0.129
+ 9 Dave McNally      184   119  1310  1133    0.119
+10 Roy Halladay      203   105  1601  1206    0.119</code></pre>
+</section>
+<section id="takeaways" class="level3" data-number="7.10">
+<h3 data-number="7.10" class="anchored" data-anchor-id="takeaways"><span class="header-section-number">7.10</span> Takeaways</h3>
+<ul>
+<li><p>(<strong>Working in One’s Own Backyard</strong>). The famous statistician John Tukey once said that it is fun to be a consulting statistician – you get the opportunity to work on new applications, that is, work in someone else’s backyard. Actually it is rewarding for me to be a statistician working on baseball problems since I’m a baseball fan and actually working in my own backyard. Any statistical findings that I figure out have to make “baseball sense”. So I question crazy outliers such as the case of Lindy McDaniel.</p></li>
+<li><p>(<strong>Check Your Work!</strong>). This post also stresses the importance of checking one’s R work. This can be done in several ways. Often I discover errors in my work when I am explaining the work to others.</p></li>
+<li><p>(<strong>Focus on Starting Pitchers</strong>). I didn’t think about the starting pitcher issue until I encountered the Lindy McDaniel outlier. It makes sense to focus on starting pictures in my study.</p></li>
+<li><p>(<strong>Using Retrosheet Data</strong>). One issue with the Retrosheet play-by-play data is that I didn’t figure out how to extract the runs against for a specific pitcher. Instead I used the runs scored in the pitcher’s inning as a surrogate. I suppose I could revise my code if I wanted to extracted the runs allowed by the pitcher.</p></li>
+<li><p>(<strong>What Did We Learn?</strong>). The focus of this post was to correct my earlier work on the usefulness of the W/L record. It appears that one can accurately predict a pitcher’s win-loss record by knowing their ratio of runs scored to runs allowed. Since the most successful pitchers tend to have larger residuals than the less successful pitchers, it would be interesting to look deeper for selected groups of starters.</p></li>
 </ul>
 </section>
 </section>
